@@ -4,6 +4,7 @@ from decimal import Decimal
 
 from django.http import HttpResponseForbidden, JsonResponse
 from django.utils import timezone
+from django.utils.translation import gettext as _
 
 from requests import Response
 
@@ -135,3 +136,16 @@ def require_ip(allowed_ip_list):
         return authorize
 
     return new_func
+
+
+def get_user_group(user):
+    groups = user.student.membership_set.filter(can_use_nantralpay=True).filter(
+        group__slug__in=["bde", "bda", "bds"]
+    )
+    if len(groups) == 0:
+        raise PermissionError(_("You are not allowed to use NantralPay."))
+    elif len(groups) > 1:
+        raise PermissionError(
+            _("You are in too many groups. Please contact an administrator.")
+        )
+    return groups.first().group

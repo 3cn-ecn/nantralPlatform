@@ -29,6 +29,7 @@ from .serializers import (
 from .utils import (
     check_qrcode,
     get_items_from_json,
+    get_user_group,
     update_balance,
 )
 
@@ -172,22 +173,10 @@ def cash_in_qrcode(request, transaction_id):
                         )
 
                     # Récupérer le groupe du receiver
-                    groups = receiver.student.membership_set.filter(
-                        can_use_nantralpay=True
-                    ).filter(group__slug__in=["bde", "bda", "bds"])
-                    if len(groups) == 0:
-                        return JsonResponse(
-                            {"error": "You are not allowed to use NantralPay."},
-                            status=403,
-                        )
-                    elif len(groups) > 1:
-                        return JsonResponse(
-                            {
-                                "error": "You are in too many groups. Please contact an administrator."
-                            },
-                            status=403,
-                        )
-                    group = groups.first().group
+                    try:
+                        group = get_user_group(receiver)
+                    except PermissionError as e:
+                        return JsonResponse({"error": str(e)}, status=403)
 
                     # Mettre à jour le solde du group et du sender
                     update_balance(group, amount)
