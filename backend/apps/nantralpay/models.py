@@ -112,8 +112,7 @@ class Sale(models.Model):
 
     def get_price(self):
         return sum(
-            item.item.price * item.quantity
-            for item in self.items.through.objects.all()
+            item.item.price * item.quantity for item in self.item_sales.all()
         )
 
 
