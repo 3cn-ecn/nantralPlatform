@@ -26,20 +26,17 @@ class TransactionSerializer(serializers.ModelSerializer):
 
 
 class ItemSerializer(serializers.ModelSerializer):
+    price = serializers.DecimalField(
+        max_digits=10, decimal_places=2, min_value=0.01
+    )
+
     class Meta:
         model = Item
         fields = ("id", "name", "price")
 
 
-def positive(val):
-    if val < 0:
-        raise serializers.ValidationError(
-            "This value should be positive or zero"
-        )
-
-
 class ItemSaleSerializer(serializers.ModelSerializer):
-    quantity = serializers.IntegerField(validators=[positive])
+    quantity = serializers.IntegerField(min_value=0)
 
     class Meta:
         model = ItemSale

@@ -1,10 +1,15 @@
 import { lazy } from 'react';
 import { RouteObject } from 'react-router-dom';
 
-import SelectionFormPanel from '#pages/NantralPay/SelectionFormPanel.page';
 import { PageTemplate } from '#shared/components/PageTemplate/PageTemplate';
 
 const QRCodeFormPage = lazy(() => import('#pages/NantralPay/QRCodeForm.page'));
+const SelectionFormPage = lazy(
+  () => import('#pages/NantralPay/SelectionForm.page'),
+);
+const AddItemFormPage = lazy(
+  () => import('#pages/NantralPay/AddItemForm.page'),
+);
 
 const EventPage = lazy(() => import('#pages/Event/Event.page'));
 const EventCalendarViewPage = lazy(
@@ -99,8 +104,13 @@ export const authenticatedRoutes: RouteObject = {
         },
         {
           path: 'cash-in/:uuid/',
-          element: <SelectionFormPanel />,
+          element: <SelectionFormPage />,
           handle: { crumb: t('breadcrumbs.qrcode.cash-in') },
+        },
+        {
+          path: 'add-item/',
+          element: <AddItemFormPage />,
+          handle: { crumb: t('breadcrumbs.nantralpay.add-item') },
         },
       ],
     },

@@ -10,6 +10,8 @@ from django.views.decorators.http import require_http_methods
 
 from rest_framework import permissions, viewsets
 
+from apps.group.models import Membership
+
 from .models import (
     Item,
     Payment,
@@ -38,6 +40,19 @@ class NantralPayPermission(permissions.BasePermission):
         if request.method in permissions.SAFE_METHODS:
             return True
         return request.user.is_superuser
+
+
+class ItemPermission(permissions.BasePermission):
+    def has_permission(self, request, view):
+        if request.method in permissions.SAFE_METHODS:
+            return True
+        try:
+            request.user.student.membership_set.get(
+                admin=True, group__slug__in=["bde", "bda", "bds"]
+            )
+        except Membership.DoesNotExist:
+            return request.user.is_superuser
+        return True
 
 
 class TransactionViewSet(viewsets.ModelViewSet):
@@ -70,8 +85,8 @@ class SaleViewSet(viewsets.ModelViewSet):
 class ItemViewSet(viewsets.ModelViewSet):
     serializer_class = ItemSerializer
     permission_classes = [
-        permissions.DjangoModelPermissions,
-        NantralPayPermission,
+        permissions.IsAuthenticated,
+        ItemPermission,
     ]
 
     def get_queryset(self) -> QuerySet[Item]:

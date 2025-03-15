@@ -1,11 +1,14 @@
-import { useCallback } from 'react';
-
 import { Alert, Divider, Typography } from '@mui/material';
+import { useQuery } from '@tanstack/react-query';
+import axios, { AxiosError } from 'axios';
 
+import { adaptItem } from '#modules/nantralpay/infra/item.adapter';
+import { ItemDTO } from '#modules/nantralpay/infra/item.dto';
 import { Item } from '#modules/nantralpay/types/item.type';
 import { SaleForm } from '#modules/nantralpay/types/sale.type';
 import { NumberField, TextField } from '#shared/components/FormFields';
 import { useTranslation } from '#shared/i18n/useTranslation';
+import { adaptPage, Page, PageDTO } from '#shared/infra/pagination';
 
 interface SaleFormFieldsProps {
   error: {
@@ -14,7 +17,6 @@ interface SaleFormFieldsProps {
   } | null;
   formValues: SaleForm;
   updateFormValues: (newValue: Partial<SaleForm>) => void;
-  items: Item[];
 }
 
 function QuantityField(
@@ -49,9 +51,39 @@ export function SaleFormFields({
   error,
   formValues,
   updateFormValues,
-  items,
 }: SaleFormFieldsProps) {
   const { t } = useTranslation();
+
+  // Récupère la liste des produits en vente
+  const itemsQuery = useQuery<Page<Item>, AxiosError>({
+    queryKey: ['items'],
+    queryFn: async () => {
+      const res = await axios.get<PageDTO<ItemDTO>>('/api/nantralpay/item/');
+      const data = adaptPage(res.data, adaptItem);
+      formValues.itemSales = data.results.map((item) => ({
+        item: item.id,
+        quantity: 0,
+      }));
+      return data;
+    },
+  });
+
+  // check if the query is loading
+  if (itemsQuery.isLoading) {
+    return <p>Loading... ⏳</p>;
+  }
+
+  // check if there is an error and show it
+  if (itemsQuery.isError) {
+    return (
+      <Alert severity="error">
+        {itemsQuery.error.response?.data?.error || itemsQuery.error.message}
+      </Alert>
+    );
+  }
+
+  const page = itemsQuery.data;
+  const itemsOfThisPage = page.results;
 
   return (
     <>
@@ -75,17 +107,14 @@ export function SaleFormFields({
           name="qr_code"
           type="hidden"
           value={formValues.qrCode}
-          handleChange={useCallback(
-            (val) => updateFormValues({ qrCode: val }),
-            [updateFormValues],
-          )}
+          handleChange={(val) => updateFormValues({ qrCode: val })}
           errors={error?.fields?.qrCode}
           required
           style={{ display: 'none' }}
         />
       </div>
       {formValues.itemSales.map((objet, i) =>
-        QuantityField(items, formValues, updateFormValues, i, error),
+        QuantityField(itemsOfThisPage, formValues, updateFormValues, i, error),
       )}
     </>
   );

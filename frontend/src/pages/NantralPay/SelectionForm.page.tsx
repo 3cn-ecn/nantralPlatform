@@ -6,15 +6,11 @@ import { useMutation, useQuery } from '@tanstack/react-query';
 import axios, { AxiosError } from 'axios';
 
 import { createSaleApi } from '#modules/nantralpay/api/createSale.api';
-import { adaptItem } from '#modules/nantralpay/infra/item.adapter';
-import { ItemDTO } from '#modules/nantralpay/infra/item.dto';
-import { Item } from '#modules/nantralpay/types/item.type';
 import { SaleForm, SalePreview } from '#modules/nantralpay/types/sale.type';
-import { SaleFormFields } from '#modules/nantralpay/view/shared/RegisterFormFields';
+import { SaleFormFields } from '#modules/nantralpay/view/shared/SaleFormFields';
 import { LoadingButton } from '#shared/components/LoadingButton/LoadingButton';
 import { Spacer } from '#shared/components/Spacer/Spacer';
 import { useTranslation } from '#shared/i18n/useTranslation';
-import { adaptPage, Page, PageDTO } from '#shared/infra/pagination';
 
 interface NantralPayUser {
   user: string;
@@ -47,6 +43,7 @@ export default function SelectionFormPanel() {
     SalePreview,
     {
       fields: Partial<Record<keyof SaleForm, string[]>>;
+      globalErrors: Partial<string[]>;
     },
     SaleForm
   >(saveSale, {
@@ -63,20 +60,6 @@ export default function SelectionFormPanel() {
     },
   });
 
-  // Récupère la liste des produits en vente
-  const itemsQuery = useQuery<Page<Item>, AxiosError>({
-    queryKey: ['items'],
-    queryFn: async () => {
-      const res = await axios.get<PageDTO<ItemDTO>>('/api/nantralpay/item/');
-      const data = adaptPage(res.data, adaptItem);
-      formValues.itemSales = data.results.map((item) => ({
-        item: item.id,
-        quantity: 0,
-      }));
-      return data;
-    },
-  });
-
   // check if the query is loading
   if (userQuery.isLoading) {
     return <p>Loading... ⏳</p>;
@@ -86,27 +69,11 @@ export default function SelectionFormPanel() {
   if (userQuery.isError) {
     return (
       <Alert severity="error">
-        {userQuery.error.response?.data.error || userQuery.error.message}
+        {userQuery.error.response?.data?.error || userQuery.error.message}
       </Alert>
     );
   }
 
-  // check if the query is loading
-  if (itemsQuery.isLoading) {
-    return <p>Loading... ⏳</p>;
-  }
-
-  // check if there is an error and show it
-  if (itemsQuery.isError) {
-    return (
-      <Alert severity="error">
-        {itemsQuery.error.response?.data.error || itemsQuery.error.message}
-      </Alert>
-    );
-  }
-
-  const page = itemsQuery.data;
-  const itemsOfThisPage = page.results;
   const user = userQuery.data;
 
   async function saveSale(form: SaleForm) {
@@ -129,7 +96,6 @@ export default function SelectionFormPanel() {
             setFormValues({ ...formValues, ...newValues })
           }
           error={error}
-          items={itemsOfThisPage}
         />
         <Divider flexItem />
         <Spacer vertical={3} />
