@@ -67,11 +67,12 @@ export default function SelectionFormPanel() {
 
   // check if there is an error and show it
   if (userQuery.isError) {
-    return (
-      <Alert severity="error">
-        {userQuery.error.response?.data?.error || userQuery.error.message}
-      </Alert>
-    );
+    if (userQuery.error.response?.data) {
+      if (typeof userQuery.error.response?.data === 'string') {
+        userQuery.error.message = userQuery.error.response?.data;
+      }
+    }
+    return <Alert severity="error">{userQuery.error.message}</Alert>;
   }
 
   const user = userQuery.data;

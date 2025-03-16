@@ -1,6 +1,7 @@
 import json
 
 from django.http import HttpResponseServerError
+from django.http.response import HttpResponseBadRequest
 from django.shortcuts import redirect, render
 from django.urls import reverse
 
@@ -52,7 +53,7 @@ def create_payment(request):
             try:
                 response_data = response.json()
             except json.JSONDecodeError:
-                return HttpResponseServerError("Failed to decode response JSON")
+                return HttpResponseBadRequest("Failed to decode response JSON")
 
             intent_id = response_data["id"]
             redirect_url = response_data["redirectUrl"]
@@ -94,4 +95,4 @@ def helloasso_successurl(request):
         # Rediriger vers la page d'accueil
         return redirect("core:home")
     else:
-        return HttpResponseServerError("HelloAsso payment refused")
+        return HttpResponseBadRequest("HelloAsso payment refused")

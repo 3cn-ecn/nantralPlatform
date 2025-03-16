@@ -1,1 +1,1 @@
-export { default as QRCodeTransactionPage } from './QRCodeTransaction.page';
+export { default as QRCodeFormPage } from './QRCodeForm.page';

@@ -5,6 +5,7 @@ from django.core.exceptions import (
 )
 from django.db.models import QuerySet
 from django.http import JsonResponse
+from django.http.response import Http404, HttpResponseBadRequest
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
 
@@ -106,7 +107,7 @@ def create_qrcode(request):
         return JsonResponse({"qr_code_id": qr_code.id}, status=201)
 
     except json.JSONDecodeError:
-        return JsonResponse({"error": "JSON invalide"}, status=400)
+        return HttpResponseBadRequest("JSON invalide")
 
 
 @require_http_methods(["GET"])
@@ -115,7 +116,7 @@ def qrcode(request, qrcode_id):
     try:
         qr_code = QRCode.objects.get(id=qrcode_id)
     except QRCode.DoesNotExist:
-        return JsonResponse({"error": "QR Code not found"}, status=404)
+        return Http404("QR Code not found")
 
     try:
         check_qrcode(qr_code)
@@ -126,4 +127,4 @@ def qrcode(request, qrcode_id):
             }
         )
     except ValidationError as e:
-        return JsonResponse({"error": " ".join(e)}, status=400)
+        return HttpResponseBadRequest(" ".join(e))

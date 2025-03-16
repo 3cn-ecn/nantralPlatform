@@ -75,11 +75,12 @@ export function SaleFormFields({
 
   // check if there is an error and show it
   if (itemsQuery.isError) {
-    return (
-      <Alert severity="error">
-        {itemsQuery.error.response?.data?.error || itemsQuery.error.message}
-      </Alert>
-    );
+    if (itemsQuery.error.response?.data) {
+      if (typeof itemsQuery.error.response?.data === 'string') {
+        itemsQuery.error.message = itemsQuery.error.response?.data;
+      }
+    }
+    return <Alert severity="error">{itemsQuery.error.message}</Alert>;
   }
 
   const page = itemsQuery.data;
