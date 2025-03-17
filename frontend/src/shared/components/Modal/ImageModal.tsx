@@ -1,12 +1,5 @@
-import { Close } from '@mui/icons-material';
-import {
-  Dialog,
-  DialogContent,
-  DialogTitle,
-  IconButton,
-  useMediaQuery,
-  useTheme,
-} from '@mui/material';
+import { Close as CloseIcon } from '@mui/icons-material';
+import { IconButton, Modal } from '@mui/material';
 
 export function ImageModal(props: {
   url: string;
@@ -14,34 +7,34 @@ export function ImageModal(props: {
   open: boolean;
 }) {
   const { url, onClose, open } = props;
-  const theme = useTheme();
-  const fullScreen: boolean = useMediaQuery(theme.breakpoints.down('md'));
+
   return (
-    <Dialog
+    <Modal
       open={open}
       onClose={onClose}
-      scroll="paper"
-      fullScreen={fullScreen}
-      PaperProps={{ sx: { minWidth: '90%' } }}
-      sx={{ margin: 0 }}
+      sx={{
+        margin: 0,
+        justifyContent: 'center',
+        width: '100%',
+        alignItems: 'center',
+        display: 'flex',
+        bgcolor: 'rgba(0, 0, 0, 0.9)',
+      }}
     >
-      <DialogTitle>
-        <div
-          style={{
-            width: '100%',
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-          }}
+      <>
+        <img
+          alt=""
+          src={url}
+          style={{ maxWidth: '100%', maxHeight: '100%', padding: '8px' }}
+        />
+        <IconButton
+          onClick={onClose}
+          size="large"
+          sx={{ position: 'absolute', right: 0, top: 0, m: 2, color: 'white' }}
         >
-          <IconButton onClick={onClose}>
-            <Close />
-          </IconButton>
-        </div>
-      </DialogTitle>
-      <DialogContent dividers>
-        <img alt="" src={url} style={{ maxWidth: '100%' }} />
-      </DialogContent>
-    </Dialog>
+          <CloseIcon fontSize="inherit" />
+        </IconButton>
+      </>
+    </Modal>
   );
 }

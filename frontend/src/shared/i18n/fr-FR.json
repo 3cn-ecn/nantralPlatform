@@ -14,6 +14,9 @@
       "home": "Commentaires",
       "suggestion": "Suggestion"
     },
+    "group": {
+      "index": "Groupes"
+    },
     "home": {
       "index": "Accueil"
     },
@@ -28,11 +31,18 @@
     }
   },
   "button": {
+    "add": "Ajouter",
     "back": "Retour",
     "cancel": "Annuler",
     "confirm": "Valider",
+    "delete": "Supprimer",
+    "edit": "Modifier",
     "next": "Suivant",
-    "previous": "Précédent"
+    "previous": "Précédent",
+    "save": "Enregistrer",
+    "saved": "Enregistré",
+    "send": "Envoyer",
+    "update": "Valider"
   },
   "error": {
     "errorMessage": "Erreur : {{errorMessage}}",
@@ -269,6 +279,181 @@
       "wrongFormat": "Format invalide"
     }
   },
+  "group": {
+    "details": {
+      "accept": "Accepter",
+      "accepted": "Acceptée",
+      "addMember": "Ajouter un membre",
+      "create": "Créer",
+      "denied": "Refusée",
+      "deny": "Refuser",
+      "edit": "Modifier",
+      "editGroup": {
+        "add": "Ajouter"
+      },
+      "form": {
+        "description": {
+          "label": "Description"
+        },
+        "message": {
+          "helperText": " Demander à avoir les droits d'administration sur ce groupe",
+          "label": "Message"
+        },
+        "summary": {
+          "label": "Résumé"
+        },
+        "user": {
+          "label": "Utilisateur"
+        }
+      },
+      "formerMembers": "Anciens membres",
+      "infoLine": {
+        "events_one": "{{count}} événement",
+        "events_other": "{{count}} événements",
+        "members_one": "{{count}} membre",
+        "members_other": "{{count}} membres"
+      },
+      "join": "Rejoindre",
+      "makeAdminRequest": "Faire une demande d'admin",
+      "member": "Membre",
+      "modal": {
+        "deleteMember": {
+          "text": "Voulez-vous vraiment supprimer {{ student }} des membres de {{ group }} ?",
+          "title": "Supprimer le membre ?"
+        },
+        "displayMember": {
+          "dates": "Membre du {{ from }} au {{ to }}",
+          "descripition": "Membre de {{ group }}",
+          "openGroup": "Ouvrir le groupe",
+          "openProfile": "Ouvrir le profil"
+        },
+        "editGroup": {
+          "error": "Une erreur s'est produite",
+          "members": "Membres",
+          "noMembers": "Aucun membre pour le moment",
+          "tabs": {
+            "general": "Général",
+            "links": "Liens",
+            "members": "Membres",
+            "subgroups": "Sous-groupes"
+          },
+          "title": "Modifier le groupe"
+        },
+        "editMembership": {
+          "error": "Erreur de réseau : le réagencement n'est pas sauvegardé",
+          "success": "Réagencement sauvegardé !"
+        },
+        "joinGroup": {
+          "title": "Rejoindre {{ group }}"
+        }
+      },
+      "noAdminReqests": "Aucune demande d'admin",
+      "requestAdmin": "Demander a être admin",
+      "requestSent": "Demande envoyée",
+      "requestToBeAdmin": "{{student}} demande à être admin",
+      "subGroupOf": "Sous-groupe de",
+      "subgroups": "Sous-Groupes",
+      "tabs": {
+        "adminRequests": "Demandes d'admin",
+        "events": "Évènements",
+        "home": "Accueil",
+        "members": "Membres",
+        "posts": "Posts"
+      }
+    },
+    "form": {
+      "admin": {
+        "label": "Admin"
+      },
+      "archive": {
+        "helperText": "Un groupe archivé ne peut plus avoir de nouveaux membres et est masqué de la liste.",
+        "label": "Groupe archivé"
+      },
+      "banner": {
+        "helperText": "Image avec un ratio de 3:1 (taille minimale recommandée : 1200x400)",
+        "label": "Bannière"
+      },
+      "beginDate": {
+        "label": "Date de début"
+      },
+      "creationDate": {
+        "label": "Date de création"
+      },
+      "description": {
+        "label": "Description"
+      },
+      "endDate": {
+        "label": "Date de fin"
+      },
+      "icon": {
+        "helperText": "Image avec un ratio de 1:1 (taille minimale recommandée : 500x500)",
+        "label": "Image de profil"
+      },
+      "label": {
+        "label": "Label",
+        "none": "Aucun"
+      },
+      "lockMemberships": {
+        "helperText": "Les utilisateurs ne peuvent plus s'ajouter eux-mêmes au groupe.",
+        "label": "Vérouiller les membres"
+      },
+      "meetingHour": {
+        "label": "Heure de réunion"
+      },
+      "meetingPlace": {
+        "label": "Lieu de réunion"
+      },
+      "name": {
+        "label": "Nom"
+      },
+      "parent": {
+        "label": "Groupe parent"
+      },
+      "private": {
+        "helperText": "Un groupe privé n'est visible que par les membres du groupe.",
+        "label": "Groupe privé"
+      },
+      "public": {
+        "helperText": "Si coché, la page du groupe sera accessible publiquement, y compris à des utilisateurs non-connectés. Les membres, évènements et posts restent toutefois masqués.",
+        "label": "Groupe public"
+      },
+      "shortName": {
+        "helperText": "Ce nom sera affiché dans la liste des groupes.",
+        "label": "Nom raccourci"
+      },
+      "summary": {
+        "label": "Résumé"
+      },
+      "title": {
+        "advancedOptions": "Options avancées",
+        "general": "Général",
+        "presentation": "Présentation"
+      },
+      "video1": {
+        "label": "Lien Vidéo 1"
+      },
+      "video2": {
+        "label": "Lien Vidéo 2"
+      }
+    },
+    "list": {
+      "editType": "Modifier le type",
+      "noGroup": "Aucun groupe à afficher 🤔"
+    },
+    "modal": {
+      "createGroup": {
+        "title": "Créer un groupe"
+      }
+    },
+    "search": {
+      "placeholder": "Rechercher un groupe"
+    },
+    "type": {
+      "seeAll": "Voir tous",
+      "seeList": "Voir la liste",
+      "title": "Groupes"
+    }
+  },
   "home": {
     "eventSection": {
       "error": "Erreur : les évènements n'ont pas pu être chargés 😢",
@@ -284,6 +469,11 @@
       "giveFeedback": "Propose des améliorations",
       "level": "Niveau {{level}} : ",
       "title": "Tu aimes ce site ? Dis-le nous !"
+    },
+    "myGroupSection": {
+      "noGroup": "Vous n'êtes dans aucun groupe actuellement 😔",
+      "seeAll": "Voir tous",
+      "title": "Mes groupes"
     },
     "postSection": {
       "error": "Erreur : les annonces n'ont pas pu être chargées 😢",
@@ -464,6 +654,7 @@
         "dates": "Publié {{createdDuration}} • Mis à jour {{updatedDuration}}"
       }
     },
+    "noPosts": "Aucun post 😿",
     "post": "Post"
   },
   "register": {
@@ -552,7 +743,23 @@
     "title": "Générateur de signature"
   },
   "site": {
+    "adminSettings": "Paramètres Admin",
     "name": "Nantral Platform"
+  },
+  "socialLink": {
+    "addEmail": "Email",
+    "addLink": "Lien",
+    "addPhoneNumber": "Téléphone",
+    "form": {
+      "label": {
+        "label": "Label"
+      },
+      "url": {
+        "description": "L'URL doit commencer par https:, mailto:, ou tel:",
+        "label": "URL"
+      }
+    },
+    "new": "Nouveau lien"
   },
   "userMenu": {
     "button": {

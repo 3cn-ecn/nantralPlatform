@@ -58,12 +58,7 @@ export function EventInfo({
       flexWrap="wrap"
     >
       <FlexRow gap={1} alignItems="center">
-        <IconButton
-          component={Link}
-          to={group.url}
-          reloadDocument
-          sx={{ p: 0.5 }}
-        >
+        <IconButton component={Link} to={group.url} sx={{ p: 0.5 }}>
           <Avatar
             src={group.icon}
             alt={group.shortName}

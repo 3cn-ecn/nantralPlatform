@@ -1,11 +1,7 @@
-from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.db import models
-from django.template.loader import render_to_string
-from django.urls.base import reverse
 from django.utils.translation import gettext_lazy as _
 
-from discord_webhook import DiscordEmbed, DiscordWebhook
 from django_ckeditor_5.fields import CKEditor5Field
 
 from apps.account.models import User
@@ -48,6 +44,7 @@ class GroupType(models.Model):
         default=False,
         help_text=_("New groups are private by default."),
     )
+    priority = models.IntegerField(verbose_name=_("Priority"), default=0)
 
     # Group list display settings
     extra_parents = models.ManyToManyField(
@@ -93,6 +90,7 @@ class GroupType(models.Model):
         verbose_name=_("Everyone can create new group"),
         default=False,
     )
+    can_have_parent = models.BooleanField(default=True)
 
     class Meta:
         verbose_name = _("group type")
@@ -103,7 +101,7 @@ class GroupType(models.Model):
 
     def get_absolute_url(self) -> str:
         """Get the url of the object."""
-        return reverse("group:sub_index", kwargs={"type": self.slug})
+        return f"/group/{self.slug}/"
 
     def delete(self, *args, **kwargs) -> None:
         self.icon.delete(save=False)
@@ -248,21 +246,24 @@ class Group(models.Model, SlugModel):
         blank=True,
     )
     icon = CustomImageField(
-        verbose_name=_("Icon"),
+        verbose_name=_("Profile picture"),
         blank=True,
         null=True,
-        help_text=_("Your icon will be displayed at 306x306 pixels."),
+        help_text=_(
+            "Image with a ratio of 1:1 (recommended minimum size: 500x500)"
+        ),
         size=(500, 500),
-        crop=True,
+        crop=False,
         name_from_field="name",
     )
     banner = CustomImageField(
         verbose_name=_("Banner"),
         blank=True,
         null=True,
-        help_text=_("Your banner will be displayed at 1320x492 pixels."),
-        size=(1320, 492),
-        crop=True,
+        help_text=_(
+            "Image with 3:1 ratio (recommended minimum size: 1200x400)"
+        ),
+        size=(1200, 400),
         name_from_field="name",
     )
     video1 = models.URLField(
@@ -278,7 +279,7 @@ class Group(models.Model, SlugModel):
     social_links = models.ManyToManyField(
         to=SocialLink,
         verbose_name=_("Social networks"),
-        related_name="+",
+        related_name="group_set",
         blank=True,
     )
 
@@ -408,6 +409,25 @@ class Group(models.Model, SlugModel):
             and self.members.contains(user.student)
         )
 
+    def _eval_as_str(self, expr: str) -> str | None:
+        """Evaluate an expression containing with this group as a context variable
+        and returns the result as a string
+
+        Parameters
+        ----------
+        expr : The expression to evaluate
+
+        Returns
+        -------
+        None if the result is None else a string representing the result
+        """
+        res = eval(expr, {"group": self})  # noqa: S307
+
+        if res is None:
+            return None
+
+        return str(res)
+
     def get_category(self) -> str:
         """Get the category label for list display.
 
@@ -417,10 +437,7 @@ class Group(models.Model, SlugModel):
             The formatted label of the category of the group.
 
         """
-        return eval(  # noqa: S307
-            self.group_type.category_expr,
-            {"group": self},
-        )
+        return self._eval_as_str(self.group_type.category_expr)
 
     def get_sub_category(self) -> str:
         """Get the sub category label for list display.
@@ -431,10 +448,7 @@ class Group(models.Model, SlugModel):
             The formatted label of the category of the group.
 
         """
-        return eval(  # noqa: S307
-            self.group_type.sub_category_expr,
-            {"group": self},
-        )
+        return self._eval_as_str(self.group_type.sub_category_expr)
 
 
 class Membership(models.Model):
@@ -464,7 +478,8 @@ class Membership(models.Model):
         _("Asked to become admin"),
         default=False,
     )
-    admin_request_messsage = models.TextField(_("Request message"), blank=True)
+    admin_request_message = models.TextField(_("Request message"), blank=True)
+
     can_use_nantralpay = models.BooleanField(default=False)
 
     class Meta:
@@ -486,60 +501,3 @@ class Membership(models.Model):
             self.admin_request = False
             self.admin_request_messsage = ""
         super().save(*args, **kwargs)
-
-    def accept_admin_request(self) -> None:
-        """Accept an admin request."""
-        self.admin = True
-        self.save()
-        mail = render_to_string(
-            "group/mail/accept_admin_request.html",
-            {"group": self.group, "user": self.student.user},
-        )
-        self.student.user.email_user(
-            subject=(
-                _("Your admin request for %(group)s has been accepted.")
-                % {"group": self.group.name}
-            ),
-            message=mail,
-            html_message=mail,
-        )
-        webhook = DiscordWebhook(url=settings.DISCORD_ADMIN_MODERATION_WEBHOOK)
-        embed = DiscordEmbed(
-            title=(
-                f"La demande de {self.student} pour rejoindre {self.group} "
-                "a été acceptée."
-            ),
-            description="",
-            color=00000,
-        )
-        webhook.add_embed(embed)
-        webhook.execute()
-
-    def deny_admin_request(self) -> None:
-        """Deny an admin request."""
-        self.admin_request = False
-        self.admin_request_messsage = ""
-        self.save()
-        mail = render_to_string(
-            "group/mail/deny_admin_request.html",
-            {"group": self.group, "user": self.student.user},
-        )
-        self.student.user.email_user(
-            subject=(
-                _("Your admin request for %(group)s has been denied.")
-                % {"group": self.group.name}
-            ),
-            message=mail,
-            html_message=mail,
-        )
-        webhook = DiscordWebhook(url=settings.DISCORD_ADMIN_MODERATION_WEBHOOK)
-        embed = DiscordEmbed(
-            title=(
-                f"La demande de {self.student} pour rejoindre {self.group} "
-                "a été refusée."
-            ),
-            description="",
-            color=00000,
-        )
-        webhook.add_embed(embed)
-        webhook.execute()

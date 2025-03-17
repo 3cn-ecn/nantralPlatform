@@ -11,6 +11,7 @@ import { ThemeProvider } from '@mui/material';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import axios from 'axios';
 
+import { AuthProvider } from '#shared/context/Auth.context';
 import { CustomThemeProvider } from '#shared/context/CustomTheme.context';
 import { ToastProvider } from '#shared/context/Toast.context';
 
@@ -60,11 +61,13 @@ export const wrapAndRenderLegacyCode = (
       <CustomThemeProvider>
         <ThemeProvider theme={theme}>
           <QueryClientProvider client={queryClient}>
-            <ToastProvider>
-              <BrowserRouter>
-                <div className="react-legacy-container">{element}</div>
-              </BrowserRouter>
-            </ToastProvider>
+            <AuthProvider>
+              <ToastProvider>
+                <BrowserRouter>
+                  <div className="react-legacy-container">{element}</div>
+                </BrowserRouter>
+              </ToastProvider>
+            </AuthProvider>
           </QueryClientProvider>
         </ThemeProvider>
       </CustomThemeProvider>

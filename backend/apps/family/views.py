@@ -1,3 +1,5 @@
+import json
+
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import redirect
@@ -6,19 +8,19 @@ from django.views.generic import CreateView, DetailView, FormView, TemplateView
 
 from extra_settings.models import Setting
 
+from apps.family.serializers import FamilyMembersSerializer
+from apps.student.models import Student
+from apps.student.serializers import StudentSerializer
 from apps.utils.access_mixins import UserIsAdmin
 
 from .forms import (
     CreateFamilyForm,
     FamilyQuestionItiiForm,
     FamilyQuestionsForm,
-    Member2AFormset,
     MemberQuestionsForm,
     UpdateFamilyForm,
 )
 from .models import (
-    MAX_2APLUS_PER_FAMILY,
-    MIN_2APLUS_PER_FAMILY,
     Family,
     MembershipFamily,
     QuestionPage,
@@ -26,7 +28,6 @@ from .models import (
 from .utils import (
     get_membership,
     is_first_year,
-    scholar_year,
     show_sensible_data,
 )
 
@@ -223,82 +224,80 @@ class UpdateFamilyView(UserIsAdmin, TemplateView):
         self.kwargs["slug"] = self.get_family().slug
         return super().test_func()
 
+    def get_members(self):
+        students = (
+            MembershipFamily.objects.filter(role="2A+", group=self.get_family())
+            .order_by("pk")
+            .values_list("student")
+            .all()
+        )
+
+        return StudentSerializer(
+            instance=[
+                Student.objects.filter(pk=value[0]).first()
+                for value in students
+                if Student.objects.filter(pk=value[0]).exists()
+            ],
+            many=True,
+        ).data
+
     def get_context_data(self, *args, **kwargs):
         context = {}
         context["update_form"] = UpdateFamilyForm(instance=self.get_family())
-        context["members_form"] = Member2AFormset(
-            instance=self.get_family(),
-            queryset=MembershipFamily.objects.filter(role="2A+"),
-        )
+        context["current_members"] = json.dumps(self.get_members())
         context["question_form"] = FamilyQuestionsForm(
             initial=self.get_family().get_answers_dict(),
         )
+        context["errors"] = {}
         return context
 
     def post(self, request, *args, **kwargs):
         forms = [
             UpdateFamilyForm(request.POST, instance=self.get_family()),
-            Member2AFormset(
-                request.POST,
-                instance=self.get_family(),
-                queryset=MembershipFamily.objects.filter(role="2A+"),
-            ),
             FamilyQuestionsForm(data=request.POST),
         ]
-        if forms[0].is_valid() and forms[1].is_valid() and forms[2].is_valid():
-            nb_non_subscribed = 0
-            nb_subscribed = 0
-            for form in forms[1]:
-                if hasattr(form.instance, "student"):
-                    nb_subscribed += 1
-            nb_tot = nb_subscribed + nb_non_subscribed
-            if (
-                nb_tot <= MAX_2APLUS_PER_FAMILY
-                and nb_tot >= MIN_2APLUS_PER_FAMILY
-            ):
-                # on vérifie que les membres ne sont pas déjà dans une famille
-                membres_doublon = [
-                    form.instance.student.alphabetical_name
-                    for form in forms[1]
-                    if hasattr(form.instance, "student")
-                    and form.instance.student.family_set.filter(
-                        year=scholar_year()
-                    ).exclude(pk=self.get_family().pk)
-                ]
-                if not membres_doublon:
-                    # c'est bon on sauvegarde !
-                    for form in forms[1]:
-                        form.instance.role = "2A+"
-                        form.instance.admin = True
-                    forms[0].save()
-                    forms[1].save()
-                    forms[2].save(self.get_family())
-                    messages.success(
-                        request,
-                        "Les informations ont bien été enregistrées ! <a href='"
-                        + reverse("family:home")
-                        + "'>Compléter mon questionnaire perso</a>",
-                    )
-                    return redirect("family:update", self.get_family().pk)
-                else:
-                    messages.error(
-                        request,
-                        "Erreur : les membres suivants sont déjà dans une "
-                        "famille : " + ", ".join(membres_doublon),
-                    )
-            else:
-                messages.error(
-                    request,
-                    'Erreur : une famille doit avoir minimum 3 membres \
-                    et maximum 7 membres (vérifiez les noms du champ \
-                    "Autres parrains")',
-                )
+
+        serializer = FamilyMembersSerializer(
+            data=request.POST, context={"family": self.get_family()}
+        )
+        error_dict = {}
+        if not serializer.is_valid():
+            for key, values in serializer.errors.items():
+                error_dict[key] = [value[:] for value in values]
+
+        if (
+            forms[0].is_valid()
+            and forms[1].is_valid()
+            and serializer.is_valid()
+        ):
+            forms[0].save()
+            serializer.save()
+            forms[1].save(self.get_family())
+            messages.success(
+                request,
+                "Les informations ont bien été enregistrées ! <a href='"
+                + reverse("family:home")
+                + "'>Compléter mon questionnaire perso</a>",
+            )
+            return redirect("family:update", self.get_family().pk)
+
         else:
             messages.error(request, "OOOOUPS !!! Il y a une erreur...")
+
         context = {
             "update_form": forms[0],
-            "members_form": forms[1],
-            "question_form": forms[2],
+            "current_members": json.dumps(
+                StudentSerializer(
+                    instance=[
+                        Student.objects.filter(pk=value).first()
+                        for value in serializer.data.values()
+                        if Student.objects.filter(pk=value).exists()
+                    ],
+                    many=True,
+                ).data
+            ),
+            "question_form": forms[1],
+            "errors": json.dumps(error_dict),
         }
         return self.render_to_response(context)
 

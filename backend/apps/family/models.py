@@ -147,9 +147,6 @@ class BaseQuestion(models.Model):
     code_name = models.CharField("Nom de code", max_length=50)
     label = models.CharField("Question", max_length=100)
     label_en = models.CharField("Question (en)", max_length=100)
-    allow_custom_coef = models.BooleanField(
-        "Coefficient personnalisable par la personne répondant", default=False
-    )
     details = models.CharField(
         "Informations supplémentaires",
         max_length=200,
@@ -200,6 +197,9 @@ class Option(models.Model):
 class QuestionMember(BaseQuestion):
     page = models.ForeignKey(QuestionPage, on_delete=models.CASCADE)
     coeff = models.IntegerField("Coefficient")
+    allow_custom_coef = models.BooleanField(
+        "Coefficient personnalisable par la personne répondant", default=False
+    )
     group = models.ForeignKey(
         GroupQuestion,
         verbose_name="Groupe",
@@ -245,6 +245,9 @@ class QuestionFamily(BaseQuestion):
         help_text="Question équivalente dans le questionnaire des membres. \
             Laissez vide si vous souhaitez que cette question ne soit pas \
             prise en compte dans l'algo.",
+    )
+    allow_custom_coef = models.BooleanField(
+        "Coefficient personnalisable par la famille répondant", default=False
     )
     quota = models.IntegerField(
         "Quota",

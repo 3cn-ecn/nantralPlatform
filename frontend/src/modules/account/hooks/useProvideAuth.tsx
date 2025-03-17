@@ -28,7 +28,10 @@ export function useProvideAuth(): ProvideAuthValues {
   const { mutateAsync: logout, isLoading: isLogoutLoading } = useMutation(
     logoutApi,
     {
-      onSuccess: () => queryClient.invalidateQueries(['isAuthenticated']),
+      onSuccess: async () => {
+        queryClient.clear();
+        queryClient.setQueryData(['isAuthenticated'], false);
+      },
     },
   );
 
@@ -41,7 +44,10 @@ export function useProvideAuth(): ProvideAuthValues {
     AxiosError<{ message?: string; code?: string }>,
     LoginApiBody
   >(loginApi, {
-    onSuccess: () => queryClient.invalidateQueries(['isAuthenticated']),
+    onSuccess: () => {
+      queryClient.clear();
+      queryClient.setQueryData(['isAuthenticated'], true);
+    },
   });
 
   return {

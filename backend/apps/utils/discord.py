@@ -1,6 +1,7 @@
 from django.conf import settings
 
 import requests
+from discord_webhook import DiscordEmbed, DiscordWebhook
 
 BASE_URL = "https://discord.com/api"
 AUTH_HEADER = {"Authorization": f"Bot {settings.DISCORD_TOKEN}"}
@@ -20,6 +21,7 @@ def send_message(
         headers=AUTH_HEADER,
         timeout=10,
     )
+
     return resp.json()["id"]
 
 
@@ -32,3 +34,30 @@ def react_message(channel_id: int, message_id: str, emoji: str):
         headers=AUTH_HEADER,
         timeout=10,
     )
+
+
+def send_admin_request(title: str, description: str, url: str):
+    webhook = DiscordWebhook(url=settings.DISCORD_ADMIN_MODERATION_WEBHOOK)
+    embed = DiscordEmbed(
+        title=title,
+        description=description,
+        color=242424,
+    )
+    embed.add_embed_field(
+        name="Voir la demande",
+        value=f"[Voir la demande]({url})",
+        inline=True,
+    )
+    webhook.add_embed(embed)
+    webhook.execute()
+
+
+def respond_admin_request(title: str, description: str = "", color=00000):
+    webhook = DiscordWebhook(url=settings.DISCORD_ADMIN_MODERATION_WEBHOOK)
+    embed = DiscordEmbed(
+        title=title,
+        description=description,
+        color=color,
+    )
+    webhook.add_embed(embed)
+    webhook.execute()

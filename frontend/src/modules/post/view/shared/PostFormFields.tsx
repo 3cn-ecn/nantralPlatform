@@ -24,7 +24,7 @@ interface PostFormFieldsProps {
   error: ApiFormError<PostFormDTO> | null;
   formValues: PostForm;
   updateFormValues: Dispatch<SetObjectStateAction<PostForm>>;
-  prevData?: Post;
+  prevData?: Partial<Post>;
   selectedLang: BaseLanguage;
 }
 
@@ -145,7 +145,7 @@ export function PostFormFields({
         <MenuItem value="Pub">{t('post.form.publicity.options.pub')}</MenuItem>
         <MenuItem value="Mem">{t('post.form.publicity.options.mem')}</MenuItem>
       </SelectField>
-      {prevData?.group.canPin && (
+      {prevData?.group?.canPin && (
         <CheckboxField
           name="pinned"
           label={t('post.form.pinned.label')}

@@ -4,7 +4,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("roommates", "0016_alter_roommates_end_date"),
     ]
@@ -33,7 +32,10 @@ class Migration(migrations.Migration):
             model_name="roommates",
             name="alt_name",
             field=models.CharField(
-                blank=True, default="", max_length=100, verbose_name="Nom alternatif"
+                blank=True,
+                default="",
+                max_length=100,
+                verbose_name="Nom alternatif",
             ),
             preserve_default=False,
         ),
@@ -70,13 +72,17 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name="roommates",
             name="video1",
-            field=models.URLField(blank=True, default="", verbose_name="Lien vidéo 1"),
+            field=models.URLField(
+                blank=True, default="", verbose_name="Lien vidéo 1"
+            ),
             preserve_default=False,
         ),
         migrations.AlterField(
             model_name="roommates",
             name="video2",
-            field=models.URLField(blank=True, default="", verbose_name="Lien vidéo 2"),
+            field=models.URLField(
+                blank=True, default="", verbose_name="Lien vidéo 2"
+            ),
             preserve_default=False,
         ),
     ]

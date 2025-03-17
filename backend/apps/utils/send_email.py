@@ -33,8 +33,8 @@ def send_email(
     """
     connection = get_connection()
 
-    html_template = f"emails/{template_name}.html"
-    text_template = f"emails/{template_name}.txt"
+    html_template = f"emails/html/{template_name}.html"
+    text_template = f"emails/text/{template_name}.txt"
 
     html_body = render_to_string(html_template, context)
     text_body = render_to_string(text_template, context)

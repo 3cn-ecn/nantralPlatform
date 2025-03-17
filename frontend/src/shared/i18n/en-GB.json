@@ -14,6 +14,9 @@
       "home": "Feedback",
       "suggestion": "Suggestion"
     },
+    "group": {
+      "index": "Groups"
+    },
     "home": {
       "index": "Home"
     },
@@ -28,11 +31,18 @@
     }
   },
   "button": {
+    "add": "Add",
     "back": "Back",
     "cancel": "Cancel",
     "confirm": "OK",
+    "delete": "Delete",
+    "edit": "Edit",
     "next": "Next",
-    "previous": "Previous"
+    "previous": "Previous",
+    "save": "Save",
+    "saved": "Saved",
+    "send": "Send",
+    "update": "Update"
   },
   "error": {
     "errorMessage": "Error: {{errorMessage}}",
@@ -269,6 +279,181 @@
       "wrongFormat": "Invalid format"
     }
   },
+  "group": {
+    "details": {
+      "accept": "Accept",
+      "accepted": "Accepted",
+      "addMember": "Add a member",
+      "create": "Create",
+      "denied": "Denied",
+      "deny": "Deny",
+      "edit": "Edit",
+      "editGroup": {
+        "add": "Add"
+      },
+      "form": {
+        "description": {
+          "label": "Description"
+        },
+        "message": {
+          "helperText": "Request administrative rights to this group",
+          "label": "Message"
+        },
+        "summary": {
+          "label": "Summary"
+        },
+        "user": {
+          "label": "User"
+        }
+      },
+      "formerMembers": "Former members",
+      "infoLine": {
+        "events_one": "{{count}} event",
+        "events_other": "{{count}} events",
+        "members_one": "{{count}} member",
+        "members_other": "{{count}} members"
+      },
+      "join": "Join",
+      "makeAdminRequest": "Make an admin request",
+      "member": "Member",
+      "modal": {
+        "deleteMember": {
+          "text": "Are you sure you want to remove {{ student }} from {{ group }} members?",
+          "title": "Delete member?"
+        },
+        "displayMember": {
+          "dates": "Member from {{ from }} to {{ to }}",
+          "descripition": "Member of {{group}}",
+          "openGroup": "Open group",
+          "openProfile": "Open profile"
+        },
+        "editGroup": {
+          "error": "An error occurred",
+          "members": "Members",
+          "noMembers": "No members at the moment",
+          "tabs": {
+            "general": "General",
+            "links": "Links",
+            "members": "Members",
+            "subgroups": "Subgroups"
+          },
+          "title": "Edit group"
+        },
+        "editMembership": {
+          "error": "Network error: rearrangement not saved",
+          "success": "Rearrangement saved!"
+        },
+        "joinGroup": {
+          "title": "Join {{group}}"
+        }
+      },
+      "noAdminReqests": "No admin requests",
+      "requestAdmin": "Ask to be an admin",
+      "requestSent": "Request sent",
+      "requestToBeAdmin": "{{student}} asks to be admin",
+      "subGroupOf": "Subgroup of",
+      "subgroups": "Subgroups",
+      "tabs": {
+        "adminRequests": "Admin Requests",
+        "events": "Events",
+        "home": "Home",
+        "members": "Members",
+        "posts": "Posts"
+      }
+    },
+    "form": {
+      "admin": {
+        "label": "Admin"
+      },
+      "archive": {
+        "helperText": "An archived group can no longer have new members and is hidden from the list.",
+        "label": "Archived group"
+      },
+      "banner": {
+        "helperText": "Image with 3:1 ratio (recommended minimum size: 1200x400)",
+        "label": "Banner"
+      },
+      "beginDate": {
+        "label": "Begin date"
+      },
+      "creationDate": {
+        "label": "Creation date"
+      },
+      "description": {
+        "label": "Description"
+      },
+      "endDate": {
+        "label": "End date"
+      },
+      "icon": {
+        "helperText": "Image with a ratio of 1:1 (recommended minimum size: 500x500)",
+        "label": "Profile picture"
+      },
+      "label": {
+        "label": "Label",
+        "none": "None"
+      },
+      "lockMemberships": {
+        "helperText": "Users can no longer add themselves to the group.",
+        "label": "Lock members"
+      },
+      "meetingHour": {
+        "label": "Meeting time"
+      },
+      "meetingPlace": {
+        "label": "Meeting place"
+      },
+      "name": {
+        "label": "Name"
+      },
+      "parent": {
+        "label": "Parent group"
+      },
+      "private": {
+        "helperText": "Make the club invisible to everyone except members",
+        "label": "Private group"
+      },
+      "public": {
+        "helperText": "If checked, the group page will be publicly accessible, including to unconnected users. \nHowever, members, events and posts remain hidden.",
+        "label": "Public group"
+      },
+      "shortName": {
+        "helperText": "This name will be displayed in the group list.",
+        "label": "Shortened name"
+      },
+      "summary": {
+        "label": "Summary"
+      },
+      "title": {
+        "advancedOptions": "Advanced options",
+        "general": "General",
+        "presentation": "Presentation"
+      },
+      "video1": {
+        "label": "Video Link 1"
+      },
+      "video2": {
+        "label": "Video Link 2"
+      }
+    },
+    "list": {
+      "editType": "Edit Type",
+      "noGroup": "No groups to display 🤔"
+    },
+    "modal": {
+      "createGroup": {
+        "title": "Create a group"
+      }
+    },
+    "search": {
+      "placeholder": "Search for a group"
+    },
+    "type": {
+      "seeAll": "See all",
+      "seeList": "See the list",
+      "title": "Groups"
+    }
+  },
   "home": {
     "eventSection": {
       "error": "Error: events cannot be loaded 😢",
@@ -284,6 +469,11 @@
       "giveFeedback": "Suggest improvements",
       "level": "Level {{level}}: ",
       "title": "Do you like this site?"
+    },
+    "myGroupSection": {
+      "noGroup": "You are not in any group currently 😔",
+      "seeAll": "See all",
+      "title": "My groups"
     },
     "postSection": {
       "error": "Error: posts cannot be loaded 😢",
@@ -464,6 +654,7 @@
         "dates": "Published {{createdDuration}} • Updated {{updatedDuration}}"
       }
     },
+    "noPosts": "No posts 😿",
     "post": "Post"
   },
   "register": {
@@ -552,7 +743,23 @@
     "title": "Signature generator"
   },
   "site": {
+    "adminSettings": "Admin Settings",
     "name": "Nantral Platform"
+  },
+  "socialLink": {
+    "addEmail": "E-mail",
+    "addLink": "Link",
+    "addPhoneNumber": "Phone",
+    "form": {
+      "label": {
+        "label": "Label"
+      },
+      "url": {
+        "description": "The URL should start with https:, mailto, or tel:",
+        "label": "URL"
+      }
+    },
+    "new": "New link"
   },
   "userMenu": {
     "button": {

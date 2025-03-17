@@ -95,14 +95,6 @@ class Roommates(AbstractGroup):
     class Meta:
         verbose_name = "coloc"
 
-    def occupied(self):
-        td = timezone.now().today
-        if self.begin_date <= td and (
-            self.end_date is None or self.end_date >= td
-        ):
-            return True
-        return False
-
 
 class NamedMembershipRoommates(NamedMembership):
     group = models.ForeignKey(to=Roommates, on_delete=models.CASCADE)

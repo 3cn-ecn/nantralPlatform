@@ -22,8 +22,13 @@ function convertToForm(post: Post): PostForm {
   };
 }
 
-export function usePostFormValues(post?: Post) {
+export function usePostFormValues({
+  post,
+  group,
+}: { post?: Post; group?: number } = {}) {
   const defaultValues = post ? convertToForm(post) : defaultPostFormValues;
-
+  if (group) {
+    defaultValues.group = group;
+  }
   return useObjectState(defaultValues);
 }

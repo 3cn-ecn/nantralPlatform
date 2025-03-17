@@ -1,6 +1,7 @@
 import { Typography } from '@mui/material';
+import 'ckeditor5/ckeditor5.css';
 
-import '#shared/ckeditor/styles/base.styles.scss';
+import '#shared/ckeditor/custom.styles.scss';
 
 interface RichTextRendererProps {
   content: string;

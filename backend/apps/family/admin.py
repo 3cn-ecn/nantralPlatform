@@ -51,7 +51,15 @@ class OptionInline(admin.TabularInline):
 
 
 class QuestionMemberAdmin(admin.ModelAdmin):
-    list_display = ["code_name", "coeff", "allow_custom_coef"]
+    list_display = [
+        "code_name",
+        "coeff",
+        "allow_custom_coef",
+        "order",
+        "group",
+        "page",
+    ]
+    list_filter = ["group", "page"]
     inlines = [OptionInline]
 
 

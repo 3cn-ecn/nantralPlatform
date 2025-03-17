@@ -4,9 +4,7 @@ import { TranslatedFieldsDTO } from './translatedField.dto';
 import { TranslatedFieldObject } from './translatedField.types';
 
 type TranslatedFieldsDTOWithOriginal<Field extends string> =
-  TranslatedFieldsDTO<Field> & {
-    [K in Field]: undefined;
-  };
+  TranslatedFieldsDTO<Field> & Record<Field, undefined>;
 
 /**
  * Converts a TranslatedFieldObject to a TranslatedFieldsDTO.

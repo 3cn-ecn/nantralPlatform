@@ -122,6 +122,7 @@ class AuthViewSet(GenericViewSet):
     def register(self, request: Request):
         """Create a new account"""
         data = request.data
+
         if data.get("invitation_uuid"):
             serializer = InvitationRegisterSerializer(data=data)
             temporary = True

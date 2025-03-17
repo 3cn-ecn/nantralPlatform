@@ -17,7 +17,7 @@ export function BackgroundImageOverlay({ src }: BackgroundImageOverlayProps) {
       <BackgroundImage
         src={src}
         shift="bottom"
-        height="80vh"
+        height="60vh"
         wrapperStyle={{ overflow: 'hidden' }}
       />
       <Box
@@ -26,7 +26,7 @@ export function BackgroundImageOverlay({ src }: BackgroundImageOverlayProps) {
           backdropFilter: 'blur(10px)',
           position: 'absolute',
           width: '100%',
-          height: '80vh',
+          height: '60vh',
           zIndex: -1,
         }}
       />

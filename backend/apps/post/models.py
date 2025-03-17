@@ -113,8 +113,8 @@ class AbstractPublication(models.Model, SlugModel):
         n.body = notification_body
         n.url = self.get_absolute_url()
         n.sender = self.group.slug
-        n.icon_url = self.group.icon.url if self.group.icon else None
-        n.image_url = self.image.url if self.image else None
+        n.icon_url = self.group.icon.url if self.group.icon else ""
+        n.image_url = self.image.url if self.image else ""
         n.publicity = self.publicity
         n.save()
         # send the notification

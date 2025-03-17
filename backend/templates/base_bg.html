@@ -1,28 +1,21 @@
-{% extends 'base.html' %}
-{% load static %}
+{% extends 'base.html' %} {% load static %} {% block content%}
+<style>
+  body {
+    background-image: url('{% static "/img/central_background.jpg" %}');
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-attachment: fixed;
+  }
+  .bg-light {
+    background-color: rgba(248, 249, 251, 0.9) !important;
+    backdrop-filter: blur(4px);
+  }
+</style>
 
+<div class="row">
+  <div class="col-md-3"></div>
+  <div class="card col-lg-6 col-12 my-3 p-3 bg-light text-center">{% block card_content %} {% endblock %}</div>
+  <div class="col-md-3"></div>
+</div>
 
-{% block content%}
-    <style> 
-        body {
-            background-image: url('{% static "/img/central_background.jpg" %}');
-            background-repeat: no-repeat;
-            background-size: cover;
-            background-attachment: fixed;
-        }
-        .bg-light {
-            background-color: rgba(248, 249, 251, 0.90) !important;
-            backdrop-filter: blur(4px);
-        }
-    </style>
-    
-    <div class='row'>
-        <div class='col-md-3'></div>
-        <div class='card col-lg-6 col-12  my-3 p-3 bg-light text-center'>
-            {% block card_content %}
-            {% endblock %}
-        </div>
-        <div class='col-md-3'></div>
-    </div>
-    
 {% endblock %}

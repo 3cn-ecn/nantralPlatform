@@ -1,5 +1,7 @@
 {% extends 'base.html' %}
 {% load crispy_forms_tags %}
+{% load static %} 
+{% load django_vite %}
 
 {% block content %}
 
@@ -15,7 +17,7 @@
             <div class="col-12 col-md-6">
                 <h2>Membres</h2>
                 <table>
-                    {{ members_form.management_form|crispy }}
+                    <div id="membership-form"/>
                     {% for form in members_form.forms %}
                         {# Include the hidden fields in the form #}
                         {% for field in form %}
@@ -44,5 +46,13 @@
         <br>
         <button type="submit" class="btn btn-primary">Enregistrer ma famille</button>
     </form>
+   
+{% endblock %}
 
+{% block script %}
+<script>
+  const CURRENT_MEMBERS = {{ current_members|safe }};
+  const ERRORS = {{ errors|safe }}
+</script>
+{% vite_asset 'src/legacy/family/FamilyMembersForm.tsx' %}
 {% endblock %}

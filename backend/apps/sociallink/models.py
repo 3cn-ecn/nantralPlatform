@@ -33,10 +33,13 @@ class SocialLink(models.Model):
         max_length=20,
         blank=True,
     )
+
+    # Legacy fields: only used for Roommates (based on AbstractGroups)
     network = models.ForeignKey(
         SocialNetwork,
-        on_delete=models.CASCADE,
+        on_delete=models.SET_NULL,
         verbose_name="Type du lien",
+        null=True,
     )
     slug = models.SlugField(verbose_name="Slug du groupe", null=True)  # noqa: DJ001
 
