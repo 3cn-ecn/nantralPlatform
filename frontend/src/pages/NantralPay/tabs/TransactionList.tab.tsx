@@ -25,14 +25,20 @@ export default function TransactionListTab({
   return (
     <>
       <Typography variant="h2">{t('nantralpay.transaction.list')}</Typography>
-      <TransactionTable
-        data={transactions}
-        updateFilters={updateFilters}
-        filters={filters}
-        isSuccess={isSuccess}
-        isFetching={isFetching}
-        isLoading={isLoading}
-      />
+      {transactions?.count ? (
+        <TransactionTable
+          data={transactions}
+          updateFilters={updateFilters}
+          filters={filters}
+          isSuccess={isSuccess}
+          isFetching={isFetching}
+          isLoading={isLoading}
+        />
+      ) : (
+        <Typography variant="body1">
+          {t('nantralpay.transaction.empty')}
+        </Typography>
+      )}
     </>
   );
 }

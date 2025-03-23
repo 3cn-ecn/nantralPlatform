@@ -602,7 +602,8 @@
       "date": "Date",
       "status": "Statut",
       "haOrderId": "ID HelloAsso de la commande",
-      "haPaymentId": "ID HelloAsso du paiement"
+      "haPaymentId": "ID HelloAsso du paiement",
+      "empty": "Vous n'avez pas encore effectué de paiement"
     },
     "transaction": {
       "list": "Liste des transactions",
@@ -612,7 +613,8 @@
       "description": "Description",
       "sender": "Envoyé par",
       "receiver": "Reçu par",
-      "group": "Envoyé au Groupe"
+      "group": "Envoyé au Groupe",
+      "empty": "Vous n'avez pas encore effectué de transaction"
     },
     "qrcode": {
       "button": "Générer un QR Code",

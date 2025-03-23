@@ -602,7 +602,8 @@
       "date": "Date",
       "status": "Status",
       "haOrderId": "HelloAsso Order ID",
-      "haPaymentId": "HelloAsso Payment ID"
+      "haPaymentId": "HelloAsso Payment ID",
+      "empty": "You have made no payments yet"
     },
     "transaction": {
       "list": "Transaction list",
@@ -612,7 +613,8 @@
       "description": "Description",
       "sender": "Sent by",
       "receiver": "Received by",
-      "group": "Sent to group"
+      "group": "Sent to group",
+      "empty": "You have made no transactions yet"
     },
     "qrcode": {
       "button": "Generate QR Code",

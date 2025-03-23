@@ -25,14 +25,18 @@ export default function PaymentListTab({
   return (
     <>
       <Typography variant="h2">{t('nantralpay.payment.list')}</Typography>
-      <PaymentTable
-        data={payments}
-        updateFilters={updateFilters}
-        filters={filters}
-        isLoading={isLoading}
-        isFetching={isFetching}
-        isSuccess={isSuccess}
-      />
+      {payments?.count ? (
+        <PaymentTable
+          data={payments}
+          updateFilters={updateFilters}
+          filters={filters}
+          isLoading={isLoading}
+          isFetching={isFetching}
+          isSuccess={isSuccess}
+        />
+      ) : (
+        <Typography variant="body1">{t('nantralpay.payment.empty')}</Typography>
+      )}
     </>
   );
 }
