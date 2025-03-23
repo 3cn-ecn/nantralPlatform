@@ -1,14 +1,12 @@
 from datetime import timedelta
 
+from apps.group.models import Group
 from django.core.exceptions import (
     PermissionDenied,
     ValidationError,
 )
-from django.http import HttpResponseForbidden
 from django.utils import timezone
 from django.utils.translation import gettext as _
-
-from apps.group.models import Group
 
 from ..account.models import User
 from .models import Payment, QRCode, Transaction
@@ -85,7 +83,7 @@ def require_ip(allowed_ip_list):
         def authorize(request, *args, **kwargs):
             user_ip = request.META["REMOTE_ADDR"]
             if user_ip not in allowed_ip_list:
-                return HttpResponseForbidden("You cannot access this page")
+                raise PermissionDenied()
             else:
                 return view_func(request, *args, **kwargs)
 
