@@ -1,6 +1,7 @@
 from datetime import datetime, timedelta, timezone
 
 import requests
+
 from config.settings.base import HELLOASSO_CLIENT_ID, HELLOASSO_CLIENT_SECRET
 
 from .models import AccessToken, RefreshToken
