@@ -39,31 +39,24 @@ export default function AddItemForm() {
 
   return (
     <>
-      <form
-        onSubmit={(event) => {
-          event.preventDefault();
-          mutate(formValues);
-        }}
+      <ItemFormFields
+        formValues={formValues}
+        updateFormValues={(newValues) =>
+          setFormValues({ ...formValues, ...newValues })
+        }
+        error={error}
+      />
+      <Divider flexItem />
+      <Spacer vertical={3} />
+      <LoadingButton
+        loading={loading}
+        variant="contained"
+        type="submit"
+        size="large"
+        onClick={() => mutate(formValues)}
       >
-        Ajouter unn nouveau produit
-        <ItemFormFields
-          formValues={formValues}
-          updateFormValues={(newValues) =>
-            setFormValues({ ...formValues, ...newValues })
-          }
-          error={error}
-        />
-        <Divider flexItem />
-        <Spacer vertical={3} />
-        <LoadingButton
-          loading={loading}
-          variant="contained"
-          type="submit"
-          size="large"
-        >
-          {t('nantralPay.addItem')}
-        </LoadingButton>
-      </form>
+        {t('nantralpay.item.button')}
+      </LoadingButton>
     </>
   );
 }

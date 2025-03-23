@@ -100,7 +100,7 @@ export function SaleFormFields({
         color={'primary'}
         sx={{ alignItems: 'center', display: 'flex', columnGap: 1 }}
       >
-        {t('nantralpay.selectItems')}
+        {t('nantralpay.cash-in.select')}
       </Typography>
       <Divider sx={{ marginTop: 1 }} />
       <div style={{ display: 'block' }}>

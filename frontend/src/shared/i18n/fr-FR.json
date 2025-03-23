@@ -28,6 +28,10 @@
     },
     "signature": {
       "index": "Signature"
+    },
+    "nantralpay": {
+      "index": "NantralPay",
+      "cash-in": "Encaisser"
     }
   },
   "button": {
@@ -578,6 +582,56 @@
       "label": "Aide"
     }
   },
+  "nantralpay": {
+    "title": "NantralPay",
+    "balance": "Solde : {{balance}} €",
+    "tabs": {
+      "home": "Accueil",
+      "payments": "Paiements",
+      "transactions": "Transactions",
+      "qrcode": "Payer par QR Code",
+      "manageItems": "Gérer les articles"
+    },
+    "list": {
+      "labelDisplayedRows": "Page {{ page }} sur {{ pageSize }} ({{ count }} résultats)"
+    },
+    "payment": {
+      "list": "Liste des paiements",
+      "id": "ID",
+      "amount": "Montant",
+      "date": "Date",
+      "status": "Statut",
+      "haOrderId": "ID HelloAsso de la commande",
+      "haPaymentId": "ID HelloAsso du paiement"
+    },
+    "transaction": {
+      "list": "Liste des transactions",
+      "id": "ID",
+      "amount": "Montant",
+      "date": "Date",
+      "description": "Description",
+      "sender": "Envoyé par",
+      "receiver": "Reçu par",
+      "group": "Envoyé au Groupe"
+    },
+    "qrcode": {
+      "button": "Générer un QR Code",
+      "qrcode": "QR Code :",
+      "title": "Payer par QR Code"
+    },
+    "cash-in": {
+      "title": "Encaisser l'utilisateur {{user}}",
+      "amount": "Montant disponible : {{amount}} €",
+      "button": "Valider",
+      "select": "Sélectionner des articles"
+    },
+    "item": {
+      "addForm": "Ajouter un article",
+      "button": "Ajouter",
+      "name": "Nom",
+      "price": "Prix"
+    }
+  },
   "navbar": {
     "events": "Évènements",
     "family": "Parrainage",
@@ -585,7 +639,8 @@
     "group": "Groupes",
     "home": "Accueil",
     "signature": "Signature ECN",
-    "student": "Annuaire Étudiant"
+    "student": "Annuaire Étudiant",
+    "nantralpay": "NantralPay"
   },
   "notification": {
     "aria-label": "Afficher les {{ nb }} nouvelles notifications",

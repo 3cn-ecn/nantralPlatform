@@ -28,6 +28,10 @@
     },
     "signature": {
       "index": "Signature"
+    },
+    "nantralpay": {
+      "index": "NantralPay",
+      "cash-in": "Cash In"
     }
   },
   "button": {
@@ -578,6 +582,56 @@
       "label": "Help"
     }
   },
+  "nantralpay": {
+    "title": "NantralPay",
+    "balance": "Balance : {{balance}} €",
+    "tabs": {
+      "home": "Home",
+      "payments": "Payments",
+      "transactions": "Transactions",
+      "qrcode": "Pay with QR Code",
+      "manageItems": "Manage Items"
+    },
+    "list": {
+      "labelDisplayedRows": "Page {{ page }} of {{ pageSize }} ({{ count }} results)"
+    },
+    "payment": {
+      "list": "Payment list",
+      "id": "ID",
+      "amount": "Amount",
+      "date": "Date",
+      "status": "Status",
+      "haOrderId": "HelloAsso Order ID",
+      "haPaymentId": "HelloAsso Payment ID"
+    },
+    "transaction": {
+      "list": "Transaction list",
+      "id": "ID",
+      "amount": "Amount",
+      "date": "Date",
+      "description": "Description",
+      "sender": "Sent by",
+      "receiver": "Received by",
+      "group": "Sent to group"
+    },
+    "qrcode": {
+      "button": "Generate QR Code",
+      "qrcode": "QR Code:",
+      "title": "Pay with QR Code"
+    },
+    "cash-in": {
+      "title": "Cash in user {{user}}",
+      "amount": "Available amount: {{amount}} €",
+      "button": "Save",
+      "select": "Select items"
+    },
+    "item": {
+      "addForm": "Add an item",
+      "button": "Add",
+      "name": "Name",
+      "price": "Price"
+    }
+  },
   "navbar": {
     "events": "Events",
     "family": "Family",
@@ -585,7 +639,8 @@
     "group": "Groups",
     "home": "Home",
     "signature": "Signature",
-    "student": "Student List"
+    "student": "Student List",
+    "nantralpay": "NantralPay"
   },
   "notification": {
     "aria-label": "Show {{ nb }} new notifications",

@@ -71,9 +71,9 @@ export function AppMenuPanel({ menuOpen, onClose }: AppMenuPanelProps) {
           closeMenu={onClose}
         />
         <AppMenuItem
-          label="Créer un QR Code"
-          path="/nantralpay/qrcode-form/"
-          iconPath="/static/img/icons/cropped/menu_dots.svg"
+          label={t('navbar.nantralpay')}
+          path="/nantralpay/"
+          iconPath="/static/img/icons/cropped/link.svg"
           closeMenu={onClose}
         />
       </List>

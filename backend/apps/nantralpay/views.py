@@ -1,6 +1,8 @@
 import json
 
+from django.contrib.auth.decorators import login_required
 from django.core.exceptions import (
+    PermissionDenied,
     ValidationError,
 )
 from django.db.models import QuerySet
@@ -9,12 +11,13 @@ from django.http.response import Http404, HttpResponseBadRequest
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
 
-from rest_framework import permissions, viewsets
+from rest_framework import mixins, permissions, viewsets
 
 from apps.group.models import Membership
 
 from .models import (
     Item,
+    Order,
     Payment,
     QRCode,
     Sale,
@@ -28,6 +31,7 @@ from .serializers import (
 )
 from .utils import (
     check_qrcode,
+    get_user_group,
 )
 
 
@@ -56,20 +60,26 @@ class ItemPermission(permissions.BasePermission):
         return True
 
 
-class TransactionViewSet(viewsets.ModelViewSet):
+class PaymentViewSet(mixins.RetrieveModelMixin, mixins.ListModelMixin, viewsets.GenericViewSet):
+    serializer_class = PaymentSerializer
+    permission_classes = [
+        permissions.IsAuthenticated,
+        NantralPayPermission,
+    ]
+
+    def get_queryset(self) -> QuerySet[Order]:
+        return Payment.objects.filter(order__user=self.request.user)
+
+
+class TransactionViewSet(mixins.RetrieveModelMixin, mixins.ListModelMixin, viewsets.GenericViewSet):
     serializer_class = TransactionSerializer
-    permission_classes = [permissions.IsAuthenticated, NantralPayPermission]
+    permission_classes = [
+        permissions.IsAuthenticated,
+        NantralPayPermission,
+    ]
 
     def get_queryset(self) -> QuerySet[Transaction]:
-        return Transaction.objects.all()
-
-
-class PaymentViewSet(viewsets.ModelViewSet):
-    serializer_class = PaymentSerializer
-    permission_classes = [permissions.IsAuthenticated, NantralPayPermission]
-
-    def get_queryset(self) -> QuerySet[Payment]:
-        return Payment.objects.all()
+        return Transaction.objects.filter(sender=self.request.user)
 
 
 class SaleViewSet(viewsets.ModelViewSet):
@@ -122,9 +132,28 @@ def qrcode(request, qrcode_id):
         check_qrcode(qr_code)
         return JsonResponse(
             {
-                "user": str(qr_code.user),
+                "user": qr_code.user.student.name,
                 "balance": qr_code.user.nantralpay_balance,
             }
         )
     except ValidationError as e:
         return HttpResponseBadRequest(" ".join(e))
+
+
+@require_http_methods(["GET"])
+@login_required
+def user_info(request):
+    try:
+        get_user_group(request.user)
+    except PermissionDenied:
+        is_admin = request.user.is_superuser
+    else:
+        is_admin = True
+
+    return JsonResponse(
+        {
+            "user": str(request.user),
+            "balance": request.user.nantralpay_balance,
+            "is_admin": is_admin,
+        }
+    )

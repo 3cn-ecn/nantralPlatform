@@ -48,12 +48,12 @@ class TransactionAdmin(admin.ModelAdmin):
         "receiver",
         "amount",
         "transaction_date",
-        "description",
+        "get_description",
     )
     search_fields = (
         "sender__username",
         "receiver__username",
-        "description",
+        "get_description",
     )
     list_filter = ("transaction_date",)
     ordering = ("-transaction_date",)
@@ -99,10 +99,3 @@ class SaleAdmin(admin.ModelAdmin):
         "user__email",
     )
     list_display = ("user", "get_items")
-
-    def get_items(self, obj):
-        """Shows the purchased items"""
-        return "\n".join(
-            f"{item.quantity}x {item.item.name}"
-            for item in obj.item_sales.all()
-        )

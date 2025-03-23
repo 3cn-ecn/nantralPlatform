@@ -76,7 +76,6 @@ class Transaction(models.Model):
     )
     amount = models.DecimalField(max_digits=10, decimal_places=2)
     transaction_date = models.DateTimeField(auto_now_add=True)
-    description = models.TextField(blank=True)
 
     group = models.ForeignKey(
         Group,
@@ -85,6 +84,9 @@ class Transaction(models.Model):
         blank=True,
         null=True,
     )
+
+    def get_description(self):
+        return self.sale.get_items()
 
 
 class QRCode(models.Model):
@@ -127,6 +129,13 @@ class Sale(models.Model):
     def get_price(self):
         return sum(
             item.item.price * item.quantity for item in self.item_sales.all()
+        )
+
+    def get_items(self):
+        """Shows the purchased items"""
+        return " / ".join(
+            f"{item.quantity}x {item.item.name}"
+            for item in self.item_sales.all()
         )
 
 

@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
-import { Alert, Divider } from '@mui/material';
+import { Alert, Container, Divider, Typography } from '@mui/material';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import axios, { AxiosError } from 'axios';
 
@@ -82,33 +82,31 @@ export default function SelectionFormPanel() {
   }
 
   return (
-    <>
-      <form
-        onSubmit={(event) => {
-          event.preventDefault();
-          mutate(formValues);
-        }}
+    <Container sx={{ mb: 2 }}>
+      <Typography variant="h1">
+        {t('nantralpay.cash-in.title', { user: user.user })}
+      </Typography>
+      <Typography>
+        {t('nantralpay.cash-in.amount', { amount: user.balance })}
+      </Typography>
+      <SaleFormFields
+        formValues={formValues}
+        updateFormValues={(newValues) =>
+          setFormValues({ ...formValues, ...newValues })
+        }
+        error={error}
+      />
+      <Divider flexItem />
+      <Spacer vertical={3} />
+      <LoadingButton
+        loading={loading}
+        variant="contained"
+        type="submit"
+        size="large"
+        onClick={() => mutate(formValues)}
       >
-        Encaisser l&apos;utilisateur {user.user} - Montant disponible{' '}
-        {user.balance} €
-        <SaleFormFields
-          formValues={formValues}
-          updateFormValues={(newValues) =>
-            setFormValues({ ...formValues, ...newValues })
-          }
-          error={error}
-        />
-        <Divider flexItem />
-        <Spacer vertical={3} />
-        <LoadingButton
-          loading={loading}
-          variant="contained"
-          type="submit"
-          size="large"
-        >
-          {t('nantralPay.saveSale')}
-        </LoadingButton>
-      </form>
-    </>
+        {t('nantralpay.cash-in.button')}
+      </LoadingButton>
+    </Container>
   );
 }

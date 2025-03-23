@@ -3,15 +3,12 @@ import { RouteObject } from 'react-router-dom';
 
 import { PageTemplate } from '#shared/components/PageTemplate/PageTemplate';
 
-const QRCodeFormPage = lazy(() => import('#pages/NantralPay/QRCodeForm.page'));
 const SelectionFormPage = lazy(
   () => import('#pages/NantralPay/SelectionForm.page'),
 );
-const AddItemFormPage = lazy(
-  () => import('#pages/NantralPay/AddItemForm.page'),
-);
 
 const EventPage = lazy(() => import('#pages/Event/Event.page'));
+const NantralPayHomePage = lazy(() => import('#pages/NantralPay'));
 const EventCalendarViewPage = lazy(
   () => import('#pages/Event/EventCalendar/EventCalendarView.page'),
 );
@@ -95,22 +92,16 @@ export const authenticatedRoutes: RouteObject = {
     },
     {
       path: '/nantralpay',
-      handle: { crumb: 'NantralPay' },
+      handle: { crumb: t('breadcrumbs.nantralpay.index') },
       children: [
         {
-          path: 'qrcode-form',
-          element: <QRCodeFormPage />,
-          handle: { crumb: t('breadcrumbs.qrcode.form') },
+          index: true,
+          element: <NantralPayHomePage />,
         },
         {
           path: 'cash-in/:uuid/',
           element: <SelectionFormPage />,
-          handle: { crumb: t('breadcrumbs.qrcode.cash-in') },
-        },
-        {
-          path: 'add-item/',
-          element: <AddItemFormPage />,
-          handle: { crumb: t('breadcrumbs.nantralpay.add-item') },
+          handle: { crumb: t('breadcrumbs.nantralpay.cash-in') },
         },
       ],
     },

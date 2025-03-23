@@ -9,8 +9,9 @@ from django.utils import timezone
 from django.utils.translation import gettext as _
 
 from apps.group.models import Group
-from .models import Payment, QRCode, Transaction
+
 from ..account.models import User
+from .models import Payment, QRCode, Transaction
 
 QRCode_expiration_time = 2  # Durée (en minutes) avant que le QRCode périme
 

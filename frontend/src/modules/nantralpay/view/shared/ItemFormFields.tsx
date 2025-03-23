@@ -36,10 +36,11 @@ export function ItemFormFields({
         color={'primary'}
         sx={{ alignItems: 'center', display: 'flex', columnGap: 1 }}
       >
-        {t('nantralpay.selectItems')}
+        {t('nantralpay.item.addForm')}
       </Typography>
       <Divider sx={{ marginTop: 1 }} />
       <TextField
+        label={t('nantralpay.item.name')}
         name="qr_code"
         type="text"
         value={formValues.name}
@@ -51,12 +52,13 @@ export function ItemFormFields({
         required
       />
       <NumberField
+        label={t('nantralpay.item.price')}
         name="qr_code"
         value={formValues.price}
         handleChange={useCallback(
           (val) => {
             console.log(val);
-            updateFormValues({ price: val || 0 });
+            updateFormValues({ price: val || undefined });
           },
           [updateFormValues],
         )}

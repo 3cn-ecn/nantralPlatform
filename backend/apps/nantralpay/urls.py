@@ -16,6 +16,7 @@ from .views import (
     TransactionViewSet,
     create_qrcode,
     qrcode,
+    user_info,
 )
 
 app_name = "nantralpay"
@@ -29,6 +30,8 @@ router.register("item", ItemViewSet, basename="item")
 urlpatterns = router.urls
 
 urlpatterns += [
+    # Infos sur l'utilisateur
+    path("user/", user_info, name="user-info"),
     # Page de création du paiement
     path("checkout/", create_payment, name="helloasso_create_payment"),
     # Adresses de retour après le paiement

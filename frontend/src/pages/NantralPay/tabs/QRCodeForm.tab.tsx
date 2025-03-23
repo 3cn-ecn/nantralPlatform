@@ -1,10 +1,13 @@
 import React, { useState } from 'react';
 
+import { Button, Typography } from '@mui/material';
 import { QRCodeSVG } from 'qrcode.react';
 
+import { useTranslation } from '#shared/i18n/useTranslation';
 import { buildAbsoluteUrl } from '#shared/utils/urls';
 
-const QRCodeFormPage: React.FC = () => {
+const QRCodeFormTab: React.FC = () => {
+  const { t } = useTranslation();
   const [QRCodeId, setQRCodeId] = useState<string | null>(null);
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -28,22 +31,22 @@ const QRCodeFormPage: React.FC = () => {
   };
 
   return (
-    <div>
-      <h1>NantralPay</h1>
-      <form onSubmit={handleSubmit}>
-        <button type="submit">Générer le QRCode</button>
-      </form>
+    <>
+      <Typography variant="h2">{t('nantralpay.qrcode.title')}</Typography>
+      <Button variant="contained" onClick={handleSubmit}>
+        {t('nantralpay.qrcode.button')}
+      </Button>
 
       {QRCodeId && (
-        <div>
-          <h2>QR Code:</h2>
+        <>
+          <Typography variant="h3">{t('nantralpay.qrcode.qrcode')}</Typography>
           <QRCodeSVG
             value={buildAbsoluteUrl(`/nantralpay/cash-in/${QRCodeId}/`)}
           />
-        </div>
+        </>
       )}
-    </div>
+    </>
   );
 };
 
-export default QRCodeFormPage;
+export default QRCodeFormTab;

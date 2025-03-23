@@ -13,13 +13,29 @@ from .models import (
 )
 
 
+class TransactionSerializer(serializers.ModelSerializer):
+    sender = serializers.SlugRelatedField(slug_field="student__name", read_only=True)
+    receiver = serializers.SlugRelatedField(slug_field="student__name", read_only=True)
+    group = serializers.StringRelatedField()
+    description = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Transaction
+        fields = ("id", "sender", "receiver", "amount", "transaction_date", "description", "group", "qr_code")
+
+    def get_description(self, instance):
+        return instance.get_description()
+
+
 class PaymentSerializer(serializers.ModelSerializer):
+    order = serializers.SlugRelatedField(slug_field="helloasso_order_id", read_only=True)
+
     class Meta:
         model = Payment
-        fields = "__all__"
+        fields = ("id", "amount", "payment_date", "order", "helloasso_payment_id", "payment_status")
 
 
-class TransactionSerializer(serializers.ModelSerializer):
+class TransactionQRCodeSerializer(serializers.ModelSerializer):
     class Meta:
         model = Transaction
         fields = ("id", "qr_code")
@@ -44,7 +60,7 @@ class ItemSaleSerializer(serializers.ModelSerializer):
 
 
 class SaleSerializer(serializers.ModelSerializer):
-    transaction = TransactionSerializer()
+    transaction = TransactionQRCodeSerializer()
     item_sales = ItemSaleSerializer(many=True)
 
     class Meta:
@@ -99,7 +115,6 @@ class SaleSerializer(serializers.ModelSerializer):
         # Create the transaction
         transaction = Transaction(
             sender=qr_code.user,
-            description=f"Cash-in QR code {qr_code.id}",
             **transaction_data,
         )
         transaction.save()
@@ -117,6 +132,7 @@ class SaleSerializer(serializers.ModelSerializer):
                 if item.get("quantity")
             ]
         )
+
         # Update the balances
         update_balance(transaction_data["group"], transaction_data["amount"])
         update_balance(qr_code.user, -transaction_data["amount"])
