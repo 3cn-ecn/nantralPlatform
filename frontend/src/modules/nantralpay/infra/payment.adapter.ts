@@ -17,9 +17,9 @@ export function adaptPaymentPreview(
 ): PaymentPreview {
   return {
     id: paymentDto.id,
-    amount: paymentDto.amount || 0,
-    date: new Date(paymentDto.payment_date) || new Date(),
-    status: paymentDto.payment_status || 'Unknown',
+    amount: paymentDto.amount ?? 0,
+    date: new Date(paymentDto.payment_date),
+    status: paymentDto.payment_status ?? 'Unknown',
     haOrderId: paymentDto.order || 0,
     haPaymentID: paymentDto.helloasso_payment_id || 0,
   };

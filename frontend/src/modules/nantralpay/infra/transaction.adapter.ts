@@ -12,7 +12,7 @@ export function adaptTransaction(
     id: transactionDto.id ?? 0,
     qrCode: transactionDto.qr_code ?? '',
     amount: transactionDto.amount ?? 0,
-    date: new Date(transactionDto.transaction_date) ?? new Date(),
+    date: new Date(transactionDto.transaction_date),
     sender: transactionDto.sender ?? '',
     receiver: transactionDto.receiver ?? '',
     description: transactionDto.description ?? '',
