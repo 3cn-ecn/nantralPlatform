@@ -9,9 +9,8 @@ from django.utils import timezone
 from django.utils.translation import gettext as _
 
 from apps.group.models import Group
-
-from ..account.models import User
 from .models import Payment, QRCode, Transaction
+from ..account.models import User
 
 QRCode_expiration_time = 2  # Durée (en minutes) avant que le QRCode périme
 
@@ -27,7 +26,7 @@ def recalculate_balance(user: User):
     """Recalculate the user's balance by taking all the payments and transactions in account.
     It takes time"""
     balance = 0
-    for payment in Payment.objects.filter(user=user).values("amount"):
+    for payment in Payment.objects.filter(user=user, payment_satus__in=Payment.valid_payment_status).values("amount"):
         balance += payment["amount"]
 
     for transaction in Transaction.objects.filter(sender=user).values("amount"):

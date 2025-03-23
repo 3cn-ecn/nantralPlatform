@@ -26,6 +26,20 @@ class Payment(models.Model):
         REFUNDING = "Refunding"
         CONTESTED = "Contested"
 
+    valid_payment_status = [
+        PaymentStatus.PENDING,  # Pending payments are valid to ensure the users can pay as soon as possible
+        PaymentStatus.AUTHORIZED,
+        PaymentStatus.REGISTERED,
+    ]
+
+    invalid_payment_status = [
+        PaymentStatus.REFUSED,
+        PaymentStatus.UNKNOWN,
+        PaymentStatus.REFUNDED,
+        PaymentStatus.REFUNDING,
+        PaymentStatus.CONTESTED,
+    ]
+
     class PaymentCashOutState(models.TextChoices):
         CASHED_OUT = "CashedOut"
         WAITING_FOR_CASH_OUT_CONFIRMATION = "WaitingForCashOutConfirmation"

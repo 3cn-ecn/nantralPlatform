@@ -4,7 +4,7 @@ from decimal import Decimal
 from django.http import HttpResponse
 
 from apps.nantralpay.models import Order, Payment
-from apps.nantralpay.utils import require_ip
+from apps.nantralpay.utils import require_ip, update_balance
 
 HELLOASSO_PROD = False
 HELLOASSO_PROD_IP = "51.138.206.200"
@@ -27,6 +27,13 @@ def handle_payment(json_data):
         return HttpResponse("Payment not found")
 
     # Mise à jour du paiement
+    if payment.payment_status in Payment.valid_payment_status and data.get("state") in Payment.invalid_payment_status:
+        # Si le statut du paiement est devenu invalide, on retire le montant du paiement
+        update_balance(payment.order.user, -payment.amount)
+    if payment.payment_status in Payment.invalid_payment_status and data.get("state") in Payment.valid_payment_status:
+        # Si le statut du paiement est redevenu valide, on ajoute le montant du paiement
+        update_balance(payment.order.user, payment.amount)
+
     payment.payment_status = data.get("state")
     payment.payment_cash_out_state = data.get("cashOutState")
     payment.save()
