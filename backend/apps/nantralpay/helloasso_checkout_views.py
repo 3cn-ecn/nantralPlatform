@@ -7,9 +7,11 @@ from django.urls import reverse
 
 import requests
 
-from apps.nantralpay.forms import RechargeForm
-from apps.nantralpay.models import Order
+from .forms import RechargeForm
+from .helloasso_utils import get_token
+from .models import Order
 
+HELLOASSO_ORG_SLUG = "association-des-etudiants-de-l-ecole-centrale-nantes"
 
 def create_payment(request):
     if request.method == "POST":
@@ -37,11 +39,11 @@ def create_payment(request):
             headers = {
                 "accept": "application/json",
                 "content-type": "application/*+json",
-                "authorization": "Bearer {accessToken}",
+                "authorization": f"Bearer {get_token()}",
             }
 
             response = requests.post(
-                "https://api.helloasso.com/v5/organizations/{organizationSlug}/checkout-intents",
+                f"https://api.helloasso.com/v5/organizations/{HELLOASSO_ORG_SLUG}/checkout-intents",
                 json=body,
                 headers=headers,
                 timeout=60,

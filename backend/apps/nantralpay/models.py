@@ -154,3 +154,19 @@ class ItemSale(models.Model):
                 fields=("item", "sale"), name="unique_item_sale"
             )
         ]
+
+
+class RefreshToken(models.Model):
+    token = models.CharField(max_length=255, unique=True)
+    creation_date = models.DateTimeField()
+    expiration_date = models.DateTimeField()
+
+    is_active = models.BooleanField(default=True)
+
+
+class AccessToken(models.Model):
+    token = models.CharField(max_length=255, unique=True)
+    creation_date = models.DateTimeField()
+    expiration_date = models.DateTimeField()
+
+    is_active = models.BooleanField(default=True)

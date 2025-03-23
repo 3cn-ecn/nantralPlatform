@@ -47,6 +47,10 @@ env = environ.Env(
     CODESPACES=(bool, False),
     CODESPACE_NAME=(str, ""),
     GITHUB_CODESPACES_PORT_FORWARDING_DOMAIN=(str, ""),
+    # for helloasso
+    HELLOASSO_CLIENT_ID=(str,""),
+    HELLOASSO_CLIENT_SECRET=(str,""),
+    HELLOASSO_SLUG=(str,""),
 )
 env.read_env()
 
@@ -322,3 +326,7 @@ AUTH_PASSWORD_VALIDATORS = [
     },
     {"NAME": "django.contrib.auth.password_validation.CommonPasswordValidator"},
 ]
+
+# HelloAsso
+HELLOASSO_CLIENT_ID = env("HELLOASSO_CLIENT_ID")
+HELLOASSO_CLIENT_SECRET = env("HELLOASSO_CLIENT_SECRET")
