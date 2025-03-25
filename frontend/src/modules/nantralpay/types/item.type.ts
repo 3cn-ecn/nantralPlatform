@@ -5,7 +5,7 @@ export interface Item {
   quantity: number;
 }
 
-export type ItemPreview = Pick<Item, 'id' | 'name' | 'price' | 'quantity'>;
+export type ItemPreview = Pick<Item, 'id' | 'name' | 'price'>;
 
 export interface ItemForm {
   name: string;

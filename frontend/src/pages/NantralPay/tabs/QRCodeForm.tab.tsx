@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { Button, Typography } from '@mui/material';
 import { QRCodeSVG } from 'qrcode.react';
 
+import { FlexRow } from '#shared/components/FlexBox/FlexBox';
 import { useTranslation } from '#shared/i18n/useTranslation';
 import { buildAbsoluteUrl } from '#shared/utils/urls';
 
@@ -32,7 +33,6 @@ const QRCodeFormTab: React.FC = () => {
 
   return (
     <>
-      <Typography variant="h2">{t('nantralpay.qrcode.title')}</Typography>
       <Button variant="contained" onClick={handleSubmit}>
         {t('nantralpay.qrcode.button')}
       </Button>
@@ -40,9 +40,20 @@ const QRCodeFormTab: React.FC = () => {
       {QRCodeId && (
         <>
           <Typography variant="h3">{t('nantralpay.qrcode.qrcode')}</Typography>
-          <QRCodeSVG
-            value={buildAbsoluteUrl(`/nantralpay/cash-in/${QRCodeId}/`)}
-          />
+          <FlexRow>
+            <QRCodeSVG
+              value={buildAbsoluteUrl(`/nantralpay/cash-in/${QRCodeId}/`)}
+              width={256}
+              height={256}
+              marginSize={4}
+              imageSettings={{
+                src: '/static/img/logo/scalable/logo.svg',
+                height: 20,
+                width: 20,
+                excavate: true,
+              }}
+            />
+          </FlexRow>
         </>
       )}
     </>

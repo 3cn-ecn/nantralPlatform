@@ -4,6 +4,7 @@ import { usePostQueryParamState } from '#modules/post/hooks/usePostQueryParamSta
 import { PostModal } from '#modules/post/view/PostModal/PostModal';
 import { NantralPayInfo } from '#pages/NantralPay/components/NantralPayInfo';
 import { useNantralPay } from '#pages/NantralPay/hooks/useNantralPay';
+import ItemsTab from '#pages/NantralPay/tabs/Items.tab';
 import PaymentListTab from '#pages/NantralPay/tabs/PaymentList.tab';
 import QRCodeFormTab from '#pages/NantralPay/tabs/QRCodeForm.tab';
 import TransactionListTab from '#pages/NantralPay/tabs/TransactionList.tab';
@@ -12,7 +13,6 @@ import { Spacer } from '#shared/components/Spacer/Spacer';
 import { useQueryParamState } from '#shared/hooks/useQueryParamState';
 
 import { TabBar, TabType } from './TabBar';
-import AddItemForm from './tabs/AddItemForm.tab';
 
 export default function NantralPayHomePage() {
   const [selectedTab, setSelectedTab] = useQueryParamState<TabType>(
@@ -75,7 +75,7 @@ export default function NantralPayHomePage() {
             isSuccess={isSuccess}
           />
         )}
-        {selectedTab == 'items' && <AddItemForm />}
+        {selectedTab == 'items' && <ItemsTab />}
       </Container>
       {postId && <PostModal postId={postId} onClose={closePost} />}
     </>
