@@ -1,18 +1,20 @@
 import { useState } from 'react';
-import { CardFooter } from 'react-bootstrap';
 
-import { Edit as EditIcon } from '@mui/icons-material';
 import {
-  Box,
+  DeleteForever as DeleteIcon,
+  Edit as EditIcon,
+} from '@mui/icons-material';
+import {
   Button,
   Card,
-  CardActionArea,
+  CardActions,
   CardContent,
   Grid,
   Typography,
 } from '@mui/material';
 
 import { ItemPreview } from '#modules/nantralpay/types/item.type';
+import { FlexRow } from '#shared/components/FlexBox/FlexBox';
 import { useTranslation } from '#shared/i18n/useTranslation';
 
 import { ModalDeleteItem } from './Modal/ModalDeleteItem';
@@ -36,42 +38,40 @@ function MembershipCard(props: {
 
   //const today = new Date(new Date().toDateString());
   return (
-    <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
+    <Grid item xs={12} sm={6} md={4} lg={3} xl={3}>
       <Card variant="outlined" sx={{ height: '100%', borderColor: 'primary' }}>
-        <CardActionArea sx={{ height: '100%' }}>
-          <CardContent
-            sx={{ display: 'flex', alignItems: 'center', gap: 1, p: 1 }}
+        <CardContent sx={{ p: 1 }}>
+          <FlexRow justifyContent="space-between" sx={{ mx: 1 }}>
+            <Typography variant="body1" noWrap>
+              {item.name}
+            </Typography>
+            <Typography variant="body1" color="secondary" noWrap>
+              {item.price} €
+            </Typography>
+          </FlexRow>
+        </CardContent>
+        <CardActions>
+          <Button
+            hidden={!openEditModal}
+            onClick={() => setOpenEditModal(true)}
+            variant="outlined"
+            size="small"
+            endIcon={<EditIcon />}
+            sx={{ marginLeft: 1 }}
           >
-            <Box sx={{ minWidth: 0 }}>
-              <Typography variant="body1" noWrap>
-                {item.name}
-              </Typography>
-              <Typography variant="body2" color="secondary" noWrap>
-                {item.price} €
-              </Typography>
-            </Box>
-          </CardContent>
-          <CardFooter>
-            <Button
-              hidden={!openEditModal}
-              onClick={() => setOpenEditModal(true)}
-              variant="outlined"
-              endIcon={<EditIcon />}
-              sx={{ marginLeft: 1 }}
-            >
-              Edit
-            </Button>
-            <Button
-              hidden={!openDeleteModal}
-              onClick={() => setOpenDeleteModal(true)}
-              variant="outlined"
-              endIcon={<EditIcon />}
-              sx={{ marginLeft: 1 }}
-            >
-              Delete
-            </Button>
-          </CardFooter>
-        </CardActionArea>
+            {t('button.edit')}
+          </Button>
+          <Button
+            hidden={!openDeleteModal}
+            onClick={() => setOpenDeleteModal(true)}
+            variant="outlined"
+            size="small"
+            endIcon={<DeleteIcon />}
+            sx={{ marginLeft: 1 }}
+          >
+            {t('button.delete')}
+          </Button>
+        </CardActions>
       </Card>
       {openEditModal && item && (
         <ModalEditItem onClose={() => setOpenEditModal(false)} item={item} />
