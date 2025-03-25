@@ -73,14 +73,16 @@ class SaleSerializer(serializers.ModelSerializer):
         # Check if the QR code is valid
         check_qrcode(data["transaction"]["qr_code"])
 
-        # Get the request User
+        # Get the request User (who receive the money) and the qr_code User (who send the money)
         receiver = self.context["request"].user
+        sender = data["transaction"]["qr_code"].user
+        
         # Get the group of the user. Raises an error if the user is not authorized to use NantralPay
         try:
             group = get_user_group(receiver)
         except PermissionError as e:
             raise exceptions.ValidationError(e)
-
+            
         # Check if the user has enough money
         amount = Decimal(0)
         for item_sale in data["item_sales"]:
@@ -91,7 +93,7 @@ class SaleSerializer(serializers.ModelSerializer):
                 continue
 
             amount += quantity * item.price
-        if amount > receiver.nantralpay_balance:
+        if amount > sender.nantralpay_balance:
             raise exceptions.ValidationError(
                 "The user does not have enough money"
             )
