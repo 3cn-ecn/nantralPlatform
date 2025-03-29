@@ -17,11 +17,13 @@ else:
     ALLOWED_HOSTS = env("DJANGO_ALLOWED_HOSTS").split(" ")
 
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
-EMAIL_HOST = None
-EMAIL_PORT = None
+EMAIL_HOST = env("EMAIL_HOST")
+EMAIL_PORT = env("EMAIL_PORT")
+EMAIL_USE_SSL=False
+EMAIL_USE_TLS=True
 # No need to authenticate on localhost
-EMAIL_HOST_USER = None
-EMAIL_HOST_PASSWORD = None
+EMAIL_HOST_USER = env("EMAIL_HOST_USER")
+EMAIL_HOST_PASSWORD = env("EMAIL_HOST_PASSWORD")
 # Specify default sender emails
 DEFAULT_FROM_EMAIL = "Nantral Platform <no-reply@nantral-platform.fr>"
 SERVER_EMAIL = "Nantral Platform Server <server@nantral-platform.fr>"
