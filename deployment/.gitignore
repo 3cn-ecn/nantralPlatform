@@ -1,7 +1,10 @@
 # Environments
 *.env
+*.env.*
 .venv/
 env/
+
+*.secret
 
 # Config folders
 dav/
@@ -10,6 +13,13 @@ certs/
 data/
 filter/
 redis/
+mail/
+webmail/
+appdata/
+certbot/
+mailqueue/
+scripts/db_backup.log
+scripts/db_staging.log
 
 # Python
 *.py[cod]

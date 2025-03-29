@@ -1,70 +1,32 @@
-version: "2.1"
-
-services:
-  database:
-    image: postgres:14.1
-    expose:
-      - 5432
-    volumes:
-      - postgres_data:/var/lib/postgresql/data/
-    env_file: backend.env
-
-  backend:
-    build:
-      context: ../backend/
-      dockerfile: ../deployment/containers/web/Dockerfile
-    expose:
-      - 8000
-    command: sh run_server.sh
-    volumes:
-      - ../backend:/var/app
-      - static_volume:/var/app/staticfiles/
-    depends_on:
-      - database
-      - redis
-    env_file: backend.env
-
-  nginx:
-    build: ./containers/nginx
-    ports:
-      - 80:80
-      - 443:443
-    volumes:
-      - ../backend:/var/app
-      - static_volume:/var/app/staticfiles/
-    depends_on:
-      - backend
-
-  # External dependencies
-  redis:
-    image: redis:alpine
-    restart: always
-    volumes:
-      - "./redis:/data"
-
-  celery:
-    build:
-      context: ../backend/
-      dockerfile: ../deployment/containers/web/Dockerfile
-    command: celery -A apps.celery worker -l info
-    volumes:
-      - ../backend:/var/app
-    depends_on:
-      - celery-beat
-      - redis
-    env_file: backend.env
-
-  celery-beat:
-    build:
-      context: ../backend/
-      dockerfile: ../deployment/containers/web/Dockerfile
-    command: celery -A apps.celery beat -l info --scheduler django_celery_beat.schedulers:DatabaseScheduler
-    volumes:
-      - ../backend:/var/app
-    depends_on:
-      - redis
-    env_file: backend.env
+include:
+  - stack/celery.yml
+  - stack/postgres.yml
+  - stack/redis.yml
+  - stack/traefik.yml
+  - stack/nginx.yml
+  - stack/backend.yml
+  # - stack/mail.yml
+  - stack/stalwart.yml
 
 volumes:
-  postgres_data:
   static_volume:
+  static_volume_staging:
+  redis:
+  certs:
+
+secrets:
+  ovh_endpoint:
+    file: "./secrets/ovh_endpoint.secret"
+  ovh_application_key:
+    file: "./secrets/ovh_application_key.secret"
+  ovh_application_secret:
+    file: "./secrets/ovh_application_secret.secret"
+  ovh_consumer_key:
+    file: "./secrets/ovh_consumer_key.secret"
+
+networks:
+  proxy:
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.19.0.0/24

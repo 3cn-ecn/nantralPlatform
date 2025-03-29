@@ -1,0 +1,78 @@
+services:
+  traefik:
+    container_name: traefik
+    image: "traefik:latest"
+    restart: unless-stopped
+    ports:
+      - 80:80
+      - 443:443
+      - 25:25
+      - 465:465
+      - 993:993
+    logging:
+      driver: json-file
+    secrets:
+      - "ovh_endpoint"
+      - "ovh_application_key"
+      - "ovh_application_secret"
+      - "ovh_consumer_key"
+    environment:
+      # - "PUID=1000"
+      # - "PGID=1000"
+      - "TZ=Europe/Paris"
+      - "OVH_ENDPOINT_FILE=/run/secrets/ovh_endpoint"
+      - "OVH_APPLICATION_KEY_FILE=/run/secrets/ovh_application_key"
+      - "OVH_APPLICATION_SECRET_FILE=/run/secrets/ovh_application_secret"
+      - "OVH_CONSUMER_KEY_FILE=/run/secrets/ovh_consumer_key"
+    command:
+      # - "--log.level=DEBUG"
+      - "--api.insecure=false"
+      - "--api.dashboard=false"
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"
+      - "--providers.docker.allowEmptyServices=true"
+
+      # Entry Points      
+      - "--entryPoints.web.address=:80"
+      - "--entryPoints.websecure.address=:443"
+      - "--entrypoints.smtp.address=:25"
+      - "--entrypoints.smtp.proxyprotocol.trustedips=172.19.0.2,172.19.0.5"
+
+      - "--entrypoints.smtps.address=:465"
+      - "--entrypoints.smtps.proxyprotocol.trustedips=172.19.0.2,172.19.0.5"
+
+      - "--entrypoints.imaps.address=:993"
+      - "--entrypoints.imaps.proxyprotocol.trustedips=172.19.0.2,172.19.0.5"
+
+      # certificates
+      - "--certificatesresolvers.letsencrypt.acme.dnschallenge=true"
+      - "--certificatesresolvers.letsencrypt.acme.dnschallenge.provider=ovh"
+      - "--certificatesresolvers.letsencrypt.acme.email=postmaster@nantral-platform.fr"
+      - "--certificatesresolvers.letsencrypt.acme.storage=/letsencrypt/acme.json"
+      - "--certificatesresolvers.letsencrypt.acme.dnschallenge.propagation.delayBeforeChecks=60"
+      # - "--certificatesresolvers.letsencrypt.acme.caserver=https://acme-staging-v02.api.letsencrypt.org/directory"
+
+      - "--global.checknewversion=true"
+      - "--global.sendanonymoususage=false"
+
+      # TLS settings
+      # - "--tls.options.default.minversion=VersionTLS12"
+
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - "../appdata/traefik/letsencrypt:/letsencrypt"
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+    
+    networks:
+      - proxy
+
+  traefik-certs-dumper:
+    image: ghcr.io/kereis/traefik-certs-dumper:latest
+    container_name: traefik-certs-dumper
+    restart: unless-stopped
+    depends_on:
+      - traefik
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - ../appdata/traefik/letsencrypt:/traefik:ro
+      - certs:/output

@@ -1,0 +1,48 @@
+services:
+  backend:
+    container_name: backend
+    build:
+      context: ../../backend/
+      dockerfile: ../deployment/containers/web/Dockerfile
+    expose:
+      - "8000"
+    command: sh run_server.sh
+    volumes:
+      - ../../backend:/var/app
+      - static_volume:/var/app/staticfiles/
+    depends_on:
+      - database
+      - redis
+    env_file: ../backend.env
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.backend.rule=Host(`nantral-platform.fr`)"
+      - "traefik.http.routers.backend.entrypoints=websecure"
+      - "traefik.http.routers.backend.tls.certresolver=letsencrypt"
+    networks:
+      - proxy
+
+  backend-staging:
+    container_name: backend_staging
+    build:
+      context: ../../../nantralPlatform-staging/backend/
+      dockerfile: ../deployment/containers/web_staging/Dockerfile
+    expose:
+      - "8001"
+    command: sh run_server_staging.sh
+    volumes:
+      - ../../../nantralPlatform-staging/backend:/var/app
+      - static_volume_staging:/var/app/staticfiles/
+    depends_on:
+      - database
+      - redis
+    env_file: ../backend.env
+    environment:
+      - STAGING=True
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.backend-staging.rule=Host(`dev.nantral-platform.fr`)"
+      - "traefik.http.routers.backend-staging.entrypoints=websecure"
+      - "traefik.http.routers.backend-staging.tls.certresolver=letsencrypt"
+    networks:
+      - proxy
