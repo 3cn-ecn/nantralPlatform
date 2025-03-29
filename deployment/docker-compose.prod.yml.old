@@ -1,34 +1,6 @@
 version: "2.1"
 
 services:
-  backend-staging:
-    build:
-      context: ../../nantralPlatform-staging/backend/
-      dockerfile: ../deployment/containers/web_staging/Dockerfile
-    expose:
-      - 8001
-    command: sh run_server_staging.sh
-    volumes:
-      - ../../nantralPlatform-staging/backend:/var/app
-      - static_volume_staging:/var/app/staticfiles/
-    depends_on:
-      - database
-      - redis
-    env_file: backend.env
-    environment:
-      - STAGING=True
-
-  nginx:
-    healthcheck:
-      test: ["CMD", "wget", "-qO-", "https://nantral-platform.fr"]
-      interval: 30s
-      timeout: 3s
-      retries: 3
-    volumes:
-      - /etc/letsencrypt:/etc/letsencrypt
-      - ./certbot/www:/var/www/certbot/:ro
-      - static_volume_staging:/var/app/staticfiles_staging/
-
   # Core services
   front:
     image: ${DOCKER_ORG:-mailu}/${DOCKER_PREFIX:-}nginx:${MAILU_VERSION:-1.8}
@@ -148,6 +120,3 @@ networks:
       driver: default
       config:
         - subnet: 192.168.203.0/24
-
-volumes:
-  static_volume_staging:

@@ -52,7 +52,8 @@ jobs:
 
   deploy:
     name: Deploy to staging
-    needs: [frontend-build, email-templates-build, backend-quality, clone-database]
+    needs:
+      [frontend-build, email-templates-build, backend-quality, clone-database]
     runs-on: ubuntu-latest
     steps:
       - name: Deploy to the VPS
@@ -68,5 +69,5 @@ jobs:
             git switch ${{ github.ref_name }}
             git reset --hard origin/${{ github.ref_name }}
             cd ../nantralPlatform/deployment
-            sudo docker-compose -f docker-compose.yml -f docker-compose.prod.yml build backend-staging
-            docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d
+            docker compose build backend-staging
+            docker compose up -d

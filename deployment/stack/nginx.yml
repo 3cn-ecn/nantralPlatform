@@ -1,0 +1,22 @@
+services:
+  nginx:
+    container_name: nginx
+    image: "nginx:1-alpine"
+    restart: unless-stopped
+    logging:
+      driver: json-file
+    volumes:
+      - ../config/nginx/global_nginx.conf:/etc/nginx/nginx.conf
+      - ../config/nginx/server_nginx.conf:/etc/nginx/conf.d/default.conf
+      - ../config/nginx/custom_413.html:/var/www/html/custom_413.html
+      - static_volume:/var/app/staticfiles/
+      - static_volume_staging:/var/app/staticfiles_staging/
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.static-http.entrypoints=websecure"
+      - "traefik.http.routers.static-http.rule=(Host(`nantral-platform.fr`) || Host(`dev.nantral-platform.fr`)) && PathPrefix(`/static`)" 
+      - "traefik.http.routers.static-http.tls.certresolver=letsencrypt"  
+    depends_on:
+      - backend
+    networks:
+      - proxy

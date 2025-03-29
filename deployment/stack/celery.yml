@@ -1,0 +1,27 @@
+services: 
+  celery:
+    build:
+      context: ../../backend/
+      dockerfile: ../deployment/containers/web/Dockerfile
+    command: celery -A apps.celery worker -l info
+    volumes:
+      - ../../backend:/var/app
+    depends_on:
+      - celery-beat
+      - redis
+    env_file: ../backend.env
+    networks:
+      - proxy
+
+  celery-beat:
+    build:
+      context: ../../backend/
+      dockerfile: ../deployment/containers/web/Dockerfile
+    command: celery -A apps.celery beat -l info --scheduler django_celery_beat.schedulers:DatabaseScheduler
+    volumes:
+      - ../../backend:/var/app
+    depends_on:
+      - redis
+    env_file: ../backend.env
+    networks:
+      - proxy
