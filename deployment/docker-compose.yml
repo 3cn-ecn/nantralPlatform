@@ -1,12 +1,12 @@
 include:
+  - stack/traefik.yml
   - stack/celery.yml
   - stack/postgres.yml
   - stack/redis.yml
-  - stack/traefik.yml
   - stack/nginx.yml
   - stack/backend.yml
-  # - stack/mail.yml
   - stack/stalwart.yml
+  - stack/uptime-kuma.yml
 
 volumes:
   static_volume:
@@ -26,6 +26,7 @@ secrets:
 
 networks:
   proxy:
+  mailserver:
     ipam:
       driver: default
       config:

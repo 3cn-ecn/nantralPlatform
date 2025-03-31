@@ -4,13 +4,16 @@ services:
     container_name: mailserver
     restart: unless-stopped
     hostname: mail.nantral-platform.fr
-    ports:
-      - "8080:8080"
+    expose:
+      - "8080"
     networks:
-      proxy:
+      mailserver:
         ipv4_address: 172.19.0.5
+    environment:
+      - "TZ=Europe/Paris"
     volumes:
-      - /etc/localtime:/etc/localtime:ro
+      - "/etc/timezone:/etc/timezone:ro"
+      - "/etc/localtime:/etc/localtime:ro"
       - ../appdata/stalwart/data:/opt/stalwart-mail
       - certs:/data/certs:ro
     labels:

@@ -1,0 +1,17 @@
+services:
+  uptime-kuma:
+    container_name: uptime-kuma
+    image: louislam/uptime-kuma
+    restart: unless-stopped
+    ports:
+      - "3001:3001"
+    logging:
+      driver: json-file
+    environment:
+      - TZ=Europe/Paris
+    volumes:
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+      - "../appdata/uptime-kuma:/app/data"
+    networks:
+      - proxy
