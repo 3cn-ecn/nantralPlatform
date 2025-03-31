@@ -1,10 +1,14 @@
-services: 
+services:
   celery:
     build:
       context: ../../backend/
       dockerfile: ../deployment/containers/web/Dockerfile
     command: celery -A apps.celery worker -l info
+    environment:
+      - "TZ=Europe/Paris"
     volumes:
+      - "/etc/timezone:/etc/timezone:ro"
+      - "/etc/localtime:/etc/localtime:ro"
       - ../../backend:/var/app
     depends_on:
       - celery-beat
@@ -18,7 +22,11 @@ services:
       context: ../../backend/
       dockerfile: ../deployment/containers/web/Dockerfile
     command: celery -A apps.celery beat -l info --scheduler django_celery_beat.schedulers:DatabaseScheduler
+    environment:
+      - "TZ=Europe/Paris"
     volumes:
+      - "/etc/timezone:/etc/timezone:ro"
+      - "/etc/localtime:/etc/localtime:ro"
       - ../../backend:/var/app
     depends_on:
       - redis
