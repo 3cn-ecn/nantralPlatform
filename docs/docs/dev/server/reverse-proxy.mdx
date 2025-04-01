@@ -25,16 +25,17 @@ everything is done through Docker Compose files.
 
 1. Add the subdomain on OVH.
 2. In your Docker Compose service, add the following:
+
 ```yml
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.<service-name>.rule=Host(`<subdomain>.nantral-platform.fr`)"
-      - "traefik.http.routers.<service-name>.entrypoints=websecure"
-      - "traefik.http.routers.<service-name>.tls.certresolver=letsencrypt"
+labels:
+   - 'traefik.enable=true'
+   - 'traefik.http.routers.<service-name>.rule=Host(`<subdomain>.nantral-platform.fr`)'
+   - 'traefik.http.routers.<service-name>.entrypoints=websecure'
+   - 'traefik.http.routers.<service-name>.tls.certresolver=letsencrypt'
 ```
+
 3. Make sure your service is connected to the `proxy` network.
 4. Start your service, wait a few minutes for the DNS challenge to resolve and you are done.
-
 
 ## letsencrypt
 
