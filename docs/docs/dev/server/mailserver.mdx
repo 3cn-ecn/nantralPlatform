@@ -35,4 +35,4 @@ We use [Stalwart](https://stalw.art/) with Docker to handle our emails. We used 
 
 Stalwart uses the same certificates as the one used by Traefik, our reverse proxy. They are dumped periodically with `traefik-cert-dumper`.
 
-The emails and accounts are stored on a RocksDB database (however, migrating to our postgresql database is on the roadmap).
+The emails and accounts are stored in the `stalwart` table on the PostgreSQL database.
