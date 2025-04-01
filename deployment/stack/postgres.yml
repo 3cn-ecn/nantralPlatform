@@ -1,10 +1,10 @@
 services:
   database:
     image: postgres:14.1
-    expose:
-      - "5432"
+    ports:
+      - "5432:5432"
     # environment:
-      # - "TZ=Europe/Paris"
+    #   - "TZ=Europe/Paris"
     volumes:
       # - "/etc/timezone:/etc/timezone:ro"
       # - "/etc/localtime:/etc/localtime:ro"
