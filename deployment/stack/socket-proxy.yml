@@ -1,0 +1,19 @@
+services:
+  socket-proxy:
+    image: lscr.io/linuxserver/socket-proxy:latest
+    container_name: socket-proxy
+    restart: unless-stopped
+    logging:
+      driver: json-file
+    environment:
+      - "TZ=Europe/Paris"
+      - "CONTAINERS=1"
+    volumes:
+      - "/etc/timezone:/etc/timezone:ro"
+      - "/etc/localtime:/etc/localtime:ro"
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+    read_only: true
+    tmpfs:
+      - /run
+    networks:
+      - proxy

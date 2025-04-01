@@ -73,4 +73,5 @@ coverage.xml
 
 # Compiled files
 static/front/
+static/js/
 templates/emails/

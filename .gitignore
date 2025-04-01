@@ -51,3 +51,6 @@ tags
 
 # MacOS
 .DS_Store
+
+# Statistics
+frontend/webpack-stats.json

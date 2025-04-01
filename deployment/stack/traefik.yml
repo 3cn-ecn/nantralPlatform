@@ -3,6 +3,8 @@ services:
     container_name: traefik
     image: "traefik:latest"
     restart: unless-stopped
+    depends_on:
+      - socket-proxy
     ports:
       - "25:25"
       - "80:80"
@@ -26,12 +28,12 @@ services:
       - "/etc/timezone:/etc/timezone:ro"
       - "/etc/localtime:/etc/localtime:ro"
       - "../appdata/traefik/letsencrypt:/letsencrypt"
-      - "/var/run/docker.sock:/var/run/docker.sock:ro"
     networks:
       mailserver:
         ipv4_address: 172.19.0.2
       proxy:
     command:
+      - "--providers.docker.endpoint=tcp://socket-proxy:2375"
       # - "--log.level=DEBUG"
       - "--api.insecure=false"
       - "--api.dashboard=false"
@@ -71,7 +73,10 @@ services:
     restart: unless-stopped
     depends_on:
       - traefik
+    environment:
+      - "TZ=Europe/Paris"
     volumes:
-      - /etc/localtime:/etc/localtime:ro
+      - "/etc/timezone:/etc/timezone:ro"
+      - "/etc/localtime:/etc/localtime:ro"
       - ../appdata/traefik/letsencrypt:/traefik:ro
       - certs:/output

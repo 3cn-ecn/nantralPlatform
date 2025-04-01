@@ -15,3 +15,8 @@ services:
       - "../appdata/uptime-kuma:/app/data"
     networks:
       - proxy
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.uptime-kuma.entrypoints=websecure"
+      - "traefik.http.routers.uptime-kuma.rule=Host(`status.nantral-platform.fr`)"
+      - "traefik.http.routers.uptime-kuma.tls.certresolver=letsencrypt"
