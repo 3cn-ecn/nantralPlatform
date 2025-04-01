@@ -1,0 +1,43 @@
+---
+description: 'How we deploy and use Traefik as our reverse proxy'
+---
+
+# Traefik as our reverse proxy
+
+## Reverse Proxy 101
+
+Before diving into this page, please make sure you understand the fundamentals of what a reverse proxy is.
+
+You can find a great writeup by Cloudflare [on their website](https://www.cloudflare.com/learning/cdn/glossary/reverse-proxy/).
+
+## Traefik
+
+[Traefik](https://traefik.io/traefik/) is a reverse proxy just like [nginx](https://nginx.org/) and [Caddy](https://caddyserver.com/).
+
+We use it over other implementations because it supports the Proxy Protocol which is useful for our mailserver needs and can manage the renewal of our TLS certificates for us.
+
+## Configuration
+
+We use Traefik in our Docker Compose stack, which allows us to declare the configuration through Compose labels. There are no Traefik configuration files in our repository,
+everything is done through Docker Compose files.
+
+### Adding another subdomain
+
+1. Add the subdomain on OVH.
+2. In your Docker Compose service, add the following:
+```yml
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.<service-name>.rule=Host(`<subdomain>.nantral-platform.fr`)"
+      - "traefik.http.routers.<service-name>.entrypoints=websecure"
+      - "traefik.http.routers.<service-name>.tls.certresolver=letsencrypt"
+```
+3. Make sure your service is connected to the `proxy` network.
+4. Start your service, wait a few minutes for the DNS challenge to resolve and you are done.
+
+
+## letsencrypt
+
+We use [Letsencrypt](https://letsencrypt.org/fr/) to obtain our certificates. Traefik renews them for us.
+We use a DNS challenge with OVH to obtain the certificates, instead of the regular HTTP challenge.
+The only benefit to this is that we can use wildcard domains with certificates.
