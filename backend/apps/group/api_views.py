@@ -38,6 +38,7 @@ from .serializers import (
     LabelSerializer,
     MembershipSerializer,
     NewMembershipSerializer,
+    SubscriptionSerializer,
 )
 
 
@@ -79,6 +80,7 @@ class GroupViewSet(viewsets.ModelViewSet):
     GET .../group/<id>/ : get a group
     PUT .../group/<id>/ : update a group
     DELETE .../group/<id>/ : delete a group
+    POST .../group/<id>/update_subscription/ : change user subscription
     """
 
     permission_classes = [GroupPermission]
@@ -93,6 +95,8 @@ class GroupViewSet(viewsets.ModelViewSet):
 
     def get_serializer_class(self):
         preview = parse_bool(self.query_params.get("preview"))
+        if self.action == "update_subscription":
+            return SubscriptionSerializer
         if self.request.method in ["POST", "PUT", "PATCH"]:
             return GroupWriteSerializer
         if preview is True:
@@ -187,6 +191,26 @@ class GroupViewSet(viewsets.ModelViewSet):
         obj = get_object_or_404(Group, slug=self.kwargs["slug"])
         self.check_object_permissions(self.request, obj)
         return obj
+
+    @decorators.action(
+        detail=True,
+        methods=["POST"],
+        permission_classes=[permissions.IsAuthenticated],
+    )
+    def update_subscription(self, request: Request, *args, **kwargs):
+        group: Group = self.get_object()
+        serializer = SubscriptionSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        student = self.request.user.student
+        subscribed = group.subscribers.contains(student)
+        subscribe: bool = serializer.data.get("subscribe")
+
+        if not subscribe and subscribed:
+            group.subscribers.remove(student)
+        elif subscribe and not subscribed:
+            group.subscribers.add(student)
+
+        return response.Response(status=status.HTTP_200_OK)
 
 
 class MembershipViewSet(viewsets.ModelViewSet):
