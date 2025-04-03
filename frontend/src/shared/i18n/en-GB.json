@@ -353,6 +353,8 @@
       "requestToBeAdmin": "{{student}} asks to be admin",
       "subGroupOf": "Subgroup of",
       "subgroups": "Subgroups",
+      "subscribe": "Subscribe",
+      "subscribed": "Subscribed",
       "tabs": {
         "adminRequests": "Admin Requests",
         "events": "Events",

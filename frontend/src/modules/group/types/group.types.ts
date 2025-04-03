@@ -23,6 +23,7 @@ export interface Group {
   video1: string;
   video2: string;
   isAdmin: boolean;
+  isSubscribed: boolean;
   isMember: boolean;
   lockMemberships: boolean;
   category: string;

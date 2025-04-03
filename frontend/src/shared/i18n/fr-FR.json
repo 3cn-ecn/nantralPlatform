@@ -353,6 +353,8 @@
       "requestToBeAdmin": "{{student}} demande à être admin",
       "subGroupOf": "Sous-groupe de",
       "subgroups": "Sous-Groupes",
+      "subscribe": "S'abonner",
+      "subscribed": "Abonné",
       "tabs": {
         "adminRequests": "Demandes d'admin",
         "events": "Évènements",
