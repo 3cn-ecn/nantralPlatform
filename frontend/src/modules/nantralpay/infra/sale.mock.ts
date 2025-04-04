@@ -6,6 +6,6 @@ export function getMockSalePreview(sale: Partial<SalePreview>): SalePreview {
     id: id,
     creationDate: sale.creationDate || new Date(),
     qrCode: sale.qrCode || 'QR Code',
-    itemSales: sale.itemSales || [],
+    contents: sale.contents || [],
   };
 }

@@ -10,6 +10,7 @@ import { FlexAuto, FlexRow } from '#shared/components/FlexBox/FlexBox';
 import { FormErrorAlert } from '#shared/components/FormErrorAlert/FormErrorAlert';
 import {
   AutocompleteSearchField,
+  CheckboxField,
   DateTimeField,
   FileField,
   SelectField,
@@ -243,6 +244,17 @@ export function EventFormFields({
         <MenuItem value="Pub">{t('event.form.publicity.options.pub')}</MenuItem>
         <MenuItem value="Mem">{t('event.form.publicity.options.mem')}</MenuItem>
       </SelectField>
+      <CheckboxField
+        name="nantralpay_is_open"
+        label={t('event.form.nantralpay.label')}
+        helperText={t('event.form.nantralpay.helperText')}
+        value={formValues.useNantralpay}
+        handleChange={useCallback(
+          (val) => updateFormValues({ useNantralpay: val }),
+          [updateFormValues],
+        )}
+        errors={error?.fields?.use_nantralpay}
+      />
     </>
   );
 }

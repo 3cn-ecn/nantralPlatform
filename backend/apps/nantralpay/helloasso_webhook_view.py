@@ -27,10 +27,16 @@ def handle_payment(json_data):
         return HttpResponse("Payment not found")
 
     # Mise à jour du paiement
-    if payment.payment_status in Payment.valid_payment_status and data.get("state") in Payment.invalid_payment_status:
+    if (
+        payment.payment_status in Payment.valid_payment_status
+        and data.get("state") in Payment.invalid_payment_status
+    ):
         # Si le statut du paiement est devenu invalide, on retire le montant du paiement
         update_balance(payment.order.user, -payment.amount)
-    if payment.payment_status in Payment.invalid_payment_status and data.get("state") in Payment.valid_payment_status:
+    if (
+        payment.payment_status in Payment.invalid_payment_status
+        and data.get("state") in Payment.valid_payment_status
+    ):
         # Si le statut du paiement est redevenu valide, on ajoute le montant du paiement
         update_balance(payment.order.user, payment.amount)
 
@@ -77,7 +83,7 @@ def handle_order(json_data):
         [
             Payment(
                 amount=payment.get("amount"),
-                payment_date=payment.get("date"),
+                date=payment.get("date"),
                 helloasso_payment_id=payment.get("id"),
                 order=order,
                 payment_status=payment.get("state"),

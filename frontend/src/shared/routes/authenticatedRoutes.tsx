@@ -1,11 +1,8 @@
 import { lazy } from 'react';
 import { RouteObject } from 'react-router-dom';
 
+import SelectItemsTab from '#pages/NantralPay/tabs/SelectItems.tab';
 import { PageTemplate } from '#shared/components/PageTemplate/PageTemplate';
-
-const SelectionFormPage = lazy(
-  () => import('#pages/NantralPay/SelectionForm.page'),
-);
 
 const EventPage = lazy(() => import('#pages/Event/Event.page'));
 const NantralPayHomePage = lazy(() => import('#pages/NantralPay'));
@@ -100,7 +97,7 @@ export const authenticatedRoutes: RouteObject = {
         },
         {
           path: 'cash-in/:uuid/',
-          element: <SelectionFormPage />,
+          element: <SelectItemsTab />,
           handle: { crumb: t('breadcrumbs.nantralpay.cash-in') },
         },
       ],

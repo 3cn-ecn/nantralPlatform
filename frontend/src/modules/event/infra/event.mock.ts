@@ -12,6 +12,7 @@ export function getMockEventPreview(
     image: event.image || '',
     isParticipating: event.isParticipating || false,
     isBookmarked: event.isBookmarked || false,
+    nantralpayIsOpen: event.nantralpayIsOpen || false,
     numberOfParticipants: event.numberOfParticipants || 0,
     maxParticipant: event.maxParticipant || 0,
     formUrl: event.formUrl || '',

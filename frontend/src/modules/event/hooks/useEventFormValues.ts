@@ -16,6 +16,7 @@ const defaultEventFormValues: EventForm = {
   endRegistration: null,
   maxParticipant: null,
   formUrl: '',
+  useNantralpay: false,
 };
 
 function convertToForm(event: Event): EventForm {
@@ -32,6 +33,7 @@ function convertToForm(event: Event): EventForm {
     endRegistration: event.endRegistration,
     maxParticipant: event.maxParticipant,
     formUrl: event.formUrl,
+    useNantralpay: event.useNantralpay,
   };
 }
 

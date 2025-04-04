@@ -1,5 +1,5 @@
 export interface NantralPayUserDTO {
   id: number;
-  balance: number;
+  nantralpay_balance: number;
   is_admin: boolean;
 }

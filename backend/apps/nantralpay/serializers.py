@@ -1,12 +1,15 @@
 from decimal import Decimal
 
+from django.utils import timezone
+from django.utils.translation import gettext_lazy as _
+
 from rest_framework import exceptions, serializers
 
-from apps.nantralpay.utils import check_qrcode, get_user_group, update_balance
-
-from .models import (
+from apps.account.models import User
+from apps.event.models import Event
+from apps.nantralpay.models import (
+    Content,
     Item,
-    ItemSale,
     Payment,
     Sale,
     Transaction,
@@ -14,31 +17,35 @@ from .models import (
 
 
 class TransactionSerializer(serializers.ModelSerializer):
-    sender = serializers.SlugRelatedField(slug_field="student__name", read_only=True)
-    receiver = serializers.SlugRelatedField(slug_field="student__name", read_only=True)
-    group = serializers.StringRelatedField()
-    description = serializers.SerializerMethodField()
+    user = serializers.SlugRelatedField(
+        slug_field="student__name", read_only=True
+    )
 
     class Meta:
         model = Transaction
-        fields = ("id", "sender", "receiver", "amount", "transaction_date", "description", "group", "qr_code")
-
-    def get_description(self, instance):
-        return instance.get_description()
+        fields = (
+            "id",
+            "user",
+            "amount",
+            "date",
+        )
 
 
 class PaymentSerializer(serializers.ModelSerializer):
-    order = serializers.SlugRelatedField(slug_field="helloasso_order_id", read_only=True)
+    order = serializers.SlugRelatedField(
+        slug_field="helloasso_order_id", read_only=True
+    )
 
     class Meta:
         model = Payment
-        fields = ("id", "amount", "payment_date", "order", "helloasso_payment_id", "payment_status")
-
-
-class TransactionQRCodeSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Transaction
-        fields = ("id", "qr_code")
+        fields = (
+            "id",
+            "amount",
+            "date",
+            "order",
+            "helloasso_payment_id",
+            "payment_status",
+        )
 
 
 class ItemSerializer(serializers.ModelSerializer):
@@ -48,95 +55,125 @@ class ItemSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Item
-        fields = ("id", "name", "price")
+        fields = ("id", "name", "price", "event")
+
+    def validate(self, attrs):
+        """Validate the event
+
+        We don't use `validate_event` because it is not a field in the UI.
+        """
+
+        data = super().validate(attrs)
+
+        # Get the request User (who send the money)
+        user = self.context["request"].user
+
+        event = data.get("event")
+
+        # Check if the user is admin of the event
+        if not event.group.is_admin(user):
+            raise exceptions.ValidationError(
+                _("You have to be admin of the event to add an item")
+            )
+
+        # Check if the event can be used with nantralpay
+        if not event.use_nantralpay:
+            raise exceptions.ValidationError(
+                _("This event can't be used with nantralpay")
+            )
+
+        # Check if the event can't be modified
+        if event.nantralpay_has_been_opened:
+            raise exceptions.ValidationError(
+                _("This event can't be modified")
+            )
+
+        return data
 
 
-class ItemSaleSerializer(serializers.ModelSerializer):
+class ContentSerializer(serializers.ModelSerializer):
     quantity = serializers.IntegerField(min_value=Decimal(0))
 
     class Meta:
-        model = ItemSale
+        model = Content
         fields = ("id", "quantity", "item")
 
 
 class SaleSerializer(serializers.ModelSerializer):
-    transaction = TransactionQRCodeSerializer()
-    item_sales = ItemSaleSerializer(many=True)
+    contents = ContentSerializer(many=True)
 
     class Meta:
         model = Sale
-        fields = ("id", "item_sales", "transaction")
+        fields = ("contents",)
 
     def validate(self, attrs):
         data = super().validate(attrs)
 
-        # Check if the QR code is valid
-        check_qrcode(data["transaction"]["qr_code"])
+        # Get the request User (who send the money)
+        user = self.context["request"].user
 
-        # Get the request User (who receive the money) and the qr_code User (who send the money)
-        receiver = self.context["request"].user
-        sender = data["transaction"]["qr_code"].user
-        
-        # Get the group of the user. Raises an error if the user is not authorized to use NantralPay
-        try:
-            group = get_user_group(receiver)
-        except PermissionError as e:
-            raise exceptions.ValidationError(e)
-            
         # Check if the user has enough money
         amount = Decimal(0)
-        for item_sale in data["item_sales"]:
-            item = item_sale["item"]
-            quantity = item_sale["quantity"]
+        for content in data["contents"]:
+            item = content["item"]
+            quantity = content["quantity"]
 
             if not quantity:
                 continue
 
             amount += quantity * item.price
-        if amount > sender.nantralpay_balance:
+
+        if amount > user.nantralpay_balance:
             raise exceptions.ValidationError(
-                "The user does not have enough money"
+                _("You don't have enough money to make this transaction")
             )
 
         if amount == 0:
             raise exceptions.ValidationError("Please select at least one Item")
 
-        # Update the transaction with extra data
-        data["transaction"]["receiver"] = receiver
-        data["transaction"]["group"] = group
-        data["transaction"]["amount"] = amount
+        # save the amount in the sale (negative because money is taken from the user)
+        data["amount"] = -amount
 
         return data
 
     def create(self, validated_data):
         # Get the related values
-        item_sales = validated_data.pop("item_sales")
-        transaction_data = validated_data.pop("transaction")
-        qr_code = transaction_data.get("qr_code")
-
-        # Create the transaction
-        transaction = Transaction(
-            sender=qr_code.user,
-            **transaction_data,
-        )
-        transaction.save()
+        contents = validated_data.pop("contents")
 
         # Create the Sale
         sale = Sale.objects.create(
-            user=qr_code.user, transaction=transaction, **validated_data
+            date=timezone.now(),
+            user=self.context["request"].user, **validated_data
         )
 
         # Create the ItemSales
-        ItemSale.objects.bulk_create(
+        Content.objects.bulk_create(
             [
-                ItemSale(sale=sale, **item)
-                for item in item_sales
+                Content(sale=sale, **item)
+                for item in contents
                 if item.get("quantity")
             ]
         )
 
-        # Update the balances
-        update_balance(transaction_data["group"], transaction_data["amount"])
-        update_balance(qr_code.user, -transaction_data["amount"])
-
         return sale
+
+
+class QRCodeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Sale
+        fields = ("uuid", "scanned", "seller", "date")
+
+
+class UserBalanceSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ("id", "nantralpay_balance")
+
+
+class NantralPayEventSerializer(serializers.ModelSerializer):
+    """Serializer for the NantralPay event"""
+
+    class Meta:
+        model = Event
+        fields = ("id", "title", "nantralpay_is_open", "use_nantralpay", "nantralpay_has_been_opened")
+

@@ -2,13 +2,11 @@ from django.contrib import admin
 
 from .forms import ItemAdminField
 from .models import (
+    Content,
     Item,
-    ItemSale,
     Order,
     Payment,
-    QRCode,
     Sale,
-    Transaction,
 )
 
 
@@ -17,12 +15,12 @@ class PaymentAdmin(admin.ModelAdmin):
     list_display = (
         "order",
         "amount",
-        "payment_date",
+        "date",
         "helloasso_payment_id",
     )
     search_fields = ("helloasso_payment_id",)
-    list_filter = ("payment_date", "payment_status", "payment_cash_out_state")
-    ordering = ("-payment_date",)
+    list_filter = ("date", "payment_status", "payment_cash_out_state")
+    ordering = ("-date",)
 
 
 @admin.register(Order)
@@ -41,45 +39,23 @@ class OrderAdmin(admin.ModelAdmin):
     ordering = ("-checkout_date",)
 
 
-@admin.register(Transaction)
-class TransactionAdmin(admin.ModelAdmin):
-    list_display = (
-        "sender",
-        "receiver",
-        "amount",
-        "transaction_date",
-        "get_description",
-    )
-    search_fields = (
-        "sender__username",
-        "receiver__username",
-        "get_description",
-    )
-    list_filter = ("transaction_date",)
-    ordering = ("-transaction_date",)
-
-
-@admin.register(QRCode)
-class QRCodeAdmin(admin.ModelAdmin):
-    list_display = (
-        "user",
-        "creation_date",
-        "id",
-    )
-    search_fields = ("user__username",)
-    list_filter = ("creation_date",)
-    ordering = ("-creation_date",)
-
-
 @admin.register(Item)
 class ItemAdmin(admin.ModelAdmin):
-    list_display = ("name", "price")
-    search_fields = ("name",)
-    ordering = ("name",)
+    list_display = (
+        "name",
+        "event",
+        "price",
+    )
+    search_fields = ("name", "event")
+    list_filter = ("event",)
+    ordering = (
+        "event",
+        "name",
+    )
 
 
-class ItemSaleInline(admin.TabularInline):
-    model = ItemSale
+class ContentInline(admin.TabularInline):
+    model = Content
     extra = 1
     min_num = 1
 
@@ -92,7 +68,7 @@ class ItemSaleInline(admin.TabularInline):
 
 @admin.register(Sale)
 class SaleAdmin(admin.ModelAdmin):
-    inlines = (ItemSaleInline,)
+    inlines = (ContentInline,)
     search_fields = (
         "user__first_name",
         "user__last_name",

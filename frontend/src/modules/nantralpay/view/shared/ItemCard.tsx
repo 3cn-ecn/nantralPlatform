@@ -13,12 +13,12 @@ import {
   Typography,
 } from '@mui/material';
 
+import { Event } from '#modules/event/event.type';
 import { ItemPreview } from '#modules/nantralpay/types/item.type';
+import { ModalDeleteItem } from '#modules/nantralpay/view/Modal/ModalDeleteItem';
+import { ModalEditItem } from '#modules/nantralpay/view/Modal/ModalEditItem';
 import { FlexRow } from '#shared/components/FlexBox/FlexBox';
 import { useTranslation } from '#shared/i18n/useTranslation';
-
-import { ModalDeleteItem } from './Modal/ModalDeleteItem';
-import { ModalEditItem } from './Modal/ModalEditItem';
 
 /**
  * A row of the table with a membership
@@ -28,17 +28,17 @@ import { ModalEditItem } from './Modal/ModalEditItem';
  */
 function MembershipCard(props: {
   item: ItemPreview;
+  event: Event;
   updateItem?: (item: ItemPreview) => Promise<void>;
   deleteItem?: (item: ItemPreview) => Promise<void>;
 }) {
   const { t } = useTranslation();
-  const { item } = props;
+  const { item, event } = props;
   const [openEditModal, setOpenEditModal] = useState(false);
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
 
-  //const today = new Date(new Date().toDateString());
   return (
-    <Grid item xs={12} sm={6} md={4} lg={3} xl={3}>
+    <Grid item xs={12} sm={6} md={4} lg={4} xl={4}>
       <Card variant="outlined" sx={{ height: '100%', borderColor: 'primary' }}>
         <CardContent sx={{ p: 1 }}>
           <FlexRow justifyContent="space-between" sx={{ mx: 1 }}>
@@ -74,7 +74,11 @@ function MembershipCard(props: {
         </CardActions>
       </Card>
       {openEditModal && item && (
-        <ModalEditItem onClose={() => setOpenEditModal(false)} item={item} />
+        <ModalEditItem
+          event={event}
+          onClose={() => setOpenEditModal(false)}
+          item={item}
+        />
       )}
       <ModalDeleteItem
         open={openDeleteModal}

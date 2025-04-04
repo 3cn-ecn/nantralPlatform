@@ -22,6 +22,8 @@ export type EventDTO = {
   end_registration: string | null;
   form_url: string;
   notification: number | null;
+  nantralpay_is_open: boolean;
+  use_nantralpay: boolean;
 } & TranslatedFieldsDTO<'title' | 'description'>;
 
 export type EventPreviewDTO = Pick<
@@ -41,6 +43,7 @@ export type EventPreviewDTO = Pick<
   | 'start_registration'
   | 'end_registration'
   | 'url'
+  | 'nantralpay_is_open'
 >;
 
 export type EventFormDTO = Pick<
@@ -53,6 +56,7 @@ export type EventFormDTO = Pick<
   | 'start_registration'
   | 'end_registration'
   | 'form_url'
+  | 'use_nantralpay'
 > & {
   // keep unused fields for typing errors
   title: undefined;

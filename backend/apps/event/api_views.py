@@ -60,6 +60,8 @@ class EventViewSet(viewsets.ModelViewSet):
         filter events current user is participating
     - is_registration_open: bool = None
         whether registration is open or closed
+    - nantralpay_is_open: bool = None
+        whether nantralpay is open or closed
     - page: int
         the index of the page
     - page_size: int
@@ -121,6 +123,9 @@ class EventViewSet(viewsets.ModelViewSet):
         is_registration_open = parse_bool(
             self.query_params.get("is_registration_open"),
         )
+        nantralpay_is_open = parse_bool(
+            self.query_params.get("nantralpay_is_open"),
+        )
         from_date = self.query_params.get("from_date")
         to_date = self.query_params.get("to_date")
 
@@ -166,6 +171,8 @@ class EventViewSet(viewsets.ModelViewSet):
                 Q(end_registration__gte=now) | Q(end_registration__isnull=True)
             )
             qs = qs.filter(condition if is_registration_open else ~condition)
+        if nantralpay_is_open is not None:
+            qs = qs.filter(nantralpay_is_open=nantralpay_is_open)
 
         return qs.select_related("group").distinct()
 

@@ -2,6 +2,7 @@ from django.db import models
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
+from apps.account.models import User
 from apps.post.models import AbstractPublication
 from apps.student.models import Student
 
@@ -56,6 +57,31 @@ class Event(AbstractPublication):
         blank=True,
         null=True,
         help_text=_("Users cannot register after this date."),
+    )
+    
+    # NantralPay
+    use_nantralpay = models.BooleanField(
+        verbose_name=_("Use NantralPay"),
+        default=False,
+        help_text=_("Enable NantralPay for this event."),
+    )
+    sellers = models.ManyToManyField(
+        to=User,
+        verbose_name=_("Sellers"),
+        through="nantralpay.Seller",
+        blank=True,
+        help_text=_("Users who can sell items for this event."),
+        related_name="selling_events",
+    )
+    nantralpay_is_open = models.BooleanField(
+        verbose_name=_("NantralPay is open"),
+        default=False,
+        help_text=_("NantralPay is currently open for this event: Users can buy items."),
+    )
+    nantralpay_has_been_opened = models.BooleanField(
+        verbose_name=_("NantralPay has been opened"),
+        default=False,
+        help_text=_("If true, you cannot change the items nor remove sellers."),
     )
 
     @property

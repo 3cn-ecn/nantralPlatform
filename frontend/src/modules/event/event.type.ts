@@ -22,6 +22,8 @@ export interface Event {
   endRegistration: Date | null;
   formUrl: string;
   notificationId: number | null;
+  nantralpayIsOpen: boolean;
+  useNantralpay: boolean;
 }
 
 export type EventPreview = Pick<
@@ -39,6 +41,7 @@ export type EventPreview = Pick<
   | 'startRegistration'
   | 'endRegistration'
   | 'url'
+  | 'nantralpayIsOpen'
 > & {
   group: GroupPreview & { isAdmin: boolean };
 };
@@ -53,6 +56,7 @@ export type EventForm = Pick<
   | 'startRegistration'
   | 'endRegistration'
   | 'formUrl'
+  | 'useNantralpay'
 > & {
   startDate: Date | null;
   endDate: Date | null;

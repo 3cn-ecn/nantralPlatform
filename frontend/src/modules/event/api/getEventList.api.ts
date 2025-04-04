@@ -1,8 +1,8 @@
 import axios, { GenericAbortSignal } from 'axios';
 
-import { ApiErrorDTO, adaptApiErrors } from '#shared/infra/errors';
+import { adaptApiErrors, ApiErrorDTO } from '#shared/infra/errors';
 import { OrderingField } from '#shared/infra/orderingFields.types';
-import { Page, PageDTO, adaptPage } from '#shared/infra/pagination';
+import { adaptPage, Page, PageDTO } from '#shared/infra/pagination';
 
 import { EventPreview } from '../event.type';
 import { adaptEventPreview } from '../infra/event.adapter';
@@ -21,6 +21,7 @@ export interface EventListQueryParams {
   ordering?: OrderingField<EventDTO> | null;
   page?: number | null;
   pageSize?: number | null;
+  nantralpayIsOpen?: boolean | null;
 }
 
 export async function getEventListApi(
@@ -42,6 +43,7 @@ export async function getEventListApi(
         ordering: params.ordering,
         page: params.page,
         page_size: params.pageSize,
+        nantralpay_is_open: params.nantralpayIsOpen,
       },
       signal: signal,
     })

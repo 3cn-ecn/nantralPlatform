@@ -4,9 +4,7 @@ import { usePostQueryParamState } from '#modules/post/hooks/usePostQueryParamSta
 import { PostModal } from '#modules/post/view/PostModal/PostModal';
 import { NantralPayInfo } from '#pages/NantralPay/components/NantralPayInfo';
 import { useNantralPay } from '#pages/NantralPay/hooks/useNantralPay';
-import ItemsTab from '#pages/NantralPay/tabs/Items.tab';
-import PaymentListTab from '#pages/NantralPay/tabs/PaymentList.tab';
-import QRCodeFormTab from '#pages/NantralPay/tabs/QRCodeForm.tab';
+import PlaceOrderTab from '#pages/NantralPay/tabs/PlaceOrder.tab';
 import TransactionListTab from '#pages/NantralPay/tabs/TransactionList.tab';
 import { ErrorPageContent } from '#shared/components/ErrorPageContent/ErrorPageContent';
 import { Spacer } from '#shared/components/Spacer/Spacer';
@@ -24,7 +22,6 @@ export default function NantralPayHomePage() {
   const {
     nantralpayUser,
     transactions,
-    payments,
     isLoading,
     isFetching,
     isError,
@@ -58,15 +55,6 @@ export default function NantralPayHomePage() {
         )}
         <Spacer vertical={2} />
         {selectedTab == 'home' && <div />}
-        {selectedTab == 'qrcode' && <QRCodeFormTab />}
-        {payments && selectedTab == 'payments' && (
-          <PaymentListTab
-            payments={payments}
-            isLoading={isLoading}
-            isFetching={isFetching}
-            isSuccess={isSuccess}
-          />
-        )}
         {transactions && selectedTab == 'transactions' && (
           <TransactionListTab
             transactions={transactions}
@@ -75,7 +63,7 @@ export default function NantralPayHomePage() {
             isSuccess={isSuccess}
           />
         )}
-        {selectedTab == 'items' && <ItemsTab />}
+        {selectedTab == 'order' && <PlaceOrderTab />}
       </Container>
       {postId && <PostModal postId={postId} onClose={closePost} />}
     </>

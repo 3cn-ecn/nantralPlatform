@@ -1,6 +1,7 @@
 import { Grid, Typography } from '@mui/material';
 import { UseInfiniteQueryResult } from '@tanstack/react-query';
 
+import { Event } from '#modules/event/event.type';
 import { ItemPreview } from '#modules/nantralpay/types/item.type';
 import ItemCard from '#modules/nantralpay/view/shared/ItemCard';
 import { ItemCardSkeleton } from '#modules/nantralpay/view/shared/ItemCardSkeleton';
@@ -10,8 +11,10 @@ import { Page } from '#shared/infra/pagination';
 
 export function ItemGrid({
   query,
+  event,
 }: {
   query: UseInfiniteQueryResult<Page<ItemPreview>>;
+  event: Event;
 }) {
   const { t } = useTranslation();
   return (
@@ -19,7 +22,7 @@ export function ItemGrid({
       <Grid spacing={1} container my={2}>
         {query.data?.pages
           .flatMap((page) => page.results)
-          .map((item) => <ItemCard key={item.id} item={item} />)}
+          .map((item) => <ItemCard key={item.id} item={item} event={event} />)}
         {query.data?.pages[0].count === 0 && (
           <Typography px={2}>
             {t('group.details.modal.editGroup.noMembers')}

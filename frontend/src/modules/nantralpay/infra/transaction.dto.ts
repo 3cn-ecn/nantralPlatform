@@ -2,7 +2,7 @@ export interface TransactionDTO {
   id: number;
   qr_code: string;
   amount: number;
-  transaction_date: string;
+  date: string;
   sender: string;
   receiver: string;
   description: string;
@@ -14,7 +14,7 @@ export type TransactionPreviewDTO = Pick<
   | 'id'
   | 'qr_code'
   | 'amount'
-  | 'transaction_date'
+  | 'date'
   | 'sender'
   | 'receiver'
   | 'description'

@@ -1,16 +1,14 @@
 from datetime import timedelta
 
+from apps.group.models import Group
 from django.core.exceptions import (
     PermissionDenied,
     ValidationError,
 )
 from django.utils import timezone
-from django.utils.translation import gettext as _
-
-from apps.group.models import Group
 
 from ..account.models import User
-from .models import Payment, QRCode, Transaction
+from .models import Payment, Sale
 
 QRCode_expiration_time = 2  # Durée (en minutes) avant que le QRCode périme
 
@@ -29,8 +27,8 @@ def recalculate_balance(user: User):
     for payment in Payment.objects.filter(user=user, payment_satus__in=Payment.valid_payment_status).values("amount"):
         balance += payment["amount"]
 
-    for transaction in Transaction.objects.filter(sender=user).values("amount"):
-        balance -= transaction["amount"]
+    for sale in Sale.objects.filter(user=user):
+        balance -= sale.get_price()
 
     user.nantralpay_balance = balance
     user.save()
@@ -41,42 +39,42 @@ def group_recalculate_balance(group: Group):
     It takes time"""
     balance = 0
 
-    for transaction in Transaction.objects.filter(group=group).values("amount"):
-        balance -= transaction["amount"]
+    for sale in Sale.objects.filter(seller__event__group=group):
+        balance -= sale.get_price()
 
     group.nantralpay_balance = balance
     group.save()
 
 
-def check_qrcode(qr_code: QRCode):
-    """Vérifie la validité du QR Code
+def check_sale(sale: Sale):
+    """Vérifie la validité d'une vente scannée par un QR code
 
     Parameters
     ----------
-    qr_code : QRCode
-        QR Code à vérifier
+    sale : Sale
+        La vente à vérifier
 
     Raises
     ------
     ValidationError
-        Le QR code ne peut pas être utilisé
+        La vente n'est pas valide
     """
 
-    # Vérifier si la transaction n'est pas déjà enregistrée
-    if qr_code.transaction is not None:
-        raise ValidationError("This QR code has already been cashed in.")
+    # Vérifier si la vente n'est pas déjà enregistrée
+    if sale.cash_in_date is None:
+        raise ValidationError("This sale has already been cashed in.")
 
-    # Vérifier si le QR code n'est pas périmé
+    # Vérifier si la vente n'est pas périmé
     current_time = (
         timezone.now()
     )  # Utilise la méthode correcte de Django pour obtenir l'heure actuelle
-    expiration_time = qr_code.creation_date + timedelta(
+    expiration_time = sale.creation_date + timedelta(
         minutes=QRCode_expiration_time
     )
     if current_time > expiration_time:
-        raise ValidationError("This QR code has expired.")
+        raise ValidationError("This sale has expired.")
 
-    return qr_code
+    return sale
 
 
 def require_ip(allowed_ip_list):
@@ -91,16 +89,3 @@ def require_ip(allowed_ip_list):
         return authorize
 
     return decorator
-
-
-def get_user_group(user):
-    groups = user.student.membership_set.filter(can_use_nantralpay=True).filter(
-        group__slug__in=["bde", "bda", "bds"]
-    )
-    if len(groups) == 0:
-        raise PermissionDenied(_("You are not allowed to use NantralPay."))
-    elif len(groups) > 1:
-        raise PermissionDenied(
-            _("You are in too many groups. Please contact an administrator.")
-        )
-    return groups.first().group

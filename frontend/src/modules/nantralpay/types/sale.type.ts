@@ -1,16 +1,17 @@
-import { ItemSale, ItemSaleForm, ItemSalePreview } from './itemSale.type';
+import { Content, ContentForm, ContentPreview } from './content.type';
 
 export interface Sale {
   id: number;
   creationDate: Date;
   qrCode: string;
-  itemSales: ItemSale[];
+  contents: Content[];
 }
 
 export type SalePreview = Pick<Sale, 'id' | 'creationDate' | 'qrCode'> & {
-  itemSales: ItemSalePreview[];
+  contents: ContentPreview[];
 };
 
 export type SaleForm = Pick<Sale, 'qrCode'> & {
-  itemSales: ItemSaleForm[];
+  contents: ContentForm[];
+  event?: number;
 };

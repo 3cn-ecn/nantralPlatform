@@ -4,11 +4,7 @@ import { MoreHoriz } from '@mui/icons-material';
 import { Button, IconButton, Menu, MenuItem, Typography } from '@mui/material';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
-import { editItemApi } from '#modules/nantralpay/api/editItem.api';
-import { convertItemForm } from '#modules/nantralpay/infra/item.converter';
-import { ItemFormDTO } from '#modules/nantralpay/infra/item.dto';
-import { ItemForm, ItemPreview } from '#modules/nantralpay/types/item.type';
-import { ItemFormFields } from '#modules/nantralpay/view/shared/ItemFormFields';
+import { Event } from '#modules/event/event.type';
 import { FlexRow } from '#shared/components/FlexBox/FlexBox';
 import { LoadingButton } from '#shared/components/LoadingButton/LoadingButton';
 import {
@@ -21,22 +17,28 @@ import { Spacer } from '#shared/components/Spacer/Spacer';
 import { useTranslation } from '#shared/i18n/useTranslation';
 import { ApiFormError } from '#shared/infra/errors';
 
+import { editItemApi } from '../../api/editItem.api';
+import { convertItemToForm } from '../../hooks/useItemFormValues';
+import { ItemFormDTO } from '../../infra/item.dto';
+import { ItemForm, ItemPreview } from '../../types/item.type';
+import { ItemFormFields } from '../../view/shared/ItemFormFields';
 import { ModalDeleteItem } from './ModalDeleteItem';
 
 export function ModalEditItem({
   onClose,
   item,
+  event,
 }: {
   onClose: () => void;
   item: ItemPreview;
+  event: Event;
 }) {
   const { t } = useTranslation();
-  const today = new Date();
-  const oneYear = new Date();
-  oneYear.setFullYear(today.getFullYear() + 1);
 
   const [modalOpen, setModalOpen] = useState(false);
-  const [formValues, setFormValues] = useState<ItemForm>(convertItemForm(item));
+  const [formValues, setFormValues] = useState<ItemForm>(
+    convertItemToForm(item, event.id),
+  );
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
@@ -53,7 +55,7 @@ export function ModalEditItem({
     ItemForm
   >(() => editItemApi(item.id, formValues), {
     onSuccess: () => {
-      queryClient.invalidateQueries(['items']);
+      queryClient.invalidateQueries(['items', { event: event.id }]);
       onClose();
     },
   });
@@ -71,11 +73,11 @@ export function ModalEditItem({
     <>
       <ResponsiveDialog onClose={onClose} disableEnforceFocus maxWidth="sm">
         <ResponsiveDialogHeader onClose={onClose}>
-          Edit item
+          {t('nantralpay.modal.editItem')}
           <Spacer flex={1} />
         </ResponsiveDialogHeader>
         <ResponsiveDialogContent>
-          <form id="edit-group-form" onSubmit={(e) => onSubmit(e)}>
+          <form id="edit-item-form" onSubmit={(e) => onSubmit(e)}>
             <ItemFormFields
               error={error}
               formValues={formValues}
@@ -106,7 +108,7 @@ export function ModalEditItem({
             {t('button.cancel')}
           </Button>
           <LoadingButton
-            form="edit-group-form"
+            form="edit-item-form"
             type="submit"
             loading={isLoading}
             variant="contained"

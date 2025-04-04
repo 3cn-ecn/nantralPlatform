@@ -5,5 +5,6 @@ export function convertItemForm(itemSale: ItemForm): ItemFormDTO {
   return {
     name: itemSale.name,
     price: itemSale.price,
+    event: itemSale.event,
   };
 }

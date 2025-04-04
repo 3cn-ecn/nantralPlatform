@@ -50,6 +50,7 @@ class EventSerializer(TranslationModelSerializer):
             "end_registration",
             "form_url",
             "notification",
+            "use_nantralpay",
         ]
         translations_fields = ["title", "description"]
 
@@ -104,6 +105,7 @@ class EventPreviewSerializer(EventSerializer):
             "start_registration",
             "end_registration",
             "url",
+            "nantralpay_is_open",
         ]
         translations_fields = []
 
@@ -123,6 +125,7 @@ class EventWriteSerializer(TranslationModelSerializer):
             "start_registration",
             "end_registration",
             "form_url",
+            "use_nantralpay",
         ]
         translations_fields = ["title", "description"]
         translations_only = True

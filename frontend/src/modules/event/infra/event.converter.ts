@@ -17,5 +17,6 @@ export function convertEventForm(event: EventForm): EventFormDTO {
     start_registration: event.startRegistration?.toISOString() || null,
     end_registration: event.endRegistration?.toISOString() || null,
     form_url: event.formUrl,
+    use_nantralpay: event.useNantralpay,
   };
 }

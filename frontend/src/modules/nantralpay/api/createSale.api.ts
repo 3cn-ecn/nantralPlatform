@@ -1,6 +1,6 @@
 import axios, { AxiosResponse } from 'axios';
 
-import { ApiFormErrorDTO, adaptApiFormErrors } from '#shared/infra/errors';
+import { adaptApiFormErrors, ApiFormErrorDTO } from '#shared/infra/errors';
 
 import { adaptSale } from '../infra/sale.adapter';
 import { convertSaleForm } from '../infra/sale.converter';

@@ -7,7 +7,6 @@ export function adaptNantralPayUser(
 ): NantralPayUser {
   return {
     id: nantralPayUserDto.id,
-    balance: nantralPayUserDto.balance,
-    isAdmin: nantralPayUserDto.is_admin,
+    balance: nantralPayUserDto.nantralpay_balance,
   };
 }

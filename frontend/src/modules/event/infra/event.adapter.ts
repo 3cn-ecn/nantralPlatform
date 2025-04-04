@@ -25,6 +25,8 @@ export function adaptEvent(eventDto: EventDTO): Event {
     },
     isParticipating: eventDto.is_participating,
     isBookmarked: eventDto.is_bookmarked,
+    useNantralpay: eventDto.use_nantralpay,
+    nantralpayIsOpen: eventDto.nantralpay_is_open,
     maxParticipant: eventDto.max_participant,
     startRegistration: eventDto.start_registration
       ? new Date(eventDto.start_registration)
@@ -50,6 +52,7 @@ export function adaptEventPreview(eventDto: EventPreviewDTO): EventPreview {
     },
     isParticipating: eventDto.is_participating,
     isBookmarked: eventDto.is_bookmarked,
+    nantralpayIsOpen: eventDto.nantralpay_is_open,
     url: eventDto.url,
     numberOfParticipants: eventDto.number_of_participants,
     maxParticipant: eventDto.max_participant,

@@ -3,6 +3,7 @@ import { FormEvent, useState } from 'react';
 import { Button } from '@mui/material';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
+import { Event } from '#modules/event/event.type';
 import { addItemApi } from '#modules/nantralpay/api/addItem.api';
 import { ItemFormDTO } from '#modules/nantralpay/infra/item.dto';
 import { ItemForm, ItemPreview } from '#modules/nantralpay/types/item.type';
@@ -18,7 +19,13 @@ import { Spacer } from '#shared/components/Spacer/Spacer';
 import { useTranslation } from '#shared/i18n/useTranslation';
 import { ApiFormError } from '#shared/infra/errors';
 
-export function ModalAddItem({ onClose }: { onClose: () => void }) {
+export function ModalAddItem({
+  onClose,
+  event,
+}: {
+  onClose: () => void;
+  event: Event;
+}) {
   const { t } = useTranslation();
   const today = new Date();
   const oneYear = new Date();
@@ -26,6 +33,7 @@ export function ModalAddItem({ onClose }: { onClose: () => void }) {
   const [formValues, setFormValues] = useState<ItemForm>({
     name: '',
     price: 0,
+    event: event.id,
   });
   const queryClient = useQueryClient();
   const { error, mutate, isLoading } = useMutation<

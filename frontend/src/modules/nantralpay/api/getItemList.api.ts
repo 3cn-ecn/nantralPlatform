@@ -5,19 +5,19 @@ import { ItemDTO } from '#modules/nantralpay/infra/item.dto';
 import { adaptApiErrors, ApiErrorDTO } from '#shared/infra/errors';
 import { adaptPage, PageDTO } from '#shared/infra/pagination';
 
-export interface GetItemListApiParams {
+export interface ItemListQueryParams {
+  event: number;
   page?: number;
   pageSize?: number;
-  orderBy?: string;
 }
 
-export async function getItemListApi(options: GetItemListApiParams) {
+export async function getItemListApi(params: ItemListQueryParams) {
   const { data } = await axios
     .get<PageDTO<ItemDTO>>('/api/nantralpay/item/', {
       params: {
-        page: options.page,
-        page_size: options.pageSize,
-        ordering: options.orderBy,
+        page: params.page,
+        page_size: params.pageSize,
+        event: params.event,
       },
     })
     .catch((err: ApiErrorDTO) => {

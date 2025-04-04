@@ -4,4 +4,6 @@ export interface ItemDTO {
   price: number;
 }
 
-export type ItemFormDTO = Pick<ItemDTO, 'name' | 'price'>;
+export type ItemFormDTO = Pick<ItemDTO, 'name' | 'price'> & {
+  event: number;
+};

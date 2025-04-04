@@ -1,9 +1,17 @@
 import uuid
 
 from django.db import models
+from django.utils.translation import gettext_lazy as _
 
 from apps.account.models import User
-from apps.group.models import Group
+from apps.event.models import Event
+from apps.utils.fields.image_field import CustomImageField
+
+
+class Transaction(models.Model):
+    date = models.DateTimeField(null=True, blank=True)
+    amount = models.DecimalField(max_digits=10, decimal_places=2)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
 
 
 class Order(models.Model):
@@ -15,7 +23,7 @@ class Order(models.Model):
     helloasso_order_id = models.IntegerField(unique=True, null=True)
 
 
-class Payment(models.Model):
+class Payment(Transaction):
     class PaymentStatus(models.TextChoices):
         PENDING = "Pending"
         AUTHORIZED = "Authorized"
@@ -49,8 +57,6 @@ class Payment(models.Model):
         TRANSFERED = "Transfered"
         MONEY_IN = "MoneyIn"
 
-    amount = models.DecimalField(max_digits=10, decimal_places=2)
-    payment_date = models.DateTimeField(auto_now_add=True)
     helloasso_payment_id = models.IntegerField(unique=True)
     order = models.ForeignKey(Order, on_delete=models.CASCADE)
 
@@ -67,84 +73,75 @@ class Payment(models.Model):
     )
 
 
-class Transaction(models.Model):
-    sender = models.ForeignKey(
-        User, related_name="transaction_sender", on_delete=models.CASCADE
-    )
-    receiver = models.ForeignKey(
-        User, related_name="transaction_receiver", on_delete=models.CASCADE
-    )
-    amount = models.DecimalField(max_digits=10, decimal_places=2)
-    transaction_date = models.DateTimeField(auto_now_add=True)
-
-    group = models.ForeignKey(
-        Group,
-        on_delete=models.CASCADE,
-        related_name="transactions",
-        blank=True,
-        null=True,
-    )
-
-    def get_description(self):
-        return self.sale.get_items()
-
-
-class QRCode(models.Model):
-    id = models.UUIDField(
-        default=uuid.uuid4, editable=False, unique=True, primary_key=True
-    )
-    user = models.ForeignKey(
-        User, related_name="qr_code", on_delete=models.CASCADE
-    )
-    creation_date = models.DateTimeField(auto_now_add=True)
-    transaction = models.OneToOneField(
-        Transaction,
-        on_delete=models.CASCADE,
-        related_name="qr_code",
-        blank=True,
-        null=True,
-    )
-
-
 class Item(models.Model):
-    name = models.CharField(max_length=255, unique=True)
+    name = models.CharField(max_length=255)
     price = models.DecimalField(max_digits=10, decimal_places=2)
 
-
-class Sale(models.Model):
-    user = models.ForeignKey(
-        User, on_delete=models.CASCADE, related_name="sales"
-    )
-    items = models.ManyToManyField(
-        Item, through="ItemSale", related_name="sales"
-    )
-    transaction = models.OneToOneField(
-        Transaction,
+    event = models.ForeignKey(
+        Event,
         on_delete=models.CASCADE,
-        related_name="sale",
-        blank=True,
+        related_name="items",
         null=True,
+        blank=True,
     )
+
+    image = CustomImageField(
+        verbose_name=_("Image"),
+        null=True,
+        blank=True,
+    )
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                fields=("name", "event"), name="unique_event_item_name"
+            )
+        ]
+        
+    def delete(self, *args, **kwargs):
+        self.image.delete(save=False)
+        super().delete(*args, **kwargs)
+
+
+
+
+class Sale(Transaction):
+    uuid = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
+
+    seller = models.ForeignKey(
+        "Seller",
+        on_delete=models.SET_NULL,
+        related_name="sales",
+        null=True,
+        blank=True,
+    )
+
+    items = models.ManyToManyField(
+        Item, through="Content", related_name="sales"
+    )
+
+    creation_date = models.DateTimeField(auto_now_add=True)
+
+    scanned = models.BooleanField(default=False)
 
     def get_price(self):
         return sum(
-            item.item.price * item.quantity for item in self.item_sales.all()
+            item.item.price * item.quantity for item in self.contents.all()
         )
 
     def get_items(self):
         """Shows the purchased items"""
         return " / ".join(
-            f"{item.quantity}x {item.item.name}"
-            for item in self.item_sales.all()
+            f"{item.quantity}x {item.item.name}" for item in self.contents.all()
         )
 
 
-class ItemSale(models.Model):
+class Content(models.Model):
     item = models.ForeignKey(
-        Item, on_delete=models.CASCADE, related_name="item_sales"
+        Item, on_delete=models.PROTECT, related_name="used_in_list"
     )
     sale = models.ForeignKey(
-        Sale, on_delete=models.CASCADE, related_name="item_sales"
+        Sale, on_delete=models.CASCADE, related_name="contents"
     )
     quantity = models.IntegerField(default=1)
 
@@ -154,6 +151,15 @@ class ItemSale(models.Model):
                 fields=("item", "sale"), name="unique_item_sale"
             )
         ]
+
+
+class Seller(models.Model):
+    user = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name="seller"
+    )
+    events = models.ForeignKey(
+        Event, on_delete=models.CASCADE, related_name="seller_list"
+    )
 
 
 class RefreshToken(models.Model):

@@ -1,14 +1,18 @@
-import { Alert, Divider, Typography } from '@mui/material';
-import { useQuery } from '@tanstack/react-query';
-import axios, { AxiosError } from 'axios';
+import { useCallback } from 'react';
 
-import { adaptItem } from '#modules/nantralpay/infra/item.adapter';
-import { ItemDTO } from '#modules/nantralpay/infra/item.dto';
+import { Alert, Divider, Typography } from '@mui/material';
+
+import { getNantralPayEventListApi } from '#modules/nantralpay/api/getNantralPayEventList.api';
+import { useItemListQuery } from '#modules/nantralpay/hooks/useItemList.query';
 import { Item } from '#modules/nantralpay/types/item.type';
 import { SaleForm } from '#modules/nantralpay/types/sale.type';
-import { NumberField, TextField } from '#shared/components/FormFields';
+import {
+  AutocompleteSearchField,
+  NumberField,
+  TextField,
+} from '#shared/components/FormFields';
+import ButtonNumberField from '#shared/components/FormFields/ButtonNumberField';
 import { useTranslation } from '#shared/i18n/useTranslation';
-import { adaptPage, Page, PageDTO } from '#shared/infra/pagination';
 
 interface SaleFormFieldsProps {
   error: {
@@ -26,24 +30,27 @@ function QuantityField(
   i,
   error,
 ) {
-  const item = items.filter((it) => it.id == formValues.itemSales[i].item)[0];
+  const item = items.filter((it) => it.id == formValues.contents[i].item)[0];
   console.log(error);
   return (
-    <NumberField
-      name={'quantity-' + item.id}
-      label={item.name + ' - ' + item.price + ' €'}
-      value={formValues.itemSales[i].quantity}
-      handleChange={(val) => {
-        formValues.itemSales[i].quantity = val || 0;
-        updateFormValues({
-          itemSales: formValues.itemSales,
-        });
-        console.log(formValues);
-      }}
-      errors={error?.fields?.item_sales?.at(i)?.quantity}
-      required
-      key={item.id}
-    />
+    <>
+      <ButtonNumberField />
+      <NumberField
+        name={'quantity-' + item.id}
+        label={item.name + ' - ' + item.price + ' €'}
+        value={formValues.contents[i].quantity}
+        handleChange={(val) => {
+          formValues.contents[i].quantity = val || 0;
+          updateFormValues({
+            itemSales: formValues.contents,
+          });
+          console.log(formValues);
+        }}
+        errors={error?.fields?.item_sales?.at(i)?.quantity}
+        required
+        key={item.id}
+      />
+    </>
   );
 }
 
@@ -54,19 +61,28 @@ export function SaleFormFields({
 }: SaleFormFieldsProps) {
   const { t } = useTranslation();
 
+  const handleEventChange = (val: number) => {
+    useCallback(
+      (val: number) => updateFormValues({ event: val }),
+      [updateFormValues],
+    );
+  };
+
+  const fetchInitialGroupOptions = useCallback(
+    () =>
+      getNantralPayEventListApi({ pageSize: 7 }).then((data) => data.results),
+    [],
+  );
+  const fetchGroupOptions = useCallback(
+    (searchText: string) =>
+      getNantralPayEventListApi({ search: searchText, pageSize: 10 }).then(
+        (data) => data.results,
+      ),
+    [],
+  );
+
   // Récupère la liste des produits en vente
-  const itemsQuery = useQuery<Page<Item>, AxiosError>({
-    queryKey: ['items'],
-    queryFn: async () => {
-      const res = await axios.get<PageDTO<ItemDTO>>('/api/nantralpay/item/');
-      const data = adaptPage(res.data, adaptItem);
-      formValues.itemSales = data.results.map((item) => ({
-        item: item.id,
-        quantity: 0,
-      }));
-      return data;
-    },
-  });
+  const itemsQuery = useItemListQuery({ event: formValues.event ?? 0 });
 
   // check if the query is loading
   if (itemsQuery.isLoading) {
@@ -75,16 +91,16 @@ export function SaleFormFields({
 
   // check if there is an error and show it
   if (itemsQuery.isError) {
-    if (itemsQuery.error.response?.data) {
-      if (typeof itemsQuery.error.response?.data === 'string') {
-        itemsQuery.error.message = itemsQuery.error.response?.data;
-      }
-    }
     return <Alert severity="error">{itemsQuery.error.message}</Alert>;
   }
 
   const page = itemsQuery.data;
-  const itemsOfThisPage = page.results;
+  const itemsOfThisPage = page.results.map(
+    (item): Item => ({
+      quantity: 0,
+      ...item,
+    }),
+  );
 
   return (
     <>
@@ -102,6 +118,20 @@ export function SaleFormFields({
       >
         {t('nantralpay.cash-in.select')}
       </Typography>
+      <AutocompleteSearchField
+        name="event"
+        label={t('nantralpay.form.event.label')}
+        helperText={t('nantralpay.form.event.helpText')}
+        value={formValues.event ?? null}
+        handleChange={handleEventChange}
+        defaultObjectValue={prevData?.event || null}
+        errors={error?.fields?.event}
+        required
+        fetchInitialOptions={fetchInitialGroupOptions}
+        fetchOptions={fetchGroupOptions}
+        labelPropName="name"
+        imagePropName="icon"
+      />
       <Divider sx={{ marginTop: 1 }} />
       <div style={{ display: 'block' }}>
         <TextField
@@ -114,7 +144,7 @@ export function SaleFormFields({
           style={{ display: 'none' }}
         />
       </div>
-      {formValues.itemSales.map((objet, i) =>
+      {formValues.contents.map((objet, i) =>
         QuantityField(itemsOfThisPage, formValues, updateFormValues, i, error),
       )}
     </>

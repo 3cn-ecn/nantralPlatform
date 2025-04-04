@@ -3,7 +3,7 @@ import { Divider, Tab, Tabs } from '@mui/material';
 import { NantralPayUser } from '#modules/nantralpay/types/nantralpayUser.type';
 import { useTranslation } from '#shared/i18n/useTranslation';
 
-export type TabType = 'home' | 'payments' | 'transactions' | 'qrcode' | 'items';
+export type TabType = 'home' | 'payments' | 'transactions' | 'order' | 'items';
 
 interface TabBarProps {
   value: TabType;
@@ -26,12 +26,8 @@ export function TabBar({ value, onChangeValue, user }: TabBarProps) {
         }}
       >
         <Tab label={t('nantralpay.tabs.home')} value={'home'} />
-        <Tab label={t('nantralpay.tabs.payments')} value={'payments'} />
         <Tab label={t('nantralpay.tabs.transactions')} value={'transactions'} />
-        <Tab label={t('nantralpay.tabs.qrcode')} value={'qrcode'} />
-        {user.isAdmin && (
-          <Tab label={t('nantralpay.tabs.manageItems')} value={'items'} />
-        )}
+        <Tab label={t('nantralpay.tabs.order')} value={'order'} />
       </Tabs>
       <Divider />
     </>
