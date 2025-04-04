@@ -4,10 +4,12 @@ import {
   Edit as EditIcon,
   Group as GroupIcon,
   PushPin as PushPinIcon,
+  AdminPanelSettings as AdminPanelSettingsIcon,
 } from '@mui/icons-material';
 import { Box, IconButton, Tooltip, Typography } from '@mui/material';
 
 import { Post } from '#modules/post/post.types';
+import { useCurrentUserData } from '#modules/student/hooks/useCurrentUser.data';
 import { Avatar } from '#shared/components/Avatar/Avatar';
 import { FlexRow } from '#shared/components/FlexBox/FlexBox';
 import {
@@ -33,18 +35,14 @@ export function ReadPostModalContent({
   onEdit,
 }: ReadPostModalContentProps) {
   const { t, formatRelativeTime } = useTranslation();
+  const { staff } = useCurrentUserData();
 
   return (
     <>
       <ResponsiveDialogHeader
         onClose={onClose}
         leftIcon={
-          <IconButton
-            component={Link}
-            to={post.group.url}
-            reloadDocument
-            sx={{ p: 0.5 }}
-          >
+          <IconButton component={Link} to={post.group.url} sx={{ p: 0.5 }}>
             <Avatar src={post.group.icon} alt={post.group.shortName} />
           </IconButton>
         }
@@ -75,13 +73,25 @@ export function ReadPostModalContent({
           <RichTextRenderer content={post.description} />
         </Box>
       </ResponsiveDialogContent>
-      <ResponsiveDialogFooter sx={{ justifyContent: 'space-between', pl: 3 }}>
+      <ResponsiveDialogFooter sx={{ pl: 3 }}>
         <Typography variant="caption" color="text.secondary" fontStyle="italic">
           {`${t('post.modal.metadata.dates', {
             createdDuration: formatRelativeTime(post.createdAt),
             updatedDuration: formatRelativeTime(post.updatedAt),
           })}`}
         </Typography>
+        <Spacer flex={1} />
+        {staff && (
+          <Tooltip title={t('site.adminSettings')}>
+            <IconButton
+              color="secondary"
+              href={`/admin/post/post/${post.id}/change/`}
+              target="_blank"
+            >
+              <AdminPanelSettingsIcon />
+            </IconButton>
+          </Tooltip>
+        )}
         {post.isAdmin && (
           <Tooltip title={t('post.modal.editButton.label')}>
             <IconButton color="secondary" onClick={onEdit}>

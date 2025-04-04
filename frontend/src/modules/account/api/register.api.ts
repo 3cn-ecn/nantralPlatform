@@ -14,7 +14,6 @@ export async function registerApi(form: RegisterForm) {
     .post<
       RegisterDTO,
       AxiosResponse<RegisterCreatedDTO>
-      // eslint-disable-next-line prettier/prettier
     >('/api/account/register/', adaptRegisterForm(form))
     .catch((err: ApiErrorDTO) => {
       throw adaptApiErrors(err);

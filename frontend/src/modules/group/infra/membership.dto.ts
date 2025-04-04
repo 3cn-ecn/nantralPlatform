@@ -14,3 +14,8 @@ export interface MembershipDTO {
   admin: boolean;
   admin_request: string;
 }
+
+export type MembershipFormDTO = Pick<
+  MembershipDTO,
+  'begin_date' | 'end_date' | 'summary' | 'description' | 'admin'
+> & { group: number; student: number };

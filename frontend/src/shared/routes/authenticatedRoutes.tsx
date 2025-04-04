@@ -3,9 +3,12 @@ import { RouteObject } from 'react-router-dom';
 
 import { PageTemplate } from '#shared/components/PageTemplate/PageTemplate';
 
-const QRCodeFormPage = lazy(() => import('#pages/NantralPay/QRCodeForm.page'));
+const SelectionFormPage = lazy(
+  () => import('#pages/NantralPay/SelectionForm.page'),
+);
 
 const EventPage = lazy(() => import('#pages/Event/Event.page'));
+const NantralPayHomePage = lazy(() => import('#pages/NantralPay'));
 const EventCalendarViewPage = lazy(
   () => import('#pages/Event/EventCalendar/EventCalendarView.page'),
 );
@@ -88,9 +91,19 @@ export const authenticatedRoutes: RouteObject = {
       ],
     },
     {
-      path: '/nantralpay/qrcode-form',
-      element: <QRCodeFormPage />,
-      handle: { crumb: t('breadcrumbs.qrcode.form') },
+      path: '/nantralpay',
+      handle: { crumb: t('breadcrumbs.nantralpay.index') },
+      children: [
+        {
+          index: true,
+          element: <NantralPayHomePage />,
+        },
+        {
+          path: 'cash-in/:uuid/',
+          element: <SelectionFormPage />,
+          handle: { crumb: t('breadcrumbs.nantralpay.cash-in') },
+        },
+      ],
     },
     {
       path: '*',

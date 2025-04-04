@@ -2,8 +2,6 @@ from django.apps import apps
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.db import models
-from django.db.models.signals import post_save
-from django.dispatch import receiver
 
 from apps.utils.fields.image_field import CustomImageField
 
@@ -32,8 +30,7 @@ User = get_user_model()
 
 class Student(models.Model):
     user = models.OneToOneField(
-        settings.AUTH_USER_MODEL,
-        on_delete=models.CASCADE,
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE
     )
     promo = models.IntegerField(
         verbose_name="Année de promotion entrante",
@@ -110,11 +107,3 @@ class Student(models.Model):
     def delete(self, *args, **kwargs):
         self.picture.delete()
         super().delete(*args, **kwargs)
-
-
-@receiver(post_save, sender=User)
-def update_student_signal(sender, instance, created, **kwargs):
-    if not instance.is_superuser:
-        if created:
-            Student.objects.create(user=instance)
-        instance.student.save()

@@ -2,6 +2,7 @@ import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
 import { EventDTO } from '#modules/event/infra/event.dto';
+import { GroupPreviewDTO } from '#modules/group/infra/group.dto';
 import { PostDTO } from '#modules/post/infra/post.dto';
 import { mockServer } from '#shared/testing/mockServer';
 import { renderWithProviders } from '#shared/testing/renderWithProviders';
@@ -32,12 +33,29 @@ function mockEventApiCall(results: EventDTO[] = []) {
     .reply(200, { count: results.length, results });
 }
 
+function mockGroupApiCall(results: GroupPreviewDTO[]) {
+  mockServer
+    .get('/api/group/group/')
+    .query({
+      type: /.*/,
+      is_member: true,
+      is_admin: /.*/,
+      slug: /.*/,
+      search: /.*/,
+      page: /.*/,
+      page_size: /.*/,
+      parent: /.*/,
+    })
+    .reply(200, { count: results.length, results });
+}
+
 describe('Home page', () => {
   it('should render correctly without data', async () => {
     // mock the api (since the backend does not exist during tests)
     mockEventApiCall([]);
     mockPostApiCall({ pinned: true }, []);
     mockPostApiCall({ pinned: false }, []);
+    mockGroupApiCall([]);
 
     const component = renderWithProviders(<HomePage />);
 
@@ -67,6 +85,7 @@ describe('Home page', () => {
     mockEventApiCall([]);
     mockPostApiCall({ pinned: true }, []);
     mockPostApiCall({ pinned: false }, []);
+    mockGroupApiCall([]);
 
     // create a fake event page for testing
     const fakeEventRoute = { path: '/event', element: <p>Events</p> };
@@ -74,7 +93,7 @@ describe('Home page', () => {
     renderWithProviders(<HomePage />, [fakeEventRoute]);
 
     // click the 'See all' button
-    const seeAllLink = screen.getByText('See all'); // NB: we use get because we are not in an expect
+    const seeAllLink = screen.getAllByText('See all')[0]; // NB: we use get because we are not in an expect
     userEvent.click(seeAllLink);
 
     // check that we are on the event page

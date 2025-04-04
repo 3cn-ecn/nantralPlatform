@@ -35,7 +35,7 @@
   create your account.
 - Access the administration panel at
   [http://localhost:8000/admin](http://localhost:8000/admin) with the default
-  login `admin/admin` and grant yourself admin rights (tick the 3 checkboxes).
+  login `admin@ec-nantes.fr/admin` and grant yourself admin rights (tick the 3 checkboxes).
 - Log out from the administration panel, go back to the website and log in with
   your personal account.
 

@@ -7,6 +7,7 @@ class EventAdmin(admin.ModelAdmin):
     list_display = ["title", "start_date"]
     readonly_fields = ["updated_by"]
     exclude = ["bookmarks"]
+    autocomplete_fields = ["participants", "created_by"]
 
     def save_model(
         self,

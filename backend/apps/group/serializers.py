@@ -4,9 +4,13 @@ from django.utils.translation import gettext as _
 
 from rest_framework import exceptions, serializers
 
+from apps.sociallink.serializers import (
+    GroupSocialLinkSerializer,
+    SocialLinkSerializer,
+)
 from apps.student.serializers import StudentPreviewSerializer
 
-from .models import Group, GroupType, Membership
+from .models import Group, GroupType, Label, Membership
 
 
 class AdminFieldsMixin:
@@ -36,21 +40,57 @@ class AdminFieldsMixin:
 
 
 class GroupTypeSerializer(serializers.ModelSerializer):
+    can_create = serializers.SerializerMethodField()
+
     class Meta:
         model = GroupType
-        fields = ["name", "slug", "no_membership_dates"]
+        fields = [
+            "name",
+            "slug",
+            "no_membership_dates",
+            "can_create",
+            "can_have_parent",
+        ]
+
+    def get_can_create(self, obj: GroupType):
+        user = self.context.get("request").user
+        return user.is_authenticated and (obj.can_create or user.is_superuser)
 
 
 class GroupPreviewSerializer(serializers.ModelSerializer):
     url = serializers.SerializerMethodField()
+    category = serializers.SerializerMethodField()
+    sub_category = serializers.SerializerMethodField()
 
     class Meta:
         model = Group
-        fields = ["name", "short_name", "slug", "url", "icon", "id"]
-        read_only_fields = ["name", "short_name", "slug", "url", "icon"]
+        fields = [
+            "name",
+            "short_name",
+            "slug",
+            "url",
+            "icon",
+            "id",
+            "category",
+            "sub_category",
+        ]
+        read_only_fields = [
+            "name",
+            "short_name",
+            "slug",
+            "url",
+            "icon",
+            "category",
+        ]
 
     def get_url(self, obj: Group) -> str:
         return obj.get_absolute_url()
+
+    def get_category(self, obj: Group) -> str:
+        return obj.get_category()
+
+    def get_sub_category(self, obj: Group) -> str:
+        return obj.get_sub_category()
 
 
 class GroupSerializer(serializers.ModelSerializer):
@@ -59,6 +99,9 @@ class GroupSerializer(serializers.ModelSerializer):
     is_member = serializers.SerializerMethodField()
     group_type = GroupTypeSerializer(read_only=True)
     parent = GroupPreviewSerializer(read_only=True)
+    category = serializers.SerializerMethodField()
+    sub_category = serializers.SerializerMethodField()
+    social_links = SocialLinkSerializer(many=True)
 
     class Meta:
         model = Group
@@ -66,14 +109,19 @@ class GroupSerializer(serializers.ModelSerializer):
             "members",
             "subscribers",
             "priority",
-            "social_links",
             "created_at",
             "created_by",
             "updated_at",
             "updated_by",
-            "lock_memberships",
         ]
-        read_only_fields = ["group_type", "parent", "url"]
+        read_only_fields = [
+            "group_type",
+            "parent",
+            "url",
+            "category",
+            "sub_category",
+            "parent",
+        ]
 
     def get_url(self, obj: Group) -> str:
         return obj.get_absolute_url()
@@ -84,27 +132,81 @@ class GroupSerializer(serializers.ModelSerializer):
     def get_is_member(self, obj: Group) -> bool:
         return obj.is_member(self.context["request"].user)
 
+    def get_category(self, obj: Group) -> str:
+        return obj.get_category()
+
+    def get_sub_category(self, obj: Group) -> str:
+        return obj.get_sub_category()
+
 
 class GroupWriteSerializer(serializers.ModelSerializer):
+    social_links = GroupSocialLinkSerializer(many=True, read_only=True)
+
     class Meta:
         model = Group
         exclude = [
             "members",
             "subscribers",
             "priority",
-            "social_links",
             "created_at",
             "created_by",
             "updated_at",
             "updated_by",
-            "lock_memberships",
         ]
-        read_only_fields = ["group_type", "parent", "url"]
+        read_only_fields = ["group_type", "url", "tags"]
+
+    def get_group_type(self) -> GroupType:
+        group: Group | None = self.instance
+        if group is None:
+            group_type = self.context["request"].query_params.get("type")
+            return GroupType.objects.get(slug=group_type)
+        else:
+            return group.group_type
+
+    def validate_parent(self, parent: Group | None):
+        if parent is None:
+            # Nothing to validate in that case
+            return parent
+
+        group: Group | None = self.instance
+        group_type = self.get_group_type()
+
+        if group == parent:
+            raise exceptions.ValidationError("Can't assign itself as a parent")
+
+        if not group_type.can_have_parent:
+            raise exceptions.ValidationError(
+                "Can't assign a parent to that group"
+            )
+
+        if parent.parent is not None:
+            raise exceptions.ValidationError(
+                "Can't choose a subgroup as parent"
+            )
+
+        if group and len(group.children.all()) > 0:
+            raise exceptions.ValidationError(
+                "A group having children can't have a parent"
+            )
+
+        return parent
 
     def validate(self, data):
-        if not self.instance:
-            group_type = self.context["request"].query_params.get("type")
-            data["group_type"] = GroupType.objects.get(slug=group_type)
+        group_type = self.get_group_type()
+        # assign group_type to data so that the group is updated
+        data["group_type"] = group_type
+
+        parent: Group = data.get("parent")
+        if parent and not group_type.can_have_parent:
+            raise exceptions.ValidationError(
+                "Can't assign parent to that group"
+            )
+
+        if parent and parent.group_type != group_type:
+            raise exceptions.ValidationError(
+                "Parent group type and this group type do not match"
+            )
+
         return super().validate(data)
 
 
@@ -202,3 +304,27 @@ class NewMembershipSerializer(AdminFieldsMixin, serializers.ModelSerializer):
             )
         self.validate_admin_fields(data, group)
         return data
+
+
+class LabelSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Label
+        fields = ["id", "name"]
+
+
+class AdminRequestFormSerializer(serializers.Serializer):
+    message = serializers.CharField(
+        max_length=256, source="admin_request_message"
+    )
+
+
+class AdminRequestValidateSerializer(serializers.Serializer):
+    id = serializers.IntegerField()
+
+
+class AdminRequestSerializer(serializers.ModelSerializer):
+    student = StudentPreviewSerializer(read_only=True)
+
+    class Meta:
+        model = Membership
+        fields = ["student", "admin", "admin_request_message", "id"]

@@ -4,6 +4,7 @@ import { Edit as EditIcon } from '@mui/icons-material';
 import { Avatar, Button, useTheme } from '@mui/material';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
+import { GroupPreview } from '#modules/group/types/group.types';
 import { createPostApi } from '#modules/post/api/createPost.api';
 import { usePostFormValues } from '#modules/post/hooks/usePostFormValues';
 import { PostFormDTO } from '#modules/post/infra/post.dto';
@@ -25,15 +26,22 @@ import { PostFormFields } from '../shared/PostFormFields';
 interface CreatePostModalProps {
   onClose: () => void;
   onCreated: (postId: number) => void;
+  group?: GroupPreview & { canPin: boolean };
 }
 
-export function CreatePostModal({ onClose, onCreated }: CreatePostModalProps) {
+export function CreatePostModal({
+  onClose,
+  onCreated,
+  group,
+}: CreatePostModalProps) {
   const { currentBaseLanguage, t } = useTranslation();
   const queryClient = useQueryClient();
   const { palette } = useTheme();
 
   const [selectedLang, setSelectedLang] = useState(currentBaseLanguage);
-  const [formValues, updateFormValues] = usePostFormValues();
+  const [formValues, updateFormValues] = usePostFormValues({
+    group: group?.id,
+  });
 
   // create all states for error, loading, etc. while fetching the API
   const { mutate, isLoading, isError, error } = useMutation<
@@ -83,6 +91,7 @@ export function CreatePostModal({ onClose, onCreated }: CreatePostModalProps) {
             formValues={formValues}
             updateFormValues={updateFormValues}
             selectedLang={selectedLang}
+            prevData={{ group: group }}
           />
         </form>
       </ResponsiveDialogContent>

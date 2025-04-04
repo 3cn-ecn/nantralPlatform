@@ -8,5 +8,7 @@ export function adaptGroupTypePreview(
     name: groupType.name,
     slug: groupType.slug,
     noMembershipDates: groupType.no_membership_dates,
+    canCreate: groupType.can_create,
+    canHaveParent: groupType.can_have_parent,
   };
 }

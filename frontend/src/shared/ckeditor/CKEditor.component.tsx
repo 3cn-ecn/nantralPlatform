@@ -1,19 +1,20 @@
 import { forwardRef } from 'react';
 
 import { CKEditor } from '@ckeditor/ckeditor5-react';
+import { EventInfo } from '@ckeditor/ckeditor5-utils';
 import {
   FormControl,
   FormHelperText,
   InputLabel,
   OutlinedInput,
 } from '@mui/material';
+import 'ckeditor5/ckeditor5.css';
 
 import { useTranslation } from '#shared/i18n/useTranslation';
 
 import { CustomEditor } from './CustomEditor';
+import './custom.styles.scss';
 import { getCKEditorLanguage } from './getCKEditorLanguage';
-import './styles/base.styles.scss';
-import './styles/editor.styles.scss';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const CKEditorWithRef = forwardRef<HTMLInputElement>((props: any, ref) => {
@@ -73,9 +74,11 @@ export default function CKEditorComponent({
           } as any,
         }}
         onChange={
-          ((event, editor) => {
+          ((event: EventInfo, editor: CustomEditor) => {
             const data = editor.getData();
             handleChange(data);
+
+            // Force type because Mui does not support CKEditor onChange type
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
           }) as any
         }

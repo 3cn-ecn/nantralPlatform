@@ -8,6 +8,11 @@ import { useTranslation } from '#shared/i18n/useTranslation';
 
 import { BreadcrumbsItem } from './BreadcrumbsItem';
 
+interface Crumb {
+  id: string;
+  label: string;
+  path: string;
+}
 export function BreadcrumbsNav() {
   const matches = useMatches();
   const { t } = useTranslation();
@@ -15,12 +20,26 @@ export function BreadcrumbsNav() {
 
   // generate the list of all crumbs
   const crumbs = matches
-    .filter((match) => (match.handle as { crumb?: string })?.crumb)
-    .map((match) => ({
-      id: match.id,
-      label: t((match.handle as { crumb: string }).crumb),
-      path: match.pathname,
-    }));
+    .filter(
+      (match) => (match.handle as { crumb?: string })?.crumb || match.data,
+    )
+    .map((match) => {
+      let allCrumbs: Crumb[] = [];
+      if (match.handle) {
+        allCrumbs.push({
+          id: match.id,
+          label: t((match.handle as { crumb: string }).crumb),
+          path: match.pathname,
+        });
+      }
+      const extraCrumb = (match.data as { extraCrumb?: Crumb })?.extraCrumb;
+
+      if (extraCrumb) {
+        allCrumbs = allCrumbs.concat(extraCrumb);
+      }
+      return allCrumbs;
+    })
+    .flat();
 
   // select which crumbs to display: the last 3 for larger screens,
   // or the penultimate one for smaller screens (or the last one if 1 item only)

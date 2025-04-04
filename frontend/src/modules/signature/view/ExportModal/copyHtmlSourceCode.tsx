@@ -8,12 +8,12 @@ export async function copyHtmlSourceCode(
   markdownContent: string,
   group?: GroupPreview,
 ) {
-  const htmlCode = render(
+  const htmlCode = await render(
     <SignatureTemplate markdownContent={markdownContent} group={group} />,
   );
   try {
     await navigator.clipboard.writeText(htmlCode);
-  } catch (error) {
+  } catch {
     // continue regardless of error
   }
   return htmlCode;

@@ -98,6 +98,7 @@ class GroupFakeData(FakeDataGenerator):
             category_expr="""f"Campagnes {group.creation_year}-{group.creation_year + 1}" if group.creation_year else "Autres" """,
             sub_category_expr="""group.label""",
             can_create=True,
+            can_have_parent=False,
         )
         academics = GroupTypeFactory.create(slug="academic", name="Formations")
 

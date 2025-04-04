@@ -16,11 +16,20 @@ type AvatarComponentType<
     P & {
       alt: string;
       Icon?: SvgIconComponent;
-      size?: 's' | 'm' | 'l' | 'xxl';
+      size?: AvatarSize;
     },
     D
   >
 >;
+export type AvatarSize = 's' | 'm' | 'l' | 'xl' | 'xxl';
+
+export const AVATAR_SIZES = {
+  s: 28,
+  m: 40,
+  l: 48,
+  xl: 115,
+  xxl: 170,
+};
 
 /**
  * A custom Avatar extending the default MUI Avatar with:
@@ -43,29 +52,24 @@ export const Avatar: AvatarComponentType = ({
       : altWords[0].substring(0, 2)
   ).toLocaleUpperCase();
 
-  const sizes = {
-    s: 28,
-    m: 40,
-    l: 48,
-  };
-
   const bgColor = stringToColor(alt);
 
   return (
     <MuiAvatar
       alt={alt}
       sx={{
-        width: sizes[size],
-        height: sizes[size],
-        fontSize: sizes[size] * 0.4,
-        backgroundColor: bgColor,
+        width: AVATAR_SIZES[size],
+        height: AVATAR_SIZES[size],
+        fontSize: AVATAR_SIZES[size] * 0.4,
+        backgroundColor: props.src ? 'transparent' : bgColor,
         color: theme.palette.getContrastText(bgColor),
         textDecoration: 'none',
+        img: { objectFit: 'contain' },
         ...sx,
       }}
       {...props}
     >
-      {Icon ? <Icon /> : initials}
+      {Icon ? <Icon sx={{ bgcolor: bgColor }} /> : initials}
     </MuiAvatar>
   );
 };

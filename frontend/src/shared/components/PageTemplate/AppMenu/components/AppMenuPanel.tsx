@@ -41,7 +41,6 @@ export function AppMenuPanel({ menuOpen, onClose }: AppMenuPanelProps) {
           label={t('navbar.group')}
           path="/group/"
           iconPath="/static/img/icons/cropped/club.svg"
-          isOnBackend
           closeMenu={onClose}
         />
         <AppMenuItem
@@ -69,6 +68,12 @@ export function AppMenuPanel({ menuOpen, onClose }: AppMenuPanelProps) {
           label={t('navbar.signature')}
           path="/signature/"
           iconPath="/static/img/icons/cropped/sign.svg"
+          closeMenu={onClose}
+        />
+        <AppMenuItem
+          label={t('navbar.nantralpay')}
+          path="/nantralpay/"
+          iconPath="/static/img/icons/cropped/link.svg"
           closeMenu={onClose}
         />
       </List>

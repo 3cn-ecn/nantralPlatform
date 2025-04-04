@@ -11,9 +11,9 @@ exports[`Home page should render correctly without data 1`] = `
     >
       <img
         alt=""
-        class="mui-image-img  css-jlmoib"
+        class="mui-image-img css-jlmoib"
         src="/static/img/header.png"
-        style="position: relative; width: 100%; height: 100%; object-fit: cover; transition-property: top, opacity; transition-duration: 900ms, 450ms; transition-timing-function: ease-in; opacity: 0; top: 100px;"
+        style="position: relative; width: 100%; height: 100%; object-fit: cover; transition-property: top, opacity; transition-duration: 120ms, 200ms; transition-timing-function: ease-in; opacity: 0; top: 100px;"
       />
     </div>
     <div
@@ -207,6 +207,49 @@ exports[`Home page should render correctly without data 1`] = `
         class="MuiTypography-root MuiTypography-body1 css-17s6y1p-MuiTypography-root"
       >
         No post in the last few days... 🥺 Create a new one!
+      </p>
+    </div>
+    <div
+      class="MuiBox-root css-i3pbo"
+    >
+      <div
+        class="MuiBox-root css-47fqa9"
+      >
+        <h2
+          class="MuiTypography-root MuiTypography-h2 css-2raco3-MuiTypography-root"
+        >
+          My groups
+        </h2>
+        <a
+          class="MuiButtonBase-root MuiButton-root MuiButton-outlined MuiButton-outlinedSecondary MuiButton-sizeMedium MuiButton-outlinedSizeMedium MuiButton-colorSecondary MuiButton-disableElevation MuiButton-root MuiButton-outlined MuiButton-outlinedSecondary MuiButton-sizeMedium MuiButton-outlinedSizeMedium MuiButton-colorSecondary MuiButton-disableElevation css-lvx8jz-MuiButtonBase-root-MuiButton-root"
+          href="/group"
+          tabindex="0"
+        >
+          See all
+          <span
+            class="MuiButton-icon MuiButton-endIcon MuiButton-iconSizeMedium css-9tj150-MuiButton-endIcon"
+          >
+            <svg
+              aria-hidden="true"
+              class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root"
+              data-testid="ChevronRightIcon"
+              focusable="false"
+              viewBox="0 0 24 24"
+            >
+              <path
+                d="M10 6 8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"
+              />
+            </svg>
+          </span>
+          <span
+            class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
+          />
+        </a>
+      </div>
+      <p
+        class="MuiTypography-root MuiTypography-body1 css-17s6y1p-MuiTypography-root"
+      >
+        You are not in any group currently 😔
       </p>
     </div>
     <div

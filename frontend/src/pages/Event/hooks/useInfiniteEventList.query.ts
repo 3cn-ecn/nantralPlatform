@@ -12,7 +12,7 @@ import { ApiError } from '#shared/infra/errors';
 import { Page } from '#shared/infra/pagination';
 
 export function useInfiniteEventListQuery(
-  filters: Omit<EventListQueryParams, 'page' | 'ordering'>,
+  filters: Omit<EventListQueryParams, 'page'>,
   options?: UseInfiniteQueryOptions<Page<EventPreview>>,
 ) {
   const query = useInfiniteQuery<Page<EventPreview>, ApiError>({
@@ -22,7 +22,10 @@ export function useInfiniteEventListQuery(
         {
           ...filters,
           page: pageParam,
-          ordering: filters.toDate && !filters.fromDate ? '-start_date' : null,
+          ordering:
+            filters.toDate && !filters.fromDate
+              ? '-start_date'
+              : (filters.ordering as never),
         },
         signal,
       ),

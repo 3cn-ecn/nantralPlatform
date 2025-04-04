@@ -8,7 +8,7 @@ export async function copyAsHtml(
   markdownContent: string,
   group?: GroupPreview,
 ) {
-  const htmlCode = render(
+  const htmlCode = await render(
     <SignatureTemplate markdownContent={markdownContent} group={group} />,
   );
   const element = document.createElement('div');
@@ -19,7 +19,7 @@ export async function copyAsHtml(
     const blob = new Blob([element.innerHTML], { type });
     const data = [new ClipboardItem({ [type]: blob })];
     await navigator.clipboard.write(data);
-  } catch (error) {
+  } catch {
     // continue regardless of error
   }
 
