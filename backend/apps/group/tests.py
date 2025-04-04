@@ -358,3 +358,32 @@ class TestMemberships(APITestCase):
         ms = self.g1.membership_set.all().order_by("-priority")
         self.assertEqual(ms[0].student, self.u2.student)
         self.assertEqual(ms[1].student, self.u1.student)
+
+
+class SubscriptionTest(APITestCase):
+    def setUp(self):
+        self.u1 = create_student_user(username="u1", email="u1@ec-nantes.fr")
+        self.t1 = GroupType.objects.create(name="T1", slug="t1")
+        self.g1 = Group.objects.create(name="G1", group_type=self.t1)
+        self.url = f"/api/group/group/{self.g1.slug}/update_subscription/"
+        # deactivate warnings
+        logger = logging.getLogger("django.request")
+        self.previous_level = logger.getEffectiveLevel()
+        logger.setLevel(logging.ERROR)
+
+    def test_subscribe(self):
+        res = self.client.post(self.url, {"subscribe": True})
+        self.assertEqual(res.status_code, status.HTTP_403_FORBIDDEN)
+        self.client.force_login(self.u1)
+        # add subscription
+        res = self.client.post(self.url, {"subscribe": True})
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+        self.assertTrue(self.g1.subscribers.contains(self.u1.student))
+        # add again
+        res = self.client.post(self.url, {"subscribe": True})
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+        self.assertTrue(self.g1.subscribers.contains(self.u1.student))
+        # remove subscription
+        res = self.client.post(self.url, {"subscribe": False})
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+        self.assertFalse(self.g1.subscribers.contains(self.u1.student))

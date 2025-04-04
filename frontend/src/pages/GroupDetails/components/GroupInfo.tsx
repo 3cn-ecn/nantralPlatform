@@ -7,9 +7,11 @@ import { SocialLinkItem } from '#modules/social_link/view/shared/SocialLinkItem'
 import { useCurrentUserData } from '#modules/student/hooks/useCurrentUser.data';
 import { Avatar } from '#shared/components/Avatar/Avatar';
 import { FlexCol, FlexRow } from '#shared/components/FlexBox/FlexBox';
+import { useAuth } from '#shared/context/Auth.context';
 import { useBreakpoint } from '#shared/hooks/useBreakpoint';
 import { useTranslation } from '#shared/i18n/useTranslation';
 
+import { SubscribeButton } from './Buttons/SubscribeButton';
 import { GroupInfoLine } from './GroupInfoLine';
 import { TimeAndPlace } from './TimeAndPlace';
 
@@ -27,6 +29,7 @@ export function GroupInfo({
   const { staff } = useCurrentUserData();
   const { t } = useTranslation();
   const { isSmaller } = useBreakpoint('sm');
+  const { isAuthenticated } = useAuth();
 
   const sortedSocialLinks = group ? sortLinks(group.socialLinks) : [];
 
@@ -101,6 +104,14 @@ export function GroupInfo({
             ))}
           </FlexRow>
         )}
+        <FlexRow py={2}>
+          {isAuthenticated && group && (
+            <SubscribeButton
+              groupSlug={group.slug}
+              isSubscribed={group?.isSubscribed}
+            />
+          )}
+        </FlexRow>
       </FlexCol>
     </FlexRow>
   );

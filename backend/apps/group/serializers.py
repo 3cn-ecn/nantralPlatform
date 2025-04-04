@@ -96,6 +96,7 @@ class GroupPreviewSerializer(serializers.ModelSerializer):
 class GroupSerializer(serializers.ModelSerializer):
     url = serializers.SerializerMethodField()
     is_admin = serializers.SerializerMethodField()
+    is_subscribed = serializers.SerializerMethodField()
     is_member = serializers.SerializerMethodField()
     group_type = GroupTypeSerializer(read_only=True)
     parent = GroupPreviewSerializer(read_only=True)
@@ -128,6 +129,9 @@ class GroupSerializer(serializers.ModelSerializer):
 
     def get_is_admin(self, obj: Group) -> bool:
         return obj.is_admin(self.context["request"].user)
+
+    def get_is_subscribed(self, obj: Group) -> bool:
+        return obj.is_subscribed(self.context["request"].user)
 
     def get_is_member(self, obj: Group) -> bool:
         return obj.is_member(self.context["request"].user)
@@ -328,3 +332,7 @@ class AdminRequestSerializer(serializers.ModelSerializer):
     class Meta:
         model = Membership
         fields = ["student", "admin", "admin_request_message", "id"]
+
+
+class SubscriptionSerializer(serializers.Serializer):
+    subscribe = serializers.BooleanField()

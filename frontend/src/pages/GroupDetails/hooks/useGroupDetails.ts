@@ -35,7 +35,8 @@ export function useGroupDetails(slug: string) {
     events: eventsQuery.data,
     members: membersQuery.data,
     isLoading:
-      groupQuery.isLoading || eventsQuery.isLoading || membersQuery.isLoading,
+      groupQuery.isLoading ||
+      (isAuthenticated && (eventsQuery.isLoading || membersQuery.isLoading)),
     isError: groupQuery.isError || eventsQuery.isError || membersQuery.isError,
     refetch: () => {
       groupQuery.refetch();
@@ -44,6 +45,7 @@ export function useGroupDetails(slug: string) {
     },
     error: groupQuery.error || eventsQuery.error || membersQuery.error,
     isSuccess:
-      groupQuery.isSuccess && eventsQuery.isSuccess && membersQuery.isSuccess,
+      (groupQuery.isSuccess && !isAuthenticated) ||
+      (eventsQuery.isSuccess && membersQuery.isSuccess),
   };
 }

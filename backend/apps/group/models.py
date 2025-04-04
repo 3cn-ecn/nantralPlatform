@@ -385,6 +385,26 @@ class Group(models.Model, SlugModel):
             and self.parent.is_admin(user)
         )
 
+    def is_subscribed(self, user: User) -> bool:
+        """Check if a user is subscribed to this group.
+
+        Parameters
+        ----------
+        user : User
+            The user to check for.
+
+        Returns
+        -------
+        bool
+            True if the user is a member of this group.
+
+        """
+        return (
+            user.is_authenticated
+            and hasattr(user, "student")
+            and self.subscribers.contains(user.student)
+        )
+
     def is_member(self, user: User) -> bool:
         """Check if a user is a member for this group.
 

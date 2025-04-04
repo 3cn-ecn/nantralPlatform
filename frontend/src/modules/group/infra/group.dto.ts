@@ -23,6 +23,7 @@ export interface GroupDTO {
   video1: string;
   video2: string;
   is_admin: boolean;
+  is_subscribed: boolean;
   is_member: boolean;
   lock_memberships: boolean;
   category: string;

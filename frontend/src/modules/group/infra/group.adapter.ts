@@ -39,6 +39,7 @@ export function adaptGroup(groupDTO: GroupDTO): Group {
     video1: groupDTO.video1,
     video2: groupDTO.video2,
     isAdmin: groupDTO.is_admin,
+    isSubscribed: groupDTO.is_subscribed,
     isMember: groupDTO.is_member,
     lockMemberships: groupDTO.lock_memberships,
     category: groupDTO.category,
