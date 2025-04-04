@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+import { Check } from '@mui/icons-material';
 import {
   Alert,
   Button,
@@ -9,7 +10,9 @@ import {
   Typography,
   useTheme,
 } from '@mui/material';
+import { useMutation } from '@tanstack/react-query';
 
+import { resendVerificationEmailApi } from '#modules/account/api/email.api';
 import { LoginFormFields } from '#modules/account/view/shared/LoginFormFields';
 import { FlexRow } from '#shared/components/FlexBox/FlexBox';
 import { FloatingContainer } from '#shared/components/FloatingContainer/FloatingContainer';
@@ -29,6 +32,12 @@ export default function LoginPage() {
     email: string;
     password: string;
   }>({ email: '', password: '' });
+
+  const {
+    isSuccess: isResendSuccess,
+    mutate,
+    isLoading: isResendLoading,
+  } = useMutation(resendVerificationEmailApi);
 
   const { login, error, isLoading } = useAuth();
 
@@ -83,7 +92,30 @@ export default function LoginPage() {
           }}
         >
           {error?.response?.data?.message && (
-            <Alert severity="error">{error?.response?.data?.message}</Alert>
+            <Alert
+              severity="error"
+              action={
+                error?.response?.data?.code == '1' /* Email not valid */ &&
+                (isResendSuccess ? (
+                  <Check color="success" />
+                ) : (
+                  <LoadingButton
+                    loading={isResendLoading}
+                    variant="outlined"
+                    color="inherit"
+                    size="small"
+                    sx={{ textTransform: 'none' }}
+                    onClick={() => {
+                      mutate(formValues.email);
+                    }}
+                  >
+                    {t('register.sendAgain')}
+                  </LoadingButton>
+                ))
+              }
+            >
+              {error?.response?.data?.message}
+            </Alert>
           )}
           <LoginFormFields
             formValues={formValues}
