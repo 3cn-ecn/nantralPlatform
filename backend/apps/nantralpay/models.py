@@ -12,6 +12,7 @@ class Transaction(models.Model):
     date = models.DateTimeField(null=True, blank=True)
     amount = models.DecimalField(max_digits=10, decimal_places=2)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
+    description = models.CharField(max_length=255)
 
 
 class Order(models.Model):

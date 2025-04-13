@@ -51,6 +51,7 @@ class EventSerializer(TranslationModelSerializer):
             "form_url",
             "notification",
             "use_nantralpay",
+            "nantralpay_is_open",
         ]
         translations_fields = ["title", "description"]
 

@@ -1,7 +1,14 @@
 import { DeleteForever, Edit } from '@mui/icons-material';
-import { IconButton, ListItem, ListItemText } from '@mui/material';
+import InboxIcon from '@mui/icons-material/Inbox';
+import {
+  IconButton,
+  ListItem,
+  ListItemAvatar,
+  ListItemText,
+} from '@mui/material';
 
 import { ItemPreview } from '#modules/nantralpay/types/item.type';
+import { Avatar } from '#shared/components/Avatar/Avatar';
 
 export interface Props {
   item: ItemPreview;
@@ -12,11 +19,11 @@ export interface Props {
 export function ItemsListItem({ item, onClickDelete, onClickEdit }: Props) {
   return (
     <ListItem>
-      {/*<ListItemAvatar>
-        <Avatar src={item.picture} alt={item.name}>
+      <ListItemAvatar>
+        <Avatar src={item.image} alt={item.name}>
           <InboxIcon />
         </Avatar>
-      </ListItemAvatar>*/}
+      </ListItemAvatar>
       <ListItemText primary={item.name} secondary={item.price} />
       <IconButton
         title="Modifier"

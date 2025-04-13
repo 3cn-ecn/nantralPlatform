@@ -96,7 +96,18 @@
       }
     },
     "editModal": {
-      "title": "Modifier l'évènement"
+      "title": "Modifier l'évènement",
+      "tabs": {
+        "general": "Général",
+        "items": "Gestion des articles",
+        "npInfo": "Infos NantralPay"
+      },
+      "items": {
+        "list": "Liste des articles",
+        "noItem": "Aucun article",
+        "add": "Ajouter un article",
+        "error": "Erreur lors de la récupération des articles"
+      }
     },
     "event": "Évènement",
     "filters": {
@@ -142,6 +153,10 @@
         "disabledHelperText": "Vous ne pouvez pas définir de limite si vous utilisez un form externe.",
         "label": "Nombre maximum de participants"
       },
+      "nantralpay": {
+        "helperText": "Attention, assurez-vous d'avoir l'autorisation de le faire",
+        "label": "Créer une vente NantralPay"
+      },
       "publicity": {
         "helperText": "Définit qui peut voir cet évènement.",
         "label": "Visibilité",
@@ -172,6 +187,26 @@
       "allIsLoaded": "Fin de la liste 🥳",
       "loadMore": "Charger plus",
       "noEventFound": "Aucun évènement 😿"
+    },
+    "nantralpay": {
+      "enable": {
+        "success": "Le paiement a bien été activé !"
+      },
+      "disable": {
+        "success": "Le paiement a bien été désactivé !"
+      }
+    },
+    "nantralpayEnableButton": {
+      "open": "Démarrer la vente NantralPay",
+      "close": "Arrêter la vente NantralPay",
+      "enableModal": {
+        "message": "Voulez-vous vraiment démarrer la vente NantralPay ? Vous ne pourrez plus supprimer des vendeurs ou modifier les articles une fois la vente démarrée.",
+        "title": "Démarrer la vente NantralPay"
+      },
+      "disableModal": {
+        "message": "Voulez-vous vraiment arrêter la vente NantralPay ? Vous pourrez toujours reprendre plus tard.",
+        "title": "Arrêter la vente NantralPay"
+      }
     },
     "participants": {
       "noParticipants": "Aucun participant 😔",
@@ -586,42 +621,6 @@
   "nantralpay": {
     "title": "NantralPay",
     "balance": "Solde : {{balance}} €",
-    "tabs": {
-      "home": "Accueil",
-      "payments": "Paiements",
-      "transactions": "Transactions",
-      "qrcode": "Payer par QR Code",
-      "manageItems": "Gérer les articles"
-    },
-    "list": {
-      "labelDisplayedRows": "Page {{ page }} sur {{ pageSize }} ({{ count }} résultats)"
-    },
-    "payment": {
-      "list": "Liste des paiements",
-      "id": "ID",
-      "amount": "Montant",
-      "date": "Date",
-      "status": "Statut",
-      "haOrderId": "ID HelloAsso de la commande",
-      "haPaymentId": "ID HelloAsso du paiement",
-      "empty": "Vous n'avez pas encore effectué de paiement"
-    },
-    "transaction": {
-      "list": "Liste des transactions",
-      "id": "ID",
-      "amount": "Montant",
-      "date": "Date",
-      "description": "Description",
-      "sender": "Envoyé par",
-      "receiver": "Reçu par",
-      "group": "Envoyé au Groupe",
-      "empty": "Vous n'avez pas encore effectué de transaction"
-    },
-    "qrcode": {
-      "button": "Générer un QR Code",
-      "qrcode": "QR Code :",
-      "title": "Payer par QR Code"
-    },
     "cash-in": {
       "title": "Encaisser l'utilisateur {{user}}",
       "amount": "Montant disponible : {{amount}} €",
@@ -633,6 +632,55 @@
       "button": "Ajouter",
       "name": "Nom",
       "price": "Prix"
+    },
+    "list": {
+      "labelDisplayedRows": "Page {{ page }} sur {{ pageSize }} ({{ count }} résultats)"
+    },
+    "order": {
+      "selectEvent": "Sélection de l'évènement",
+      "selectItems": "Choix des articles",
+      "payment": "Paiement",
+      "confirmation": "Confirmation",
+      "form": {
+        "event": {
+          "label": "Évènement",
+          "helpText": "Sélectionnez l'évènement pour lequel vous souhaitez acheter des articles"
+        },
+        "quantity": {
+          "label": "Quantité"
+        }
+      }
+    },
+    "payment": {
+      "list": "Liste des paiements",
+      "id": "ID",
+      "amount": "Montant",
+      "date": "Date",
+      "status": "Statut",
+      "haOrderId": "ID HelloAsso de la commande",
+      "haPaymentId": "ID HelloAsso du paiement",
+      "empty": "Vous n'avez pas encore effectué de paiement"
+    },
+    "qrcode": {
+      "button": "Générer un QR Code",
+      "qrcode": "QR Code :",
+      "title": "Payer par QR Code"
+    },
+    "tabs": {
+      "home": "Accueil",
+      "transactions": "Transactions",
+      "order": "Commander"
+    },
+    "transaction": {
+      "list": "Liste des transactions",
+      "id": "ID",
+      "amount": "Montant",
+      "date": "Date",
+      "description": "Description",
+      "sender": "Envoyé par",
+      "receiver": "Reçu par",
+      "group": "Envoyé au Groupe",
+      "empty": "Vous n'avez pas encore effectué de transaction"
     }
   },
   "navbar": {

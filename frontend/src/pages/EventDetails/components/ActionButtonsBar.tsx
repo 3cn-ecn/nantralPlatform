@@ -1,5 +1,6 @@
 import { Event } from '#modules/event/event.type';
 import { BookmarkedButton } from '#modules/event/view/shared/BookmarkedButton';
+import { NantralPayEnableButton } from '#modules/event/view/shared/NantralPayEnableButton';
 import { ParticipateButton } from '#modules/event/view/shared/ParticipateButton';
 import { FlexRow } from '#shared/components/FlexBox/FlexBox';
 import { Spacer } from '#shared/components/Spacer/Spacer';
@@ -20,7 +21,12 @@ export function ActionButtonsBar({ event }: ActionButtonsBarProps) {
       <Spacer flex={1} />
       <FlexRow gap={1} flexWrap="wrap">
         <ShareButton eventId={event.id} />
-        {event.group.isAdmin && <EditButton eventId={event.id} />}
+        {event.group.isAdmin && (
+          <>
+            <EditButton eventId={event.id} />
+            {event.useNantralpay && <NantralPayEnableButton event={event} />}
+          </>
+        )}
         {!event.formUrl && <ParticipantsButton event={event} />}
       </FlexRow>
     </FlexRow>

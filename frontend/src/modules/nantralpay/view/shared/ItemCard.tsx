@@ -1,45 +1,41 @@
-import { useState } from 'react';
-
 import {
-  DeleteForever as DeleteIcon,
-  Edit as EditIcon,
-} from '@mui/icons-material';
-import {
-  Button,
   Card,
   CardActions,
   CardContent,
+  CardMedia,
   Grid,
   Typography,
 } from '@mui/material';
 
 import { Event } from '#modules/event/event.type';
-import { ItemPreview } from '#modules/nantralpay/types/item.type';
-import { ModalDeleteItem } from '#modules/nantralpay/view/Modal/ModalDeleteItem';
-import { ModalEditItem } from '#modules/nantralpay/view/Modal/ModalEditItem';
+import { Item } from '#modules/nantralpay/types/item.type';
 import { FlexRow } from '#shared/components/FlexBox/FlexBox';
+import { ButtonNumberField } from '#shared/components/FormFields';
 import { useTranslation } from '#shared/i18n/useTranslation';
 
-/**
- * A row of the table with a membership
- *
- * @param props
- * @returns
- */
-function MembershipCard(props: {
-  item: ItemPreview;
-  event: Event;
-  updateItem?: (item: ItemPreview) => Promise<void>;
-  deleteItem?: (item: ItemPreview) => Promise<void>;
+const DEFAULT_ITEM_IMAGE = '/static/img/default-item.png';
+
+function ItemCard(props: {
+  item: Item;
+  event?: Event;
+  errors?: string[];
+  quantity: number;
+  setQuantity: (quantity: number) => void;
 }) {
   const { t } = useTranslation();
-  const { item, event } = props;
-  const [openEditModal, setOpenEditModal] = useState(false);
-  const [openDeleteModal, setOpenDeleteModal] = useState(false);
+  const { item, errors, quantity, setQuantity } = props;
 
   return (
-    <Grid item xs={12} sm={6} md={4} lg={4} xl={4}>
+    <Grid item xs={12} sm={6} md={4} lg={3} xl={3}>
       <Card variant="outlined" sx={{ height: '100%', borderColor: 'primary' }}>
+        <CardMedia
+          component="img"
+          height="140"
+          image={item.image || DEFAULT_ITEM_IMAGE}
+          title={item.name}
+          alt={item.name}
+          loading="lazy"
+        />
         <CardContent sx={{ p: 1 }}>
           <FlexRow justifyContent="space-between" sx={{ mx: 1 }}>
             <Typography variant="body1" noWrap>
@@ -51,42 +47,18 @@ function MembershipCard(props: {
           </FlexRow>
         </CardContent>
         <CardActions>
-          <Button
-            hidden={!openEditModal}
-            onClick={() => setOpenEditModal(true)}
-            variant="outlined"
-            size="small"
-            endIcon={<EditIcon />}
-            sx={{ marginLeft: 1 }}
-          >
-            {t('button.edit')}
-          </Button>
-          <Button
-            hidden={!openDeleteModal}
-            onClick={() => setOpenDeleteModal(true)}
-            variant="outlined"
-            size="small"
-            endIcon={<DeleteIcon />}
-            sx={{ marginLeft: 1 }}
-          >
-            {t('button.delete')}
-          </Button>
+          <ButtonNumberField
+            name={'quantity-' + item.id}
+            label={t('nantralpay.order.form.quantity.label')}
+            value={quantity}
+            handleChange={setQuantity}
+            errors={errors}
+            required
+          />
         </CardActions>
       </Card>
-      {openEditModal && item && (
-        <ModalEditItem
-          event={event}
-          onClose={() => setOpenEditModal(false)}
-          item={item}
-        />
-      )}
-      <ModalDeleteItem
-        open={openDeleteModal}
-        onClose={() => setOpenDeleteModal(false)}
-        item={item}
-      />
     </Grid>
   );
 }
 
-export default MembershipCard;
+export default ItemCard;

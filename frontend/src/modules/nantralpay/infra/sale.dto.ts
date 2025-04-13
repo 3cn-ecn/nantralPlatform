@@ -1,5 +1,5 @@
 import { ContentFormDTO, ContentPreviewDTO } from './content.dto';
-import { TransactionFormDTO, TransactionPreviewDTO } from './transaction.dto';
+import { TransactionPreviewDTO } from './transaction.dto';
 
 export interface SaleDTO {
   id: number;
@@ -14,7 +14,6 @@ export type SalePreviewDTO = Pick<
 >;
 
 export interface SaleFormDTO {
-  transaction: TransactionFormDTO;
   contents: ContentFormDTO[];
   event?: number;
 }

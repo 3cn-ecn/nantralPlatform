@@ -1,4 +1,5 @@
 export interface Item {
+  image: string;
   id: number;
   name: string;
   price: number;
@@ -6,7 +7,10 @@ export interface Item {
   event: number;
 }
 
-export type ItemPreview = Pick<Item, 'id' | 'name' | 'price' | 'event'>;
+export type ItemPreview = Pick<
+  Item,
+  'id' | 'name' | 'price' | 'event' | 'image'
+>;
 
 export interface ItemForm {
   name: string;

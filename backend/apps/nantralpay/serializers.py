@@ -55,7 +55,7 @@ class ItemSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Item
-        fields = ("id", "name", "price", "event")
+        fields = ("id", "name", "price", "event", "image")
 
     def validate(self, attrs):
         """Validate the event
@@ -104,7 +104,13 @@ class SaleSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Sale
-        fields = ("contents",)
+        fields = ("contents", "event")
+
+    def validate_event(self, event):
+        if not event.use_nantralpay:
+            raise exceptions.ValidationError(
+                _("This event can't be used with nantralpay")
+            )
 
     def validate(self, attrs):
         data = super().validate(attrs)
@@ -116,6 +122,10 @@ class SaleSerializer(serializers.ModelSerializer):
         amount = Decimal(0)
         for content in data["contents"]:
             item = content["item"]
+            if item.event != data["event"]:
+                raise exceptions.ValidationError(
+                    _("The selected items are not from the same event")
+                )
             quantity = content["quantity"]
 
             if not quantity:

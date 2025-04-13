@@ -11,7 +11,15 @@ export type SalePreview = Pick<Sale, 'id' | 'creationDate' | 'qrCode'> & {
   contents: ContentPreview[];
 };
 
-export type SaleForm = Pick<Sale, 'qrCode'> & {
+export interface SaleForm {
   contents: ContentForm[];
-  event?: number;
-};
+  event: number | null;
+}
+
+export interface SaleFormErrors {
+  fields: Partial<{
+    contents: Partial<{ quantity: string[] }>[];
+    event: string[];
+  }>;
+  globalErrors: Partial<string[]>;
+}

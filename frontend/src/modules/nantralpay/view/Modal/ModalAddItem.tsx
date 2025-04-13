@@ -27,9 +27,6 @@ export function ModalAddItem({
   event: Event;
 }) {
   const { t } = useTranslation();
-  const today = new Date();
-  const oneYear = new Date();
-  oneYear.setFullYear(today.getFullYear() + 1);
   const [formValues, setFormValues] = useState<ItemForm>({
     name: '',
     price: 0,

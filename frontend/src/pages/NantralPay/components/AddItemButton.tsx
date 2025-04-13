@@ -17,7 +17,7 @@ export function AddItemButton({ event }: { event: Event }) {
         startIcon={<Add />}
         onClick={() => setModalOpen(true)}
       >
-        {t('nantralpay.editEvent.add')}
+        {t('event.editModal.items.add')}
       </Button>
       {modalOpen && (
         <ModalAddItem onClose={() => setModalOpen(false)} event={event} />

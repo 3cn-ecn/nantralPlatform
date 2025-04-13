@@ -1,4 +1,5 @@
 from django.db.models import QuerySet
+from django.http.request import QueryDict
 from django.utils.translation import gettext_lazy as _
 
 from rest_framework import mixins, permissions, status, viewsets
@@ -115,11 +116,19 @@ class ItemViewSet(viewsets.ModelViewSet):
         ItemPermission,
     ]
 
+    @property
+    def query_params(self) -> QueryDict:
+        return self.request.query_params
+
     def get_queryset(self) -> QuerySet[Item]:
-        if self.request.method in permissions.SAFE_METHODS:
-            return Item.objects.all()
+        if self.query_params.get("event") is None:
+            items = Item.objects.all()
         else:
-            return Item.object.filter(event__nantralpay_has_been_opened=False)
+            items = Item.objects.filter(event__pk=self.query_params.get("event"))
+        if self.request.method in permissions.SAFE_METHODS:
+            return items
+        else:
+            return items.filter(event__nantralpay_has_been_opened=False)
 
 
 class CashInViewSet(
@@ -190,7 +199,7 @@ class NantralPayEventViewSet(
 
     def get_queryset(self) -> QuerySet[Sale]:
         if self.action == "list":
-            return Event.objects.filter(event__nantralpay_is_open=True)
+            return Event.objects.filter(nantralpay_is_open=True)
         return Event.objects.all()
 
     @action(detail=True, methods=["post"])

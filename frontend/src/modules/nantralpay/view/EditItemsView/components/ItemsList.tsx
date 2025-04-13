@@ -1,4 +1,4 @@
-import { List } from '@mui/material';
+import { Divider, List } from '@mui/material';
 
 import { ItemPreview } from '#modules/nantralpay/types/item.type';
 
@@ -17,13 +17,16 @@ export function ItemsList({
 }: ItemsListProps) {
   return (
     <List>
-      {items.map((item: ItemPreview) => (
-        <ItemsListItem
-          item={item}
-          key={item.id}
-          onClickEdit={() => onClickEdit(item)}
-          onClickDelete={() => onClickDelete(item)}
-        />
+      {items.map((item: ItemPreview, i) => (
+        <>
+          {i !== 0 && <Divider variant="middle" />}
+          <ItemsListItem
+            item={item}
+            key={item.id}
+            onClickEdit={() => onClickEdit(item)}
+            onClickDelete={() => onClickDelete(item)}
+          />
+        </>
       ))}
     </List>
   );

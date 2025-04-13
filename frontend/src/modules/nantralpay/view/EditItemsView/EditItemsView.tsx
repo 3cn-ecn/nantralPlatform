@@ -48,13 +48,13 @@ export function EditItemsView({ event }: EditItemsViewProps) {
     <>
       <FlexAuto justifyContent={'space-between'} alignItems={'center'} mb={1}>
         <Typography variant="h3" mb={1}>
-          {t('nantralpay.modal.editEvent.items')} ({items.count})
+          {t('event.editModal.items.list')} ({items.count})
         </Typography>
         <AddItemButton event={event} />
       </FlexAuto>
       {isLoading && <CircularProgress />}
       {isError && (
-        <Alert severity="error">{t('nantralpay.modal.editEvent.error')}</Alert>
+        <Alert severity="error">{t('event.editModal.items.error')}</Alert>
       )}
       {isSuccess && items?.count > 0 && (
         <Paper>
@@ -66,7 +66,7 @@ export function EditItemsView({ event }: EditItemsViewProps) {
         </Paper>
       )}
       {isSuccess && items?.count === 0 && (
-        <Typography>{t('nantralpay.modal.editEvent.noItems')}</Typography>
+        <Typography>{t('event.editModal.items.noItems')}</Typography>
       )}
       {selected && (
         <ModalEditItem
