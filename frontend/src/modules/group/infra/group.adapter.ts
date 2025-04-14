@@ -47,6 +47,9 @@ export function adaptGroup(groupDTO: GroupDTO): Group {
     socialLinks: groupDTO.social_links.map((social_link) =>
       adaptSocialLink(social_link),
     ),
+    address: groupDTO.address,
+    latitude: groupDTO.latitude,
+    longitude: groupDTO.longitude,
   };
 }
 
@@ -72,6 +75,9 @@ export function adaptGroupForm(groupForm: CreateGroupForm): CreateGroupFormDTO {
     label: (groupForm.label >= 0 && groupForm.label) || null,
     parent: groupForm.parent,
     lock_memberships: groupForm.lockMemberships,
+    address: groupForm.address,
+    latitude: groupForm.latitude,
+    longitude: groupForm.longitude,
     _change_reason: groupForm.changeReason,
   };
 }
