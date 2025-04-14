@@ -50,7 +50,10 @@ class GroupTypeViewSet(viewsets.ReadOnlyModelViewSet):
     ordering = ["-priority"]
     ordering_fields = ["slug", "name", "priority"]
     lookup_url_kwarg = "slug"
-    queryset = GroupType.objects.all()
+    def get_queryset(self):
+        if self.request.query_params.get("is_map") == "true":
+            return GroupType.objects.filter(is_map=True)
+        return GroupType.objects.all()
 
 
 class GroupViewSet(viewsets.ModelViewSet):
