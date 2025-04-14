@@ -24,6 +24,8 @@ import {
   Group,
 } from '#modules/group/types/group.types';
 import { GroupTypePreview } from '#modules/group/types/groupType.types';
+import { getGeocodeListApi } from '#modules/map/api/getGeocodeList.api';
+import { Geocode } from '#modules/map/geocode.type';
 import { FlexAuto, FlexCol } from '#shared/components/FlexBox/FlexBox';
 import { FormErrorAlert } from '#shared/components/FormErrorAlert/FormErrorAlert';
 import {
@@ -34,6 +36,7 @@ import {
   SelectField,
   TextField,
 } from '#shared/components/FormFields';
+import { AutocompleteAddressField } from '#shared/components/FormFields/AutocompleteAddressField';
 import { RichTextField } from '#shared/components/FormFields/RichTextField';
 import { SetObjectStateAction } from '#shared/hooks/useObjectState';
 import { useTranslation } from '#shared/i18n/useTranslation';
@@ -76,7 +79,12 @@ export function GroupFormFields({
     [groupType.slug],
   );
   const addressCallback = useCallback(
-    (val: string) => updateFormValues({ address: val }),
+    (val: string, objectValue: Geocode) =>
+      updateFormValues({
+        address: val,
+        latitude: objectValue.latitude.toString(),
+        longitude: objectValue.longitude.toString(),
+      }),
     [updateFormValues],
   );
   const latitudeCallback = useCallback(
@@ -223,11 +231,18 @@ export function GroupFormFields({
       />
       {groupType.isMap ? (
         <>
-          <TextField
+          <AutocompleteAddressField
             label={t('group.form.address.label')}
             value={formValues.address}
             handleChange={addressCallback}
             errors={error?.fields?.address}
+            fetchOptions={getGeocodeListApi}
+            initialObjectValue={{
+              address: formValues.address,
+              latitude: parseFloat(formValues.latitude),
+              longitude: parseFloat(formValues.longitude),
+            }}
+            labelPropName={'address'}
           />
           <FlexAuto columnGap={2}>
             <TextField

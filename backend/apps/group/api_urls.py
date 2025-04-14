@@ -4,6 +4,7 @@ from .api_views import (
     GroupTypeViewSet,
     GroupViewSet,
     LabelViewSet,
+    MapViewSet,
     MembershipViewSet,
 )
 
@@ -17,4 +18,5 @@ router.register("membership", MembershipViewSet, basename="membership")
 router.register("group", GroupViewSet, basename="group")
 router.register("grouptype", GroupTypeViewSet, basename="grouptype")
 router.register("label", LabelViewSet, basename="label")
+router.register("map", MapViewSet, basename="map")
 urlpatterns = router.urls
