@@ -32,6 +32,7 @@ class GroupType(models.Model):
         crop=True,
         name_from_field="slug",
     )
+    is_map = models.BooleanField(verbose_name=_("Is map"), default=False)
 
     # Members settings
     no_membership_dates = models.BooleanField(
@@ -283,6 +284,11 @@ class Group(models.Model, SlugModel):
         blank=True,
     )
 
+    # Map infos
+    address = models.CharField(max_length=250, verbose_name=_("Address"), blank=True, default="")
+    latitude = models.CharField(max_length=250, verbose_name=_("Latitude"), blank=True, default="")
+    longitude = models.CharField(max_length=250, verbose_name=_("Longitude"), blank=True, default="")
+
     # Log infos
     created_at = models.DateTimeField(auto_now_add=True)
     created_by = models.ForeignKey(
@@ -327,6 +333,9 @@ class Group(models.Model, SlugModel):
 
     def clean(self) -> None:
         """Test if the object is valid (no incompatibility between fields)."""
+        # If the group type has a map, check if map fields are not empty
+        if self.group_type.is_map and not (self.address and self.latitude and self.longitude):
+            raise ValidationError(f"Address and latitude are required for group type {self.group_type}.")
         if self.public and self.private:
             raise ValidationError(
                 _(
