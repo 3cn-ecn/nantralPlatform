@@ -29,6 +29,9 @@ export interface Group {
   category: string;
   socialLinks: SocialLink[];
   subCategory?: string;
+  address: string;
+  latitude: string;
+  longitude: string;
 }
 
 export type GroupPreview = Pick<
@@ -59,6 +62,9 @@ export type CreateGroupForm = Pick<
   | 'description'
   | 'meetingPlace'
   | 'lockMemberships'
+  | 'address'
+  | 'latitude'
+  | 'longitude'
 > & {
   childrenLabel?: string;
   icon?: File;

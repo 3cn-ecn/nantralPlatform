@@ -26,6 +26,9 @@
     "legal": {
       "index": "Mentions légales"
     },
+    "map": {
+      "index": "Carte"
+    },
     "notFound": {
       "index": "Erreur 404"
     },
@@ -415,6 +418,9 @@
       }
     },
     "form": {
+      "address": {
+        "label": "Adresse"
+      },
       "admin": {
         "label": "Admin"
       },
@@ -450,9 +456,16 @@
         "label": "Label",
         "none": "Aucun"
       },
+      "latitude": {
+        "label": "Latitude",
+        "helperText": "Modifiez uniquement si la valeur automatique est incorrecte"
+      },
       "lockMemberships": {
         "helperText": "Les utilisateurs ne peuvent plus s'ajouter eux-mêmes au groupe.",
         "label": "Vérouiller les membres"
+      },
+      "longitude": {
+        "label": "Longitude"
       },
       "meetingHour": {
         "label": "Heure de réunion"
@@ -495,6 +508,7 @@
     },
     "list": {
       "editType": "Modifier le type",
+      "gotoMap": "Voir sur la carte",
       "noGroup": "Aucun groupe à afficher 🤔"
     },
     "modal": {
@@ -627,6 +641,14 @@
       "ecn": "Le site web étudiant de Centrale Nantes !"
     }
   },
+  "map": {
+    "title": "Carte",
+    "viewList": "Voir la liste",
+    "moreButton": {
+      "viewArchive": "Voir les groupes archivés",
+      "addGroup": "Ajouter un groupe"
+    }
+  },
   "modal": {
     "closeButton": {
       "label": "Fermer"
@@ -638,7 +660,7 @@
   "navbar": {
     "events": "Évènements",
     "family": "Parrainage",
-    "flatshare": "Carte des colocs",
+    "map": "Carte",
     "group": "Groupes",
     "home": "Accueil",
     "signature": "Signature ECN",

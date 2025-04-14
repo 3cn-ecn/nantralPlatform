@@ -1,7 +1,8 @@
-import { useSearchParams } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 
 import { AdminPanelSettings as AdminPanelSettingsIcon } from '@mui/icons-material';
 import {
+  Button,
   Container,
   Divider,
   MenuItem,
@@ -14,6 +15,7 @@ import { useCurrentUserData } from '#modules/student/hooks/useCurrentUser.data';
 import { FlexCol, FlexRow } from '#shared/components/FlexBox/FlexBox';
 import { IconMenu } from '#shared/components/IconMenu/IconMenu';
 import { InfiniteList } from '#shared/components/InfiniteList/InfiniteList';
+import { Spacer } from '#shared/components/Spacer/Spacer';
 import { useTranslation } from '#shared/i18n/useTranslation';
 
 import { CreateGroupButton } from './components/CreateGroupButton';
@@ -59,6 +61,16 @@ export default function GroupListPage() {
               {t('group.type.seeList')}
             </MenuItem>
           </IconMenu>
+        )}
+        <Spacer flex={'auto'} />
+        {groupTypeQuery.data?.isMap && (
+          <Button
+            component={Link}
+            variant="contained"
+            to={'/map?type=' + groupTypeQuery.data.slug}
+          >
+            {t('group.list.gotoMap')}
+          </Button>
         )}
       </FlexRow>
       <Divider sx={{ my: 3 }} />

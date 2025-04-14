@@ -16,7 +16,7 @@ class TagInline(admin.TabularInline):
 
 
 class GroupTypeAdmin(admin.ModelAdmin):
-    list_display = ["name", "slug"]
+    list_display = ["name", "slug", "is_map"]
     autocomplete_fields = ["extra_parents"]
     inlines = [LabelInline, TagInline]
 

@@ -47,6 +47,7 @@ class GroupTypeSerializer(serializers.ModelSerializer):
         fields = [
             "name",
             "slug",
+            "is_map",
             "no_membership_dates",
             "can_create",
             "can_have_parent",
@@ -167,6 +168,27 @@ class GroupWriteSerializer(serializers.ModelSerializer):
             return GroupType.objects.get(slug=group_type)
         else:
             return group.group_type
+
+    def validate_address(self, value: str) -> str:
+        if self.get_group_type().is_map and not value:
+            raise exceptions.ValidationError(
+                _("This field is required for map groups.")
+            )
+        return value
+
+    def validate_latitude(self, value: float) -> float:
+        if self.get_group_type().is_map and not value:
+            raise exceptions.ValidationError(
+                _("This field is required for map groups.")
+            )
+        return value
+
+    def validate_longitude(self, value: float) -> float:
+        if self.get_group_type().is_map and not value:
+            raise exceptions.ValidationError(
+                _("This field is required for map groups.")
+            )
+        return value
 
     def validate_parent(self, parent: Group | None):
         if parent is None:
