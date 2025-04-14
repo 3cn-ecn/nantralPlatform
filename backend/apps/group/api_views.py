@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.db.models import Count, F, Q, QuerySet
 from django.http.request import QueryDict
 from django.shortcuts import get_object_or_404
@@ -6,6 +7,7 @@ from django.utils import timezone
 from django.utils.dateparse import parse_datetime
 from django.utils.translation import gettext as _
 
+import requests
 from requests import Request
 from rest_framework import (
     decorators,
@@ -581,3 +583,25 @@ class LabelViewSet(viewsets.ModelViewSet):
             qs = qs.filter(group_type=group_type)
 
         return qs
+
+class MapViewSet(viewsets.ViewSet):
+    @decorators.action(detail=False, methods=["GET"])
+    def geocode(self, request):
+        """Get the geocode of a given address."""
+        search = request.query_params.get("search")
+
+        request_data = {
+            "q": search,
+            "access_token": settings.MAPBOX_API_KEY,
+            "autocomplete": "true",
+            "proximity": "-1.548606,47.248558",
+            "types": "address",
+        }
+        mapbox_response = requests.get("https://api.mapbox.com/search/geocode/v6/forward", params=request_data, timeout=10)
+        results = [{
+            "address": feature.get("properties").get("full_address"),
+            "latitude": feature.get("properties").get("coordinates").get("latitude"),
+            "longitude": feature.get("properties").get("coordinates").get("longitude"),
+        } for feature in mapbox_response.json().get("features", [])]
+        
+        return response.Response(data=results)
