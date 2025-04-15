@@ -33,7 +33,7 @@ export function CustomMap({
   const [params, setParams] = useSearchParams();
   const [popupInfo, setPopupInfo] = useState<MapGroupPreview | null>(null);
   const [groupList, setGroupList] = useState<MapGroupPreview[]>([]);
-  const mapRef = useRef<MapRef>();
+  const mapRef = useRef<MapRef>(null);
 
   const handleOpen = useCallback(
     (group) => {
