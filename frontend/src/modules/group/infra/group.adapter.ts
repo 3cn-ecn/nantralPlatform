@@ -1,7 +1,17 @@
 import { adaptSocialLink } from '#modules/social_link/infra/socialLink.adapter';
 
-import { CreateGroupForm, Group, GroupPreview } from '../types/group.types';
-import { CreateGroupFormDTO, GroupDTO, GroupPreviewDTO } from './group.dto';
+import {
+  CreateGroupForm,
+  Group,
+  GroupPreview,
+  MapGroupPreview,
+} from '../types/group.types';
+import {
+  CreateGroupFormDTO,
+  GroupDTO,
+  GroupPreviewDTO,
+  MapGroupPreviewDTO,
+} from './group.dto';
 import { adaptGroupTypePreview } from './groupType.adapter';
 
 export function adaptGroupPreview(groupDTO: GroupPreviewDTO): GroupPreview {
@@ -14,6 +24,26 @@ export function adaptGroupPreview(groupDTO: GroupPreviewDTO): GroupPreview {
     icon: groupDTO.icon,
     category: groupDTO.category,
     subCategory: groupDTO?.sub_category,
+  };
+}
+
+export function adaptMapGroupPreview(
+  groupDTO: MapGroupPreviewDTO,
+): MapGroupPreview {
+  return {
+    id: groupDTO.id,
+    name: groupDTO.name,
+    shortName: groupDTO.short_name,
+    slug: groupDTO.slug,
+    url: groupDTO.url,
+    icon: groupDTO.icon,
+    category: groupDTO.category,
+    subCategory: groupDTO?.sub_category,
+    address: groupDTO.address,
+    latitude: groupDTO.latitude,
+    longitude: groupDTO.longitude,
+    summary: groupDTO.summary,
+    banner: groupDTO.banner,
   };
 }
 
