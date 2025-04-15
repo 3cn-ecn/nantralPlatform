@@ -457,8 +457,8 @@
         "none": "None"
       },
       "latitude": {
-        "label": "Latitude",
-        "helperText": "Change it only if the automatic detection is wrong"
+        "helperText": "Change it only if the automatic detection is wrong",
+        "label": "Latitude"
       },
       "lockMemberships": {
         "helperText": "Users can no longer add themselves to the group.",
@@ -642,12 +642,20 @@
     }
   },
   "map": {
-    "title": "Map",
-    "viewList": "View list",
     "moreButton": {
-      "viewArchive": "Show archived groups",
-      "addGroup": "Add a new group"
-    }
+      "addGroup": "Add a new group",
+      "hideArchive": "Hide archived groups",
+      "viewArchive": "Show archived groups"
+    },
+    "popup": {
+      "details": "See more",
+      "go": "Go"
+    },
+    "selectType": {
+      "all": "All categories"
+    },
+    "title": "Map",
+    "viewList": "View list"
   },
   "modal": {
     "closeButton": {
@@ -660,9 +668,9 @@
   "navbar": {
     "events": "Events",
     "family": "Family",
-    "map": "Map",
     "group": "Groups",
     "home": "Home",
+    "map": "Map",
     "signature": "Signature",
     "student": "Student List"
   },

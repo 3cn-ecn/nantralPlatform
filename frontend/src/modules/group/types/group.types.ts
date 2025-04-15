@@ -46,6 +46,9 @@ export type GroupPreview = Pick<
   | 'subCategory'
 >;
 
+export type MapGroupPreview = GroupPreview &
+  Pick<Group, 'address' | 'latitude' | 'longitude' | 'summary' | 'banner'>;
+
 export type CreateGroupForm = Pick<
   Group,
   | 'name'

@@ -46,6 +46,9 @@ export type GroupPreviewDTO = Pick<
   | 'sub_category'
 >;
 
+export type MapGroupPreviewDTO = GroupPreviewDTO &
+  Pick<GroupDTO, 'address' | 'latitude' | 'longitude' | 'summary' | 'banner'>;
+
 export type CreateGroupFormDTO = Pick<
   GroupDTO,
   | 'name'

@@ -457,8 +457,8 @@
         "none": "Aucun"
       },
       "latitude": {
-        "label": "Latitude",
-        "helperText": "Modifiez uniquement si la valeur automatique est incorrecte"
+        "helperText": "Modifiez uniquement si la valeur automatique est incorrecte",
+        "label": "Latitude"
       },
       "lockMemberships": {
         "helperText": "Les utilisateurs ne peuvent plus s'ajouter eux-mêmes au groupe.",
@@ -642,12 +642,20 @@
     }
   },
   "map": {
-    "title": "Carte",
-    "viewList": "Voir la liste",
     "moreButton": {
-      "viewArchive": "Voir les groupes archivés",
-      "addGroup": "Ajouter un groupe"
-    }
+      "addGroup": "Ajouter un groupe",
+      "hideArchive": "Cacher les groupes archivés",
+      "viewArchive": "Voir les groupes archivés"
+    },
+    "popup": {
+      "details": "Détails",
+      "go": "Y aller"
+    },
+    "selectType": {
+      "all": "Tous les types"
+    },
+    "title": "Carte",
+    "viewList": "Voir la liste"
   },
   "modal": {
     "closeButton": {
@@ -660,9 +668,9 @@
   "navbar": {
     "events": "Évènements",
     "family": "Parrainage",
-    "map": "Carte",
     "group": "Groupes",
     "home": "Accueil",
+    "map": "Carte",
     "signature": "Signature ECN",
     "student": "Annuaire Étudiant"
   },
