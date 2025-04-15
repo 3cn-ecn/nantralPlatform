@@ -113,17 +113,15 @@ class GroupViewSet(viewsets.ModelViewSet):
             return SubscriptionSerializer
         if self.request.method in ["POST", "PUT", "PATCH"]:
             return GroupWriteSerializer
-        if preview is True:
-            return GroupPreviewSerializer
         if preview is False:
             return GroupSerializer
         if is_map is True:
             return MapGroupPreviewSerializer
-        if self.detail:
+        if self.detail and preview is not True:
             return GroupSerializer
         return GroupPreviewSerializer
 
-    def get_queryset(self) -> QuerySet[Group]:
+    def get_queryset(self) -> QuerySet[Group]:  # noqa: C901
         user = self.request.user
         group_type = GroupType.objects.filter(
             slug=self.query_params.get("type"),
