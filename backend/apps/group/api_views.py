@@ -39,6 +39,7 @@ from .serializers import (
     GroupTypeSerializer,
     GroupWriteSerializer,
     LabelSerializer,
+    MapGroupPreviewSerializer,
     MembershipSerializer,
     NewMembershipSerializer,
     SubscriptionSerializer,
@@ -77,6 +78,12 @@ class GroupViewSet(viewsets.ModelViewSet):
         The max number of items to return per page
     - parent: string (multiple)
         Filter by one or multiple parent group slug
+    - map: bool
+        Filter by map groups
+    - search: string
+        Search by group name, shortName, members__first_name, or members_last_name
+    - archived: bool
+        Filter by archived groups
 
     Actions
     -------
@@ -101,6 +108,7 @@ class GroupViewSet(viewsets.ModelViewSet):
 
     def get_serializer_class(self):
         preview = parse_bool(self.query_params.get("preview"))
+        is_map = parse_bool(self.query_params.get("map"))
         if self.action == "update_subscription":
             return SubscriptionSerializer
         if self.request.method in ["POST", "PUT", "PATCH"]:
@@ -109,6 +117,8 @@ class GroupViewSet(viewsets.ModelViewSet):
             return GroupPreviewSerializer
         if preview is False:
             return GroupSerializer
+        if is_map is True:
+            return MapGroupPreviewSerializer
         if self.detail:
             return GroupSerializer
         return GroupPreviewSerializer
@@ -127,11 +137,12 @@ class GroupViewSet(viewsets.ModelViewSet):
         )
         slugs = self.query_params.getlist("slug")
         parents = self.query_params.getlist("parent")
+        is_map = parse_bool(self.query_params.get("map"))
+        search = self.query_params.get("search")
+        archived = parse_bool(self.query_params.get("archived"), False)
 
         queryset = (
             Group.objects
-            # hide archived groups
-            .filter(archived=False)
             # hide groups without active members (ie end_date > today)
             .annotate(
                 num_active_members=Count(
@@ -180,6 +191,20 @@ class GroupViewSet(viewsets.ModelViewSet):
         # filter by parent
         if parents:
             queryset = queryset.filter(parent__slug__in=parents)
+        # filter if map
+        if is_map:
+            queryset = queryset.filter(group_type__is_map=is_map)
+        # filter by search
+        if search:
+            queryset = queryset.filter(
+                Q(name__icontains=search)
+                | Q(short_name__icontains=search)
+                | Q(members__user__first_name__icontains=search)
+                | Q(members__user__last_name__icontains=search),
+            )
+        # filter by archived
+        if archived is False or archived is None:
+            queryset = queryset.filter(archived=False)
 
         return (
             queryset

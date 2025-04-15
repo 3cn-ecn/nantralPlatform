@@ -24,6 +24,8 @@ const legacyEntryPoints = [
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [svgr(), react(), visualizer({ template: 'sunburst' })],
+  envPrefix: ['VITE_', 'MAPBOX_'], // add Mapbox to authorized env variables
+  envDir: path.join(__dirname, '../backend/config/settings/'),
   base: '/static/',
   resolve: {
     alias: {
