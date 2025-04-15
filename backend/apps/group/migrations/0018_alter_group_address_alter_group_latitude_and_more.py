@@ -6,23 +6,23 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('group', '0017_group_address_group_latitude_group_longitude_and_more'),
+        ("group", "0017_group_address_group_latitude_group_longitude_and_more"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='group',
-            name='address',
-            field=models.CharField(blank=True, default='', max_length=250, verbose_name='Address'),
+            model_name="group",
+            name="address",
+            field=models.CharField(blank=True, default="", max_length=250, verbose_name="Address"),
         ),
         migrations.AlterField(
-            model_name='group',
-            name='latitude',
-            field=models.CharField(blank=True, default='', max_length=250, verbose_name='Latitude'),
+            model_name="group",
+            name="latitude",
+            field=models.CharField(blank=True, default="", max_length=250, verbose_name="Latitude"),
         ),
         migrations.AlterField(
-            model_name='group',
-            name='longitude',
-            field=models.CharField(blank=True, default='', max_length=250, verbose_name='Longitude'),
+            model_name="group",
+            name="longitude",
+            field=models.CharField(blank=True, default="", max_length=250, verbose_name="Longitude"),
         ),
     ]
