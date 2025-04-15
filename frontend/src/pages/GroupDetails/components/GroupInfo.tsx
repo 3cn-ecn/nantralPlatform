@@ -1,4 +1,3 @@
-import { useNavigate } from 'react-router';
 import { Link as RouterLink } from 'react-router-dom';
 
 import {
@@ -45,7 +44,6 @@ export function GroupInfo({
   const { t } = useTranslation();
   const { isSmaller } = useBreakpoint('sm');
   const { isAuthenticated } = useAuth();
-  const navigate = useNavigate();
 
   const sortedSocialLinks = group ? sortLinks(group.socialLinks) : [];
 
