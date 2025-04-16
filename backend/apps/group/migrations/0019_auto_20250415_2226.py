@@ -23,16 +23,15 @@ def transfert_roommates_to_group(apps, schema_editor):
     # Transfer roommates to group
     for roommate in Roommates.objects.all():
         housing = roommate.housing
-        group = Group.objects.create(
+        group = Group(
             name=roommate.name,
-            short_name=roommate.alt_name,
-            slug=roommate.slug,
+            short_name=roommate.alt_name if roommate.alt_name else roommate.name,
             group_type=roommates_group_type,
             lock_memberships=True,
             creation_year=roommate.begin_date.year,
             archived=roommate.begin_date.year<timezone.now().year,
             summary=housing.details,
-            description=roommate.summary + "\n" + roommate.description,
+            description="\n".join(summary for summary in (roommate.summary, roommate.description) if summary),
             icon=roommate.logo,
             banner=roommate.banniere,
             video1=roommate.video1,
@@ -43,6 +42,8 @@ def transfert_roommates_to_group(apps, schema_editor):
             created_at=roommate.begin_date,
             updated_at=roommate.modified_date,
         )
+        group.set_slug(roommate.slug if roommate.slug else (roommate.alt_name if roommate.alt_name else roommate.name))
+        group.save()
 
         # Transfer members
         for member in roommate.namedmembershiproommates_set.all():
