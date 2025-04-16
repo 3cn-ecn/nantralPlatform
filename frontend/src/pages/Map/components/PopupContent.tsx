@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 
-import { Close as CloseIcon } from '@mui/icons-material';
+import { Close as CloseIcon, OpenInNew } from '@mui/icons-material';
 import {
   Button,
   Card,
@@ -28,18 +28,13 @@ export function PopupContent({
     <Card>
       <CardHeader
         title={group.name}
-        avatar={
-          <Avatar
-            src={group.icon}
-            alt={group.name}
-            sx={{ width: 32, height: 32 }}
-          />
-        }
+        avatar={<Avatar src={group.icon} alt={group.name} />}
         action={
           <IconButton onClick={onClose}>
             <CloseIcon />
           </IconButton>
         }
+        subheader={group.address}
       />
       <CardMedia component={'img'} src={group.banner} sx={{ maxHeight: 100 }} />
       <CardContent color="secondary">{group.summary}</CardContent>
@@ -58,6 +53,7 @@ export function PopupContent({
             variant="outlined"
             href={`https://www.google.com/maps/dir/?api=1&travelmode=transit&destination=${group.address}`}
             target="_blank"
+            endIcon={<OpenInNew />}
           >
             {t('map.popup.go')}
           </Button>
