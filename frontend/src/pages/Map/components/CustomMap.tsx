@@ -21,6 +21,8 @@ import { useChangeThemeMode } from '#shared/context/CustomTheme.context';
 
 import '../styles/custom-mapbox-gl.css';
 
+declare const MAPBOX_TOKEN: string;
+
 export function CustomMap({
   groupType,
   showArchived,
@@ -104,7 +106,7 @@ export function CustomMap({
           bearing: 0,
           pitch: 0,
         }}
-        mapboxAccessToken={import.meta.env.MAPBOX_API_KEY}
+        mapboxAccessToken={MAPBOX_TOKEN}
         style={{ height: '60vh' }}
         mapStyle="mapbox://styles/mapbox/standard"
         config={{
