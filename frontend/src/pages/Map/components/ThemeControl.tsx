@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
-import { useMap } from 'react-map-gl/mapbox';
+
+import { useMap } from '@vis.gl/react-mapbox';
 
 import { useChangeThemeMode } from '#shared/context/CustomTheme.context';
 
