@@ -23,6 +23,9 @@
     "legal": {
       "index": "Legal Notice"
     },
+    "map": {
+      "index": "Map"
+    },
     "notFound": {
       "index": "404 error"
     },
@@ -364,6 +367,9 @@
       }
     },
     "form": {
+      "address": {
+        "label": "Address"
+      },
       "admin": {
         "label": "Admin"
       },
@@ -395,9 +401,16 @@
         "label": "Label",
         "none": "None"
       },
+      "latitude": {
+        "helperText": "Change it only if the automatic detection is wrong",
+        "label": "Latitude"
+      },
       "lockMemberships": {
         "helperText": "Users can no longer add themselves to the group.",
         "label": "Lock members"
+      },
+      "longitude": {
+        "label": "Longitude"
       },
       "meetingHour": {
         "label": "Meeting time"
@@ -440,6 +453,7 @@
     },
     "list": {
       "editType": "Edit Type",
+      "gotoMap": "View on the map",
       "noGroup": "No groups to display 🤔"
     },
     "modal": {
@@ -572,6 +586,22 @@
       "ecn": "The student website for Centrale Nantes!"
     }
   },
+  "map": {
+    "moreButton": {
+      "addGroup": "Add a new group",
+      "hideArchive": "Hide archived groups",
+      "viewArchive": "Show archived groups"
+    },
+    "popup": {
+      "details": "See more",
+      "go": "Go"
+    },
+    "selectType": {
+      "all": "All categories"
+    },
+    "title": "Map",
+    "viewList": "View list"
+  },
   "modal": {
     "closeButton": {
       "label": "Close"
@@ -583,9 +613,9 @@
   "navbar": {
     "events": "Events",
     "family": "Family",
-    "flatshare": "Flatshares Map",
     "group": "Groups",
     "home": "Home",
+    "map": "Map",
     "signature": "Signature",
     "student": "Student List"
   },

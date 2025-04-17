@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.db.models import Count, F, Q, QuerySet
 from django.http.request import QueryDict
 from django.shortcuts import get_object_or_404
@@ -6,6 +7,7 @@ from django.utils import timezone
 from django.utils.dateparse import parse_datetime
 from django.utils.translation import gettext as _
 
+import requests
 from requests import Request
 from rest_framework import (
     decorators,
@@ -36,6 +38,7 @@ from .serializers import (
     GroupTypeSerializer,
     GroupWriteSerializer,
     LabelSerializer,
+    MapGroupPreviewSerializer,
     MembershipSerializer,
     NewMembershipSerializer,
     SubscriptionSerializer,
@@ -49,7 +52,10 @@ class GroupTypeViewSet(viewsets.ReadOnlyModelViewSet):
     ordering = ["-priority"]
     ordering_fields = ["slug", "name", "priority"]
     lookup_url_kwarg = "slug"
-    queryset = GroupType.objects.all()
+    def get_queryset(self):
+        if self.request.query_params.get("is_map") == "true":
+            return GroupType.objects.filter(is_map=True)
+        return GroupType.objects.all()
 
 
 class GroupViewSet(viewsets.ModelViewSet):
@@ -71,6 +77,12 @@ class GroupViewSet(viewsets.ModelViewSet):
         The max number of items to return per page
     - parent: string (multiple)
         Filter by one or multiple parent group slug
+    - map: bool
+        Filter by map groups
+    - search: string
+        Search by group name, shortName, members__first_name, or members_last_name
+    - archived: bool
+        Filter by archived groups
 
     Actions
     -------
@@ -95,19 +107,20 @@ class GroupViewSet(viewsets.ModelViewSet):
 
     def get_serializer_class(self):
         preview = parse_bool(self.query_params.get("preview"))
+        is_map = parse_bool(self.query_params.get("map"))
         if self.action == "update_subscription":
             return SubscriptionSerializer
         if self.request.method in ["POST", "PUT", "PATCH"]:
             return GroupWriteSerializer
-        if preview is True:
-            return GroupPreviewSerializer
         if preview is False:
             return GroupSerializer
-        if self.detail:
+        if is_map is True:
+            return MapGroupPreviewSerializer
+        if self.detail and preview is not True:
             return GroupSerializer
         return GroupPreviewSerializer
 
-    def get_queryset(self) -> QuerySet[Group]:
+    def get_queryset(self) -> QuerySet[Group]:  # noqa: C901
         user = self.request.user
         group_type = GroupType.objects.filter(
             slug=self.query_params.get("type"),
@@ -121,11 +134,12 @@ class GroupViewSet(viewsets.ModelViewSet):
         )
         slugs = self.query_params.getlist("slug")
         parents = self.query_params.getlist("parent")
+        is_map = parse_bool(self.query_params.get("map"))
+        search = self.query_params.get("search")
+        archived = parse_bool(self.query_params.get("archived"), False)
 
         queryset = (
             Group.objects
-            # hide archived groups
-            .filter(archived=False)
             # hide groups without active members (ie end_date > today)
             .annotate(
                 num_active_members=Count(
@@ -174,6 +188,20 @@ class GroupViewSet(viewsets.ModelViewSet):
         # filter by parent
         if parents:
             queryset = queryset.filter(parent__slug__in=parents)
+        # filter if map
+        if is_map:
+            queryset = queryset.filter(group_type__is_map=is_map)
+        # filter by search
+        if search:
+            queryset = queryset.filter(
+                Q(name__icontains=search)
+                | Q(short_name__icontains=search)
+                | Q(members__user__first_name__icontains=search)
+                | Q(members__user__last_name__icontains=search),
+            )
+        # filter by archived
+        if archived is False or archived is None:
+            queryset = queryset.filter(archived=False)
 
         return (
             queryset
@@ -565,3 +593,25 @@ class LabelViewSet(viewsets.ModelViewSet):
             qs = qs.filter(group_type=group_type)
 
         return qs
+
+class MapViewSet(viewsets.ViewSet):
+    @decorators.action(detail=False, methods=["GET"])
+    def geocode(self, request):
+        """Get the geocode of a given address."""
+        search = request.query_params.get("search")
+
+        request_data = {
+            "q": search,
+            "access_token": settings.MAPBOX_API_KEY,
+            "autocomplete": "true",
+            "proximity": "-1.548606,47.248558",
+            "types": "address",
+        }
+        mapbox_response = requests.get("https://api.mapbox.com/search/geocode/v6/forward", params=request_data, timeout=10)
+        results = [{
+            "address": feature.get("properties").get("full_address"),
+            "latitude": feature.get("properties").get("coordinates").get("latitude"),
+            "longitude": feature.get("properties").get("coordinates").get("longitude"),
+        } for feature in mapbox_response.json().get("features", [])]
+        
+        return response.Response(data=results)

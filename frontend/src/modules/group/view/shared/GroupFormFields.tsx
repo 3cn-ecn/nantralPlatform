@@ -20,10 +20,12 @@ import { useQuery } from '@tanstack/react-query';
 import { getGroupLabelApi } from '#modules/group/api/getGroupLabel.api';
 import { getGroupListApi } from '#modules/group/api/getGroupList.api';
 import {
-  Group,
   CreateGroupForm as GroupForm,
+  Group,
 } from '#modules/group/types/group.types';
 import { GroupTypePreview } from '#modules/group/types/groupType.types';
+import { getGeocodeListApi } from '#modules/map/api/getGeocodeList.api';
+import { Geocode } from '#modules/map/geocode.type';
 import { FlexAuto, FlexCol } from '#shared/components/FlexBox/FlexBox';
 import { FormErrorAlert } from '#shared/components/FormErrorAlert/FormErrorAlert';
 import {
@@ -34,6 +36,7 @@ import {
   SelectField,
   TextField,
 } from '#shared/components/FormFields';
+import { AutocompleteAddressField } from '#shared/components/FormFields/AutocompleteAddressField';
 import { RichTextField } from '#shared/components/FormFields/RichTextField';
 import { SetObjectStateAction } from '#shared/hooks/useObjectState';
 import { useTranslation } from '#shared/i18n/useTranslation';
@@ -74,6 +77,31 @@ export function GroupFormFields({
         (res) => res.results,
       ),
     [groupType.slug],
+  );
+  const addressCallback = useCallback(
+    (val: string, objectValue: Geocode) =>
+      updateFormValues({
+        address: val,
+        latitude: objectValue.latitude.toString(),
+        longitude: objectValue.longitude.toString(),
+      }),
+    [updateFormValues],
+  );
+  const latitudeCallback = useCallback(
+    (val: string) => updateFormValues({ latitude: val }),
+    [updateFormValues],
+  );
+  const longitudeCallback = useCallback(
+    (val: string) => updateFormValues({ longitude: val }),
+    [updateFormValues],
+  );
+  const meetingPlaceCallback = useCallback(
+    (val: string) => updateFormValues({ meetingPlace: val }),
+    [updateFormValues],
+  );
+  const meetingHourCallback = useCallback(
+    (val: string) => updateFormValues({ meetingHour: val }),
+    [updateFormValues],
   );
 
   return (
@@ -188,41 +216,68 @@ export function GroupFormFields({
         )}
         errors={error?.fields?.summary}
       />
-
-      <FlexAuto columnGap={2}>
-        <TextField
-          InputProps={{
-            endAdornment: (
-              <InputAdornment position="end">
-                <PlaceIcon />
-              </InputAdornment>
-            ),
-          }}
-          label={t('group.form.meetingPlace.label')}
-          value={formValues.meetingPlace}
-          handleChange={useCallback(
-            (val) => updateFormValues({ meetingPlace: val }),
-            [updateFormValues],
-          )}
-          errors={error?.fields?.meetingPlace}
-        />
-        <TextField
-          InputProps={{
-            endAdornment: (
-              <InputAdornment position="end">
-                <ClockIcon />
-              </InputAdornment>
-            ),
-          }}
-          label={t('group.form.meetingHour.label')}
-          value={formValues.meetingHour}
-          handleChange={useCallback(
-            (val) => updateFormValues({ meetingHour: val }),
-            [updateFormValues],
-          )}
-          errors={error?.fields?.meetingHour}
-        />
-      </FlexAuto>
+      {groupType.isMap ? (
+        <>
+          <AutocompleteAddressField
+            label={t('group.form.address.label')}
+            value={formValues.address}
+            handleChange={addressCallback}
+            errors={error?.fields?.address}
+            fetchOptions={getGeocodeListApi}
+            initialObjectValue={{
+              address: formValues.address,
+              latitude: parseFloat(formValues.latitude),
+              longitude: parseFloat(formValues.longitude),
+            }}
+            labelPropName={'address'}
+          />
+          <FlexAuto columnGap={2}>
+            <TextField
+              label={t('group.form.latitude.label')}
+              helperText={t('group.form.latitude.helperText')}
+              value={formValues.latitude}
+              handleChange={latitudeCallback}
+              errors={error?.fields?.latitude}
+            />
+            <TextField
+              label={t('group.form.longitude.label')}
+              helperText={t('group.form.latitude.helperText')}
+              value={formValues.longitude}
+              handleChange={longitudeCallback}
+              errors={error?.fields?.longitude}
+            />
+          </FlexAuto>
+        </>
+      ) : (
+        <FlexAuto columnGap={2}>
+          <TextField
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <PlaceIcon />
+                </InputAdornment>
+              ),
+            }}
+            label={t('group.form.meetingPlace.label')}
+            value={formValues.meetingPlace}
+            handleChange={meetingPlaceCallback}
+            errors={error?.fields?.meetingPlace}
+          />
+          <TextField
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <ClockIcon />
+                </InputAdornment>
+              ),
+            }}
+            label={t('group.form.meetingHour.label')}
+            value={formValues.meetingHour}
+            handleChange={meetingHourCallback}
+            errors={error?.fields?.meetingHour}
+          />
+        </FlexAuto>
+      )}
 
       <FlexAuto columnGap={2}>
         <TextField

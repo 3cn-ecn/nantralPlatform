@@ -13,6 +13,7 @@ const EventGridViewPage = lazy(
 const EventDetailsPage = lazy(
   () => import('#pages/EventDetails/EventDetails.page'),
 );
+const MapPage = lazy(() => import('#pages/Map/Map.page'));
 const HomePage = lazy(() => import('#pages/Home/Home.page'));
 const NotFoundPage = lazy(() => import('#pages/NotFound/NotFound.page'));
 const Signature = lazy(() => import('#pages/Signature/Signature.page'));
@@ -84,6 +85,11 @@ export const authenticatedRoutes: RouteObject = {
           handle: { crumb: t('breadcrumbs.feedback.suggestion') },
         },
       ],
+    },
+    {
+      path: '/map',
+      element: <MapPage />,
+      handle: { crumb: t('breadcrumbs.map.index') },
     },
     {
       path: '*',

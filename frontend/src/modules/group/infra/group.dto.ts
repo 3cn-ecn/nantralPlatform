@@ -29,6 +29,9 @@ export interface GroupDTO {
   category: string;
   sub_category?: string;
   social_links: SocialLinkDTO[];
+  address: string;
+  latitude: string;
+  longitude: string;
 }
 
 export type GroupPreviewDTO = Pick<
@@ -42,6 +45,9 @@ export type GroupPreviewDTO = Pick<
   | 'category'
   | 'sub_category'
 >;
+
+export type MapGroupPreviewDTO = GroupPreviewDTO &
+  Pick<GroupDTO, 'address' | 'latitude' | 'longitude' | 'summary' | 'banner'>;
 
 export type CreateGroupFormDTO = Pick<
   GroupDTO,
@@ -59,6 +65,9 @@ export type CreateGroupFormDTO = Pick<
   | 'description'
   | 'meeting_place'
   | 'lock_memberships'
+  | 'address'
+  | 'latitude'
+  | 'longitude'
 > & {
   children_label?: string;
   icon?: File;
