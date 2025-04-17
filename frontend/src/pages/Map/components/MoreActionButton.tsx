@@ -4,15 +4,19 @@ import { Link, useSearchParams } from 'react-router-dom';
 import { MoreHoriz } from '@mui/icons-material';
 import { IconButton, Menu, MenuItem } from '@mui/material';
 
+import { CreateGroupModal } from '#pages/GroupList/components/CreateGroupModal';
+import { useGroupTypeDetails } from '#pages/GroupList/hooks/useGroupTypeDetails';
 import { useBreakpoint } from '#shared/hooks/useBreakpoint';
 import { useTranslation } from '#shared/i18n/useTranslation';
 
 export function MoreActionButton({
   showArchive,
   setShowArchive,
+  groupTypeQuery,
 }: {
   showArchive: boolean;
   setShowArchive: (showArchive: boolean) => void;
+  groupTypeQuery: ReturnType<typeof useGroupTypeDetails>;
 }) {
   const { t } = useTranslation();
   const { isSmaller } = useBreakpoint('sm');
@@ -28,6 +32,9 @@ export function MoreActionButton({
   const handleClose = () => {
     setAnchorEl(null);
   };
+
+  const [groupFormOpen, setGroupFormOpen] = useState(false);
+
   return (
     <>
       <IconButton
@@ -68,10 +75,23 @@ export function MoreActionButton({
             ? t('map.moreButton.hideArchive')
             : t('map.moreButton.viewArchive')}
         </MenuItem>
-        <MenuItem onClick={handleClose}>
-          {t('map.moreButton.addGroup')}
-        </MenuItem>
+        {type && (
+          <MenuItem
+            onClick={() => {
+              setGroupFormOpen(true);
+              handleClose();
+            }}
+          >
+            {t('map.moreButton.addGroup')}
+          </MenuItem>
+        )}
       </Menu>
+      {groupFormOpen && groupTypeQuery.data && (
+        <CreateGroupModal
+          onClose={() => setGroupFormOpen(false)}
+          groupType={groupTypeQuery.data}
+        />
+      )}
     </>
   );
 }

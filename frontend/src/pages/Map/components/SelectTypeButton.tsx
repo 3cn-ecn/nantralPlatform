@@ -9,9 +9,13 @@ import { useGroupTypeDetails } from '#pages/GroupList/hooks/useGroupTypeDetails'
 import { LoadingButton } from '#shared/components/LoadingButton/LoadingButton';
 import { useTranslation } from '#shared/i18n/useTranslation';
 
-const PAGE_SIZE = 20;
+const PAGE_SIZE = 0;
 
-export function SelectTypeButton() {
+export function SelectTypeButton({
+  groupTypeQuery,
+}: {
+  groupTypeQuery: ReturnType<typeof useGroupTypeDetails>;
+}) {
   const { t } = useTranslation();
 
   const [params, setParams] = useSearchParams();
@@ -26,9 +30,8 @@ export function SelectTypeButton() {
     setAnchorEl(null);
   };
 
-  const groupTypeQuery = useGroupTypeDetails(type || undefined);
-
   const { groupTypesQuery } = useGroupTypes(PAGE_SIZE, true);
+
   return (
     <>
       <LoadingButton
