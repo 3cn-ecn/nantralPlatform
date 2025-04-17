@@ -115,6 +115,7 @@ export function CustomMap({
             showPointOfInterestLabels: false,
           },
         }}
+        projection={'globe'}
       >
         <GeolocateControl position="top-left" />
         <FullscreenControl position="top-left" />
