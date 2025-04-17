@@ -6,6 +6,7 @@ import 'mapbox-gl/dist/mapbox-gl.css';
 
 import { getMapGroupListApi } from '#modules/group/api/getMapGroupList.api';
 import { MapGroupPreview } from '#modules/group/types/group.types';
+import { useGroupTypeDetails } from '#pages/GroupList/hooks/useGroupTypeDetails';
 import { MoreActionButton } from '#pages/Map/components/MoreActionButton';
 import { SelectTypeButton } from '#pages/Map/components/SelectTypeButton';
 import { FlexRow } from '#shared/components/FlexBox/FlexBox';
@@ -41,11 +42,13 @@ export default function MapPage() {
     [params, setParams],
   );
 
+  const groupTypeQuery = useGroupTypeDetails(type || undefined);
+
   return (
     <Container sx={{ my: 3 }}>
       <FlexRow alignItems="center" gap={2} mb={4}>
         <Typography variant="h1">{t('map.title')}</Typography>
-        <SelectTypeButton />
+        <SelectTypeButton groupTypeQuery={groupTypeQuery} />
         {!isSmaller && (
           <>
             <Spacer flex="auto" />
@@ -83,6 +86,7 @@ export default function MapPage() {
         <MoreActionButton
           showArchive={showArchive}
           setShowArchive={setShowArchive}
+          groupTypeQuery={groupTypeQuery}
         />
       </FlexRow>
       <Spacer vertical={2} />
