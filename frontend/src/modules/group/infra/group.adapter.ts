@@ -1,3 +1,4 @@
+import { adaptMembership } from '#modules/group/infra/membership.adapter';
 import { adaptSocialLink } from '#modules/social_link/infra/socialLink.adapter';
 
 import {
@@ -44,6 +45,9 @@ export function adaptMapGroupPreview(
     longitude: groupDTO.longitude,
     summary: groupDTO.summary,
     banner: groupDTO.banner,
+    members: groupDTO.membership_set.map((memberDTO) =>
+      adaptMembership(memberDTO),
+    ),
   };
 }
 

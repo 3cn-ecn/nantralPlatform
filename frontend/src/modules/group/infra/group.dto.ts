@@ -1,3 +1,4 @@
+import { MembershipDTO } from '#modules/group/infra/membership.dto';
 import { SocialLinkDTO } from '#modules/social_link/infra/socialLink.dto';
 
 import { GroupTypePreviewDTO } from './groupType.dto';
@@ -47,7 +48,12 @@ export type GroupPreviewDTO = Pick<
 >;
 
 export type MapGroupPreviewDTO = GroupPreviewDTO &
-  Pick<GroupDTO, 'address' | 'latitude' | 'longitude' | 'summary' | 'banner'>;
+  Pick<
+    GroupDTO,
+    'address' | 'latitude' | 'longitude' | 'summary' | 'banner'
+  > & {
+    membership_set: MembershipDTO[];
+  };
 
 export type CreateGroupFormDTO = Pick<
   GroupDTO,
