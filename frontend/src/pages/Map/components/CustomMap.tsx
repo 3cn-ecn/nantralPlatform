@@ -44,7 +44,7 @@ export function CustomMap({
       setParams(params);
       mapRef.current?.flyTo({
         // small bias to ensure that the popup is visible
-        center: [group.longitude, group.latitude - 0.0007],
+        center: [group.longitude, group.latitude - 0.0015],
         zoom: 15.5,
         duration: 2000,
       });
