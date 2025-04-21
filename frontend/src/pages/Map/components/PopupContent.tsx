@@ -8,6 +8,12 @@ import {
   CardHeader,
   CardMedia,
   IconButton,
+  List,
+  ListItem,
+  ListItemAvatar,
+  ListItemButton,
+  ListItemText,
+  Typography,
 } from '@mui/material';
 import { CardActions } from '@mui/material/';
 
@@ -27,29 +33,21 @@ export function PopupContent({
   return (
     <Card>
       <CardHeader
-        title={group.name}
+        title={group.address.split(',')[0]}
         avatar={<Avatar src={group.icon} alt={group.name} />}
         action={
           <IconButton onClick={onClose}>
             <CloseIcon />
           </IconButton>
         }
-        subheader={group.address}
+        subheader={group.summary}
       />
-      <CardMedia component={'img'} src={group.banner} sx={{ maxHeight: 100 }} />
-      <CardContent color="secondary">{group.summary}</CardContent>
       <CardActions>
         <FlexRow gap={2}>
-          <Button
-            component={Link}
-            to={group.url}
-            size="small"
-            variant="contained"
-          >
+          <Button component={Link} to={group.url} variant="contained">
             {t('map.popup.details')}
           </Button>
           <Button
-            size="small"
             variant="outlined"
             href={`https://www.google.com/maps/dir/?api=1&travelmode=transit&destination=${group.address}`}
             target="_blank"
@@ -59,6 +57,28 @@ export function PopupContent({
           </Button>
         </FlexRow>
       </CardActions>
+      <CardContent color="secondary">
+        <Typography variant={'h3'}>{group.name}</Typography>
+      </CardContent>
+      <List>
+        {group.members.map((member) => (
+          <ListItem disablePadding key={member.student.id}>
+            <ListItemButton component={Link} to={member.student.url}>
+              <ListItemAvatar>
+                <Avatar
+                  src={member.student.picture}
+                  alt={member.student.name}
+                />
+              </ListItemAvatar>
+              <ListItemText
+                primary={member.student.name}
+                secondary={member.summary}
+              />
+            </ListItemButton>
+          </ListItem>
+        ))}
+      </List>
+      <CardMedia component={'img'} src={group.banner} sx={{ maxHeight: 150 }} />
     </Card>
   );
 }
