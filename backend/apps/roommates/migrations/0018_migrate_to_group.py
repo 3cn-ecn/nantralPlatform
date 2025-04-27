@@ -3,6 +3,8 @@
 from django.db import migrations
 from django.utils import timezone
 
+from apps.utils.slug import SlugModel
+
 
 def transfert_roommates_to_group(apps, schema_editor):
     # Get the models
@@ -10,6 +12,7 @@ def transfert_roommates_to_group(apps, schema_editor):
     Group = apps.get_model("group", "Group")
     Roommates = apps.get_model("roommates", "Roommates")
     Membership = apps.get_model("group", "Membership")
+    Housing = apps.get_model("roommates", "Housing")
 
     # Create group type
     roommates_group_type = GroupType.objects.create(
@@ -62,6 +65,9 @@ def transfert_roommates_to_group(apps, schema_editor):
 
         # Delete the old roommate
         roommate.delete()
+    # Delete Housings
+    for housing in Housing.objects.all():
+        housing.delete()
 
 def reverse(apps, schema_editor):
     # Get the models
@@ -78,8 +84,8 @@ def reverse(apps, schema_editor):
     # Transfer groups back to roommates
     for group in Group.objects.filter(group_type=roommates_group_type):
         try:
-            begin_date = group.memberships.first().begin_date
-            end_date = group.memberships.first().end_date
+            begin_date = group.membership_set.first().begin_date
+            end_date = group.membership_set.first().end_date
         except Membership.DoesNotExist:
             continue  # Delete the group if it has no members
 
@@ -106,10 +112,10 @@ def reverse(apps, schema_editor):
             end_date=end_date,
             housing=housing,
         )
-        roommate.set_slug(group.slug)
+        SlugModel.set_slug(roommate, group.slug)
         roommate.save()
         # Members
-        for member in group.memberships.all():
+        for member in group.membership_set.all():
             NamedMembershipRoommates.objects.create(
                 # NamedMembership
                 admin=member.admin,
@@ -122,6 +128,8 @@ def reverse(apps, schema_editor):
 
         # Delete the group
         group.delete()
+    # Delete the group type
+    roommates_group_type.delete()
 
 class Migration(migrations.Migration):
 
