@@ -62,7 +62,7 @@ class ItemPermission(permissions.BasePermission):
         return True
 
 
-class PaymentViewSet(
+class OrderViewSet(
     mixins.RetrieveModelMixin, mixins.ListModelMixin, viewsets.GenericViewSet
 ):
     """List and retrieve payments of the current user."""

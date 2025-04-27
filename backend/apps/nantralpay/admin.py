@@ -3,8 +3,8 @@ from django.contrib import admin
 from .forms import ItemAdminField
 from .models import (
     Content,
+    HelloAssoOrder,
     Item,
-    Order,
     Payment,
     Sale,
 )
@@ -19,24 +19,22 @@ class PaymentAdmin(admin.ModelAdmin):
         "helloasso_payment_id",
     )
     search_fields = ("helloasso_payment_id",)
-    list_filter = ("date", "payment_status", "payment_cash_out_state")
+    list_filter = ("date", "payment_status")
     ordering = ("-date",)
 
 
-@admin.register(Order)
+@admin.register(HelloAssoOrder)
 class OrderAdmin(admin.ModelAdmin):
     list_display = (
         "user",
         "amount",
-        "checkout_date",
-        "helloasso_order_id",
+        "creation_date",
     )
     search_fields = (
         "user",
-        "helloasso_order_id",
     )
-    list_filter = ("checkout_date",)
-    ordering = ("-checkout_date",)
+    list_filter = ("creation_date",)
+    ordering = ("-creation_date",)
 
 
 @admin.register(Item)

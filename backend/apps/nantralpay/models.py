@@ -1,30 +1,146 @@
 import uuid
 
+from django.contrib.contenttypes.fields import (
+    GenericForeignKey,
+    GenericRelation,
+)
+from django.contrib.contenttypes.models import ContentType
+from django.core.exceptions import ValidationError
 from django.db import models
+from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
 from apps.account.models import User
 from apps.event.models import Event
+from apps.group.models import Group
 from apps.utils.fields.image_field import CustomImageField
 
 
+class QRCode(models.Model):
+    """Make a QRCode for a model."""
+    uuid = models.UUIDField(default=uuid.uuid4, primary_key=True, editable=False)
+    expiration_date = models.DateTimeField(default=timezone.now() + timezone.timedelta(minutes=2))
+    scanned_by = models.ForeignKey(User, on_delete=models.SET_NULL, blank=True, null=True)
+    scanned = models.BooleanField(default=False)
+
+    # Related object
+    content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
+    object_id = models.PositiveIntegerField()
+    content_object = GenericForeignKey("content_type", "object_id")
+
+    class Meta:
+        indexes = [
+            models.Index(fields=["content_type", "object_id"]),
+        ]
+
+    def is_scanned(self):
+        return self.scanned_by is not None
+
+
+class Order(models.Model):
+    """Model to represent an order.
+
+    An order is a request to perform a transaction.
+    The different types of order are:
+      - HelloAsso order to refill the user's balance
+      - Purchase of items during an event
+      - Both of the previous (pay for an event using directly HelloAsso)
+    """
+    class OrderStatus(models.TextChoices):
+        SAVED = "Saved"  # Order is saved but not yet paid
+        PENDING = "Pending"  # Order is pending and waiting for payment
+        CANCELED = "Canceled"  # Order has been canceled
+        COMPLETED = "Completed"   # Order has been completed
+        UNKNOWN = "Unknown"  # Order status is unknown
+
+    valid_status = [OrderStatus.PENDING, OrderStatus.COMPLETED]  # `Pending` orders are valid to ensure the users can pay as soon as possible
+    invalid_status = [OrderStatus.SAVED, OrderStatus.CANCELED, OrderStatus.UNKNOWN]
+
+    # Generic data
+    user = models.ForeignKey(User, on_delete=models.CASCADE, help_text=_("The user who created the order"))
+    amount = models.DecimalField(max_digits=10, decimal_places=2)
+    creation_date = models.DateTimeField(auto_now_add=True)
+    description = models.CharField(max_length=255, help_text=_("Explain what the order is for"))
+    status = models.CharField(choices=OrderStatus.choices, default=OrderStatus.SAVED, max_length=255)
+
+    # Sender and receiver
+    sender_user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="sent_orders", null=True, blank=True)
+    sender_group = models.ForeignKey(Group, on_delete=models.CASCADE, related_name="sent_orders", null=True, blank=True)
+
+    receiver_user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="received_orders", null=True, blank=True)
+    receiver_group = models.ForeignKey(Group, on_delete=models.CASCADE, related_name="received_orders", null=True, blank=True)
+
+    @property
+    def sender(self) -> Group | User | None:
+        if self.sender_user:
+            return self.sender_user
+        elif self.sender_group:
+            return self.sender_group
+        else:
+            return None
+
+    @sender.setter
+    def sender(self, value: Group | User | None):
+        if isinstance(value, User):
+            self.sender_user = value
+            self.sender_group = None
+        elif isinstance(value, Group):
+            self.sender_group = value
+            self.sender_user = None
+        elif value is None:
+            self.sender_user = None
+            self.sender_group = None
+        else:
+            raise TypeError(_("Sender must be a User or a Group (or `None` if money is sent by HelloAsso)"))
+
+    @property
+    def receiver(self) -> Group | User | None:
+        if self.receiver_user:
+            return self.receiver_user
+        elif self.receiver_group:
+            return self.receiver_group
+        else:
+            return None
+
+    @receiver.setter
+    def receiver(self, value: Group | User | None):
+        if isinstance(value, User):
+            self.receiver_user = value
+            self.receiver_group = None
+        elif isinstance(value, Group):
+            self.receiver_group = value
+            self.receiver_user = None
+        elif value is None:
+            self.receiver_user = None
+            self.receiver_group = None
+        else:
+            raise TypeError(_("Receiver must be a User or a Group (or `None` if money taken out)"))
+
+    def clean(self):
+        errors = []
+        if self.receiver_group and self.receiver_user:
+            errors.append(ValidationError(_("Receiver cannot be set for both user and group.")))
+        if self.sender_group and self.sender_user:
+            errors.append(ValidationError(_("Sender cannot be set for both user and group.")))
+        if errors:
+            raise ValidationError(errors)
+
+
 class Transaction(models.Model):
-    date = models.DateTimeField(null=True, blank=True)
+    """Model to represent a transaction.
+
+    A transaction is a transfer of money between two parties.
+    The parties are the following:
+      - A User
+      - A Group
+      - HelloAsso with checkout (in this case, sender/receiver is set to null)
+    The parties are stored in the associated order.
+    """
+    update_date = models.DateTimeField(auto_now=True)
     amount = models.DecimalField(max_digits=10, decimal_places=2)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     description = models.CharField(max_length=255)
 
-
-class Order(models.Model):
-    user = models.ForeignKey(User, null=True, on_delete=models.CASCADE)
-    checkout_intent_id = models.IntegerField(unique=True)
-    amount = models.DecimalField(max_digits=10, decimal_places=2)
-    checkout_date = models.DateTimeField(auto_now_add=True)
-
-    helloasso_order_id = models.IntegerField(unique=True, null=True)
-
-
-class Payment(Transaction):
     class PaymentStatus(models.TextChoices):
         PENDING = "Pending"
         AUTHORIZED = "Authorized"
@@ -49,17 +165,7 @@ class Payment(Transaction):
         PaymentStatus.CONTESTED,
     ]
 
-    class PaymentCashOutState(models.TextChoices):
-        CASHED_OUT = "CashedOut"
-        WAITING_FOR_CASH_OUT_CONFIRMATION = "WaitingForCashOutConfirmation"
-        REFUNDING = "Refunding"
-        REFUNDED = "Refunded"
-        TRANSFERT_IN_PROGRESS = "TransfertInProgress"
-        TRANSFERED = "Transfered"
-        MONEY_IN = "MoneyIn"
-
-    helloasso_payment_id = models.IntegerField(unique=True)
-    order = models.ForeignKey(Order, on_delete=models.CASCADE)
+    order = models.ForeignKey(Order, on_delete=models.CASCADE)  # link the order
 
     payment_status = models.CharField(
         max_length=255,
@@ -67,11 +173,16 @@ class Payment(Transaction):
         default=PaymentStatus.PENDING,
     )
 
-    payment_cash_out_state = models.CharField(
-        max_length=255,
-        choices=PaymentCashOutState.choices,
-        default=PaymentCashOutState.MONEY_IN,
-    )
+
+class HelloAssoOrder(Order):
+    """HelloAsso Specific data for orders"""
+    helloasso_order_id = models.IntegerField(unique=True)
+    checkout_intent_id = models.IntegerField(unique=True)
+
+
+class Payment(Transaction):
+    """HelloAsso Specific data for transactions"""
+    helloasso_payment_id = models.IntegerField(unique=True)
 
 
 class Item(models.Model):
@@ -104,26 +215,12 @@ class Item(models.Model):
         super().delete(*args, **kwargs)
 
 
-
-
-class Sale(Transaction):
-    uuid = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
-
-    seller = models.ForeignKey(
-        "Seller",
-        on_delete=models.SET_NULL,
-        related_name="sales",
-        null=True,
-        blank=True,
-    )
+class Sale(Order):
+    qr_codes = GenericRelation(QRCode, related_query_name="sale")
 
     items = models.ManyToManyField(
         Item, through="Content", related_name="sales"
     )
-
-    creation_date = models.DateTimeField(auto_now_add=True)
-
-    scanned = models.BooleanField(default=False)
 
     def get_price(self):
         return sum(
@@ -137,6 +234,12 @@ class Sale(Transaction):
         )
 
 
+class HelloAssoSale(Sale, HelloAssoOrder):
+    """HelloAsso Specific data for sales"""
+    helloasso_order_id = models.IntegerField(unique=True)
+    checkout_intent_id = models.IntegerField(unique=True)
+
+
 class Content(models.Model):
     item = models.ForeignKey(
         Item, on_delete=models.PROTECT, related_name="used_in_list"
@@ -144,7 +247,7 @@ class Content(models.Model):
     sale = models.ForeignKey(
         Sale, on_delete=models.CASCADE, related_name="contents"
     )
-    quantity = models.IntegerField(default=1)
+    quantity = models.PositiveIntegerField(default=1)
 
     class Meta:
         constraints = [
@@ -158,7 +261,7 @@ class Seller(models.Model):
     user = models.ForeignKey(
         User, on_delete=models.CASCADE, related_name="seller"
     )
-    events = models.ForeignKey(
+    event = models.ForeignKey(
         Event, on_delete=models.CASCADE, related_name="seller_list"
     )
 

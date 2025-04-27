@@ -1,6 +1,6 @@
 import { Skeleton, TableCell, TableRow } from '@mui/material';
 
-export function PaymentRowSkeleton() {
+export function OrderRowSkeleton() {
   return (
     <TableRow>
       <TableCell>

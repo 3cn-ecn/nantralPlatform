@@ -1,6 +1,6 @@
 import { Typography } from '@mui/material';
 
-import { TransactionPreview } from '#modules/nantralpay/types/transaction.type';
+import { Transaction } from '#modules/nantralpay/types/transaction.type';
 import { useTranslation } from '#shared/i18n/useTranslation';
 import { Page } from '#shared/infra/pagination';
 
@@ -13,7 +13,7 @@ export default function TransactionListTab({
   isSuccess,
   isFetching,
 }: {
-  transactions: Page<TransactionPreview>;
+  transactions: Page<Transaction>;
   isLoading: boolean;
   isSuccess: boolean;
   isFetching: boolean;

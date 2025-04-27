@@ -1,4 +1,5 @@
 import {
+  Paper,
   Table,
   TableBody,
   TableCell,
@@ -10,16 +11,16 @@ import {
 } from '@mui/material';
 import TablePaginationActions from '@mui/material/TablePagination/TablePaginationActions';
 
-import { PaymentPreview } from '#modules/nantralpay/types/payment.type';
+import { Order } from '#modules/nantralpay/types/order.type';
 import { useTranslation } from '#shared/i18n/useTranslation';
 import { Page } from '#shared/infra/pagination';
 
 import { TransactionListQueryParams } from '../hooks/useFilters';
-import { PaymentRow } from './PaymentRow';
-import { PaymentRowSkeleton } from './PaymentRowSkeleton';
+import { OrderRow } from './OrderRow';
+import { OrderRowSkeleton } from './OrderRowSkeleton';
 
 interface PaymentTableProps {
-  data: Page<PaymentPreview>;
+  data?: Page<Order>;
   filters: TransactionListQueryParams;
   updateFilters: (val: Partial<TransactionListQueryParams>) => void;
   isLoading: boolean;
@@ -27,7 +28,7 @@ interface PaymentTableProps {
   isSuccess: boolean;
 }
 
-export function PaymentTable({
+export function OrderTable({
   data,
   filters,
   updateFilters,
@@ -38,16 +39,16 @@ export function PaymentTable({
   const { t } = useTranslation();
 
   return (
-    <TableContainer>
-      <Table aria-label="simple table">
+    <TableContainer component={Paper}>
+      <Table aria-label="order table">
         <TableHead>
           <TableRow>
-            <TableCell>{t('nantralpay.payment.id')}</TableCell>
-            <TableCell>{t('nantralpay.payment.haPaymentId')}</TableCell>
-            <TableCell>{t('nantralpay.payment.haOrderId')}</TableCell>
-            <TableCell>{t('nantralpay.payment.status')}</TableCell>
-            <TableCell>{t('nantralpay.payment.amount')}</TableCell>
-            <TableCell>{t('nantralpay.payment.date')}</TableCell>
+            <TableCell>{t('nantralpay.order.amount')}</TableCell>
+            <TableCell>{t('nantralpay.order.date')}</TableCell>
+            <TableCell>{t('nantralpay.order.reciever')}</TableCell>
+            <TableCell>{t('nantralpay.order.status')}</TableCell>
+            <TableCell>{t('nantralpay.order.description')}</TableCell>
+            <TableCell>{t('nantralpay.order.action')}</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -56,13 +57,13 @@ export function PaymentTable({
               .fill(0)
               .map((_, i) => (
                 // eslint-disable-next-line react/no-array-index-key
-                <PaymentRowSkeleton key={i.toString()} />
+                <OrderRowSkeleton key={i.toString()} />
               ))}
           {isSuccess &&
             !isLoading &&
             !isFetching &&
-            data.results.map((payment) => (
-              <PaymentRow key={payment.id} payment={payment} />
+            data?.results.map((payment) => (
+              <OrderRow key={payment.id} order={payment} />
             ))}
         </TableBody>
         <TableFooter>

@@ -1,11 +1,11 @@
 import { lazy } from 'react';
 import { RouteObject } from 'react-router-dom';
 
-import SelectItemsTab from '#pages/NantralPay/tabs/SelectItems.tab';
 import { PageTemplate } from '#shared/components/PageTemplate/PageTemplate';
 
 const EventPage = lazy(() => import('#pages/Event/Event.page'));
 const NantralPayHomePage = lazy(() => import('#pages/NantralPay'));
+const CashInPage = lazy(() => import('#pages/NantralPay/CashIn.page'));
 const EventCalendarViewPage = lazy(
   () => import('#pages/Event/EventCalendar/EventCalendarView.page'),
 );
@@ -93,11 +93,23 @@ export const authenticatedRoutes: RouteObject = {
       children: [
         {
           index: true,
-          element: <NantralPayHomePage />,
+          element: <NantralPayHomePage tab={'home'} />,
+        },
+        {
+          path: 'orders/',
+          element: <NantralPayHomePage tab={'orders'} />,
+        },
+        {
+          path: 'order/',
+          element: <NantralPayHomePage tab={'order'} />,
+        },
+        {
+          path: 'transactions/',
+          element: <NantralPayHomePage tab={'transactions'} />,
         },
         {
           path: 'cash-in/:uuid/',
-          element: <SelectItemsTab />,
+          element: <CashInPage />,
           handle: { crumb: t('breadcrumbs.nantralpay.cash-in') },
         },
       ],

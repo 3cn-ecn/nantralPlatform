@@ -623,9 +623,7 @@
     "balance": "Solde : {{balance}} €",
     "cash-in": {
       "title": "Encaisser l'utilisateur {{user}}",
-      "amount": "Montant disponible : {{amount}} €",
-      "button": "Valider",
-      "select": "Sélectionner des articles"
+      "button": "Valider"
     },
     "item": {
       "addForm": "Ajouter un article",

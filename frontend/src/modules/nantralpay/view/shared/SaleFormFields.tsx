@@ -5,7 +5,7 @@ import { SaleForm, SaleFormErrors } from '#modules/nantralpay/types/sale.type';
 import ItemCard from '#modules/nantralpay/view/shared/ItemCard';
 
 interface SaleFormFieldsProps {
-  errors?: SaleFormErrors;
+  errors?: SaleFormErrors | null;
   formValues: SaleForm;
   updateFormValues: (newValue: Partial<SaleForm>) => void;
   itemsOfThisPage: Item[];

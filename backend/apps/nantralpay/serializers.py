@@ -45,6 +45,7 @@ class PaymentSerializer(serializers.ModelSerializer):
             "order",
             "helloasso_payment_id",
             "payment_status",
+            "description",
         )
 
 
@@ -187,3 +188,11 @@ class NantralPayEventSerializer(serializers.ModelSerializer):
         model = Event
         fields = ("id", "title", "nantralpay_is_open", "use_nantralpay", "nantralpay_has_been_opened")
 
+class SaleDetailSerializer(serializers.ModelSerializer):
+    """Serializer for the Sale detail"""
+
+    contents = ContentSerializer(many=True)
+
+    class Meta:
+        model = Sale
+        fields = ("id", "contents", "date", "amount", "event")

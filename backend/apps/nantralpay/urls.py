@@ -6,7 +6,6 @@ from apps.nantralpay.api_views import (
     CashInViewSet,
     ItemViewSet,
     NantralPayEventViewSet,
-    PaymentViewSet,
     SaleViewSet,
     TransactionViewSet,
     UserBalanceViewSet,
@@ -27,7 +26,7 @@ router.register("event",
                 NantralPayEventViewSet, basename="event_enable")
 router.register("item", ItemViewSet, basename="item")
 router.register("sale", SaleViewSet, basename="sale")
-router.register("payment", PaymentViewSet, basename="payment")
+router.register("order", SaleViewSet, basename="order")
 router.register("transaction", TransactionViewSet, basename="transaction")
 
 urlpatterns = router.urls

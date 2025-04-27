@@ -10,7 +10,7 @@ import {
 } from '@mui/material';
 import TablePaginationActions from '@mui/material/TablePagination/TablePaginationActions';
 
-import { TransactionPreview } from '#modules/nantralpay/types/transaction.type';
+import { Transaction } from '#modules/nantralpay/types/transaction.type';
 import { useTranslation } from '#shared/i18n/useTranslation';
 import { Page } from '#shared/infra/pagination';
 
@@ -19,7 +19,7 @@ import { TransactionRow } from './TransactionRow';
 import { TransactionRowSkeleton } from './TransactionRowSkeleton';
 
 interface TransactionTableProps {
-  data: Page<TransactionPreview>;
+  data: Page<Transaction>;
   filters: TransactionListQueryParams;
   updateFilters: (val: Partial<TransactionListQueryParams>) => void;
   isLoading: boolean;
@@ -42,12 +42,12 @@ export function TransactionTable({
       <Table aria-label="simple table">
         <TableHead>
           <TableRow>
-            <TableCell>{t('nantralpay.transaction.id')}</TableCell>
-            <TableCell>{t('nantralpay.transaction.description')}</TableCell>
+            <TableCell>{t('nantralpay.transaction.type')}</TableCell>
+            <TableCell>{t('nantralpay.transaction.amount')}</TableCell>
             <TableCell>{t('nantralpay.transaction.sender')}</TableCell>
             <TableCell>{t('nantralpay.transaction.receiver')}</TableCell>
-            <TableCell>{t('nantralpay.transaction.group')}</TableCell>
-            <TableCell>{t('nantralpay.transaction.amount')}</TableCell>
+            <TableCell>{t('nantralpay.transaction.status')}</TableCell>
+            <TableCell>{t('nantralpay.transaction.description')}</TableCell>
             <TableCell>{t('nantralpay.transaction.date')}</TableCell>
           </TableRow>
         </TableHead>

@@ -1,13 +1,11 @@
-import { TransactionPreview } from '../types/transaction.type';
-import { TransactionDTO, TransactionPreviewDTO } from './transaction.dto';
+import { Transaction } from '../types/transaction.type';
+import { TransactionDTO } from './transaction.dto';
 
 export function adaptTransactionSale(transactionDto: TransactionDTO): string {
   return transactionDto.qr_code;
 }
 
-export function adaptTransaction(
-  transactionDto: TransactionPreviewDTO,
-): TransactionPreview {
+export function adaptTransaction(transactionDto: TransactionDTO): Transaction {
   return {
     id: transactionDto.id ?? 0,
     qrCode: transactionDto.qr_code ?? '',

@@ -9,16 +9,4 @@ export interface TransactionDTO {
   group: string;
 }
 
-export type TransactionPreviewDTO = Pick<
-  TransactionDTO,
-  | 'id'
-  | 'qr_code'
-  | 'amount'
-  | 'date'
-  | 'sender'
-  | 'receiver'
-  | 'description'
-  | 'group'
->;
-
 export type TransactionFormDTO = Pick<TransactionDTO, 'qr_code'>;

@@ -3,7 +3,7 @@ from decimal import Decimal
 
 from django.http import HttpResponse
 
-from apps.nantralpay.models import Order, Payment
+from apps.nantralpay.models import HelloAssoOrder, Payment
 from apps.nantralpay.utils import require_ip, update_balance
 
 HELLOASSO_PROD = False
@@ -41,7 +41,6 @@ def handle_payment(json_data):
         update_balance(payment.order.user, payment.amount)
 
     payment.payment_status = data.get("state")
-    payment.payment_cash_out_state = data.get("cashOutState")
     payment.save()
 
     return HttpResponse("OK")
@@ -68,8 +67,8 @@ def handle_order(json_data):
 
     # Récupération du CheckoutIntent
     try:
-        order = Order.objects.get(checkout_intent_id=checkout_intent_id)
-    except Order.DoesNotExist:
+        order = HelloAssoOrder.objects.get(checkout_intent_id=checkout_intent_id)
+    except HelloAssoOrder.DoesNotExist:
         return HttpResponse("CheckoutIntent not found")
 
     # Création de la commande et des paiements
@@ -87,7 +86,6 @@ def handle_order(json_data):
                 helloasso_payment_id=payment.get("id"),
                 order=order,
                 payment_status=payment.get("state"),
-                payment_cash_out_state=payment.get("cashOutState"),
             )
             for payment in data.get("payments")
         ]
@@ -102,7 +100,7 @@ def handle_organization(json_data):
     This is important because the organization's slug is used to identify the organization
     when using the Checkout API.
 
-    To do
+    To do: Need to change the url where the checkout redirects
     """
     return HttpResponse("Not implemented")
 
