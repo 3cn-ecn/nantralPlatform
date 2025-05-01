@@ -16,7 +16,6 @@ import { GroupHome } from './GroupHome/GroupHome.tab';
 import { GroupMembers } from './GroupMembers/GroupMembers.tab';
 import { GroupPosts } from './GroupPosts/GroupPosts.tab';
 import { GroupTabBar, TabType } from './GroupTabBar/GroupTabBar';
-import { EditButton } from './components/Buttons/EditButton';
 import { GroupInfo } from './components/GroupInfo';
 import { useGroupDetails } from './hooks/useGroupDetails';
 
@@ -90,7 +89,6 @@ export default function GroupDetailsPage() {
           <GroupAdminRequests group={groupDetails} />
         )}
         <Spacer vertical={80} />
-        {groupDetails?.isAdmin && <EditButton group={groupDetails} />}
       </Container>
       {postId && <PostModal postId={postId} onClose={closePost} />}
     </>

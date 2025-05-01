@@ -11,6 +11,7 @@ import { useAuth } from '#shared/context/Auth.context';
 import { useBreakpoint } from '#shared/hooks/useBreakpoint';
 import { useTranslation } from '#shared/i18n/useTranslation';
 
+import { EditButton } from './Buttons/EditButton';
 import { SubscribeButton } from './Buttons/SubscribeButton';
 import { GroupInfoLine } from './GroupInfoLine';
 import { TimeAndPlace } from './TimeAndPlace';
@@ -104,13 +105,14 @@ export function GroupInfo({
             ))}
           </FlexRow>
         )}
-        <FlexRow py={2}>
+        <FlexRow py={2} gap={1}>
           {isAuthenticated && group && (
             <SubscribeButton
               groupSlug={group.slug}
               isSubscribed={group?.isSubscribed}
             />
           )}
+          {group?.isAdmin && <EditButton group={group} />}
         </FlexRow>
       </FlexCol>
     </FlexRow>
