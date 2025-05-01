@@ -33,10 +33,13 @@ export function SocialLinkItem({
     <Chip
       color="secondary"
       variant="outlined"
-      style={{
+      sx={{
         border: 'none',
         fontWeight: 600,
         color: color,
+        '&:active': {
+          boxShadow: 'none',
+        },
       }}
       icon={icon}
       label={label}
