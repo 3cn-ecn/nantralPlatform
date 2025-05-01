@@ -1,7 +1,19 @@
 import { useState } from 'react';
 
-import { KeyboardArrowDown as KeyboardArrowDownIcon } from '@mui/icons-material';
-import { Button, Menu, MenuItem } from '@mui/material';
+import {
+  CalendarViewDayRounded as CalendarViewDayIcon,
+  CalendarViewMonthRounded as CalendarViewMonthIcon,
+  CalendarViewWeekRounded as CalendarViewWeekIcon,
+  KeyboardArrowDown as KeyboardArrowDownIcon,
+  ViewWeekRounded as ViewWeekIcon,
+} from '@mui/icons-material';
+import {
+  Button,
+  ListItemIcon,
+  ListItemText,
+  Menu,
+  MenuItem,
+} from '@mui/material';
 import {
   addDays,
   differenceInCalendarDays,
@@ -101,10 +113,18 @@ export function CalendarViewModeButton({
         onClose={() => setIsOpen(false)}
       >
         <MenuItem selected={nbOfDays === 1} onClick={handleDaysChange(1)}>
-          {t('event.calendar.viewMode.oneDay')}
+          <ListItemIcon>
+            <CalendarViewDayIcon />
+          </ListItemIcon>
+          <ListItemText>{t('event.calendar.viewMode.oneDay')}</ListItemText>
         </MenuItem>
         <MenuItem selected={nbOfDays === 3} onClick={handleDaysChange(3)}>
-          {t('event.calendar.viewMode.days', { nbOfDays: 3 })}
+          <ListItemIcon>
+            <ViewWeekIcon />
+          </ListItemIcon>
+          <ListItemText>
+            {t('event.calendar.viewMode.days', { nbOfDays: 3 })}
+          </ListItemText>
         </MenuItem>
         <MenuItem
           selected={
@@ -113,10 +133,16 @@ export function CalendarViewModeButton({
           }
           onClick={handleWeekChange}
         >
-          {t('event.calendar.viewMode.week')}
+          <ListItemIcon>
+            <CalendarViewWeekIcon />
+          </ListItemIcon>
+          <ListItemText>{t('event.calendar.viewMode.week')}</ListItemText>
         </MenuItem>
         <MenuItem selected={viewMode === 'month'} onClick={handleMonthChange}>
-          {t('event.calendar.viewMode.month')}
+          <ListItemIcon>
+            <CalendarViewMonthIcon />
+          </ListItemIcon>
+          <ListItemText>{t('event.calendar.viewMode.month')}</ListItemText>
         </MenuItem>
       </Menu>
     </>
