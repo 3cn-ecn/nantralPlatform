@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom';
 
 import { Event as EventIcon } from '@mui/icons-material';
 import { Button, ListItemText, Menu, MenuItem } from '@mui/material';
-import { useTheme } from '@mui/material/styles';
 import * as CalendarLink from 'calendar-link';
 
 import { Event } from '#modules/event/event.type';
@@ -15,7 +14,6 @@ interface AddToCalendarButtonProps {
 
 export function AddToCalendarButton({ event }: AddToCalendarButtonProps) {
   const { t } = useTranslation();
-  const theme = useTheme();
 
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const anchorEl = useRef<HTMLButtonElement | null>(null);
@@ -52,7 +50,6 @@ export function AddToCalendarButton({ event }: AddToCalendarButtonProps) {
         {t('event.action_menu.addToCalendar')}
       </Button>
       <Menu
-        elevation={0}
         anchorOrigin={{
           vertical: 'bottom',
           horizontal: 'right',
@@ -60,16 +57,6 @@ export function AddToCalendarButton({ event }: AddToCalendarButtonProps) {
         transformOrigin={{
           vertical: 'top',
           horizontal: 'right',
-        }}
-        slotProps={{
-          paper: {
-            style: {
-              marginTop: theme.spacing(1),
-              borderRadius: 6,
-              padding: '4px 0',
-              minWidth: anchorEl.current?.clientWidth ?? undefined,
-            },
-          },
         }}
         anchorEl={anchorEl.current}
         open={isMenuOpen}
