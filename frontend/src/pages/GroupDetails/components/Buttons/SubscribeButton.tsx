@@ -1,4 +1,4 @@
-import { Check } from '@mui/icons-material';
+import { Check, NotificationsNone } from '@mui/icons-material';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import { updateSubscriptionApi } from '#modules/group/api/updateSubscription.api';
@@ -45,7 +45,7 @@ export function SubscribeButton({
 
   return (
     <LoadingButton
-      startIcon={isSubscribed && <Check />}
+      startIcon={isSubscribed ? <Check /> : <NotificationsNone />}
       variant={isSubscribed ? 'outlined' : 'contained'}
       onClick={() => mutate(!isSubscribed)}
       loading={isLoading}
