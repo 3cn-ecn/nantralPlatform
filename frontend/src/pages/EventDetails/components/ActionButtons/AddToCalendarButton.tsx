@@ -1,8 +1,8 @@
-import { useRef, useState } from 'react';
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 
 import { Event as EventIcon } from '@mui/icons-material';
-import { Button, ListItemText, Menu, MenuItem } from '@mui/material';
+import { ListItemIcon, ListItemText, Menu, MenuItem } from '@mui/material';
 import * as CalendarLink from 'calendar-link';
 
 import { Event } from '#modules/event/event.type';
@@ -16,10 +16,11 @@ export function AddToCalendarButton({ event }: AddToCalendarButtonProps) {
   const { t } = useTranslation();
 
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const anchorEl = useRef<HTMLButtonElement | null>(null);
+  const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
 
-  const onButtonClick = () => {
-    setIsMenuOpen((v) => !v);
+  const onButtonClick = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorEl(event.currentTarget);
+    setIsMenuOpen(true);
   };
 
   const handleClose = () => {
@@ -37,18 +38,17 @@ export function AddToCalendarButton({ event }: AddToCalendarButtonProps) {
 
   return (
     <>
-      <Button
-        ref={anchorEl}
+      <MenuItem
+        role="button"
         aria-haspopup="true"
         aria-expanded={isMenuOpen}
-        disableElevation
         onClick={onButtonClick}
-        startIcon={<EventIcon />}
-        variant="outlined"
-        color="secondary"
       >
-        {t('event.action_menu.addToCalendar')}
-      </Button>
+        <ListItemIcon>
+          <EventIcon />
+        </ListItemIcon>
+        <ListItemText>{t('event.action_menu.addToCalendar')}</ListItemText>
+      </MenuItem>
       <Menu
         anchorOrigin={{
           vertical: 'bottom',
@@ -58,7 +58,7 @@ export function AddToCalendarButton({ event }: AddToCalendarButtonProps) {
           vertical: 'top',
           horizontal: 'right',
         }}
-        anchorEl={anchorEl.current}
+        anchorEl={anchorEl}
         open={isMenuOpen}
         onClose={handleClose}
       >
