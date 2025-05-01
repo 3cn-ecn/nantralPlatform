@@ -42,6 +42,7 @@
     "save": "Enregistrer",
     "saved": "Enregistré",
     "send": "Envoyer",
+    "today": "Aujourd'hui",
     "update": "Valider"
   },
   "error": {
@@ -173,9 +174,9 @@
       "noParticipants": "Aucun participant 😔",
       "title": "Participants",
       "titleWithMax": "{{number}}/{{max}} participants",
-      "titleWithNumber_zero": "{{count}} participant",
       "titleWithNumber_one": "{{count}} participant",
-      "titleWithNumber_other": "{{count}} participants"
+      "titleWithNumber_other": "{{count}} participants",
+      "titleWithNumber_zero": "{{count}} participant"
     },
     "participateButton": {
       "isParticipating": "Participant",

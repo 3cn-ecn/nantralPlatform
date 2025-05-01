@@ -1,6 +1,10 @@
 import { useState } from 'react';
 
-import { ChevronLeft, ChevronRight } from '@mui/icons-material';
+import {
+  ChevronLeft as ChevronLeftIcon,
+  ChevronRight as ChevronRightIcon,
+  Today as TodayIcon,
+} from '@mui/icons-material';
 import { Button, Dialog, IconButton, Tooltip, Typography } from '@mui/material';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
@@ -8,8 +12,11 @@ import {
   addDays,
   addMonths,
   differenceInCalendarDays,
+  endOfDay,
   endOfMonth,
   isSameDay,
+  startOfDay,
+  startOfMonth,
   subDays,
   subMonths,
 } from 'date-fns';
@@ -36,8 +43,14 @@ export function CalendarDateSelector({
   updateFilters,
   viewMode,
 }: CalendarDateSelectorProps) {
-  const { t, formatDateTimeRange, formatDate, dateFnsLocale, startOfWeek } =
-    useTranslation();
+  const {
+    t,
+    formatDateTimeRange,
+    formatDate,
+    dateFnsLocale,
+    startOfWeek,
+    endOfWeek,
+  } = useTranslation();
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const title =
@@ -76,17 +89,43 @@ export function CalendarDateSelector({
           toDate: endOfMonth(addMonths(filters.fromDate, 1)),
         });
 
+  const handleToday = () => {
+    const now = new Date();
+
+    if (nbOfDays === 7)
+      return updateFilters({
+        fromDate: startOfWeek(now),
+        toDate: endOfWeek(now),
+      });
+
+    if (nbOfDays > 7)
+      return updateFilters({
+        fromDate: startOfMonth(now),
+        toDate: endOfMonth(now),
+      });
+
+    updateFilters({
+      fromDate: startOfDay(now),
+      toDate: endOfDay(addDays(now, nbOfDays - 1)),
+    });
+  };
+
   return (
     <>
       <FlexRow alignItems="center" overflow="auto">
         <Tooltip title={t('button.previous')}>
           <IconButton onClick={handlePrev}>
-            <ChevronLeft />
+            <ChevronLeftIcon />
           </IconButton>
         </Tooltip>
         <Tooltip title={t('button.next')}>
           <IconButton onClick={handleNext}>
-            <ChevronRight />
+            <ChevronRightIcon />
+          </IconButton>
+        </Tooltip>
+        <Tooltip title={t('button.today')}>
+          <IconButton onClick={handleToday}>
+            <TodayIcon />
           </IconButton>
         </Tooltip>
         <Button
