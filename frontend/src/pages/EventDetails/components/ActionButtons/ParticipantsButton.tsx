@@ -15,6 +15,25 @@ export function ParticipantsButton({ event }: ParticipantsButtonProps) {
   const { t } = useTranslation();
   const [isOpenParticipantsModal, setIsOpenParticipantsModal] = useState(false);
 
+  const getButtonText = () => {
+    if (event.maxParticipant) {
+      return t('event.participants.titleWithMax', {
+        number: event.numberOfParticipants,
+        max: event.maxParticipant,
+      });
+    }
+
+    // Hide the number of participants if it is too low
+    // to avoid the "I don't want to be the first one" feeling
+    if (event.numberOfParticipants < 5) {
+      return t('event.participants.title');
+    }
+
+    return t('event.participants.titleWithNumber', {
+      count: event.numberOfParticipants,
+    });
+  };
+
   return (
     <>
       <Button
@@ -23,14 +42,7 @@ export function ParticipantsButton({ event }: ParticipantsButtonProps) {
         color="secondary"
         onClick={() => setIsOpenParticipantsModal(true)}
       >
-        {event.maxParticipant
-          ? t('event.participants.titleWithMax', {
-              number: event.numberOfParticipants,
-              max: event.maxParticipant,
-            })
-          : t('event.participants.titleWithNumber', {
-              number: event.numberOfParticipants,
-            })}
+        {getButtonText()}
       </Button>
 
       {isOpenParticipantsModal && (

@@ -173,7 +173,9 @@
       "noParticipants": "Aucun participant 😔",
       "title": "Participants",
       "titleWithMax": "{{number}}/{{max}} participants",
-      "titleWithNumber": "{{number}} participants"
+      "titleWithNumber_zero": "{{count}} participant",
+      "titleWithNumber_one": "{{count}} participant",
+      "titleWithNumber_other": "{{count}} participants"
     },
     "participateButton": {
       "isParticipating": "Participant",

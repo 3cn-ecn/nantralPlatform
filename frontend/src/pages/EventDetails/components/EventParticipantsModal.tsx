@@ -70,19 +70,6 @@ export function EventParticipantsModal({
   const participants = participantsQuery.data.results;
   const numberOfParticipants = participantsQuery.data.count;
 
-  if (numberOfParticipants === 0) {
-    return (
-      <ResponsiveDialog onClose={onClose} maxWidth="xs">
-        <ResponsiveDialogHeader onClose={onClose}>
-          {t('event.participants.title')}
-        </ResponsiveDialogHeader>
-        <ResponsiveDialogContent>
-          <Typography>{t('event.participants.noParticipants')}</Typography>
-        </ResponsiveDialogContent>
-      </ResponsiveDialog>
-    );
-  }
-
   return (
     <ResponsiveDialog onClose={onClose} maxWidth="xs">
       <ResponsiveDialogHeader onClose={onClose}>
@@ -92,23 +79,29 @@ export function EventParticipantsModal({
               max: event.maxParticipant,
             })
           : t('event.participants.titleWithNumber', {
-              number: numberOfParticipants,
+              count: numberOfParticipants,
             })}
       </ResponsiveDialogHeader>
-      <ResponsiveDialogContent sx={{ p: 0 }}>
-        <List>
-          {participants.map((student) => (
-            <ListItem key={student.id} disablePadding>
-              <ListItemButton href={student.url}>
-                <ListItemAvatar>
-                  <Avatar alt={student.name} src={student.picture} />
-                </ListItemAvatar>
-                <ListItemText>{student.name}</ListItemText>
-              </ListItemButton>
-            </ListItem>
-          ))}
-        </List>
-      </ResponsiveDialogContent>
+      {numberOfParticipants === 0 ? (
+        <ResponsiveDialogContent>
+          <Typography>{t('event.participants.noParticipants')}</Typography>
+        </ResponsiveDialogContent>
+      ) : (
+        <ResponsiveDialogContent sx={{ p: 0 }}>
+          <List>
+            {participants.map((student) => (
+              <ListItem key={student.id} disablePadding>
+                <ListItemButton href={student.url}>
+                  <ListItemAvatar>
+                    <Avatar alt={student.name} src={student.picture} />
+                  </ListItemAvatar>
+                  <ListItemText>{student.name}</ListItemText>
+                </ListItemButton>
+              </ListItem>
+            ))}
+          </List>
+        </ResponsiveDialogContent>
+      )}
     </ResponsiveDialog>
   );
 }

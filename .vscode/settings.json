@@ -71,9 +71,10 @@
   "i18n-ally.indent": 2,
   "i18n-ally.tabStyle": "space",
   "i18n-ally.usage.scanningIgnore": ["backend/", "docs/", "ckeditor.js"],
+  "i18n-ally.usage.derivedKeyRules": ["{key}_zero", "{key}_one", "{key}_other"],
   // cSpell (grammar checker)
   "cSpell.language": "en,fr",
-  "cSpell.enableFiletypes": ["mdx"],
+  "cSpell.enabledFileTypes": { "mdx": true },
   "cSpell.words": [
     "ariane",
     "ckeditor",
