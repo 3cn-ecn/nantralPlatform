@@ -1,7 +1,7 @@
 import { useState } from 'react';
 
 import { Edit as EditIcon } from '@mui/icons-material';
-import { Button } from '@mui/material';
+import { ListItemIcon, ListItemText, MenuItem } from '@mui/material';
 
 import { EditEventModal } from '#modules/event/view/Modals/EditEventModal';
 import { useTranslation } from '#shared/i18n/useTranslation';
@@ -16,14 +16,12 @@ export function EditButton({ eventId }: EditButtonProps) {
 
   return (
     <>
-      <Button
-        startIcon={<EditIcon />}
-        variant="outlined"
-        color="secondary"
-        onClick={() => setIsOpenEditModal(true)}
-      >
-        {t('event.action_menu.edit')}
-      </Button>
+      <MenuItem onClick={() => setIsOpenEditModal(true)}>
+        <ListItemIcon>
+          <EditIcon />
+        </ListItemIcon>
+        <ListItemText>{t('event.action_menu.edit')}</ListItemText>
+      </MenuItem>
 
       {isOpenEditModal && (
         <EditEventModal
