@@ -16,6 +16,8 @@
   --ck-border-radius: 20px;
 
   .ck-content {
+    overflow-x: auto;
+
     a {
       color: var(--ck-color-link-default);
     }

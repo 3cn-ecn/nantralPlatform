@@ -1,7 +1,7 @@
 import { useState } from 'react';
 
 import { Edit as EditIcon } from '@mui/icons-material';
-import { Fab } from '@mui/material';
+import { Button } from '@mui/material';
 
 import { Group } from '#modules/group/types/group.types';
 import { ModalEditGroup } from '#modules/group/view/Modal/ModalEditGroup';
@@ -13,15 +13,14 @@ export function EditButton({ group }: { group: Group }) {
 
   return (
     <>
-      <Fab
-        color="primary"
-        variant="extended"
+      <Button
+        color="secondary"
+        variant="outlined"
+        startIcon={<EditIcon />}
         onClick={() => setModalOpen(true)}
-        sx={{ position: 'fixed', bottom: 24, right: 24 }}
       >
-        <EditIcon sx={{ mr: 1 }} />
         {t('group.details.edit')}
-      </Fab>
+      </Button>
       {modalOpen && (
         <ModalEditGroup group={group} onClose={() => setModalOpen(false)} />
       )}

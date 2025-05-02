@@ -1,8 +1,4 @@
-import {
-  addHours,
-  differenceInCalendarDays,
-  differenceInHours,
-} from 'date-fns';
+import { addDays, addHours, differenceInCalendarDays } from 'date-fns';
 
 import { EventPreview } from '#modules/event/event.type';
 import { getMockEventPreview } from '#modules/event/infra/event.mock';
@@ -21,24 +17,17 @@ export function createBlankEvents(
   fromDate: Date,
   toDate: Date,
 ): EventPreview[] {
-  const events = new Array<EventPreview>();
-  const numberOfHours = differenceInHours(toDate, fromDate);
-  const numberOfDays = differenceInCalendarDays(toDate, fromDate);
+  const numberOfDays = differenceInCalendarDays(toDate, fromDate) + 1;
 
-  const dateStr = `${fromDate}-${toDate}`;
-  const numberOfEvents = (hash(dateStr) % numberOfDays) + numberOfDays / 2 || 2;
+  return Array.from({ length: numberOfDays }, (_, i) => {
+    const currentDay = addDays(fromDate, i);
+    const startHour = hash(currentDay.toISOString()) % 20; // Between 0 PM and 19 PM
+    const duration = (hash(currentDay.toUTCString()) % 4) + 2; // Between 2 and 5 hours
 
-  for (let i = 0; i < numberOfEvents; i++) {
-    const startHour = hash(dateStr + i * 543) % (numberOfHours - 5); // Between 0 PM and 19 PM
-    const duration = (hash(dateStr + 'duration' + i * 345) % 4) + 2; // Between 2 and 5 hours
-    events.push(
-      getMockEventPreview({
-        id: i,
-        startDate: addHours(fromDate, startHour),
-        endDate: addHours(fromDate, startHour + duration),
-      }),
-    );
-  }
-
-  return events.sort((a, b) => a.startDate.getTime() - b.startDate.getTime());
+    return getMockEventPreview({
+      id: i,
+      startDate: addHours(currentDay, startHour),
+      endDate: addHours(currentDay, startHour + duration),
+    });
+  });
 }
