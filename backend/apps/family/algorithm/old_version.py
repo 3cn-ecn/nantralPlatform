@@ -2,6 +2,7 @@
 # csv file, extracted from a google form. Feel free to use it if a year you
 # can't use nantral platform anymore
 
+# ruff: noqa: PGH004
 # ruff: noqa
 
 import copy
