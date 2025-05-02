@@ -1,3 +1,4 @@
+import { Membership } from '#modules/group/types/membership.types';
 import { SocialLink } from '#modules/social_link/types/socialLink.type';
 
 import { GroupTypePreview } from './groupType.types';
@@ -29,6 +30,9 @@ export interface Group {
   category: string;
   socialLinks: SocialLink[];
   subCategory?: string;
+  address: string;
+  latitude: string;
+  longitude: string;
 }
 
 export type GroupPreview = Pick<
@@ -42,6 +46,11 @@ export type GroupPreview = Pick<
   | 'category'
   | 'subCategory'
 >;
+
+export type MapGroupPreview = GroupPreview &
+  Pick<Group, 'address' | 'latitude' | 'longitude' | 'summary' | 'banner'> & {
+    members: Membership[];
+  };
 
 export type CreateGroupForm = Pick<
   Group,
@@ -59,6 +68,9 @@ export type CreateGroupForm = Pick<
   | 'description'
   | 'meetingPlace'
   | 'lockMemberships'
+  | 'address'
+  | 'latitude'
+  | 'longitude'
 > & {
   childrenLabel?: string;
   icon?: File;

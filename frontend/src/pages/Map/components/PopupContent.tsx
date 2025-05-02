@@ -1,0 +1,84 @@
+import { Link } from 'react-router-dom';
+
+import { Close as CloseIcon, OpenInNew } from '@mui/icons-material';
+import {
+  Button,
+  Card,
+  CardContent,
+  CardHeader,
+  CardMedia,
+  IconButton,
+  List,
+  ListItem,
+  ListItemAvatar,
+  ListItemButton,
+  ListItemText,
+  Typography,
+} from '@mui/material';
+import { CardActions } from '@mui/material/';
+
+import { MapGroupPreview } from '#modules/group/types/group.types';
+import { Avatar } from '#shared/components/Avatar/Avatar';
+import { FlexRow } from '#shared/components/FlexBox/FlexBox';
+import { useTranslation } from '#shared/i18n/useTranslation';
+
+export function PopupContent({
+  group,
+  onClose,
+}: {
+  group: MapGroupPreview;
+  onClose: () => void;
+}) {
+  const { t } = useTranslation();
+  return (
+    <Card>
+      <CardHeader
+        title={group.address.split(',')[0]}
+        avatar={<Avatar src={group.icon} alt={group.name} />}
+        action={
+          <IconButton onClick={onClose}>
+            <CloseIcon />
+          </IconButton>
+        }
+        subheader={group.summary}
+      />
+      <CardActions>
+        <FlexRow gap={2}>
+          <Button component={Link} to={group.url} variant="contained">
+            {t('map.popup.details')}
+          </Button>
+          <Button
+            variant="outlined"
+            href={`https://www.google.com/maps/dir/?api=1&travelmode=transit&destination=${group.address}`}
+            target="_blank"
+            endIcon={<OpenInNew />}
+          >
+            {t('map.popup.go')}
+          </Button>
+        </FlexRow>
+      </CardActions>
+      <CardContent color="secondary">
+        <Typography variant={'h3'}>{group.name}</Typography>
+      </CardContent>
+      <List>
+        {group.members.map((member) => (
+          <ListItem disablePadding key={member.student.id}>
+            <ListItemButton component={Link} to={member.student.url}>
+              <ListItemAvatar>
+                <Avatar
+                  src={member.student.picture}
+                  alt={member.student.name}
+                />
+              </ListItemAvatar>
+              <ListItemText
+                primary={member.student.name}
+                secondary={member.summary}
+              />
+            </ListItemButton>
+          </ListItem>
+        ))}
+      </List>
+      <CardMedia component={'img'} src={group.banner} sx={{ maxHeight: 150 }} />
+    </Card>
+  );
+}
