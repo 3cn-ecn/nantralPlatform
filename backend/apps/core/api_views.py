@@ -24,7 +24,7 @@ class CreateFeedbackView(generics.CreateAPIView):
             label=data["kind"],
             body=(
                 f"{data['description']} \n\n"
-                f"<a href=\"{student_url}\">Voir l'auteur sur Nantral Platform</a>"
+                f'<a href="{student_url}">Voir l\'auteur sur Nantral Platform</a>'
             ),
         )
 

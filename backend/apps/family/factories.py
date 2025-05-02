@@ -92,7 +92,7 @@ class FamilyFakeData(FakeDataGenerator):
 
     def make_families(self):
         for i in range(FAMILY_NUMBER):
-            print(f"Création de la famille {i+1}/{FAMILY_NUMBER}")  # noqa: T201
+            print(f"Création de la famille {i + 1}/{FAMILY_NUMBER}")  # noqa: T201
 
             family = FamilyFactory.create()
             num_2a_plus = random.randint(
