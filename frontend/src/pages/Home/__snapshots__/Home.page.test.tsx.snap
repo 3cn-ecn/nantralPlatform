@@ -35,6 +35,226 @@ exports[`Home page should render correctly without data 1`] = `
     class="MuiContainer-root MuiContainer-maxWidthLg css-1f2kw6w-MuiContainer-root"
   >
     <div
+      class="MuiBox-root css-3k8eup"
+    >
+      <div
+        class="MuiBox-root css-1o6pa4a"
+      >
+        <div
+          class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation1 MuiCard-root css-15m64r9-MuiPaper-root-MuiCard-root"
+        >
+          <a
+            aria-label="Events"
+            class="MuiButtonBase-root MuiCardActionArea-root css-1oitmrd-MuiButtonBase-root-MuiCardActionArea-root"
+            href="/event/"
+            tabindex="0"
+          >
+            <div
+              class="MuiCardContent-root css-46bh2p-MuiCardContent-root"
+            >
+              <img
+                aria-hidden="true"
+                class="material-icons notranslate MuiIcon-root MuiIcon-fontSizeLarge css-1gb9piy-MuiIcon-root"
+                src="/static/img/icons/cropped/event.svg"
+              />
+            </div>
+            <span
+              class="MuiCardActionArea-focusHighlight css-1v2exvi-MuiCardActionArea-focusHighlight"
+            />
+            <span
+              class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
+            />
+          </a>
+        </div>
+        <p
+          aria-hidden="true"
+          class="MuiTypography-root MuiTypography-body2 MuiTypography-alignCenter css-b7etmd-MuiTypography-root"
+        >
+          Events
+        </p>
+      </div>
+      <div
+        class="MuiBox-root css-1o6pa4a"
+      >
+        <div
+          class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation1 MuiCard-root css-15m64r9-MuiPaper-root-MuiCard-root"
+        >
+          <a
+            aria-label="Groups"
+            class="MuiButtonBase-root MuiCardActionArea-root css-1oitmrd-MuiButtonBase-root-MuiCardActionArea-root"
+            href="/group/"
+            tabindex="0"
+          >
+            <div
+              class="MuiCardContent-root css-46bh2p-MuiCardContent-root"
+            >
+              <img
+                aria-hidden="true"
+                class="material-icons notranslate MuiIcon-root MuiIcon-fontSizeLarge css-1gb9piy-MuiIcon-root"
+                src="/static/img/icons/cropped/club.svg"
+              />
+            </div>
+            <span
+              class="MuiCardActionArea-focusHighlight css-1v2exvi-MuiCardActionArea-focusHighlight"
+            />
+            <span
+              class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
+            />
+          </a>
+        </div>
+        <p
+          aria-hidden="true"
+          class="MuiTypography-root MuiTypography-body2 MuiTypography-alignCenter css-b7etmd-MuiTypography-root"
+        >
+          Groups
+        </p>
+      </div>
+      <div
+        class="MuiBox-root css-1o6pa4a"
+      >
+        <div
+          class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation1 MuiCard-root css-15m64r9-MuiPaper-root-MuiCard-root"
+        >
+          <a
+            aria-label="Flatshares Map"
+            class="MuiButtonBase-root MuiCardActionArea-root css-1oitmrd-MuiButtonBase-root-MuiCardActionArea-root"
+            href="/colocs/"
+            tabindex="0"
+          >
+            <div
+              class="MuiCardContent-root css-46bh2p-MuiCardContent-root"
+            >
+              <img
+                aria-hidden="true"
+                class="material-icons notranslate MuiIcon-root MuiIcon-fontSizeLarge css-1gb9piy-MuiIcon-root"
+                src="/static/img/icons/cropped/roommates.svg"
+              />
+            </div>
+            <span
+              class="MuiCardActionArea-focusHighlight css-1v2exvi-MuiCardActionArea-focusHighlight"
+            />
+            <span
+              class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
+            />
+          </a>
+        </div>
+        <p
+          aria-hidden="true"
+          class="MuiTypography-root MuiTypography-body2 MuiTypography-alignCenter css-b7etmd-MuiTypography-root"
+        >
+          Flatshares Map
+        </p>
+      </div>
+      <div
+        class="MuiBox-root css-1o6pa4a"
+      >
+        <div
+          class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation1 MuiCard-root css-15m64r9-MuiPaper-root-MuiCard-root"
+        >
+          <a
+            aria-label="Family"
+            class="MuiButtonBase-root MuiCardActionArea-root css-1oitmrd-MuiButtonBase-root-MuiCardActionArea-root"
+            href="/parrainage/"
+            tabindex="0"
+          >
+            <div
+              class="MuiCardContent-root css-46bh2p-MuiCardContent-root"
+            >
+              <img
+                aria-hidden="true"
+                class="material-icons notranslate MuiIcon-root MuiIcon-fontSizeLarge css-1gb9piy-MuiIcon-root"
+                src="/static/img/icons/cropped/family.svg"
+              />
+            </div>
+            <span
+              class="MuiCardActionArea-focusHighlight css-1v2exvi-MuiCardActionArea-focusHighlight"
+            />
+            <span
+              class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
+            />
+          </a>
+        </div>
+        <p
+          aria-hidden="true"
+          class="MuiTypography-root MuiTypography-body2 MuiTypography-alignCenter css-b7etmd-MuiTypography-root"
+        >
+          Family
+        </p>
+      </div>
+      <div
+        class="MuiBox-root css-1o6pa4a"
+      >
+        <div
+          class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation1 MuiCard-root css-15m64r9-MuiPaper-root-MuiCard-root"
+        >
+          <a
+            aria-label="Student List"
+            class="MuiButtonBase-root MuiCardActionArea-root css-1oitmrd-MuiButtonBase-root-MuiCardActionArea-root"
+            href="/student/"
+            tabindex="0"
+          >
+            <div
+              class="MuiCardContent-root css-46bh2p-MuiCardContent-root"
+            >
+              <img
+                aria-hidden="true"
+                class="material-icons notranslate MuiIcon-root MuiIcon-fontSizeLarge css-1gb9piy-MuiIcon-root"
+                src="/static/img/icons/cropped/list.svg"
+              />
+            </div>
+            <span
+              class="MuiCardActionArea-focusHighlight css-1v2exvi-MuiCardActionArea-focusHighlight"
+            />
+            <span
+              class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
+            />
+          </a>
+        </div>
+        <p
+          aria-hidden="true"
+          class="MuiTypography-root MuiTypography-body2 MuiTypography-alignCenter css-b7etmd-MuiTypography-root"
+        >
+          Student List
+        </p>
+      </div>
+      <div
+        class="MuiBox-root css-1o6pa4a"
+      >
+        <div
+          class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation1 MuiCard-root css-15m64r9-MuiPaper-root-MuiCard-root"
+        >
+          <a
+            aria-label="Signature"
+            class="MuiButtonBase-root MuiCardActionArea-root css-1oitmrd-MuiButtonBase-root-MuiCardActionArea-root"
+            href="/signature/"
+            tabindex="0"
+          >
+            <div
+              class="MuiCardContent-root css-46bh2p-MuiCardContent-root"
+            >
+              <img
+                aria-hidden="true"
+                class="material-icons notranslate MuiIcon-root MuiIcon-fontSizeLarge css-1gb9piy-MuiIcon-root"
+                src="/static/img/icons/cropped/sign.svg"
+              />
+            </div>
+            <span
+              class="MuiCardActionArea-focusHighlight css-1v2exvi-MuiCardActionArea-focusHighlight"
+            />
+            <span
+              class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
+            />
+          </a>
+        </div>
+        <p
+          aria-hidden="true"
+          class="MuiTypography-root MuiTypography-body2 MuiTypography-alignCenter css-b7etmd-MuiTypography-root"
+        >
+          Signature
+        </p>
+      </div>
+    </div>
+    <div
       class="MuiSpeedDial-root MuiSpeedDial-directionUp css-1mv8y2l-MuiSpeedDial-root"
       role="presentation"
     >
