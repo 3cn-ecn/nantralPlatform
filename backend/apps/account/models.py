@@ -17,7 +17,7 @@ class InvitationLink(models.Model):
             return self.description
 
         return f"""Invitation(Expires at:
-         {self.expires_at.strftime('%d/%m/%Y, %H:%M:%S')})"""
+         {self.expires_at.strftime("%d/%m/%Y, %H:%M:%S")})"""
 
     def get_absolute_url(self):
         return f"/register?uuid={self.id}/"

@@ -340,11 +340,9 @@ class MembershipViewSet(viewsets.ModelViewSet):
             .first()
         )
         # check that memberships are from same group
-        if (
-            lower
-            and lower.group != member.group
-            or self.query_params.get("group") != member.group.slug
-        ):
+        if (lower and lower.group != member.group) or self.query_params.get(
+            "group"
+        ) != member.group.slug:
             raise exceptions.ValidationError(
                 _("All memberships objects must be from the same group."),
             )

@@ -359,7 +359,7 @@ class Group(models.Model, SlugModel):
 
         """
         if self.creation_year:
-            return f"{self.creation_year}-{self.creation_year+1}"
+            return f"{self.creation_year}-{self.creation_year + 1}"
         else:
             return ""
 
@@ -379,10 +379,11 @@ class Group(models.Model, SlugModel):
         """
         return (
             user.is_superuser
-            or self.is_member(user)
-            and self.membership_set.get(student=user.student).admin
-            or self.parent is not None
-            and self.parent.is_admin(user)
+            or (
+                self.is_member(user)
+                and self.membership_set.get(student=user.student).admin
+            )
+            or (self.parent is not None and self.parent.is_admin(user))
         )
 
     def is_subscribed(self, user: User) -> bool:

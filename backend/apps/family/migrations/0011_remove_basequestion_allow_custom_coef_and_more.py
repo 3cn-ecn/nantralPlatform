@@ -4,9 +4,11 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ("family", "0010_answerfamily_custom_coeff_answermember_custom_coeff_and_more"),
+        (
+            "family",
+            "0010_answerfamily_custom_coeff_answermember_custom_coeff_and_more",
+        ),
     ]
 
     operations = [

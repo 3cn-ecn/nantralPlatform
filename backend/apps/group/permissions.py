@@ -17,7 +17,7 @@ class GroupPermission(permissions.BasePermission):
             if not group_type:
                 raise exceptions.ValidationError(
                     _(
-                        "You must specify a valid group type"
+                        "You must specify a valid group type "
                         "in query parameters."
                     )
                 )
