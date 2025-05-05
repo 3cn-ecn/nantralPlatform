@@ -53,6 +53,7 @@ class GroupTypeViewSet(viewsets.ReadOnlyModelViewSet):
     ordering = ["-priority"]
     ordering_fields = ["slug", "name", "priority"]
     lookup_url_kwarg = "slug"
+
     def get_queryset(self):
         if self.request.query_params.get("is_map") == "true":
             return GroupType.objects.filter(is_map=True)
@@ -98,13 +99,22 @@ class GroupViewSet(viewsets.ModelViewSet):
 
     permission_classes = [GroupPermission]
     filter_backends = [filters.SearchFilter]
-    search_fields = ["name", "short_name", "slug"]
     lookup_field = "slug"
     lookup_url_kwarg = "slug"
 
     @property
     def query_params(self) -> QueryDict:
         return self.request.query_params
+
+    def get_search_fields(self):
+        search_fields = ["name", "short_name", "slug"]
+        is_map = parse_bool(self.query_params.get("map"))
+        if is_map is True:
+            search_fields += [
+                "members__user__first_name",
+                "members__user__last_name",
+            ]
+        return search_fields
 
     def get_serializer_class(self):
         preview = parse_bool(self.query_params.get("preview"))
@@ -136,7 +146,6 @@ class GroupViewSet(viewsets.ModelViewSet):
         slugs = self.query_params.getlist("slug")
         parents = self.query_params.getlist("parent")
         is_map = parse_bool(self.query_params.get("map"))
-        search = self.query_params.get("search")
         archived = parse_bool(self.query_params.get("archived"), False)
 
         queryset = (
@@ -147,8 +156,7 @@ class GroupViewSet(viewsets.ModelViewSet):
                     "membership_set",
                     filter=Q(membership_set__end_date__gte=timezone.now()),
                 ),
-            )
-            .filter(
+            ).filter(
                 Q(num_active_members__gt=0)
                 | Q(group_type__hide_no_active_members=False),
             )
@@ -190,16 +198,8 @@ class GroupViewSet(viewsets.ModelViewSet):
         if parents:
             queryset = queryset.filter(parent__slug__in=parents)
         # filter if map
-        if is_map:
+        if is_map is not None:
             queryset = queryset.filter(group_type__is_map=is_map)
-        # filter by search
-        if search:
-            queryset = queryset.filter(
-                Q(name__icontains=search)
-                | Q(short_name__icontains=search)
-                | Q(members__user__first_name__icontains=search)
-                | Q(members__user__last_name__icontains=search),
-            )
         # filter by archived
         if archived is False or archived is None:
             queryset = queryset.filter(archived=False)
@@ -607,6 +607,7 @@ class LabelViewSet(viewsets.ModelViewSet):
 
         return qs
 
+
 class MapViewSet(viewsets.ViewSet):
     @decorators.action(detail=False, methods=["GET"])
     def geocode(self, request):
@@ -620,11 +621,22 @@ class MapViewSet(viewsets.ViewSet):
             "proximity": "-1.548606,47.248558",
             "types": "address",
         }
-        mapbox_response = requests.get("https://api.mapbox.com/search/geocode/v6/forward", params=request_data, timeout=10)
-        results = [{
-            "address": feature.get("properties").get("full_address"),
-            "latitude": feature.get("properties").get("coordinates").get("latitude"),
-            "longitude": feature.get("properties").get("coordinates").get("longitude"),
-        } for feature in mapbox_response.json().get("features", [])]
-        
+        mapbox_response = requests.get(
+            "https://api.mapbox.com/search/geocode/v6/forward",
+            params=request_data,
+            timeout=10,
+        )
+        results = [
+            {
+                "address": feature.get("properties").get("full_address"),
+                "latitude": feature.get("properties")
+                .get("coordinates")
+                .get("latitude"),
+                "longitude": feature.get("properties")
+                .get("coordinates")
+                .get("longitude"),
+            }
+            for feature in mapbox_response.json().get("features", [])
+        ]
+
         return response.Response(data=results)
