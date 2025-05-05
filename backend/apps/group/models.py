@@ -285,9 +285,15 @@ class Group(models.Model, SlugModel):
     )
 
     # Map infos
-    address = models.CharField(max_length=250, verbose_name=_("Address"), blank=True, default="")
-    latitude = models.CharField(max_length=250, verbose_name=_("Latitude"), blank=True, default="")
-    longitude = models.CharField(max_length=250, verbose_name=_("Longitude"), blank=True, default="")
+    address = models.CharField(
+        max_length=250, verbose_name=_("Address"), blank=True, default=""
+    )
+    latitude = models.FloatField(
+        verbose_name=_("Latitude"), null=True, blank=True, default=47.2186371
+    )
+    longitude = models.FloatField(
+        verbose_name=_("Longitude"), null=True, blank=True, default=-1.5541362
+    )
 
     # Log infos
     created_at = models.DateTimeField(auto_now_add=True)
@@ -334,8 +340,12 @@ class Group(models.Model, SlugModel):
     def clean(self) -> None:
         """Test if the object is valid (no incompatibility between fields)."""
         # If the group type has a map, check if map fields are not empty
-        if self.group_type.is_map and not (self.address and self.latitude and self.longitude):
-            raise ValidationError(f"Address and latitude are required for group type {self.group_type}.")
+        if self.group_type.is_map and not (
+            self.address and self.latitude and self.longitude
+        ):
+            raise ValidationError(
+                f"Address and latitude are required for group type {self.group_type}."
+            )
         if self.public and self.private:
             raise ValidationError(
                 _(
@@ -368,7 +378,7 @@ class Group(models.Model, SlugModel):
 
         """
         if self.creation_year:
-            return f"{self.creation_year}-{self.creation_year+1}"
+            return f"{self.creation_year}-{self.creation_year + 1}"
         else:
             return ""
 
@@ -388,10 +398,11 @@ class Group(models.Model, SlugModel):
         """
         return (
             user.is_superuser
-            or self.is_member(user)
-            and self.membership_set.get(student=user.student).admin
-            or self.parent is not None
-            and self.parent.is_admin(user)
+            or (
+                self.is_member(user)
+                and self.membership_set.get(student=user.student).admin
+            )
+            or (self.parent is not None and self.parent.is_admin(user))
         )
 
     def is_subscribed(self, user: User) -> bool:
