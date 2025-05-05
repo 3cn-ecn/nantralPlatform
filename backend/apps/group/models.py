@@ -349,8 +349,12 @@ class Group(models.Model, SlugModel):
     def clean(self) -> None:
         """Test if the object is valid (no incompatibility between fields)."""
         # If the group type has a map, check if map fields are not empty
-        if self.group_type.is_map and not (self.address and self.latitude and self.longitude):
-            raise ValidationError(f"Address and latitude are required for group type {self.group_type}.")
+        if self.group_type.is_map and not (
+            self.address and self.latitude and self.longitude
+        ):
+            raise ValidationError(
+                f"Address and latitude are required for group type {self.group_type}."
+            )
         if self.public and self.private:
             raise ValidationError(
                 _(
