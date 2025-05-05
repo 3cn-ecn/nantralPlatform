@@ -7,7 +7,7 @@ export function useGroupTypes(pageSize: number, isMap?: boolean) {
   const queryClient = useQueryClient();
 
   async function getGroupTypesAndCache() {
-    const groupTypes = await getGroupTypesApi({ isMap });
+    const groupTypes = await getGroupTypesApi(isMap);
     groupTypes.results.forEach((type) =>
       queryClient.setQueryData(['groupType', type.slug, isMap], type),
     );

@@ -31,8 +31,8 @@ export interface Group {
   socialLinks: SocialLink[];
   subCategory?: string;
   address: string;
-  latitude: string;
-  longitude: string;
+  latitude: number;
+  longitude: number;
 }
 
 export type GroupPreview = Pick<

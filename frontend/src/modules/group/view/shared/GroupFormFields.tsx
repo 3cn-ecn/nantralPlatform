@@ -82,17 +82,17 @@ export function GroupFormFields({
     (val: string, objectValue: Geocode) =>
       updateFormValues({
         address: val,
-        latitude: objectValue.latitude.toString(),
-        longitude: objectValue.longitude.toString(),
+        latitude: objectValue.latitude,
+        longitude: objectValue.longitude,
       }),
     [updateFormValues],
   );
   const latitudeCallback = useCallback(
-    (val: string) => updateFormValues({ latitude: val }),
+    (val) => updateFormValues({ latitude: val }),
     [updateFormValues],
   );
   const longitudeCallback = useCallback(
-    (val: string) => updateFormValues({ longitude: val }),
+    (val) => updateFormValues({ longitude: val }),
     [updateFormValues],
   );
   const meetingPlaceCallback = useCallback(
@@ -239,10 +239,11 @@ export function GroupFormFields({
             fetchOptions={getGeocodeListApi}
             initialObjectValue={{
               address: formValues.address,
-              latitude: parseFloat(formValues.latitude),
-              longitude: parseFloat(formValues.longitude),
+              latitude: formValues.latitude,
+              longitude: formValues.longitude,
             }}
             labelPropName={'address'}
+            required
           />
           <FlexAuto columnGap={2}>
             <TextField

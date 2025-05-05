@@ -1,7 +1,4 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
-
-import { Box, useTheme } from '@mui/material';
 import Map, {
   FullscreenControl,
   GeolocateControl,
@@ -10,7 +7,10 @@ import Map, {
   NavigationControl,
   Popup,
   ScaleControl,
-} from '@vis.gl/react-mapbox';
+} from 'react-map-gl/mapbox';
+import { useSearchParams } from 'react-router-dom';
+
+import { Box, useTheme } from '@mui/material';
 import 'mapbox-gl/dist/mapbox-gl.css';
 
 import { getMapGroupListApi } from '#modules/group/api/getMapGroupList.api';
@@ -38,9 +38,11 @@ export function CustomMap({
   const mapRef = useRef<MapRef>(null);
 
   const handleOpen = useCallback(
-    (group) => {
+    (group: MapGroupPreview) => {
+      // TODO: store only the latitude/longitude in groupList and fetch the rest of the data
+      // from the server when opening the popup
       setPopupInfo(group);
-      params.set('id', group.id);
+      params.set('id', group.id.toString());
       setParams(params);
       mapRef.current?.flyTo({
         // small bias to ensure that the popup is visible
@@ -80,8 +82,8 @@ export function CustomMap({
       groupList.map((group) => (
         <Marker
           key={group.id}
-          longitude={parseFloat(group.longitude)}
-          latitude={parseFloat(group.latitude)}
+          longitude={group.longitude}
+          latitude={group.latitude}
           color={theme.palette.primary.main}
           anchor="center"
           onClick={(e) => {
@@ -125,8 +127,8 @@ export function CustomMap({
         {pins}
         {popupInfo && (
           <Popup
-            longitude={parseFloat(popupInfo.longitude)}
-            latitude={parseFloat(popupInfo.latitude)}
+            longitude={popupInfo.longitude}
+            latitude={popupInfo.latitude}
             anchor="top"
             onClose={handleClose}
             closeButton={false}

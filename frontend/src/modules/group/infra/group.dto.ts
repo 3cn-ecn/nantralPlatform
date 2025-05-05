@@ -31,8 +31,8 @@ export interface GroupDTO {
   sub_category?: string;
   social_links: SocialLinkDTO[];
   address: string;
-  latitude: string;
-  longitude: string;
+  latitude: number;
+  longitude: number;
 }
 
 export type GroupPreviewDTO = Pick<
