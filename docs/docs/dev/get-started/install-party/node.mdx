@@ -19,33 +19,38 @@ import TabItem from '@theme/TabItem';
 
 ---
 
-We recommend you to use the **LaTest Stable** version of **Node** (also called the "LTS" version). Currently, it is the
-16.15.0 version.
-
 <Tabs groupId="os">
-<TabItem value="win-mac" label="Windows/MacOS">
+<TabItem value="win" label="Windows">
 
 -  Download **Node.js LTS** from [the official website](https://nodejs.org/en/).
+   We recommend you to use the **LaTest Stable** version of **Node**
+   (also called the "LTS" version). Currently, it is the 16.15.0 version.
 -  Install Node.js by clicking on the executable you just downloaded.
 
 </TabItem>
-<TabItem value="lin" label="Linux">
+<TabItem value="mac-lin" label="MacOS/Linux">
 
-Open a terminal and run
-
-```bash
-sudo apt update && sudo apt install nodejs npm -y
-```
-
-:::info
-You might need in the future to have different versions of node.js installed for different projects. To manage them,
-you can check the `nvm` package which allowed you to have multiple versions of node.js.
-:::
+1. Install **fnm** to manage multiple node versions:
+   -  [follow the official instructions](https://github.com/Schniz/fnm/blob/master/README.md#using-a-script-macoslinux)
+1. Copy-paste the commands given at the end of the installation script into
+   your `.bashrc` or `.zshrc` file.
+1. Activate the `--use-on-cd` config to automatically use the correct version
+   on each project:
+   -  In the commands you pasted in your `.bashrc` or `.zshrc` file, replace
+      ```bash
+      eval "$(fnm env)"
+      ```
+      by
+      ```bash
+      eval "$(fnm env --use-on-cd)"
+      ```
 
 </TabItem>
 </Tabs>
 
-Check that the installtion was successful:
+---
+
+Now, check that the installation was successful:
 
 -  Open a terminal and run `node -v`, and then `npm -v`.
 -  You should get a version number for each command. If you get an error such as `command not found`, the

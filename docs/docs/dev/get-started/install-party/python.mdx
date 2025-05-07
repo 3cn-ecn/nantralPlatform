@@ -20,20 +20,20 @@ used to serve the website.
    allowfullscreen
 ></iframe>
 
-## The Python language
+## Install Python
 
-For Nantral Platform, we need to install the
-**Python 3.10** version. Be sure to select the correct version!! ⚠️
+:::warning Check the version
+Be sure to select the correct version!
+You can find the version required for Nantral Platform in the file
+[`backend/.python-version`](https://github.com/3cn-ecn/nantralPlatform/blob/master/backend/.python-version).
+Currently, we use **Python 3.10**.
+:::
 
 <Tabs groupId="os">
 <TabItem value="win" label="Windows">
 
-Download and install Python from the **[Windows Store](https://apps.microsoft.com/store/search/python)**.
-
-:::info
-You can also download Python from the [official website](https://www.python.org/downloads/). In this case, be careful
-to check the **"Add python to the PATH"** option during the installation.
-:::
+Download and install the Python version from the
+**[Microsoft Store](https://apps.microsoft.com/search?query=python&hl=fr-FR&gl=FR)**.
 
 </TabItem>
 <TabItem value="mac" label="MacOS">
@@ -50,27 +50,18 @@ Internet to solve it.
 </TabItem>
 <TabItem value="lin" label="Linux">
 
-Python should be already installed on your system, you can check that you have
-the correct version with:
+Python should be already installed on your system.
+If it is not the case, run in a terminal:
 
 ```bash
-python3 --version
+sudo apt update
+sudo apt install python3 python3-pip
 ```
 
-> If Python is not installed, you can run in a terminal:
->
-> ```bash
-> sudo apt update && sudo apt install python3 python3-pip -y
-> ```
->
-> If you don't have the correct version, install `pyenv`:
->
-> ```bash
-> curl https://pyenv.run | bash
-> ```
->
-> (`pipenv` will then automatically install the correct version using `pyenv`,
-> so don't worry to install the correct python version now.)
+:::note
+If you need to install multiple versions of python,
+you can use [`pyenv`](https://github.com/pyenv/pyenv)
+:::
 
 </TabItem>
 </Tabs>
@@ -94,7 +85,7 @@ To avoid this, you can precise which version you want to use by adding the versi
 `python` instead of `python3`, to get the correct version, or `python3.7` for example.
 
 Also notice that on Windows, `python` is sometimes replaced by `py` only: in this case, you can precise the version
-by runnning `py -3` for example.
+by runnning `py -3` for example.
 
 **Once you have found the command that works for you, memorize it: in the following, we will always use `python` or
 `python3` but you might need to replace it by the command which works for you.**
@@ -104,60 +95,27 @@ or try to reboot your computer to refresh the available commands.
 
 </details>
 
-## Package installer for Python (pip)
+## Install Pipenv
 
-Pip should have been installed with Python. To verify this, run:
-
-```bash
-python3 -m pip --version
-```
-
-It should produce a line like this: `pip 20.0.2 from /usr/lib/python3/dist-packages/pip (python 3.10)`
-
-<details>
-<summary>I have the error <em>"command pip not found"</em>, what can I do?</summary>
-
-First, pip is maybe not installed on your system. To install it, run
-
-```bash
-python3 -m ensurepip --upgrade
-```
-
-or on Linux:
-
-```bash
-sudo apt-get install python3-pip
-```
-
-:::note
-Don't forget to replace `python` by `python3` or `py` if needed, as we have seen previsouly.
-:::
-
-</details>
-
-If you are a more advanced user, you can also add `pip` to your PATH to run
-directly `pip3` instead of `python3 -m pip`. In most cases it will be already
-added to your PATH!
-
-## Pipenv
-
-Finally, we will install `pipenv` to replace `pip`. _But why did you ask me to
-intall `pip` so?_, you will ask me! Well, the answer is pretty simple: we need
-`pip` to install `pipenv`.
+Pipenv will be our dependency manager, to handle dependencies of the project.
 
 <Tabs groupId="os">
 <TabItem value="win" label="Windows">
 
-1. First, run this command into **PowerShell** to install `pipenv`:
+1. Ensure that `pip` is correctly installed and upgrade it:
+   ```
+   python3 -m ensurepip --upgrade
+   ```
+1. Then, run this command into **PowerShell** to install `pipenv`:
    ```powershell
    python3 -m pip install --user pipenv
    ```
-2. Add the `pipenv` command to your PATH:
+1. Add the `pipenv` command to your PATH:
    ```powershell
    [Environment]::SetEnvironmentVariable("PATH", $Env:PATH + ";$($(get-item $(python -m site --user-site)).parent.FullName)\Scripts", [EnvironmentVariableTarget]::User)
    ```
-3. Close and reopen your terminal to refresh the PATH.
-4. Finally let's test the installation:
+1. Close and reopen your terminal to refresh the PATH.
+1. Finally let's test the installation:
    ```bash
    pipenv --version
    ```
@@ -165,25 +123,37 @@ intall `pip` so?_, you will ask me! Well, the answer is pretty simple: we need
 </TabItem>
 <TabItem value="mac-lin" label="MacOS/Linux">
 
-1. First, run this command to install `pipenv`:
+1. First, install **pipx** to manage Python applications:
+   -  follow the [official instructions here](https://github.com/pypa/pipx?tab=readme-ov-file#install-pipx)
+1. Then, install **pipenv**:
    ```bash
-   python3 -m pip install --user pipenv
+   pipx install pipenv
    ```
-2. Test the installation:
+1. Check **pipenv** is correctly installed, and that it is accessible in the PATH:
+
    ```bash
    pipenv --version
    ```
-3. If it does not work, you might need to add `pipenv` to your PATH. To do this,
-   you will edit your profile configuration file `~/.bashrc`, or `~/.zshrc`.
-   At the end of the file, add this line:
-   ```bash
-   export PATH="$PATH:$(python3 -m site --user-base)/bin"
-   ```
-   Close and restart your terminal, and test again to run `pipenv`.
-   If it still doesn't work, replace the previous line by this one:
-   ```bash
-   export PATH="$PATH:$(python3 -m site --user-site)"
-   ```
+
+<details>
+<summary>If **pipenv** is not correctly installed...</summary>
+
+If it does not work, you might need to add `pipenv` to your PATH. To do this,
+you will edit your profile configuration file (`~/.bashrc` or `~/.zshrc`).
+At the end of the file, add this line:
+
+```bash
+export PATH="$PATH:$(python3 -m site --user-base)/bin"
+```
+
+Close and restart your terminal, and test again to run `pipenv`.
+If it still doesn't work, replace the previous line by this one:
+
+```bash
+export PATH="$PATH:$(python3 -m site --user-site)"
+```
+
+</details>
 
 </TabItem>
 </Tabs>
