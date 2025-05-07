@@ -18,7 +18,6 @@ endif
 # Install the project
 .PHONY: install
 install:
-	$(PYTHON) -m pip install --upgrade pipenv --break-system-packages 2>/dev/null || $(PYTHON) -m pip install --upgrade --user pipenv || $(PYTHON) -m pip install --upgrade pipenv
 	cd deployment && \
 		$(CREATE) backend.env
 	cd backend/config/settings && \
