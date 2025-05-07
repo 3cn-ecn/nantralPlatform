@@ -1,5 +1,7 @@
 # ruff: noqa: F403, F405
 
+from botocore.client import Config as BotoConfig
+
 from .docker import *
 
 print("Running prod config")  # noqa: T201
@@ -81,6 +83,10 @@ AWS_S3_OBJECT_PARAMETERS = {
     "CacheControl": "max-age=86400",
     "ACL": "public-read",
 }
+AWS_S3_CLIENT_CONFIG = BotoConfig(
+    request_checksum_calculation="when_required",
+    response_checksum_validation="when_required",
+)
 
 # THIRD PARTY LIBRARIES SETTINGS
 
