@@ -16,6 +16,8 @@ services:
       - "/etc/localtime:/etc/localtime:ro"
       - ../appdata/stalwart/data:/opt/stalwart-mail
       - certs:/data/certs:ro
+    depends_on:
+      - database
     labels:
       - traefik.enable=true
 
