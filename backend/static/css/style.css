@@ -92,49 +92,19 @@ table.table-sort th {
   }
 }
 
-.menuSet .dropdown > .nav-link {
+.menuSet .nav-item > .nav-link {
   border-radius: 50%;
+  border-style: none;
   padding: 0.2rem;
 }
-.menuSet .dropdown > .nav-link:hover {
+.menuSet .nav-item > .nav-link:hover {
   background-color: #eee;
+  cursor: wait;
 }
-.menuSet .dropdown > .nav-link img {
+.menuSet .nav-item > .nav-link img {
   width: 35px;
   height: 35px;
 }
-.menuSet .dropdown-toggle::after {
-  display: none;
-}
-.menuSet #notificationPanel .dropdown-menu {
-  right: -42px !important;
-  width: 20rem;
-  max-width: 90vw;
-  padding-bottom: 0;
-  max-height: calc(calc(100vh - 43px - 8px) * 0.9);
-  overflow: auto;
-}
-.menuSet .dropdown-menu {
-  box-shadow: 3px 3px 6px #aaa;
-}
-.menuSet .dropdown-menu img {
-  width: 2rem;
-  height: 2rem;
-  border-radius: 20%;
-  object-fit: contain;
-}
-.menuSet .dropdown-item:hover {
-  cursor: pointer;
-}
-/* bouton pour mettre en lu les notifications */
-.menuSet .dropdown-item .read-button {
-  display: flex;
-  flex-shrink: 0;
-  width: 2rem;
-  justify-content: center;
-  align-items: center;
-}
-
 #goBackButton:hover {
   cursor: pointer;
 }
@@ -303,7 +273,7 @@ a.rs:hover span {
 
 footer div {
   font-weight: 400;
-  font-family: "Heebo";
+  font-family: "Heebo", sans-serif;
   font-size: 1.1rem;
   position: fixed;
   width: 100%;
