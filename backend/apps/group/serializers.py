@@ -1,8 +1,13 @@
 from datetime import date
 
+from django.contrib.gis.geos import Point
 from django.utils.translation import gettext as _
 
 from rest_framework import exceptions, serializers
+from rest_framework_gis.serializers import (
+    GeoFeatureModelSerializer,
+    GeometrySerializerMethodField,
+)
 
 from apps.sociallink.serializers import (
     GroupSocialLinkSerializer,
@@ -394,7 +399,7 @@ class SubscriptionSerializer(serializers.Serializer):
     subscribe = serializers.BooleanField()
 
 
-class MapGroupPreviewSerializer(serializers.ModelSerializer):
+class MapGroupSerializer(serializers.ModelSerializer):
     url = serializers.SerializerMethodField()
     category = serializers.SerializerMethodField()
     sub_category = serializers.SerializerMethodField()
@@ -416,7 +421,7 @@ class MapGroupPreviewSerializer(serializers.ModelSerializer):
             "address",
             "latitude",
             "longitude",
-            "membership_set"
+            "membership_set",
         ]
         read_only_fields = fields
 
@@ -428,6 +433,19 @@ class MapGroupPreviewSerializer(serializers.ModelSerializer):
 
     def get_sub_category(self, obj: Group) -> str:
         return obj.get_sub_category()
+
+
+class MapGroupPreviewSerializer(GeoFeatureModelSerializer):
+    point = GeometrySerializerMethodField()
+
+    class Meta:
+        model = Group
+        geo_field = "point"
+        fields = ["id", "slug"]
+        id_field = "id"
+
+    def get_point(self, obj: Group) -> Point:
+        return Point(obj.longitude, obj.latitude)
 
 
 class GroupHistorySerializer(serializers.ModelSerializer):

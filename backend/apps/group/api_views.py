@@ -14,11 +14,13 @@ from rest_framework import (
     exceptions,
     filters,
     permissions,
+    renderers,
     response,
     serializers,
     status,
     viewsets,
 )
+from rest_framework.settings import api_settings
 
 from apps.utils.discord import respond_admin_request, send_admin_request
 from apps.utils.parse_bool import parse_bool
@@ -40,10 +42,16 @@ from .serializers import (
     GroupWriteSerializer,
     LabelSerializer,
     MapGroupPreviewSerializer,
+    MapGroupSerializer,
     MembershipSerializer,
     NewMembershipSerializer,
     SubscriptionSerializer,
 )
+
+
+class GeoJsonRender(renderers.JSONRenderer):
+    media_type = "application/geo+json"
+    format = "geojson"
 
 
 class GroupTypeViewSet(viewsets.ReadOnlyModelViewSet):
@@ -101,6 +109,14 @@ class GroupViewSet(viewsets.ModelViewSet):
     filter_backends = [filters.SearchFilter]
     lookup_field = "slug"
     lookup_url_kwarg = "slug"
+    renderer_classes = [*api_settings.DEFAULT_RENDERER_CLASSES, GeoJsonRender]
+
+    @property
+    def pagination_class(self):
+        if self.request.accepted_renderer.format == "geojson":
+            return None
+        else:
+            return api_settings.DEFAULT_PAGINATION_CLASS
 
     @property
     def query_params(self) -> QueryDict:
@@ -119,16 +135,19 @@ class GroupViewSet(viewsets.ModelViewSet):
     def get_serializer_class(self):
         preview = parse_bool(self.query_params.get("preview"))
         is_map = parse_bool(self.query_params.get("map"))
+        if self.request.accepted_renderer.format == "geojson":
+            if is_map is True:
+                return MapGroupPreviewSerializer
+            else:
+                raise exceptions.NotAcceptable("GeoJSON format is only supported for map groups")
         if self.action == "update_subscription":
             return SubscriptionSerializer
         if self.request.method in ["POST", "PUT", "PATCH"]:
             return GroupWriteSerializer
-        if preview is False:
+        if preview is False or self.detail:
             return GroupSerializer
         if is_map is True:
-            return MapGroupPreviewSerializer
-        if self.detail and preview is not True:
-            return GroupSerializer
+            return MapGroupSerializer
         return GroupPreviewSerializer
 
     def get_queryset(self) -> QuerySet[Group]:  # noqa: C901
@@ -245,6 +264,10 @@ class GroupViewSet(viewsets.ModelViewSet):
             group.subscribers.add(student)
 
         return response.Response(status=status.HTTP_200_OK)
+
+    @decorators.action(detail=False, methods=["GET"])
+    def geojson(self, request: Request, *args, **kwargs):
+        return self.list(request, *args, **kwargs)
 
     @decorators.action(
         detail=True,

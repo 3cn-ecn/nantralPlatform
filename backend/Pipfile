@@ -32,6 +32,7 @@ django-simple-history = "~=3.10"
 django-storages = {version = "~=1.13", extras = ["boto3"]}
 django-vite = "~=3.0"
 djangorestframework = "~=3.15"
+djangorestframework-gis = "*"
 docutils = "*"
 factory-boy = "~=3.3"
 flower = "~=2.0"
