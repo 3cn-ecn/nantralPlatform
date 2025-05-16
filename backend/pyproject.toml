@@ -5,6 +5,7 @@ requires-python = ">=3.13"
 
 [tool.ruff]
 line-length = 80
+exclude = ["_archived", "old_version.py"]  # don't run lint on old and unused code
 
 [tool.ruff.lint]
 select = [
