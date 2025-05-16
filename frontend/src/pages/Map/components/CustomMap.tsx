@@ -46,7 +46,7 @@ export function CustomMap({
       getMapGroupDetailApi(groupPoint.slug).then((group) => {
         setPopupInfo(group);
         params.set('id', group.id.toString());
-        setParams(params);
+        setParams(params, { preventScrollReset: true });
         mapRef.current?.flyTo({
           // small bias to ensure that the popup is visible
           center: [group.longitude, group.latitude - 0.0015],
@@ -61,7 +61,7 @@ export function CustomMap({
   const handleClose = useCallback(() => {
     setPopupInfo(null);
     params.delete('id');
-    setParams(params);
+    setParams(params, { preventScrollReset: true });
   }, [params, setParams]);
 
   useEffect(() => {
