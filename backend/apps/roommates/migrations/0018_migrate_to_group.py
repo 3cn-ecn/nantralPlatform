@@ -59,7 +59,7 @@ def transfert_roommates_to_group(apps, schema_editor):
                 begin_date=roommate.begin_date,
                 end_date=roommate.end_date,
                 admin=member.admin,
-                summary=member.nickname,
+                description=member.nickname,
             )
             membership.save()
 
