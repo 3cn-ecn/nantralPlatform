@@ -134,7 +134,7 @@ def reverse(apps, schema_editor):
 class Migration(migrations.Migration):
 
     dependencies = [
-        ("group", "0018_alter_group_address_alter_group_latitude_and_more"),
+        ("group", "0017_group_address_group_latitude_group_longitude_and_more"),
         ("roommates", "0017_alter_housing_details_and_more"),
     ]
 

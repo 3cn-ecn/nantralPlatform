@@ -19,8 +19,8 @@ const defaultGroupFormValues: CreateGroupForm = {
   label: -1,
   lockMemberships: false,
   address: '',
-  latitude: '',
-  longitude: '',
+  latitude: 0,
+  longitude: 0,
 };
 
 function convertToForm(group: Group): CreateGroupForm {
