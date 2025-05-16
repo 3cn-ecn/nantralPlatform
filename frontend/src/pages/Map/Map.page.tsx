@@ -70,6 +70,7 @@ export default function MapPage() {
           value={groupId}
           handleChange={handleChange}
           size="small"
+          margin="none"
           fetchOptions={async (searchInput): Promise<MapGroupPreview[]> => {
             const res = await getMapGroupListApi({
               search: searchInput,

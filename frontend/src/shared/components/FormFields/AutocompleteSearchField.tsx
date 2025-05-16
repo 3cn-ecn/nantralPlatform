@@ -75,6 +75,7 @@ type AutocompleteSearchFieldProps<
   labelPropName: LabelPropName;
   imagePropName?: ImagePropName;
   loading?: boolean;
+  margin?: 'normal' | 'none' | 'dense';
 };
 
 /**
@@ -134,6 +135,7 @@ function AutocompleteSearchFieldComponent<
   labelPropName,
   imagePropName,
   loading = false,
+  margin = 'normal',
   ...props
 }: AutocompleteSearchFieldProps<
   T,
@@ -244,6 +246,7 @@ function AutocompleteSearchFieldComponent<
           required={required}
           helperText={isError ? errors.join(', ') : helperText}
           error={isError}
+          margin={margin}
           InputProps={{
             ...params.InputProps,
             startAdornment: isMultiple(objectValue, multiple)
