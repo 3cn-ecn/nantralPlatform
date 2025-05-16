@@ -50,8 +50,8 @@ from .serializers import (
 
 
 class GeoJsonRender(renderers.JSONRenderer):
-    media_type = "application/geo+json"
-    format = "geojson"
+    media_type = "application/json"
+    format = "points"
 
 
 class GroupTypeViewSet(viewsets.ReadOnlyModelViewSet):
@@ -113,7 +113,7 @@ class GroupViewSet(viewsets.ModelViewSet):
 
     @property
     def pagination_class(self):
-        if self.request.accepted_renderer.format == "geojson":
+        if self.request.accepted_renderer.format == "points":
             return None
         else:
             return api_settings.DEFAULT_PAGINATION_CLASS
@@ -135,7 +135,7 @@ class GroupViewSet(viewsets.ModelViewSet):
     def get_serializer_class(self):
         preview = parse_bool(self.query_params.get("preview"))
         is_map = parse_bool(self.query_params.get("map"))
-        if self.request.accepted_renderer.format == "geojson":
+        if self.request.accepted_renderer.format == "points":
             if is_map is True:
                 return MapGroupPreviewSerializer
             else:
@@ -144,10 +144,10 @@ class GroupViewSet(viewsets.ModelViewSet):
             return SubscriptionSerializer
         if self.request.method in ["POST", "PUT", "PATCH"]:
             return GroupWriteSerializer
-        if preview is False or self.detail:
-            return GroupSerializer
         if is_map is True:
             return MapGroupSerializer
+        if preview is False or self.detail:
+            return GroupSerializer
         return GroupPreviewSerializer
 
     def get_queryset(self) -> QuerySet[Group]:  # noqa: C901
