@@ -13,7 +13,9 @@ import { useSearchParams } from 'react-router-dom';
 import { Box, useTheme } from '@mui/material';
 import 'mapbox-gl/dist/mapbox-gl.css';
 
-import { getMapGroupListApi } from '#modules/group/api/getMapGroupList.api';
+import { getMapGroupDetailApi } from '#modules/group/api/getMapGroupDetail.api';
+import { getMapGroupListPreviewApi } from '#modules/group/api/getMapGroupListPreview.api';
+import { Feature, FeatureCollection } from '#modules/group/types/geojson.type';
 import { MapGroupPreview } from '#modules/group/types/group.types';
 import { PopupContent } from '#pages/Map/components/PopupContent';
 import { ThemeControl } from '#pages/Map/components/ThemeControl';
@@ -34,35 +36,36 @@ export function CustomMap({
   const theme = useTheme();
   const [params, setParams] = useSearchParams();
   const [popupInfo, setPopupInfo] = useState<MapGroupPreview | null>(null);
-  const [groupList, setGroupList] = useState<MapGroupPreview[]>([]);
+  const [groupList, setGroupList] = useState<FeatureCollection | null>(null);
   const mapRef = useRef<MapRef>(null);
 
   const handleOpen = useCallback(
-    (group: MapGroupPreview) => {
-      // TODO: store only the latitude/longitude in groupList and fetch the rest of the data
-      // from the server when opening the popup
-      setPopupInfo(group);
-      params.set('id', group.id.toString());
-      setParams(params);
-      mapRef.current?.flyTo({
-        // small bias to ensure that the popup is visible
-        center: [group.longitude, group.latitude - 0.0015],
-        zoom: 15.5,
-        duration: 2000,
+    (groupFeature: Feature) => {
+      getMapGroupDetailApi(groupFeature.properties.slug).then((group) => {
+        setPopupInfo(group);
+        params.set('id', group.id.toString());
+        setParams(params);
+        mapRef.current?.flyTo({
+          // small bias to ensure that the popup is visible
+          center: [group.longitude, group.latitude - 0.0015],
+          zoom: 15.5,
+          duration: 2000,
+        });
       });
     },
     [params, setParams],
   );
 
   useEffect(() => {
-    getMapGroupListApi({
+    getMapGroupListPreviewApi({
       type: groupType,
       archived: showArchived,
     }).then((groupPage) => {
-      setGroupList(groupPage.results);
-      if (params.has('id')) {
-        const group = groupPage.results.find(
-          (group) => group.id.toString() === params.get('id'),
+      setGroupList(groupPage);
+      const id = params.get('id');
+      if (id) {
+        const group = groupPage.features.find(
+          (group) => group.id === parseInt(id),
         );
         if (group) {
           handleOpen(group);
@@ -79,11 +82,11 @@ export function CustomMap({
 
   const pins = useMemo(
     () =>
-      groupList.map((group) => (
+      groupList?.features.map((group) => (
         <Marker
           key={group.id}
-          longitude={group.longitude}
-          latitude={group.latitude}
+          longitude={group.geometry.coordinates[0]}
+          latitude={group.geometry.coordinates[1]}
           color={theme.palette.primary.main}
           anchor="center"
           onClick={(e) => {
@@ -98,62 +101,60 @@ export function CustomMap({
   );
 
   return (
-    <>
-      <Map
-        ref={mapRef}
-        initialViewState={{
-          latitude: 47.248558,
-          longitude: -1.548606,
-          zoom: 12,
-          bearing: 0,
-          pitch: 0,
-        }}
-        mapboxAccessToken={MAPBOX_TOKEN}
-        style={{ height: '60vh' }}
-        mapStyle="mapbox://styles/mapbox/standard"
-        config={{
-          basemap: {
-            lightPreset: currentThemeMode === 'dark' ? 'night' : 'day',
-            showPointOfInterestLabels: false,
-          },
-        }}
-        projection={'globe'}
-      >
-        <GeolocateControl position="top-left" />
-        <FullscreenControl position="top-left" />
-        <NavigationControl position="top-left" />
-        <ThemeControl />
-        <ScaleControl />
-        {pins}
-        {popupInfo && (
-          <Popup
-            longitude={popupInfo.longitude}
-            latitude={popupInfo.latitude}
-            anchor="top"
-            onClose={handleClose}
-            closeButton={false}
+    <Map
+      ref={mapRef}
+      initialViewState={{
+        latitude: 47.248558,
+        longitude: -1.548606,
+        zoom: 12,
+        bearing: 0,
+        pitch: 0,
+      }}
+      mapboxAccessToken={MAPBOX_TOKEN}
+      style={{ height: '60vh' }}
+      mapStyle="mapbox://styles/mapbox/standard"
+      config={{
+        basemap: {
+          lightPreset: currentThemeMode === 'dark' ? 'night' : 'day',
+          showPointOfInterestLabels: false,
+          show3dObjects: false,
+        },
+      }}
+    >
+      <GeolocateControl position="top-left" />
+      <FullscreenControl position="top-left" />
+      <NavigationControl position="top-left" />
+      <ThemeControl />
+      <ScaleControl />
+      {pins}
+      {popupInfo && (
+        <Popup
+          longitude={popupInfo.longitude}
+          latitude={popupInfo.latitude}
+          anchor="top"
+          onClose={handleClose}
+          closeButton={false}
+        >
+          <Box
+            sx={{
+              display: 'flex',
+              flexDirection: 'column',
+            }}
           >
             <Box
               sx={{
-                display: 'flex',
-                flexDirection: 'column',
+                border: '20px solid transparent',
+                height: 0,
+                width: 0,
+                alignSelf: 'center',
+                borderBottomColor: theme.palette.background.paper,
+                borderTop: 'none',
               }}
-            >
-              <Box
-                sx={{
-                  border: '20px solid transparent',
-                  height: 0,
-                  width: 0,
-                  alignSelf: 'center',
-                  borderBottomColor: theme.palette.background.paper,
-                  borderTop: 'none',
-                }}
-              />
-              <PopupContent group={popupInfo} onClose={handleClose} />
-            </Box>
-          </Popup>
-        )}
-      </Map>
-    </>
+            />
+            <PopupContent group={popupInfo} onClose={handleClose} />
+          </Box>
+        </Popup>
+      )}
+    </Map>
   );
 }
