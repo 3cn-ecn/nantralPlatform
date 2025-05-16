@@ -122,7 +122,8 @@ class GroupViewSet(viewsets.ModelViewSet):
     def query_params(self) -> QueryDict:
         return self.request.query_params
 
-    def get_search_fields(self):
+    @property
+    def search_fields(self):
         search_fields = ["name", "short_name", "slug"]
         is_map = parse_bool(self.query_params.get("map"))
         if is_map is True:
