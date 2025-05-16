@@ -244,7 +244,6 @@ function AutocompleteSearchFieldComponent<
           required={required}
           helperText={isError ? errors.join(', ') : helperText}
           error={isError}
-          margin="normal"
           InputProps={{
             ...params.InputProps,
             startAdornment: isMultiple(objectValue, multiple)
