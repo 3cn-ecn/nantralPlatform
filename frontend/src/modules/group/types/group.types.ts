@@ -80,3 +80,8 @@ export type CreateGroupForm = Pick<
   parent?: number;
   changeReason?: string;
 };
+
+export type MapGroupPoint = Pick<
+  Group,
+  'id' | 'icon' | 'latitude' | 'longitude' | 'slug' | 'name'
+>;
