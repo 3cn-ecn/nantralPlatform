@@ -1,8 +1,7 @@
 import axios from 'axios';
 
+import { MapGroupPoint } from '#modules/group/types/group.types';
 import { adaptApiErrors, ApiErrorDTO } from '#shared/infra/errors';
-
-import { FeatureCollection } from '../types/geojson.type';
 
 export interface GetGroupListApiParams {
   type?: string | null;
@@ -11,16 +10,14 @@ export interface GetGroupListApiParams {
 
 export async function getMapGroupListPreviewApi(
   options: GetGroupListApiParams,
-): Promise<FeatureCollection> {
+): Promise<MapGroupPoint[]> {
   const { data } = await axios
-    .get<FeatureCollection>('/api/group/group/', {
+    .get<MapGroupPoint[]>('/api/group/group/', {
       params: {
         map: true,
         type: options.type,
         archived: options.archived,
-      },
-      headers: {
-        Accept: 'application/geo+json',
+        format: 'points',
       },
     })
     .catch((err: ApiErrorDTO) => {

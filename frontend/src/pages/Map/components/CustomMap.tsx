@@ -15,8 +15,10 @@ import 'mapbox-gl/dist/mapbox-gl.css';
 
 import { getMapGroupDetailApi } from '#modules/group/api/getMapGroupDetail.api';
 import { getMapGroupListPreviewApi } from '#modules/group/api/getMapGroupListPreview.api';
-import { Feature, FeatureCollection } from '#modules/group/types/geojson.type';
-import { MapGroupPreview } from '#modules/group/types/group.types';
+import {
+  MapGroupPoint,
+  MapGroupPreview,
+} from '#modules/group/types/group.types';
 import { PopupContent } from '#pages/Map/components/PopupContent';
 import { ThemeControl } from '#pages/Map/components/ThemeControl';
 import { useChangeThemeMode } from '#shared/context/CustomTheme.context';
@@ -36,12 +38,12 @@ export function CustomMap({
   const theme = useTheme();
   const [params, setParams] = useSearchParams();
   const [popupInfo, setPopupInfo] = useState<MapGroupPreview | null>(null);
-  const [groupList, setGroupList] = useState<FeatureCollection | null>(null);
+  const [groupList, setGroupList] = useState<MapGroupPoint[]>([]);
   const mapRef = useRef<MapRef>(null);
 
   const handleOpen = useCallback(
-    (groupFeature: Feature) => {
-      getMapGroupDetailApi(groupFeature.properties.slug).then((group) => {
+    (groupPoint: MapGroupPoint) => {
+      getMapGroupDetailApi(groupPoint.slug).then((group) => {
         setPopupInfo(group);
         params.set('id', group.id.toString());
         setParams(params);
@@ -56,37 +58,38 @@ export function CustomMap({
     [params, setParams],
   );
 
-  useEffect(() => {
-    getMapGroupListPreviewApi({
-      type: groupType,
-      archived: showArchived,
-    }).then((groupPage) => {
-      setGroupList(groupPage);
-      const id = params.get('id');
-      if (id) {
-        const group = groupPage.features.find(
-          (group) => group.id === parseInt(id),
-        );
-        if (group) {
-          handleOpen(group);
-        }
-      }
-    });
-  }, [groupType, handleOpen, params, showArchived]);
-
   const handleClose = useCallback(() => {
     setPopupInfo(null);
     params.delete('id');
     setParams(params);
   }, [params, setParams]);
 
+  useEffect(() => {
+    getMapGroupListPreviewApi({
+      type: groupType,
+      archived: showArchived,
+    }).then((groupPage) => {
+      setGroupList(groupPage);
+      if (params.has('id')) {
+        const group = groupPage.find(
+          (group) => group.id.toString() === params.get('id'),
+        );
+        if (group) {
+          handleOpen(group);
+        } else {
+          handleClose();
+        }
+      }
+    });
+  }, [groupType, handleClose, handleOpen, params, showArchived]);
+
   const pins = useMemo(
     () =>
-      groupList?.features.map((group) => (
+      groupList.map((group) => (
         <Marker
           key={group.id}
-          longitude={group.geometry.coordinates[0]}
-          latitude={group.geometry.coordinates[1]}
+          longitude={group.longitude}
+          latitude={group.latitude}
           color={theme.palette.primary.main}
           anchor="center"
           onClick={(e) => {
