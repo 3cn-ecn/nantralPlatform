@@ -1,13 +1,8 @@
 from datetime import date
 
-from django.contrib.gis.geos import Point
 from django.utils.translation import gettext as _
 
 from rest_framework import exceptions, serializers
-from rest_framework_gis.serializers import (
-    GeoFeatureModelSerializer,
-    GeometrySerializerMethodField,
-)
 
 from apps.sociallink.serializers import (
     GroupSocialLinkSerializer,
