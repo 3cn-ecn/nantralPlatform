@@ -69,7 +69,7 @@ export function SelectTypeButton({
               key={type.slug}
               onClick={() => {
                 params.set('type', type.slug);
-                setParams(params);
+                setParams(params, { preventScrollReset: true });
                 handleClose();
               }}
             >
@@ -79,7 +79,7 @@ export function SelectTypeButton({
         <MenuItem
           onClick={() => {
             params.delete('type');
-            setParams(params);
+            setParams(params, { preventScrollReset: true });
             handleClose();
           }}
         >
