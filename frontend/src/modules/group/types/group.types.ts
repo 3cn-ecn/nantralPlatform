@@ -79,3 +79,8 @@ export type CreateGroupForm = Pick<
   tags: number[];
   parent?: number;
 };
+
+export type MapGroupPoint = Pick<
+  Group,
+  'id' | 'icon' | 'latitude' | 'longitude' | 'slug' | 'name'
+>;

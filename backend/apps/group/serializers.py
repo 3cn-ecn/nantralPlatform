@@ -401,14 +401,7 @@ class MapGroupSerializer(serializers.ModelSerializer):
         return obj.get_sub_category()
 
 
-class MapGroupPreviewSerializer(GeoFeatureModelSerializer):
-    point = GeometrySerializerMethodField()
-
+class MapGroupPreviewSerializer(serializers.ModelSerializer):
     class Meta:
         model = Group
-        geo_field = "point"
-        fields = ["id", "slug"]
-        id_field = "id"
-
-    def get_point(self, obj: Group) -> Point:
-        return Point(obj.longitude, obj.latitude)
+        fields = ["id", "slug", "latitude", "longitude", "name", "icon"]
