@@ -18,7 +18,8 @@ def transfert_roommates_to_group(apps, schema_editor):
     roommates_group_type = GroupType.objects.create(
         name="Colocations",
         slug="colocs",
-        hide_no_active_members=True,
+        hide_no_active_members=False,
+        is_map=True,
         can_create=True,
         can_have_parent=False,
     )
@@ -86,7 +87,7 @@ def reverse(apps, schema_editor):
         try:
             begin_date = group.membership_set.first().begin_date
             end_date = group.membership_set.first().end_date
-        except Membership.DoesNotExist:
+        except :
             continue  # Delete the group if it has no members
 
         housing = Housing.objects.create(
