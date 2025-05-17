@@ -153,7 +153,7 @@ class SaleSerializer(serializers.ModelSerializer):
             raise exceptions.ValidationError("Please select at least one Item")
 
         # save the amount in the sale (negative because money is taken from the user)
-        data["amount"] = -amount
+        data["amount"] = amount
 
         return data
 
