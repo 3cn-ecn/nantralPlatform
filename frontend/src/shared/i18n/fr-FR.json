@@ -635,6 +635,24 @@
       "labelDisplayedRows": "Page {{ page }} sur {{ pageSize }} ({{ count }} résultats)"
     },
     "order": {
+      "list": {
+        "title": "Liste des commandes",
+        "amount": "Montant",
+        "date": "Date",
+        "sender": "De",
+        "receiver": "À",
+        "status": "État",
+        "action": "Actions"
+      },
+      "modal": {
+        "info": {
+          "title": "Informations sur la commande"
+        },
+        "qrcode": {
+          "title": "Votre QR Code",
+          "text": "Montrez ce QR Code à un vendeur afin de récupérer votre commande. Ce QR code est valable 2 minutes."
+        }
+      },
       "selectEvent": "Sélection de l'évènement",
       "selectItems": "Choix des articles",
       "payment": "Paiement",
@@ -667,7 +685,8 @@
     "tabs": {
       "home": "Accueil",
       "transactions": "Transactions",
-      "order": "Commander"
+      "order": "Commander",
+      "orderList": "Commandes"
     },
     "transaction": {
       "list": "Liste des transactions",

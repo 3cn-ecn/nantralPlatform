@@ -3,10 +3,8 @@ export interface Order {
   amount: number;
   date: Date;
   status: string;
-  haOrderId: number;
-  haPaymentID: number;
+  haOrderID: number;
   description: string;
   receiver: string;
   sender: string;
-  scanned: boolean;
 }

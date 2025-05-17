@@ -6,9 +6,19 @@ import { adaptPage, PageDTO } from '#shared/infra/pagination';
 import { adaptOrder } from '../infra/order.adapter';
 import { OrderDTO } from '../infra/order.dto';
 
-export async function getOrderListApi() {
+interface OrderParams {
+  page?: number;
+  pageSize?: number;
+}
+
+export async function getOrderListApi(options: OrderParams) {
   const { data } = await axios
-    .get<PageDTO<OrderDTO>>('/api/nantralpay/order/')
+    .get<PageDTO<OrderDTO>>('/api/nantralpay/order/', {
+      params: {
+        page: options.page,
+        page_size: options.pageSize,
+      },
+    })
     .catch((err: ApiErrorDTO) => {
       throw adaptApiErrors(err);
     });

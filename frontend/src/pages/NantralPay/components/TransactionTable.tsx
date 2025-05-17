@@ -14,14 +14,14 @@ import { Transaction } from '#modules/nantralpay/types/transaction.type';
 import { useTranslation } from '#shared/i18n/useTranslation';
 import { Page } from '#shared/infra/pagination';
 
-import { TransactionListQueryParams } from '../hooks/useFilters';
+import { OrderListQueryParams } from '../hooks/useFilters';
 import { TransactionRow } from './TransactionRow';
 import { TransactionRowSkeleton } from './TransactionRowSkeleton';
 
 interface TransactionTableProps {
   data: Page<Transaction>;
-  filters: TransactionListQueryParams;
-  updateFilters: (val: Partial<TransactionListQueryParams>) => void;
+  filters: OrderListQueryParams;
+  updateFilters: (val: Partial<OrderListQueryParams>) => void;
   isLoading: boolean;
   isFetching: boolean;
   isSuccess: boolean;

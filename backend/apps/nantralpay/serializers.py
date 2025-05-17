@@ -10,6 +10,7 @@ from apps.nantralpay.models import (
     Content,
     Item,
     Order,
+    QRCode,
     Sale,
     Transaction,
 )
@@ -34,9 +35,8 @@ class TransactionSerializer(serializers.ModelSerializer):
 
 
 class OrderSerializer(serializers.ModelSerializer):
-    order = serializers.SlugRelatedField(
-        slug_field="id", read_only=True
-    )
+    sender = serializers.SerializerMethodField()
+    receiver = serializers.SerializerMethodField()
 
     class Meta:
         model = Order
@@ -44,11 +44,28 @@ class OrderSerializer(serializers.ModelSerializer):
             "id",
             "amount",
             "creation_date",
-            "order",
-            "helloasso_payment_id",
-            "payment_status",
+            "sender",
+            "receiver",
+            "helloasso_order_id",
+            "status",
             "description",
         )
+
+    def get_sender(self, obj):
+        if obj.sender_user:
+            return obj.sender_user.student.name
+        elif obj.sender_group:
+            return obj.sender_group.name
+        else:
+            return "<Payment HelloAsso>"
+
+    def get_receiver(self, obj):
+        if obj.receiver_user:
+            return obj.receiver_user.student.name
+        elif obj.receiver_group:
+            return obj.receiver_group.name
+        else:
+            return "<Remboursement>"
 
 
 class ItemSerializer(serializers.ModelSerializer):
@@ -180,13 +197,17 @@ class SaleSerializer(serializers.ModelSerializer):
             ]
         )
 
+        # Update description now to have infos about the content
+        sale.description = f"Vente NantralPay n°{sale.id} ({sale.get_items()})"
+        sale.save()
+
         return sale
 
 
 class QRCodeSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Sale
-        fields = ("uuid", "scanned", "seller", "date")
+        model = QRCode
+        fields = ("uuid", "expiration_date", "object_id")
 
 
 class UserBalanceSerializer(serializers.ModelSerializer):

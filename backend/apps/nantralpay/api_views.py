@@ -1,8 +1,8 @@
-from django.db.models import QuerySet
+from django.db.models import Q, QuerySet
 from django.http.request import QueryDict
 from django.utils.translation import gettext_lazy as _
 
-from rest_framework import mixins, permissions, status, viewsets
+from rest_framework import exceptions, mixins, permissions, status, viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
@@ -12,16 +12,18 @@ from apps.group.models import Membership
 from apps.nantralpay.models import (
     Item,
     Order,
+    QRCode,
     Sale,
     Transaction,
 )
 from apps.nantralpay.serializers import (
     ItemSerializer,
     NantralPayEventSerializer,
+    OrderSerializer,
     QRCodeSerializer,
     SaleSerializer,
     TransactionSerializer,
-    UserBalanceSerializer, OrderSerializer,
+    UserBalanceSerializer,
 )
 
 
@@ -73,7 +75,7 @@ class TransactionViewSet(
     def get_queryset(self) -> QuerySet[Transaction]:
         return Transaction.objects.filter(order__user=self.request.user)
 
-class OrderViewSet(mixins.RetrieveModelMixin, mixins.ListModelMixin, viewsets.GenericViewSet):
+class OrderViewSet(mixins.RetrieveModelMixin, mixins.ListModelMixin, mixins.DestroyModelMixin, viewsets.GenericViewSet):
     """List and retrieve orders of the current user."""
 
     serializer_class = OrderSerializer
@@ -81,8 +83,30 @@ class OrderViewSet(mixins.RetrieveModelMixin, mixins.ListModelMixin, viewsets.Ge
         permissions.IsAuthenticated,
     ]
 
-    def get_queryset(self) -> QuerySet[Transaction]:
-        return Transaction.objects.filter(order__user=self.request.user)
+    def get_queryset(self) -> QuerySet[Order]:
+        return Order.objects.filter(Q(sender_user=self.request.user) | Q(receiver_user=self.request.user)).order_by("-creation_date")
+
+    def destroy(self, request, *args, **kwargs):
+        instance = self.get_object()
+        if instance.user != self.request.user:
+            raise exceptions.PermissionDenied(_("You are not authorized to perform this action"))
+        if instance.status in Order.cancelable_status:
+            instance.status = Order.OrderStatus.CANCELED
+            instance.save()
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        raise exceptions.MethodNotAllowed(_("Can't delete order with status '{}'").format(instance.status))
+
+    @action(detail=True, methods=["post"])
+    def qrcode(self, request, pk=None):
+        instance = self.get_object()
+        if instance.user != request.user:
+            raise exceptions.PermissionDenied(_("You are not authorized to get this qr code"))
+        if instance.status == Order.OrderStatus.COMPLETED:
+            qr_code = QRCode.objects.create(content_object=instance)
+            serialized = QRCodeSerializer(qr_code)
+            return Response(serialized.data, status=status.HTTP_201_CREATED)
+        raise exceptions.ValidationError(_("QR code is not available for order with status '{}'").format(instance.status))
+
 
 
 class SaleViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):

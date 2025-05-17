@@ -5,25 +5,19 @@ import {
   convertCamelToSnakeCase,
   convertToURLSearchParams,
   parseNumber,
-  parseString,
 } from '#shared/utils/queryParamsParsers';
 
-export interface TransactionListQueryParams {
-  group?: string;
-  search?: string;
+export interface OrderListQueryParams {
   page: number;
   pageSize: number;
 }
 
 function parseQueryParams(
   queryParams: URLSearchParams,
-): TransactionListQueryParams {
+): OrderListQueryParams {
   const filters = {
-    group: parseString(queryParams.get('group')) ?? undefined,
     page: parseNumber(queryParams.get('page')) ?? 1,
     pageSize: parseNumber(queryParams.get('page_size')) ?? 25,
-    search: parseString(queryParams.get('search')) ?? undefined,
-    ordering: parseString(queryParams.get('ordering')) ?? undefined,
   };
 
   return filters;
@@ -40,7 +34,7 @@ export function useFilters() {
   const filters = useMemo(() => parseQueryParams(queryParams), [queryParams]);
 
   const setFilters = useCallback(
-    (newFilter: Partial<TransactionListQueryParams>) => {
+    (newFilter: Partial<OrderListQueryParams>) => {
       const convertedFilter = convertCamelToSnakeCase({
         ...newFilter,
       });
@@ -51,7 +45,7 @@ export function useFilters() {
   );
 
   const updateFilters = useCallback(
-    (newFilter: Partial<TransactionListQueryParams>) => {
+    (newFilter: Partial<OrderListQueryParams>) => {
       setFilters({ ...filters, ...newFilter });
     },
     [filters, setFilters],
@@ -60,7 +54,6 @@ export function useFilters() {
   const resetFilters = useCallback(
     () =>
       setFilters({
-        group: undefined,
         page: 1,
       }),
     [setFilters],

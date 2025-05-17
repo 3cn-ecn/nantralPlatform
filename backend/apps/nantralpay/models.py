@@ -16,10 +16,13 @@ from apps.group.models import Group
 from apps.utils.fields.image_field import CustomImageField
 
 
+def default_QRcode_expiration_date():
+    return timezone.now() + timezone.timedelta(minutes=2)
+
 class QRCode(models.Model):
     """Make a QRCode for a model."""
     uuid = models.UUIDField(default=uuid.uuid4, primary_key=True, editable=False)
-    expiration_date = models.DateTimeField(default=timezone.now() + timezone.timedelta(minutes=2))
+    expiration_date = models.DateTimeField(default=default_QRcode_expiration_date)
     scanned_by = models.ForeignKey(User, on_delete=models.SET_NULL, blank=True, null=True)
     scanned = models.BooleanField(default=False)
 
@@ -51,17 +54,19 @@ class Order(models.Model):
         PENDING = "Pending"  # Order is pending and waiting for payment
         CANCELED = "Canceled"  # Order has been canceled
         COMPLETED = "Completed"   # Order has been completed
+        VALIDATED = "Validated"  # Products have been retrieved
         UNKNOWN = "Unknown"  # Order status is unknown
 
-    valid_status = [OrderStatus.PENDING, OrderStatus.COMPLETED]  # `Pending` orders are valid to ensure the users can pay as soon as possible
-    invalid_status = [OrderStatus.SAVED, OrderStatus.CANCELED, OrderStatus.UNKNOWN]
+    valid_status = [OrderStatus.COMPLETED]
+    invalid_status = [OrderStatus.SAVED, OrderStatus.PENDING, OrderStatus.CANCELED, OrderStatus.VALIDATED, OrderStatus.UNKNOWN]
+    cancelable_status = [OrderStatus.SAVED, OrderStatus.COMPLETED]
 
     # Generic data
     user = models.ForeignKey(User, on_delete=models.CASCADE, help_text=_("The user who created the order"))
     amount = models.DecimalField(max_digits=10, decimal_places=2)
     creation_date = models.DateTimeField(auto_now_add=True)
     description = models.CharField(max_length=255, help_text=_("Explain what the order is for"))
-    status = models.CharField(choices=OrderStatus.choices, default=OrderStatus.SAVED, max_length=255)
+    status = models.CharField(choices=OrderStatus.choices, default=OrderStatus.SAVED, max_length=10)
 
     # HelloAsso specific data
     helloasso_order_id = models.IntegerField(blank=True, null=True)

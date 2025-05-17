@@ -22,12 +22,13 @@ export default function OrderListTab() {
     ApiError,
     Page<Order>
   >({
-    queryKey: ['orders'],
-    queryFn: () => getOrderListApi(),
+    queryKey: ['orders', filters],
+    queryFn: () => getOrderListApi(filters),
+    keepPreviousData: true,
   });
   return (
     <>
-      <Typography variant={'h2'}>{t('nantralpay.oderList.title')}</Typography>
+      <Typography variant={'h2'}>{t('nantralpay.order.list.title')}</Typography>
       <Spacer vertical={2} />
       <OrderTable
         data={data}

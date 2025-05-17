@@ -6,12 +6,10 @@ export function adaptOrder(orderDto: OrderDTO): Order {
     id: orderDto.id,
     amount: orderDto.amount,
     date: new Date(orderDto.creation_date),
-    haOrderId: orderDto.order,
-    haPaymentID: orderDto.helloasso_payment_id,
-    status: orderDto.payment_status,
+    haOrderID: orderDto.helloasso_order_id,
+    status: orderDto.status,
     description: orderDto.description,
     receiver: orderDto.receiver,
     sender: orderDto.sender,
-    scanned: orderDto.scanned,
   };
 }

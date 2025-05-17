@@ -25,8 +25,8 @@ export function useNantralPay() {
   });
 
   const ordersQuery = useQuery<Page<Order>, ApiError>({
-    queryFn: () => getOrderListApi(),
-    queryKey: ['payments'],
+    queryFn: () => getOrderListApi({}),
+    queryKey: ['orders'],
     enabled: isAuthenticated,
   });
 
