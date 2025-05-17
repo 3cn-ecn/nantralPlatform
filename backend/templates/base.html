@@ -24,7 +24,7 @@
     ></script>
     <!-- fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300&display=swap" rel="stylesheet" />
-    <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;900&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;600;900&display=swap" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@800&display=swap" rel="stylesheet" />
     <script src="https://kit.fontawesome.com/fb916ac9cd.js" crossorigin="anonymous"></script>
     <!-- favicon -->
@@ -44,10 +44,10 @@
     <nav class="navbar navbar-expand sticky-top navbar-light bg-light" style="box-shadow: 1px 1px 7px #999">
       <div class="container-fluid px-4">
         <ul class="menuSet navbar-nav pe-2">
-          <li id="appMenu" class="nav-item dropdown">
-            <a class="nav-link dropdown-toggler disabled" href="#" role="button" data-bs-toggle="dropdown">
+          <li id="appMenu" class="nav-item">
+            <button disabled class="nav-link">
               <img src='{% static "/img/icons/scalable/menu.svg" %}' class="d-inline-block align-top" alt="menu" loading="lazy" />
-            </a>
+            </button>
           </li>
         </ul>
         <div id="fil-dariane" class="navbar-brand">
@@ -69,7 +69,7 @@
         -->{% for link in ariane %}<!--
           --><i class="fas fa-angle-right"></i
           ><!--
-          --><a class="ariane-link" href="{{ link.target }}" style="font: 'Heebo'; font-weight: 900"
+          --><a class="ariane-link" href="{{ link.target }}" style="font-weight: 600"
             ><span>{{ link.label }}</span></a
           ><!--
         -->{% empty %} <span></span><span></span>
@@ -77,36 +77,36 @@
         </div>
         <ul class="menuSet navbar-nav ms-auto align-items-center">
           {% if user.is_authenticated %}
-          <li id="notificationPanel" class="nav-item dropdown">
-            <a class="nav-link disabled" href="#" role="button">
+          <li id="notificationPanel" class="nav-item">
+            <button disabled class="nav-link">
               <img
                 src='{% static "/img/icons/scalable/notification.svg" %}'
                 class="d-inline-block align-top"
                 alt="notifications"
                 loading="lazy"
               />
-            </a>
+            </button>
           </li>
-          <li id="userMenu" class="nav-item dropdown">
-            <a class="nav-link dropdown-toggler disabled" href="#" role="button" data-bs-toggle="dropdown">
+          <li id="userMenu" class="nav-item">
+            <button disabled class="nav-link">
               <img
                 src='{% static "/img/icons/scalable/people.svg" %}'
                 class="d-inline-block align-top"
                 alt="compte personnel"
                 loading="lazy"
               />
-            </a>
+            </button>
           </li>
           {% else %}
-          <li id="userMenuUnauthenticated" class="nav-item dropdown">
-            <a class="nav-link dropdown-toggler disabled" href="#" role="button" data-bs-toggle="dropdown">
+          <li id="userMenuUnauthenticated" class="nav-item">
+            <button disabled class="nav-link">
               <img
                 src='{% static "/img/icons/scalable/people.svg" %}'
                 class="d-inline-block align-top"
                 alt="compte personnel"
                 loading="lazy"
               />
-            </a>
+            </button>
           </li>
           {% endif %}
         </ul>
