@@ -94,7 +94,7 @@ export function MembershipFormFields({
           />
           <DateField
             label={t('group.form.endDate.label')}
-            disablePast
+            minDate={formValues.beginDate}
             value={formValues.endDate}
             onChange={(val) => {
               updateFormValues({ endDate: val ?? undefined });
