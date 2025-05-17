@@ -63,6 +63,10 @@ class Order(models.Model):
     description = models.CharField(max_length=255, help_text=_("Explain what the order is for"))
     status = models.CharField(choices=OrderStatus.choices, default=OrderStatus.SAVED, max_length=255)
 
+    # HelloAsso specific data
+    helloasso_order_id = models.IntegerField(blank=True, null=True)
+    checkout_intent_id = models.IntegerField(blank=True, null=True)
+
     # Sender and receiver
     sender_user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="sent_orders", null=True, blank=True)
     sender_group = models.ForeignKey(Group, on_delete=models.CASCADE, related_name="sent_orders", null=True, blank=True)
@@ -138,8 +142,10 @@ class Transaction(models.Model):
     """
     update_date = models.DateTimeField(auto_now=True)
     amount = models.DecimalField(max_digits=10, decimal_places=2)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
     description = models.CharField(max_length=255)
+
+    # HelloAsso specific data
+    helloasso_payment_id = models.IntegerField(blank=True, null=True)
 
     class PaymentStatus(models.TextChoices):
         PENDING = "Pending"
@@ -172,17 +178,6 @@ class Transaction(models.Model):
         choices=PaymentStatus.choices,
         default=PaymentStatus.PENDING,
     )
-
-
-class HelloAssoOrder(Order):
-    """HelloAsso Specific data for orders"""
-    helloasso_order_id = models.IntegerField(unique=True)
-    checkout_intent_id = models.IntegerField(unique=True)
-
-
-class Payment(Transaction):
-    """HelloAsso Specific data for transactions"""
-    helloasso_payment_id = models.IntegerField(unique=True)
 
 
 class Item(models.Model):
@@ -222,6 +217,8 @@ class Sale(Order):
         Item, through="Content", related_name="sales"
     )
 
+    event = models.ForeignKey(Event, on_delete=models.CASCADE)
+
     def get_price(self):
         return sum(
             item.item.price * item.quantity for item in self.contents.all()
@@ -232,12 +229,6 @@ class Sale(Order):
         return " / ".join(
             f"{item.quantity}x {item.item.name}" for item in self.contents.all()
         )
-
-
-class HelloAssoSale(Sale, HelloAssoOrder):
-    """HelloAsso Specific data for sales"""
-    helloasso_order_id = models.IntegerField(unique=True)
-    checkout_intent_id = models.IntegerField(unique=True)
 
 
 class Content(models.Model):

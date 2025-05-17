@@ -12,18 +12,16 @@ from apps.group.models import Membership
 from apps.nantralpay.models import (
     Item,
     Order,
-    Payment,
     Sale,
     Transaction,
 )
 from apps.nantralpay.serializers import (
     ItemSerializer,
     NantralPayEventSerializer,
-    PaymentSerializer,
     QRCodeSerializer,
     SaleSerializer,
     TransactionSerializer,
-    UserBalanceSerializer,
+    UserBalanceSerializer, OrderSerializer,
 )
 
 
@@ -33,7 +31,7 @@ class NantralPayPermission(permissions.BasePermission):
             return True
         return request.user.is_superuser
 
-    def has_object_permission(self, request, view, obj: Payment) -> bool:
+    def has_object_permission(self, request, view, obj: Transaction) -> bool:
         if request.method in permissions.SAFE_METHODS:
             return True
         return request.user.is_superuser
@@ -62,20 +60,6 @@ class ItemPermission(permissions.BasePermission):
         return True
 
 
-class OrderViewSet(
-    mixins.RetrieveModelMixin, mixins.ListModelMixin, viewsets.GenericViewSet
-):
-    """List and retrieve payments of the current user."""
-
-    serializer_class = PaymentSerializer
-    permission_classes = [
-        permissions.IsAuthenticated,
-    ]
-
-    def get_queryset(self) -> QuerySet[Order]:
-        return Payment.objects.filter(order__user=self.request.user)
-
-
 class TransactionViewSet(
     mixins.RetrieveModelMixin, mixins.ListModelMixin, viewsets.GenericViewSet
 ):
@@ -87,7 +71,18 @@ class TransactionViewSet(
     ]
 
     def get_queryset(self) -> QuerySet[Transaction]:
-        return Transaction.objects.filter(user=self.request.user)
+        return Transaction.objects.filter(order__user=self.request.user)
+
+class OrderViewSet(mixins.RetrieveModelMixin, mixins.ListModelMixin, viewsets.GenericViewSet):
+    """List and retrieve orders of the current user."""
+
+    serializer_class = OrderSerializer
+    permission_classes = [
+        permissions.IsAuthenticated,
+    ]
+
+    def get_queryset(self) -> QuerySet[Transaction]:
+        return Transaction.objects.filter(order__user=self.request.user)
 
 
 class SaleViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):

@@ -1,6 +1,5 @@
 from decimal import Decimal
 
-from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
 from rest_framework import exceptions, serializers
@@ -10,38 +9,41 @@ from apps.event.models import Event
 from apps.nantralpay.models import (
     Content,
     Item,
-    Payment,
+    Order,
     Sale,
     Transaction,
 )
 
 
 class TransactionSerializer(serializers.ModelSerializer):
-    user = serializers.SlugRelatedField(
-        slug_field="student__name", read_only=True
+    order = serializers.SlugRelatedField(
+        slug_field="id", read_only=True
     )
 
     class Meta:
         model = Transaction
         fields = (
             "id",
-            "user",
             "amount",
-            "date",
+            "update_date",
+            "order",
+            "helloasso_payment_id",
+            "payment_status",
+            "description",
         )
 
 
-class PaymentSerializer(serializers.ModelSerializer):
+class OrderSerializer(serializers.ModelSerializer):
     order = serializers.SlugRelatedField(
-        slug_field="helloasso_order_id", read_only=True
+        slug_field="id", read_only=True
     )
 
     class Meta:
-        model = Payment
+        model = Order
         fields = (
             "id",
             "amount",
-            "date",
+            "creation_date",
             "order",
             "helloasso_payment_id",
             "payment_status",
@@ -102,22 +104,30 @@ class ContentSerializer(serializers.ModelSerializer):
 
 class SaleSerializer(serializers.ModelSerializer):
     contents = ContentSerializer(many=True)
+    event = serializers.SlugRelatedField("id", queryset=Event.objects.all())
 
     class Meta:
         model = Sale
         fields = ("contents", "event")
 
     def validate_event(self, event):
+        errors = []
         if not event.use_nantralpay:
-            raise exceptions.ValidationError(
+            errors.append(exceptions.ValidationError(
                 _("This event can't be used with nantralpay")
-            )
+            ))
+        if not event.nantralpay_is_open:
+            errors.append(exceptions.ValidationError(_("This is not a currently opened event")))
+        if errors:
+            raise exceptions.ValidationError(errors)
+        return event
 
     def validate(self, attrs):
         data = super().validate(attrs)
 
         # Get the request User (who send the money)
         user = self.context["request"].user
+        print(attrs)
 
         # Check if the user has enough money
         amount = Decimal(0)
@@ -150,11 +160,15 @@ class SaleSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         # Get the related values
         contents = validated_data.pop("contents")
+        event = validated_data.pop("event")
 
         # Create the Sale
         sale = Sale.objects.create(
-            date=timezone.now(),
-            user=self.context["request"].user, **validated_data
+            event=event,
+            user=self.context["request"].user,
+            sender_user=self.context["request"].user,
+            receiver_group=event.group,
+            **validated_data,
         )
 
         # Create the ItemSales

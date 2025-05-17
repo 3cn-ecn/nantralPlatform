@@ -7,5 +7,6 @@ export interface Order {
   haPaymentID: number;
   description: string;
   receiver: string;
+  sender: string;
   scanned: boolean;
 }

@@ -3,7 +3,7 @@ from decimal import Decimal
 
 from django.http import HttpResponse
 
-from apps.nantralpay.models import HelloAssoOrder, Payment
+from apps.nantralpay.models import Order, Transaction
 from apps.nantralpay.utils import require_ip, update_balance
 
 HELLOASSO_PROD = False
@@ -22,20 +22,20 @@ def handle_payment(json_data):
     # Récupération du Paiement
     payment_id = data.get("id")
     try:
-        payment = Payment.objects.get(helloasso_payment_id=payment_id)
-    except Payment.DoesNotExist:
+        payment = Transaction.objects.get(helloasso_payment_id=payment_id)
+    except Transaction.DoesNotExist:
         return HttpResponse("Payment not found")
 
     # Mise à jour du paiement
     if (
-        payment.payment_status in Payment.valid_payment_status
-        and data.get("state") in Payment.invalid_payment_status
+        payment.payment_status in Transaction.valid_payment_status
+        and data.get("state") in Transaction.invalid_payment_status
     ):
         # Si le statut du paiement est devenu invalide, on retire le montant du paiement
         update_balance(payment.order.user, -payment.amount)
     if (
-        payment.payment_status in Payment.invalid_payment_status
-        and data.get("state") in Payment.valid_payment_status
+        payment.payment_status in Transaction.invalid_payment_status
+        and data.get("state") in Transaction.valid_payment_status
     ):
         # Si le statut du paiement est redevenu valide, on ajoute le montant du paiement
         update_balance(payment.order.user, payment.amount)
@@ -67,8 +67,8 @@ def handle_order(json_data):
 
     # Récupération du CheckoutIntent
     try:
-        order = HelloAssoOrder.objects.get(checkout_intent_id=checkout_intent_id)
-    except HelloAssoOrder.DoesNotExist:
+        order = Order.objects.get(checkout_intent_id=checkout_intent_id)
+    except Order.DoesNotExist:
         return HttpResponse("CheckoutIntent not found")
 
     # Création de la commande et des paiements
@@ -78,9 +78,9 @@ def handle_order(json_data):
 
     order.save()
 
-    Payment.objects.bulk_create(
+    Transaction.objects.bulk_create(
         [
-            Payment(
+            Transaction(
                 amount=payment.get("amount"),
                 date=payment.get("date"),
                 helloasso_payment_id=payment.get("id"),

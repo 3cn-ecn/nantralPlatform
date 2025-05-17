@@ -8,7 +8,7 @@ from django.core.exceptions import (
 from django.utils import timezone
 
 from ..account.models import User
-from .models import Payment, Sale
+from .models import Sale, Transaction
 
 QRCode_expiration_time = 2  # Durée (en minutes) avant que le QRCode périme
 
@@ -24,7 +24,7 @@ def recalculate_balance(user: User):
     """Recalculate the user's balance by taking all the payments and transactions in account.
     It takes time"""
     balance = 0
-    for payment in Payment.objects.filter(user=user, payment_satus__in=Payment.valid_payment_status).values("amount"):
+    for payment in Transaction.objects.filter(user=user, payment_satus__in=Transaction.valid_payment_status).values("amount"):
         balance += payment["amount"]
 
     for sale in Sale.objects.filter(user=user):
