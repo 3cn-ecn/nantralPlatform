@@ -1,0 +1,38 @@
+---
+description: 'A comprehensive description of how mails are handled on the server'
+---
+
+# Email server
+
+To be able to send and receive emails with the `@nantral-platform.fr` domain,
+we need an email server. This server runs on the same server as the Nantral
+Platform website.
+
+## Accessing the emails
+
+We do not host a webmail. You have to use a local mail client such as [Thunderbird](http://thunderbird.net/) to access the emails.
+
+To configure an account, simply add a new account in Thunderbird with the email and password, and the rest of the configuration should be autodiscovered.
+
+Currently, the only existing email account is `admin@nantral-platform.fr`, and it has the following aliases:
+
+-  contact@nantral-platform.fr
+-  group-manager@nantral-platform.fr
+-  no-reply@nantral-platform.fr
+-  postmaster@nantral-platform.fr
+
+## Accessing the mailserver's administration page
+
+The mailserver's administration page is available at [`https://mail.nantral-platform.fr/`](https://mail.nantral-platform.fr/).
+
+Please contact the current president of the club to get access to the administration page.
+
+Detailed documentation on this interface is available [on the Stalwart website](https://stalw.art/docs/management/webadmin/overview).
+
+## Architecture details
+
+We use [Stalwart](https://stalw.art/) with Docker to handle our emails. We used to use Mailu, but Stalwart is a much more lightweight alternatives, written in Rust.
+
+Stalwart uses the same certificates as the one used by Traefik, our reverse proxy. They are dumped periodically with `traefik-cert-dumper`.
+
+The emails and accounts are stored in the `stalwart` table on the PostgreSQL database.
