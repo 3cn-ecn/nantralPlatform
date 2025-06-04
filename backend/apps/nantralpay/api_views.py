@@ -21,6 +21,7 @@ from apps.nantralpay.serializers import (
     NantralPayEventSerializer,
     OrderSerializer,
     QRCodeSerializer,
+    RefillSerializer,
     SaleSerializer,
     TransactionSerializer,
     UserBalanceSerializer,
@@ -257,3 +258,11 @@ class NantralPayEventViewSet(
         event.nantralpay_is_open = False
         event.save()
         return Response({"detail": _("NantralPay disabled")})
+
+class RefillViewSet(mixins.CreateModelMixin, mixins.ListModelMixin, viewsets.GenericViewSet):
+
+    serializer_class = RefillSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        return Order.objects.filter(sender_user=None, sender_group=None)

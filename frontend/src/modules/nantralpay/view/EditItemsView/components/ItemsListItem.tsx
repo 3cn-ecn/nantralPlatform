@@ -9,6 +9,7 @@ import {
 
 import { ItemPreview } from '#modules/nantralpay/types/item.type';
 import { Avatar } from '#shared/components/Avatar/Avatar';
+import { useTranslation } from '#shared/i18n/useTranslation';
 
 export interface Props {
   item: ItemPreview;
@@ -17,6 +18,7 @@ export interface Props {
 }
 
 export function ItemsListItem({ item, onClickDelete, onClickEdit }: Props) {
+  const { formatPrice } = useTranslation();
   return (
     <ListItem>
       <ListItemAvatar>
@@ -24,7 +26,7 @@ export function ItemsListItem({ item, onClickDelete, onClickEdit }: Props) {
           <InboxIcon />
         </Avatar>
       </ListItemAvatar>
-      <ListItemText primary={item.name} secondary={item.price} />
+      <ListItemText primary={item.name} secondary={formatPrice(item.price)} />
       <IconButton
         title="Modifier"
         aria-label="edit"

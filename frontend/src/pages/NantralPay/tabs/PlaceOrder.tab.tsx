@@ -23,7 +23,8 @@ import {
   SaleFormErrors,
   SalePreview,
 } from '#modules/nantralpay/types/sale.type';
-import { SelectItemsStep } from '#modules/nantralpay/view/Modal/SelectItemsStep';
+import { PaymentStep } from '#modules/nantralpay/view/Step/PaymentStep';
+import { SelectItemsStep } from '#modules/nantralpay/view/Step/SelectItemsStep';
 import { SelectEventField } from '#pages/NantralPay/components/SelectEventField';
 import { FlexRow } from '#shared/components/FlexBox/FlexBox';
 import { LoadingButton } from '#shared/components/LoadingButton/LoadingButton';
@@ -52,8 +53,10 @@ export default function PlaceOrderTab() {
     SaleFormErrors,
     SaleForm
   >(saveSale, {
-    onSuccess: () => {
+    onSuccess: (data) => {
       queryClient.invalidateQueries(['orders']);
+      setActiveStep(activeStep + 1);
+      setSearchParams({ order: data.id.toString() });
     },
   });
 
@@ -64,10 +67,6 @@ export default function PlaceOrderTab() {
   function onSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     mutate(formValues);
-    console.log('formValues', formValues);
-    if (isSuccess) {
-      setActiveStep(activeStep + 1);
-    }
   }
 
   const isStepFailed = (step: number) => {
@@ -232,48 +231,55 @@ export default function PlaceOrderTab() {
         );
       })}
       <Divider sx={{ my: 3 }} />
-      <form id="sale-form" onSubmit={onSubmit}>
-        {activeStep === 0 && (
-          <SelectEventField
-            isLoading={isEventFieldLoading}
-            formValues={formValues}
-            event={event}
-            handleChange={handleChange}
-          />
-        )}
-        {formValues.event && activeStep === 1 && (
-          <SelectItemsStep
-            itemsOfThisPage={itemsOfThisPage}
-            formValues={formValues}
-            updateFormValues={updateFormValues}
-            errors={error || undefined}
-          />
-        )}
-      </form>
+      {(activeStep === 0 || activeStep === 1) && (
+        <form id="sale-form" onSubmit={onSubmit}>
+          {activeStep === 0 && (
+            <SelectEventField
+              isLoading={isEventFieldLoading}
+              formValues={formValues}
+              event={event}
+              handleChange={handleChange}
+            />
+          )}
+          {formValues.event && activeStep === 1 && (
+            <SelectItemsStep
+              itemsOfThisPage={itemsOfThisPage}
+              formValues={formValues}
+              updateFormValues={updateFormValues}
+              errors={error || undefined}
+            />
+          )}
+        </form>
+      )}
+      {activeStep === 2 && (
+        <PaymentStep
+          formValues={formValues}
+          itemsOfThisPage={itemsOfThisPage}
+        />
+      )}
       <Spacer vertical={3} />
-      <FlexRow justifyContent={'space-between'}>
-        <Button
-          onClick={() => setActiveStep(activeStep - 1)}
-          disabled={activeStep === 0}
-        >
-          {t('button.previous')}
-        </Button>
-        {activeStep === 2 ? (
-          <LoadingButton
-            variant="contained"
-            loading={isLoading}
-            type="submit"
-            form="sale-form"
-          >
-            {t('button.next')}
-          </LoadingButton>
+      <FlexRow gap={2} justifyContent={'flex-end'}>
+        {activeStep === 1 ? (
+          <>
+            <Button onClick={() => setActiveStep(activeStep - 1)}>
+              {t('button.previous')}
+            </Button>
+            <LoadingButton
+              variant="contained"
+              loading={isLoading}
+              type="submit"
+              form="sale-form"
+            >
+              {t('button.next')}
+            </LoadingButton>
+          </>
         ) : (
           <Button
             variant="contained"
             onClick={() => setActiveStep(activeStep + 1)}
             disabled={activeStep === 3}
           >
-            {t('button.next')}
+            {t('button.confirm')}
           </Button>
         )}
       </FlexRow>

@@ -585,7 +585,7 @@
   },
   "nantralpay": {
     "title": "NantralPay",
-    "balance": "Balance : {{balance}} €",
+    "balance": "Balance: {{balance}}",
     "tabs": {
       "home": "Home",
       "payments": "Payments",

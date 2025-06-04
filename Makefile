@@ -18,12 +18,13 @@ endif
 # Install the project
 .PHONY: install
 install:
-	$(PYTHON) -m pip install --upgrade --user pipenv
+#	$(PYTHON) -m pip install --upgrade --user pipenv
 	cd deployment && \
 		$(CREATE) backend.env
 	cd backend/config/settings && \
 		$(COPY) .env.example .env
 	cd backend && \
+		rm -rf "static/front" && \
 		mkdir "static/front" && \
 		$(call EXPORT,PIPENV_VENV_IN_PROJECT,1) && \
 		$(PIPENV) sync --dev && \

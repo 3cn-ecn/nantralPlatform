@@ -25,10 +25,10 @@ def create_payment(request):
                 "initialAmount": int(amount.shift(2)),
                 "itemName": "Recharge du compte NantralPay",
                 "backUrl": reverse(
-                    "helloasso:helloasso_create_payment"
+                    "nantralpay:helloasso_create_payment"
                 ),  # à faire: garder le montant demandé dans le formulaire
-                "errorUrl": reverse("helloasso:helloasso_errorurl"),
-                "returnUrl": reverse("helloasso:helloasso_successurl"),
+                "errorUrl": reverse("nantralpay:helloasso_errorurl"),
+                "returnUrl": reverse("nantralpay:helloasso_successurl"),
                 "containsDonation": True,
                 "payer": {
                     "firstName": request.user.first_name,

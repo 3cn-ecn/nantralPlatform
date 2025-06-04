@@ -620,7 +620,7 @@
   },
   "nantralpay": {
     "title": "NantralPay",
-    "balance": "Solde : {{balance}} €",
+    "balance": "Solde : {{balance}}",
     "cash-in": {
       "title": "Encaisser l'utilisateur {{user}}",
       "button": "Valider"
@@ -630,6 +630,9 @@
       "button": "Ajouter",
       "name": "Nom",
       "price": "Prix"
+    },
+    "helloasso": {
+      "checkout": "Payer avec HelloAsso ({{ amount }})"
     },
     "list": {
       "labelDisplayedRows": "Page {{ page }} sur {{ pageSize }} ({{ count }} résultats)"

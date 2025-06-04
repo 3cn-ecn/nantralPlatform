@@ -6,9 +6,11 @@ from apps.nantralpay.api_views import (
     CashInViewSet,
     ItemViewSet,
     NantralPayEventViewSet,
+    OrderViewSet,
+    RefillViewSet,
     SaleViewSet,
     TransactionViewSet,
-    UserBalanceViewSet, OrderViewSet,
+    UserBalanceViewSet,
 )
 from apps.nantralpay.helloasso_checkout_views import (
     create_payment,
@@ -28,6 +30,7 @@ router.register("item", ItemViewSet, basename="item")
 router.register("sale", SaleViewSet, basename="sale")
 router.register("order", OrderViewSet, basename="order")
 router.register("transaction", TransactionViewSet, basename="transaction")
+router.register("refill", RefillViewSet, basename="refill")
 
 urlpatterns = router.urls
 

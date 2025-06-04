@@ -22,7 +22,7 @@ function ItemCard(props: {
   quantity: number;
   setQuantity: (quantity: number) => void;
 }) {
-  const { t } = useTranslation();
+  const { t, formatPrice } = useTranslation();
   const { item, errors, quantity, setQuantity } = props;
 
   return (
@@ -42,7 +42,7 @@ function ItemCard(props: {
               {item.name}
             </Typography>
             <Typography variant="body1" color="secondary" noWrap>
-              {item.price} €
+              {formatPrice(item.price)}
             </Typography>
           </FlexRow>
         </CardContent>

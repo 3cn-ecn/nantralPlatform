@@ -22,7 +22,7 @@ interface OrderRowProps {
 }
 
 export function OrderRow({ order, onClick, onClickQRCode }: OrderRowProps) {
-  const { formatDateTime } = useTranslation();
+  const { formatDateTime, formatPrice } = useTranslation();
   /*
   Possible action for each status:
                       | Shown  | Cancel | QRCode |
@@ -59,7 +59,7 @@ export function OrderRow({ order, onClick, onClickQRCode }: OrderRowProps) {
 
   return (
     <TableRow sx={{ textDecoration: 'none' }} hover onClick={onClick}>
-      <TableCell>{order.amount}</TableCell>
+      <TableCell>{formatPrice(order.amount)}</TableCell>
       <TableCell>{upperFirst(formatDateTime(order.date))}</TableCell>
       <TableCell>{order.sender}</TableCell>
       <TableCell>{order.receiver}</TableCell>

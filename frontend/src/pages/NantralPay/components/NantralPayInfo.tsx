@@ -10,7 +10,7 @@ export function NantralPayInfo({
 }: {
   nantralpayUser?: NantralPayUser;
 }) {
-  const { t } = useTranslation();
+  const { t, formatPrice } = useTranslation();
   const { isSmaller } = useBreakpoint('sm');
 
   return (
@@ -28,7 +28,9 @@ export function NantralPayInfo({
         {nantralpayUser && (
           <FlexRow gap={1} alignItems="center">
             <Typography variant="h2">
-              {t('nantralpay.balance', { balance: nantralpayUser.balance })}
+              {t('nantralpay.balance', {
+                balance: formatPrice(nantralpayUser.balance),
+              })}
             </Typography>
           </FlexRow>
         )}

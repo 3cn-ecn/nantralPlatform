@@ -104,6 +104,10 @@ export const authenticatedRoutes: RouteObject = {
           element: <NantralPayHomePage tab={'order'} />,
         },
         {
+          path: 'refill/',
+          element: <NantralPayHomePage tab={'refill'} />,
+        },
+        {
           path: 'transactions/',
           element: <NantralPayHomePage tab={'transactions'} />,
         },

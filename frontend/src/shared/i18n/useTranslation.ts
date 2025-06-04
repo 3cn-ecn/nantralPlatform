@@ -77,6 +77,14 @@ export function useTranslation() {
       return intlObject.formatRange(startNumber, endNumber);
     };
 
+    const formatPrice = (number: number) => {
+      const intlObject = Intl.NumberFormat(i18n.language, {
+        style: 'currency',
+        currency: 'EUR',
+      });
+      return intlObject.format(number);
+    };
+
     const startOfWeek = (date: Date) =>
       fnsStartOfWeek(date, { locale: dateFnsLocale });
 
@@ -94,6 +102,7 @@ export function useTranslation() {
       formatRelativeTime,
       formatNumber,
       formatNumberRange,
+      formatPrice,
       dateFnsLocale,
       startOfWeek,
       endOfWeek,

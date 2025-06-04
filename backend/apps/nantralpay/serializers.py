@@ -3,6 +3,7 @@ from decimal import Decimal
 from django.utils.translation import gettext_lazy as _
 
 from rest_framework import exceptions, serializers
+from rest_framework.settings import api_settings
 
 from apps.account.models import User
 from apps.event.models import Event
@@ -15,6 +16,11 @@ from apps.nantralpay.models import (
     Transaction,
 )
 
+
+class ServiceUnavailable(exceptions.APIException):
+    status_code = 503
+    default_detail = "Service temporarily unavailable, try again later."
+    default_code = "service_unavailable"
 
 class TransactionSerializer(serializers.ModelSerializer):
     order = serializers.SlugRelatedField(
@@ -125,7 +131,7 @@ class SaleSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Sale
-        fields = ("contents", "event")
+        fields = ("id", "contents", "event")
 
     def validate_event(self, event):
         errors = []
@@ -231,3 +237,79 @@ class SaleDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = Sale
         fields = ("id", "contents", "date", "amount", "event")
+
+class RefillSerializer(serializers.ModelSerializer):
+    """Serializer for the Refill"""
+
+    class Meta:
+        model = Order
+        fields = ["id", "amount", "helloasso_order_id"]
+
+    def create(self, validated_data):
+        request = self.context.get("request")
+        amount = validated_data.get("amount")
+        """
+
+        body = {
+            "totalAmount": int(amount.shift(2)),
+            "initialAmount": int(amount.shift(2)),
+            "itemName": "Recharge du compte NantralPay",
+            "backUrl": reverse(
+                "nantralpay:ha_create_payment"
+            ),  # à faire: garder le montant demandé dans le formulaire
+            "errorUrl": reverse("nantralpay:ha_errorurl"),
+            "returnUrl": reverse("nantralpay:ha_successurl"),
+            "containsDonation": True,
+            "payer": {
+                "firstName": request.user.first_name,
+                "lastName": request.user.last_name,
+                "email": request.user.email,
+            },
+        }
+        try:
+            headers = {
+                "accept": "application/json",
+                "content-type": "application/*+json",
+                "authorization": f"Bearer {get_token()}",
+            }
+        except Exception:
+            raise ServiceUnavailable("No token provided")
+
+        from apps.nantralpay.helloasso_checkout_views import HELLOASSO_ORG_SLUG
+        response = requests.post(
+            f"https://api.helloasso.com/v5/organizations/{HELLOASSO_ORG_SLUG}/checkout-intents",
+            json=body,
+            headers=headers,
+            timeout=60,
+        )
+        if not response.ok:
+            raise ServiceUnavailable("Failed to create payment")
+
+        # Parse response JSON
+        try:
+            response_data = response.json()
+        except json.JSONDecodeError:
+            raise exceptions.APIException("Failed to decode response JSON", code=500)
+
+        intent_id = response_data["id"]
+        redirect_url = response_data["redirectUrl"]
+
+        # Create a new Order
+        Order.objects.create(
+            user=request.user,
+            checkout_intent_id=intent_id,
+            amount=amount,
+        )
+
+        order = Order.objects.create(
+            user=self.context["request"].user,
+            desciption="Refill account",
+            checkout_intent_id=intent_id,
+            amount=amount,
+        )"""
+
+        self.data[api_settings.URL_FIELD_NAME] = "https://api.nantralpay.com"
+        obj = Order.objects.create(user=self.context["request"].user, **self.data)
+        obj.receiver = self.context["request"].user
+        obj.save()
+        return obj
