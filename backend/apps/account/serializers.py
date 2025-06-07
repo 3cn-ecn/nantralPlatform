@@ -11,6 +11,7 @@ from rest_framework.validators import UniqueValidator
 from apps.student.models import FACULTIES, PATHS, Student
 
 from .models import InvitationLink, User
+from .utils import clean_username
 
 
 def validate_ecn_email(mail: str):
@@ -121,10 +122,8 @@ class RegisterSerializer(serializers.Serializer):
 
         if user.username is None:
             # create a unique username
-            first_name = "".join(e for e in user.first_name if e.isalnum())
-            last_name = "".join(e for e in user.last_name if e.isalnum())
             promo = validated_data.get("promo")
-            user.username = f"{first_name}.{last_name}.{promo}.{user.pk}"
+            user.username = clean_username(f"{user.first_name}.{user.last_name}.{promo}.{user.pk}")
         # save again
         user.save()
         # add student informations
