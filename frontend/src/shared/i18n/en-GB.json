@@ -703,6 +703,8 @@
     "sendAgain": "Resend",
     "signUpEmailRequirement": "To sign up for Nantral Platform, you have to be currently at Centrale Nantes. To verify it, we use your email address that should end with <strong>@eleves.ec-nantes.fr</strong> or <strong>@ec-nantes.fr</strong>.",
     "stillNothing": "Still nothing?",
+    "username": "Username",
+    "usernameHelp": "Choose wisely. You will not be able to change this later! We will generate one for you if you keep this empty.",
     "validation": "Validation",
     "waitAFewMinutes": "Wait a few minutes, this can sometimes take a long time."
   },

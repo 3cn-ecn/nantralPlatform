@@ -703,6 +703,8 @@
     "sendAgain": "Renvoyer",
     "signUpEmailRequirement": "Pour s'inscrire à Nantral Platform, vous devez être actuellement à Centrale Nantes. Pour le vérifier, nous utilisons votre adresse email qui doit se terminer par <strong>@eleves.ec-nantes.fr</strong> ou <strong>@ec-nantes.fr</strong>.",
     "stillNothing": "Toujours rien ?",
+    "username": "Nom d'utilisateur",
+    "usernameHelp": "Choisissez bien car vous ne pourrez plus le modifier après avoir créé votre compte. Un nom sera généré pour vous si vous laissez le champ vide.",
     "validation": "Validation",
     "waitAFewMinutes": "Attendez quelques minutes, cela peut parfois prendre beaucoup de temps."
   },

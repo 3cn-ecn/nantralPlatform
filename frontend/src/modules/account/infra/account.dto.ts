@@ -1,5 +1,6 @@
 export interface RegisterDTO {
   email: string;
+  username: string;
   first_name: string;
   last_name: string;
   password: string;
@@ -13,6 +14,7 @@ export interface RegisterCreatedDTO {
   first_name: string;
   last_name: string;
   email: string;
+  username: string;
   promo: number;
   faculty: FacultyOptions;
   path: PathOptions;
