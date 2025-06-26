@@ -10,10 +10,10 @@ from .manager import UserManager
 
 
 class MatrixUsernameValidator(validators.RegexValidator):
-    regex = r"^[a-z0-9._=\-/+]+\Z"
+    regex = r"^[a-z0-9.=\-/+][a-z0-9._=\-/+]*\Z"
     message = _(
         "Enter a valid username. This value may contain only lower case letters, "
-        "numbers, and ./_/=/-///+ characters."
+        "numbers, and ./_/=/-///+ characters. It may not start with _"
     )
     flags = 0
 
