@@ -10,7 +10,7 @@ from rest_framework.validators import UniqueValidator
 
 from apps.student.models import FACULTIES, PATHS, Student
 
-from .models import InvitationLink, User
+from .models import InvitationLink, MatrixUsernameValidator, User
 from .utils import clean_username
 
 
@@ -87,6 +87,7 @@ class RegisterSerializer(serializers.Serializer):
                 User.objects.all(),
                 message=_("Ce nom d'utilisateur est déjà pris"),
             ),
+            MatrixUsernameValidator(),
         ],
         required=False,
     )
