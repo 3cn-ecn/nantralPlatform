@@ -1,4 +1,5 @@
 import { Spinner } from 'react-bootstrap';
+import { Navigate, useSearchParams } from 'react-router-dom';
 
 import { Card, Typography, useTheme } from '@mui/material';
 
@@ -13,40 +14,46 @@ export default function UpdatePassordPage() {
   const { t } = useTranslation();
   const theme = useTheme();
   const { data, isSuccess } = useCurrentUsernameQuery();
+  const [params, setParams] = useSearchParams();
+  console.log('params', params);
 
-  return (
-    <FloatingContainer maxWidth={'sm'}>
-      <Card
-        sx={{
-          padding: 5,
-          alignItems: 'center',
-          display: 'flex',
-          flexDirection: 'column',
-        }}
-      >
-        {data?.picture && (
-          <Avatar src={data.picture} alt={data.name} size={'xl'} />
-        )}
-        <Spacer vertical={2} />
-        <Typography
-          variant="h2"
+  return isSuccess ? (
+    data.has_updated_username /* Navigate to the source if username has already changed */ ? (
+      <Navigate to={params.get('from') || '/'} />
+    ) : (
+      <FloatingContainer maxWidth={'sm'}>
+        <Card
           sx={{
-            color: theme.palette.mode == 'dark' ? '#b6b7b7' : '#282828',
+            padding: 5,
+            alignItems: 'center',
+            display: 'flex',
+            flexDirection: 'column',
           }}
-          textAlign="center"
         >
-          {data ? data.name : 'Chargement...'}
-        </Typography>
-        <Typography mt={1} textAlign="center" variant="subtitle1">
-          {t('username.update')}
-        </Typography>
-        <Spacer vertical={2} />
-        {isSuccess ? (
+          {data?.picture && (
+            <>
+              <Avatar src={data.picture} alt={data.name} size={'xl'} />
+              <Spacer vertical={2} />
+            </>
+          )}
+          <Typography
+            variant="h2"
+            sx={{
+              color: theme.palette.mode == 'dark' ? '#b6b7b7' : '#282828',
+            }}
+            textAlign="center"
+          >
+            {data ? data.name : 'Chargement...'}
+          </Typography>
+          <Typography mt={1} textAlign="center" variant="subtitle1">
+            {t('username.update')}
+          </Typography>
+          <Spacer vertical={2} />
           <UpdateUsernameForm username={data?.username || ''} />
-        ) : (
-          <Spinner />
-        )}
-      </Card>
-    </FloatingContainer>
+        </Card>
+      </FloatingContainer>
+    )
+  ) : (
+    <Spinner />
   );
 }

@@ -39,13 +39,7 @@ export const authenticatedRoutes: RouteObject = {
     },
     {
       path: '/update-username',
-      element: <UnauthenticatedPageTemplate />,
-      children: [
-        {
-          index: true,
-          element: <UpdateUsernamePage />,
-        },
-      ],
+      element: <UpdateUsernamePage />,
     },
     {
       path: '/event',
