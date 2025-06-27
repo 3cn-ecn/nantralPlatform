@@ -26,9 +26,8 @@ from .models import User
 
 
 class TestLogin(TestCase):
-    uri = reverse("account-api:account-login")
-
     def setUp(self) -> None:
+        self.uri = reverse("account-api:account-login")
         self.password = "test"
         self.user: User = User.objects.create_user(
             email="test@ec-nantes.fr",
@@ -218,9 +217,8 @@ class TestLogout(TestCase):
 
 
 class TestIsAuthenticated(TestCase):
-    uri = reverse("account-api:account-is-authenticated")
-
     def test_is_authenticated(self):
+        self.uri = reverse("account-api:account-is-authenticated")
         self.user = User.objects.create_user(
             email="test@ec-nantes.fr",
             password="adminadmin",
@@ -235,9 +233,8 @@ class TestIsAuthenticated(TestCase):
 
 
 class TestChangePassword(TestCase):
-    url = reverse("account-api:account-change-password")
-
     def setUp(self) -> None:
+        self.url = reverse("account-api:account-change-password")
         self.user = User.objects.create_user(
             email="test@ec-nantes.fr",
             password="adminadmin",
@@ -284,9 +281,8 @@ class TestChangePassword(TestCase):
 
 
 class TestEdit(TestCase):
-    url = reverse("account_api:account-edit")
-
     def setUp(self) -> None:
+        self.url = reverse("account_api:account-edit")
         self.user: User = User.objects.create_user(
             email="test@ec-nantes.fr",
             password="test",
@@ -341,9 +337,8 @@ class TestEdit(TestCase):
 
 
 class TestChangeEmail(TestCase):
-    url = reverse("account_api:email-change")
-
     def setUp(self) -> None:
+        self.url = reverse("account_api:email-change")
         self.user: User = User.objects.create_user(
             email="test@ec-nantes.fr",
             password="test",
@@ -424,9 +419,8 @@ class TestForgottenPassword(TestCase):
 
 
 class TestValidateInvitation(TestCase):
-    url = reverse("account_api:account-validate-invitation")
-
     def setUp(self):
+        self.url = reverse("account_api:account-validate-invitation")
         self.invite_id = InvitationLink.objects.create(
             expires_at=datetime(year=2021, month=9, day=3, tzinfo=timezone.utc),
         ).id
@@ -447,9 +441,8 @@ class TestValidateInvitation(TestCase):
 
 
 class TestEmailResend(TestCase):
-    url = reverse("account_api:email-resend")
-
     def setUp(self) -> None:
+        self.url = reverse("account_api:email-resend")
         self.email = "test@ec-nantes.fr"
         self.user = User.objects.create(email=self.email)
 
