@@ -81,7 +81,7 @@ def service_worker(request):
             settings.STATIC_ROOT,
             parsed_url.path.replace(settings.STATIC_URL, "", 1),
         )
-        return FileResponse(open(path_to_file, "rb"))  # noqa: SIM115
+        return FileResponse(open(path_to_file, "rb"))
 
 
 @require_http_methods(["GET"])
