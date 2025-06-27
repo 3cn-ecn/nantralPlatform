@@ -214,6 +214,7 @@ class InvitationValidSerializer(serializers.Serializer):
 class UsernameSerializer(serializers.ModelSerializer):
     picture = serializers.SerializerMethodField()
     name = serializers.SerializerMethodField()
+    has_updated_username = serializers.BooleanField(read_only=True)
 
     username = serializers.CharField(
         max_length=200,
@@ -229,7 +230,7 @@ class UsernameSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ["username", "picture", "name"]
+        fields = ["username", "picture", "name", "has_updated_username"]
 
     def validate_username(self, value):
         if self.instance.has_opened_matrix and self.instance.username != value:

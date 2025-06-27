@@ -1,5 +1,7 @@
 import { Navigate, Outlet, useLocation } from 'react-router-dom';
 
+import { update } from 'lodash-es';
+
 import { useAuth } from '#shared/context/Auth.context';
 
 interface AuthenticationRedirectProps {
@@ -19,12 +21,17 @@ export function AuthenticationRedirect({
   const location = useLocation();
   const { isAuthenticated } = useAuth();
 
+  // redirect to update-username field to make the user change their username
   return isAuthenticated !== authenticated ? (
     <Outlet />
   ) : (
     <Navigate
       to={location.state?.from || redirectTo}
-      state={{ from: location }}
+      state={{
+        from: authenticated
+          ? '/update-username/?from=' + location.pathname
+          : location,
+      }}
       replace
     />
   );

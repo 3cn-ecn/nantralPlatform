@@ -6,7 +6,13 @@ export default async function getUsernameApi() {
   return axios
     .get('/api/account/username/')
     .then(
-      (res) => res.data as { username: string; name: string; picture: string },
+      (res) =>
+        res.data as {
+          username: string;
+          name: string;
+          picture: string;
+          has_updated_username: boolean;
+        },
     )
     .catch((err: ApiErrorDTO) => {
       throw adaptApiErrors(err);
