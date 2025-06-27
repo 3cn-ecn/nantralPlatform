@@ -1,8 +1,4 @@
-import { Link as RouterLink } from 'react-router-dom';
-
-import { AlternateEmail as AlternateEmailIcon } from '@mui/icons-material';
-import { Link, Typography } from '@mui/material';
-import { Alert, AlertTitle, Container } from '@mui/material';
+import { Container } from '@mui/material';
 
 import { usePostQueryParamState } from '#modules/post/hooks/usePostQueryParamState';
 import { PostModal } from '#modules/post/view/PostModal/PostModal';
