@@ -114,9 +114,8 @@ class TestLogin(TestCase):
 
 
 class TestRegister(TestCase):
-    uri = reverse("account_api:account-register")
-
     def setUp(self) -> None:
+        self.uri = reverse("account_api:account-register")
         self.payload = {
             "first_name": "test",
             "last_name": "test",
