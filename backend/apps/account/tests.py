@@ -114,7 +114,7 @@ class TestLogin(TestCase):
 
 
 class TestRegister(TestCase):
-    uri = "/api/account/register/"
+    uri = reverse("account_api:account-register")
 
     def setUp(self) -> None:
         self.payload = {
