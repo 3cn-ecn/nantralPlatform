@@ -35,6 +35,6 @@ export type PathOptions =
 export interface UsernameDTO {
   username: string;
   name: string;
-  has_changed_username: boolean;
+  has_updated_username: boolean;
   picture?: string;
 }

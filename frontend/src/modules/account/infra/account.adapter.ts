@@ -34,6 +34,6 @@ export function adaptUsername(data: UsernameDTO): Username {
     username: data.username,
     name: data.name,
     picture: data.picture,
-    hasChangedUsername: data.has_changed_username,
+    hasUpdatedUsername: data.has_updated_username,
   };
 }

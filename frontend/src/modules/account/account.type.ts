@@ -26,6 +26,6 @@ export interface RegisterCreated {
 export interface Username {
   username: string;
   name: string;
-  hasChangedUsername: boolean;
+  hasUpdatedUsername: boolean;
   picture?: string;
 }
