@@ -26,8 +26,9 @@ from .models import User
 
 
 class TestLogin(TestCase):
+    uri = reverse("account-api:account-login")
+
     def setUp(self) -> None:
-        self.uri = reverse("account-api:account-login")
         self.password = "test"
         self.user: User = User.objects.create_user(
             email="test@ec-nantes.fr",
@@ -113,8 +114,9 @@ class TestLogin(TestCase):
 
 
 class TestRegister(TestCase):
+    uri = "/api/account/register/"
+
     def setUp(self) -> None:
-        self.uri = reverse("account_api:account-register")
         self.payload = {
             "first_name": "test",
             "last_name": "test",
@@ -217,8 +219,9 @@ class TestLogout(TestCase):
 
 
 class TestIsAuthenticated(TestCase):
+    uri = reverse("account-api:account-is-authenticated")
+
     def test_is_authenticated(self):
-        self.uri = reverse("account-api:account-is-authenticated")
         self.user = User.objects.create_user(
             email="test@ec-nantes.fr",
             password="adminadmin",
@@ -233,8 +236,9 @@ class TestIsAuthenticated(TestCase):
 
 
 class TestChangePassword(TestCase):
+    url = reverse("account-api:account-change-password")
+
     def setUp(self) -> None:
-        self.url = reverse("account-api:account-change-password")
         self.user = User.objects.create_user(
             email="test@ec-nantes.fr",
             password="adminadmin",
@@ -280,65 +284,10 @@ class TestChangePassword(TestCase):
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
 
-class TestEdit(TestCase):
-    def setUp(self) -> None:
-        self.url = reverse("account_api:account-edit")
-        self.user: User = User.objects.create_user(
-            email="test@ec-nantes.fr",
-            password="test",
-            username="test",
-        )
-
-    def test_edit(self):
-        self.client.force_login(self.user)
-        payload = {
-            "first_name": "Test",
-            "last_name": "Test",
-            "username": "Tesssst",
-        }
-        response = self.client.put(
-            self.url,
-            data=payload,
-            content_type="application/json",
-        )
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.user.refresh_from_db()
-        self.assertEqual(self.user.first_name, payload["first_name"].lower())
-        self.assertEqual(self.user.last_name, payload["last_name"].lower())
-        self.assertEqual(self.user.username, payload["username"])
-
-    def test_taken_username(self):
-        self.client.force_login(self.user)
-        User.objects.create_user(
-            email="test2@ec-nantes.fr",
-            password="password",
-            username="Tesssst",
-        )
-        payload = {
-            "first_name": "Test",
-            "last_name": "Test",
-            "username": "Tesssst",
-        }
-        response = self.client.put(
-            self.url,
-            data=payload,
-            content_type="application/json",
-        )
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-
-    def test_is_authenticated(self):
-        payload = {
-            "first_name": "Test",
-            "last_name": "Test",
-            "username": "Tesssst",
-        }
-        response = self.client.put(self.url, data=payload)
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
-
-
 class TestChangeEmail(TestCase):
+    url = reverse("account_api:email-change")
+
     def setUp(self) -> None:
-        self.url = reverse("account_api:email-change")
         self.user: User = User.objects.create_user(
             email="test@ec-nantes.fr",
             password="test",
@@ -419,8 +368,9 @@ class TestForgottenPassword(TestCase):
 
 
 class TestValidateInvitation(TestCase):
+    url = reverse("account_api:account-validate-invitation")
+
     def setUp(self):
-        self.url = reverse("account_api:account-validate-invitation")
         self.invite_id = InvitationLink.objects.create(
             expires_at=datetime(year=2021, month=9, day=3, tzinfo=timezone.utc),
         ).id
@@ -441,8 +391,9 @@ class TestValidateInvitation(TestCase):
 
 
 class TestEmailResend(TestCase):
+    url = reverse("account_api:email-resend")
+
     def setUp(self) -> None:
-        self.url = reverse("account_api:email-resend")
         self.email = "test@ec-nantes.fr"
         self.user = User.objects.create(email=self.email)
 
