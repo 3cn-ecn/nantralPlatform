@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 import { Alert, Divider } from '@mui/material';
 import { useMutation } from '@tanstack/react-query';
@@ -16,7 +16,6 @@ export default function UpdateUsernameForm({ username }: { username: string }) {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const showToast = useToast();
-  const [params] = useSearchParams();
 
   const [formValues, setFormValues] = useState({ username });
   // create all states for error, loading, etc. while fetching the API
@@ -30,7 +29,7 @@ export default function UpdateUsernameForm({ username }: { username: string }) {
         message: t('username.success'),
         variant: 'success',
       });
-      navigate(params.get('from') || '/');
+      navigate('/');
     },
   });
 
