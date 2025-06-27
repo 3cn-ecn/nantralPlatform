@@ -31,3 +31,10 @@ export type PathOptions =
   | 'M-I'
   | 'I-O'
   | 'O-I';
+
+export interface UsernameDTO {
+  username: string;
+  name: string;
+  has_changed_username: boolean;
+  picture?: string;
+}

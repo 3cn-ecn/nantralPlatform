@@ -22,3 +22,10 @@ export interface RegisterCreated {
   faculty: FacultyOptions;
   path: PathOptions;
 }
+
+export interface Username {
+  username: string;
+  name: string;
+  hasChangedUsername: boolean;
+  picture?: string;
+}

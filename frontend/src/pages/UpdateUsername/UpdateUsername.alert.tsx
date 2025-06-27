@@ -34,7 +34,7 @@ export default function UpdateUsernameAlert() {
     );
   }
 
-  if (isSuccess && data.has_updated_username) {
+  if (isSuccess && !data.hasChangedUsername) {
     return (
       <Alert
         severity={'success'}
