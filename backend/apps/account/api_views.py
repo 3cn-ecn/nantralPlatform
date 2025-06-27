@@ -20,7 +20,7 @@ from .serializers import (
     InvitationValidSerializer,
     LoginSerializer,
     RegisterSerializer,
-    UserSerializer,
+    UsernameSerializer,
 )
 from .utils import send_email_confirmation
 
@@ -218,13 +218,22 @@ class AuthViewSet(GenericViewSet):
 
     @action(
         detail=False,
+        methods=["GET"],
+        permission_classes=[IsAuthenticated],
+    )
+    def username(self, request: Request):
+        """Edit account informations"""
+        serializer = UsernameSerializer(instance=request.user)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    @action(
+        detail=False,
         methods=["PUT"],
         permission_classes=[IsAuthenticated],
-        serializer_class=UserSerializer,
     )
-    def edit(self, request: Request):
+    def edit_username(self, request: Request):
         """Edit account informations"""
-        serializer = UserSerializer(instance=request.user, data=request.data)
+        serializer = UsernameSerializer(instance=request.user, data=request.data)
         if not serializer.is_valid():
             return Response(
                 serializer.errors,

@@ -2,6 +2,7 @@ import { lazy } from 'react';
 import { RouteObject } from 'react-router-dom';
 
 import { PageTemplate } from '#shared/components/PageTemplate/PageTemplate';
+import { UnauthenticatedPageTemplate } from '#shared/components/PageTemplate/UnauthenticatedPageTemplate';
 
 const EventPage = lazy(() => import('#pages/Event/Event.page'));
 const EventCalendarViewPage = lazy(
@@ -22,6 +23,9 @@ const FeedbackHomePage = lazy(
 const FeedbackFormPage = lazy(
   () => import('#pages/Feedback/FeedbackForm.page'),
 );
+const UpdateUsernamePage = lazy(
+  () => import('#pages/UpdateUsername/UpdateUsername.page'),
+);
 
 const t = (key: string) => key;
 
@@ -32,6 +36,16 @@ export const authenticatedRoutes: RouteObject = {
       path: '/',
       element: <HomePage />,
       handle: { crumb: t('breadcrumbs.home.index') },
+    },
+    {
+      path: '/update-username',
+      element: <UnauthenticatedPageTemplate />,
+      children: [
+        {
+          index: true,
+          element: <UpdateUsernamePage />,
+        },
+      ],
     },
     {
       path: '/event',

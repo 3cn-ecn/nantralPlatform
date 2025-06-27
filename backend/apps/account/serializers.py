@@ -109,6 +109,7 @@ class RegisterSerializer(serializers.Serializer):
             first_name=validated_data["first_name"],
             last_name=validated_data["last_name"],
             email=validated_data["email"],
+            has_updated_username=True,  # Already had a chance to change username
         )
         # IMPORTANT: hash password
         user.set_password(validated_data["password"])
@@ -210,7 +211,41 @@ class InvitationValidSerializer(serializers.Serializer):
     uuid = serializers.UUIDField()
 
 
-class UserSerializer(serializers.ModelSerializer):
+class UsernameSerializer(serializers.ModelSerializer):
+    picture = serializers.SerializerMethodField()
+    name = serializers.SerializerMethodField()
+
+    username = serializers.CharField(
+        max_length=200,
+        validators=[
+            UniqueValidator(
+                User.objects.all(),
+                message=_("Ce nom d'utilisateur est déjà pris"),
+            ),
+            MatrixUsernameValidator(),
+        ],
+        required=True,
+    )
+
     class Meta:
         model = User
-        fields = ["username", "first_name", "last_name"]
+        fields = ["username", "picture", "name"]
+
+    def validate_username(self, value):
+        if self.instance.has_opened_matrix and self.instance.username != value:
+            raise serializers.ValidationError("You can not change username because you created a matrix account")
+        return value
+
+    def save(self):
+        self.validated_data["has_updated_username"] = True
+        super().save()
+
+    def get_picture(self, obj):
+        pic = obj.student.picture
+        if pic:
+            return pic.url
+        else:
+            return None
+
+    def get_name(self, obj):
+        return obj.student.name
