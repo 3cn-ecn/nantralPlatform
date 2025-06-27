@@ -67,6 +67,10 @@ class User(AbstractUser):
         blank=True,
         on_delete=models.SET_NULL,
     )
+    # While a user has not created his matrix account, it can alter its username
+    # after it's too late since we won't be able to change the matrix username
+    has_opened_matrix = models.BooleanField(default=False)
+    has_updated_username = models.BooleanField(default=False)
 
     def save(self, *args, **kwargs):
         self.email = self.email.lower()

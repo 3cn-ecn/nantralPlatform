@@ -39,6 +39,11 @@ class CheckCredentials(views.APIView):
         if (user is None) or (user.invitation is not None and not user.invitation.is_valid()) or (not user.is_email_valid):
             raise exceptions.AuthenticationFailed({"auth": {"success": False}})
 
+        # Lock the change of username after matrix account has been created
+        if not user.has_opened_matrix:
+            user.has_opened_matrix = True
+            user.save()
+
         # Return user data
         return response.Response({ "auth": {
             "success": True,
