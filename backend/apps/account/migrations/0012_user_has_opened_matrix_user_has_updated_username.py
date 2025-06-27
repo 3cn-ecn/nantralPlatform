@@ -6,18 +6,18 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('account', '0011_alter_user_username'),
+        ("account", "0011_alter_user_username"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='user',
-            name='has_opened_matrix',
+            model_name="user",
+            name="has_opened_matrix",
             field=models.BooleanField(default=False),
         ),
         migrations.AddField(
-            model_name='user',
-            name='has_updated_username',
+            model_name="user",
+            name="has_updated_username",
             field=models.BooleanField(default=False),
         ),
     ]
