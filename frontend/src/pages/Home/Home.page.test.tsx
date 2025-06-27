@@ -64,7 +64,7 @@ describe('Home page', () => {
     mockUsernameApiCall({
       username: '',
       name: '',
-      has_changed_username: true,
+      has_updated_username: true,
       picture: '',
     });
 
@@ -100,7 +100,7 @@ describe('Home page', () => {
     mockUsernameApiCall({
       username: '',
       name: '',
-      has_changed_username: true,
+      has_updated_username: true,
       picture: '',
     });
 
