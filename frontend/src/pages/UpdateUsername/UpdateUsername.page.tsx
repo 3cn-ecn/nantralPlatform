@@ -1,18 +1,25 @@
 import { Spinner } from 'react-bootstrap';
 
 import { Card, Typography, useTheme } from '@mui/material';
+import { useQuery } from '@tanstack/react-query';
 
+import { Username } from '#modules/account/account.type';
+import getUsernameApi from '#modules/account/api/getUsername.api';
 import { useCurrentUsernameQuery } from '#modules/account/hooks/useCurrentUsername.query';
 import UpdateUsernameForm from '#pages/UpdateUsername/UpdateUsername.form';
 import { Avatar } from '#shared/components/Avatar/Avatar';
 import { FloatingContainer } from '#shared/components/FloatingContainer/FloatingContainer';
 import { Spacer } from '#shared/components/Spacer/Spacer';
 import { useTranslation } from '#shared/i18n/useTranslation';
+import { ApiError } from '#shared/infra/errors';
 
 export default function UpdatePassordPage() {
   const { t } = useTranslation();
   const theme = useTheme();
-  const { data, isSuccess } = useCurrentUsernameQuery();
+  const { data, isSuccess } = useQuery({
+    queryKey: ['username'],
+    queryFn: getUsernameApi,
+  });
 
   return (
     <FloatingContainer maxWidth={'sm'}>
