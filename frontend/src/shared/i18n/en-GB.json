@@ -799,7 +799,13 @@
   },
   "username": {
     "update": "Choose a new username",
-    "success": "Successfully updated username"
+    "success": "Successfully updated username",
+    "alert": {
+      "title": "Important Update - Usernames",
+      "message1": "We made you able to choose an username.",
+      "link": "Click here",
+      "message2": "to make the change. Please perform this action quickly to prepare for a future update."
+    }
   },
   "utils": {
     "shareLink": {
