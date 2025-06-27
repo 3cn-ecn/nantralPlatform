@@ -2,7 +2,6 @@ import { lazy } from 'react';
 import { RouteObject } from 'react-router-dom';
 
 import { PageTemplate } from '#shared/components/PageTemplate/PageTemplate';
-import { UnauthenticatedPageTemplate } from '#shared/components/PageTemplate/UnauthenticatedPageTemplate';
 
 const EventPage = lazy(() => import('#pages/Event/Event.page'));
 const EventCalendarViewPage = lazy(
