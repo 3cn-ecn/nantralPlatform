@@ -2,19 +2,14 @@ import axios from 'axios';
 
 import { adaptApiErrors, ApiErrorDTO } from '#shared/infra/errors';
 
+import { adaptUsername } from '../infra/account.adapter';
+
 export default async function getUsernameApi() {
-  return axios
+  const { data } = await axios
     .get('/api/account/username/')
-    .then(
-      (res) =>
-        res.data as {
-          username: string;
-          name: string;
-          picture: string;
-          has_updated_username: boolean;
-        },
-    )
     .catch((err: ApiErrorDTO) => {
       throw adaptApiErrors(err);
     });
+
+  return adaptUsername(data);
 }
