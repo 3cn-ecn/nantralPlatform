@@ -383,6 +383,10 @@
       "beginDate": {
         "label": "Begin date"
       },
+      "changeReason": {
+        "label": "Change Reason",
+        "helperText": "If you wish, you can add a few words explaining why you are updating/creating this group"
+      },
       "creationDate": {
         "label": "Creation date"
       },

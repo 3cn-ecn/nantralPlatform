@@ -141,6 +141,7 @@ class GroupSerializer(serializers.ModelSerializer):
 
 class GroupWriteSerializer(serializers.ModelSerializer):
     social_links = GroupSocialLinkSerializer(many=True, read_only=True)
+    _change_reason = serializers.CharField(write_only=True, required=False)
 
     class Meta:
         model = Group

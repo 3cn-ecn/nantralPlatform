@@ -144,6 +144,19 @@ export function GroupFormFields({
         </FlexAuto>
       )}
 
+      <TextField
+        label={t('group.form.changeReason.label')}
+        value={formValues.changeReason}
+        handleChange={useCallback(
+          (val) => {
+            updateFormValues({ changeReason: val });
+          },
+          [updateFormValues],
+        )}
+        helperText={t('group.form.changeReason.helperText')}
+        errors={error?.fields?.changeReason}
+      />
+
       <FlexAuto columnGap={2}>
         <FileField
           name="icon"

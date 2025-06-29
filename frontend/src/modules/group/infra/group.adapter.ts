@@ -72,5 +72,6 @@ export function adaptGroupForm(groupForm: CreateGroupForm): CreateGroupFormDTO {
     label: (groupForm.label >= 0 && groupForm.label) || null,
     parent: groupForm.parent,
     lock_memberships: groupForm.lockMemberships,
+    _change_reason: groupForm.changeReason,
   };
 }
