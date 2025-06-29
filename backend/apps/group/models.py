@@ -289,6 +289,7 @@ class Group(models.Model, SlugModel):
     # Field to handle history of the updates to the group
     history = HistoricalRecords(
         excluded_fields=(
+            "short_name",
             "members",
             "subscribers",
             "group_type",
@@ -299,6 +300,7 @@ class Group(models.Model, SlugModel):
             "lock_memberships",
             "priority",
             "creation_year",
+            "slug",
             "archived",
             "private",
             "public",
@@ -307,6 +309,7 @@ class Group(models.Model, SlugModel):
             "meeting_hour",
             "social_links",
         ),
+        related_name="versions",
     )
 
     class Meta:

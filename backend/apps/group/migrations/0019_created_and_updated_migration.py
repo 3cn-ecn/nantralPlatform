@@ -11,7 +11,6 @@ from apps.student.models import Student
 def forwards(apps, schema_editor):
     Group = apps.get_model("group", "Group")
 
-    historical_instances = []
     history = get_history_manager_for_model(models.Group)
 
     for group in Group.objects.all():
@@ -19,7 +18,7 @@ def forwards(apps, schema_editor):
             user = User.objects.get(pk=group.created_by.user.pk)
         except (AttributeError, Student.DoesNotExist):
             user = None
-        created = history.model(
+        group.versions.create(
             history_date=group.created_at,
             history_user=user,
             history_type="+",
@@ -28,13 +27,13 @@ def forwards(apps, schema_editor):
                 for field in history.model.tracked_fields
             },
         )
-        historical_instances.append(created)
+
         if group.created_at != group.updated_at:
             try:
                 user = User.objects.get(pk=group.updated_by.user.pk)
             except (AttributeError, Student.DoesNotExist):
                 user = None
-            updated = history.model(
+            group.versions.create(
                 history_date=group.updated_at,
                 history_user=user,
                 history_type="~",
@@ -43,30 +42,25 @@ def forwards(apps, schema_editor):
                     for field in history.model.tracked_fields
                 },
             )
-            historical_instances.append(updated)
-
-    return history.model.objects.bulk_create(historical_instances)
 
 
 def reverse(apps, schema_editor):
     Group = apps.get_model("group", "Group")
     Student = apps.get_model("student", "Student")
 
-    history = get_history_manager_for_model(models.Group)
-
     for group in Group.objects.all():
         try:
-            student = Student.objects.get(pk=history.earliest().history_user.student.pk)
+            student = Student.objects.get(pk=group.versions.earliest().history_user.student.pk)
         except (AttributeError, Student.DoesNotExist):
             student = None
-        group.created_at = history.earliest().history_date
+        group.created_at = group.versions.earliest().history_date
         group.created_by = student
 
         try:
-            student = Student.objects.get(pk=history.latest().history_user.student.pk)
+            student = Student.objects.get(pk=group.versions.latest().history_user.student.pk)
         except (AttributeError, Student.DoesNotExist):
             student = None
-        group.updated_at = history.latest().history_date
+        group.updated_at = group.versions.latest().history_date
         group.updated_by = student
         group.save()
 
@@ -74,7 +68,7 @@ def reverse(apps, schema_editor):
 class Migration(migrations.Migration):
 
     dependencies = [
-        ("group", "0018_remove_group_created_at_remove_group_created_by_and_more"),
+        ("group", "0018_add_historical_manager"),
     ]
 
     operations = [

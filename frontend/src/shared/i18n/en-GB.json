@@ -311,6 +311,7 @@
         }
       },
       "formerMembers": "Former members",
+      "history": "See old versions",
       "infoLine": {
         "events_one": "{{count}} event",
         "events_other": "{{count}} events",

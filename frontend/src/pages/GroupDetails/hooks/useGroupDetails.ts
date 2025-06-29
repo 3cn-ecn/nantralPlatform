@@ -10,12 +10,12 @@ import { useAuth } from '#shared/context/Auth.context';
 import { ApiError } from '#shared/infra/errors';
 import { Page } from '#shared/infra/pagination';
 
-export function useGroupDetails(slug: string) {
+export function useGroupDetails(slug: string, version?: number) {
   const { isAuthenticated } = useAuth();
 
   const groupQuery = useQuery<Group, ApiError>({
-    queryFn: () => getGroupDetailsApi(slug),
-    queryKey: ['group', { slug: slug }],
+    queryFn: () => getGroupDetailsApi(slug, version),
+    queryKey: ['group', { slug: slug, version: version }],
   });
 
   const eventsQuery = useQuery<Page<EventPreview>, ApiError>({

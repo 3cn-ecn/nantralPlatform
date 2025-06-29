@@ -328,3 +328,17 @@ class AdminRequestSerializer(serializers.ModelSerializer):
 
 class SubscriptionSerializer(serializers.Serializer):
     subscribe = serializers.BooleanField()
+
+
+class GroupHistorySerializer(serializers.ModelSerializer):
+    user = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Group.history.model
+        fields = ["pk", "history_date", "user", "history_change_reason", "history_type"]
+
+    def get_user(self, obj):
+        if obj.history_user:
+            return obj.history_user.student.name
+        else:
+            return obj.history_user
