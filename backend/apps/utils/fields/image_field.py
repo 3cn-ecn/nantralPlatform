@@ -30,8 +30,8 @@ class CustomImageFieldFile(models.ImageField.attr_class):
 class CustomImageField(models.ImageField):
     """A custom ImageField.
 
-    ImageField that deletes the previous image file when a new file is uploaded,
-    and compresses the uploaded image.
+    ImageField that compresses the uploaded image when a new file is uploaded.
+    It also deletes the previous image file if the option is selected.
 
     Remember to add <your_field_name>.delete(save=False) in the
     delete() method of your model.
@@ -45,17 +45,19 @@ class CustomImageField(models.ImageField):
         size: tuple[int, int] = (500, 500),
         crop: bool = False,
         name_from_field="pk",
+        delete_on_save: bool = True,
         **kwargs,
     ):
         self.size = size
         self.crop = crop
         self.name_from_field = name_from_field
+        self.delete_on_save = delete_on_save
         kwargs["upload_to"] = self.create_filename
         super().__init__(*args, **kwargs)
 
     @property
     def non_db_attrs(self):
-        return (*super().non_db_attrs, "size", "crop", "name_from_field")
+        return (*super().non_db_attrs, "size", "crop", "name_from_field", "delete_on_save")
 
     def deconstruct(self):
         name, path, args, kwargs = super().deconstruct()
@@ -91,7 +93,7 @@ class CustomImageField(models.ImageField):
 
         new_file = super().pre_save(model_instance, add)
 
-        if old_image and old_image != new_file:
+        if self.delete_on_save and old_image and old_image != new_file:
             old_image.delete(save=False)
 
         setattr(model_instance, self.attname, new_file)

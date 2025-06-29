@@ -256,8 +256,8 @@ class Group(models.Model, SlugModel):
         size=(500, 500),
         crop=False,
         name_from_field="name",
+        delete_on_save=False,
     )
-    # TODO: don't delete the images when a new one is uploaded, only when the snapshot is deleted
     banner = CustomImageField(
         verbose_name=_("Banner"),
         blank=True,
@@ -267,6 +267,7 @@ class Group(models.Model, SlugModel):
         ),
         size=(1200, 400),
         name_from_field="name",
+        delete_on_save=False,
     )
     video1 = models.URLField(
         verbose_name=_("Video link 1"),
@@ -339,11 +340,6 @@ class Group(models.Model, SlugModel):
                     "'private' properties to True.",
                 ),
             )
-
-    def delete(self, *args, **kwargs) -> None:
-        self.icon.delete(save=False)
-        self.banner.delete(save=False)
-        super().delete(*args, **kwargs)
 
     @property
     def created_at(self):
