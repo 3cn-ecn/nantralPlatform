@@ -110,10 +110,6 @@ class GroupSerializer(serializers.ModelSerializer):
             "members",
             "subscribers",
             "priority",
-            "created_at",
-            "created_by",
-            "updated_at",
-            "updated_by",
         ]
         read_only_fields = [
             "group_type",
@@ -152,10 +148,6 @@ class GroupWriteSerializer(serializers.ModelSerializer):
             "members",
             "subscribers",
             "priority",
-            "created_at",
-            "created_by",
-            "updated_at",
-            "updated_by",
         ]
         read_only_fields = ["group_type", "url", "tags"]
 

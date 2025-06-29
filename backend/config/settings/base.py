@@ -86,6 +86,7 @@ THIRD_PARTY_APPS = [
     "storages",
     "django_vite",
     "django_rest_passwordreset",
+    "simple_history",
 ]
 COMMON_APPS = [
     "apps.account",
@@ -119,6 +120,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "simple_history.middleware.HistoryRequestMiddleware",
 ]
 
 AUTHENTICATION_BACKENDS = [
@@ -292,6 +294,8 @@ PUSH_NOTIFICATIONS_SETTINGS = {
     "WP_PRIVATE_KEY": env("WP_PRIVATE_KEY"),
     "WP_CLAIMS": {"sub": "mailto:" + env("WP_ADMIN_EMAIL")},
 }
+
+SIMPLE_HISTORY_FILEFIELD_TO_CHARFIELD = True
 
 # THIRD PARTY CONNEXIONS
 

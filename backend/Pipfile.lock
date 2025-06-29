@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "43b0d8dc55d47273fe763779a3b2999ce9d054ca5c37c89cca23d69d78be1119"
+            "sha256": "b4917f4afabcea0fe7aa0eb65bf38dbaee236623b0981d6c4225f329c59c56f2"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -358,12 +358,12 @@
         },
         "django": {
             "hashes": [
-                "sha256:0a32773b5b7f4e774a155ee253ab24a841fed7e9e9061db08bf2ce9711da404d",
-                "sha256:e726764b094407c313adba5e2e866ab88f00436cad85c540a5bf76dc0a912c9e"
+                "sha256:42fdeaba6e6449d88d4f66de47871015097dc6f1b87910db00a91946295cfae4",
+                "sha256:dafbfaf52c2f289bd65f4ab935791cb4fb9a198f2a5ba9faf35d7338a77e9803"
             ],
             "index": "pypi",
             "markers": "python_version >= '3.8'",
-            "version": "==4.2.22"
+            "version": "==4.2.23"
         },
         "django-celery-beat": {
             "hashes": [
@@ -444,6 +444,15 @@
             ],
             "index": "pypi",
             "version": "==1.5.0"
+        },
+        "django-simple-history": {
+            "hashes": [
+                "sha256:040f0c2286bed730312aa15f0acee9e7e6f839c4bcd721693251aa7ec5b65d95",
+                "sha256:e12c27abfcd7e801a9d274d94542549ce8c617b0b384ae69afb161b56cd02ba4"
+            ],
+            "index": "pypi",
+            "markers": "python_version >= '3.9'",
+            "version": "==3.10.1"
         },
         "django-storages": {
             "extras": [
@@ -591,14 +600,6 @@
             ],
             "markers": "python_version >= '3.7'",
             "version": "==1.0.1"
-        },
-        "jsonfield": {
-            "hashes": [
-                "sha256:7e4e84597de21eeaeeaaa7cc5da08c61c48a9b64d0c446b2d71255d01812887a",
-                "sha256:df857811587f252b97bafba42e02805e70a398a7a47870bc6358a0308dd689ed"
-            ],
-            "markers": "python_version >= '3.6'",
-            "version": "==3.1.0"
         },
         "kombu": {
             "hashes": [

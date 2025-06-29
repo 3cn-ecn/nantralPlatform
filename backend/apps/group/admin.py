@@ -1,5 +1,7 @@
 from django.contrib import admin
 
+from simple_history.admin import SimpleHistoryAdmin
+
 from .models import Group, GroupType, Label, Membership, Tag
 
 
@@ -19,7 +21,7 @@ class GroupTypeAdmin(admin.ModelAdmin):
     inlines = [LabelInline, TagInline]
 
 
-class GroupAdmin(admin.ModelAdmin):
+class GroupAdmin(SimpleHistoryAdmin):
     search_fields = ["name", "short_name"]
     list_display = ["name", "short_name", "slug", "group_type", "can_pin"]
     list_filter = [
@@ -45,10 +47,6 @@ class GroupAdmin(admin.ModelAdmin):
             form.base_fields["label"].queryset = obj.group_type.label_set.all()
             form.base_fields["tags"].queryset = obj.group_type.tag_set.all()
         return form
-
-    def save_model(self, request, obj: Group, form, change):
-        obj.updated_by = request.user.student
-        super().save_model(request, obj, form, change)
 
 
 class MembershipAdmin(admin.ModelAdmin):
