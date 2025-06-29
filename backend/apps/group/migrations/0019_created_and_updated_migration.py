@@ -3,9 +3,7 @@ from django.db import migrations
 
 from simple_history.utils import get_history_manager_for_model
 
-from apps.account.models import User
 from apps.group import models
-from apps.student.models import Student
 
 
 def forwards(apps, schema_editor):
@@ -14,10 +12,7 @@ def forwards(apps, schema_editor):
     history = get_history_manager_for_model(models.Group)
 
     for group in Group.objects.all():
-        try:
-            user = User.objects.get(pk=group.created_by.user.pk)
-        except (AttributeError, Student.DoesNotExist):
-            user = None
+        user = group.created_by.user if group.created_by else None
         group.versions.create(
             history_date=group.created_at,
             history_user=user,
@@ -29,10 +24,7 @@ def forwards(apps, schema_editor):
         )
 
         if group.created_at != group.updated_at:
-            try:
-                user = User.objects.get(pk=group.updated_by.user.pk)
-            except (AttributeError, Student.DoesNotExist):
-                user = None
+            user = group.updated_by.user if group.updated_by else None
             group.versions.create(
                 history_date=group.updated_at,
                 history_user=user,
@@ -46,20 +38,15 @@ def forwards(apps, schema_editor):
 
 def reverse(apps, schema_editor):
     Group = apps.get_model("group", "Group")
-    Student = apps.get_model("student", "Student")
 
     for group in Group.objects.all():
-        try:
-            student = Student.objects.get(pk=group.versions.earliest().history_user.student.pk)
-        except (AttributeError, Student.DoesNotExist):
-            student = None
+        version = group.versions.earliest()
+        student = version.history_user.student if version.history_user else None
         group.created_at = group.versions.earliest().history_date
         group.created_by = student
 
-        try:
-            student = Student.objects.get(pk=group.versions.latest().history_user.student.pk)
-        except (AttributeError, Student.DoesNotExist):
-            student = None
+        version = group.versions.latest()
+        student = version.history_user.student if version.history_user else None
         group.updated_at = group.versions.latest().history_date
         group.updated_by = student
         group.save()
