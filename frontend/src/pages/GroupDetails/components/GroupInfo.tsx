@@ -1,7 +1,4 @@
-import {
-  AdminPanelSettings as AdminPanelSettingsIcon,
-  History,
-} from '@mui/icons-material';
+import { AdminPanelSettings as AdminPanelSettingsIcon } from '@mui/icons-material';
 import { Box, IconButton, Skeleton, Tooltip, Typography } from '@mui/material';
 
 import { Group } from '#modules/group/types/group.types';
