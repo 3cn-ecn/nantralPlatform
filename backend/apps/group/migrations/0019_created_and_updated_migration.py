@@ -42,12 +42,12 @@ def reverse(apps, schema_editor):
     for group in Group.objects.all():
         version = group.versions.earliest()
         student = version.history_user.student if version.history_user else None
-        group.created_at = group.versions.earliest().history_date
+        group.created_at = version.history_date
         group.created_by = student
 
         version = group.versions.latest()
         student = version.history_user.student if version.history_user else None
-        group.updated_at = group.versions.latest().history_date
+        group.updated_at = version.history_date
         group.updated_by = student
         group.save()
 
