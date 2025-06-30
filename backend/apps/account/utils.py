@@ -17,7 +17,7 @@ from .tokens import account_activation_token
 def clean_username(username: str):
     normalized = unicodedata.normalize("NFKD", username)  # split the Unicode characters
     normalized = normalized.lower()
-    cleaned = re.sub(r"[^a-z0-9._=\-/+]", "", normalized)  # remove unauthorized Unicode chars
+    cleaned = re.sub(r"[^a-z0-9._\-+]", "", normalized)  # remove unauthorized Unicode chars
     cleaned.strip("_")  # just to be sure, remove leading underscores (and trailing, but we don't care)
     return cleaned
 
