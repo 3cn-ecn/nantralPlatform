@@ -69,8 +69,9 @@ def transfert_roommates_to_group(apps, schema_editor):
 
             # Update the other roommates
             for roommate in roommates:
+                # Create a snapshot for each roommate
                 group.versions.create(
-                    history_date=roommate.modified_date,
+                    history_date=roommate.begin_date,
                     history_type="+",
                     name=roommate.name,
                     summary=roommate.summary,
@@ -81,6 +82,11 @@ def transfert_roommates_to_group(apps, schema_editor):
                     video2=roommate.video2,
                     id=group.id
                 )
+                # Update archived status to take the current roommate object into account
+                if roommate.begin_date.year >= timezone.now().year:
+                    group.archived = False
+                    group.save()
+
                 # Transfer members
                 for member in roommate.namedmembershiproommates_set.all():
                     try:
