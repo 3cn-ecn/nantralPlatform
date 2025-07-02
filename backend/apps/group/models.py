@@ -320,6 +320,9 @@ class Group(models.Model, SlugModel):
             "meeting_place",
             "meeting_hour",
             "social_links",
+            "address",
+            "latitude",
+            "longitude",
         ),
         related_name="versions",
     )
