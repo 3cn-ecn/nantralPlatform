@@ -66,4 +66,5 @@ export type CreateGroupForm = Pick<
   label: number;
   tags: number[];
   parent?: number;
+  changeReason?: string;
 };

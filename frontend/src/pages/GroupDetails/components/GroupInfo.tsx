@@ -5,6 +5,7 @@ import { Group } from '#modules/group/types/group.types';
 import { sortLinks } from '#modules/social_link/utils/sortLinks';
 import { SocialLinkItem } from '#modules/social_link/view/shared/SocialLinkItem';
 import { useCurrentUserData } from '#modules/student/hooks/useCurrentUser.data';
+import HistoryButton from '#pages/GroupDetails/GroupHistory/HistoryButton';
 import { Avatar } from '#shared/components/Avatar/Avatar';
 import { FlexCol, FlexRow } from '#shared/components/FlexBox/FlexBox';
 import { useAuth } from '#shared/context/Auth.context';
@@ -112,6 +113,7 @@ export function GroupInfo({
               isSubscribed={group?.isSubscribed}
             />
           )}
+          {group && <HistoryButton group={group} />}
           {group?.isAdmin && <EditButton group={group} />}
         </FlexRow>
       </FlexCol>

@@ -1,4 +1,5 @@
-import { useParams } from 'react-router-dom';
+import { useMemo } from 'react';
+import { useParams, useSearchParams } from 'react-router-dom';
 
 import { Container } from '@mui/material';
 
@@ -23,6 +24,12 @@ export default function GroupDetailsPage() {
   const urlPathParams = useParams();
   const slug = (urlPathParams.type as string).slice(1);
 
+  const [queryParams] = useSearchParams();
+  const version = useMemo(() => {
+    const paramVersion = queryParams.get('version');
+    return paramVersion ? parseInt(paramVersion) : undefined;
+  }, [queryParams]);
+
   const [selectedTab, setSelectedTab] = useQueryParamState<TabType>(
     'tab',
     'home',
@@ -38,7 +45,7 @@ export default function GroupDetailsPage() {
     error,
     refetch,
     isSuccess,
-  } = useGroupDetails(slug);
+  } = useGroupDetails(slug, version);
 
   if (isError && error) {
     return (

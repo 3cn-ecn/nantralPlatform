@@ -66,4 +66,5 @@ export type CreateGroupFormDTO = Pick<
   label: number | null;
   tags: number[];
   parent?: number;
+  _change_reason?: string;
 };

@@ -31,6 +31,7 @@ from .permissions import (
 from .serializers import (
     AdminRequestFormSerializer,
     AdminRequestSerializer,
+    GroupHistorySerializer,
     GroupPreviewSerializer,
     GroupSerializer,
     GroupTypeSerializer,
@@ -189,6 +190,11 @@ class GroupViewSet(viewsets.ModelViewSet):
 
     def get_object(self):
         obj = get_object_or_404(Group, slug=self.kwargs["slug"])
+
+        version = self.query_params.get("version")
+        if version:
+            obj = get_object_or_404(obj.history, pk=version).instance
+
         self.check_object_permissions(self.request, obj)
         return obj
 
@@ -211,6 +217,15 @@ class GroupViewSet(viewsets.ModelViewSet):
             group.subscribers.add(student)
 
         return response.Response(status=status.HTTP_200_OK)
+
+    @decorators.action(
+        detail=True,
+        methods=["GET"],
+    )
+    def history(self, request: Request, *args, **kwargs):
+        group: Group = self.get_object()
+        serialized_data = GroupHistorySerializer(group.history.all(), many=True).data
+        return response.Response(serialized_data)
 
 
 class MembershipViewSet(viewsets.ModelViewSet):

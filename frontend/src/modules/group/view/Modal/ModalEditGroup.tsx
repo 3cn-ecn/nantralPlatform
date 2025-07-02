@@ -1,4 +1,5 @@
 import { FormEvent, useEffect, useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
 
 import {
   Check,
@@ -46,6 +47,7 @@ export function ModalEditGroup({
   const [hasModifications, setHasModifications] = useState(false);
   const queryClient = useQueryClient();
   const { palette } = useTheme();
+  const [, setSerachParams] = useSearchParams();
   const { error, isError, mutate, isLoading } = useMutation<
     Group,
     ApiFormError<CreateGroupForm>,
@@ -53,6 +55,8 @@ export function ModalEditGroup({
   >(() => updateGroupApi(group.slug, formValues), {
     onSuccess: () => {
       queryClient.invalidateQueries(['group', { slug: group.slug }]);
+      queryClient.invalidateQueries(['history', { slug: group.slug }]);
+      setSerachParams({}, { preventScrollReset: true });
       setHasModifications(false);
     },
   });

@@ -110,10 +110,6 @@ class GroupSerializer(serializers.ModelSerializer):
             "members",
             "subscribers",
             "priority",
-            "created_at",
-            "created_by",
-            "updated_at",
-            "updated_by",
         ]
         read_only_fields = [
             "group_type",
@@ -145,6 +141,7 @@ class GroupSerializer(serializers.ModelSerializer):
 
 class GroupWriteSerializer(serializers.ModelSerializer):
     social_links = GroupSocialLinkSerializer(many=True, read_only=True)
+    _change_reason = serializers.CharField(write_only=True, required=False)
 
     class Meta:
         model = Group
@@ -152,12 +149,16 @@ class GroupWriteSerializer(serializers.ModelSerializer):
             "members",
             "subscribers",
             "priority",
-            "created_at",
-            "created_by",
-            "updated_at",
-            "updated_by",
         ]
         read_only_fields = ["group_type", "url", "tags"]
+
+    def create(self, validated_data: dict):
+        _change_reason = validated_data.pop("_change_reason", None)
+        group = Group(**validated_data)
+        if _change_reason:
+            group._change_reason = _change_reason
+        group.save()
+        return group
 
     def get_group_type(self) -> GroupType:
         group: Group | None = self.instance
@@ -336,3 +337,17 @@ class AdminRequestSerializer(serializers.ModelSerializer):
 
 class SubscriptionSerializer(serializers.Serializer):
     subscribe = serializers.BooleanField()
+
+
+class GroupHistorySerializer(serializers.ModelSerializer):
+    user = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Group.history.model
+        fields = ["pk", "history_date", "user", "history_change_reason", "history_type"]
+
+    def get_user(self, obj):
+        if obj.history_user:
+            return obj.history_user.student.name
+        else:
+            return obj.history_user

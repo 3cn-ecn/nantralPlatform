@@ -311,6 +311,7 @@
         }
       },
       "formerMembers": "Anciens membres",
+      "history": "Voir l'historique",
       "infoLine": {
         "events_one": "{{count}} événement",
         "events_other": "{{count}} événements",
@@ -378,6 +379,10 @@
       "banner": {
         "helperText": "Image avec un ratio de 3:1 (taille minimale recommandée : 1200x400)",
         "label": "Bannière"
+      },
+      "changeReason": {
+        "label": "Modif de changement",
+        "helperText": "Si vous le souhaitez, ajoutez quelques mots expliquant pourquoi vous créez/modifiez ce groupe"
       },
       "beginDate": {
         "label": "Date de début"

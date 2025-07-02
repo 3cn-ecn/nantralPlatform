@@ -3,6 +3,7 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 
 from django_ckeditor_5.fields import CKEditor5Field
+from simple_history.models import HistoricalRecords
 
 from apps.account.models import User
 from apps.sociallink.models import SocialLink
@@ -255,6 +256,7 @@ class Group(models.Model, SlugModel):
         size=(500, 500),
         crop=False,
         name_from_field="name",
+        delete_on_save=False,
     )
     banner = CustomImageField(
         verbose_name=_("Banner"),
@@ -265,6 +267,7 @@ class Group(models.Model, SlugModel):
         ),
         size=(1200, 400),
         name_from_field="name",
+        delete_on_save=False,
     )
     video1 = models.URLField(
         verbose_name=_("Video link 1"),
@@ -283,22 +286,30 @@ class Group(models.Model, SlugModel):
         blank=True,
     )
 
-    # Log infos
-    created_at = models.DateTimeField(auto_now_add=True)
-    created_by = models.ForeignKey(
-        Student,
-        blank=True,
-        null=True,
-        on_delete=models.SET_NULL,
-        related_name="+",
-    )
-    updated_at = models.DateTimeField(auto_now=True)
-    updated_by = models.ForeignKey(
-        Student,
-        blank=True,
-        null=True,
-        on_delete=models.SET_NULL,
-        related_name="+",
+    # Field to handle history of the updates to the group
+    history = HistoricalRecords(
+        excluded_fields=(
+            "short_name",
+            "members",
+            "subscribers",
+            "group_type",
+            "label",
+            "tags",
+            "parent",
+            "children_label",
+            "lock_memberships",
+            "priority",
+            "creation_year",
+            "slug",
+            "archived",
+            "private",
+            "public",
+            "can_pin",
+            "meeting_place",
+            "meeting_hour",
+            "social_links",
+        ),
+        related_name="versions",
     )
 
     class Meta:
@@ -312,8 +323,6 @@ class Group(models.Model, SlugModel):
         # fill default values
         if not self.short_name:
             self.short_name = self.name
-        if self.pk is None:
-            self.created_by = self.updated_by
         if self.pk is None and self.group_type.private_by_default:
             self.private = True
         # create the slug
@@ -335,10 +344,29 @@ class Group(models.Model, SlugModel):
                 ),
             )
 
-    def delete(self, *args, **kwargs) -> None:
-        self.icon.delete(save=False)
-        self.banner.delete(save=False)
-        super().delete(*args, **kwargs)
+    @property
+    def created_at(self):
+        return self.history.earliest().history_date
+
+    @property
+    def created_by(self):
+        user = self.history.earliest().history_user
+        if user:
+            return user.student
+        else:
+            return None
+
+    @property
+    def updated_at(self):
+        return self.history.latest().history_date
+
+    @property
+    def updated_by(self):
+        user = self.history.latest().history_user
+        if user:
+            return user.student
+        else:
+            return None
 
     @property
     def scholar_year(self) -> str:
