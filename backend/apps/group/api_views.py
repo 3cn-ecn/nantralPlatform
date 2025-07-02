@@ -1,4 +1,3 @@
-
 from django.db.models import Count, F, Q, QuerySet
 from django.http.request import QueryDict
 from django.shortcuts import get_object_or_404
@@ -191,12 +190,12 @@ class GroupViewSet(viewsets.ModelViewSet):
 
     def get_object(self):
         obj = get_object_or_404(Group, slug=self.kwargs["slug"])
-        self.check_object_permissions(self.request, obj)
 
         version = self.query_params.get("version")
         if version:
-            return get_object_or_404(obj.history, pk=version).instance
+            obj = get_object_or_404(obj.history, pk=version).instance
 
+        self.check_object_permissions(self.request, obj)
         return obj
 
     @decorators.action(
