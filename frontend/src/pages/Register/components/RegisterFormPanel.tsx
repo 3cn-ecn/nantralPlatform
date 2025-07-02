@@ -22,6 +22,7 @@ export default function RegisterFormPanel() {
     RegisterForm & { passwordConfirm: string }
   >({
     email: '',
+    username: '',
     password: '',
     passwordConfirm: '',
     firstName: '',

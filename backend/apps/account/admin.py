@@ -96,6 +96,8 @@ class CustomUserAdmin(UserAdmin):
                     "is_email_valid",
                     "email_next",
                     "invitation",
+                    "has_updated_username",
+                    "has_opened_matrix",
                 ),
             },
         ),
@@ -111,7 +113,7 @@ class CustomUserAdmin(UserAdmin):
             },
         ),
     )
-    readonly_fields = ("date_joined", "last_login")
+    readonly_fields = ("username", "date_joined", "last_login", "has_opened_matrix", "has_updated_username")
     inlines = (StudentInline,)
 
     list_filter = (

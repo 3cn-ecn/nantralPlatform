@@ -703,6 +703,8 @@
     "sendAgain": "Renvoyer",
     "signUpEmailRequirement": "Pour s'inscrire à Nantral Platform, vous devez être actuellement à Centrale Nantes. Pour le vérifier, nous utilisons votre adresse email qui doit se terminer par <strong>@eleves.ec-nantes.fr</strong> ou <strong>@ec-nantes.fr</strong>.",
     "stillNothing": "Toujours rien ?",
+    "username": "Nom d'utilisateur",
+    "usernameHelp": "Choisissez bien car vous ne pourrez peut-être plus le modifier plus tard.",
     "validation": "Validation",
     "waitAFewMinutes": "Attendez quelques minutes, cela peut parfois prendre beaucoup de temps."
   },
@@ -793,6 +795,16 @@
         "light": "Thème clair",
         "title": "Apparence"
       }
+    }
+  },
+  "username": {
+    "update": "Choisissez un nouveau nom d'utilisateur",
+    "success": "Mise à jour du nom d'utilisateur effectuée avec succès",
+    "alert": {
+      "title": "Mise à jour importante - Noms d'utilisateurs",
+      "message1": "Nous avons ajouté la possibilité de modifier votre nom d'utilisateur.",
+      "link": "Cliquez sur ce lien",
+      "message2": "pour effectuer le changement. Nous vous conseillons de réaliser l'opération rapidement en prévision d'une mise à jour future."
     }
   },
   "utils": {

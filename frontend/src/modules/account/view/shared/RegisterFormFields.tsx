@@ -55,6 +55,18 @@ export function RegisterFormFields({
         }
       />
       <TextField
+        name="username"
+        label={t('register.username')}
+        type={'text'}
+        value={formValues.username}
+        handleChange={useCallback(
+          (val) => updateFormValues({ username: val }),
+          [updateFormValues],
+        )}
+        errors={error?.fields?.username}
+        helperText={t('register.usernameHelp')}
+      />
+      <TextField
         label={t('register.firstName')}
         value={formValues.firstName}
         handleChange={useCallback(

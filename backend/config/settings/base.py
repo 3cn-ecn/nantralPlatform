@@ -27,6 +27,7 @@ env = environ.Env(
     WP_PUBLIC_KEY=(str, ""),
     WP_PRIVATE_KEY=(str, ""),
     STAGING=(bool, False),
+    MATRIX_SERVER_NAME=(str, ""),
     # docker needed
     DB_HOSTNAME=(str, ""),
     DB_PORT=(int, 0),
@@ -311,6 +312,9 @@ GITHUB_REPO = "3cn-ecn/nantralPlatform"
 
 # Mapbox
 MAPBOX_API_KEY = env("MAPBOX_API_KEY")
+
+# Matrix
+MATRIX_SERVER_NAME = env("MATRIX_SERVER_NAME")
 
 # Password validation
 # https://docs.djangoproject.com/en/3.0/ref/settings/#auth-password-validators
