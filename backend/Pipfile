@@ -28,6 +28,7 @@ django-extra-settings = "~=0.5"
 django-modeltranslation = "~=0.18.11"
 django-push-notifications = {version = "~=3.0", extras = ["apns", "wp"]}
 django-rest-passwordreset = "~=1.4"
+django-simple-history = "~=3.10"
 django-storages = {version = "~=1.13", extras = ["boto3"]}
 django-vite = "~=3.0"
 djangorestframework = "~=3.15"
@@ -46,8 +47,8 @@ pywebpush = "~=1.14"
 redis = "~=5.0"
 requests = "~=2.32"
 six = "~=1.16"
+# force update of a sub-package
 pyjwt = ">=2.4"
-django-simple-history = "*"
 
 [dev-packages]
 coverage = "~=7.3"
