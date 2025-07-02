@@ -1,5 +1,7 @@
 from datetime import date
 
+from django.db.models.query_utils import Q
+from django.utils import timezone
 from django.utils.translation import gettext as _
 
 from rest_framework import exceptions, serializers
@@ -365,7 +367,7 @@ class MapGroupSerializer(serializers.ModelSerializer):
     url = serializers.SerializerMethodField()
     category = serializers.SerializerMethodField()
     sub_category = serializers.SerializerMethodField()
-    membership_set = MembershipSerializer(many=True, read_only=True)
+    membership_set = serializers.SerializerMethodField()
 
     class Meta:
         model = Group
@@ -395,6 +397,11 @@ class MapGroupSerializer(serializers.ModelSerializer):
 
     def get_sub_category(self, obj: Group) -> str:
         return obj.get_sub_category()
+
+    def get_membership_set(self, obj: Group) -> str:
+        from_date = timezone.now()
+        serialized_data = MembershipSerializer(obj.membership_set.filter(Q(end_date__gte=from_date) | Q(end_date__isnull=True)), many=True).data
+        return serialized_data
 
 
 class MapGroupPreviewSerializer(serializers.ModelSerializer):
