@@ -152,6 +152,14 @@ class GroupWriteSerializer(serializers.ModelSerializer):
         ]
         read_only_fields = ["group_type", "url", "tags"]
 
+    def create(self, validated_data: dict):
+        _change_reason = validated_data.pop("_change_reason", None)
+        group = Group(**validated_data)
+        if _change_reason:
+            group._change_reason = _change_reason
+        group.save()
+        return group
+
     def get_group_type(self) -> GroupType:
         group: Group | None = self.instance
         if group is None:
