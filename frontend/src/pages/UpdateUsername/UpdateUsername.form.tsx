@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { Alert, Divider } from '@mui/material';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import changeUsernameApi from '#modules/account/api/changeUsername.api';
 import { UpdateUsernameFormFields } from '#modules/account/view/shared/UpdateUsernameFormFields';
@@ -16,6 +16,7 @@ export default function UpdateUsernameForm({ username }: { username: string }) {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const showToast = useToast();
+  const queryClient = useQueryClient();
 
   const [formValues, setFormValues] = useState({ username });
   // create all states for error, loading, etc. while fetching the API
@@ -29,6 +30,7 @@ export default function UpdateUsernameForm({ username }: { username: string }) {
         message: t('username.success'),
         variant: 'success',
       });
+      queryClient.invalidateQueries(['username']);
       navigate('/');
     },
   });
