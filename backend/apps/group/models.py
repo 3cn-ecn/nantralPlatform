@@ -291,11 +291,11 @@ class Group(models.Model, SlugModel):
     address = models.CharField(
         max_length=250, verbose_name=_("Address"), blank=True, default=""
     )
-    latitude = models.CharField(
-        max_length=250, verbose_name=_("Latitude"), blank=True, default=""
+    latitude = models.FloatField(
+        verbose_name=_("Latitude"), null=True, blank=True, default=47.2186371
     )
-    longitude = models.CharField(
-        max_length=250, verbose_name=_("Longitude"), blank=True, default=""
+    longitude = models.FloatField(
+        verbose_name=_("Longitude"), null=True, blank=True, default=-1.5541362
     )
 
     # Field to handle history of the updates to the group

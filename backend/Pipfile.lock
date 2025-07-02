@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "c4424e65dabd34dd82a8b28eca230549d738d71e474ae067938f26a2db2ebdb4"
+            "sha256": "6f08d8b244f33ae95df0ecde44b13b421f44b5f60a05cd23489e127ea5ec02f8"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -420,14 +420,6 @@
             "index": "pypi",
             "version": "==0.14.0"
         },
-        "django-filter": {
-            "hashes": [
-                "sha256:1ec9eef48fa8da1c0ac9b411744b16c3f4c31176c867886e4c48da369c407153",
-                "sha256:4fa48677cf5857b9b1347fed23e355ea792464e0fe07244d1fdfb8a806215b80"
-            ],
-            "markers": "python_version >= '3.9'",
-            "version": "==25.1"
-        },
         "django-modeltranslation": {
             "hashes": [
                 "sha256:4665ff19617e3a868f4c8173fe1b359d6a50362552165e665a0d32f78edafddd",
@@ -499,14 +491,6 @@
             "index": "pypi",
             "markers": "python_version >= '3.9'",
             "version": "==3.16.0"
-        },
-        "djangorestframework-gis": {
-            "hashes": [
-                "sha256:3924651b2f6dcb5a64b30df9692577af548a04725b0c2c36cbc385f7c50fc80a",
-                "sha256:702ba9ad44173b7cc70e48c6c84da48c28f6f82612cc901a77fdb54c5c57c971"
-            ],
-            "index": "pypi",
-            "version": "==1.2.0"
         },
         "docutils": {
             "hashes": [
