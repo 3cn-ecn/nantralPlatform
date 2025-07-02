@@ -47,6 +47,7 @@ pywebpush = "~=1.14"
 redis = "~=5.0"
 requests = "~=2.32"
 six = "~=1.16"
+# force update of a sub-package
 pyjwt = ">=2.4"
 
 [dev-packages]
