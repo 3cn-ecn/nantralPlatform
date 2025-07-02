@@ -34,8 +34,8 @@ export default function Shortcuts() {
         iconPath="/static/img/icons/cropped/club.svg"
       />
       <ShortcutItem
-        label={t('navbar.flatshare')}
-        path="/colocs/"
+        label={t('navbar.map')}
+        path="/map/"
         iconPath="/static/img/icons/cropped/roommates.svg"
         isOnBackend
       />
