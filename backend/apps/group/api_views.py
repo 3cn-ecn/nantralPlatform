@@ -650,6 +650,7 @@ class MapViewSet(viewsets.ViewSet):
             params=request_data,
             timeout=10,
         )
+        mapbox_response.raise_for_status()
         results = [
             {
                 "address": feature.get("properties").get("full_address"),

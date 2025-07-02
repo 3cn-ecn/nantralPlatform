@@ -93,39 +93,6 @@ class GroupPreviewSerializer(serializers.ModelSerializer):
     def get_sub_category(self, obj: Group) -> str:
         return obj.get_sub_category()
 
-class MapGroupPreviewSerializer(serializers.ModelSerializer):
-    url = serializers.SerializerMethodField()
-    category = serializers.SerializerMethodField()
-    sub_category = serializers.SerializerMethodField()
-
-    class Meta:
-        model = Group
-        fields = [
-            "name",
-            "short_name",
-            "category",
-            "sub_category",
-            "slug",
-            "url",
-            "icon",
-            "id",
-            "summary",
-            "banner",
-            "address",
-            "latitude",
-            "longitude"
-        ]
-        read_only_fields = fields
-
-    def get_url(self, obj: Group) -> str:
-        return obj.get_absolute_url()
-
-    def get_category(self, obj: Group) -> str:
-        return obj.get_category()
-
-    def get_sub_category(self, obj: Group) -> str:
-        return obj.get_sub_category()
-
 
 class GroupSerializer(serializers.ModelSerializer):
     url = serializers.SerializerMethodField()
