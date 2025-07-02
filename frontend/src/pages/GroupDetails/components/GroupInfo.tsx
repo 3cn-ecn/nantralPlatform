@@ -146,7 +146,7 @@ export function GroupInfo({
             ))}
           </FlexRow>
         )}
-        <FlexRow py={2} gap={1}>
+        <FlexRow py={2} gap={1} flexWrap="wrap">
           {isAuthenticated && group && (
             <SubscribeButton
               groupSlug={group.slug}
