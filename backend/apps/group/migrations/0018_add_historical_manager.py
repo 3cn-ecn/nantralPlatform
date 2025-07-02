@@ -12,7 +12,7 @@ class Migration(migrations.Migration):
 
     dependencies = [
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
-        ("group", "0017_alter_group_banner_alter_group_icon"),
+        ("group", "0017_group_address_group_latitude_group_longitude_and_more"),
     ]
 
     operations = [
@@ -27,6 +27,9 @@ class Migration(migrations.Migration):
                 ("banner", models.CharField(blank=True, help_text="Image with 3:1 ratio (recommended minimum size: 1200x400)", max_length=100, null=True, verbose_name="Banner")),
                 ("video1", models.URLField(blank=True, verbose_name="Video link 1")),
                 ("video2", models.URLField(blank=True, verbose_name="Video link 2")),
+                ("address", models.CharField(blank=True, max_length=250, verbose_name="Address")),
+                ("latitude", models.FloatField(blank=True, null=True, verbose_name="Latitude")),
+                ("longitude", models.FloatField(blank=True, null=True, verbose_name="Longitude")),
                 ("history_id", models.AutoField(primary_key=True, serialize=False)),
                 ("history_date", models.DateTimeField(db_index=True)),
                 ("history_change_reason", models.CharField(max_length=100, null=True)),
