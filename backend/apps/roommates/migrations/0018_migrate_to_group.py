@@ -83,15 +83,23 @@ def transfert_roommates_to_group(apps, schema_editor):
                 )
                 # Transfer members
                 for member in roommate.namedmembershiproommates_set.all():
-                    membership = Membership.objects.create(
-                        group=group,
-                        student=member.student,
-                        begin_date=roommate.begin_date,
-                        end_date=roommate.end_date,
-                        admin=member.admin,
-                        description=member.nickname,
-                    )
-                    membership.save()
+                    try:
+                        membership = Membership.objects.get(group=group, student=member.student)
+                    except Membership.DoesNotExist:
+                        Membership.objects.create(
+                            group=group,
+                            student=member.student,
+                            begin_date=roommate.begin_date,
+                            end_date=roommate.end_date,
+                            admin=member.admin,
+                            description=member.nickname,
+                        )
+                    else:
+                        membership.begin_date = min(membership.begin_date, roommate.begin_date)
+                        membership.end_date = max(membership.end_date, roommate.end_date)
+                        membership.admin = member.admin or membership.admin
+                        membership.description = "\n".join(nickname for nickname in (membership.description, member.nickname) if nickname)
+                        membership.save()
 
             # Delete the old roommate
             for roommate in roommates:
