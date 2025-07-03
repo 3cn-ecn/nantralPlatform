@@ -20,7 +20,6 @@ import {
   MapGroupPreview,
 } from '#modules/group/types/group.types';
 import { PopupContent } from '#pages/Map/components/PopupContent';
-import { ThemeControl } from '#pages/Map/components/ThemeControl';
 import { useChangeThemeMode } from '#shared/context/CustomTheme.context';
 
 import '../styles/custom-mapbox-gl.css';
@@ -40,6 +39,15 @@ export function CustomMap({
   const [popupInfo, setPopupInfo] = useState<MapGroupPreview | null>(null);
   const [groupList, setGroupList] = useState<MapGroupPoint[]>([]);
   const mapRef = useRef<MapRef>(null);
+
+  useEffect(() => {
+    if (!mapRef.current) return;
+    mapRef.current.setConfigProperty(
+      'basemap',
+      'lightPreset',
+      currentThemeMode === 'dark' ? 'night' : 'day',
+    );
+  }, [currentThemeMode, mapRef]);
 
   const handleOpen = useCallback(
     (groupPoint: MapGroupPoint) => {
@@ -127,7 +135,6 @@ export function CustomMap({
       <GeolocateControl position="top-left" />
       <FullscreenControl position="top-left" />
       <NavigationControl position="top-left" />
-      <ThemeControl />
       <ScaleControl />
       {pins}
       {popupInfo && (

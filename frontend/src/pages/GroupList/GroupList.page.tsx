@@ -62,15 +62,17 @@ export default function GroupListPage() {
             </MenuItem>
           </IconMenu>
         )}
-        <Spacer flex={'auto'} />
         {groupTypeQuery.data?.isMap && (
-          <Button
-            component={Link}
-            variant="contained"
-            to={'/map?type=' + groupTypeQuery.data.slug}
-          >
-            {t('group.list.gotoMap')}
-          </Button>
+          <>
+            <Spacer flex={'auto'} />
+            <Button
+              component={Link}
+              variant="contained"
+              to={'/map?type=' + groupTypeQuery.data.slug}
+            >
+              {t('group.list.gotoMap')}
+            </Button>
+          </>
         )}
       </FlexRow>
       <Divider sx={{ my: 3 }} />

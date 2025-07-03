@@ -63,8 +63,9 @@ class GroupTypeViewSet(viewsets.ReadOnlyModelViewSet):
     lookup_url_kwarg = "slug"
 
     def get_queryset(self):
-        if self.request.query_params.get("is_map") == "true":
-            return GroupType.objects.filter(is_map=True)
+        is_map = parse_bool(self.request.query_params.get("is_map"))
+        if is_map is not None:
+            return GroupType.objects.filter(is_map=is_map)
         return GroupType.objects.all()
 
 
@@ -176,7 +177,8 @@ class GroupViewSet(viewsets.ModelViewSet):
                     "membership_set",
                     filter=Q(membership_set__end_date__gte=timezone.now()),
                 ),
-            ).filter(
+            )
+            .filter(
                 Q(num_active_members__gt=0)
                 | Q(group_type__hide_no_active_members=False),
             )
@@ -221,7 +223,7 @@ class GroupViewSet(viewsets.ModelViewSet):
         if is_map is not None:
             queryset = queryset.filter(group_type__is_map=is_map)
         # filter by archived
-        if archived is False or archived is None:
+        if archived is not True:
             queryset = queryset.filter(archived=False)
 
         return (
@@ -265,10 +267,6 @@ class GroupViewSet(viewsets.ModelViewSet):
             group.subscribers.add(student)
 
         return response.Response(status=status.HTTP_200_OK)
-
-    @decorators.action(detail=False, methods=["GET"])
-    def geojson(self, request: Request, *args, **kwargs):
-        return self.list(request, *args, **kwargs)
 
     @decorators.action(
         detail=True,

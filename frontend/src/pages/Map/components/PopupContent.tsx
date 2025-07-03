@@ -60,7 +60,7 @@ export function PopupContent({
       <CardContent color="secondary">
         <Typography variant={'h3'}>{group.name}</Typography>
       </CardContent>
-      <List>
+      <List dense={true}>
         {group.members.map((member) => (
           <ListItem disablePadding key={member.student.id}>
             <ListItemButton component={Link} to={member.student.url}>

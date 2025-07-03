@@ -86,7 +86,7 @@ export function MoreActionButton({
           </MenuItem>
         )}
       </Menu>
-      {groupFormOpen && groupTypeQuery.data && (
+      {groupFormOpen && groupTypeQuery.data?.canCreate && (
         <CreateGroupModal
           onClose={() => setGroupFormOpen(false)}
           groupType={groupTypeQuery.data}
