@@ -44,10 +44,9 @@ export function AppMenuPanel({ menuOpen, onClose }: AppMenuPanelProps) {
           closeMenu={onClose}
         />
         <AppMenuItem
-          label={t('navbar.flatshare')}
-          path="/colocs/"
+          label={t('navbar.map')}
+          path="/map/"
           iconPath="/static/img/icons/cropped/roommates.svg"
-          isOnBackend
           closeMenu={onClose}
         />
         <AppMenuItem

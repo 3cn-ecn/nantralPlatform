@@ -116,9 +116,9 @@ exports[`Home page should render correctly without data 1`] = `
           class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation1 MuiCard-root css-15m64r9-MuiPaper-root-MuiCard-root"
         >
           <a
-            aria-label="Flatshares Map"
+            aria-label="Map"
             class="MuiButtonBase-root MuiCardActionArea-root css-1oitmrd-MuiButtonBase-root-MuiCardActionArea-root"
-            href="/colocs/"
+            href="/map/"
             tabindex="0"
           >
             <div
@@ -142,7 +142,7 @@ exports[`Home page should render correctly without data 1`] = `
           aria-hidden="true"
           class="MuiTypography-root MuiTypography-body2 MuiTypography-alignCenter css-b7etmd-MuiTypography-root"
         >
-          Flatshares Map
+          Map
         </p>
       </div>
       <div
