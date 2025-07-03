@@ -42,9 +42,17 @@ export function PopupContent({
         }
         subheader={group.summary}
       />
+      <CardContent color="secondary" sx={{ py: 0 }}>
+        <Typography variant={'h3'}>{group.name}</Typography>
+      </CardContent>
       <CardActions>
         <FlexRow gap={2}>
-          <Button component={Link} to={group.url} variant="contained">
+          <Button
+            component={Link}
+            to={group.url}
+            variant="contained"
+            size={'small'}
+          >
             {t('map.popup.details')}
           </Button>
           <Button
@@ -52,15 +60,13 @@ export function PopupContent({
             href={`https://www.google.com/maps/dir/?api=1&travelmode=transit&destination=${group.address}`}
             target="_blank"
             endIcon={<OpenInNew />}
+            size={'small'}
           >
             {t('map.popup.go')}
           </Button>
         </FlexRow>
       </CardActions>
-      <CardContent color="secondary">
-        <Typography variant={'h3'}>{group.name}</Typography>
-      </CardContent>
-      <List dense={true}>
+      <List dense={true} sx={{ py: 0 }}>
         {group.members.map((member) => (
           <ListItem disablePadding key={member.student.id}>
             <ListItemButton component={Link} to={member.student.url}>
