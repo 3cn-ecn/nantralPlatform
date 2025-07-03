@@ -139,20 +139,20 @@ def reverse(apps, schema_editor):
         )
 
         for version in group.versions.all():
-            instance = version
             roommate = Roommates.objects.create(
                 # Abstract Group
                 alt_name=group.short_name,
-                logo=instance.icon,
-                banniere=instance.banner,
-                summary=instance.summary,
-                description=instance.description,
-                video1=instance.video1,
-                video2=instance.video2,
+                logo=version.icon,
+                banniere=version.banner,
+                summary=version.summary,
+                description=version.description,
+                video1=version.video1,
+                video2=version.video2,
                 modified_date=version.history_date,
 
                 # Roommates
-                name=instance.name,
+                name=version.name,
+                # we loose the correct dates, but it's too complicated to have the correct ones
                 begin_date=begin_date,
                 end_date=end_date,
                 housing=housing,
