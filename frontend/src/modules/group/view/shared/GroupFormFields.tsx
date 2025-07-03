@@ -218,8 +218,28 @@ export function GroupFormFields({
         {t('group.form.title.presentation')}
       </Typography>
 
+      {groupType.isMap && (
+        <AutocompleteAddressField
+          label={t('group.form.address.label')}
+          value={formValues.address}
+          handleChange={addressCallback}
+          errors={error?.fields?.address}
+          fetchOptions={getGeocodeListApi}
+          initialObjectValue={{
+            address: formValues.address,
+            latitude: formValues.latitude,
+            longitude: formValues.longitude,
+          }}
+          labelPropName={'address'}
+          required
+        />
+      )}
       <TextField
-        label={t('group.form.summary.label')}
+        label={
+          groupType.isMap
+            ? t('group.form.summary.mapLabel')
+            : t('group.form.summary.label')
+        }
         value={formValues.summary}
         handleChange={useCallback(
           (val) => {
@@ -228,40 +248,27 @@ export function GroupFormFields({
           [updateFormValues],
         )}
         errors={error?.fields?.summary}
+        placeholder={
+          groupType.isMap ? t('group.form.summary.mapPlaceholder') : undefined
+        }
       />
       {groupType.isMap ? (
-        <>
-          <AutocompleteAddressField
-            label={t('group.form.address.label')}
-            value={formValues.address}
-            handleChange={addressCallback}
-            errors={error?.fields?.address}
-            fetchOptions={getGeocodeListApi}
-            initialObjectValue={{
-              address: formValues.address,
-              latitude: formValues.latitude,
-              longitude: formValues.longitude,
-            }}
-            labelPropName={'address'}
-            required
+        <FlexAuto columnGap={2}>
+          <TextField
+            label={t('group.form.latitude.label')}
+            helperText={t('group.form.latitude.helperText')}
+            value={formValues.latitude}
+            handleChange={latitudeCallback}
+            errors={error?.fields?.latitude}
           />
-          <FlexAuto columnGap={2}>
-            <TextField
-              label={t('group.form.latitude.label')}
-              helperText={t('group.form.latitude.helperText')}
-              value={formValues.latitude}
-              handleChange={latitudeCallback}
-              errors={error?.fields?.latitude}
-            />
-            <TextField
-              label={t('group.form.longitude.label')}
-              helperText={t('group.form.latitude.helperText')}
-              value={formValues.longitude}
-              handleChange={longitudeCallback}
-              errors={error?.fields?.longitude}
-            />
-          </FlexAuto>
-        </>
+          <TextField
+            label={t('group.form.longitude.label')}
+            helperText={t('group.form.latitude.helperText')}
+            value={formValues.longitude}
+            handleChange={longitudeCallback}
+            errors={error?.fields?.longitude}
+          />
+        </FlexAuto>
       ) : (
         <FlexAuto columnGap={2}>
           <TextField
