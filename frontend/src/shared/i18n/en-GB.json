@@ -492,7 +492,9 @@
         "label": "Shortened name"
       },
       "summary": {
-        "label": "Summary"
+        "label": "Summary",
+        "mapPlaceholder": "Apt. 101",
+        "mapLabel": "Address supplement"
       },
       "title": {
         "advancedOptions": "Advanced options",

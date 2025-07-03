@@ -492,7 +492,9 @@
         "label": "Nom raccourci"
       },
       "summary": {
-        "label": "Résumé"
+        "label": "Résumé",
+        "mapPlaceholder": "Apt. 101",
+        "mapLabel": "Complément d'adresse"
       },
       "title": {
         "advancedOptions": "Options avancées",
