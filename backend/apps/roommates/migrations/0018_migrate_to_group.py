@@ -26,8 +26,8 @@ def transfert_roommates_to_group(apps, schema_editor):
     # Transfer roommates to group
     for housing in Housing.objects.all():
         roommates = housing.roommates_set.order_by("begin_date")
-        # add first roomate as a group
-        roommate = roommates.first()
+        # add last roomate as a group
+        roommate = roommates.last()
         if roommate:
             name = roommate.name
             i = 0
