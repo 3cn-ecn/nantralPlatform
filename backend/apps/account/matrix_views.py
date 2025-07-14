@@ -1,4 +1,3 @@
-from django.conf import settings
 from django.contrib.auth import authenticate
 
 from rest_framework import (
@@ -48,7 +47,7 @@ class CheckCredentials(views.APIView):
         # Return user data
         return response.Response({ "auth": {
             "success": True,
-            "mxid": f"@{user.username}:{settings.MATRIX_SERVER_NAME}",
+            "mxid": f"@{user.username}:nantral-platform.fr",
             "profile": {
                 "display_name": user.student.name,
                 "three_pids": [
