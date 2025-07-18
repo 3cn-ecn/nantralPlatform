@@ -2,6 +2,7 @@ import { Container } from '@mui/material';
 
 import { usePostQueryParamState } from '#modules/post/hooks/usePostQueryParamState';
 import { PostModal } from '#modules/post/view/PostModal/PostModal';
+import UpdateUsernameAlert from '#pages/UpdateUsername/UpdateUsername.alert';
 import { Spacer } from '#shared/components/Spacer/Spacer';
 
 import { CreateNewButton } from './views/CreateNewButton';
@@ -28,6 +29,7 @@ export default function HomePage() {
     <>
       <HomeHeader />
       <Container sx={{ my: 4 }}>
+        <UpdateUsernameAlert />
         <Shortcuts />
         <CreateNewButton />
         <PinnedPostsSection enabled={!postId} />

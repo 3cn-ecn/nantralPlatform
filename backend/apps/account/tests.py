@@ -284,8 +284,8 @@ class TestChangePassword(TestCase):
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
 
-class TestEdit(TestCase):
-    url = reverse("account_api:account-edit")
+class TestEditUsername(TestCase):
+    url = reverse("account-api:account-edit-username")
 
     def setUp(self) -> None:
         self.user: User = User.objects.create_user(
@@ -297,9 +297,7 @@ class TestEdit(TestCase):
     def test_edit(self):
         self.client.force_login(self.user)
         payload = {
-            "first_name": "Test",
-            "last_name": "Test",
-            "username": "Tesssst",
+            "username": "tesssst",
         }
         response = self.client.put(
             self.url,
@@ -308,8 +306,6 @@ class TestEdit(TestCase):
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.user.refresh_from_db()
-        self.assertEqual(self.user.first_name, payload["first_name"].lower())
-        self.assertEqual(self.user.last_name, payload["last_name"].lower())
         self.assertEqual(self.user.username, payload["username"])
 
     def test_taken_username(self):
@@ -317,12 +313,10 @@ class TestEdit(TestCase):
         User.objects.create_user(
             email="test2@ec-nantes.fr",
             password="password",
-            username="Tesssst",
+            username="tesssst",
         )
         payload = {
-            "first_name": "Test",
-            "last_name": "Test",
-            "username": "Tesssst",
+            "username": "tesssst",
         }
         response = self.client.put(
             self.url,
@@ -333,12 +327,32 @@ class TestEdit(TestCase):
 
     def test_is_authenticated(self):
         payload = {
-            "first_name": "Test",
-            "last_name": "Test",
-            "username": "Tesssst",
+            "username": "tesssst",
         }
         response = self.client.put(self.url, data=payload)
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+    def test_invalid_username_underscore(self):
+        self.client.force_login(self.user)
+        payload = {
+            "username": "_tesssst",
+        }
+        response = self.client.put(
+            self.url,
+            data=payload,
+            content_type="application/json"
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_invalid_username_char(self):
+        self.client.force_login(self.user)
+        payload = {
+            "username": "Tesssst",
+        }
+        response = self.client.put(
+            self.url, data=payload, content_type="application/json"
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
 
 class TestChangeEmail(TestCase):
@@ -480,3 +494,34 @@ class TestEmailResend(TestCase):
 
         response = self.client.post(self.url, {"email": "not email"})
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+class TestMatrix(TestCase):
+    url = reverse("matrix_api:check_credentials")
+
+    def setUp(self):
+        self.user = create_student_user(
+            email="test@ec-nantes.fr",
+            username="teeeest",
+            password="<PASSWORD>",
+        )
+
+    def test_check_credentials_email(self):
+        payload = {"user": {"password": "<PASSWORD>", "email": "test@ec-nantes.fr"}}
+        response = self.client.post(self.url, data=payload, content_type="application/json")
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.user.refresh_from_db()
+        self.assertTrue(self.user.has_opened_matrix)
+
+    def test_check_credentials_username(self):
+        payload = {"user": {"password": "<PASSWORD>", "id": "teeeest"}}
+        response = self.client.post(self.url, data=payload, content_type="application/json")
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.user.refresh_from_db()
+        self.assertTrue(self.user.has_opened_matrix)
+
+    def test_check_credentials_mxid(self):
+        payload = {"user": {"password": "<PASSWORD>", "id": "@teeeest:nantral-platform.fr"}}
+        response = self.client.post(self.url, data=payload, content_type="application/json")
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.user.refresh_from_db()
+        self.assertTrue(self.user.has_opened_matrix)

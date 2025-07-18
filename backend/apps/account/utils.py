@@ -1,3 +1,6 @@
+import re
+import unicodedata
+
 from django.contrib import messages
 from django.http import HttpRequest
 from django.urls import reverse
@@ -9,6 +12,14 @@ from apps.utils.send_email import send_email
 from .forms import SignUpForm, TemporaryRequestSignUpForm
 from .models import InvitationLink, User
 from .tokens import account_activation_token
+
+
+def clean_username(username: str):
+    normalized = unicodedata.normalize("NFKD", username)  # split the Unicode characters
+    normalized = normalized.lower()
+    cleaned = re.sub(r"[^a-z0-9._\-+]", "", normalized)  # remove unauthorized Unicode chars
+    cleaned.strip("_")  # just to be sure, remove leading underscores (and trailing, but we don't care)
+    return cleaned
 
 
 def user_creation(
@@ -29,10 +40,8 @@ def user_creation(
     if user.last_name is not None:
         user.last_name = user.last_name.lower()
     # create a unique user name
-    first_name = "".join(e for e in user.first_name if e.isalnum())
-    last_name = "".join(e for e in user.last_name if e.isalnum())
     promo = user.student.promo
-    user.username = f"{first_name}.{last_name}{promo}-{user.id}"
+    user.username = clean_username(f"{user.first_name}.{user.last_name}.{promo}.{user.id}")
     if isinstance(form, TemporaryRequestSignUpForm):
         user.invitation = invitation
     user.save()
