@@ -1,4 +1,4 @@
-FROM python:3.10-slim-buster
+FROM python:3.13-slim-bookworm
 
 ENV C_FORCE_ROOT 1
 ENV DOCKER True
@@ -11,7 +11,7 @@ RUN adduser --disabled-password --gecos '' myuser
 # Install PostgreSQL dependencies
 # We have to install GCC as the slim and alpine base images do not come with gcc built in
 RUN apt-get update && \
-  apt-get install -y postgresql-client libpq-dev supervisor netcat gcc memcached git gettext
+  apt-get install -y postgresql-client libpq-dev supervisor netcat-openbsd gcc memcached git gettext
 
 # Step 1: Install any Python packages
 # ----------------------------------------
