@@ -1,7 +1,7 @@
 # spell-checker: words utest uidb
 # ruff: noqa: S105, S106
 
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 
 from django.contrib.auth import authenticate
 from django.core import mail
@@ -84,7 +84,7 @@ class TestLogin(TestCase):
     def test_login_temporary_account(self):
         # test for a valid invitation
         self.user.invitation = InvitationLink.objects.create(
-            expires_at=datetime(year=2021, month=9, day=2, tzinfo=timezone.utc),
+            expires_at=datetime(year=2021, month=9, day=2, tzinfo=UTC),
         )
         self.user.save()
 
@@ -101,7 +101,7 @@ class TestLogin(TestCase):
                 year=2021,
                 month=8,
                 day=30,
-                tzinfo=timezone.utc,
+                tzinfo=UTC,
             ),
         )
         self.user.save()
@@ -172,7 +172,7 @@ class TestRegister(TestCase):
     @freeze_time("2021-09-01")
     def test_register_invitation(self):
         invitation = InvitationLink.objects.create(
-            expires_at=datetime(year=2021, month=9, day=2, tzinfo=timezone.utc),
+            expires_at=datetime(year=2021, month=9, day=2, tzinfo=UTC),
         )
         self.payload["email"] = "test@notecn.fr"
         self.payload["invitation_uuid"] = invitation.id
@@ -195,7 +195,7 @@ class TestRegister(TestCase):
     @freeze_time("2021-09-10")
     def test_register_invitation_expired(self):
         invitation = InvitationLink.objects.create(
-            expires_at=datetime(year=2021, month=9, day=2, tzinfo=timezone.utc),
+            expires_at=datetime(year=2021, month=9, day=2, tzinfo=UTC),
         )
         self.payload["email"] = "test@notecn.fr"
         self.payload["invitation_uuid"] = invitation.id
@@ -443,7 +443,7 @@ class TestValidateInvitation(TestCase):
 
     def setUp(self):
         self.invite_id = InvitationLink.objects.create(
-            expires_at=datetime(year=2021, month=9, day=3, tzinfo=timezone.utc),
+            expires_at=datetime(year=2021, month=9, day=3, tzinfo=UTC),
         ).id
 
     @freeze_time("2021-09-01")
