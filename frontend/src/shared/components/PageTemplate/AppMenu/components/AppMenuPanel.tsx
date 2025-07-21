@@ -45,7 +45,7 @@ export function AppMenuPanel({ menuOpen, onClose }: AppMenuPanelProps) {
         />
         <AppMenuItem
           label={t('navbar.map')}
-          path="/map/"
+          path="/map/?type=colocs"
           iconPath="/static/img/icons/cropped/roommates.svg"
           closeMenu={onClose}
         />
