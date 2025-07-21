@@ -108,7 +108,9 @@ class RegisterSerializer(serializers.Serializer):
         if user.username is None:
             # create a unique username
             promo = validated_data.get("promo")
-            user.username = clean_username(f"{user.first_name}.{user.last_name}.{promo}.{user.pk}")
+            user.username = clean_username(
+                f"{user.first_name}.{user.last_name}.{promo}.{user.pk}"
+            )
         # save again
         user.save()
         # add student informations

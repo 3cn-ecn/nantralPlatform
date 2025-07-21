@@ -9,7 +9,6 @@ import simple_history.models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
         ("group", "0017_alter_group_banner_alter_group_icon"),
@@ -19,20 +18,99 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name="HistoricalGroup",
             fields=[
-                ("id", models.IntegerField(auto_created=True, blank=True, db_index=True, verbose_name="ID")),
-                ("name", models.CharField(db_index=True, max_length=100, verbose_name="Name")),
-                ("summary", models.CharField(blank=True, max_length=500, verbose_name="Summary")),
-                ("description", django_ckeditor_5.fields.CKEditor5Field(blank=True, verbose_name="Description")),
-                ("icon", models.CharField(blank=True, help_text="Image with a ratio of 1:1 (recommended minimum size: 500x500)", max_length=100, null=True, verbose_name="Profile picture")),
-                ("banner", models.CharField(blank=True, help_text="Image with 3:1 ratio (recommended minimum size: 1200x400)", max_length=100, null=True, verbose_name="Banner")),
-                ("video1", models.URLField(blank=True, verbose_name="Video link 1")),
-                ("video2", models.URLField(blank=True, verbose_name="Video link 2")),
-                ("history_id", models.AutoField(primary_key=True, serialize=False)),
+                (
+                    "id",
+                    models.IntegerField(
+                        auto_created=True,
+                        blank=True,
+                        db_index=True,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "name",
+                    models.CharField(
+                        db_index=True, max_length=100, verbose_name="Name"
+                    ),
+                ),
+                (
+                    "summary",
+                    models.CharField(
+                        blank=True, max_length=500, verbose_name="Summary"
+                    ),
+                ),
+                (
+                    "description",
+                    django_ckeditor_5.fields.CKEditor5Field(
+                        blank=True, verbose_name="Description"
+                    ),
+                ),
+                (
+                    "icon",
+                    models.CharField(
+                        blank=True,
+                        help_text="Image with a ratio of 1:1 (recommended minimum size: 500x500)",
+                        max_length=100,
+                        null=True,
+                        verbose_name="Profile picture",
+                    ),
+                ),
+                (
+                    "banner",
+                    models.CharField(
+                        blank=True,
+                        help_text="Image with 3:1 ratio (recommended minimum size: 1200x400)",
+                        max_length=100,
+                        null=True,
+                        verbose_name="Banner",
+                    ),
+                ),
+                (
+                    "video1",
+                    models.URLField(blank=True, verbose_name="Video link 1"),
+                ),
+                (
+                    "video2",
+                    models.URLField(blank=True, verbose_name="Video link 2"),
+                ),
+                (
+                    "history_id",
+                    models.AutoField(primary_key=True, serialize=False),
+                ),
                 ("history_date", models.DateTimeField(db_index=True)),
-                ("history_change_reason", models.CharField(max_length=100, null=True)),
-                ("history_type", models.CharField(choices=[("+", "Created"), ("~", "Changed"), ("-", "Deleted")], max_length=1)),
-                ("history_relation", models.ForeignKey(db_constraint=False, on_delete=django.db.models.deletion.DO_NOTHING, related_name="versions", to="group.group")),
-                ("history_user", models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, related_name="+", to=settings.AUTH_USER_MODEL)),
+                (
+                    "history_change_reason",
+                    models.CharField(max_length=100, null=True),
+                ),
+                (
+                    "history_type",
+                    models.CharField(
+                        choices=[
+                            ("+", "Created"),
+                            ("~", "Changed"),
+                            ("-", "Deleted"),
+                        ],
+                        max_length=1,
+                    ),
+                ),
+                (
+                    "history_relation",
+                    models.ForeignKey(
+                        db_constraint=False,
+                        on_delete=django.db.models.deletion.DO_NOTHING,
+                        related_name="versions",
+                        to="group.group",
+                    ),
+                ),
+                (
+                    "history_user",
+                    models.ForeignKey(
+                        null=True,
+                        on_delete=django.db.models.deletion.SET_NULL,
+                        related_name="+",
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
             ],
             options={
                 "verbose_name": "historical groupe",

@@ -244,7 +244,9 @@ class AuthViewSet(GenericViewSet):
     )
     def edit_username(self, request: Request):
         """Edit account informations"""
-        serializer = UsernameSerializer(instance=request.user, data=request.data)
+        serializer = UsernameSerializer(
+            instance=request.user, data=request.data
+        )
         if not serializer.is_valid():
             return Response(
                 serializer.errors,

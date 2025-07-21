@@ -65,8 +65,6 @@ def transfert_roommates_to_group(apps, schema_editor):
             group._history_date = roommate.modified_date
             group.save()
 
-
-
             # Update the other roommates
             for roommate in roommates:
                 # Create a snapshot for each roommate
@@ -80,7 +78,7 @@ def transfert_roommates_to_group(apps, schema_editor):
                     banner=roommate.banniere,
                     video1=roommate.video1,
                     video2=roommate.video2,
-                    id=group.id
+                    id=group.id,
                 )
                 # Update archived status to take the current roommate object into account
                 if roommate.begin_date.year >= timezone.now().year:
@@ -90,7 +88,9 @@ def transfert_roommates_to_group(apps, schema_editor):
                 # Transfer members
                 for member in roommate.namedmembershiproommates_set.all():
                     try:
-                        membership = Membership.objects.get(group=group, student=member.student)
+                        membership = Membership.objects.get(
+                            group=group, student=member.student
+                        )
                     except Membership.DoesNotExist:
                         Membership.objects.create(
                             group=group,
@@ -101,10 +101,21 @@ def transfert_roommates_to_group(apps, schema_editor):
                             description=member.nickname,
                         )
                     else:
-                        membership.begin_date = min(membership.begin_date, roommate.begin_date)
-                        membership.end_date = max(membership.end_date, roommate.end_date)
+                        membership.begin_date = min(
+                            membership.begin_date, roommate.begin_date
+                        )
+                        membership.end_date = max(
+                            membership.end_date, roommate.end_date
+                        )
                         membership.admin = member.admin or membership.admin
-                        membership.description = "\n".join(nickname for nickname in (membership.description, member.nickname) if nickname)
+                        membership.description = "\n".join(
+                            nickname
+                            for nickname in (
+                                membership.description,
+                                member.nickname,
+                            )
+                            if nickname
+                        )
                         membership.save()
 
             # Delete the old roommate
@@ -112,6 +123,7 @@ def transfert_roommates_to_group(apps, schema_editor):
                 roommate.delete()
 
         housing.delete()
+
 
 def reverse(apps, schema_editor):
     # Get the models
@@ -135,7 +147,7 @@ def reverse(apps, schema_editor):
             address=group.address,
             latitude=float(group.latitude),
             longitude=float(group.longitude),
-            details = group.summary,
+            details=group.summary,
         )
 
         for version in group.versions.all():
@@ -149,7 +161,6 @@ def reverse(apps, schema_editor):
                 video1=version.video1,
                 video2=version.video2,
                 modified_date=version.history_date,
-
                 # Roommates
                 name=version.name,
                 # we loose the correct dates, but it's too complicated to have the correct ones
@@ -159,14 +170,13 @@ def reverse(apps, schema_editor):
             )
             SlugModel.set_slug(roommate, group.slug)
             roommate.save()
-        
+
             # Members
             for member in group.membership_set.all():
                 roommate.namedmembershiproommates_set.create(
                     # NamedMembership
                     admin=member.admin,
                     student=member.student,
-
                     # NamedMembershipRoommates
                     group=roommate,
                     nickname=member.summary,
@@ -177,8 +187,8 @@ def reverse(apps, schema_editor):
     # Delete the group type
     roommates_group_type.delete()
 
-class Migration(migrations.Migration):
 
+class Migration(migrations.Migration):
     dependencies = [
         ("group", "0020_group_address_group_latitude_group_longitude_and_more"),
         ("roommates", "0017_alter_housing_details_and_more"),

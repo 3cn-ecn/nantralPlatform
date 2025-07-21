@@ -1,7 +1,4 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
-
-import { Box, useTheme } from '@mui/material';
 import Map, {
   FullscreenControl,
   GeolocateControl,
@@ -10,7 +7,10 @@ import Map, {
   NavigationControl,
   Popup,
   ScaleControl,
-} from '@vis.gl/react-mapbox';
+} from 'react-map-gl/mapbox';
+import { useSearchParams } from 'react-router-dom';
+
+import { Box, useTheme } from '@mui/material';
 import 'mapbox-gl/dist/mapbox-gl.css';
 
 import { getMapGroupDetailApi } from '#modules/group/api/getMapGroupDetail.api';

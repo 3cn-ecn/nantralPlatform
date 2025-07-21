@@ -400,7 +400,12 @@ class MapGroupSerializer(serializers.ModelSerializer):
 
     def get_membership_set(self, obj: Group) -> str:
         from_date = timezone.now()
-        serialized_data = MembershipSerializer(obj.membership_set.filter(Q(end_date__gte=from_date) | Q(end_date__isnull=True)), many=True).data
+        serialized_data = MembershipSerializer(
+            obj.membership_set.filter(
+                Q(end_date__gte=from_date) | Q(end_date__isnull=True)
+            ),
+            many=True,
+        ).data
         return serialized_data
 
 
@@ -415,7 +420,13 @@ class GroupHistorySerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Group.history.model
-        fields = ["pk", "history_date", "user", "history_change_reason", "history_type"]
+        fields = [
+            "pk",
+            "history_date",
+            "user",
+            "history_change_reason",
+            "history_type",
+        ]
 
     def get_user(self, obj):
         if obj.history_user:

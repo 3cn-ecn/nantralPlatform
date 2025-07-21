@@ -4,7 +4,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("group", "0019_created_and_updated_migration"),
     ]
@@ -13,17 +12,29 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name="group",
             name="address",
-            field=models.CharField(blank=True, default="", max_length=250, verbose_name="Address"),
+            field=models.CharField(
+                blank=True, default="", max_length=250, verbose_name="Address"
+            ),
         ),
         migrations.AddField(
             model_name="group",
             name="latitude",
-            field=models.FloatField(blank=True, default=47.2186371, null=True, verbose_name="Latitude"),
+            field=models.FloatField(
+                blank=True,
+                default=47.2186371,
+                null=True,
+                verbose_name="Latitude",
+            ),
         ),
         migrations.AddField(
             model_name="group",
             name="longitude",
-            field=models.FloatField(blank=True, default=-1.5541362, null=True, verbose_name="Longitude"),
+            field=models.FloatField(
+                blank=True,
+                default=-1.5541362,
+                null=True,
+                verbose_name="Longitude",
+            ),
         ),
         migrations.AddField(
             model_name="grouptype",
