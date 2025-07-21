@@ -141,7 +141,9 @@ class GroupViewSet(viewsets.ModelViewSet):
             if is_map is True:
                 return MapGroupPreviewSerializer
             else:
-                raise exceptions.NotAcceptable("GeoJSON format is only supported for map groups")
+                raise exceptions.NotAcceptable(
+                    "GeoJSON format is only supported for map groups"
+                )
         if self.action == "update_subscription":
             return SubscriptionSerializer
         if self.request.method in ["POST", "PUT", "PATCH"]:
@@ -177,8 +179,7 @@ class GroupViewSet(viewsets.ModelViewSet):
                     "membership_set",
                     filter=Q(membership_set__end_date__gte=timezone.now()),
                 ),
-            )
-            .filter(
+            ).filter(
                 Q(num_active_members__gt=0)
                 | Q(group_type__hide_no_active_members=False),
             )
@@ -274,7 +275,9 @@ class GroupViewSet(viewsets.ModelViewSet):
     )
     def history(self, request: Request, *args, **kwargs):
         group: Group = self.get_object()
-        serialized_data = GroupHistorySerializer(group.history.all(), many=True).data
+        serialized_data = GroupHistorySerializer(
+            group.history.all(), many=True
+        ).data
         return response.Response(serialized_data)
 
 

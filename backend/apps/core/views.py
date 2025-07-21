@@ -21,7 +21,10 @@ from apps.student.models import Student
 @require_http_methods(["GET"])
 def react_app_view(request):
     """Serve the React frontend app."""
-    context = {"DJANGO_VITE_DEV_MODE": settings.DJANGO_VITE_DEV_MODE}
+    context = {
+        "DJANGO_VITE_DEV_MODE": settings.DJANGO_VITE_DEV_MODE,
+        "MAPBOX_API_KEY": settings.MAPBOX_API_KEY,
+    }
     response = render(request, "base_empty.html", context)
     return response
 
