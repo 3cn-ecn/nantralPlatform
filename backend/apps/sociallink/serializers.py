@@ -1,10 +1,14 @@
+from typing import TYPE_CHECKING
+
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 
 from apps.group.models import Group
-from apps.student.models import Student
 
 from .models import SocialLink
+
+if TYPE_CHECKING:
+    from apps.student.models import Student
 
 
 class SocialLinkSerializer(serializers.ModelSerializer):

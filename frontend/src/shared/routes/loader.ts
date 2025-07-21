@@ -22,16 +22,16 @@ export async function studentDetailsLoader(
       queryKey: ['student', 'current'],
     }));
 
-  if (currentStudent.id.toString() === id) {
-    return redirect('/student/me');
+  if (id === 'me') {
+    return redirect(`/student/${currentStudent.id}`);
   }
 
-  if (id === 'me') {
+  if (id === currentStudent.id.toString()) {
     return {
       extraCrumb: {
         id: 'student me',
         label: currentStudent.name,
-        path: '/student/me',
+        path: `/student/${currentStudent.id}`,
       },
     };
   }
@@ -46,7 +46,7 @@ export async function studentDetailsLoader(
     (queryClient.getQueryData(['student', parsedId]) as Student) ??
     (await queryClient.fetchQuery({
       queryFn: () => getStudentDetailsApi({ id: parsedId }),
-      queryKey: ['student', { id: parsedId }],
+      queryKey: ['student', { id }],
     }));
 
   return {

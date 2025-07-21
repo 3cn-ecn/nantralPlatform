@@ -1,4 +1,4 @@
-from rest_framework import filters, permissions, viewsets
+from rest_framework import filters, mixins, permissions, viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
@@ -15,10 +15,9 @@ class StudentPermission(permissions.BasePermission):
         return request.user == obj.user
 
 
-class StudentViewSet(viewsets.ModelViewSet):
+class StudentViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin, viewsets.GenericViewSet):
     """An API endpoint for students."""
 
-    http_method_names = ["get", "options"]
     permission_classes = [permissions.IsAuthenticated, StudentPermission]
     serializer_class = StudentSerializer
     search_fields = ["user__first_name", "user__last_name"]

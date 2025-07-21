@@ -36,5 +36,6 @@ export interface UsernameDTO {
   username: string;
   name: string;
   has_updated_username: boolean;
+  has_opened_matrix: boolean;
   picture?: string;
 }

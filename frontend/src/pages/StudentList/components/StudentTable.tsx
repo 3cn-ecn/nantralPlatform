@@ -33,7 +33,7 @@ export function StudentTable({ filters, updateFilters }: StudentTableProps) {
 
   return (
     <TableContainer>
-      <Table aria-label="simple table">
+      <Table aria-label="simple table" size={'small'}>
         <TableHead>
           <TableRow>
             <TableCell>{t('student.picture.label')}</TableCell>

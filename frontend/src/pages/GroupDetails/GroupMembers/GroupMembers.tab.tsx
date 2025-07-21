@@ -21,6 +21,7 @@ export function GroupMembers({ group }: GroupMembersProps) {
       <FlexRow alignItems={'center'} justifyContent={'space-between'}>
         <CheckboxField
           value={filters.previous}
+          disabled={group.groupType.noMembershipDates}
           handleChange={(val) => setFilters({ ...filters, previous: val })}
           label={
             filters.previous

@@ -12,12 +12,9 @@ import { Page } from '#shared/infra/pagination';
 export function MembersGrid({
   query,
   group,
-  reloadDocument,
 }: {
   query: UseInfiniteQueryResult<Page<Membership>>;
   group?: Group;
-  // reload document for group pages not currently in front end
-  reloadDocument?: boolean;
 }) {
   const { t } = useTranslation();
   return (
@@ -26,12 +23,7 @@ export function MembersGrid({
         {query.data?.pages
           .flatMap((page) => page.results)
           .map((member) => (
-            <MembershipCard
-              group={group}
-              key={member.id}
-              item={member}
-              reloadDocument={reloadDocument}
-            />
+            <MembershipCard group={group} key={member.id} item={member} />
           ))}
         {query.data?.pages[0].count === 0 && (
           <Typography px={2}>

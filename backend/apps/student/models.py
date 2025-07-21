@@ -2,7 +2,7 @@ from django.apps import apps
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.db import models
-from django.utils.translation import gettext as _
+from django.utils.translation import gettext_lazy as _
 
 from apps.sociallink.models import SocialLink
 from apps.utils.fields.image_field import CustomImageField
@@ -45,6 +45,7 @@ class Student(models.Model):
         blank=True,
         size=(500, 500),
         name_from_field="user",
+        crop=True,
     )
     faculty = models.CharField(
         max_length=200,

@@ -11,7 +11,7 @@ export function useStudentDetails(id: string | undefined) {
       id === 'me'
         ? getCurrentUserApi({ signal })
         : getStudentDetailsApi({ id: parsedId || -1 }),
-    queryKey: ['student', id === 'me' ? 'current' : { id }],
+    queryKey: ['student', { id }],
     refetchOnMount: false,
     refetchOnWindowFocus: false,
   });

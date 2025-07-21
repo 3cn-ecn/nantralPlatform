@@ -24,7 +24,7 @@ export function StudentHousingSection({ student }: { student: Student }) {
   return (
     <>
       <Typography variant="h2">{t('student.details.housing')}</Typography>
-      <MembersGrid query={housingQuery} reloadDocument />
+      <MembersGrid query={housingQuery} />
     </>
   );
 }

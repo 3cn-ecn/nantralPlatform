@@ -71,7 +71,7 @@ export function UserMenuAuthenticated() {
           label={t('userMenu.menu.profile')}
           icon={<PersonIcon />}
           component={Link}
-          to={'/student/me'}
+          to={`/student/${currentUser.id}`}
           onClick={() => setMenuOpen(null)}
         />
         <UserMenuItem

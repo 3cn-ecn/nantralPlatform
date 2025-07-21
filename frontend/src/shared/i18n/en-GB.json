@@ -387,8 +387,8 @@
         "label": "Begin date"
       },
       "changeReason": {
-        "label": "Change Reason",
-        "helperText": "If you wish, you can add a few words explaining why you are updating/creating this group"
+        "helperText": "If you wish, you can add a few words explaining why you are updating/creating this group",
+        "label": "Change Reason"
       },
       "creationDate": {
         "label": "Creation date"
@@ -788,6 +788,10 @@
       "label": "Description",
       "placeholder": "Describe yourself in one or two sentences"
     },
+    "detail": {
+      "hideFormerGroups": "Hide former groups",
+      "showFormerGroups": "Show former groups"
+    },
     "details": {
       "changePassword": "Change password",
       "editPassword": "Change password",
@@ -828,6 +832,7 @@
       "placeholder": "Search for a student"
     },
     "username": {
+      "disabledText": "You can not change your username because you already created a Matrix account",
       "label": "User name"
     }
   },
@@ -855,14 +860,14 @@
     }
   },
   "username": {
-    "update": "Choose a new username",
-    "success": "Successfully updated username",
     "alert": {
-      "title": "Important Update - Usernames",
-      "message1": "We made you able to choose an username.",
       "link": "Click here",
-      "message2": "to make the change. Please perform this action quickly to prepare for a future update."
-    }
+      "message1": "We made you able to choose an username.",
+      "message2": "to make the change. Please perform this action quickly to prepare for a future update.",
+      "title": "Important Update - Usernames"
+    },
+    "success": "Successfully updated username",
+    "update": "Choose a new username"
   },
   "utils": {
     "shareLink": {

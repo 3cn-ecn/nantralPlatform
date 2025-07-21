@@ -67,7 +67,9 @@ export function ModalEditProfile({ onClose }: { onClose: () => void }) {
             socialLinks={socialLinks}
             type="user"
             onSuccess={() =>
-              queryClient.invalidateQueries(['student', 'current'])
+              queryClient.invalidateQueries({
+                queryKey: ['student', 'current'],
+              })
             }
           />
         )}

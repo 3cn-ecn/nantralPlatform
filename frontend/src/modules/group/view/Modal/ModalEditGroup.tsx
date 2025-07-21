@@ -153,7 +153,9 @@ export function ModalEditGroup({
             groupSlug={group.slug}
             type="group"
             onSuccess={() =>
-              queryClient.invalidateQueries(['group', { slug: group.slug }])
+              queryClient.invalidateQueries({
+                queryKey: ['group', { slug: group.slug }],
+              })
             }
           />
         )}

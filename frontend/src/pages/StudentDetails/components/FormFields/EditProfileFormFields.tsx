@@ -20,11 +20,13 @@ export function EditProfileFormFields({
   previousValues,
   updateFormValues,
   error,
+  hasOpenedMatrix,
 }: {
   formValues: EditAccountOptions;
   previousValues: Student;
   updateFormValues: (val: Partial<EditAccountOptions>) => void;
   error: ApiFormError<EditAccountOptionsDTO> | null;
+  hasOpenedMatrix?: boolean;
 }) {
   const { t } = useTranslation();
   return (
@@ -59,6 +61,10 @@ export function EditProfileFormFields({
         label={t('student.username.label')}
         errors={error?.fields?.username}
         required
+        disabled={hasOpenedMatrix}
+        helperText={
+          hasOpenedMatrix ? t('student.username.disabledText') : undefined
+        }
       />
       <TextField
         handleChange={(val) => updateFormValues({ description: val })}

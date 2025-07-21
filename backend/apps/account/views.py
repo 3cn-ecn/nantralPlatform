@@ -131,7 +131,7 @@ class ConfirmEmail(TemplateView):
         try:
             User.objects.get(email=request.session["email"])
         except (User.DoesNotExist, KeyError):
-            return redirect("account:login")
+            return redirect("/login")
         return super().get(request, *args, **kwargs)
 
     def post(self, request):
@@ -145,4 +145,4 @@ class ConfirmEmail(TemplateView):
             send_to=mail,
         )
         del self.request.session["email"]
-        return redirect("account:login")
+        return redirect("/login")

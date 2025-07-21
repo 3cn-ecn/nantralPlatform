@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { Chip, Divider, Typography } from '@mui/material';
@@ -10,9 +10,11 @@ import { MembersGrid } from '#pages/GroupDetails/GroupMembers/MembersGrid';
 import { useInfiniteMembership } from '#pages/GroupDetails/hooks/useInfiniteMemberships';
 import { FlexRow } from '#shared/components/FlexBox/FlexBox';
 import { CheckboxField } from '#shared/components/FormFields';
+import { useTranslation } from '#shared/i18n/useTranslation';
 
 export function StudentGroupsSection({ student }: { student: Student }) {
   const { groupTypesQuery } = useGroupTypes(1);
+  const { t } = useTranslation();
   const today = roundToNearestMinutes(new Date());
   const [type, setType] = useState<string>('all');
   const [showFormerGroups, setShowFormerGroups] = useState(false);
@@ -58,27 +60,38 @@ export function StudentGroupsSection({ student }: { student: Student }) {
           />
         ))}
       </FlexRow>
-      <CheckboxField
-        label={showFormerGroups ? 'Hide former groups' : 'Show former groups'}
-        value={showFormerGroups}
-        checkboxProps={{ icon: <Visibility />, checkedIcon: <VisibilityOff /> }}
-        handleChange={(val) => setShowFormerGroups(val)}
-      />
+
       <MembersGrid query={membershipQuery} />
       {!groupTypesQuery.data?.results.find((item) => type == item.slug)
-        ?.noMembershipDates &&
-        showFormerGroups && (
-          <>
-            <FlexRow alignItems="center">
-              <Divider sx={{ flex: 1, backgroundColor: 'red' }} />
-              <Typography sx={{ mx: 2, color: 'red' }}>
-                Former groups
-              </Typography>
-              <Divider sx={{ flex: 1, backgroundColor: 'red' }} />
-            </FlexRow>
-            <MembersGrid query={formerMembershipQuery} />
-          </>
-        )}
+        ?.noMembershipDates && (
+        <>
+          <CheckboxField
+            label={
+              showFormerGroups
+                ? t('student.detail.hideFormerGroups')
+                : t('student.detail.showFormerGroups')
+            }
+            value={showFormerGroups}
+            checkboxProps={{
+              icon: <Visibility />,
+              checkedIcon: <VisibilityOff />,
+            }}
+            handleChange={(val) => setShowFormerGroups(val)}
+          />
+          {showFormerGroups && (
+            <>
+              <FlexRow alignItems="center">
+                <Divider sx={{ flex: 1, backgroundColor: 'red' }} />
+                <Typography sx={{ mx: 2, color: 'red' }}>
+                  Former groups
+                </Typography>
+                <Divider sx={{ flex: 1, backgroundColor: 'red' }} />
+              </FlexRow>
+              <MembersGrid query={formerMembershipQuery} />
+            </>
+          )}
+        </>
+      )}
     </>
   );
 }

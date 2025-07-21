@@ -1,9 +1,14 @@
+from datetime import datetime
+from typing import TYPE_CHECKING
+
 from rest_framework import serializers
 
-from apps.account.models import User
 from apps.sociallink.serializers import SocialLinkSerializer
 
 from .models import Student
+
+if TYPE_CHECKING:
+    from apps.account.models import User
 
 
 class StudentSerializer(serializers.ModelSerializer):
@@ -43,10 +48,15 @@ class StudentSerializer(serializers.ModelSerializer):
     def get_username(self, obj: Student) -> str:
         return obj.user.username
 
-    def get_expires_at(self, obj: Student) -> str | None:
+    def get_expires_at(self, obj: Student) -> datetime | None:
         user: User = obj.user
         # send expiring date only to the current user
-        if self.context["request"].user != user or not user.invitation:
+        request_user = None
+        request = self.context.get("request")
+        if request and hasattr(request, "user"):
+            request_user = request.user
+
+        if request_user != user or not user.invitation:
             return None
         return user.invitation.expires_at
 

@@ -28,18 +28,16 @@ function MembershipCard(props: {
   group?: Group;
   updateMembership?: (member: Membership) => Promise<void>;
   deleteMembership?: (member: Membership) => Promise<void>;
-  reloadDocument?: boolean;
 }) {
   const { item, group, deleteMembership } = props;
   const [openShowModal, setOpenShowModal] = useState(false);
   const [openEditModal, setOpenEditModal] = useState(false);
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
 
-  const today = new Date(new Date().toDateString());
   return (
     <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
       <Card
-        variant={item.endDate < today ? 'outlined' : 'elevation'}
+        variant={'elevation'}
         sx={{ height: '100%', borderColor: 'primary' }}
       >
         <CardActionArea
@@ -75,7 +73,6 @@ function MembershipCard(props: {
         member={item}
         group={group}
         student={item.student}
-        reloadDocument={props.reloadDocument}
       />
 
       {openEditModal && group && (

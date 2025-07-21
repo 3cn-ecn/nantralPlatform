@@ -2,6 +2,7 @@ import { useParams } from 'react-router-dom';
 
 import { Container, Divider, Typography } from '@mui/material';
 
+import { useCurrentUserData } from '#modules/student/hooks/useCurrentUser.data';
 import { Avatar } from '#shared/components/Avatar/Avatar';
 import { FlexRow } from '#shared/components/FlexBox/FlexBox';
 import { Spacer } from '#shared/components/Spacer/Spacer';
@@ -14,13 +15,15 @@ import { useStudentDetails } from './hooks/useStudentDetails';
 
 export default function StudentDetailsPage() {
   const { id } = useParams();
-  const isMe = id === 'me';
-
   const { isLoading, data: student } = useStudentDetails(id);
+
+  const currentStudent = useCurrentUserData();
 
   if (isLoading || !student) {
     return;
   }
+
+  const isMe = student.id === currentStudent.id;
 
   return (
     <Container sx={{ my: 3 }}>

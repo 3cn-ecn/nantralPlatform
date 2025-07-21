@@ -18,7 +18,7 @@ import { useMutation } from '@tanstack/react-query';
 import { createGroupSocialLinkApi } from '#modules/social_link/api/createGroupSocialLink.api';
 import { createUserSocialLinkApi } from '#modules/social_link/api/createUserSocialLink.api';
 import { deleteSocialLinkApi } from '#modules/social_link/api/deleteSocialLink.api';
-import { updateSocialLinkApi } from '#modules/social_link/api/updateGroupSocialLink.api';
+import { updateSocialLinkApi } from '#modules/social_link/api/updateSocialLink.api';
 import { SocialLinkDTO } from '#modules/social_link/infra/socialLink.dto';
 import {
   SocialLink,

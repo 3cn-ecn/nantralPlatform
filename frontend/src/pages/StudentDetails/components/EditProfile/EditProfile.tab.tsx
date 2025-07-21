@@ -1,13 +1,14 @@
 import { FormEvent, useState } from 'react';
 
 import { Divider } from '@mui/material';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
 import {
   editAccount,
   EditAccountOptions,
   EditAccountOptionsDTO,
 } from '#modules/account/api/editAccount';
+import getUsernameApi from '#modules/account/api/getUsername.api';
 import { useCurrentUserData } from '#modules/student/hooks/useCurrentUser.data';
 import { Student } from '#modules/student/student.types';
 import { Avatar } from '#shared/components/Avatar/Avatar';
@@ -21,6 +22,10 @@ import { StudentDetailsInfo } from '../StudentDetailsInfo';
 
 export function EditProfileTab() {
   const student = useCurrentUserData();
+  const { data: userData } = useQuery({
+    queryFn: getUsernameApi,
+    queryKey: ['username'],
+  });
 
   const queryClient = useQueryClient();
   const { t } = useTranslation();
@@ -44,7 +49,11 @@ export function EditProfileTab() {
     EditAccountOptions
   >(editAccount, {
     onSuccess: () => {
-      queryClient.invalidateQueries(['student', 'current']);
+      queryClient.invalidateQueries({ queryKey: ['student', 'current'] });
+      queryClient.invalidateQueries({
+        queryKey: ['student', { id: student.id.toString() }],
+      });
+      queryClient.invalidateQueries({ queryKey: ['username'] });
       setHasChanges(false);
     },
   });
@@ -103,6 +112,7 @@ export function EditProfileTab() {
           previousValues={student}
           updateFormValues={updateFormValues}
           error={error}
+          hasOpenedMatrix={userData?.hasOpenedMatrix}
         />
       </form>
       <LoadingButton

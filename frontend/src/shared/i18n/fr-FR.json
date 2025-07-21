@@ -383,12 +383,12 @@
         "helperText": "Image avec un ratio de 3:1 (taille minimale recommandée : 1200x400)",
         "label": "Bannière"
       },
-      "changeReason": {
-        "label": "Modif de changement",
-        "helperText": "Si vous le souhaitez, ajoutez quelques mots expliquant pourquoi vous créez/modifiez ce groupe"
-      },
       "beginDate": {
         "label": "Date de début"
+      },
+      "changeReason": {
+        "helperText": "Si vous le souhaitez, ajoutez quelques mots expliquant pourquoi vous créez/modifiez ce groupe",
+        "label": "Modif de changement"
       },
       "creationDate": {
         "label": "Date de création"
@@ -788,6 +788,10 @@
       "label": "Description",
       "placeholder": "Décrivez-vous en une ou deux phrases"
     },
+    "detail": {
+      "hideFormerGroups": "Cacher les anciens groupes",
+      "showFormerGroups": "Montrer les anciens groupes"
+    },
     "details": {
       "changePassword": "Changer de mot de passe",
       "editPassword": "Changer de mot de passe",
@@ -828,6 +832,7 @@
       "placeholder": "Rechercher un élève"
     },
     "username": {
+      "disabledText": "Vous ne pouvez plus changer votre nom d'utilisateur car vous avez créé un compte Matrix",
       "label": "Nom d'utilisateur"
     }
   },
@@ -855,14 +860,14 @@
     }
   },
   "username": {
-    "update": "Choisissez un nouveau nom d'utilisateur",
-    "success": "Mise à jour du nom d'utilisateur effectuée avec succès",
     "alert": {
-      "title": "Mise à jour importante - Noms d'utilisateurs",
-      "message1": "Nous avons ajouté la possibilité de modifier votre nom d'utilisateur.",
       "link": "Cliquez sur ce lien",
-      "message2": "pour effectuer le changement. Nous vous conseillons de réaliser l'opération rapidement en prévision d'une mise à jour future."
-    }
+      "message1": "Nous avons ajouté la possibilité de modifier votre nom d'utilisateur.",
+      "message2": "pour effectuer le changement. Nous vous conseillons de réaliser l'opération rapidement en prévision d'une mise à jour future.",
+      "title": "Mise à jour importante - Noms d'utilisateurs"
+    },
+    "success": "Mise à jour du nom d'utilisateur effectuée avec succès",
+    "update": "Choisissez un nouveau nom d'utilisateur"
   },
   "utils": {
     "shareLink": {
