@@ -118,7 +118,7 @@ exports[`Home page should render correctly without data 1`] = `
           <a
             aria-label="Map"
             class="MuiButtonBase-root MuiCardActionArea-root css-1oitmrd-MuiButtonBase-root-MuiCardActionArea-root"
-            href="/map/"
+            href="/map/?type=colocs"
             tabindex="0"
           >
             <div
