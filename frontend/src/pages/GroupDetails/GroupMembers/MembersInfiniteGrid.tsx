@@ -1,6 +1,7 @@
 import { Divider, Typography } from '@mui/material';
 
 import { Group } from '#modules/group/types/group.types';
+import { InfiniteList } from '#shared/components/InfiniteList/InfiniteList';
 import { useTranslation } from '#shared/i18n/useTranslation';
 
 import { useInfiniteMembership } from '../hooks/useInfiniteMemberships';
@@ -17,9 +18,11 @@ export function MembersInfiniteGrid({
 }: InfiniteMembershipGridProps) {
   const today = new Date(new Date().toDateString());
   const { t } = useTranslation();
+
   const membershipsQuery = useInfiniteMembership({
     options: { group: group.slug, from: today, pageSize: 6 * 5 },
   });
+
   const oldMembershipsQuery = useInfiniteMembership({
     options: {
       group: group.slug,
@@ -29,17 +32,20 @@ export function MembersInfiniteGrid({
     },
     enabled: filters.previous,
   });
+
   return (
     <>
-      <MembersGrid query={membershipsQuery} group={group} />
+      <InfiniteList query={membershipsQuery}>
+        <MembersGrid query={membershipsQuery} group={group} />
+      </InfiniteList>
       {filters.previous && (
-        <>
+        <InfiniteList query={oldMembershipsQuery}>
           <Typography variant="caption" sx={{ mt: 2, ml: 1 }} color={'primary'}>
             {t('group.details.formerMembers')}
           </Typography>
           <Divider sx={{ mb: 1, backgroundColor: 'red' }} />
           <MembersGrid query={oldMembershipsQuery} group={group} />
-        </>
+        </InfiniteList>
       )}
     </>
   );
