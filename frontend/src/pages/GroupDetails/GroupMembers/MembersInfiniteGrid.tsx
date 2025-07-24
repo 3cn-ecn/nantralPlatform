@@ -1,11 +1,12 @@
 import { Divider, Typography } from '@mui/material';
 import { UseInfiniteQueryResult } from '@tanstack/react-query';
+import { groupBy, map } from 'lodash-es';
 
 import { Group } from '#modules/group/types/group.types';
 import { Membership } from '#modules/group/types/membership.types';
 import { InfiniteList } from '#shared/components/InfiniteList/InfiniteList';
-import { useTranslation } from '#shared/i18n/useTranslation';
 import { Page } from '#shared/infra/pagination';
+import { getScholarYear } from '#shared/utils/dateUtils';
 
 import { useInfiniteMembership } from '../hooks/useInfiniteMemberships';
 import { MembersGrid } from './MembersGrid';
@@ -20,7 +21,6 @@ export function MembersInfiniteGrid({
   group,
 }: InfiniteMembershipGridProps) {
   const today = new Date(new Date().toDateString());
-  const { t } = useTranslation();
 
   const membershipsQuery = useInfiniteMembership({
     options: { group: group.slug, from: today, pageSize: 6 * 5 },
@@ -36,6 +36,11 @@ export function MembersInfiniteGrid({
     enabled: filters.previous,
   });
 
+  const oldMembershipsGroupedByYear = groupBy(
+    getDataList(oldMembershipsQuery),
+    (membership) => getScholarYear(membership.beginDate),
+  );
+
   return (
     <>
       <InfiniteList query={membershipsQuery}>
@@ -47,15 +52,23 @@ export function MembersInfiniteGrid({
       </InfiniteList>
       {filters.previous && (
         <InfiniteList query={oldMembershipsQuery}>
-          <Typography variant="caption" sx={{ mt: 2, ml: 1 }} color={'primary'}>
-            {t('group.details.formerMembers')}
-          </Typography>
-          <Divider sx={{ mb: 1, backgroundColor: 'red' }} />
-          <MembersGrid
-            memberships={getDataList(oldMembershipsQuery)}
-            showSkeletonsAtEnd={getShowSkeleton(oldMembershipsQuery)}
-            group={group}
-          />
+          {map(oldMembershipsGroupedByYear, (memberships, scholarYear) => (
+            <>
+              <Typography
+                variant="caption"
+                sx={{ mt: 2, ml: 1 }}
+                color={'primary'}
+              >
+                {scholarYear}
+              </Typography>
+              <Divider sx={{ mb: 1, borderColor: 'primary.main' }} />
+              <MembersGrid
+                memberships={memberships}
+                showSkeletonsAtEnd={getShowSkeleton(oldMembershipsQuery)}
+                group={group}
+              />
+            </>
+          ))}
         </InfiniteList>
       )}
     </>
