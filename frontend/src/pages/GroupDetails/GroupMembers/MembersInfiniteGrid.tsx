@@ -1,8 +1,11 @@
 import { Divider, Typography } from '@mui/material';
+import { UseInfiniteQueryResult } from '@tanstack/react-query';
 
 import { Group } from '#modules/group/types/group.types';
+import { Membership } from '#modules/group/types/membership.types';
 import { InfiniteList } from '#shared/components/InfiniteList/InfiniteList';
 import { useTranslation } from '#shared/i18n/useTranslation';
+import { Page } from '#shared/infra/pagination';
 
 import { useInfiniteMembership } from '../hooks/useInfiniteMemberships';
 import { MembersGrid } from './MembersGrid';
@@ -36,7 +39,11 @@ export function MembersInfiniteGrid({
   return (
     <>
       <InfiniteList query={membershipsQuery}>
-        <MembersGrid query={membershipsQuery} group={group} />
+        <MembersGrid
+          memberships={getDataList(membershipsQuery)}
+          showSkeletonsAtEnd={getShowSkeleton(membershipsQuery)}
+          group={group}
+        />
       </InfiniteList>
       {filters.previous && (
         <InfiniteList query={oldMembershipsQuery}>
@@ -44,9 +51,25 @@ export function MembersInfiniteGrid({
             {t('group.details.formerMembers')}
           </Typography>
           <Divider sx={{ mb: 1, backgroundColor: 'red' }} />
-          <MembersGrid query={oldMembershipsQuery} group={group} />
+          <MembersGrid
+            memberships={getDataList(oldMembershipsQuery)}
+            showSkeletonsAtEnd={getShowSkeleton(oldMembershipsQuery)}
+            group={group}
+          />
         </InfiniteList>
       )}
     </>
   );
+}
+
+function getDataList(
+  query: UseInfiniteQueryResult<Page<Membership>>,
+): Membership[] {
+  return query.data?.pages.flatMap((page) => page.results) ?? [];
+}
+
+function getShowSkeleton(
+  query: UseInfiniteQueryResult<Page<Membership>>,
+): boolean {
+  return query.isLoading || query.isFetchingNextPage;
 }
