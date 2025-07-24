@@ -1,6 +1,6 @@
 import { Divider, Typography } from '@mui/material';
 import { UseInfiniteQueryResult } from '@tanstack/react-query';
-import { groupBy, map } from 'lodash-es';
+import { groupBy } from 'lodash-es';
 
 import { Group } from '#modules/group/types/group.types';
 import { Membership } from '#modules/group/types/membership.types';
@@ -36,9 +36,10 @@ export function MembersInfiniteGrid({
     enabled: filters.previous,
   });
 
-  const oldMembershipsGroupedByYear = groupBy(
-    getDataList(oldMembershipsQuery),
-    (membership) => getScholarYear(membership.beginDate),
+  const oldMembershipsGroupedByYear = Object.entries(
+    groupBy(getDataList(oldMembershipsQuery), (membership) =>
+      getScholarYear(membership.beginDate),
+    ),
   );
 
   return (
@@ -52,23 +53,28 @@ export function MembersInfiniteGrid({
       </InfiniteList>
       {filters.previous && (
         <InfiniteList query={oldMembershipsQuery}>
-          {map(oldMembershipsGroupedByYear, (memberships, scholarYear) => (
-            <>
-              <Typography
-                variant="caption"
-                sx={{ mt: 2, ml: 1 }}
-                color={'primary'}
-              >
-                {scholarYear}
-              </Typography>
-              <Divider sx={{ mb: 1, borderColor: 'primary.main' }} />
-              <MembersGrid
-                memberships={memberships}
-                showSkeletonsAtEnd={getShowSkeleton(oldMembershipsQuery)}
-                group={group}
-              />
-            </>
-          ))}
+          {oldMembershipsGroupedByYear.map(
+            ([scholarYear, memberships], index) => (
+              <>
+                <Typography
+                  variant="caption"
+                  sx={{ mt: 2, ml: 1 }}
+                  color={'primary'}
+                >
+                  {scholarYear}
+                </Typography>
+                <Divider sx={{ mb: 1, borderColor: 'primary.main' }} />
+                <MembersGrid
+                  memberships={memberships}
+                  showSkeletonsAtEnd={
+                    getShowSkeleton(oldMembershipsQuery) &&
+                    index === oldMembershipsGroupedByYear.length - 1
+                  }
+                  group={group}
+                />
+              </>
+            ),
+          )}
         </InfiniteList>
       )}
     </>
