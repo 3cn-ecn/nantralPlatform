@@ -15,10 +15,16 @@ from .tokens import account_activation_token
 
 
 def clean_username(username: str):
-    normalized = unicodedata.normalize("NFKD", username)  # split the Unicode characters
+    normalized = unicodedata.normalize(
+        "NFKD", username
+    )  # split the Unicode characters
     normalized = normalized.lower()
-    cleaned = re.sub(r"[^a-z0-9._\-+]", "", normalized)  # remove unauthorized Unicode chars
-    cleaned.strip("_")  # just to be sure, remove leading underscores (and trailing, but we don't care)
+    cleaned = re.sub(
+        r"[^a-z0-9._\-+]", "", normalized
+    )  # remove unauthorized Unicode chars
+    cleaned.strip(
+        "_"
+    )  # just to be sure, remove leading underscores (and trailing, but we don't care)
     return cleaned
 
 
@@ -41,7 +47,9 @@ def user_creation(
         user.last_name = user.last_name.lower()
     # create a unique user name
     promo = user.student.promo
-    user.username = clean_username(f"{user.first_name}.{user.last_name}.{promo}.{user.id}")
+    user.username = clean_username(
+        f"{user.first_name}.{user.last_name}.{promo}.{user.id}"
+    )
     if isinstance(form, TemporaryRequestSignUpForm):
         user.invitation = invitation
     user.save()

@@ -57,7 +57,13 @@ class CustomImageField(models.ImageField):
 
     @property
     def non_db_attrs(self):
-        return (*super().non_db_attrs, "size", "crop", "name_from_field", "delete_on_save")
+        return (
+            *super().non_db_attrs,
+            "size",
+            "crop",
+            "name_from_field",
+            "delete_on_save",
+        )
 
     def deconstruct(self):
         name, path, args, kwargs = super().deconstruct()

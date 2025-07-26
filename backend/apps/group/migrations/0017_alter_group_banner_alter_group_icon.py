@@ -6,20 +6,32 @@ import apps.utils.fields.image_field
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ("group", "0014_rename_admin_request_messsage_membership_admin_request_message_and_more_squashed_0016_grouptype_priority"),
+        (
+            "group",
+            "0014_rename_admin_request_messsage_membership_admin_request_message_and_more_squashed_0016_grouptype_priority",
+        ),
     ]
 
     operations = [
         migrations.AlterField(
             model_name="group",
             name="banner",
-            field=apps.utils.fields.image_field.CustomImageField(blank=True, help_text="Image with 3:1 ratio (recommended minimum size: 1200x400)", null=True, verbose_name="Banner"),
+            field=apps.utils.fields.image_field.CustomImageField(
+                blank=True,
+                help_text="Image with 3:1 ratio (recommended minimum size: 1200x400)",
+                null=True,
+                verbose_name="Banner",
+            ),
         ),
         migrations.AlterField(
             model_name="group",
             name="icon",
-            field=apps.utils.fields.image_field.CustomImageField(blank=True, help_text="Image with a ratio of 1:1 (recommended minimum size: 500x500)", null=True, verbose_name="Profile picture"),
+            field=apps.utils.fields.image_field.CustomImageField(
+                blank=True,
+                help_text="Image with a ratio of 1:1 (recommended minimum size: 500x500)",
+                null=True,
+                verbose_name="Profile picture",
+            ),
         ),
     ]
