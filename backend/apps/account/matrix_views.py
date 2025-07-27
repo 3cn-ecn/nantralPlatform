@@ -53,7 +53,7 @@ class CheckCredentials(views.APIView):
                 "three_pids": [
                     {
                         "medium": "email",
-                        "address": user.email
+                        "address": user.email,
                     }
                 ]
             }

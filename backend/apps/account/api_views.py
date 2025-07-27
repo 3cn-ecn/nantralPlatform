@@ -11,7 +11,7 @@ from rest_framework.serializers import Serializer
 from rest_framework.throttling import AnonRateThrottle
 from rest_framework.viewsets import GenericViewSet
 
-from .models import InvitationLink, User
+from .models import Email, InvitationLink, User
 from .serializers import (
     ChangeEmailSerializer,
     ChangePasswordSerializer,
@@ -29,6 +29,8 @@ EMAIL_NOT_VALIDATED = 1
 TEMPORARY_ACCOUNT_EXPIRED = 2
 ACCOUNT_TEMPORARY = 3
 FAILED = 4
+EMAIL_CHANGED = 5
+ECN_EMAIL_NOT_VALIDATED = 6
 
 
 class AuthViewSet(GenericViewSet):
@@ -43,12 +45,15 @@ class AuthViewSet(GenericViewSet):
     def login(self, request: Request):
         """Login using your email and password
         If login is successful a session cookie is returned
+        If account is not verified and email_ecn is provided,
+        add the email to the account
         POST:
             - email
             - password
+            - email_ecn?
         """
         data = request.data
-        serializer = LoginSerializer(data=data)
+        serializer = self.serializer_class(data=data)
 
         if not serializer.is_valid():
             return Response(
@@ -60,57 +65,75 @@ class AuthViewSet(GenericViewSet):
         password = serializer.validated_data.get("password")
 
         user: User = authenticate(username=email, password=password)
-        fail_message = _("L'authentification à échoué")
+
         # Wrong credentials
         if user is None:
-            return Response(
-                {
-                    "message": fail_message,
-                    "code": FAILED,
-                },
-                status=status.HTTP_401_UNAUTHORIZED,
-            )
+            message = _("L'authentification à échoué")
+            code = FAILED
+            response_status = status.HTTP_401_UNAUTHORIZED
 
-        # Expired invitation
-        if user.invitation is not None and not user.invitation.is_valid():
-            return Response(
-                {
-                    "message": fail_message,
-                    "code": TEMPORARY_ACCOUNT_EXPIRED,
-                },
-                status=status.HTTP_401_UNAUTHORIZED,
-            )
-
-        # Not verified email
-        if not user.is_email_valid:
+        # Not verified primary email
+        elif not user.is_email_valid:
             message = _(
                 "Votre e-mail n'est pas vérifié. Merci de cliquer sur le lien "
                 "de vérification",
             )
-            return Response(
-                {
-                    "message": message,
-                    "code": EMAIL_NOT_VALIDATED,
-                },
-                status=status.HTTP_401_UNAUTHORIZED,
-            )
+            code = EMAIL_NOT_VALIDATED
+            response_status = status.HTTP_401_UNAUTHORIZED
 
         # Temporary account
-        if user.invitation is not None and user.invitation.is_valid():
-            message = _(
-                "Connection réussi, votre compte est temporaire, veuillez "
-                "mettre à jour votre adresse email au plus vite.",
-            )
+        elif user.invitation is not None and user.invitation.is_valid():
             login(request=request, user=user)
-            return Response(
-                data={"message": message, "code": ACCOUNT_TEMPORARY},
-                status=status.HTTP_200_OK,
+            message = _(
+                "Connection réussie, votre compte est temporaire, veuillez "
+                "ajouter votre adresse mail Centrale au plus vite.",
             )
+            code = ACCOUNT_TEMPORARY
+            response_status = status.HTTP_200_OK
 
-        login(request=request, user=user)
+        # Expired invitation
+        elif user.invitation is not None and not user.invitation.is_valid():
+            if not user.has_ecn_email():
+                email_ecn = serializer.validated_data.get("email_ecn")
+                if email_ecn:
+                    user.add_email(request=request, user=user)
+                    message = _("Veuillez consulter votre boîte mail pour vérifier la nouvelle adresse")
+                    code = EMAIL_CHANGED
+                    response_status = status.HTTP_201_CREATED
+                else:
+                    message = _(
+                                "Votre compte n'est pas vérifié et a été désactivé. Veuillez ajouter "
+                                "une adresse mail Centrale pour réactiver votre compte."
+                            )
+                    code = TEMPORARY_ACCOUNT_EXPIRED
+                    response_status = status.HTTP_401_UNAUTHORIZED
+            elif not user.has_valid_ecn_email():
+                message = _(
+                            "Votre e-mail Centrale n'est pas vérifié. Merci de cliquer sur le lien "
+                            "de vérification ou renseigner une autre adresse",
+                        )
+                code = ECN_EMAIL_NOT_VALIDATED
+                response_status = status.HTTP_401_UNAUTHORIZED
+            else:
+                # Here, the user has a valid ECN email but invitation is not null, so we fix it
+                user.invitation = None
+                user.save()
+                login(user=user, request=self.request)
+                message = _("Connection réussie")
+                code = SUCCESS
+                response_status = status.HTTP_200_OK
+        else:
+            login(request=request, user=user)
+            message = _("Connection réussie")
+            code = SUCCESS
+            response_status = status.HTTP_200_OK
+
         return Response(
-            data={"message": _("Connection réussi"), "code": SUCCESS},
-            status=status.HTTP_200_OK,
+            {
+                "message": message,
+                "code": code,
+            },
+            status=response_status,
         )
 
     @action(
@@ -125,22 +148,15 @@ class AuthViewSet(GenericViewSet):
 
         if data.get("invitation_uuid"):
             serializer = InvitationRegisterSerializer(data=data)
-            temporary = True
         else:
             serializer = RegisterSerializer(data=data)
-            temporary = False
 
         if not serializer.is_valid():
             return Response(
                 serializer.errors,
                 status=status.HTTP_400_BAD_REQUEST,
             )
-        user = serializer.save()
-        send_email_confirmation(
-            user,
-            request=request,
-            temporary_access=temporary,
-        )
+        serializer.save()
         return Response(
             serializer.validated_data,
             status=status.HTTP_201_CREATED,
@@ -259,9 +275,9 @@ class EmailViewSet(GenericViewSet):
                 status=status.HTTP_400_BAD_REQUEST,
             )
         user: User = request.user
-        user.email_next = serializer.validated_data["email"]
+        user.email = serializer.validated_data["email"]
         user.save()
-        send_email_confirmation(user, request=request, temporary_access=False)
+
         message = "A confirmation email has been sent to verify provided email"
         return Response(
             {"message": message},
@@ -292,19 +308,16 @@ class EmailViewSet(GenericViewSet):
         )
         # check account exists
         try:
-            user = User.objects.get(email=email)
-        except User.DoesNotExist:
+            email = Email.objects.get(email__iexact=email)
+        except Email.DoesNotExist:
             return response
 
         # don't send email if already validated
-        if user.is_email_valid and not user.email_next:
+        if email.is_valid:
             return response
 
-        temp_access = user.invitation is not None
         send_email_confirmation(
-            user,
+            email,
             self.request,
-            temporary_access=temp_access,
-            send_to=email,
         )
         return response

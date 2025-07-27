@@ -43,7 +43,9 @@ class UserManager(BaseUserManager):
             password,
             is_staff=True,
             is_superuser=True,
-            is_email_valid=True,
             **extra_fields,
         )
+        email_obj = user.get_email_obj()
+        email_obj.is_valid = True
+        email_obj.save()
         return user

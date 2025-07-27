@@ -1,12 +1,13 @@
 # spell-checker: words utest uidb
 # ruff: noqa: S105, S106
 
-from datetime import UTC, datetime
+from datetime import UTC, datetime, timedelta
 
 from django.contrib.auth import authenticate
 from django.core import mail
 from django.test import TestCase
 from django.urls import reverse
+from django.utils import timezone
 
 from django_rest_passwordreset.models import ResetPasswordToken
 from freezegun import freeze_time
@@ -33,8 +34,10 @@ class TestLogin(TestCase):
         self.user: User = User.objects.create_user(
             email="test@ec-nantes.fr",
             password=self.password,
-            is_email_valid=True,
         )
+        email_obj = self.user.get_email_obj()
+        email_obj.is_valid = True
+        email_obj.save()
 
     def test_login(self):
         response = self.client.post(
@@ -55,8 +58,9 @@ class TestLogin(TestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_email_not_validated(self):
-        self.user.is_email_valid = False
-        self.user.save()
+        email_obj = self.user.get_email_obj()
+        email_obj.is_valid = False
+        email_obj.save()
         response = self.client.post(
             self.uri,
             {"email": self.user.email, "password": self.password},
@@ -80,11 +84,19 @@ class TestLogin(TestCase):
         )
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
-    @freeze_time("2021-09-01")
     def test_login_temporary_account(self):
+        # Use an email from another provider
+        new_email = self.user.add_email("test@example.com")
+        new_email.is_valid = True
+        new_email.save()
+        old_email = self.user.email
+        self.user.email = new_email.email
+        self.user.save()
+        self.user.remove_email(old_email)
+
         # test for a valid invitation
         self.user.invitation = InvitationLink.objects.create(
-            expires_at=datetime(year=2021, month=9, day=2, tzinfo=UTC),
+            expires_at=timezone.now() + timedelta(days=1),
         )
         self.user.save()
 
@@ -97,12 +109,7 @@ class TestLogin(TestCase):
 
         # test for an invalid invitation
         self.user.invitation = InvitationLink.objects.create(
-            expires_at=datetime(
-                year=2021,
-                month=8,
-                day=30,
-                tzinfo=UTC,
-            ),
+            expires_at=timezone.now() - timedelta(days=1),
         )
         self.user.save()
         response = self.client.post(
@@ -169,10 +176,9 @@ class TestRegister(TestCase):
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertIsNotNone(response.json()["email"])
 
-    @freeze_time("2021-09-01")
     def test_register_invitation(self):
         invitation = InvitationLink.objects.create(
-            expires_at=datetime(year=2021, month=9, day=2, tzinfo=UTC),
+            expires_at=timezone.now() + timedelta(days=1),
         )
         self.payload["email"] = "test@notecn.fr"
         self.payload["invitation_uuid"] = invitation.id
@@ -192,10 +198,9 @@ class TestRegister(TestCase):
 
         self.assertEqual(len(mail.outbox), 1)
 
-    @freeze_time("2021-09-10")
     def test_register_invitation_expired(self):
         invitation = InvitationLink.objects.create(
-            expires_at=datetime(year=2021, month=9, day=2, tzinfo=UTC),
+            expires_at=timezone.now() - timedelta(days=1),
         )
         self.payload["email"] = "test@notecn.fr"
         self.payload["invitation_uuid"] = invitation.id
@@ -375,9 +380,10 @@ class TestChangeEmail(TestCase):
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
-        self.assertEqual(len(mail.outbox), 1)
+        self.assertEqual(len(mail.outbox), 2)  # 1: creation, 2: change
         self.user.refresh_from_db()
-        self.assertEqual(self.user.email_next, payload["email"])
+        self.assertEqual(self.user.email, payload["email"])
+        self.assertTrue(self.user.has_email(payload["email"]))
 
     def test_wrong_password(self):
         self.client.force_login(self.user)
@@ -433,9 +439,9 @@ class TestForgottenPassword(TestCase):
 
         response = self.client.post(url, {"email": "test@ec-nantes.fr"})
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(len(mail.outbox), 1)
+        self.assertEqual(len(mail.outbox), 2) # 1: activation compte, 2: reinitialisation
         token = ResetPasswordToken.objects.get(user=self.user).key
-        self.assertTrue(token in mail.outbox[0].body)
+        self.assertTrue(token in mail.outbox.pop().body)
 
 
 class TestValidateInvitation(TestCase):
@@ -471,10 +477,12 @@ class TestEmailResend(TestCase):
     def test_email_resend(self):
         response = self.client.post(self.url, {"email": self.email})
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(len(mail.outbox), 1)
+        self.assertEqual(len(mail.outbox), 2)  # 1: activation compte, 2: resend
 
     def test_email_resend_email_next(self):
-        self.user.is_email_valid = True
+        email_obj = self.user.get_email_obj()
+        email_obj.is_valid = True
+        email_obj.save()
         self.user.email_next = "new_email@ec-nantes.fr"
         self.user.save()
         response = self.client.post(self.url, {"email": self.email})
@@ -482,11 +490,12 @@ class TestEmailResend(TestCase):
         self.assertEqual(len(mail.outbox), 1)
 
     def test_already_validated(self):
-        self.user.is_email_valid = True
-        self.user.save()
+        email_obj = self.user.get_email_obj()
+        email_obj.is_valid = True
+        email_obj.save()
         response = self.client.post(self.url, {"email": self.email})
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(len(mail.outbox), 0)
+        self.assertEqual(len(mail.outbox), 1)  # 1: activation compte
 
     def test_wrong_email(self):
         response = self.client.post(self.url, {"email": "wrong@ec-nantes.fr"})
@@ -504,6 +513,9 @@ class TestMatrix(TestCase):
             username="teeeest",
             password="<PASSWORD>",
         )
+        email_obj = self.user.get_email_obj()
+        email_obj.is_valid = True
+        email_obj.save()
 
     def test_check_credentials_email(self):
         payload = {"user": {"password": "<PASSWORD>", "email": "test@ec-nantes.fr"}}

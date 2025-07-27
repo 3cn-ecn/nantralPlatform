@@ -47,7 +47,8 @@ def create_student_user(
     else:
         user = User.objects.create_user(**user_kwargs)
 
-    user.is_email_valid = is_email_valid
-    user.save()
+    email_obj = user.get_email_obj()
+    email_obj.is_valid = is_email_valid
+    email_obj.save()
     Student.objects.create(user=user, faculty=faculty, path=path, promo=promo)
     return user
