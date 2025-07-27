@@ -1,7 +1,4 @@
-import re
-
-from django.contrib.auth.password_validation import validate_password
-from django.core.exceptions import ValidationError as DjangoValidationError
+from django.utils import timezone
 from django.utils.translation import gettext as _
 
 from rest_framework import serializers
@@ -10,42 +7,14 @@ from rest_framework.validators import UniqueValidator
 
 from apps.student.models import FACULTIES, PATHS, Student
 
-from .models import InvitationLink, MatrixUsernameValidator, User
+from .models import Email, InvitationLink, User
 from .utils import clean_username
-
-
-def validate_ecn_email(mail: str):
-    if re.search(r"@([\w\-\.]+\.)?ec-nantes.fr$", mail) is None:
-        raise ValidationError(
-            _(
-                "Vous devez utiliser une adresse mail de Centrale Nantes "
-                "finissant par ec-nantes.fr",
-            ),
-        )
-
-
-def validate_email(mail: str):
-    if "+" in mail:
-        raise ValidationError(
-            "L'adresse email ne doit pas contenir de caractères spéciaux",
-        )
-
-
-def validate_invitation(uuid: str):
-    if (
-        not InvitationLink.objects.filter(id=uuid).exists()
-        or not InvitationLink.objects.get(id=uuid).is_valid()
-    ):
-        raise ValidationError(_("Le lien d'invitation est invalide"))
-
-
-def django_validate_password(password):
-    try:
-        # validate the password against existing validators
-        validate_password(password)
-    except DjangoValidationError as e:
-        # raise a validation error for the serializer
-        raise ValidationError(e.messages)
+from .validators import (
+    django_validate_password,
+    ecn_email_validator,
+    matrix_username_validator,
+    validate_email,
+)
 
 
 class LoginSerializer(serializers.Serializer):
@@ -53,6 +22,11 @@ class LoginSerializer(serializers.Serializer):
     password = serializers.CharField(
         max_length=200,
         style={"input_type": "password"},
+    )
+    email_ecn = serializers.EmailField(
+        max_length=200,
+        validators=[ecn_email_validator],
+        required=False,
     )
 
     def validate_email(self, value: str):
@@ -64,9 +38,9 @@ class RegisterSerializer(serializers.Serializer):
         max_length=200,
         validators=[
             validate_email,
-            validate_ecn_email,
+            ecn_email_validator,
             UniqueValidator(
-                User.objects.all(),
+                Email.objects.all(),
                 message=_("Un compte à déjà été créé avec cette adresse email"),
             ),
         ],
@@ -87,7 +61,7 @@ class RegisterSerializer(serializers.Serializer):
                 User.objects.all(),
                 message=_("Ce nom d'utilisateur est déjà pris"),
             ),
-            MatrixUsernameValidator(),
+            matrix_username_validator,
         ],
         required=False,
     )
@@ -111,12 +85,12 @@ class RegisterSerializer(serializers.Serializer):
             email=validated_data["email"],
             has_updated_username=True,  # Already had a chance to change username
         )
-        # IMPORTANT: hash password
-        user.set_password(validated_data["password"])
-        # little trick to remove password from validated_data
-        self.validated_data.pop("password")
+
+        # IMPORTANT: hash password and remove password from validated_data
+        user.set_password(self.validated_data.pop("password"))
+
         # assign to something unique in the first place
-        user.username = user.email
+        user.username = validated_data.get("email")
         # save to generate the primary key
         user.save()
 
@@ -163,14 +137,14 @@ class InvitationRegisterSerializer(RegisterSerializer):
         validators=[
             validate_email,
             UniqueValidator(
-                User.objects.all(),
+                Email.objects.all(),
                 message=_("Un compte à déjà été créé avec cette adresse email"),
             ),
         ],
         required=True,
     )
     invitation_uuid = serializers.SlugRelatedField(
-        slug_field="uuid",
+        slug_field="id",
         required=True,
         queryset=InvitationLink.objects.filter(expires_at__gt=timezone.now()),
     )
@@ -179,8 +153,9 @@ class InvitationRegisterSerializer(RegisterSerializer):
         invitation_uuid = self.validated_data.pop("invitation_uuid")
         user = super().create(validated_data)
         # update invitation
-        user.invitation = invitation_uuid
-        user.save()
+        if not user.has_ecn_email():
+            user.invitation = invitation_uuid
+            user.save()
         return user
 
 
@@ -189,9 +164,9 @@ class ChangeEmailSerializer(serializers.Serializer):
     email = serializers.EmailField(
         validators=[
             validate_email,
-            validate_ecn_email,
+            ecn_email_validator,
             UniqueValidator(
-                User.objects.all(),
+                Email.objects.all(),
                 message=_("Un compte à déjà été créé avec cette adresse email"),
             ),
         ],
@@ -224,7 +199,7 @@ class UsernameSerializer(serializers.ModelSerializer):
                 User.objects.all(),
                 message=_("Ce nom d'utilisateur est déjà pris"),
             ),
-            MatrixUsernameValidator(),
+            matrix_username_validator,
         ],
         required=True,
     )

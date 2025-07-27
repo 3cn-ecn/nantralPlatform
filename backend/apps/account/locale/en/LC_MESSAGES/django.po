@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-02-12 13:47+0100\n"
+"POT-Creation-Date: 2025-07-27 19:01+0200\n"
 "PO-Revision-Date: 2023-10-20 20:08+0200\n"
 "Last-Translator: Alexis Delage <alexidelage@gmail.com>\n"
 "Language-Team: \n"
@@ -19,261 +19,136 @@ msgstr ""
 "X-Generator: Poedit 3.4\n"
 
 #: admin.py:29
-#, fuzzy
-#| msgid "Votre adresse mail Centrale Nantes."
-msgid "mail Centrale Nantes"
-msgstr "Your Centrale Nantes email."
+msgid "Mail Centrale Nantes"
+msgstr "Your Centrale Nantes email"
 
-#: admin.py:77
+#: admin.py:35
+msgid "Autres hébergeurs"
+msgstr "Other providers"
+
+#: admin.py:46 admin.py:50
+msgid "Mot de passe vide"
+msgstr "Empty passsword"
+
+#: admin.py:58 models.py:111
+msgid "Email vérifié ?"
+msgstr "Verified email?"
+
+#: admin.py:63
+msgid "Oui"
+msgstr "Yes"
+
+#: admin.py:64
+msgid "Non"
+msgstr "No"
+
+#: admin.py:113
 msgid "Info personnelles"
 msgstr "Personal info"
 
-#: admin.py:81
+#: admin.py:117
 msgid "Permissions"
 msgstr "Permissions"
 
-#: admin.py:93
+#: admin.py:129
 msgid "Validation du compte"
 msgstr "Account Validation"
 
-#: admin.py:102
+#: admin.py:139
 msgid "Dates Importantes"
 msgstr "Important dates"
 
-#: api_views.py:62
+#: api_views.py:68
 msgid "L'authentification à échoué"
 msgstr "Authentication failed"
 
-#: api_views.py:86
+#: api_views.py:82
 msgid ""
 "Votre e-mail n'est pas vérifié. Merci de cliquer sur le lien de vérification"
 msgstr ""
 "Your e-mail is not verified. Please click on the link verification link"
 
-#: api_views.py:100
+#: api_views.py:96
 msgid ""
-"Connection réussi, votre compte est temporaire, veuillez mettre à jour votre "
-"adresse email au plus vite."
+"Connection réussie, votre compte est temporaire, veuillez ajouter votre "
+"adresse mail Centrale au plus vite."
 msgstr ""
-"Connection successful, your account is temporary, please update your email "
+"Connection successful, your account is temporary, please add your ECN email "
 "address as soon as possible."
 
 #: api_views.py:111
-msgid "Connection réussi"
+msgid "Veuillez consulter votre boîte mail pour vérifier la nouvelle adresse"
+msgstr "Please check your emails in order to verify the new email address"
+
+#: api_views.py:121
+msgid ""
+"Votre compte n'est pas vérifié et a été désactivé. Veuillez ajouter une "
+"adresse mail Centrale pour réactiver votre compte."
+msgstr ""
+"Your account is not verified and has been disabled. Pleas add an email "
+"address from Centrale Nantes to reactivate your account."
+
+#: api_views.py:133
+msgid ""
+"Votre e-mail Centrale n'est pas vérifié. Merci de cliquer sur le lien de "
+"vérification ou renseigner une autre adresse"
+msgstr ""
+"Your ECN e-mail is not verified. Please click on the verification link or "
+"add another address"
+
+#: api_views.py:149
+msgid "Connection réussie"
 msgstr "Succesfully connected"
 
-#: forms.py:21
+#: models.py:44
+msgid "Nom d'utilisateur"
+msgstr "Username"
+
+#: models.py:48
 msgid ""
-"Invitation invalide : le lien d'invitation a expiré. Veuillez entrer une "
-"adresse en ec-nantes.fr, ou contactez un administrateur."
+"Requis. 150 caractères ou moins. Lettres minuscules, chiffres et . _ - + "
+"seulement."
 msgstr ""
-"Invalid invitation: the invitation link has expired. Please enter an email "
-"finishing by ec-nantes.fr, or contact an administrator."
+"Required. 150 characters or fewer. Lower case letters, digits and ./_/-/+ "
+"only."
 
-#: forms.py:32 serializers.py:20
-msgid ""
-"Vous devez utiliser une adresse mail de Centrale Nantes finissant par ec-"
-"nantes.fr"
-msgstr "You have to use your school email ending in ec-nantes.fr"
+#: models.py:52 serializers.py:66 serializers.py:205
+msgid "Ce nom d'utilisateur est déjà pris"
+msgstr "This username is already taken."
 
-#: forms.py:40 forms.py:165
-msgid "Les deux mots de passe ne correspondent pas."
-msgstr "The passwords don't match."
+#: models.py:55
+msgid "Email principal"
+msgstr "Main email"
 
-#: forms.py:45
-msgid "Adresse mail"
-msgstr "Email"
+#: models.py:95
+msgid "Vous ne pouvez pas supprimer l'email principal"
+msgstr "You cannot delete the main email address"
 
-#: forms.py:49 forms.py:119
-msgid "Votre adresse mail ec-nantes.fr"
-msgstr "Your school email in ec-nantes.fr"
+#: models.py:113
+msgid "Identifiant unique"
+msgstr "Unique ID"
 
-#: forms.py:52
-msgid "Confirmation de l'adresse mail"
-msgstr "Confirm your email"
-
-#: forms.py:55
-msgid "Confirmez votre adresse."
-msgstr "Confirm you email."
-
-#: forms.py:58
-msgid "Année d'arrivée à Centrale"
-msgstr "Year of arrival at Centrale Nantes"
-
-#: forms.py:63
-msgid "Prénom"
-msgstr "First name"
-
-#: forms.py:66
-msgid "Nom"
-msgstr "Last name"
-
-#: forms.py:69
-msgid "Filière"
-msgstr "Formation followed"
-
-#: forms.py:72
-msgid "Cursus particulier ?"
-msgstr "Are you in a special programm?"
-
-#: forms.py:74
-msgid "Vous pourrez modifier cela plus tard"
-msgstr "You can modify this later"
-
-#: forms.py:80 forms.py:125
-msgid "Mot de passe"
-msgstr "Password"
-
-#: forms.py:81
-msgid "Confirmation du mot de passe"
-msgstr "Confirm your password"
-
-#: forms.py:83
-msgid "Entrez le même mot de passe pour vérification"
-msgstr "Enter the same password for verification"
-
-#: forms.py:92
-msgid "Cet email est déjà utilisé."
-msgstr "This email is already being used."
-
-#: forms.py:97
-msgid "Les emails ne correspondent pas."
-msgstr "The emails don't match."
-
-#: forms.py:140
-msgid "Entrez l'adresse mail associée au compte"
-msgstr "Enter the email associated with your account"
-
-#: forms.py:154
-msgid "Votre nouveau mot de passe"
-msgstr "Your new password"
-
-#: forms.py:155
-msgid "Confirmer le mot de passe"
-msgstr "Confirm your password"
-
-#: forms.py:179
-msgid "Votre adresse mail personnelle."
-msgstr "Your personal email."
-
-#: forms.py:192
-msgid "Votre adresse mail Centrale Nantes."
-msgstr "Your Centrale Nantes email."
-
-#: serializers.py:38
-msgid "Le lien d'invitation est invalide"
-msgstr "Invitation link is invalid"
-
-#: serializers.py:68 serializers.py:160 serializers.py:186
+#: serializers.py:48 serializers.py:146 serializers.py:175
 msgid "Un compte à déjà été créé avec cette adresse email"
 msgstr "An account has already been created with this email address"
 
-#: serializers.py:86
-msgid "Ce nom d'utilisateur est déjà pris"
-msgstr "This email is already being used."
-
-#: serializers.py:147 serializers.py:194
+#: serializers.py:132 serializers.py:183
 msgid "Mot de passe invalide"
 msgstr "Invalid passsword"
 
-#: templates/account/confirm-email.html:11
-msgid "Confirmez votre adresse email"
-msgstr "Confirm your email address"
-
-#: templates/account/confirm-email.html:14
+#: validators.py:14
 msgid ""
-"Votre compte n'est pas encore actif. Veuillez cliquer sur le lien envoyé par "
-"mail pour l'activer. Si vous n'avez pas reçu de mail vous pouvez le renvoyer "
-"via le bouton ci-dessous"
+"Entrez un nom d'utilisateur valide. Il doit être composé de lettres "
+"minuscules de chiffres et des caractères . _ - +. Il ne doit pas commencer "
+"par _"
 msgstr ""
-"Your account is not yet active. Please click on the link sent by e-mailto "
-"activate it. If you have not received an e-mail, you can resend it using "
-"thebutton below."
+"Enter a valid username. This value may contain only lower case letters, "
+"numbers, and . _ - + characters. It may not start with _"
 
-#: templates/account/confirm-email.html:19
-msgid "Renvoyer un mail de confirmation"
-msgstr "Resend confirmation email"
-
-#: templates/account/forgotten_pass.html:10
-msgid "Réinitialisation de mot de passe"
-msgstr "Reset your password"
-
-#: templates/account/forgotten_pass.html:15
-msgid "Envoyer l'email"
-msgstr "Send the email"
-
-#: templates/account/login.html:17
-msgid "Voir les Clubs & Assos"
-msgstr "See Clubs and Associations"
-
-#: templates/account/login.html:28
-msgid "Le site des clubs et assos de Centrale Nantes !"
-msgstr "The student website for Centrale Nantes!"
-
-#: templates/account/login.html:35
-msgid "Se connecter"
-msgstr "Sign In"
-
-#: templates/account/login.html:36
-msgid "Pas de compte ?"
-msgstr "No account?"
-
-#: templates/account/permanent_account_upgrade.html:13
-msgid "Valider l'email"
-msgstr "Validate the email"
-
-#: templates/account/registration-choice.html:11
-#: templates/account/temp-registration-choice.html:11
-msgid "Avez-vous un mail ECN ?"
-msgstr "Do you have a Centrale Nantes email?"
-
-#: templates/account/registration.html:11
-msgid "Inscription sur Nantral Platform"
-msgstr "Create your Nantral Platform account"
-
-#: templates/account/registration.html:14
+#: validators.py:37
 msgid ""
-"Pour vous inscrire sur Nantral Platform, vous devez être affilié à Centrale "
-"Nantes. Votre affiliation est determinée en utilisant votre adresse mail "
-"Centrale Nantes @eleves.ec-nantes.fr ou @ec-nantes.fr."
+"Vous devez utiliser une addresse mail ECN valide (ec-nantes.fr ou "
+"centraliens-nantes.org)"
 msgstr ""
-"To sign up for Nantral Platform, you have to be currently at Centrale "
-"Nantes. To verify it, we use your email address that should end with @eleves."
-"ec-nantes.fr or @ec-nantes.fr."
-
-#: templates/account/registration.html:20
-msgid "Inscription"
-msgstr "Sign Up"
-
-#: templates/account/reset_password.html:14
-msgid "Changer le mot de passe"
-msgstr "Update the password"
-
-#: templates/account/reset_password.html:18
-msgid "Lien invalide"
-msgstr "Invalid link"
-
-#: templates/account/temporary_registration.html:15
-msgid ""
-"Pour vous inscrire sur Nantral Platform vous devez être affilié à Centrale "
-"Nantes. Si vous ne disposez pas encore de votre adresse vous pouvez demander "
-"un accès temporaire."
-msgstr ""
-"To sign up for Nantral Platform, you have to be currently at Centrale "
-"Nantes. If you do not have yet access to your school email, you can ask for "
-"a temporary access."
-
-#: templates/account/temporary_registration.html:18
-msgid "Vous pourrez vous connecter en utilisant votre adresse personelle"
-msgstr "You will be able to connect using your personal email"
-
-#: templates/account/temporary_registration.html:18
-msgid "jusqu'au"
-msgstr "until the"
-
-#: templates/account/temporary_registration.html:19
-msgid ""
-"Vous devrez avoir renseigné et validé votre adresse Centrale avant cette "
-"date."
-msgstr ""
-"You have to update your email to a Centrale Nantes' one before this date."
+"You must use a valid ECN email address (ending in ec-nantes.fr or "
+"centraliens-nantes.org)"

@@ -3,9 +3,14 @@ from django.contrib.auth.tokens import PasswordResetTokenGenerator
 import six
 
 
-class AccountActivationTokenGenerator(PasswordResetTokenGenerator):
-    def _make_hash_value(self, user, timestamp):
-        return six.text_type(user.pk) + six.text_type(timestamp)
+class EmailConfirmationTokenGenerator(PasswordResetTokenGenerator):
+    """Generate tokens based on email id
+
+    The base class is meant to use the User model, but we override the only method that uses it,
+    so we can safely use the Email model.
+    """
+    def _make_hash_value(self, email, timestamp):
+        return six.text_type(email.pk) + six.text_type(timestamp)
 
 
-account_activation_token = AccountActivationTokenGenerator()
+email_confirmation_token = EmailConfirmationTokenGenerator()
