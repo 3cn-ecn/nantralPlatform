@@ -22,9 +22,13 @@ class CheckCredentials(views.APIView):
     permission_classes = [permissions.AllowAny]
 
     def post(self, request, *args, **kwargs):
-        username = request.data.get("user").get("id")
-        password = request.data.get("user").get("password")
-        email = request.data.get("user").get("email")
+        user_data = request.data.get("user")
+        if not user_data:
+            raise exceptions.ValidationError({"auth": {"success": False, "details": "No user data provided"}})
+
+        username = user_data.get("id")
+        password = user_data.get("password")
+        email = user_data.get("email")
 
         # Check authentication method (email, matrix id or username)
         if username:
