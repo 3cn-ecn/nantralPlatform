@@ -169,16 +169,17 @@ class InvitationRegisterSerializer(RegisterSerializer):
         ],
         required=True,
     )
-    invitation_uuid = serializers.UUIDField(
+    invitation_uuid = serializers.SlugRelatedField(
+        slug_field="uuid",
         required=True,
-        validators=[validate_invitation],
+        queryset=InvitationLink.objects.filter(expires_at__gt=timezone.now()),
     )
 
     def create(self, validated_data: dict):
-        invitation_uuid = self.validated_data.pop("invitation_uuid", None)
+        invitation_uuid = self.validated_data.pop("invitation_uuid")
         user = super().create(validated_data)
         # update invitation
-        user.invitation = InvitationLink.objects.get(id=invitation_uuid)
+        user.invitation = invitation_uuid
         user.save()
         return user
 
