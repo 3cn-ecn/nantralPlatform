@@ -1,7 +1,7 @@
 from django.contrib.auth import authenticate, login, logout
 from django.utils.translation import gettext_lazy as _
 
-from rest_framework import status
+from rest_framework import exceptions, mixins, status
 from rest_framework.authentication import SessionAuthentication
 from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
@@ -20,6 +20,7 @@ from .serializers import (
     InvitationValidSerializer,
     LoginSerializer,
     RegisterSerializer,
+    ShortEmailSerializer,
     UsernameSerializer,
 )
 from .utils import send_email_confirmation
@@ -96,7 +97,7 @@ class AuthViewSet(GenericViewSet):
             if not user.has_ecn_email():
                 email_ecn = serializer.validated_data.get("email_ecn")
                 if email_ecn:
-                    user.add_email(request=request, user=user)
+                    user.add_email(email_ecn, request=request)
                     message = _("Veuillez consulter votre boîte mail pour vérifier la nouvelle adresse")
                     code = EMAIL_CHANGED
                     response_status = status.HTTP_201_CREATED
@@ -201,7 +202,7 @@ class AuthViewSet(GenericViewSet):
         user.save()
         # make sure user is not logged out by login him again
         login(request=request, user=user)
-        return Response({"message": "Successfully updated password"})
+        return Response({"message": _("Le mot de passe à bien été mis à jour.")})
 
     @action(
         detail=False,
@@ -222,10 +223,7 @@ class AuthViewSet(GenericViewSet):
             or not InvitationLink.objects.get(id=uuid).is_valid()
         ):
             # invalid invitation
-            return Response(
-                {"detail": "not found"},
-                status=status.HTTP_404_NOT_FOUND,
-            )
+            raise exceptions.NotFound()
         expires_at = InvitationLink.objects.get(id=uuid).expires_at
         return Response(
             {"status": "OK", "expires_at": expires_at},
@@ -259,7 +257,13 @@ class AuthViewSet(GenericViewSet):
         return Response(serializer.validated_data, status=status.HTTP_200_OK)
 
 
-class EmailViewSet(GenericViewSet):
+class EmailViewSet(mixins.CreateModelMixin, mixins.ListModelMixin, mixins.DestroyModelMixin, GenericViewSet):
+    serializer_class = EmailSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        return self.request.user.emails.all()
+
     @action(
         detail=False,
         methods=["PUT"],
@@ -275,19 +279,33 @@ class EmailViewSet(GenericViewSet):
                 status=status.HTTP_400_BAD_REQUEST,
             )
         user: User = request.user
-        user.email = serializer.validated_data["email"]
-        user.save()
+        email = serializer.validated_data["email"]
+        if not user.has_email(email):
+            message = _(
+                "Votre email principal a bien été enregistré. Merci de cliquer "
+                "sur le lien de vérification qui à vous a été envoyé."
+            )
+        else:
+            message = _("Votre email principal a bien été enregistré.")
+        user.email = email
+        user.save(request=request)
 
-        message = "A confirmation email has been sent to verify provided email"
         return Response(
             {"message": message},
             status=status.HTTP_200_OK,
         )
 
+    def destroy(self, request, *args, **kwargs):
+        instance = self.get_object()
+        if instance.user.email == instance.email:
+            raise exceptions.ValidationError(_("Vous ne pouvez pas supprimer l'email principal de votre compte"))
+        self.perform_destroy(instance)
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
     @action(
         detail=False,
         methods=["POST"],
-        serializer_class=EmailSerializer,
+        serializer_class=ShortEmailSerializer,
         throttle_classes=[AnonRateThrottle],
     )
     def resend(self, request: Request):
@@ -301,7 +319,7 @@ class EmailViewSet(GenericViewSet):
         email = serializer.validated_data.get("email")
 
         # always send the same response to not give informations
-        message = "A confirmation email has been sent to verify provided email"
+        message = _("Un mail de confirmation a été renvoyé à l'email fourni.")
         response = Response(
             {"message": message},
             status=status.HTTP_200_OK,
