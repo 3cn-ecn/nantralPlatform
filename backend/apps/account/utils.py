@@ -26,7 +26,7 @@ def send_email_confirmation(
         "account:confirm",
         kwargs={
             "email_uuid": email.uuid,
-            "token": email_confirmation_token.make_token(email.user),
+            "token": email_confirmation_token.make_token(email),
         },
     )
     context = {

@@ -69,9 +69,14 @@ class User(AbstractUser):
         self.first_name = self.first_name.lower()
         self.last_name = self.last_name.lower()
 
+        request = None
+        if kwargs.get("request"):
+            request = kwargs.pop("request")
+
         super().save(*args, **kwargs)
+
         if not self.has_email(self.email):
-            self.add_email(self.email, request=kwargs.get("request"))
+            self.add_email(self.email, request=request)
 
     def has_valid_ecn_email(self):
         return any(email.is_ecn_email for email in self.emails.filter(is_valid=True))
@@ -103,7 +108,6 @@ class User(AbstractUser):
         return self.emails.get(email__iexact=self.email)
 
 
-
 class Email(models.Model):
     email = models.EmailField(unique=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="emails")
@@ -117,6 +121,11 @@ class Email(models.Model):
     def save(self, *args, **kwargs):
         self.email = self.email.lower()
         super().save(*args, **kwargs)
+
+    def delete(self, using = None, keep_parents = False):
+        if self.user.email == self.email:
+            raise exceptions.ValidationError(_("Vous ne pouvez pas supprimer l'email principal"))
+
 
     @property
     def is_ecn_email(self):

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-27 19:01+0200\n"
+"POT-Creation-Date: 2025-07-28 14:38+0200\n"
 "PO-Revision-Date: 2023-10-20 20:08+0200\n"
 "Last-Translator: Alexis Delage <alexidelage@gmail.com>\n"
 "Language-Team: \n"
@@ -30,7 +30,7 @@ msgstr "Other providers"
 msgid "Mot de passe vide"
 msgstr "Empty passsword"
 
-#: admin.py:58 models.py:111
+#: admin.py:58 models.py:114
 msgid "Email vérifié ?"
 msgstr "Verified email?"
 
@@ -58,17 +58,17 @@ msgstr "Account Validation"
 msgid "Dates Importantes"
 msgstr "Important dates"
 
-#: api_views.py:68
+#: api_views.py:72
 msgid "L'authentification à échoué"
 msgstr "Authentication failed"
 
-#: api_views.py:82
+#: api_views.py:79
 msgid ""
 "Votre e-mail n'est pas vérifié. Merci de cliquer sur le lien de vérification"
 msgstr ""
 "Your e-mail is not verified. Please click on the link verification link"
 
-#: api_views.py:96
+#: api_views.py:89
 msgid ""
 "Connection réussie, votre compte est temporaire, veuillez ajouter votre "
 "adresse mail Centrale au plus vite."
@@ -76,11 +76,11 @@ msgstr ""
 "Connection successful, your account is temporary, please add your ECN email "
 "address as soon as possible."
 
-#: api_views.py:111
+#: api_views.py:101
 msgid "Veuillez consulter votre boîte mail pour vérifier la nouvelle adresse"
 msgstr "Please check your emails in order to verify the new email address"
 
-#: api_views.py:121
+#: api_views.py:106
 msgid ""
 "Votre compte n'est pas vérifié et a été désactivé. Veuillez ajouter une "
 "adresse mail Centrale pour réactiver votre compte."
@@ -88,7 +88,7 @@ msgstr ""
 "Your account is not verified and has been disabled. Pleas add an email "
 "address from Centrale Nantes to reactivate your account."
 
-#: api_views.py:133
+#: api_views.py:113
 msgid ""
 "Votre e-mail Centrale n'est pas vérifié. Merci de cliquer sur le lien de "
 "vérification ou renseigner une autre adresse"
@@ -96,9 +96,32 @@ msgstr ""
 "Your ECN e-mail is not verified. Please click on the verification link or "
 "add another address"
 
-#: api_views.py:149
+#: api_views.py:123 api_views.py:128
 msgid "Connection réussie"
 msgstr "Succesfully connected"
+
+#: api_views.py:205
+msgid "Le mot de passe à bien été mis à jour."
+msgstr "The new password has been saved"
+
+#: api_views.py:285
+msgid ""
+"Votre email principal a bien été enregistré. Merci de cliquer sur le lien de "
+"vérification qui à vous a été envoyé."
+msgstr ""
+"Your main e-mail has been saved. Please click on the link verification link"
+
+#: api_views.py:289
+msgid "Votre email principal a bien été enregistré."
+msgstr "Your mail email has been saved"
+
+#: api_views.py:301
+msgid "Vous ne pouvez pas supprimer l'email principal de votre compte"
+msgstr "You cannot delete the main email address of your account"
+
+#: api_views.py:322
+msgid "Un mail de confirmation a été renvoyé à l'email fourni."
+msgstr "A confirmation email has been sent to verify provided email"
 
 #: models.py:44
 msgid "Nom d'utilisateur"
@@ -112,7 +135,7 @@ msgstr ""
 "Required. 150 characters or fewer. Lower case letters, digits and ./_/-/+ "
 "only."
 
-#: models.py:52 serializers.py:66 serializers.py:205
+#: models.py:52 serializers.py:69 serializers.py:236
 msgid "Ce nom d'utilisateur est déjà pris"
 msgstr "This username is already taken."
 
@@ -120,21 +143,34 @@ msgstr "This username is already taken."
 msgid "Email principal"
 msgstr "Main email"
 
-#: models.py:95
+#: models.py:100 models.py:127
 msgid "Vous ne pouvez pas supprimer l'email principal"
 msgstr "You cannot delete the main email address"
 
-#: models.py:113
+#: models.py:116
 msgid "Identifiant unique"
 msgstr "Unique ID"
 
-#: serializers.py:48 serializers.py:146 serializers.py:175
+#: serializers.py:33 serializers.py:51 serializers.py:148 serializers.py:182
+#: serializers.py:197
 msgid "Un compte à déjà été créé avec cette adresse email"
 msgstr "An account has already been created with this email address"
 
-#: serializers.py:132 serializers.py:183
+#: serializers.py:135 serializers.py:176
 msgid "Mot de passe invalide"
 msgstr "Invalid passsword"
+
+#: serializers.py:211
+msgid ""
+"L'adresse mail ne peut pas être modifiée. Veuillez ajouter une nouvelle "
+"adresse"
+msgstr "You cannot change the email address. Please add a new one"
+
+#: serializers.py:250
+msgid ""
+"Vous ne pouvez pas modifier votre nom d'utilisateur car vous avez déjà créé "
+"votre compte matrix."
+msgstr "You can not change username because you created a matrix account"
 
 #: validators.py:14
 msgid ""
