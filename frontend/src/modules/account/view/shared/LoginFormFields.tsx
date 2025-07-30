@@ -44,7 +44,6 @@ export function LoginFormFields({
           value={formValues.email_ecn}
           handleChange={(val) => updateFormValues({ email_ecn: val })}
           errors={error?.fields?.email_ecn}
-          required
           sx={{ marginBottom: 2 }}
           color={'warning'}
         />
