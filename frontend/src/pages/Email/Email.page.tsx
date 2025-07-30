@@ -1,4 +1,4 @@
-import { Button, Container, Typography } from '@mui/material';
+import { Container, Typography } from '@mui/material';
 
 import { EmailForm } from '#modules/event/view/Email/EmailForm';
 import { EmailList } from '#modules/event/view/Email/EmailList';

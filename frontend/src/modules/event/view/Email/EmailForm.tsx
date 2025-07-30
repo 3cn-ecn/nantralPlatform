@@ -2,7 +2,6 @@ import { useCallback, useState } from 'react';
 
 import { Box } from '@mui/material';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { concat } from 'lodash-es';
 
 import { addEmailApi } from '#modules/account/api/addEmail.api';
 import { Email } from '#modules/account/email.type';

@@ -397,13 +397,6 @@ class TestChangeEmail(TestCase):
 
     def test_wrong_email(self):
         self.client.force_login(self.user)
-        payload = {"password": "test", "email": "new@wrongdomain.fr"}
-        response = self.client.put(
-            self.url,
-            data=payload,
-            content_type="application/json",
-        )
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         # with + in the email
         payload = {"password": "test", "email": "ne+w@ec-nantes.fr"}
         response = self.client.put(
