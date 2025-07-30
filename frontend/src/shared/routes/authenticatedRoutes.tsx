@@ -3,6 +3,7 @@ import { RouteObject } from 'react-router-dom';
 
 import { PageTemplate } from '#shared/components/PageTemplate/PageTemplate';
 
+const EmailPage = lazy(() => import('#pages/Email/Email.page'));
 const EventPage = lazy(() => import('#pages/Event/Event.page'));
 const EventCalendarViewPage = lazy(
   () => import('#pages/Event/EventCalendar/EventCalendarView.page'),
@@ -39,6 +40,11 @@ export const authenticatedRoutes: RouteObject = {
     {
       path: '/update-username',
       element: <UpdateUsernamePage />,
+    },
+    {
+      path: '/account/email',
+      element: <EmailPage />,
+      handle: { crumb: t('breadcrumbs.email.index') },
     },
     {
       path: '/event',

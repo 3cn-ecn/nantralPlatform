@@ -299,8 +299,7 @@ class EmailViewSet(mixins.CreateModelMixin, mixins.ListModelMixin, mixins.Destro
         instance = self.get_object()
         if instance.user.email == instance.email:
             raise exceptions.ValidationError(_("Vous ne pouvez pas supprimer l'email principal de votre compte"))
-        self.perform_destroy(instance)
-        return Response(status=status.HTTP_204_NO_CONTENT)
+        return super().destroy(request, *args, **kwargs)
 
     @action(
         detail=False,

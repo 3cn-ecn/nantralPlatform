@@ -191,7 +191,6 @@ class EmailSerializer(serializers.ModelSerializer):
     email = serializers.EmailField(
         validators=[
             validate_email,
-            ecn_email_validator,
             UniqueValidator(
                 Email.objects.all(),
                 message=_("Un compte à déjà été créé avec cette adresse email"),
@@ -203,8 +202,8 @@ class EmailSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Email
-        fields = ("id", "email", "is_valid", "is_ecn_email", "user", "is_main")
-        read_only_fields = ("id", "is_valid", "is_ecn_email", "user", "is_main")
+        fields = ("id", "email", "is_valid", "is_ecn_email", "is_main")
+        read_only_fields = ("id", "is_valid", "is_ecn_email", "is_main")
 
     def validate_email(self, val: str):
         if self.instance and val != self.instance.email:
