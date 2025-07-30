@@ -1,10 +1,7 @@
 import { Paper, Table, TableBody, TableContainer } from '@mui/material';
-import { MutateFunction } from '@tanstack/react-query';
-import { AxiosError } from 'axios';
 
 import { Email } from '#modules/account/email.type';
 import { EmailRowSkeleton } from '#modules/event/view/Email/EmailRowSkeleton';
-import { DjangoRestApiFieldValidationError } from '#shared/infra/errors';
 
 import { EmailRow } from './EmailRow';
 

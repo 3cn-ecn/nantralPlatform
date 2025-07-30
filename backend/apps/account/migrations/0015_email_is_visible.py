@@ -6,13 +6,13 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('account', '0014_remove_user_email_remove_user_email_next_and_more'),
+        ("account", "0014_remove_user_email_remove_user_email_next_and_more"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='email',
-            name='is_visible',
-            field=models.BooleanField(default=False, help_text="Cochez cette case pour rendre l'email visible à tous les utilisateurs", verbose_name='Visibilité'),
+            model_name="email",
+            name="is_visible",
+            field=models.BooleanField(default=False, help_text="Cochez cette case pour rendre l'email visible à tous les utilisateurs", verbose_name="Visibilité"),
         ),
     ]

@@ -6,12 +6,10 @@ export function EmailRowSkeleton() {
   return (
     <TableRow>
       <TableCell>
-        <Typography variant={'h4'}>
-          <Skeleton variant={'text'} />
-        </Typography>{' '}
-      </TableCell>
-      <TableCell>
-        <FlexRow gap={1}>
+        <FlexRow gap={1} flexWrap={'wrap'}>
+          <Typography variant={'h4'}>
+            <Skeleton variant={'text'} />
+          </Typography>
           <Skeleton variant={'rounded'} width={120} height={32} />
           <Skeleton variant={'rounded'} width={80} height={32} />
           <Skeleton variant={'rounded'} width={100} height={32} />

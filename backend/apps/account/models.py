@@ -70,7 +70,7 @@ class User(AbstractUser):
         self.last_name = self.last_name.lower()
 
         request = None
-        if kwargs.get("request"):
+        if "request" in kwargs:
             request = kwargs.pop("request")
 
         super().save(*args, **kwargs)

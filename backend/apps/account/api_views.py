@@ -307,6 +307,7 @@ class EmailViewSet(mixins.CreateModelMixin, mixins.ListModelMixin, mixins.Destro
         methods=["POST"],
         serializer_class=ShortEmailSerializer,
         throttle_classes=[AnonRateThrottle],
+        permission_classes=[]
     )
     def resend(self, request: Request):
         """Resend email in case it is not received"""
