@@ -1,5 +1,8 @@
 {
   "breadcrumbs": {
+    "email": {
+      "index": "Gestion des mails"
+    },
     "events": {
       "calendar": {
         "index": "Calendrier"
@@ -44,6 +47,48 @@
     "send": "Envoyer",
     "today": "Aujourd'hui",
     "update": "Valider"
+  },
+  "email": {
+    "changeModal": {
+      "askPassword": "Veuillez renseigner votre mot de passe pour procéder au changement.",
+      "body": "Voulez vous définir l'adresse email {{ email }} comme principale ? Vous devrez utiliser cette adresse pour vous connecter, et toutes les notifications seront envoyées dessus.",
+      "title": "Modification de l'email principal"
+    },
+    "chip": {
+      "ecn": "Email Centrale",
+      "ecnTooltip": "Cette adresse email provient de Centrale Nantes. Si elle est vérifiée, elle permet de vérifier votre compte.",
+      "error": "Erreur",
+      "main": "Principal",
+      "mainTooltip": "Email principal utilisé pour se connecter et envoyer les notifications",
+      "sendError": "Une erreur est survenue. Cliquez pour réessayer",
+      "sendMessage": "Renvoyer un email de confirmation",
+      "sendSuccess": "L'email de confirmation a bien été envoyé",
+      "setMain": "Définir",
+      "setMainTooltip": "Définir cette adresse comme principale",
+      "success": "Succès",
+      "unverified": "Non-vérifié",
+      "verified": "Vérifié"
+    },
+    "deleteModal": {
+      "body": "Voulez vous supprimer l'adresse email {{ email }} ? Cette action est irreversible.",
+      "title": "Supprimer l'adresse mail"
+    },
+    "form": {
+      "label": "Nouvelle adresse mail"
+    },
+    "list": {
+      "title": "Liste"
+    },
+    "page": {
+      "title": "Gérer vos adresses mail"
+    },
+    "table": {
+      "actions": "Actions",
+      "email": "Adresse email",
+      "isEcn": "Fournisseur",
+      "isMain": "Email principal",
+      "isValid": "Vérifié ?"
+    }
   },
   "error": {
     "errorMessage": "Erreur : {{errorMessage}}",
@@ -380,12 +425,12 @@
         "helperText": "Image avec un ratio de 3:1 (taille minimale recommandée : 1200x400)",
         "label": "Bannière"
       },
-      "changeReason": {
-        "label": "Modif de changement",
-        "helperText": "Si vous le souhaitez, ajoutez quelques mots expliquant pourquoi vous créez/modifiez ce groupe"
-      },
       "beginDate": {
         "label": "Date de début"
+      },
+      "changeReason": {
+        "helperText": "Si vous le souhaitez, ajoutez quelques mots expliquant pourquoi vous créez/modifiez ce groupe",
+        "label": "Modif de changement"
       },
       "creationDate": {
         "label": "Date de création"
@@ -798,14 +843,14 @@
     }
   },
   "username": {
-    "update": "Choisissez un nouveau nom d'utilisateur",
-    "success": "Mise à jour du nom d'utilisateur effectuée avec succès",
     "alert": {
-      "title": "Mise à jour importante - Noms d'utilisateurs",
-      "message1": "Nous avons ajouté la possibilité de modifier votre nom d'utilisateur.",
       "link": "Cliquez sur ce lien",
-      "message2": "pour effectuer le changement. Nous vous conseillons de réaliser l'opération rapidement en prévision d'une mise à jour future."
-    }
+      "message1": "Nous avons ajouté la possibilité de modifier votre nom d'utilisateur.",
+      "message2": "pour effectuer le changement. Nous vous conseillons de réaliser l'opération rapidement en prévision d'une mise à jour future.",
+      "title": "Mise à jour importante - Noms d'utilisateurs"
+    },
+    "success": "Mise à jour du nom d'utilisateur effectuée avec succès",
+    "update": "Choisissez un nouveau nom d'utilisateur"
   },
   "utils": {
     "shareLink": {

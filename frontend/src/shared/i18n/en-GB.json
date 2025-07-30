@@ -1,5 +1,8 @@
 {
   "breadcrumbs": {
+    "email": {
+      "index": "Email Management"
+    },
     "events": {
       "calendar": {
         "index": "Calendar"
@@ -44,6 +47,48 @@
     "send": "Send",
     "today": "Today",
     "update": "Update"
+  },
+  "email": {
+    "changeModal": {
+      "askPassword": "Please enter your password to proceed",
+      "body": "Do you want to use {{ email }} as your main email address? You will need to use this address to log in, and all notifications will be sent there.",
+      "title": "Change Main Email"
+    },
+    "chip": {
+      "ecn": "ECN email",
+      "ecnTooltip": "This email address is provided by Centrale Nantes. If it is verified, it can be use to verify your account.",
+      "error": "Error",
+      "main": "Main",
+      "mainTooltip": "Main email used in the login page and to send notifications",
+      "sendError": "An error occured. Click to try again",
+      "sendMessage": "Resend confirmation email",
+      "sendSuccess": "The confirmation email has been sent",
+      "setMain": "Set main",
+      "setMainTooltip": "Set as main email address",
+      "success": "Success",
+      "unverified": "Unverified",
+      "verified": "Verified"
+    },
+    "deleteModal": {
+      "body": "Do you really wish to delete the email address {{ email }}? This cannot be undone.",
+      "title": "Delete Email Address"
+    },
+    "form": {
+      "label": "New email address"
+    },
+    "list": {
+      "title": "List"
+    },
+    "page": {
+      "title": "Mage your email addresses"
+    },
+    "table": {
+      "actions": "Actions",
+      "email": "Email address",
+      "isEcn": "Provider",
+      "isMain": "Main email",
+      "isValid": "Verified?"
+    }
   },
   "error": {
     "errorMessage": "Error: {{errorMessage}}",
@@ -384,8 +429,8 @@
         "label": "Begin date"
       },
       "changeReason": {
-        "label": "Change Reason",
-        "helperText": "If you wish, you can add a few words explaining why you are updating/creating this group"
+        "helperText": "If you wish, you can add a few words explaining why you are updating/creating this group",
+        "label": "Change Reason"
       },
       "creationDate": {
         "label": "Creation date"
@@ -798,14 +843,14 @@
     }
   },
   "username": {
-    "update": "Choose a new username",
-    "success": "Successfully updated username",
     "alert": {
-      "title": "Important Update - Usernames",
-      "message1": "We made you able to choose an username.",
       "link": "Click here",
-      "message2": "to make the change. Please perform this action quickly to prepare for a future update."
-    }
+      "message1": "We made you able to choose an username.",
+      "message2": "to make the change. Please perform this action quickly to prepare for a future update.",
+      "title": "Important Update - Usernames"
+    },
+    "success": "Successfully updated username",
+    "update": "Choose a new username"
   },
   "utils": {
     "shareLink": {
