@@ -1,7 +1,10 @@
 import { Paper, Table, TableBody, TableContainer } from '@mui/material';
+import { MutateFunction } from '@tanstack/react-query';
+import { AxiosError } from 'axios';
 
 import { Email } from '#modules/account/email.type';
 import { EmailRowSkeleton } from '#modules/event/view/Email/EmailRowSkeleton';
+import { DjangoRestApiFieldValidationError } from '#shared/infra/errors';
 
 import { EmailRow } from './EmailRow';
 
@@ -10,11 +13,13 @@ export function EmailTable({
   isLoading,
   setDeleteModalEmail,
   setNewMainEmail,
+  changeVisibility,
 }: {
   emails?: Email[];
   isLoading: boolean;
   setDeleteModalEmail: (email: Email) => void;
   setNewMainEmail: (email: Email) => void;
+  changeVisibility: (emailId: number, isVisible: boolean) => void;
 }) {
   return (
     <TableContainer component={Paper}>
@@ -29,6 +34,7 @@ export function EmailTable({
                 key={email.id}
                 setDeleteModalEmail={setDeleteModalEmail}
                 setNewMainEmail={setNewMainEmail}
+                changeVisibility={changeVisibility}
               />
             ))
           )}

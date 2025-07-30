@@ -22,6 +22,7 @@ from .serializers import (
     RegisterSerializer,
     ShortEmailSerializer,
     UsernameSerializer,
+    VisibilitySerializer,
 )
 from .utils import send_email_confirmation
 
@@ -283,7 +284,7 @@ class EmailViewSet(mixins.CreateModelMixin, mixins.ListModelMixin, mixins.Destro
         if not user.has_email(email):
             message = _(
                 "Votre email principal a bien été enregistré. Merci de cliquer "
-                "sur le lien de vérification qui à vous a été envoyé."
+                "sur le lien de vérification qui vous a été envoyé."
             )
         else:
             message = _("Votre email principal a bien été enregistré.")
@@ -338,3 +339,14 @@ class EmailViewSet(mixins.CreateModelMixin, mixins.ListModelMixin, mixins.Destro
             self.request,
         )
         return response
+
+    @action(detail=True, methods=["PUT"], serializer_class=VisibilitySerializer)
+    def visibility(self, request: Request, *args, **kwargs):
+        email = self.get_object()
+        serialed_data = self.get_serializer(data=request.data)
+        if serialed_data.is_valid():
+            email.is_visible = serialed_data.validated_data.get("is_visible")
+            email.save()
+            return Response({"message": _("La visibilité a été changée.")}, status=status.HTTP_200_OK)
+        else:
+            return Response(serialed_data.errors, status=status.HTTP_400_BAD_REQUEST)

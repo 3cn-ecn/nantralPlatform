@@ -6,6 +6,7 @@ import {
   useQueryClient,
 } from '@tanstack/react-query';
 
+import { changeEmailVisibilityApi } from '#modules/account/api/changeEmailVisibility.api';
 import { changeMainEmailApi } from '#modules/account/api/changeMainEmail.api';
 import { getEmailListApi } from '#modules/account/api/getEmailList';
 import { removeEmailApi } from '#modules/account/api/removeEmail.api';
@@ -38,6 +39,28 @@ export function EmailList() {
     onSuccess: async () => {
       await queryClient.invalidateQueries(['emails']);
       setDeleteModalEmail(null);
+    },
+  });
+
+  const changeVisibility = useMutation<
+    string,
+    ApiFormError<{ isVisible: boolean }>,
+    { emailId: number; isVisible: boolean }
+  >({
+    mutationFn: ({ emailId, isVisible }) =>
+      changeEmailVisibilityApi(emailId, isVisible),
+    onSuccess: async (message) => {
+      await queryClient.invalidateQueries(['emails']);
+      showToast({
+        message: message,
+        variant: 'success',
+      });
+    },
+    onError: async (error) => {
+      showToast({
+        message: error.message,
+        variant: 'error',
+      });
     },
   });
 
@@ -79,6 +102,9 @@ export function EmailList() {
           emails={query.data?.pages.flatMap((page) => page.results)}
           setDeleteModalEmail={setDeleteModalEmail}
           setNewMainEmail={setNewMainEmail}
+          changeVisibility={(emailId, isVisible) =>
+            changeVisibility.mutate({ emailId, isVisible })
+          }
         />
       </InfiniteList>
       {deleteModalEmail && (

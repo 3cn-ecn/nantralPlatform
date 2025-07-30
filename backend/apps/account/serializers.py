@@ -192,6 +192,9 @@ class ChangeEmailSerializer(serializers.Serializer):
 class ShortEmailSerializer(serializers.Serializer):
     email = serializers.EmailField()
 
+class VisibilitySerializer(serializers.Serializer):
+    is_visible = serializers.BooleanField(required=True)
+
 
 class EmailSerializer(serializers.ModelSerializer):
     email = serializers.EmailField(
@@ -208,7 +211,7 @@ class EmailSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Email
-        fields = ("id", "email", "is_valid", "is_ecn_email", "is_main")
+        fields = ("id", "email", "is_valid", "is_ecn_email", "is_main", "is_visible")
         read_only_fields = ("id", "is_valid", "is_ecn_email", "is_main")
 
     def validate_email(self, val: str):

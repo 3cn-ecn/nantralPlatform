@@ -8,5 +8,6 @@ export function adaptEmail(emailDto: EmailDTO): Email {
     isValid: emailDto.is_valid,
     isECNEmail: emailDto.is_ecn_email,
     isMain: emailDto.is_main,
+    isVisible: emailDto.is_visible,
   };
 }
