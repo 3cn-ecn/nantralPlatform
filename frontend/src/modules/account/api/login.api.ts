@@ -5,6 +5,7 @@ import { ApiErrorDTO, adaptApiErrors } from '#shared/infra/errors';
 export interface LoginApiBody {
   email?: string;
   password?: string;
+  email_ecn?: string;
 }
 
 export async function loginApi(body: LoginApiBody) {
@@ -12,6 +13,7 @@ export async function loginApi(body: LoginApiBody) {
     .post('/api/account/login/', {
       email: body?.email,
       password: body?.password,
+      email_ecn: body?.email_ecn,
     })
     .catch((err: ApiErrorDTO) => {
       throw adaptApiErrors(err);

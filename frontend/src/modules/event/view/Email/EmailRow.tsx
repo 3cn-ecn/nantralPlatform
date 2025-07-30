@@ -89,7 +89,9 @@ export function EmailRow({
           )}
           <Chip
             icon={email.isVisible ? <Visibility /> : <VisibilityOff />}
-            label={'Visibilité'}
+            label={
+              email.isVisible ? t('email.chip.visible') : t('email.chip.hidden')
+            }
             variant={email.isVisible ? 'filled' : 'outlined'}
             onClick={() => changeVisibility(email.id, !email.isVisible)}
           />

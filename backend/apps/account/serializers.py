@@ -1,3 +1,4 @@
+from django.db.models import F
 from django.utils import timezone
 from django.utils.translation import gettext as _
 
@@ -29,7 +30,7 @@ class LoginSerializer(serializers.Serializer):
             validate_email,
             ecn_email_validator,
             UniqueValidator(
-                Email.objects.all(),
+                Email.objects.all().annotate(email_ecn=F("email")),
                 message=_("Un compte à déjà été créé avec cette adresse email"),
             ),
         ],

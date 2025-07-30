@@ -58,6 +58,7 @@
       "ecn": "Email Centrale",
       "ecnTooltip": "Cette adresse email provient de Centrale Nantes. Si elle est vérifiée, elle permet de vérifier votre compte.",
       "error": "Erreur",
+      "hidden": "Cachée",
       "main": "Principal",
       "mainTooltip": "Email principal utilisé pour se connecter et envoyer les notifications",
       "sendError": "Une erreur est survenue. Cliquez pour réessayer",
@@ -67,7 +68,8 @@
       "setMainTooltip": "Définir cette adresse comme principale",
       "success": "Succès",
       "unverified": "Non-vérifié",
-      "verified": "Vérifié"
+      "verified": "Vérifié",
+      "visible": "Publique"
     },
     "deleteModal": {
       "body": "Voulez vous supprimer l'adresse email {{ email }} ? Cette action est irreversible.",
