@@ -58,6 +58,7 @@
       "ecn": "ECN email",
       "ecnTooltip": "This email address is provided by Centrale Nantes. If it is verified, it can be use to verify your account.",
       "error": "Error",
+      "hidden": "Hidden",
       "main": "Main",
       "mainTooltip": "Main email used in the login page and to send notifications",
       "sendError": "An error occured. Click to try again",
@@ -67,7 +68,8 @@
       "setMainTooltip": "Set as main email address",
       "success": "Success",
       "unverified": "Unverified",
-      "verified": "Verified"
+      "verified": "Verified",
+      "visible": "Public"
     },
     "deleteModal": {
       "body": "Do you really wish to delete the email address {{ email }}? This cannot be undone.",

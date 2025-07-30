@@ -54,8 +54,7 @@ class AuthViewSet(GenericViewSet):
             - password
             - email_ecn?
         """
-        data = request.data
-        serializer = self.serializer_class(data=data)
+        serializer = self.serializer_class(data=request.data)
 
         if not serializer.is_valid():
             return Response(
@@ -68,29 +67,31 @@ class AuthViewSet(GenericViewSet):
 
         user: User = authenticate(username=email, password=password)
 
+        data = {}
+
         # Wrong credentials
         if user is None:
-            message = _("L'authentification à échoué")
-            code = FAILED
+            data["message"] = _("L'authentification à échoué")
+            data["code"] = FAILED
             response_status = status.HTTP_401_UNAUTHORIZED
 
         # Not verified primary email
         elif not user.is_email_valid:
-            message = _(
+            data["message"] = _(
                 "Votre e-mail n'est pas vérifié. Merci de cliquer sur le lien "
                 "de vérification",
             )
-            code = EMAIL_NOT_VALIDATED
+            data["code"] = EMAIL_NOT_VALIDATED
             response_status = status.HTTP_401_UNAUTHORIZED
 
         # Temporary account
         elif user.invitation is not None and user.invitation.is_valid():
             login(request=request, user=user)
-            message = _(
+            data["message"] = _(
                 "Connection réussie, votre compte est temporaire, veuillez "
                 "ajouter votre adresse mail Centrale au plus vite.",
             )
-            code = ACCOUNT_TEMPORARY
+            data["code"] = ACCOUNT_TEMPORARY
             response_status = status.HTTP_200_OK
 
         # Expired invitation
@@ -99,42 +100,40 @@ class AuthViewSet(GenericViewSet):
                 email_ecn = serializer.validated_data.get("email_ecn")
                 if email_ecn:
                     user.add_email(email_ecn, request=request)
-                    message = _("Veuillez consulter votre boîte mail pour vérifier la nouvelle adresse")
-                    code = EMAIL_CHANGED
-                    response_status = status.HTTP_201_CREATED
+                    data["message"] = _("Veuillez consulter votre boîte mail pour vérifier la nouvelle adresse")
+                    data["code"] = EMAIL_CHANGED
+                    response_status = status.HTTP_401_UNAUTHORIZED
                 else:
-                    message = _(
-                                "Votre compte n'est pas vérifié et a été désactivé. Veuillez ajouter "
-                                "une adresse mail Centrale pour réactiver votre compte."
-                            )
-                    code = TEMPORARY_ACCOUNT_EXPIRED
+                    data["message"] = _(
+                        "Votre compte n'est pas vérifié et a été désactivé. Veuillez ajouter "
+                        "une adresse mail Centrale pour réactiver votre compte."
+                    )
+                    data["code"] = TEMPORARY_ACCOUNT_EXPIRED
                     response_status = status.HTTP_401_UNAUTHORIZED
             elif not user.has_valid_ecn_email():
-                message = _(
-                            "Votre e-mail Centrale n'est pas vérifié. Merci de cliquer sur le lien "
-                            "de vérification ou renseigner une autre adresse",
-                        )
-                code = ECN_EMAIL_NOT_VALIDATED
+                data["message"] = _(
+                    "Votre e-mail Centrale n'est pas vérifié. Merci de cliquer sur le lien "
+                    "de vérification ou renseigner une autre adresse",
+                )
+                data["code"] = ECN_EMAIL_NOT_VALIDATED
+                data["emails_ecn"] = [email.email for email in user.emails.filter(is_valid=False) if email.is_ecn_email]
                 response_status = status.HTTP_401_UNAUTHORIZED
             else:
                 # Here, the user has a valid ECN email but invitation is not null, so we fix it
                 user.invitation = None
                 user.save()
                 login(user=user, request=self.request)
-                message = _("Connection réussie")
-                code = SUCCESS
+                data["message"] = _("Connection réussie")
+                data["code"] = SUCCESS
                 response_status = status.HTTP_200_OK
         else:
             login(request=request, user=user)
-            message = _("Connection réussie")
-            code = SUCCESS
+            data["message"] = _("Connection réussie")
+            data["code"] = SUCCESS
             response_status = status.HTTP_200_OK
 
         return Response(
-            {
-                "message": message,
-                "code": code,
-            },
+            data,
             status=response_status,
         )
 

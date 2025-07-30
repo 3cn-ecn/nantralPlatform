@@ -1,6 +1,8 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
 
+import { DjangoRestApiFieldValidationError } from '#shared/infra/errors';
+
 import { isAuthenticatedApi } from '../api/isAuthenticated.api';
 import { LoginApiBody, loginApi } from '../api/login.api';
 import { logoutApi } from '../api/logout.api';
@@ -8,7 +10,15 @@ import { logoutApi } from '../api/logout.api';
 export interface ProvideAuthValues {
   isLoading: boolean;
   isAuthenticated: boolean;
-  error: AxiosError<{ message?: string; code?: string }> | null;
+  error:
+    | (AxiosError<{
+        message?: string;
+        code?: string;
+        emails_ecn?: string[];
+      }> & {
+        fields?: DjangoRestApiFieldValidationError<LoginApiBody>;
+      })
+    | null;
   login: (body: LoginApiBody) => Promise<number>;
   logout: () => Promise<number>;
 }
