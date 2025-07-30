@@ -4,6 +4,8 @@ import {
   ErrorOutline,
   School,
   StarOutline,
+  Visibility,
+  VisibilityOff,
 } from '@mui/icons-material';
 import { Chip, TableCell, TableRow, Tooltip, Typography } from '@mui/material';
 
@@ -16,20 +18,20 @@ export function EmailRow({
   email,
   setDeleteModalEmail,
   setNewMainEmail,
+  changeVisibility,
 }: {
   email: Email;
   setDeleteModalEmail: (email: Email) => void;
   setNewMainEmail: (email: Email) => void;
+  changeVisibility: (emailId: number, isVisible: boolean) => void;
 }) {
   const { t } = useTranslation();
 
   return (
     <TableRow sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
       <TableCell>
-        <Typography variant={'h4'}>{email.email}</Typography>
-      </TableCell>
-      <TableCell>
-        <FlexRow gap={1}>
+        <FlexRow gap={1} flexWrap={'wrap'}>
+          <Typography variant={'h5'}>{email.email}</Typography>
           {email.isValid ? (
             <Chip
               icon={<CheckCircleOutlined />}
@@ -85,6 +87,12 @@ export function EmailRow({
               />
             </>
           )}
+          <Chip
+            icon={email.isVisible ? <Visibility /> : <VisibilityOff />}
+            label={'Visibilité'}
+            variant={email.isVisible ? 'filled' : 'outlined'}
+            onClick={() => changeVisibility(email.id, !email.isVisible)}
+          />
         </FlexRow>
       </TableCell>
     </TableRow>

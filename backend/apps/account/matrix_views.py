@@ -57,8 +57,9 @@ class CheckCredentials(views.APIView):
                 "three_pids": [
                     {
                         "medium": "email",
-                        "address": user.email,
+                        "address": email.email,
                     }
+                    for email in user.emails.filter(is_visible=True)
                 ]
             }
         }})

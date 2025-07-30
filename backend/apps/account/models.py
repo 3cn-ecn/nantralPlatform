@@ -112,6 +112,7 @@ class Email(models.Model):
     email = models.EmailField(unique=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="emails")
     is_valid = models.BooleanField(verbose_name=_("Email vérifié ?"), default=False)
+    is_visible = models.BooleanField(verbose_name=_("Visibilité"), default=False, help_text=_("Cochez cette case pour rendre l'email visible à tous les utilisateurs"))
     # Utilisé pour la vérification
     uuid = models.UUIDField(_("Identifiant unique"), unique=True, default=uuid.uuid4)
 

@@ -4,4 +4,5 @@ export interface Email {
   isValid: boolean;
   isECNEmail: boolean;
   isMain: boolean;
+  isVisible: boolean;
 }
