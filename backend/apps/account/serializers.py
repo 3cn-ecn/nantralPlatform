@@ -180,6 +180,12 @@ class ChangeEmailSerializer(serializers.Serializer):
         user = self.context.get("request").user
         if Email.objects.exclude(user=user).filter(email=val).exists():
             raise serializers.ValidationError(_("Un compte à déjà été créé avec cette adresse email"))
+        try:
+            email = Email.objects.get(email=val)
+            if not email.is_valid:
+                raise serializers.ValidationError(_("Vous ne pouvez pas utiliser cette adresse car elle n'est pas vérifiée."))
+        except Email.DoesNotExist:
+            pass
         return val
 
 

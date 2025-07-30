@@ -65,15 +65,17 @@ export function EmailRow({
             </Tooltip>
           ) : (
             <>
-              <Tooltip title={t('email.chip.setMainTooltip')}>
-                <Chip
-                  icon={<StarOutline />}
-                  label={t('email.chip.setMain')}
-                  color={'warning'}
-                  variant={'outlined'}
-                  onClick={() => setNewMainEmail(email)}
-                />
-              </Tooltip>
+              {email.isValid && (
+                <Tooltip title={t('email.chip.setMainTooltip')}>
+                  <Chip
+                    icon={<StarOutline />}
+                    label={t('email.chip.setMain')}
+                    color={'warning'}
+                    variant={'outlined'}
+                    onClick={() => setNewMainEmail(email)}
+                  />
+                </Tooltip>
+              )}
               <Chip
                 icon={<DeleteForever />}
                 label={t('button.delete')}
