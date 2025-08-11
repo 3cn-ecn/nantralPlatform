@@ -36,7 +36,7 @@ class CheckCredentials(views.APIView):
                 username = username.split(":")[0][1:]
             email = User.objects.get(username=username).email
 
-        user = authenticate(username=email, password=password)
+        user: User = authenticate(username=email, password=password)
 
         # Check if the user account exists and is valid
         if (user is None) or (user.invitation is not None and not user.invitation.is_valid()) or (not user.is_email_valid):

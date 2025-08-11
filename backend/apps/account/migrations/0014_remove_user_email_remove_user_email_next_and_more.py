@@ -14,14 +14,14 @@ def forwards(apps, schema_editor):
     Email = apps.get_model("account", "Email")
 
     for user in User.objects.all():
-        Email.objects.create(email=user.email, is_valid=user.is_email_valid)
+        Email.objects.create(email=user.email, is_valid=user.is_email_valid, user=user)
 
 
 def backwards(apps, schema_editor):
     User = apps.get_model("account", "User")
 
     for user in User.objects.all():
-        user.is_email_valid = user.emails.filter(email=user.email).is_active
+        user.is_email_valid = user.emails.get(email=user.email).is_valid
         user.save()
 
 
