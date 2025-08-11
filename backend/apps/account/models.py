@@ -123,7 +123,7 @@ class Email(models.Model):
         self.email = self.email.lower()
         super().save(*args, **kwargs)
 
-    def delete(self, using = None, keep_parents = False):
+    def delete(self, using=None, keep_parents=False):
         if self.user.email == self.email:
             raise exceptions.ValidationError(_("Vous ne pouvez pas supprimer l'email principal"))
         return super().delete(using=using, keep_parents=keep_parents)

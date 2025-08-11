@@ -85,7 +85,7 @@ export function EmailList() {
       if (error.fields?.email) {
         showToast({
           message:
-            "Erreur sur l'adresse séléctionnée" + error.fields.email.join(', '),
+            "Erreur sur l'adresse sélectionnée" + error.fields.email.join(', '),
           variant: 'error',
         });
         changeEmailMutation.reset();
