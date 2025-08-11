@@ -9,32 +9,12 @@ from rest_framework.exceptions import ValidationError
 
 
 class MatrixUsernameValidator(validators.RegexValidator):
-    regex = r"^[a-z0-9.\-+][a-z0-9._\-+]*\Z"
+    regex = r"^[a-z0-9.\-+][a-z0-9._\-+]*$"
     message = _(
         "Entrez un nom d'utilisateur valide. Il doit être composé de lettres minuscules "
         "de chiffres et des caractères . _ - +. Il ne doit pas commencer par _"
     )
     flags = 0
-
-
-class EcnEmailValidator(validators.EmailValidator):
-    """This validator checks if an email address is from
-    École Centrale Nantes or Centrale Nantes Alumni which
-    means that the user  belongs to Centrale Nantes
-
-    It disables all the domains by changing the regex that checks
-    if a domain is valid, and sets a list of domain that bypass
-    the check.
-    """
-    domain_regex = re.compile(r"(?!)")  # This matches nothing
-    domain_allowlist = [
-        "eleves.ec-nantes.fr",
-        "ec-nantes.fr",
-        "centraliens-nantes.org",
-        # For local
-        "fake.ec-nantes.fr",
-    ]
-    message = _("Vous devez utiliser une addresse mail ECN valide (ec-nantes.fr ou centraliens-nantes.org)")
 
 
 def validate_email(mail: str):
@@ -53,5 +33,11 @@ def django_validate_password(password):
         raise ValidationError(e.messages)
 
 
+def ecn_email_validator(mail: str):
+    if re.search(r"@([\w\-.]+\.)?(ec-nantes\.fr|centraliens-nantes\.org)$", mail) is None:
+        raise ValidationError(
+            _("Vous devez utiliser une addresse mail ECN valide (ec-nantes.fr ou centraliens-nantes.org)"),
+        )
+
+
 matrix_username_validator = MatrixUsernameValidator()
-ecn_email_validator = EcnEmailValidator()
