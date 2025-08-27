@@ -7,7 +7,7 @@ from django.utils import timezone
 from apps.group.abstract.models import AbstractGroup, NamedMembership
 from apps.student.models import Student
 
-MAX_2APLUS_PER_FAMILY = 7
+MAX_2APLUS_PER_FAMILY = 8
 MIN_2APLUS_PER_FAMILY = 3
 
 
