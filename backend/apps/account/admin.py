@@ -26,13 +26,13 @@ class UppercaseEmailFilter(admin.SimpleListFilter):
 
 
 class ECNantesDomainFilter(admin.SimpleListFilter):
-    title = _("Mail Centrale Nantes")
+    title = _("Your Centrale Nantes email")
     parameter_name = "ecnantes_domain"
 
     def lookups(self, request, model_admin):
         return (
             ("with_domain", "ec-nantes.fr"),
-            ("without_domain", _("Autres hébergeurs")),
+            ("without_domain", _("Other providers")),
         )
 
     def queryset(self, request, queryset):
@@ -43,11 +43,11 @@ class ECNantesDomainFilter(admin.SimpleListFilter):
 
 
 class NoPasswordFilter(admin.SimpleListFilter):
-    title = _("Mot de passe vide")
+    title = _("Empty passsword")
     parameter_name = "no_password"
 
     def lookups(self, request, model_admin):
-        return (("no_password", _("Mot de passe vide")),)
+        return (("no_password", _("Empty passsword")),)
 
     def queryset(self, request, queryset):
         if self.value() == "no_password":
@@ -55,13 +55,13 @@ class NoPasswordFilter(admin.SimpleListFilter):
 
 
 class IsEmailValidFilter(admin.SimpleListFilter):
-    title = _("Email vérifié ?")
+    title = _("Verified email?")
     parameter_name = "is_email_valid"
 
     def lookups(self, request, model_admin):
         return (
-            ("email_valid", _("Oui")),
-            ("email_invalid", _("Non")),
+            ("email_valid", _("Yes")),
+            ("email_invalid", _("No")),
         )
 
     def queryset(self, request, queryset):
@@ -110,7 +110,7 @@ class CustomUserAdmin(UserAdmin):
     fieldsets = (
         (None, {"fields": ("username", "password")}),
         (
-            _("Info personnelles"),
+            _("Personal info"),
             {"fields": ("first_name", "last_name", "email")},
         ),
         (
@@ -126,7 +126,7 @@ class CustomUserAdmin(UserAdmin):
             },
         ),
         (
-            _("Validation du compte"),
+            _("Account Validation"),
             {
                 "fields": (
                     "is_email_valid",
@@ -136,7 +136,7 @@ class CustomUserAdmin(UserAdmin):
                 ),
             },
         ),
-        (_("Dates Importantes"), {"fields": ("last_login", "date_joined")}),
+        (_("Important dates"), {"fields": ("last_login", "date_joined")}),
     )
 
     add_fieldsets = (

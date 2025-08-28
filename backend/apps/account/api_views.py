@@ -71,16 +71,13 @@ class AuthViewSet(GenericViewSet):
 
         # Wrong credentials
         if user is None:
-            data["message"] = _("L'authentification à échoué")
+            data["message"] = _("Authentication failed")
             data["code"] = FAILED
             response_status = status.HTTP_401_UNAUTHORIZED
 
         # Not verified primary email
         elif not user.is_email_valid:
-            data["message"] = _(
-                "Votre e-mail n'est pas vérifié. Merci de cliquer sur le lien "
-                "de vérification",
-            )
+            data["message"] = _("Your e-mail is not verified. Please click on the link verification link")
             data["code"] = EMAIL_NOT_VALIDATED
             response_status = status.HTTP_401_UNAUTHORIZED
 
@@ -88,8 +85,8 @@ class AuthViewSet(GenericViewSet):
         elif user.invitation is not None and user.invitation.is_valid():
             login(request=request, user=user)
             data["message"] = _(
-                "Connection réussie, votre compte est temporaire, veuillez "
-                "ajouter votre adresse mail Centrale au plus vite.",
+                "Connection successful, your account is temporary, please add your ECN email "
+                "address as soon as possible."
             )
             data["code"] = ACCOUNT_TEMPORARY
             response_status = status.HTTP_200_OK
@@ -100,20 +97,20 @@ class AuthViewSet(GenericViewSet):
                 email_ecn = serializer.validated_data.get("email_ecn")
                 if email_ecn:
                     user.add_email(email_ecn, request=request)
-                    data["message"] = _("Veuillez consulter votre boîte mail pour vérifier la nouvelle adresse")
+                    data["message"] = _("Please check your emails in order to verify the new email address")
                     data["code"] = EMAIL_CHANGED
                     response_status = status.HTTP_401_UNAUTHORIZED
                 else:
                     data["message"] = _(
-                        "Votre compte n'est pas vérifié et a été désactivé. Veuillez ajouter "
-                        "une adresse mail Centrale pour réactiver votre compte."
+                        "Your account is not verified and has been disabled. Pleas add an email "
+                        "address from Centrale Nantes to reactivate your account."
                     )
                     data["code"] = TEMPORARY_ACCOUNT_EXPIRED
                     response_status = status.HTTP_401_UNAUTHORIZED
             elif not user.has_valid_ecn_email():
                 data["message"] = _(
-                    "Votre e-mail Centrale n'est pas vérifié. Merci de cliquer sur le lien "
-                    "de vérification ou renseigner une autre adresse",
+                    "Your ECN e-mail is not verified. Please click on the verification link or "
+                    "add another address"
                 )
                 data["code"] = ECN_EMAIL_NOT_VALIDATED
                 data["emails_ecn"] = [email.email for email in user.emails.filter(is_valid=False) if email.is_ecn_email]
@@ -123,12 +120,12 @@ class AuthViewSet(GenericViewSet):
                 user.invitation = None
                 user.save()
                 login(user=user, request=self.request)
-                data["message"] = _("Connection réussie")
+                data["message"] = _("Successfully connected")
                 data["code"] = SUCCESS
                 response_status = status.HTTP_200_OK
         else:
             login(request=request, user=user)
-            data["message"] = _("Connection réussie")
+            data["message"] = _("Successfully connected")
             data["code"] = SUCCESS
             response_status = status.HTTP_200_OK
 
@@ -202,7 +199,7 @@ class AuthViewSet(GenericViewSet):
         user.save()
         # make sure user is not logged out by login him again
         login(request=request, user=user)
-        return Response({"message": _("Le mot de passe à bien été mis à jour.")})
+        return Response({"message": _("The new password has been saved")})
 
     @action(
         detail=False,
@@ -282,11 +279,10 @@ class EmailViewSet(mixins.CreateModelMixin, mixins.ListModelMixin, mixins.Destro
         email = serializer.validated_data["email"]
         if not user.has_email(email):
             message = _(
-                "Votre email principal a bien été enregistré. Merci de cliquer "
-                "sur le lien de vérification qui vous a été envoyé."
+                "Your main e-mail has been saved. Please click on the link verification link"
             )
         else:
-            message = _("Votre email principal a bien été enregistré.")
+            message = _("Your main email has been saved")
         user.email = email
         user.save(request=request)
 
@@ -298,7 +294,7 @@ class EmailViewSet(mixins.CreateModelMixin, mixins.ListModelMixin, mixins.Destro
     def destroy(self, request, *args, **kwargs):
         instance = self.get_object()
         if instance.user.email == instance.email:
-            raise exceptions.ValidationError(_("Vous ne pouvez pas supprimer l'email principal de votre compte"))
+            raise exceptions.ValidationError(_("You cannot delete the main email address of your account"))
         return super().destroy(request, *args, **kwargs)
 
     @action(
@@ -319,7 +315,7 @@ class EmailViewSet(mixins.CreateModelMixin, mixins.ListModelMixin, mixins.Destro
         email = serializer.validated_data.get("email")
 
         # always send the same response to not give informations
-        message = _("Un mail de confirmation a été renvoyé à l'email fourni.")
+        message = _("A confirmation email has been sent to verify provided email")
         response = Response(
             {"message": message},
             status=status.HTTP_200_OK,
@@ -347,6 +343,6 @@ class EmailViewSet(mixins.CreateModelMixin, mixins.ListModelMixin, mixins.Destro
         if serialed_data.is_valid():
             email.is_visible = serialed_data.validated_data.get("is_visible")
             email.save()
-            return Response({"message": _("La visibilité a été changée.")}, status=status.HTTP_200_OK)
+            return Response({"message": _("The visibility has been changed")}, status=status.HTTP_200_OK)
         else:
             return Response(serialed_data.errors, status=status.HTTP_400_BAD_REQUEST)
