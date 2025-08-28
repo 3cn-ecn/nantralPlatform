@@ -65,6 +65,11 @@ class SlugModel:
                 while model.objects.filter(slug=f"{slug}-{num}").exists():
                     num += 1
                 slug = f"{slug}-{num}"
+            if not slug:
+                num = 1
+                while model.objects.filter(slug=str(num)).exists():
+                    num += 1
+                slug = str(num)
             self.slug = slug
 
 
