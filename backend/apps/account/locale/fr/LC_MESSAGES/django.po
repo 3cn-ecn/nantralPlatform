@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-28 08:55+0200\n"
+"POT-Creation-Date: 2025-08-28 12:54+0200\n"
 "PO-Revision-Date: 2023-10-20 20:08+0200\n"
 "Last-Translator: Alexis Delage <alexidelage@gmail.com>\n"
 "Language-Team: \n"
@@ -30,7 +30,7 @@ msgstr "Autres hébergeurs"
 msgid "Empty passsword"
 msgstr "Mot de passe vide"
 
-#: admin.py:58 models.py:114
+#: admin.py:58 models.py:107
 msgid "Verified email?"
 msgstr "Email vérifié ?"
 
@@ -103,34 +103,34 @@ msgstr "Connection réussie"
 msgid "The new password has been saved"
 msgstr "Le mot de passe à bien été mis à jour."
 
-#: api_views.py:282
+#: api_views.py:284
 msgid ""
 "Your main e-mail has been saved. Please click on the link verification link"
 msgstr ""
 "Votre email principal a bien été enregistré. Merci de cliquer sur le lien de "
 "vérification qui à vous a été envoyé."
 
-#: api_views.py:285
+#: api_views.py:288
 msgid "Your main email has been saved"
 msgstr "Votre email principal a bien été enregistré."
 
-#: api_views.py:297 models.py:100 models.py:132
+#: api_views.py:299 models.py:91 models.py:125
 msgid "You cannot delete the main email address of your account"
 msgstr "Vous ne pouvez pas supprimer l'email principal de votre compte"
 
-#: api_views.py:318
+#: api_views.py:320
 msgid "A confirmation email has been sent to verify provided email"
 msgstr "Un mail de confirmation a été renvoyé à l'email fourni."
 
-#: api_views.py:346
+#: api_views.py:348
 msgid "The visibility has been changed"
 msgstr "La visibilité a été changée."
 
-#: models.py:44
+#: models.py:43
 msgid "Username"
 msgstr "Nom d'utilisateur"
 
-#: models.py:48
+#: models.py:47
 msgid ""
 "Required. 150 characters or fewer. Lower case letters, digits and ./_/-/+ "
 "only."
@@ -138,46 +138,46 @@ msgstr ""
 "Requis. 150 caractères ou moins. Lettres minuscules, chiffres et . _ - + "
 "seulement."
 
-#: models.py:52 serializers.py:70 serializers.py:245
+#: models.py:51 serializers.py:70 serializers.py:247
 msgid "This username is already taken."
 msgstr "Ce nom d'utilisateur est déjà pris"
 
-#: models.py:55
+#: models.py:54
 msgid "Main email"
 msgstr "Email principal"
 
-#: models.py:116
+#: models.py:109
 msgid "Visibility"
 msgstr "Visibilité"
 
-#: models.py:118
+#: models.py:111
 msgid "Check this to make this email visible for all users"
 msgstr "Cochez cette case pour rendre l'email visible à tous les utilisateurs"
 
-#: models.py:121
+#: models.py:114
 msgid "Unique ID"
 msgstr "Identifiant unique"
 
-#: serializers.py:34 serializers.py:52 serializers.py:149 serializers.py:183
-#: serializers.py:206
+#: serializers.py:34 serializers.py:52 serializers.py:151 serializers.py:185
+#: serializers.py:208
 msgid "An account has already been created with this email address"
 msgstr "Un compte à déjà été créé avec cette adresse email"
 
-#: serializers.py:136 serializers.py:177
+#: serializers.py:138 serializers.py:179
 msgid "Invalid passsword"
 msgstr "Mot de passe invalide"
 
-#: serializers.py:187
+#: serializers.py:189
 msgid "You cannot use this address because it is not verified"
 msgstr "Vous ne pouvez pas utiliser cette adresse car elle n'est pas vérifiée."
 
-#: serializers.py:220
+#: serializers.py:222
 msgid "You cannot change the email address. Please add a new one"
 msgstr ""
 "L'adresse mail ne peut pas être modifiée. Veuillez ajouter une nouvelle "
 "adresse"
 
-#: serializers.py:259
+#: serializers.py:261
 msgid "You can not change username because you created a matrix account"
 msgstr ""
 "Vous ne pouvez pas modifier votre nom d'utilisateur car vous avez déjà créé "

@@ -31,16 +31,16 @@ class TestSubscription(TransactionTestCase, TestMixin):
         # subscribe u2
         Group.objects.get(slug=self.slug).subscribers.add(self.u2.student)
         # check u2 has subscribed
-        self.client.login(email=self.u2.email, password=self.password)
+        self.client.login(username=self.u2.email.email, password=self.password)
         self.assertTrue(self.client.get(self.url).data)
         # check u3 didn't subscribed
-        self.client.login(email=self.u3.email, password=self.password)
+        self.client.login(username=self.u3.email.email, password=self.password)
         self.assertFalse(self.client.get(self.url).data)
 
     def test_adding_api(self):
         "test to subscribe"
         # subscribe
-        self.client.login(email=self.u2.email, password=self.password)
+        self.client.login(username=self.u2.email.email, password=self.password)
         resp = self.client.post(self.url)
         # check subscription is ok
         self.assertEqual(resp.status_code, status.HTTP_201_CREATED)
@@ -62,7 +62,7 @@ class TestSubscription(TransactionTestCase, TestMixin):
         # subscribe
         Group.objects.get(slug=self.slug).subscribers.add(self.u2.student)
         # delete subscription
-        self.client.login(email=self.u2.email, password=self.password)
+        self.client.login(username=self.u2.email.email, password=self.password)
         resp = self.client.delete(self.url)
         # check deletion is ok
         self.assertEqual(resp.status_code, status.HTTP_204_NO_CONTENT)
@@ -115,7 +115,7 @@ class TestNotification(TransactionTestCase, TestMixin):
             sender=self.club2,
         )
         # test subscribed notifs withoutlimit
-        self.client.login(email=self.u2.email, password=self.password)
+        self.client.login(username=self.u2.email.email, password=self.password)
         url = "/api/notification/notification/?subscribed=true"
         resp = self.client.get(url)
         self.assertEqual(len(resp.data["results"]), 1)
