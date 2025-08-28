@@ -21,6 +21,7 @@ class FamilyMembersSerializer(serializers.Serializer):
     student4 = serializers.IntegerField(allow_null=True)
     student5 = serializers.IntegerField(allow_null=True)
     student6 = serializers.IntegerField(allow_null=True)
+    student7 = serializers.IntegerField(allow_null=True)
 
     def save(self):
         previous_members = MembershipFamily.objects.filter(
@@ -77,6 +78,9 @@ class FamilyMembersSerializer(serializers.Serializer):
         return self.validate_student(val)
 
     def validate_student6(self, val):
+        return self.validate_student(val)
+
+    def validate_student7(self, val):
         return self.validate_student(val)
 
     def validate_student(self, val: int | None):
