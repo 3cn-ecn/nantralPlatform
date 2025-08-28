@@ -41,18 +41,18 @@ class User(AbstractUser):
     objects = UserManager()
 
     username = models.CharField(
-        _("Nom d'utilisateur"),
+        _("Username"),
         max_length=150,
         unique=True,
         help_text=_(
-            "Requis. 150 caractères ou moins. Lettres minuscules, chiffres et . _ - + seulement."
+            "Required. 150 characters or fewer. Lower case letters, digits and ./_/-/+ only."
         ),
         validators=[matrix_username_validator],
         error_messages={
-            "unique": _("Ce nom d'utilisateur est déjà pris"),
+            "unique": _("This username is already taken."),
         },
     )
-    email = models.EmailField(_("Email principal"), unique=True)
+    email = models.EmailField(_("Main email"), unique=True)
     invitation = models.ForeignKey(
         InvitationLink,
         null=True,
@@ -97,7 +97,7 @@ class User(AbstractUser):
 
     def remove_email(self, email):
         if email == self.email:
-            raise exceptions.ValidationError(_("Vous ne pouvez pas supprimer l'email principal"))
+            raise exceptions.ValidationError(_("You cannot delete the main email address of your account"))
         return self.emails.filter(email__iexact=email).delete()
 
     @property
@@ -111,10 +111,14 @@ class User(AbstractUser):
 class Email(models.Model):
     email = models.EmailField(unique=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="emails")
-    is_valid = models.BooleanField(verbose_name=_("Email vérifié ?"), default=False)
-    is_visible = models.BooleanField(verbose_name=_("Visibilité"), default=False, help_text=_("Cochez cette case pour rendre l'email visible à tous les utilisateurs"))
+    is_valid = models.BooleanField(verbose_name=_("Verified email?"), default=False)
+    is_visible = models.BooleanField(
+        verbose_name=_("Visibility"),
+        default=False,
+        help_text=_("Check this to make this email visible for all users"),
+    )
     # Utilisé pour la vérification
-    uuid = models.UUIDField(_("Identifiant unique"), unique=True, default=uuid.uuid4)
+    uuid = models.UUIDField(_("Unique ID"), unique=True, default=uuid.uuid4)
 
     def __str__(self):
         return self.email
@@ -125,7 +129,7 @@ class Email(models.Model):
 
     def delete(self, using=None, keep_parents=False):
         if self.user.email == self.email:
-            raise exceptions.ValidationError(_("Vous ne pouvez pas supprimer l'email principal"))
+            raise exceptions.ValidationError(_("You cannot delete the main email address of your account"))
         return super().delete(using=using, keep_parents=keep_parents)
 
 

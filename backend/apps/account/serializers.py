@@ -31,7 +31,7 @@ class LoginSerializer(serializers.Serializer):
             ecn_email_validator,
             UniqueValidator(
                 Email.objects.all().annotate(email_ecn=F("email")),
-                message=_("Un compte à déjà été créé avec cette adresse email"),
+                message=_("An account has already been created with this email address"),
             ),
         ],
         required=False,
@@ -49,7 +49,7 @@ class RegisterSerializer(serializers.Serializer):
             ecn_email_validator,
             UniqueValidator(
                 Email.objects.all(),
-                message=_("Un compte à déjà été créé avec cette adresse email"),
+                message=_("An account has already been created with this email address"),
             ),
         ],
         required=True,
@@ -67,7 +67,7 @@ class RegisterSerializer(serializers.Serializer):
         validators=[
             UniqueValidator(
                 User.objects.all(),
-                message=_("Ce nom d'utilisateur est déjà pris"),
+                message=_("This username is already taken."),
             ),
             matrix_username_validator,
         ],
@@ -133,7 +133,7 @@ class ChangePasswordSerializer(serializers.Serializer):
         """Validate that provided password is correct"""
         user: User = self.context.get("request").user
         if not user.check_password(val):
-            raise ValidationError(_("Mot de passe invalide"))
+            raise ValidationError(_("Invalid passsword"))
 
         return val
 
@@ -146,7 +146,7 @@ class InvitationRegisterSerializer(RegisterSerializer):
             validate_email,
             UniqueValidator(
                 Email.objects.all(),
-                message=_("Un compte à déjà été créé avec cette adresse email"),
+                message=_("An account has already been created with this email address"),
             ),
         ],
         required=True,
@@ -174,17 +174,17 @@ class ChangeEmailSerializer(serializers.Serializer):
     def validate_password(self, val):
         user: User = self.context.get("request").user
         if not user.check_password(val):
-            raise ValidationError(_("Mot de passe invalide"))
+            raise ValidationError(_("Invalid passsword"))
         return val
 
     def validate_email(self, val: str):
         user = self.context.get("request").user
         if Email.objects.exclude(user=user).filter(email=val).exists():
-            raise serializers.ValidationError(_("Un compte à déjà été créé avec cette adresse email"))
+            raise serializers.ValidationError(_("An account has already been created with this email address"))
         try:
             email = Email.objects.get(email=val)
             if not email.is_valid:
-                raise serializers.ValidationError(_("Vous ne pouvez pas utiliser cette adresse car elle n'est pas vérifiée."))
+                raise serializers.ValidationError(_("You cannot use this address because it is not verified"))
         except Email.DoesNotExist:
             pass
         return val
@@ -203,7 +203,7 @@ class EmailSerializer(serializers.ModelSerializer):
             validate_email,
             UniqueValidator(
                 Email.objects.all(),
-                message=_("Un compte à déjà été créé avec cette adresse email"),
+                message=_("An account has already been created with this email address"),
             )
         ],
         required=True,
@@ -217,7 +217,7 @@ class EmailSerializer(serializers.ModelSerializer):
 
     def validate_email(self, val: str):
         if self.instance and val != self.instance.email:
-            raise serializers.ValidationError(_("L'adresse mail ne peut pas être modifiée. Veuillez ajouter une nouvelle adresse"))
+            raise serializers.ValidationError(_("You cannot change the email address. Please add a new one"))
         return val
 
     def create(self, validated_data: dict):
@@ -242,7 +242,7 @@ class UsernameSerializer(serializers.ModelSerializer):
         validators=[
             UniqueValidator(
                 User.objects.all(),
-                message=_("Ce nom d'utilisateur est déjà pris"),
+                message=_("This username is already taken."),
             ),
             matrix_username_validator,
         ],
@@ -256,7 +256,7 @@ class UsernameSerializer(serializers.ModelSerializer):
     def validate_username(self, value):
         if self.instance.has_opened_matrix and self.instance.username != value:
             raise serializers.ValidationError(_(
-                "Vous ne pouvez pas modifier votre nom d'utilisateur car vous avez déjà créé votre compte matrix."
+                "You can not change username because you created a matrix account"
             ))
         return value
 
