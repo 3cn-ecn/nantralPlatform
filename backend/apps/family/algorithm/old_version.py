@@ -201,10 +201,10 @@ def readFamilies(filepath, students):
         next(reader)
         id_neg = 1
         for i, row in enumerate(reader):
-            # Create family from name COLONNE 8 CORRESPOND A LA REPONSE NOM DE
-            # FAMILLE APRES LES 7 NOMS DES PARRAINS
-            f = Family(row[8], i + 1)
-            # print(type(Family(row[7], i+1)))
+            # Create family from name COLONNE 9 CORRESPOND A LA REPONSE NOM DE
+            # FAMILLE APRES LES 8 NOMS DES PARRAINS
+            f = Family(row[9], i + 1)
+            # print(type(Family(row[8], i+1)))
             # print(row[0])
             # print(type(f))
             # print(f.name)
