@@ -1,5 +1,5 @@
 export interface Email {
-  id: number;
+  uuid: string;
   email: string;
   isValid: boolean;
   isECNEmail: boolean;

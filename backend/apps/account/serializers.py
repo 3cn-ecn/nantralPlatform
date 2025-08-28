@@ -90,7 +90,6 @@ class RegisterSerializer(serializers.Serializer):
         user = User(
             first_name=validated_data["first_name"],
             last_name=validated_data["last_name"],
-            email=validated_data["email"],
             has_updated_username=True,  # Already had a chance to change username
         )
 
@@ -99,8 +98,10 @@ class RegisterSerializer(serializers.Serializer):
 
         # assign to something unique in the first place
         user.username = validated_data.get("email")
-        # save to generate the primary key
-        user.save(request=self.context.get("request"))
+        # save to generate the primary key for default username and main email
+        user.save()
+
+        user.email = user.add_email(validated_data["email"], request=self.context.get("request"))
 
         user.username = validated_data.get("username")
 
@@ -118,6 +119,7 @@ class RegisterSerializer(serializers.Serializer):
             path=validated_data.get("path"),
         )
         student.save()
+
 
         return user
 
@@ -212,8 +214,8 @@ class EmailSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Email
-        fields = ("id", "email", "is_valid", "is_ecn_email", "is_main", "is_visible")
-        read_only_fields = ("id", "is_valid", "is_ecn_email", "is_main")
+        fields = ("email", "is_valid", "is_ecn_email", "is_main", "is_visible", "uuid")
+        read_only_fields = ("is_valid", "is_ecn_email", "is_main", "uuid")
 
     def validate_email(self, val: str):
         if self.instance and val != self.instance.email:
@@ -225,7 +227,7 @@ class EmailSerializer(serializers.ModelSerializer):
         return request.user.add_email(validated_data.get("email"), request=self.context.get("request"))
 
     def get_is_main(self, obj: Email):
-        return obj.user.email == obj.email
+        return obj.user.email == obj
 
 
 class InvitationValidSerializer(serializers.Serializer):

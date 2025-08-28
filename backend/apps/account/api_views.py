@@ -257,6 +257,7 @@ class AuthViewSet(GenericViewSet):
 class EmailViewSet(mixins.CreateModelMixin, mixins.ListModelMixin, mixins.DestroyModelMixin, GenericViewSet):
     serializer_class = EmailSerializer
     permission_classes = [IsAuthenticated]
+    lookup_field = "uuid"
 
     def get_queryset(self):
         return self.request.user.emails.all()
@@ -278,13 +279,14 @@ class EmailViewSet(mixins.CreateModelMixin, mixins.ListModelMixin, mixins.Destro
         user: User = request.user
         email = serializer.validated_data["email"]
         if not user.has_email(email):
+            user.email = user.add_email(email, request=request)
             message = _(
                 "Your main e-mail has been saved. Please click on the link verification link"
             )
         else:
+            user.email = user.emails.get(email__iexact=email)
             message = _("Your main email has been saved")
-        user.email = email
-        user.save(request=request)
+        user.save()
 
         return Response(
             {"message": message},
@@ -293,7 +295,7 @@ class EmailViewSet(mixins.CreateModelMixin, mixins.ListModelMixin, mixins.Destro
 
     def destroy(self, request, *args, **kwargs):
         instance = self.get_object()
-        if instance.user.email == instance.email:
+        if instance.user.email == instance:
             raise exceptions.ValidationError(_("You cannot delete the main email address of your account"))
         return super().destroy(request, *args, **kwargs)
 

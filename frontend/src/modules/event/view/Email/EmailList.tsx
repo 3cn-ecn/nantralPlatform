@@ -34,7 +34,7 @@ export function EmailList() {
   });
   const { t } = useTranslation();
   const [deleteModalEmail, setDeleteModalEmail] = useState<Email | null>(null);
-  const deleteEmailMutation = useMutation<number, ApiError, number>({
+  const deleteEmailMutation = useMutation<number, ApiError, string>({
     mutationFn: removeEmailApi,
     onSuccess: async () => {
       await queryClient.invalidateQueries(['emails']);
@@ -45,10 +45,10 @@ export function EmailList() {
   const changeVisibility = useMutation<
     string,
     ApiFormError<{ isVisible: boolean }>,
-    { emailId: number; isVisible: boolean }
+    { emailUuid: string; isVisible: boolean }
   >({
-    mutationFn: ({ emailId, isVisible }) =>
-      changeEmailVisibilityApi(emailId, isVisible),
+    mutationFn: ({ emailUuid, isVisible }) =>
+      changeEmailVisibilityApi(emailUuid, isVisible),
     onSuccess: async (message) => {
       await queryClient.invalidateQueries(['emails']);
       showToast({
@@ -102,8 +102,8 @@ export function EmailList() {
           emails={query.data?.pages.flatMap((page) => page.results)}
           setDeleteModalEmail={setDeleteModalEmail}
           setNewMainEmail={setNewMainEmail}
-          changeVisibility={(emailId, isVisible) =>
-            changeVisibility.mutate({ emailId, isVisible })
+          changeVisibility={(emailUuid, isVisible) =>
+            changeVisibility.mutate({ emailUuid, isVisible })
           }
         />
       </InfiniteList>
@@ -112,7 +112,7 @@ export function EmailList() {
           title={t('email.deleteModal.title')}
           body={t('email.deleteModal.body', { email: deleteModalEmail.email })}
           onCancel={() => setDeleteModalEmail(null)}
-          onConfirm={() => deleteEmailMutation.mutate(deleteModalEmail?.id)}
+          onConfirm={() => deleteEmailMutation.mutate(deleteModalEmail?.uuid)}
           loading={deleteEmailMutation.isLoading}
         />
       )}

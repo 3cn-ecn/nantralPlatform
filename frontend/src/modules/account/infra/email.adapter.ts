@@ -3,7 +3,7 @@ import { EmailDTO } from '#modules/account/infra/email.dto';
 
 export function adaptEmail(emailDto: EmailDTO): Email {
   return {
-    id: emailDto.id,
+    uuid: emailDto.uuid,
     email: emailDto.email,
     isValid: emailDto.is_valid,
     isECNEmail: emailDto.is_ecn_email,
