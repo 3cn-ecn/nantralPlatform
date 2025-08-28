@@ -1,7 +1,6 @@
 import uuid
 
 from django.contrib.auth.models import AbstractUser
-from django.core.exceptions import ValidationError
 from django.db import models
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
@@ -34,8 +33,8 @@ class InvitationLink(models.Model):
 
 
 class User(AbstractUser):
-    USERNAME_FIELD = "email"
-    EMAIL_FIELD = "email"
+    USERNAME_FIELD = "email_id"
+    EMAIL_FIELD = "email_id"
     REQUIRED_FIELDS = ["username"]
 
     objects = UserManager()
@@ -52,7 +51,8 @@ class User(AbstractUser):
             "unique": _("This username is already taken."),
         },
     )
-    email = models.EmailField(_("Main email"), unique=True)
+    #email = models.EmailField(_("Email principal"), unique=True)
+    email = models.OneToOneField("Email", verbose_name=_("Main email"), on_delete=models.RESTRICT, related_name="primary_from", null=True)
     invitation = models.ForeignKey(
         InvitationLink,
         null=True,
@@ -65,18 +65,10 @@ class User(AbstractUser):
     has_updated_username = models.BooleanField(default=False)
 
     def save(self, *args, **kwargs):
-        self.email = self.email.lower()
         self.first_name = self.first_name.lower()
         self.last_name = self.last_name.lower()
 
-        request = None
-        if "request" in kwargs:
-            request = kwargs.pop("request")
-
         super().save(*args, **kwargs)
-
-        if not self.has_email(self.email):
-            self.add_email(self.email, request=request)
 
     def has_valid_ecn_email(self):
         return any(email.is_ecn_email for email in self.emails.filter(is_valid=True))
@@ -109,7 +101,7 @@ class User(AbstractUser):
 
 
 class Email(models.Model):
-    email = models.EmailField(unique=True)
+    email = models.EmailField(primary_key=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="emails")
     is_valid = models.BooleanField(verbose_name=_("Verified email?"), default=False)
     is_visible = models.BooleanField(
@@ -138,5 +130,5 @@ class Email(models.Model):
         try:
             ecn_email_validator(self.email)
             return True
-        except ValidationError:
+        except exceptions.ValidationError:
             return False

@@ -16,7 +16,7 @@ export function EmailTable({
   isLoading: boolean;
   setDeleteModalEmail: (email: Email) => void;
   setNewMainEmail: (email: Email) => void;
-  changeVisibility: (emailId: number, isVisible: boolean) => void;
+  changeVisibility: (emailUuid: string, isVisible: boolean) => void;
 }) {
   return (
     <TableContainer component={Paper}>
@@ -28,7 +28,7 @@ export function EmailTable({
             emails?.map((email) => (
               <EmailRow
                 email={email}
-                key={email.id}
+                key={email.uuid}
                 setDeleteModalEmail={setDeleteModalEmail}
                 setNewMainEmail={setNewMainEmail}
                 changeVisibility={changeVisibility}

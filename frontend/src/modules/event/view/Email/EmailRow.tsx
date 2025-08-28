@@ -23,7 +23,7 @@ export function EmailRow({
   email: Email;
   setDeleteModalEmail: (email: Email) => void;
   setNewMainEmail: (email: Email) => void;
-  changeVisibility: (emailId: number, isVisible: boolean) => void;
+  changeVisibility: (emailUuid: string, isVisible: boolean) => void;
 }) {
   const { t } = useTranslation();
 
@@ -93,7 +93,7 @@ export function EmailRow({
               email.isVisible ? t('email.chip.visible') : t('email.chip.hidden')
             }
             variant={email.isVisible ? 'filled' : 'outlined'}
-            onClick={() => changeVisibility(email.id, !email.isVisible)}
+            onClick={() => changeVisibility(email.uuid, !email.isVisible)}
           />
         </FlexRow>
       </TableCell>

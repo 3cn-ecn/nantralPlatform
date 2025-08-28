@@ -1,5 +1,5 @@
 export interface EmailDTO {
-  id: number;
+  uuid: string;
   email: string;
   is_valid: boolean;
   is_ecn_email: boolean;
