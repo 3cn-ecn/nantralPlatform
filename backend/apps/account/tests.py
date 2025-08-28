@@ -35,9 +35,8 @@ class TestLogin(TestCase):
             email="test@ec-nantes.fr",
             password=self.password,
         )
-        email_obj = self.user.get_email_obj()
-        email_obj.is_valid = True
-        email_obj.save()
+        self.user.email.is_valid = True
+        self.user.email.save()
 
     def test_login(self):
         response = self.client.post(
@@ -52,15 +51,14 @@ class TestLogin(TestCase):
         # test you can still login with uppercase in email
         response = self.client.post(
             self.uri,
-            {"email": self.user.email.upper(), "password": self.password},
+            {"email": self.user.email.email.upper(), "password": self.password},
         )
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_email_not_validated(self):
-        email_obj = self.user.get_email_obj()
-        email_obj.is_valid = False
-        email_obj.save()
+        self.user.email.is_valid = False
+        self.user.email.save()
         response = self.client.post(
             self.uri,
             {"email": self.user.email, "password": self.password},
@@ -90,7 +88,7 @@ class TestLogin(TestCase):
         new_email.is_valid = True
         new_email.save()
         old_email = self.user.email
-        self.user.email = new_email.email
+        self.user.email = new_email
         self.user.save()
         self.user.remove_email(old_email)
 
@@ -160,7 +158,7 @@ class TestRegister(TestCase):
 
     def test_invalid_email(self):
         # email already taken
-        User.objects.create(
+        User.objects.create_user(
             email=self.payload["email"],
             password=self.payload["password"],
             username="test",
@@ -258,7 +256,7 @@ class TestChangePassword(TestCase):
         # make sure user is still connected
         self.assertTrue(response.wsgi_request.user.is_authenticated)
         user = authenticate(
-            username=self.user.email,
+            username=self.user.email.email,
             password=payload["new_password"],
         )
         self.assertEqual(user, self.user)
@@ -382,7 +380,7 @@ class TestChangeEmail(TestCase):
 
         self.assertEqual(len(mail.outbox), 2)  # 1: creation, 2: change
         self.user.refresh_from_db()
-        self.assertEqual(self.user.email, payload["email"])
+        self.assertEqual(self.user.email.email, payload["email"])
         self.assertTrue(self.user.has_email(payload["email"]))
 
     def test_wrong_password(self):
@@ -465,7 +463,9 @@ class TestEmailResend(TestCase):
 
     def setUp(self) -> None:
         self.email = "test@ec-nantes.fr"
-        self.user = User.objects.create(email=self.email)
+        self.user = User.objects.create()
+        self.user.email = self.user.add_email(self.email)
+        self.user.save()
 
     def test_email_resend(self):
         response = self.client.post(self.url, {"email": self.email})
@@ -473,9 +473,8 @@ class TestEmailResend(TestCase):
         self.assertEqual(len(mail.outbox), 2)  # 1: activation compte, 2: resend
 
     def test_email_resend_email_next(self):
-        email_obj = self.user.get_email_obj()
-        email_obj.is_valid = True
-        email_obj.save()
+        self.user.email.is_valid = True
+        self.user.email.save()
         self.user.email_next = "new_email@ec-nantes.fr"
         self.user.save()
         response = self.client.post(self.url, {"email": self.email})
@@ -483,9 +482,8 @@ class TestEmailResend(TestCase):
         self.assertEqual(len(mail.outbox), 1)
 
     def test_already_validated(self):
-        email_obj = self.user.get_email_obj()
-        email_obj.is_valid = True
-        email_obj.save()
+        self.user.email.is_valid = True
+        self.user.email.save()
         response = self.client.post(self.url, {"email": self.email})
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(len(mail.outbox), 1)  # 1: activation compte
@@ -506,9 +504,8 @@ class TestMatrix(TestCase):
             username="teeeest",
             password="<PASSWORD>",
         )
-        email_obj = self.user.get_email_obj()
-        email_obj.is_valid = True
-        email_obj.save()
+        self.user.email.is_valid = True
+        self.user.email.save()
 
     def test_check_credentials_email(self):
         payload = {"user": {"password": "<PASSWORD>", "email": "test@ec-nantes.fr"}}

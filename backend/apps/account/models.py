@@ -34,7 +34,7 @@ class InvitationLink(models.Model):
 
 class User(AbstractUser):
     USERNAME_FIELD = "email_id"
-    EMAIL_FIELD = "email_id"
+    EMAIL_FIELD = "email__email"
     REQUIRED_FIELDS = ["username"]
 
     objects = UserManager()
@@ -51,7 +51,6 @@ class User(AbstractUser):
             "unique": _("This username is already taken."),
         },
     )
-    #email = models.EmailField(_("Email principal"), unique=True)
     email = models.OneToOneField("Email", verbose_name=_("Main email"), on_delete=models.RESTRICT, related_name="primary_from", null=True)
     invitation = models.ForeignKey(
         InvitationLink,
@@ -96,8 +95,10 @@ class User(AbstractUser):
     def is_email_valid(self):
         return self.emails.filter(is_valid=True, email__iexact=self.email).exists()
 
-    def get_email_obj(self):
-        return self.emails.get(email__iexact=self.email)
+    @property
+    def email__email(self):
+        """Get email as string, this allows to use `email__email` as `EMAIL_FIELD`."""
+        return self.email.email
 
 
 class Email(models.Model):

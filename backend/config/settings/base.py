@@ -214,6 +214,7 @@ REST_FRAMEWORK = {
     "PAGE_SIZE": 20,
     "DEFAULT_THROTTLE_RATES": {"anon": "50/day", "user": "1000/day"},
 }
+DJANGO_REST_LOOKUP_FIELD = "email__email"
 
 SILENCED_SYSTEM_CHECKS = ["rest_framework.W001"]
 
