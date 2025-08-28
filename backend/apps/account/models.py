@@ -87,13 +87,13 @@ class User(AbstractUser):
         return email_object
 
     def remove_email(self, email):
-        if email == self.email:
+        if email == self.email.email:
             raise exceptions.ValidationError(_("You cannot delete the main email address of your account"))
         return self.emails.filter(email__iexact=email).delete()
 
     @property
     def is_email_valid(self):
-        return self.emails.filter(is_valid=True, email__iexact=self.email).exists()
+        return self.emails.filter(is_valid=True, email__iexact=self.email.email).exists()
 
     @property
     def email__email(self):
