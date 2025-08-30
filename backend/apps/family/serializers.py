@@ -6,7 +6,11 @@ from rest_framework import exceptions, serializers
 from apps.family.utils import scholar_year
 from apps.student.models import Student
 
-from .models import MIN_2APLUS_PER_FAMILY, MembershipFamily
+from .models import (
+    MAX_2APLUS_PER_FAMILY,
+    MIN_2APLUS_PER_FAMILY,
+    MembershipFamily,
+)
 
 
 class FamilyMembersSerializer(serializers.Serializer):
@@ -17,6 +21,7 @@ class FamilyMembersSerializer(serializers.Serializer):
     student4 = serializers.IntegerField(allow_null=True)
     student5 = serializers.IntegerField(allow_null=True)
     student6 = serializers.IntegerField(allow_null=True)
+    student7 = serializers.IntegerField(allow_null=True)
 
     def save(self):
         previous_members = MembershipFamily.objects.filter(
@@ -46,10 +51,10 @@ class FamilyMembersSerializer(serializers.Serializer):
         if len(unique_values) != len(values):
             raise exceptions.ValidationError("Un membre a été ajouté 2 fois")
 
-        if len(values) < MIN_2APLUS_PER_FAMILY:
+        if len(values) < MIN_2APLUS_PER_FAMILY or len(values) > MAX_2APLUS_PER_FAMILY:
             raise exceptions.ValidationError(
                 "Erreur : une famille doit avoir minimum 3 membres \
-                    et maximum 7 membres"
+                    et maximum 8 membres"
             )
 
         return validated_data
@@ -73,6 +78,9 @@ class FamilyMembersSerializer(serializers.Serializer):
         return self.validate_student(val)
 
     def validate_student6(self, val):
+        return self.validate_student(val)
+
+    def validate_student7(self, val):
         return self.validate_student(val)
 
     def validate_student(self, val: int | None):
