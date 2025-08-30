@@ -125,7 +125,9 @@ class RegisterSerializer(serializers.Serializer):
         if user.username is None:
             # create a unique username
             promo = validated_data.get("promo")
-            user.username = clean_username(f"{user.first_name}.{user.last_name}.{promo}.{user.pk}")
+            user.username = clean_username(
+                f"{user.first_name}.{user.last_name}.{promo}.{user.pk}"
+            )
         # save again
         user.save()
         # add student informations
@@ -234,7 +236,9 @@ class UsernameSerializer(serializers.ModelSerializer):
 
     def validate_username(self, value):
         if self.instance.has_opened_matrix and self.instance.username != value:
-            raise serializers.ValidationError("You can not change username because you created a matrix account")
+            raise serializers.ValidationError(
+                "You can not change username because you created a matrix account"
+            )
         return value
 
     def save(self):

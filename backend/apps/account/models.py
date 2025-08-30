@@ -17,6 +17,7 @@ class MatrixUsernameValidator(validators.RegexValidator):
     )
     flags = 0
 
+
 class InvitationLink(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=True)
     expires_at = models.DateTimeField()

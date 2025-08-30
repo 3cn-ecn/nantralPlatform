@@ -113,7 +113,13 @@ class CustomUserAdmin(UserAdmin):
             },
         ),
     )
-    readonly_fields = ("username", "date_joined", "last_login", "has_opened_matrix", "has_updated_username")
+    readonly_fields = (
+        "username",
+        "date_joined",
+        "last_login",
+        "has_opened_matrix",
+        "has_updated_username",
+    )
     inlines = (StudentInline,)
 
     list_filter = (

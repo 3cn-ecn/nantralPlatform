@@ -28,33 +28,42 @@ class CheckCredentials(views.APIView):
 
         # Check authentication method (email, matrix id or username)
         if username:
-            if username[0] == "@":  # Check for matrix id and convert to username
+            if (
+                username[0] == "@"
+            ):  # Check for matrix id and convert to username
                 username = username.split(":")[0][1:]
             email = User.objects.get(username=username).email
 
         user = authenticate(username=email, password=password)
 
         # Check if the user account exists and is valid
-        if (user is None) or (user.invitation is not None and not user.invitation.is_valid()) or (not user.is_email_valid):
+        if (
+            (user is None)
+            or (user.invitation is not None and not user.invitation.is_valid())
+            or (not user.is_email_valid)
+        ):
             raise exceptions.AuthenticationFailed({"auth": {"success": False}})
 
         # Lock the change of username after matrix account has been created
         if not user.has_opened_matrix:
             user.has_opened_matrix = True
-            user.has_updated_username = True  # it's too late so we say they have already changed
+            user.has_updated_username = (
+                True  # it's too late so we say they have already changed
+            )
             user.save()
 
         # Return user data
-        return response.Response({ "auth": {
-            "success": True,
-            "mxid": f"@{user.username}:nantral-platform.fr",
-            "profile": {
-                "display_name": user.student.name,
-                "three_pids": [
-                    {
-                        "medium": "email",
-                        "address": user.email
-                    }
-                ]
+        return response.Response(
+            {
+                "auth": {
+                    "success": True,
+                    "mxid": f"@{user.username}:nantral-platform.fr",
+                    "profile": {
+                        "display_name": user.student.name,
+                        "three_pids": [
+                            {"medium": "email", "address": user.email}
+                        ],
+                    },
+                }
             }
-        }})
+        )
