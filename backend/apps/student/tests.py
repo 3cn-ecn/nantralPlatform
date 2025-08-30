@@ -23,13 +23,13 @@ class TestStudent(TestCase, TestMixin):
         # Check that you have to be logged in
         self.assertEqual(response.status_code, status.HTTP_302_FOUND)
 
-        ok = self.client.login(email=self.u3.email, password=self.password)
+        ok = self.client.login(username=self.u3.email.email, password=self.password)
         self.assertTrue(ok)
         with self.assertLogs("django.request", level="WARNING"):
             response = self.client.get(url)
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
         self.client.logout()
-        ok = self.client.login(email=self.u1.email, password=self.password)
+        ok = self.client.login(username=self.u1.email.email, password=self.password)
         self.assertTrue(ok)
 
         response = self.client.get(url)
@@ -48,7 +48,7 @@ class TestStudent(TestCase, TestMixin):
         self.assertEqual(response.status_code, status.HTTP_302_FOUND)
         self.client.logout()
 
-        ok = self.client.login(email=self.u2.email, password=self.password)
+        ok = self.client.login(username=self.u2.email.email, password=self.password)
         self.assertTrue(ok)
 
         password_change = {
@@ -64,7 +64,7 @@ class TestStudent(TestCase, TestMixin):
         )
         self.assertEqual(response.status_code, status.HTTP_302_FOUND)
 
-        ok = self.client.login(email=self.u2.email, password=self.new_password)
+        ok = self.client.login(username=self.u2.email.email, password=self.new_password)
         self.assertTrue(ok)
 
     def tearDown(self):

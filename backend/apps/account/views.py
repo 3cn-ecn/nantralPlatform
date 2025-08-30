@@ -1,65 +1,39 @@
-from typing import Any
-
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth import login
-from django.contrib.auth.mixins import LoginRequiredMixin
-from django.http import HttpRequest, HttpResponse
+from django.http import HttpRequest
 from django.shortcuts import redirect, render
-from django.urls import reverse_lazy
-from django.utils.encoding import force_str
-from django.utils.http import urlsafe_base64_decode
 from django.views import View
-from django.views.decorators.http import require_http_methods
-from django.views.generic import FormView, TemplateView
 
 from django_rest_passwordreset.views import ResetPasswordValidateTokenViewSet
 from rest_framework import status
 
-from apps.student.models import Student
-
-from .forms import SignUpForm, UpgradePermanentAccountForm
-from .models import User
-from .tokens import account_activation_token
-from .utils import send_email_confirmation, user_creation
-
-
-class RegistrationView(FormView):
-    template_name = "account/registration.html"
-    form_class = SignUpForm
-
-    def form_valid(self, form):
-        user_creation(form, self.request)
-        return redirect("core:home")
+from .models import Email
+from .tokens import email_confirmation_token
 
 
 class ConfirmUser(View):
-    def get(self, request, uidb64, token):
-        # get the user
+    def get(self, request, email_uuid, token):
+        # get the email and user
         try:
-            uid = force_str(urlsafe_base64_decode(uidb64))
-            user = User.objects.get(pk=uid)
-        except (TypeError, ValueError, OverflowError, User.DoesNotExist):
+            email = Email.objects.get(uuid=email_uuid)
+        except Email.DoesNotExist:
             return render(self.request, "account/activation_invalid.html")
-        # get the associated temporary object if it exists
-        is_temporary = user.invitation is not None
+        user = email.user
+
         # checking if the token is valid.
-        if account_activation_token.check_token(user, token):
+        if email_confirmation_token.check_token(email, token):
             # if valid set active true
+            email.is_valid = True
+            email.save()
+
             user.is_active = True
-            user.is_email_valid = True
-            if is_temporary and user.email_next:
-                user.email = user.email_next
-                user.email_next = ""
+            if email.is_ecn_email:
                 user.invitation = None
-                messages.warning(
-                    request,
-                    f"Dorénavant vous devez utiliser {user.email} pour vous "
-                    "connecter.",
-                )
             user.save()
+
             login(self.request, user)
-            messages.success(request, "Votre compte est désormais actif !")
+            messages.success(request, "Votre email a bien été vérifié !")
             return redirect("core:home")
         else:
             return render(self.request, "account/activation_invalid.html")
@@ -93,56 +67,3 @@ class PasswordResetConfirmRedirect(View):
         response = render(request, "base_empty.html", context)
         return response
 
-
-@require_http_methods(["GET"])
-def redirect_to_student(request, user_id):
-    user = User.objects.get(id=user_id)
-    student = Student.objects.get(user=user)
-    return redirect("student:update", student.pk)
-
-
-class PermanentAccountUpgradeView(LoginRequiredMixin, FormView):
-    form_class = UpgradePermanentAccountForm
-    template_name = "account/permanent_account_upgrade.html"
-    success_url = reverse_lazy("core:home")
-
-    def get(self, request):
-        if request.user.invitation is None:
-            # account already permanent, redirect to home page
-            return redirect("/")
-        return super().get(request=request)
-
-    def form_valid(self, form: UpgradePermanentAccountForm) -> HttpResponse:
-        new_email = form.cleaned_data["email"]
-        self.request.user.email_next = new_email
-        self.request.user.save()
-        send_email_confirmation(
-            self.request.user,
-            self.request,
-            send_to=new_email,
-        )
-        return super().form_valid(form)
-
-
-class ConfirmEmail(TemplateView):
-    template_name = "account/confirm-email.html"
-
-    def get(self, request, *args: Any, **kwargs: Any) -> HttpResponse:
-        try:
-            User.objects.get(email=request.session["email"])
-        except (User.DoesNotExist, KeyError):
-            return redirect("account:login")
-        return super().get(request, *args, **kwargs)
-
-    def post(self, request):
-        user = User.objects.get(email=request.session["email"])
-        mail = user.email
-        temp_access = user.invitation is not None
-        send_email_confirmation(
-            user,
-            self.request,
-            temporary_access=temp_access,
-            send_to=mail,
-        )
-        del self.request.session["email"]
-        return redirect("account:login")

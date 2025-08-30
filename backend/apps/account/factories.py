@@ -22,7 +22,6 @@ class UserFactory(DjangoModelFactory):
 
     first_name = factory.Faker("first_name")
     last_name = factory.Faker("last_name")
-    is_email_valid = True
     password = factory.django.Password("pass")
     username = factory.LazyAttribute(
         lambda obj: generate_unique_username(obj.first_name, obj.last_name)

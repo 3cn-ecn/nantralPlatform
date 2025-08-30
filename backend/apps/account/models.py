@@ -1,21 +1,16 @@
 import uuid
 
 from django.contrib.auth.models import AbstractUser
-from django.core import validators
 from django.db import models
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
+from rest_framework import exceptions
+
 from .manager import UserManager
+from .utils import send_email_confirmation
+from .validators import ecn_email_validator, matrix_username_validator
 
-
-class MatrixUsernameValidator(validators.RegexValidator):
-    regex = r"^[a-z0-9.\-+][a-z0-9._\-+]*\Z"
-    message = _(
-        "Enter a valid username. This value may contain only lower case letters, "
-        "numbers, and ./_/-/+ characters. It may not start with _"
-    )
-    flags = 0
 
 class InvitationLink(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=True)
@@ -38,45 +33,103 @@ class InvitationLink(models.Model):
 
 
 class User(AbstractUser):
-    USERNAME_FIELD = "email"
-    EMAIL_FIELD = "email"
+    USERNAME_FIELD = "email_id"
+    EMAIL_FIELD = "email__email"
     REQUIRED_FIELDS = ["username"]
-
-    username_validator = MatrixUsernameValidator()
 
     objects = UserManager()
 
     username = models.CharField(
-        _("username"),
+        _("Username"),
         max_length=150,
         unique=True,
         help_text=_(
             "Required. 150 characters or fewer. Lower case letters, digits and ./_/-/+ only."
         ),
-        validators=[username_validator],
+        validators=[matrix_username_validator],
         error_messages={
-            "unique": _("A user with that username already exists."),
+            "unique": _("This username is already taken."),
         },
     )
-    email = models.EmailField(unique=True)
-    is_email_valid = models.BooleanField(default=False)
-    email_next = models.EmailField(blank=True)
+    email = models.OneToOneField("Email", verbose_name=_("Main email"), on_delete=models.RESTRICT, related_name="primary_from", null=True)
     invitation = models.ForeignKey(
         InvitationLink,
         null=True,
         blank=True,
         on_delete=models.SET_NULL,
     )
-    # While a user has not created his matrix account, it can alter its username
-    # after it's too late since we won't be able to change the matrix username
+    # While a user has not created his matrix account, they can alter their username
+    # after it is too late since we won't be able to change the matrix username
     has_opened_matrix = models.BooleanField(default=False)
     has_updated_username = models.BooleanField(default=False)
 
     def save(self, *args, **kwargs):
-        self.email = self.email.lower()
         self.first_name = self.first_name.lower()
         self.last_name = self.last_name.lower()
 
-        if self.email_next:
-            self.email_next = self.email_next.lower()
         super().save(*args, **kwargs)
+
+    def has_valid_ecn_email(self):
+        return any(email.is_ecn_email for email in self.emails.filter(is_valid=True))
+
+    def has_ecn_email(self):
+        return any(email.is_ecn_email for email in self.emails.all())
+
+    def has_valid_email(self):
+        return self.emails.filter(is_valid=True).exists()
+
+    def has_email(self, email):
+        return self.emails.filter(email__iexact=email).exists()
+
+    def add_email(self, email, request=None):
+        email_object = self.emails.create(user=self, email=email)
+        send_email_confirmation(email_object, request=request)
+        return email_object
+
+    def remove_email(self, email):
+        if email == self.email.email:
+            raise exceptions.ValidationError(_("You cannot delete the main email address of your account"))
+        return self.emails.filter(email__iexact=email).delete()
+
+    @property
+    def is_email_valid(self):
+        return self.emails.filter(is_valid=True, email__iexact=self.email.email).exists()
+
+    @property
+    def email__email(self):
+        """Get email as string, this allows to use `email__email` as `EMAIL_FIELD`."""
+        return self.email.email
+
+
+class Email(models.Model):
+    email = models.EmailField(primary_key=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="emails")
+    is_valid = models.BooleanField(verbose_name=_("Verified email?"), default=False)
+    is_visible = models.BooleanField(
+        verbose_name=_("Visibility"),
+        default=False,
+        help_text=_("Check this to make this email visible for all users"),
+    )
+    # Utilisé pour la vérification
+    uuid = models.UUIDField(_("Unique ID"), unique=True, default=uuid.uuid4)
+
+    def __str__(self):
+        return self.email
+
+    def save(self, *args, **kwargs):
+        self.email = self.email.lower()
+        super().save(*args, **kwargs)
+
+    def delete(self, using=None, keep_parents=False):
+        if self.user.email == self.email:
+            raise exceptions.ValidationError(_("You cannot delete the main email address of your account"))
+        return super().delete(using=using, keep_parents=keep_parents)
+
+
+    @property
+    def is_ecn_email(self):
+        try:
+            ecn_email_validator(self.email)
+            return True
+        except exceptions.ValidationError:
+            return False

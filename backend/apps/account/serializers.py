@@ -1,7 +1,5 @@
-import re
-
-from django.contrib.auth.password_validation import validate_password
-from django.core.exceptions import ValidationError as DjangoValidationError
+from django.db.models import F
+from django.utils import timezone
 from django.utils.translation import gettext as _
 
 from rest_framework import serializers
@@ -10,42 +8,14 @@ from rest_framework.validators import UniqueValidator
 
 from apps.student.models import FACULTIES, PATHS, Student
 
-from .models import InvitationLink, MatrixUsernameValidator, User
+from .models import Email, InvitationLink, User
 from .utils import clean_username
-
-
-def validate_ecn_email(mail: str):
-    if re.search(r"@([\w\-\.]+\.)?ec-nantes.fr$", mail) is None:
-        raise ValidationError(
-            _(
-                "Vous devez utiliser une adresse mail de Centrale Nantes "
-                "finissant par ec-nantes.fr",
-            ),
-        )
-
-
-def validate_email(mail: str):
-    if "+" in mail:
-        raise ValidationError(
-            "L'adresse email ne doit pas contenir de caractères spéciaux",
-        )
-
-
-def validate_invitation(uuid: str):
-    if (
-        not InvitationLink.objects.filter(id=uuid).exists()
-        or not InvitationLink.objects.get(id=uuid).is_valid()
-    ):
-        raise ValidationError(_("Le lien d'invitation est invalide"))
-
-
-def django_validate_password(password):
-    try:
-        # validate the password against existing validators
-        validate_password(password)
-    except DjangoValidationError as e:
-        # raise a validation error for the serializer
-        raise ValidationError(e.messages)
+from .validators import (
+    django_validate_password,
+    ecn_email_validator,
+    matrix_username_validator,
+    validate_email,
+)
 
 
 class LoginSerializer(serializers.Serializer):
@@ -53,6 +23,18 @@ class LoginSerializer(serializers.Serializer):
     password = serializers.CharField(
         max_length=200,
         style={"input_type": "password"},
+    )
+    email_ecn = serializers.EmailField(
+        max_length=200,
+        validators=[
+            validate_email,
+            ecn_email_validator,
+            UniqueValidator(
+                Email.objects.all().annotate(email_ecn=F("email")),
+                message=_("An account has already been created with this email address"),
+            ),
+        ],
+        required=False,
     )
 
     def validate_email(self, value: str):
@@ -64,10 +46,10 @@ class RegisterSerializer(serializers.Serializer):
         max_length=200,
         validators=[
             validate_email,
-            validate_ecn_email,
+            ecn_email_validator,
             UniqueValidator(
-                User.objects.all(),
-                message=_("Un compte à déjà été créé avec cette adresse email"),
+                Email.objects.all(),
+                message=_("An account has already been created with this email address"),
             ),
         ],
         required=True,
@@ -85,9 +67,9 @@ class RegisterSerializer(serializers.Serializer):
         validators=[
             UniqueValidator(
                 User.objects.all(),
-                message=_("Ce nom d'utilisateur est déjà pris"),
+                message=_("This username is already taken."),
             ),
-            MatrixUsernameValidator(),
+            matrix_username_validator,
         ],
         required=False,
     )
@@ -108,17 +90,18 @@ class RegisterSerializer(serializers.Serializer):
         user = User(
             first_name=validated_data["first_name"],
             last_name=validated_data["last_name"],
-            email=validated_data["email"],
             has_updated_username=True,  # Already had a chance to change username
         )
-        # IMPORTANT: hash password
-        user.set_password(validated_data["password"])
-        # little trick to remove password from validated_data
-        self.validated_data.pop("password")
+
+        # IMPORTANT: hash password and remove password from validated_data
+        user.set_password(self.validated_data.pop("password"))
+
         # assign to something unique in the first place
-        user.username = user.email
-        # save to generate the primary key
+        user.username = validated_data.get("email")
+        # save to generate the primary key for default username and main email
         user.save()
+
+        user.email = user.add_email(validated_data["email"], request=self.context.get("request"))
 
         user.username = validated_data.get("username")
 
@@ -137,6 +120,7 @@ class RegisterSerializer(serializers.Serializer):
         )
         student.save()
 
+
         return user
 
 
@@ -151,7 +135,7 @@ class ChangePasswordSerializer(serializers.Serializer):
         """Validate that provided password is correct"""
         user: User = self.context.get("request").user
         if not user.check_password(val):
-            raise ValidationError(_("Mot de passe invalide"))
+            raise ValidationError(_("Invalid passsword"))
 
         return val
 
@@ -163,48 +147,87 @@ class InvitationRegisterSerializer(RegisterSerializer):
         validators=[
             validate_email,
             UniqueValidator(
-                User.objects.all(),
-                message=_("Un compte à déjà été créé avec cette adresse email"),
+                Email.objects.all(),
+                message=_("An account has already been created with this email address"),
             ),
         ],
         required=True,
     )
-    invitation_uuid = serializers.UUIDField(
+    invitation_uuid = serializers.SlugRelatedField(
+        slug_field="id",
         required=True,
-        validators=[validate_invitation],
+        queryset=InvitationLink.objects.filter(expires_at__gt=timezone.now()),
     )
 
     def create(self, validated_data: dict):
-        invitation_uuid = self.validated_data.pop("invitation_uuid", None)
+        invitation_uuid = self.validated_data.pop("invitation_uuid")
         user = super().create(validated_data)
         # update invitation
-        user.invitation = InvitationLink.objects.get(id=invitation_uuid)
-        user.save()
+        if not user.has_ecn_email():
+            user.invitation = invitation_uuid
+            user.save()
         return user
 
 
 class ChangeEmailSerializer(serializers.Serializer):
     password = serializers.CharField(style={"input_type": "password"})
-    email = serializers.EmailField(
-        validators=[
-            validate_email,
-            validate_ecn_email,
-            UniqueValidator(
-                User.objects.all(),
-                message=_("Un compte à déjà été créé avec cette adresse email"),
-            ),
-        ],
-    )
+    email = serializers.EmailField(validators=[validate_email])
 
     def validate_password(self, val):
         user: User = self.context.get("request").user
         if not user.check_password(val):
-            raise ValidationError(_("Mot de passe invalide"))
+            raise ValidationError(_("Invalid passsword"))
+        return val
+
+    def validate_email(self, val: str):
+        user = self.context.get("request").user
+        if Email.objects.exclude(user=user).filter(email=val).exists():
+            raise serializers.ValidationError(_("An account has already been created with this email address"))
+        try:
+            email = Email.objects.get(email=val)
+            if not email.is_valid:
+                raise serializers.ValidationError(_("You cannot use this address because it is not verified"))
+        except Email.DoesNotExist:
+            pass
         return val
 
 
-class EmailSerializer(serializers.Serializer):
+class ShortEmailSerializer(serializers.Serializer):
     email = serializers.EmailField()
+
+class VisibilitySerializer(serializers.Serializer):
+    is_visible = serializers.BooleanField(required=True)
+
+
+class EmailSerializer(serializers.ModelSerializer):
+    email = serializers.EmailField(
+        validators=[
+            validate_email,
+            UniqueValidator(
+                Email.objects.all(),
+                message=_("An account has already been created with this email address"),
+            )
+        ],
+        required=True,
+    )
+    is_main = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Email
+        fields = ("email", "is_valid", "is_ecn_email", "is_main", "is_visible", "uuid")
+        read_only_fields = ("is_valid", "is_ecn_email", "is_main", "uuid")
+
+    def validate_email(self, val: str):
+        if self.instance and val != self.instance.email:
+            raise serializers.ValidationError(_("You cannot change the email address. Please add a new one"))
+        return val
+
+    def create(self, validated_data: dict):
+        request = self.context.get("request")
+        return request.user.add_email(validated_data.get("email"), request=self.context.get("request"))
+
+    def get_is_main(self, obj: Email):
+        return obj.user.email == obj
 
 
 class InvitationValidSerializer(serializers.Serializer):
@@ -221,9 +244,9 @@ class UsernameSerializer(serializers.ModelSerializer):
         validators=[
             UniqueValidator(
                 User.objects.all(),
-                message=_("Ce nom d'utilisateur est déjà pris"),
+                message=_("This username is already taken."),
             ),
-            MatrixUsernameValidator(),
+            matrix_username_validator,
         ],
         required=True,
     )
@@ -234,7 +257,9 @@ class UsernameSerializer(serializers.ModelSerializer):
 
     def validate_username(self, value):
         if self.instance.has_opened_matrix and self.instance.username != value:
-            raise serializers.ValidationError("You can not change username because you created a matrix account")
+            raise serializers.ValidationError(_(
+                "You can not change username because you created a matrix account"
+            ))
         return value
 
     def save(self):

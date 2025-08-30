@@ -10,12 +10,14 @@ interface LoginFormFieldsProps {
   formValues;
   updateFormValues;
   prevData;
+  askEcnEmail: boolean;
 }
 
 export function LoginFormFields({
   error,
   formValues,
   updateFormValues,
+  askEcnEmail,
 }: LoginFormFieldsProps) {
   const { t } = useTranslation();
 
@@ -32,9 +34,19 @@ export function LoginFormFields({
         )}
         errors={error?.fields?.email}
         required
-        helperText={t('login.ecnEmail')}
         sx={{ marginBottom: 2 }}
       />
+      {askEcnEmail && (
+        <TextField
+          name="ecnEmail"
+          label={t('register.ECNEmail')}
+          type="email"
+          value={formValues.email_ecn}
+          handleChange={(val) => updateFormValues({ email_ecn: val })}
+          errors={error?.fields?.email_ecn}
+          sx={{ marginBottom: 2 }}
+        />
+      )}
       <PasswordField
         handleChange={useCallback(
           (val) => updateFormValues({ password: val }),

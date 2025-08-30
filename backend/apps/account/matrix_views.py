@@ -22,9 +22,13 @@ class CheckCredentials(views.APIView):
     permission_classes = [permissions.AllowAny]
 
     def post(self, request, *args, **kwargs):
-        username = request.data.get("user").get("id")
-        password = request.data.get("user").get("password")
-        email = request.data.get("user").get("email")
+        user_data = request.data.get("user")
+        if not user_data:
+            raise exceptions.ValidationError({"auth": {"success": False, "details": "No user data provided"}})
+
+        username = user_data.get("id")
+        password = user_data.get("password")
+        email = user_data.get("email")
 
         # Check authentication method (email, matrix id or username)
         if username:
@@ -32,7 +36,7 @@ class CheckCredentials(views.APIView):
                 username = username.split(":")[0][1:]
             email = User.objects.get(username=username).email
 
-        user = authenticate(username=email, password=password)
+        user: User = authenticate(username=email, password=password)
 
         # Check if the user account exists and is valid
         if (user is None) or (user.invitation is not None and not user.invitation.is_valid()) or (not user.is_email_valid):
@@ -53,8 +57,9 @@ class CheckCredentials(views.APIView):
                 "three_pids": [
                     {
                         "medium": "email",
-                        "address": user.email
+                        "address": email.email,
                     }
+                    for email in user.emails.filter(is_visible=True)
                 ]
             }
         }})

@@ -16,7 +16,6 @@ class UserManager(BaseUserManager):
         now = timezone.now()
         email = self.normalize_email(email)
         user = self.model(
-            email=email,
             is_staff=is_staff,
             is_active=True,
             is_superuser=is_superuser,
@@ -25,6 +24,8 @@ class UserManager(BaseUserManager):
             **extra_fields,
         )
         user.set_password(password)
+        user.save(using=self._db)
+        user.email = user.add_email(email)
         user.save(using=self._db)
         return user
 
@@ -43,7 +44,8 @@ class UserManager(BaseUserManager):
             password,
             is_staff=True,
             is_superuser=True,
-            is_email_valid=True,
             **extra_fields,
         )
+        user.email.is_valid = True
+        user.email.save()
         return user

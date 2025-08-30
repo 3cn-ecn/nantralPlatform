@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { Check } from '@mui/icons-material';
@@ -31,6 +31,7 @@ export default function LoginPage() {
   const [formValues, setFormValues] = useState<{
     email: string;
     password: string;
+    email_ecn?: string;
   }>({ email: '', password: '' });
 
   const {
@@ -40,6 +41,12 @@ export default function LoginPage() {
   } = useMutation(resendVerificationEmailApi);
 
   const { login, error, isLoading } = useAuth();
+
+  useEffect(() => {
+    if (error?.response?.data.code == '5') {
+      setFormValues((f) => ({ ...f, email_ecn: undefined }));
+    }
+  }, [error]);
 
   return (
     <FloatingContainer maxWidth={'sm'}>
@@ -95,7 +102,8 @@ export default function LoginPage() {
             <Alert
               severity="error"
               action={
-                error?.response?.data?.code == '1' /* Email not valid */ &&
+                (error?.response?.data?.code == '1' ||
+                  error?.response?.data?.emails_ecn) /* Email not valid */ &&
                 (isResendSuccess ? (
                   <Check color="success" />
                 ) : (
@@ -106,7 +114,13 @@ export default function LoginPage() {
                     size="small"
                     sx={{ textTransform: 'none' }}
                     onClick={() => {
-                      mutate(formValues.email);
+                      if (error?.response?.data?.code == '1') {
+                        mutate(formValues.email);
+                      } else {
+                        error?.response?.data.emails_ecn?.forEach((email) =>
+                          mutate(email),
+                        );
+                      }
                     }}
                   >
                     {t('register.sendAgain')}
@@ -125,6 +139,9 @@ export default function LoginPage() {
             error={error}
             isError={!!error}
             prevData={undefined}
+            askEcnEmail={
+              error?.response?.data?.code == '2' || !!error?.fields?.email_ecn
+            }
           />
           <FlexRow
             sx={{
