@@ -62,14 +62,16 @@
       "main": "Principal",
       "mainTooltip": "Email principal utilisé pour se connecter et envoyer les notifications",
       "sendError": "Une erreur est survenue. Cliquez pour réessayer",
-      "sendMessage": "Renvoyer un email de confirmation",
+      "sendMessage": "Cliquez pour renvoyer un email de confirmation",
       "sendSuccess": "L'email de confirmation a bien été envoyé",
-      "setMain": "Définir",
-      "setMainTooltip": "Définir cette adresse comme principale",
       "success": "Succès",
       "unverified": "Non-vérifié",
       "verified": "Vérifié",
       "visible": "Publique"
+    },
+    "delete": {
+      "error": "Une erreur est survenue lors de la suppression de l'adresse email",
+      "success": "L'adresse a bien été supprimée"
     },
     "deleteModal": {
       "body": "Voulez vous supprimer l'adresse email {{ email }} ? Cette action est irreversible.",
@@ -78,18 +80,15 @@
     "form": {
       "label": "Nouvelle adresse mail"
     },
-    "list": {
-      "title": "Liste"
+    "more": {
+      "resend": "Renvoyer le mail de confirmation"
     },
     "page": {
       "title": "Gérer vos adresses mail"
     },
-    "table": {
-      "actions": "Actions",
-      "email": "Adresse email",
-      "isEcn": "Fournisseur",
-      "isMain": "Email principal",
-      "isValid": "Vérifié ?"
+    "setMain": {
+      "error": "Une erreur est survenue lors du changement d'email principal",
+      "label": "Définir comme principale"
     }
   },
   "error": {

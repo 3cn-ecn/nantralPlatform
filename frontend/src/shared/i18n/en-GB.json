@@ -62,14 +62,16 @@
       "main": "Main",
       "mainTooltip": "Main email used in the login page and to send notifications",
       "sendError": "An error occured. Click to try again",
-      "sendMessage": "Resend confirmation email",
+      "sendMessage": "Click to resend confirmation email",
       "sendSuccess": "The confirmation email has been sent",
-      "setMain": "Set main",
-      "setMainTooltip": "Set as main email address",
       "success": "Success",
       "unverified": "Unverified",
       "verified": "Verified",
       "visible": "Public"
+    },
+    "delete": {
+      "error": "An error has occured while deleting the email address",
+      "success": "The email address has been successfully deleted"
     },
     "deleteModal": {
       "body": "Do you really wish to delete the email address {{ email }}? This cannot be undone.",
@@ -78,18 +80,15 @@
     "form": {
       "label": "New email address"
     },
-    "list": {
-      "title": "List"
+    "more": {
+      "resend": "Resend confirmation email"
     },
     "page": {
       "title": "Manage your email addresses"
     },
-    "table": {
-      "actions": "Actions",
-      "email": "Email address",
-      "isEcn": "Provider",
-      "isMain": "Main email",
-      "isValid": "Verified?"
+    "setMain": {
+      "error": "An error occured while changing main email address",
+      "label": "Set as main address"
     }
   },
   "error": {
