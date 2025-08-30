@@ -8,15 +8,15 @@ import { EmailRow } from './EmailRow';
 export function EmailTable({
   emails,
   isLoading,
-  setDeleteModalEmail,
-  setNewMainEmail,
+  setSelectedEmail,
   changeVisibility,
+  setAnchorEl,
 }: {
   emails?: Email[];
   isLoading: boolean;
-  setDeleteModalEmail: (email: Email) => void;
-  setNewMainEmail: (email: Email) => void;
+  setSelectedEmail: (email: Email) => void;
   changeVisibility: (emailUuid: string, isVisible: boolean) => void;
+  setAnchorEl: (anchorEl: null | HTMLElement) => void;
 }) {
   return (
     <TableContainer component={Paper}>
@@ -29,9 +29,9 @@ export function EmailTable({
               <EmailRow
                 email={email}
                 key={email.uuid}
-                setDeleteModalEmail={setDeleteModalEmail}
-                setNewMainEmail={setNewMainEmail}
+                setSelectedEmail={setSelectedEmail}
                 changeVisibility={changeVisibility}
+                setAnchorEl={setAnchorEl}
               />
             ))
           )}

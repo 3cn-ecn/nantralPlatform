@@ -1,102 +1,88 @@
 import {
   CheckCircleOutlined,
-  DeleteForever,
-  ErrorOutline,
   School,
-  StarOutline,
+  Star,
   Visibility,
   VisibilityOff,
 } from '@mui/icons-material';
 import { Chip, TableCell, TableRow, Tooltip, Typography } from '@mui/material';
 
 import { Email } from '#modules/account/email.type';
-import { ResendChip } from '#modules/event/view/Email/ResendChip';
+import { InvalidChip } from '#modules/event/view/Email/InvalidChip';
+import { MoreActionButton } from '#modules/event/view/Email/MoreActionButton';
 import { FlexRow } from '#shared/components/FlexBox/FlexBox';
 import { useTranslation } from '#shared/i18n/useTranslation';
 
 export function EmailRow({
   email,
-  setDeleteModalEmail,
-  setNewMainEmail,
+  setSelectedEmail,
   changeVisibility,
+  setAnchorEl,
 }: {
   email: Email;
-  setDeleteModalEmail: (email: Email) => void;
-  setNewMainEmail: (email: Email) => void;
+  setSelectedEmail: (email: Email) => void;
   changeVisibility: (emailUuid: string, isVisible: boolean) => void;
+  setAnchorEl: (anchorEl: null | HTMLElement) => void;
 }) {
   const { t } = useTranslation();
 
   return (
     <TableRow sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
-      <TableCell>
-        <FlexRow gap={1} flexWrap={'wrap'}>
-          <Typography variant={'h5'}>{email.email}</Typography>
+      <TableCell colSpan={email.isMain && email.isValid ? 2 : 1}>
+        <FlexRow gap={1} flexWrap={'wrap'} alignItems={'center'}>
+          <Typography variant={'h6'}>{email.email}</Typography>
           {email.isValid ? (
             <Chip
               icon={<CheckCircleOutlined />}
               label={t('email.chip.verified')}
               color={'success'}
+              size={'small'}
             />
           ) : (
-            <>
-              <Chip
-                icon={<ErrorOutline />}
-                label={t('email.chip.unverified')}
-                color={'primary'}
-              />
-              <ResendChip email={email} />
-            </>
+            <InvalidChip email={email} />
           )}
           {email.isECNEmail && (
             <Tooltip title={t('email.chip.ecnTooltip')}>
               <Chip
                 icon={<School />}
                 label={t('email.chip.ecn')}
-                color={'info'}
+                color={'secondary'}
+                size={'small'}
               />
             </Tooltip>
           )}
-          {email.isMain ? (
+          {email.isMain && (
             <Tooltip title={t('email.chip.mainTooltip')}>
               <Chip
-                icon={<StarOutline />}
+                icon={<Star />}
                 label={t('email.chip.main')}
-                color={'warning'}
+                color={'primary'}
+                size={'small'}
               />
             </Tooltip>
-          ) : (
-            <>
-              {email.isValid && (
-                <Tooltip title={t('email.chip.setMainTooltip')}>
-                  <Chip
-                    icon={<StarOutline />}
-                    label={t('email.chip.setMain')}
-                    color={'warning'}
-                    variant={'outlined'}
-                    onClick={() => setNewMainEmail(email)}
-                  />
-                </Tooltip>
-              )}
-              <Chip
-                icon={<DeleteForever />}
-                label={t('button.delete')}
-                color={'error'}
-                variant={'outlined'}
-                onClick={() => setDeleteModalEmail(email)}
-              />
-            </>
           )}
           <Chip
             icon={email.isVisible ? <Visibility /> : <VisibilityOff />}
             label={
               email.isVisible ? t('email.chip.visible') : t('email.chip.hidden')
             }
-            variant={email.isVisible ? 'filled' : 'outlined'}
+            variant={'outlined'}
+            color={email.isVisible ? 'primary' : 'secondary'}
             onClick={() => changeVisibility(email.uuid, !email.isVisible)}
+            size={'small'}
           />
         </FlexRow>
       </TableCell>
+
+      {(!email.isMain || !email.isValid) && (
+        <TableCell>
+          <MoreActionButton
+            setAnchorEl={setAnchorEl}
+            setEmail={setSelectedEmail}
+            email={email}
+          />
+        </TableCell>
+      )}
     </TableRow>
   );
 }
