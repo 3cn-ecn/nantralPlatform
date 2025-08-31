@@ -63,6 +63,8 @@ class User(AbstractUser):
     has_opened_matrix = models.BooleanField(default=False)
     has_updated_username = models.BooleanField(default=False)
 
+
+
     def save(self, *args, **kwargs):
         self.first_name = self.first_name.lower()
         self.last_name = self.last_name.lower()
@@ -99,6 +101,12 @@ class User(AbstractUser):
     def email__email(self):
         """Get email as string, this allows to use `email__email` as `EMAIL_FIELD`."""
         return self.email.email
+
+    class Meta:
+        ordering = ["last_name", "first_name", "username"]
+
+    def __str__(self):
+        return f"{self.student.alphabetical_name if hasattr(self, "student") else str(self.email)} ({self.username})"
 
 
 class Email(models.Model):

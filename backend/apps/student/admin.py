@@ -17,7 +17,7 @@ class StudentAdmin(admin.ModelAdmin):
     search_fields = (
         "user__first_name",
         "user__last_name",
-        "user__email",
+        "user__email__email",
     )
 
     def get_urls(self) -> list[URLPattern]:
