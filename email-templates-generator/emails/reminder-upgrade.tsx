@@ -45,10 +45,6 @@ const ResetPasswordEmail = ({
           Le changement de mail se fait en cliquant sur le lien suivant
         </Text>
         <BigButton href={changeEmailLink}>Changer mon email</BigButton>
-        <Text>
-          Attention, après le changement, la connexion se fera via votre adresse
-          mail de Centrale.
-        </Text>
         <Text>Merci de votre confiance,</Text>
         <Text>
           La Team <Link3CN />
@@ -69,10 +65,6 @@ const ResetPasswordEmail = ({
         </Text>
         <Text>To change your email address, click on the link below</Text>
         <BigButton href={changeEmailLink}>Change my email</BigButton>
-        <Text>
-          Please note that after the change, you will login using your Centrale
-          email address.
-        </Text>
         <Text>Thank you for your trust,</Text>
         <Text>
           The <Link3CN /> team

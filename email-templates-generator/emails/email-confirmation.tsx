@@ -25,22 +25,22 @@ const EmailConfirmationEmail = ({
   <Html lang="fr">
     <HeadWithFont />
     <Preview>
-      Bienvenue sur Nantral Platform ! Active ton compte en cliquant sur le lien
-      suivant.
+      Bienvenue sur Nantral Platform ! Active cette adresse en cliquant sur le
+      lien suivant.
     </Preview>
     <GenericTemplate>
       <Section>
         <Heading as="h2">
           <LanguageFlag lang="fr" />
-          Bienvenue sur Nantral Platform !
+          Nouvelle adresse mail sur Nantral Platform !
         </Heading>
         <Text>Hello {firstName},</Text>
         <Text>
-          Nous sommes ravis de t&apos;accueillir sur Nantral Platform ! Pour
-          pouvoir profiter de tous les avantages offerts par le site, valide ton
-          compte dès maintenant en cliquant sur le bouton ci-dessous :
+          Merci d&apos;utiliser Nantral Platform ! Pour activer cette adresse
+          mail et profiter de toutes les fonctionnalités de la plateforme,
+          clique sur le bouton ci-dessous :
         </Text>
-        <BigButton href={validationLink}>Valider mon compte</BigButton>
+        <BigButton href={validationLink}>Valider cette adresse</BigButton>
         <Text>À très vite sur la plateforme nantralienne !</Text>
         <Text>
           La Team <Link3CN />
@@ -50,13 +50,12 @@ const EmailConfirmationEmail = ({
       <Section>
         <Heading as="h2">
           <LanguageFlag lang="en" />
-          Welcome to Nantral Platform!
+          New Email Address on Nantral Platform!
         </Heading>
         <Text>Hi {firstName},</Text>
         <Text>
-          We&apos;re delighted to welcome you to Nantral Platform! To take
-          advantage of all the benefits offered by the site, confirm your
-          account now by clicking on the button below:
+          Thanks for using Nantral Platform! To activate this email address and
+          enjoy all the features of the platform, click the button below:
         </Text>
         <BigButton href={validationLink}>Confirm my account</BigButton>
         <Text>See you soon on the Nantralian platform!</Text>
