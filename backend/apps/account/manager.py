@@ -3,6 +3,12 @@ from django.utils import timezone
 
 
 class UserManager(BaseUserManager):
+    def normalize_email(self, email):
+        if isinstance(email, str):
+            return super().normalize_email(email)
+        else:
+            return super().normalize_email(email.email)
+
     def _create_user(
         self,
         email,

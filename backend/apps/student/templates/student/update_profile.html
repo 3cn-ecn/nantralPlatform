@@ -4,7 +4,7 @@
 
 {% block  content%}
 <h1>{{object.name}}</h1>
-<p>{{object.user.email}}</p>
+<p>{{object.user.email.email}}</p>
 <p><a class="btn btn-primary" href="/account/email/">Gérer les adresses mail <i class="fa fa-external-link"></i></a></p>
 <form method='POST' enctype="multipart/form-data">
     {% csrf_token %}
