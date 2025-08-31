@@ -167,7 +167,7 @@ class CustomUserAdmin(UserAdmin):
     @admin.action(description="Send reminder to upgrade account.")
     def send_reminder(self, request, queryset: list[User]):
         upgrade_link = request.build_absolute_uri(
-            "/login",
+            "/account/email/",
         )
         send_mass_email(
             template_name="reminder-upgrade",
