@@ -22,7 +22,7 @@ class UppercaseEmailFilter(admin.SimpleListFilter):
 
     def queryset(self, request, queryset):
         if self.value() == "has_uppercase":
-            return queryset.filter(email__regex=r"[A-Z]")
+            return queryset.filter(emails__regex=r"[A-Z]")
 
 
 class ECNantesDomainFilter(admin.SimpleListFilter):
@@ -37,9 +37,9 @@ class ECNantesDomainFilter(admin.SimpleListFilter):
 
     def queryset(self, request, queryset):
         if self.value() == "with_domain":
-            return queryset.filter(email__regex=r"@(\w+\.)?ec-nantes\.fr$")
+            return queryset.filter(emails__regex=r"@(\w+\.)?ec-nantes\.fr$")
         if self.value() == "without_domain":
-            return queryset.exclude(email__regex=r"@(\w+\.)?ec-nantes\.fr$")
+            return queryset.exclude(emails__regex=r"@(\w+\.)?ec-nantes\.fr$")
 
 
 class NoPasswordFilter(admin.SimpleListFilter):

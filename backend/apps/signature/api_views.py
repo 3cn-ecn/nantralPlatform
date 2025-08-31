@@ -57,7 +57,7 @@ class SignatureApiView(views.APIView):
     def get(self, request: Request, *args, **kwargs):
         """Get info for a signature."""
         user: User = request.user
-        email = user.email
+        email = user.email.email
         name = user.student.name
         year = self.get_year()
         academic_groups = self.get_academic_groups()
