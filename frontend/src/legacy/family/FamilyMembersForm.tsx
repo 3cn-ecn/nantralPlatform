@@ -16,6 +16,7 @@ declare const ERRORS: {
   student4?: string[];
   student5?: string[];
   student6?: string[];
+  student7?: string[];
   non_field_errors?: string[];
 };
 
@@ -24,7 +25,7 @@ function FamilyMembersForm() {
     ...CURRENT_MEMBERS.map((member) => member.id),
   ];
 
-  for (let i = 0; i < 7 - CURRENT_MEMBERS.length; i++) {
+  for (let i = 0; i < 8 - CURRENT_MEMBERS.length; i++) {
     defaultFormValues.push(null);
   }
 
@@ -47,7 +48,7 @@ function FamilyMembersForm() {
         isError={!!ERRORS?.non_field_errors}
         error={{ globalErrors: ERRORS?.non_field_errors } as never}
       />
-      {Array(7)
+      {Array(8)
         .fill(0)
         .map((_, i) => (
           // eslint-disable-next-line react/no-array-index-key
