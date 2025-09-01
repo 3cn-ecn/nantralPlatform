@@ -6,8 +6,6 @@ import django.db.models.deletion
 from django.conf import settings
 from django.db import migrations, models
 
-import apps.account.validators
-
 
 def forwards(apps, schema_editor):
     User = apps.get_model("account", "User")
@@ -45,7 +43,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name="user",
             name="username",
-            field=models.CharField(error_messages={"unique": "Ce nom d'utilisateur est déjà pris"}, help_text="Requis. 150 caractères ou moins. Lettres minuscules, chiffres et . _ - + seulement.", max_length=150, unique=True, validators=[apps.account.validators.MatrixUsernameValidator()], verbose_name="Nom d'utilisateur"),
+            field=models.CharField(error_messages={"unique": "Ce nom d'utilisateur est déjà pris"}, help_text="Requis. 150 caractères ou moins. Lettres minuscules, chiffres et . _ - + seulement.", max_length=150, unique=True, verbose_name="Nom d'utilisateur"),
         ),
         migrations.CreateModel(
             name="Email",
