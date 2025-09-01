@@ -7,7 +7,7 @@ class UserManager(BaseUserManager):
         if isinstance(email, str):
             return super().normalize_email(email)
         else:
-            return super().normalize_email(email.email)
+            return email
 
     def _create_user(
         self,
