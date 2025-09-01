@@ -164,6 +164,13 @@ class CustomUserAdmin(UserAdmin):
         NoPasswordFilter,
     )
 
+    def get_form(self, request, obj=None, change=False, **kwargs):
+        form = super().get_form(request, obj=obj, change=change, **kwargs)
+        form.base_fields["username"].help_text = _(
+            "NEVER UPDATE THE USERNAME. Doing this will cause the users to loose all their matrix data"
+        )
+        return form
+
     @admin.action(description="Send reminder to upgrade account.")
     def send_reminder(self, request, queryset: list[User]):
         upgrade_link = request.build_absolute_uri(
