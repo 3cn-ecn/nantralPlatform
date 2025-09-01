@@ -64,6 +64,7 @@ export function RegisterFormFields({
           [updateFormValues],
         )}
         errors={error?.fields?.username}
+        required
         helperText={t('register.usernameHelp')}
       />
       <TextField
