@@ -1,5 +1,6 @@
 import uuid
 
+from django.contrib import admin
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.utils import timezone
@@ -74,15 +75,19 @@ class User(AbstractUser):
 
         super().save(*args, **kwargs)
 
+    @admin.display(boolean=True)
     def has_valid_ecn_email(self):
-        return any(email.is_ecn_email for email in self.emails.filter(is_valid=True))
+        return any(email.is_ecn_email() for email in self.emails.filter(is_valid=True))
 
+    @admin.display(boolean=True)
     def has_ecn_email(self):
-        return any(email.is_ecn_email for email in self.emails.all())
+        return any(email.is_ecn_email() for email in self.emails.all())
 
+    @admin.display(boolean=True)
     def has_valid_email(self):
         return self.emails.filter(is_valid=True).exists()
 
+    @admin.display(boolean=True)
     def has_email(self, email):
         return self.emails.filter(email__iexact=email).exists()
 
@@ -96,7 +101,7 @@ class User(AbstractUser):
             raise exceptions.ValidationError(_("You cannot delete the main email address of your account"))
         return self.emails.filter(email__iexact=email).delete()
 
-    @property
+    @admin.display(boolean=True)
     def is_email_valid(self):
         return self.emails.filter(is_valid=True, email__iexact=self.email.email).exists()
 
@@ -136,8 +141,7 @@ class Email(models.Model):
             raise exceptions.ValidationError(_("You cannot delete the main email address of your account"))
         return super().delete(using=using, keep_parents=keep_parents)
 
-
-    @property
+    @admin.display(boolean=True)
     def is_ecn_email(self):
         try:
             ecn_email_validator(self.email)

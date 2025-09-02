@@ -42,7 +42,7 @@ def send_email_confirmation(
     )
 
     if request:
-        if not email.is_ecn_email:
+        if not email.is_ecn_email():
             messages.success(
                 request,
                 (

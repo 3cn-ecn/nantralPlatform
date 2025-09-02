@@ -143,7 +143,7 @@ class TestRegister(TestCase):
         )
         self.assertIsNotNone(user)
         # check user informations
-        self.assertFalse(user.is_email_valid)
+        self.assertFalse(user.is_email_valid())
         self.assertEqual(user.student.promo, self.payload["promo"])
         self.assertEqual(user.student.faculty, self.payload["faculty"])
 
@@ -192,7 +192,7 @@ class TestRegister(TestCase):
         self.assertIsNone(response.json().get("invitation_uuid"))
         self.assertIsNotNone(user)
         self.assertEqual(user.invitation, invitation)
-        self.assertFalse(user.is_email_valid)
+        self.assertFalse(user.is_email_valid())
 
         self.assertEqual(len(mail.outbox), 1)
 
