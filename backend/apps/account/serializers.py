@@ -13,8 +13,8 @@ from .utils import clean_username
 from .validators import (
     django_validate_password,
     ecn_email_validator,
-    matrix_username_validator,
     validate_email,
+    validate_matrix_username,
 )
 
 
@@ -69,7 +69,7 @@ class RegisterSerializer(serializers.Serializer):
                 User.objects.all(),
                 message=_("This username is already taken."),
             ),
-            matrix_username_validator,
+            validate_matrix_username,
         ],
         required=False,
     )
@@ -246,7 +246,7 @@ class UsernameSerializer(serializers.ModelSerializer):
                 User.objects.all(),
                 message=_("This username is already taken."),
             ),
-            matrix_username_validator,
+            validate_matrix_username,
         ],
         required=True,
     )

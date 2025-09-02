@@ -1,21 +1,26 @@
 import re
+import string
 
 from django.contrib.auth.password_validation import validate_password
-from django.core import validators
 from django.core.exceptions import ValidationError as DjangoValidationError
 from django.utils.translation import gettext_lazy as _
 
 from rest_framework.exceptions import ValidationError
 
+MXID_LOCALPART_ALLOWED_CHARACTERS = set(
+    "_-.+" + string.ascii_lowercase + string.digits
+)
+GUEST_USER_ID_PATTERN = re.compile(r"^\d+$")
 
-class MatrixUsernameValidator(validators.RegexValidator):
-    regex = r"^[a-z0-9.\-+][a-z0-9._\-+]*$"
-    message = _(
-        "Enter a valid username. This value may contain only lower case letters, "
-        "numbers, and . _ - + characters. It may not start with _"
-    )
-    flags = 0
+def validate_matrix_username(value):
+    if any(c not in MXID_LOCALPART_ALLOWED_CHARACTERS for c in value):
+        raise ValidationError(_("Enter a valid username. This value can only contain characters a-z, 0-9, or '_-.+'"))
 
+    if value[0] == "_":
+        raise ValidationError(_("Username may not begin with _"))
+
+    if GUEST_USER_ID_PATTERN.fullmatch(value):
+        raise ValidationError(_("Numeric username are reserved"))
 
 def validate_email(mail: str):
     if "+" in mail:
@@ -38,6 +43,3 @@ def ecn_email_validator(mail: str):
         raise ValidationError(
             _("You must use a valid ECN email address (ending in ec-nantes.fr or centraliens-nantes.org)"),
         )
-
-
-matrix_username_validator = MatrixUsernameValidator()

@@ -148,7 +148,7 @@ class CustomUserAdmin(UserAdmin):
             },
         ),
     )
-    readonly_fields = ("username", "date_joined", "last_login", "has_opened_matrix", "has_updated_username", "is_email_valid")
+    readonly_fields = ("date_joined", "last_login", "has_opened_matrix", "has_updated_username", "is_email_valid")
     inlines = (StudentInline, EmailInline)
     search_fields = ("username", "first_name", "last_name", "emails__email")
 
@@ -163,6 +163,13 @@ class CustomUserAdmin(UserAdmin):
         ECNantesDomainFilter,
         NoPasswordFilter,
     )
+
+    def get_form(self, request, obj=None, change=False, **kwargs):
+        form = super().get_form(request, obj=obj, change=change, **kwargs)
+        form.base_fields["username"].help_text = _(
+            "NEVER UPDATE THE USERNAME. Doing this will cause the users to loose all their matrix data"
+        )
+        return form
 
     @admin.action(description="Send reminder to upgrade account.")
     def send_reminder(self, request, queryset: list[User]):

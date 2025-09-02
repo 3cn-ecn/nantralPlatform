@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-28 12:54+0200\n"
+"POT-Creation-Date: 2025-09-02 01:53+0200\n"
 "PO-Revision-Date: 2023-10-20 20:08+0200\n"
 "Last-Translator: Alexis Delage <alexidelage@gmail.com>\n"
 "Language-Team: \n"
@@ -30,7 +30,7 @@ msgstr "Autres hébergeurs"
 msgid "Empty passsword"
 msgstr "Mot de passe vide"
 
-#: admin.py:58 models.py:107
+#: admin.py:58 models.py:118
 msgid "Verified email?"
 msgstr "Email vérifié ?"
 
@@ -57,6 +57,14 @@ msgstr "Validation du compte"
 #: admin.py:139
 msgid "Important dates"
 msgstr "Dates Importantes"
+
+#: admin.py:170
+msgid ""
+"NEVER UPDATE THE USERNAME. Doing this will cause the users to loose all "
+"their matrix data"
+msgstr ""
+"NE JAMAIS MODIFIER LE NOM D'UTILISATEUR. Cela causera la perte de toutes les "
+"donnée du compte matrix de l'utilisateur"
 
 #: api_views.py:74
 msgid "Authentication failed"
@@ -114,7 +122,7 @@ msgstr ""
 msgid "Your main email has been saved"
 msgstr "Votre email principal a bien été enregistré."
 
-#: api_views.py:299 models.py:91 models.py:125
+#: api_views.py:299 models.py:96 models.py:136
 msgid "You cannot delete the main email address of your account"
 msgstr "Vous ne pouvez pas supprimer l'email principal de votre compte"
 
@@ -126,11 +134,11 @@ msgstr "Un mail de confirmation a été renvoyé à l'email fourni."
 msgid "The visibility has been changed"
 msgstr "La visibilité a été changée."
 
-#: models.py:43
+#: models.py:46
 msgid "Username"
 msgstr "Nom d'utilisateur"
 
-#: models.py:47
+#: models.py:50
 msgid ""
 "Required. 150 characters or fewer. Lower case letters, digits and ./_/-/+ "
 "only."
@@ -138,65 +146,72 @@ msgstr ""
 "Requis. 150 caractères ou moins. Lettres minuscules, chiffres et . _ - + "
 "seulement."
 
-#: models.py:51 serializers.py:70 serializers.py:247
+#: models.py:54 serializers.py:70 serializers.py:246
 msgid "This username is already taken."
 msgstr "Ce nom d'utilisateur est déjà pris"
 
-#: models.py:54
+#: models.py:57
 msgid "Main email"
 msgstr "Email principal"
 
-#: models.py:109
+#: models.py:120
 msgid "Visibility"
 msgstr "Visibilité"
 
-#: models.py:111
+#: models.py:122
 msgid "Check this to make this email visible for all users"
 msgstr "Cochez cette case pour rendre l'email visible à tous les utilisateurs"
 
-#: models.py:114
+#: models.py:125
 msgid "Unique ID"
 msgstr "Identifiant unique"
 
-#: serializers.py:34 serializers.py:52 serializers.py:151 serializers.py:185
-#: serializers.py:208
+#: serializers.py:34 serializers.py:52 serializers.py:150 serializers.py:184
+#: serializers.py:207
 msgid "An account has already been created with this email address"
 msgstr "Un compte à déjà été créé avec cette adresse email"
 
-#: serializers.py:138 serializers.py:179
+#: serializers.py:137 serializers.py:178
 msgid "Invalid passsword"
 msgstr "Mot de passe invalide"
 
-#: serializers.py:189
+#: serializers.py:188
 msgid "You cannot use this address because it is not verified"
 msgstr "Vous ne pouvez pas utiliser cette adresse car elle n'est pas vérifiée."
 
-#: serializers.py:222
+#: serializers.py:221
 msgid "You cannot change the email address. Please add a new one"
 msgstr ""
 "L'adresse mail ne peut pas être modifiée. Veuillez ajouter une nouvelle "
 "adresse"
 
-#: serializers.py:261
+#: serializers.py:260
 msgid "You can not change username because you created a matrix account"
 msgstr ""
 "Vous ne pouvez pas modifier votre nom d'utilisateur car vous avez déjà créé "
 "votre compte matrix."
 
-#: validators.py:14
+#: validators.py:17
 msgid ""
-"Enter a valid username. This value may contain only lower case letters, "
-"numbers, and . _ - + characters. It may not start with _"
+"Enter a valid username. This value can only contain characters a-z, 0-9, or "
+"'_-.+'"
 msgstr ""
-"Entrez un nom d'utilisateur valide. Il doit être composé de lettres "
-"minuscules de chiffres et des caractères . _ - +. Il ne doit pas commencer "
-"par _"
+"Entrez un nom d'utilisateur valide. Il doit être composé uniquement des "
+"caractères a-z, 0-9, ou '_-.+'"
+
+#: validators.py:20
+msgid "Username may not begin with _"
+msgstr "Le nom d'utilisateur ne peut pas commencer par _"
 
 #: validators.py:23
+msgid "Numeric username are reserved"
+msgstr "Les nombres sont des noms d'utilisateur réservés"
+
+#: validators.py:28
 msgid "The email address should not include special characters"
 msgstr "L'adresse email ne doit pas contenir de caractères spéciaux"
 
-#: validators.py:39
+#: validators.py:44
 msgid ""
 "You must use a valid ECN email address (ending in ec-nantes.fr or "
 "centraliens-nantes.org)"

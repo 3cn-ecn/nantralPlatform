@@ -9,7 +9,10 @@ from rest_framework import exceptions
 
 from .manager import UserManager
 from .utils import send_email_confirmation
-from .validators import ecn_email_validator, matrix_username_validator
+from .validators import (
+    ecn_email_validator,
+    validate_matrix_username,
+)
 
 
 class InvitationLink(models.Model):
@@ -46,7 +49,7 @@ class User(AbstractUser):
         help_text=_(
             "Required. 150 characters or fewer. Lower case letters, digits and ./_/-/+ only."
         ),
-        validators=[matrix_username_validator],
+        validators=[validate_matrix_username],
         error_messages={
             "unique": _("This username is already taken."),
         },
