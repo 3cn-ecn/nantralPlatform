@@ -76,7 +76,7 @@ class AuthViewSet(GenericViewSet):
             response_status = status.HTTP_401_UNAUTHORIZED
 
         # Not verified primary email
-        elif not user.is_email_valid:
+        elif not user.is_email_valid():
             data["message"] = _("Your e-mail is not verified. Please click on the link verification link")
             data["code"] = EMAIL_NOT_VALIDATED
             response_status = status.HTTP_401_UNAUTHORIZED
@@ -113,7 +113,7 @@ class AuthViewSet(GenericViewSet):
                     "add another address"
                 )
                 data["code"] = ECN_EMAIL_NOT_VALIDATED
-                data["emails_ecn"] = [email.email for email in user.emails.filter(is_valid=False) if email.is_ecn_email]
+                data["emails_ecn"] = [email.email for email in user.emails.filter(is_valid=False) if email.is_ecn_email()]
                 response_status = status.HTTP_401_UNAUTHORIZED
             else:
                 # Here, the user has a valid ECN email but invitation is not null, so we fix it

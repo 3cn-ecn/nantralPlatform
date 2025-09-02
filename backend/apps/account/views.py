@@ -28,7 +28,7 @@ class ConfirmUser(View):
             email.save()
 
             user.is_active = True
-            if email.is_ecn_email:
+            if email.is_ecn_email():
                 user.invitation = None
             user.save()
 
