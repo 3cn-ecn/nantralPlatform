@@ -7,5 +7,5 @@ register = template.Library()
 def file_url(field):
     try:
         return f"{field.url}?{field.file.size}"
-    except Exception:
+    except BaseException:
         return field.url
