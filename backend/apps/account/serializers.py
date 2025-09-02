@@ -71,6 +71,7 @@ class RegisterSerializer(serializers.Serializer):
             ),
             validate_matrix_username,
         ],
+        required=False,
     )
     promo = serializers.IntegerField(
         min_value=1919,
