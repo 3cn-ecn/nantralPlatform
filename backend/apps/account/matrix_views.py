@@ -1,3 +1,5 @@
+import logging
+
 from django.contrib.auth import authenticate
 
 from rest_framework import (
@@ -10,6 +12,7 @@ from rest_framework import (
 
 from apps.account.models import User
 
+logger = logging.getLogger(__name__)
 
 class CheckCredentials(views.APIView):
     """
@@ -34,7 +37,14 @@ class CheckCredentials(views.APIView):
         if username:
             if username[0] == "@":  # Check for matrix id and convert to username
                 username = username.split(":")[0][1:]
-            email = User.objects.get(username=username).email
+            if "@" in username:  # Username is an email address
+                email = username
+            else:
+                try:
+                    email = User.objects.get(username=username).email
+                except User.DoesNotExist:
+                    logger.error(f"Error authenticating matrix user: User {username} not found")
+                    raise exceptions.ValidationError({"auth": {"success": False, "details": "User not found"}})
 
         user: User = authenticate(username=email, password=password)
 
