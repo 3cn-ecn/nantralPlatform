@@ -27,14 +27,16 @@ class FamilyMembersSerializer(serializers.Serializer):
         previous_members = MembershipFamily.objects.filter(
             group=self.context.get("family"), role="2A+"
         ).all()
+        previous_members_pks = [member.student.pk for member in previous_members]
         new_members = list(self.validated_data.values())
 
         with transaction.atomic():
             for member in previous_members:
-                member.delete()
+                if member.student.pk not in new_members:
+                    member.delete()
 
             for member in new_members:
-                if member:
+                if member and member not in previous_members_pks:
                     MembershipFamily.objects.create(
                         student=Student.objects.get(id=member),
                         role="2A+",
