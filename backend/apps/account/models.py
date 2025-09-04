@@ -55,7 +55,7 @@ class User(AbstractUser):
             "unique": _("This username is already taken."),
         },
     )
-    email = models.OneToOneField("Email", verbose_name=_("Main email"), on_delete=models.RESTRICT, related_name="primary_from")
+    email = models.OneToOneField("Email", verbose_name=_("Main email"), on_delete=models.RESTRICT, related_name="primary_from", null=True)
     invitation = models.ForeignKey(
         InvitationLink,
         null=True,
