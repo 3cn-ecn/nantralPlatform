@@ -108,7 +108,7 @@ ARCHIVED_APPS = [
     "apps._archived.administration",
     "apps._archived.academic",
 ]
-INSTALLED_APPS = DJANGO_APPS + COMMON_APPS + THIRD_PARTY_APPS + ARCHIVED_APPS
+INSTALLED_APPS = COMMON_APPS + DJANGO_APPS + THIRD_PARTY_APPS + ARCHIVED_APPS
 
 MIDDLEWARE = [
     "debug_toolbar.middleware.DebugToolbarMiddleware",

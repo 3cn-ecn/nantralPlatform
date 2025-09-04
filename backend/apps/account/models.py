@@ -37,7 +37,7 @@ class InvitationLink(models.Model):
 
 
 class User(AbstractUser):
-    USERNAME_FIELD = "email_id"
+    USERNAME_FIELD = "email"
     EMAIL_FIELD = "email__email"
     REQUIRED_FIELDS = ["username"]
 
@@ -55,7 +55,7 @@ class User(AbstractUser):
             "unique": _("This username is already taken."),
         },
     )
-    email = models.OneToOneField("Email", verbose_name=_("Main email"), on_delete=models.RESTRICT, related_name="primary_from", null=True)
+    email = models.OneToOneField("Email", verbose_name=_("Main email"), on_delete=models.RESTRICT, related_name="primary_from")
     invitation = models.ForeignKey(
         InvitationLink,
         null=True,
