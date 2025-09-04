@@ -18,10 +18,7 @@ def clean_username(username: str):
     return cleaned
 
 
-def send_email_confirmation(
-    email,
-    request: HttpRequest | None = None,
-) -> None:
+def send_email_confirmation(email, request: HttpRequest) -> None:
     path = reverse(
         "account:confirm",
         kwargs={
@@ -31,7 +28,7 @@ def send_email_confirmation(
     )
     context = {
         "first_name": email.user.first_name,
-        "validation_link": request.build_absolute_uri(path) if request else "https://nantral-platform.fr" + path,
+        "validation_link": request.build_absolute_uri(path),
     }
 
     send_email(
