@@ -114,7 +114,13 @@ class User(AbstractUser):
         ordering = ["last_name", "first_name", "username"]
 
     def __str__(self):
-        return f"{self.student.alphabetical_name if hasattr(self, "student") else str(self.email)} ({self.username})"
+        if hasattr(self, "student"):
+            name = self.student.alphabetical_name
+        elif hasattr(self, "email"):
+            name = str(self.email)
+        else:
+            return self.username
+        return f"{name} ({self.username})"
 
 
 class Email(models.Model):
