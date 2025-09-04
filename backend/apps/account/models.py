@@ -67,8 +67,6 @@ class User(AbstractUser):
     has_opened_matrix = models.BooleanField(default=False)
     has_updated_username = models.BooleanField(default=False)
 
-
-
     def save(self, *args, **kwargs):
         self.first_name = self.first_name.lower()
         self.last_name = self.last_name.lower()
@@ -93,7 +91,8 @@ class User(AbstractUser):
 
     def add_email(self, email, request=None):
         email_object = self.emails.create(user=self, email=email)
-        send_email_confirmation(email_object, request=request)
+        if request:
+            send_email_confirmation(email_object, request)
         return email_object
 
     def remove_email(self, email):

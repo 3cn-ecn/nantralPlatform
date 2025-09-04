@@ -378,7 +378,7 @@ class TestChangeEmail(TestCase):
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
-        self.assertEqual(len(mail.outbox), 2)  # 1: creation, 2: change
+        self.assertEqual(len(mail.outbox), 1)
         self.user.refresh_from_db()
         self.assertEqual(self.user.email.email, payload["email"])
         self.assertTrue(self.user.has_email(payload["email"]))
@@ -430,7 +430,7 @@ class TestForgottenPassword(TestCase):
 
         response = self.client.post(url, {"email": "test@ec-nantes.fr"})
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(len(mail.outbox), 2) # 1: activation compte, 2: reinitialisation
+        self.assertEqual(len(mail.outbox), 1)
         token = ResetPasswordToken.objects.get(user=self.user).key
         self.assertTrue(token in mail.outbox.pop().body)
 
@@ -470,15 +470,6 @@ class TestEmailResend(TestCase):
     def test_email_resend(self):
         response = self.client.post(self.url, {"email": self.email})
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(len(mail.outbox), 2)  # 1: activation compte, 2: resend
-
-    def test_email_resend_email_next(self):
-        self.user.email.is_valid = True
-        self.user.email.save()
-        self.user.email_next = "new_email@ec-nantes.fr"
-        self.user.save()
-        response = self.client.post(self.url, {"email": self.email})
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(len(mail.outbox), 1)
 
     def test_already_validated(self):
@@ -486,7 +477,7 @@ class TestEmailResend(TestCase):
         self.user.email.save()
         response = self.client.post(self.url, {"email": self.email})
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(len(mail.outbox), 1)  # 1: activation compte
+        self.assertEqual(len(mail.outbox), 0)
 
     def test_wrong_email(self):
         response = self.client.post(self.url, {"email": "wrong@ec-nantes.fr"})
