@@ -3,9 +3,11 @@
 
 {% block content %}
 
-    <h1>{{ object.name }}</h1>
     {% if show_data %}
-        <p>Famille n°{{object.pk}}</p>
+    <h1>{{ object.name }}</h1>
+    <p>Famille n°{{object.pk}}</p>
+    {% else %}
+    <h1>Famille n°{{object.pk}}</h1>
     {% endif %}
     <br>
 

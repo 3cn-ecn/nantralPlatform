@@ -156,8 +156,6 @@ class DetailFamilyView(LoginRequiredMixin, DetailView):
         context = super().get_context_data(*args, **kwargs)
         family = self.get_object()
         show_data = show_sensible_data(self.request.user)
-        if not show_data:
-            family.name = f"Famille n°{family.id}"
         context["show_data"] = show_data
         context["is_admin"] = family.is_admin(self.request.user)
         context["parrains"] = family.memberships.filter(role="2A+")
