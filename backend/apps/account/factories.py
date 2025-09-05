@@ -4,6 +4,7 @@ import factory
 from factory.django import DjangoModelFactory
 
 from .models import User
+from .utils import clean_username
 
 suffix = 0
 
@@ -11,7 +12,7 @@ suffix = 0
 def generate_unique_username(first_name, last_name):
     global suffix  # noqa: PLW0603
     suffix += 1
-    return f"{first_name.lower()}.{last_name.lower()}{suffix}"
+    return clean_username(f"{first_name.lower()}.{last_name.lower()}.{suffix}")
 
 
 @factory.django.mute_signals(post_save)  # Use this because OneToOneField

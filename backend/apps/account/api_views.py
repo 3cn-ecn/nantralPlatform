@@ -145,9 +145,9 @@ class AuthViewSet(GenericViewSet):
         data = request.data
 
         if data.get("invitation_uuid"):
-            serializer = InvitationRegisterSerializer(data=data)
+            serializer = InvitationRegisterSerializer(data=data, context={"request": request})
         else:
-            serializer = RegisterSerializer(data=data)
+            serializer = RegisterSerializer(data=data, context={"request": request})
 
         if not serializer.is_valid():
             return Response(
