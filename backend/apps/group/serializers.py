@@ -409,6 +409,12 @@ class MapGroupSerializer(serializers.ModelSerializer):
         return serialized_data
 
 
+class MapGroupSearchSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Group
+        fields = ["id", "name", "icon"]
+
+
 class MapGroupPreviewSerializer(serializers.ModelSerializer):
     class Meta:
         model = Group

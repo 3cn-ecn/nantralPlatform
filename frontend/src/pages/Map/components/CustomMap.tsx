@@ -3,7 +3,6 @@ import Map, {
   FullscreenControl,
   GeolocateControl,
   MapRef,
-  Marker,
   NavigationControl,
   Popup,
   ScaleControl,
@@ -11,18 +10,22 @@ import Map, {
 import { useSearchParams } from 'react-router-dom';
 
 import { Box, useTheme } from '@mui/material';
+import { useInfiniteQuery } from '@tanstack/react-query';
+import { GeoJSONSource } from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 
 import { getMapGroupDetailApi } from '#modules/group/api/getMapGroupDetail.api';
 import { getMapGroupListPreviewApi } from '#modules/group/api/getMapGroupListPreview.api';
-import {
-  MapGroupPoint,
-  MapGroupPreview,
-} from '#modules/group/types/group.types';
+import { MapGroupPreview } from '#modules/group/types/group.types';
 import { PopupContent } from '#pages/Map/components/PopupContent';
 import { useChangeThemeMode } from '#shared/context/CustomTheme.context';
 
 import '../styles/custom-mapbox-gl.css';
+import {
+  clusterLayer,
+  clusterCountLayer,
+  unclusteredPointLayer,
+} from './layers';
 
 declare const MAPBOX_TOKEN: string;
 
@@ -37,8 +40,20 @@ export function CustomMap({
   const theme = useTheme();
   const [params, setParams] = useSearchParams();
   const [popupInfo, setPopupInfo] = useState<MapGroupPreview | null>(null);
-  const [groupList, setGroupList] = useState<MapGroupPoint[]>([]);
   const mapRef = useRef<MapRef>(null);
+
+  const groupListQuery = useInfiniteQuery({
+    queryFn: ({ pageParam = 1 }) =>
+      getMapGroupListPreviewApi({
+        type: groupType,
+        archived: showArchived,
+        pageSize: 30,
+        page: pageParam,
+      }),
+    getNextPageParam: (lastPage, allPages) =>
+      lastPage.next ? allPages.length + 1 : undefined,
+    queryKey: ['map', { groupType, showArchived }],
+  });
 
   useEffect(() => {
     if (!mapRef.current) return;
@@ -49,9 +64,15 @@ export function CustomMap({
     );
   }, [currentThemeMode, mapRef]);
 
+  useEffect(() => {
+    if (groupListQuery.isSuccess && groupListQuery.hasNextPage) {
+      groupListQuery.fetchNextPage();
+    }
+  }, [groupListQuery]);
+
   const handleOpen = useCallback(
-    (groupPoint: MapGroupPoint) => {
-      getMapGroupDetailApi(groupPoint.slug).then((group) => {
+    (groupPoint: string) => {
+      getMapGroupDetailApi(groupPoint).then((group) => {
         setPopupInfo(group);
         params.set('id', group.id.toString());
         setParams(params, { preventScrollReset: true });
@@ -59,57 +80,73 @@ export function CustomMap({
           // small bias to ensure that the popup is visible
           center: [group.longitude, group.latitude - 0.0015],
           zoom: 15.5,
-          duration: 2000,
+          duration: 500,
         });
       });
     },
     [params, setParams],
   );
 
-  const handleClose = useCallback(() => {
+  const handleClose = () => {
     setPopupInfo(null);
     params.delete('id');
     setParams(params, { preventScrollReset: true });
-  }, [params, setParams]);
+  };
 
   useEffect(() => {
-    getMapGroupListPreviewApi({
-      type: groupType,
-      archived: showArchived,
-    }).then((groupPage) => {
-      setGroupList(groupPage);
-      if (params.has('id')) {
-        const group = groupPage.find(
-          (group) => group.id.toString() === params.get('id'),
-        );
-        if (group) {
-          handleOpen(group);
-        } else {
-          handleClose();
-        }
+    if (params.has('id')) {
+      const group = groupListQuery.data?.pages
+        .flatMap((page) => page.results)
+        .find((group) => group.id.toString() === params.get('id'));
+      if (group) {
+        handleOpen(group.slug);
       }
-    });
-  }, [groupType, handleClose, handleOpen, params, showArchived]);
+    }
+  }, [groupListQuery.data?.pages, handleOpen, params]);
 
-  const pins = useMemo(
-    () =>
-      groupList.map((group) => (
-        <Marker
-          key={group.id}
-          longitude={group.longitude}
-          latitude={group.latitude}
-          color={theme.palette.primary.main}
-          anchor="center"
-          onClick={(e) => {
-            // If we let the click event propagates to the map, it will immediately close the popup
-            // with `closeOnClick: true`
-            e.originalEvent.stopPropagation();
-            handleOpen(group);
-          }}
-        />
-      )),
-    [groupList, handleOpen, theme.palette.primary.main],
-  );
+  const points: GeoJSON.Feature[] =
+    useMemo(
+      () =>
+        groupListQuery.data?.pages
+          .flatMap((page) => page.results)
+          .map((group) => ({
+            type: 'Feature',
+            properties: {
+              cluster: false,
+              groupId: group.id,
+              slug: group.slug,
+              category: 'group',
+            },
+            geometry: {
+              type: 'Point',
+              coordinates: [group.longitude, group.latitude],
+            },
+          })),
+      [groupListQuery.data?.pages],
+    ) ?? [];
+
+  const onClick = (event) => {
+    const feature = event?.features?.[0];
+    if (feature?.properties?.point_count) {
+      const clusterId = feature?.properties?.cluster_id;
+
+      const mapboxSource = mapRef.current?.getSource('groups') as GeoJSONSource;
+
+      mapboxSource?.getClusterExpansionZoom(clusterId, (err, zoom) => {
+        if (err) {
+          return;
+        }
+
+        mapRef.current?.flyTo({
+          center: feature.geometry.coordinates,
+          zoom: zoom !== null ? zoom : undefined,
+          duration: 500,
+        });
+      });
+    } else if (feature?.properties?.slug) {
+      handleOpen(feature.properties.slug);
+    }
+  };
 
   return (
     <Map
@@ -121,9 +158,32 @@ export function CustomMap({
         bearing: 0,
         pitch: 0,
       }}
+      onLoad={(event) => {
+        event.target.loadImage('/static/img/marker.png', (error, result) => {
+          if (error || !result) {
+            console.error(error);
+            return;
+          }
+          event.target.addImage('marker', result);
+        });
+
+        event.target.addSource('groups', {
+          type: 'geojson',
+          data: { type: 'FeatureCollection', features: points },
+          cluster: true,
+          clusterMaxZoom: 15,
+          clusterRadius: 50,
+        });
+
+        event.target.addLayer(clusterLayer);
+        event.target.addLayer(clusterCountLayer);
+        event.target.addLayer(unclusteredPointLayer);
+      }}
       mapboxAccessToken={MAPBOX_TOKEN}
       style={{ height: '60vh' }}
       mapStyle="mapbox://styles/mapbox/standard"
+      interactiveLayerIds={[clusterLayer.id, unclusteredPointLayer.id]}
+      onClick={onClick}
       config={{
         basemap: {
           lightPreset: currentThemeMode === 'dark' ? 'night' : 'day',
@@ -136,7 +196,7 @@ export function CustomMap({
       <FullscreenControl position="top-left" />
       <NavigationControl position="top-left" />
       <ScaleControl />
-      {pins}
+
       {popupInfo && (
         <Popup
           longitude={popupInfo.longitude}

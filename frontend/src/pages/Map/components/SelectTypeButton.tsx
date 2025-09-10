@@ -9,7 +9,7 @@ import { useGroupTypeDetails } from '#pages/GroupList/hooks/useGroupTypeDetails'
 import { LoadingButton } from '#shared/components/LoadingButton/LoadingButton';
 import { useTranslation } from '#shared/i18n/useTranslation';
 
-const PAGE_SIZE = 0;
+const PAGE_SIZE = 1; // 0 ne permet pas d'avoir aucun résultat
 
 export function SelectTypeButton({
   groupTypeQuery,

@@ -1,25 +1,22 @@
-import type { LayerProps } from 'react-map-gl/mapbox';
+import {
+  CircleLayerSpecification,
+  SymbolLayerSpecification,
+} from 'react-map-gl/mapbox';
 
-export const clusterLayer: LayerProps = {
+export const clusterLayer: CircleLayerSpecification = {
   id: 'clusters',
   type: 'circle',
   source: 'groups',
   filter: ['has', 'point_count'],
   paint: {
-    'circle-color': [
-      'step',
-      ['get', 'point_count'],
-      '#51bbd6',
-      100,
-      '#f1f075',
-      750,
-      '#f28cb1',
-    ],
-    'circle-radius': ['step', ['get', 'point_count'], 20, 100, 30, 750, 40],
+    'circle-color': '#1978c8',
+    'circle-radius': 20,
+    'circle-stroke-width': 3,
+    'circle-stroke-color': '#fff',
   },
 };
 
-export const clusterCountLayer: LayerProps = {
+export const clusterCountLayer: SymbolLayerSpecification = {
   id: 'cluster-count',
   type: 'symbol',
   source: 'groups',
@@ -27,18 +24,21 @@ export const clusterCountLayer: LayerProps = {
   layout: {
     'text-field': '{point_count_abbreviated}',
     'text-font': ['DIN Offc Pro Medium', 'Arial Unicode MS Bold'],
-    'text-size': 12,
+    'text-size': 15,
+  },
+  paint: {
+    'text-color': '#fff',
   },
 };
 
-export const unclusteredPointLayer: LayerProps = {
+export const unclusteredPointLayer: SymbolLayerSpecification = {
   id: 'unclustered-point',
-  type: 'circle',
+  type: 'symbol',
   source: 'groups',
-  paint: {
-    'circle-color': '#11b4da',
-    'circle-radius': 4,
-    'circle-stroke-width': 1,
-    'circle-stroke-color': '#fff',
+  filter: ['!', ['has', 'point_count']],
+  layout: {
+    'icon-image': ['image', 'marker'],
+    'icon-anchor': 'bottom',
+    'icon-size': 0.5,
   },
 };

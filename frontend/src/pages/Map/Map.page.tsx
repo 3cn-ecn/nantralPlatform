@@ -5,7 +5,7 @@ import { Button, Container, Typography } from '@mui/material';
 import 'mapbox-gl/dist/mapbox-gl.css';
 
 import { getMapGroupListApi } from '#modules/group/api/getMapGroupList.api';
-import { MapGroupPreview } from '#modules/group/types/group.types';
+import { MapGroupSearch } from '#modules/group/types/group.types';
 import { useGroupTypeDetails } from '#pages/GroupList/hooks/useGroupTypeDetails';
 import { MoreActionButton } from '#pages/Map/components/MoreActionButton';
 import { SelectTypeButton } from '#pages/Map/components/SelectTypeButton';
@@ -64,14 +64,14 @@ export default function MapPage() {
         )}
       </FlexRow>
       <FlexRow alignItems="center" gap={2} mb={4}>
-        <AutocompleteSearchField<MapGroupPreview, 'name', 'icon'>
+        <AutocompleteSearchField<MapGroupSearch, 'name', 'icon'>
           name="group"
           label={t('group.search.placeholder')}
           value={groupId}
           handleChange={handleChange}
           size="small"
           margin="none"
-          fetchOptions={async (searchInput): Promise<MapGroupPreview[]> => {
+          fetchOptions={async (searchInput): Promise<MapGroupSearch[]> => {
             const res = await getMapGroupListApi({
               search: searchInput,
               pageSize: 6 * 3,

@@ -55,6 +55,8 @@ export type MapGroupPreviewDTO = GroupPreviewDTO &
     membership_set: MembershipDTO[];
   };
 
+export type MapGroupSearchDTO = Pick<GroupDTO, 'id' | 'name' | 'icon'>;
+
 export type CreateGroupFormDTO = Pick<
   GroupDTO,
   | 'name'

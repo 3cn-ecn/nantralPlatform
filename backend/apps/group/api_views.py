@@ -42,6 +42,7 @@ from .serializers import (
     GroupWriteSerializer,
     LabelSerializer,
     MapGroupPreviewSerializer,
+    MapGroupSearchSerializer,
     MapGroupSerializer,
     MembershipSerializer,
     NewMembershipSerializer,
@@ -113,13 +114,6 @@ class GroupViewSet(viewsets.ModelViewSet):
     renderer_classes = [*api_settings.DEFAULT_RENDERER_CLASSES, GeoJsonRender]
 
     @property
-    def pagination_class(self):
-        if self.request.accepted_renderer.format == "points":
-            return None
-        else:
-            return api_settings.DEFAULT_PAGINATION_CLASS
-
-    @property
     def query_params(self) -> QueryDict:
         return self.request.query_params
 
@@ -137,6 +131,7 @@ class GroupViewSet(viewsets.ModelViewSet):
     def get_serializer_class(self):
         preview = parse_bool(self.query_params.get("preview"))
         is_map = parse_bool(self.query_params.get("map"))
+        search = self.query_params.get("search")
         if self.request.accepted_renderer.format == "points":
             if is_map is True:
                 return MapGroupPreviewSerializer
@@ -149,7 +144,7 @@ class GroupViewSet(viewsets.ModelViewSet):
         if self.request.method in ["POST", "PUT", "PATCH"]:
             return GroupWriteSerializer
         if is_map is True:
-            return MapGroupSerializer
+            return MapGroupSerializer if search is None else MapGroupSearchSerializer
         if preview is False or self.detail:
             return GroupSerializer
         return GroupPreviewSerializer

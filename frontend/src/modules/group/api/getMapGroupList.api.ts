@@ -3,9 +3,9 @@ import axios from 'axios';
 import { adaptApiErrors, ApiErrorDTO } from '#shared/infra/errors';
 import { adaptPage, Page, PageDTO } from '#shared/infra/pagination';
 
-import { adaptMapGroupPreview } from '../infra/group.adapter';
-import { MapGroupPreviewDTO } from '../infra/group.dto';
-import { MapGroupPreview } from '../types/group.types';
+import { adaptMapGroupSearch } from '../infra/group.adapter';
+import { MapGroupSearchDTO } from '../infra/group.dto';
+import { MapGroupSearch } from '../types/group.types';
 
 export interface GetGroupListApiParams {
   type?: string | null;
@@ -17,9 +17,9 @@ export interface GetGroupListApiParams {
 
 export async function getMapGroupListApi(
   options: GetGroupListApiParams,
-): Promise<Page<MapGroupPreview>> {
+): Promise<Page<MapGroupSearch>> {
   const { data } = await axios
-    .get<PageDTO<MapGroupPreviewDTO>>('/api/group/group/', {
+    .get<PageDTO<MapGroupSearchDTO>>('/api/group/group/', {
       params: {
         map: true,
         type: options.type,
@@ -33,5 +33,5 @@ export async function getMapGroupListApi(
       throw adaptApiErrors(err);
     });
 
-  return adaptPage(data, adaptMapGroupPreview);
+  return adaptPage(data, adaptMapGroupSearch);
 }

@@ -85,3 +85,5 @@ export type MapGroupPoint = Pick<
   Group,
   'id' | 'icon' | 'latitude' | 'longitude' | 'slug' | 'name'
 >;
+
+export type MapGroupSearch = Pick<Group, 'id' | 'icon' | 'name'>;

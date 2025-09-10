@@ -6,12 +6,14 @@ import {
   Group,
   GroupPreview,
   MapGroupPreview,
+  MapGroupSearch,
 } from '../types/group.types';
 import {
   CreateGroupFormDTO,
   GroupDTO,
   GroupPreviewDTO,
   MapGroupPreviewDTO,
+  MapGroupSearchDTO,
 } from './group.dto';
 import { adaptGroupTypePreview } from './groupType.adapter';
 
@@ -113,5 +115,15 @@ export function adaptGroupForm(groupForm: CreateGroupForm): CreateGroupFormDTO {
     latitude: groupForm.latitude,
     longitude: groupForm.longitude,
     _change_reason: groupForm.changeReason,
+  };
+}
+
+export function adaptMapGroupSearch(
+  groupSearchDTO: MapGroupSearchDTO,
+): MapGroupSearch {
+  return {
+    id: groupSearchDTO.id,
+    name: groupSearchDTO.name,
+    icon: groupSearchDTO.icon,
   };
 }
