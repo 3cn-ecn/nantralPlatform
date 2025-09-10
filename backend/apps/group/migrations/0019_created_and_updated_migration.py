@@ -53,6 +53,7 @@ def reverse(apps, schema_editor):
 
 
 class Migration(migrations.Migration):
+
     dependencies = [
         ("group", "0018_add_historical_manager"),
     ]
