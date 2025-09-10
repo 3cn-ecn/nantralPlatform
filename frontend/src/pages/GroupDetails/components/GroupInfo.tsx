@@ -2,10 +2,12 @@ import { Link as RouterLink } from 'react-router-dom';
 
 import {
   AdminPanelSettings as AdminPanelSettingsIcon,
+  OpenInNew,
   PlaceOutlined as PlaceIcon,
 } from '@mui/icons-material';
 import {
   Box,
+  Button,
   IconButton,
   Link,
   Skeleton,
@@ -152,6 +154,17 @@ export function GroupInfo({
               groupSlug={group.slug}
               isSubscribed={group?.isSubscribed}
             />
+          )}
+          {group?.groupType.isMap && (
+            <Button
+              variant="outlined"
+              component={RouterLink}
+              to={`https://www.google.com/maps/dir/?api=1&travelmode=transit&destination=${group.address}`}
+              target="_blank"
+              endIcon={<OpenInNew />}
+            >
+              {t('map.popup.go')}
+            </Button>
           )}
           {group && <HistoryButton group={group} />}
           {group?.isAdmin && <EditButton group={group} />}
