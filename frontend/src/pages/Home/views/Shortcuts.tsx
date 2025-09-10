@@ -49,7 +49,6 @@ export default function Shortcuts() {
         label={t('navbar.student')}
         path="/student/"
         iconPath="/static/img/icons/cropped/list.svg"
-        isOnBackend
       />
       <ShortcutItem
         label={t('navbar.signature')}

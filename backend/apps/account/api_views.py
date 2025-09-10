@@ -23,6 +23,7 @@ from .serializers import (
     ShortEmailSerializer,
     UsernameSerializer,
     VisibilitySerializer,
+    UserSerializer,
 )
 from .utils import send_email_confirmation
 
@@ -236,6 +237,31 @@ class AuthViewSet(GenericViewSet):
         """Edit account informations"""
         serializer = UsernameSerializer(instance=request.user)
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+    @action(
+        detail=False,
+        methods=["PUT", "GET"],
+        permission_classes=[IsAuthenticated],
+        serializer_class=UserSerializer,
+    )
+    def edit(self, request: Request):
+        """Edit account informations"""
+
+        if request.method == "PUT":
+            serializer = UserSerializer(
+                instance=request.user, data=request.data
+            )
+            serializer.is_valid(raise_exception=True)
+            serializer.save()
+
+            return Response(
+                serializer.validated_data, status=status.HTTP_200_OK
+            )
+
+        if request.method == "GET":
+            serializer = UserSerializer(instance=request.user)
+
+            return Response(serializer.data, status=status.HTTP_200_OK)
 
     @action(
         detail=False,

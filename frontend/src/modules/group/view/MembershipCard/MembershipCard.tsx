@@ -34,11 +34,10 @@ function MembershipCard(props: {
   const [openEditModal, setOpenEditModal] = useState(false);
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
 
-  const today = new Date(new Date().toDateString());
   return (
     <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
       <Card
-        variant={item.endDate < today ? 'outlined' : 'elevation'}
+        variant={'elevation'}
         sx={{ height: '100%', borderColor: 'primary' }}
       >
         <CardActionArea
@@ -49,13 +48,13 @@ function MembershipCard(props: {
             sx={{ display: 'flex', alignItems: 'center', gap: 1, p: 1 }}
           >
             <Avatar
-              src={item.student.picture}
-              alt={item.student.name || item.group.name}
+              src={group ? item.student.picture : item.group.icon}
+              alt={group ? item.student.name : item.group.name}
               size="m"
             />
             <Box sx={{ minWidth: 0 }}>
               <Typography variant="body1" noWrap>
-                {item.student.name || item.group.name}
+                {group ? item.student.name : item.group.name}
               </Typography>
               <Typography variant="body2" color="secondary" noWrap>
                 {item.summary}

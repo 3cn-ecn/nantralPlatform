@@ -1,3 +1,5 @@
+import { Link } from 'react-router-dom';
+
 import {
   Close as CloseIcon,
   Edit as EditIcon,
@@ -86,7 +88,8 @@ export function ModalShowMember(props: {
       </DialogContent>
       <DialogActions>
         <Button
-          href={group ? member.student.url : member.group.url}
+          component={Link}
+          to={group ? member.student.url : member.group.url}
           variant="text"
           color="secondary"
           endIcon={<OpenInNewIcon />}

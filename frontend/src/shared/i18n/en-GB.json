@@ -38,6 +38,7 @@
   },
   "button": {
     "add": "Add",
+    "apply": "Apply",
     "back": "Back",
     "cancel": "Cancel",
     "confirm": "OK",
@@ -360,6 +361,7 @@
         }
       },
       "formerMembers": "Former members",
+      "hideFormerMembers": "Hide old members",
       "history": "See old versions",
       "infoLine": {
         "events_one": "{{count}} event",
@@ -405,6 +407,7 @@
       "requestAdmin": "Ask to be an admin",
       "requestSent": "Request sent",
       "requestToBeAdmin": "{{student}} asks to be admin",
+      "showFormerMembers": "Show old members",
       "subGroupOf": "Subgroup of",
       "subgroups": "Subgroups",
       "subscribe": "Subscribe",
@@ -617,6 +620,7 @@
     "email": "Email",
     "formationFollowed": {
       "PhD": "PhD",
+      "all": "All",
       "bachelor": "Bachelor",
       "generalEngineer": "General Engineer",
       "label": "Formation followed",
@@ -851,6 +855,64 @@
       }
     },
     "new": "New link"
+  },
+  "student": {
+    "arrivalYear": "Arrival year",
+    "confirmNewPassword": "Confirm new password",
+    "currentPassword": {
+      "label": "Current password"
+    },
+    "description": {
+      "label": "Description",
+      "placeholder": "Describe yourself in one or two sentences"
+    },
+    "detail": {
+      "hideFormerGroups": "Hide former groups",
+      "showFormerGroups": "Show former groups"
+    },
+    "details": {
+      "changePassword": "Change password",
+      "editPassword": "Change password",
+      "editProfile": "Edit your profile",
+      "form": {
+        "firstName": {
+          "label": "First name"
+        }
+      },
+      "housing": "Shared accommodation",
+      "links": "Links",
+      "password": "Password",
+      "profile": "Profile"
+    },
+    "filters": {
+      "title": "Filters"
+    },
+    "firstName": {
+      "label": "First name"
+    },
+    "lastName": {
+      "label": "Last Name"
+    },
+    "list": {
+      "labelDisplayedRows": "Page {{ page }} of {{ pageSize }} ({{ count }} results)"
+    },
+    "name": {
+      "label": "Name"
+    },
+    "newPassword": {
+      "label": "New Password"
+    },
+    "picture": {
+      "helperText": "Recommended size: 400 x 400",
+      "label": "Picture"
+    },
+    "searchBar": {
+      "placeholder": "Search for a student"
+    },
+    "username": {
+      "disabledText": "You can not change your username because you already created a Matrix account",
+      "label": "User name"
+    }
   },
   "userMenu": {
     "button": {

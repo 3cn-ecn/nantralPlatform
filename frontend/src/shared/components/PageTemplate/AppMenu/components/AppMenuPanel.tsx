@@ -60,7 +60,6 @@ export function AppMenuPanel({ menuOpen, onClose }: AppMenuPanelProps) {
           label={t('navbar.student')}
           path="/student/"
           iconPath="/static/img/icons/cropped/list.svg"
-          isOnBackend
           closeMenu={onClose}
         />
         <AppMenuItem

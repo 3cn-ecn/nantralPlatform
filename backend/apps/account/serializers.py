@@ -236,10 +236,49 @@ class InvitationValidSerializer(serializers.Serializer):
     uuid = serializers.UUIDField()
 
 
+class EditStudentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Student
+        fields = ["path", "promo", "description", "picture"]
+
+
+class UserSerializer(serializers.ModelSerializer):
+    student = EditStudentSerializer()
+
+    class Meta:
+        model = User
+        fields = ["username", "first_name", "last_name", "student", "has_opened_matrix"]
+        read_only_fields = ["has_opened_matrix"]
+
+    def validate_username(self, value):
+        if self.instance.has_opened_matrix and self.instance.username != value:
+            raise serializers.ValidationError("You can not change username because you created a matrix account")
+        return value
+
+    def update(self, obj: User, data: dict):
+        student_data = data.pop("student")
+
+        for attr, value in data.items():
+            setattr(obj, attr, value)
+
+        student_serializer = EditStudentSerializer(
+            instance=obj.student, data=student_data
+        )
+
+        if student_serializer.is_valid():
+            obj.save()  # Save only if all the data is valid
+
+            student_serializer.save()
+            self.validated_data["student"]["picture"] = (
+                student_serializer.data.get("picture")
+            )
+
+        return obj
+
+
 class UsernameSerializer(serializers.ModelSerializer):
     picture = serializers.SerializerMethodField()
     name = serializers.SerializerMethodField()
-    has_updated_username = serializers.BooleanField(read_only=True)
 
     username = serializers.CharField(
         max_length=200,
@@ -255,7 +294,8 @@ class UsernameSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ["username", "picture", "name", "has_updated_username"]
+        fields = ["username", "picture", "name", "has_updated_username", "has_opened_matrix"]
+        read_only_fields = ["has_updated_username", "has_opened_matrix"]
 
     def validate_username(self, value):
         if self.instance.has_opened_matrix and self.instance.username != value:
