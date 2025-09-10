@@ -152,9 +152,9 @@ export function CustomMap({
     <Map
       ref={mapRef}
       initialViewState={{
-        latitude: 47.248558,
-        longitude: -1.548606,
-        zoom: 12,
+        latitude: 47.21789054262203,
+        longitude: -1.5559043178340437,
+        zoom: 11.5,
         bearing: 0,
         pitch: 0,
       }}

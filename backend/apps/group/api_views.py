@@ -638,7 +638,7 @@ class MapViewSet(viewsets.ViewSet):
             "q": search,
             "access_token": settings.MAPBOX_API_KEY,
             "autocomplete": "true",
-            "proximity": "-1.548606,47.248558",
+            "proximity": "-1.5559043178340437,47.21789054262203",
             "types": "address",
         }
         mapbox_response = requests.get(
