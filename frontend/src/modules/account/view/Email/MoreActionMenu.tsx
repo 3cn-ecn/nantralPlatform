@@ -2,8 +2,8 @@ import { Send } from '@mui/icons-material';
 import { ListItemIcon, ListItemText, Menu, MenuItem } from '@mui/material';
 
 import { Email } from '#modules/account/email.type';
-import { DeleteMenuItem } from '#modules/event/view/Email/MenuItems/DeleteMenuItem';
-import { SetMainMenuItem } from '#modules/event/view/Email/MenuItems/SetMainMenuItem';
+import { DeleteMenuItem } from '#modules/account/view/Email/MenuItems/DeleteMenuItem';
+import { SetMainMenuItem } from '#modules/account/view/Email/MenuItems/SetMainMenuItem';
 import { useTranslation } from '#shared/i18n/useTranslation';
 
 export function MoreActionMenu({

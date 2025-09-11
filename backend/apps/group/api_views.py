@@ -373,7 +373,7 @@ class MembershipViewSet(viewsets.ModelViewSet):
                 Q(end_date__gte=from_date) | Q(end_date__isnull=True),
             )
         if to_date:
-            qs = qs.filter(Q(end_date__lt=to_date) | Q(begin_date__isnull=True))
+            qs = qs.filter(Q(end_date__lt=to_date) | Q(begin_date__isnull=True)).filter(group__group_type__no_membership_dates=False)
         if group_type:
             qs = qs.filter(group__group_type__slug=group_type)
 

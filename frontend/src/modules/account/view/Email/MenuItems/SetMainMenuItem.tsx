@@ -6,7 +6,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import { changeMainEmailApi } from '#modules/account/api/changeMainEmail.api';
 import { Email } from '#modules/account/email.type';
-import { ChangeMainEmailModal } from '#modules/event/view/Email/ChangeMainEmailModal';
+import { ChangeMainEmailModal } from '#modules/account/view/Email/ChangeMainEmailModal';
 import { useToast } from '#shared/context/Toast.context';
 import { useTranslation } from '#shared/i18n/useTranslation';
 import { ApiFormError } from '#shared/infra/errors';

@@ -68,29 +68,3 @@ class RoommatesSerializer(serializers.ModelSerializer):
 
     def get_url(self, obj):
         return obj.get_absolute_url()
-
-
-class RoommatesPreviewSerializer(serializers.ModelSerializer):
-    url = serializers.SerializerMethodField()
-
-    class Meta:
-        model = Roommates
-        fields = [
-            "name",
-            "begin_date",
-            "end_date",
-            "url",
-        ]
-
-    def get_url(self, obj):
-        return obj.get_absolute_url()
-
-
-class HousingMembershipSerializer(serializers.ModelSerializer):
-    """Membership serializer for getting or editing objects."""
-
-    group = RoommatesPreviewSerializer()
-
-    class Meta:
-        model = NamedMembershipRoommates
-        fields = ["id", "nickname", "group"]

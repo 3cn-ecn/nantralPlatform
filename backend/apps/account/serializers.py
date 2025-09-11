@@ -257,6 +257,8 @@ class UserSerializer(serializers.ModelSerializer):
 
     def update(self, obj: User, data: dict):
         student_data = data.pop("student")
+        if self.instance.has_opened_matrix:
+            data.pop("username")  # Remove username to prevent user from changing it
 
         for attr, value in data.items():
             setattr(obj, attr, value)

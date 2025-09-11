@@ -8,8 +8,8 @@ import {
 import { Chip, TableCell, TableRow, Tooltip, Typography } from '@mui/material';
 
 import { Email } from '#modules/account/email.type';
-import { InvalidChip } from '#modules/event/view/Email/InvalidChip';
-import { MoreActionButton } from '#modules/event/view/Email/MoreActionButton';
+import { InvalidChip } from '#modules/account/view/Email/InvalidChip';
+import { MoreActionButton } from '#modules/account/view/Email/MoreActionButton';
 import { FlexRow } from '#shared/components/FlexBox/FlexBox';
 import { useTranslation } from '#shared/i18n/useTranslation';
 

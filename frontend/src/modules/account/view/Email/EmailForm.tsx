@@ -5,6 +5,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import { addEmailApi } from '#modules/account/api/addEmail.api';
 import { Email } from '#modules/account/email.type';
+import { EmailDTO } from '#modules/account/infra/email.dto';
 import { FlexRow } from '#shared/components/FlexBox/FlexBox';
 import { TextField } from '#shared/components/FormFields';
 import { LoadingButton } from '#shared/components/LoadingButton/LoadingButton';
@@ -17,7 +18,7 @@ export function EmailForm() {
   const queryClient = useQueryClient();
   const emailMutation = useMutation<
     Email,
-    ApiFormError<{ email: Email }>,
+    ApiFormError<{ email: string }>,
     string
   >({
     mutationFn: addEmailApi,

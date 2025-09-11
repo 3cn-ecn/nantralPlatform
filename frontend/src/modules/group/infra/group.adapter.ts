@@ -1,5 +1,5 @@
-import { adaptMembership } from '#modules/group/infra/membership.adapter';
 import { adaptSocialLink } from '#modules/social_link/infra/socialLink.adapter';
+import { adaptStudentPreview } from '#modules/student/infra/student.adapter';
 
 import {
   CreateGroupForm,
@@ -47,8 +47,8 @@ export function adaptMapGroupPreview(
     longitude: groupDTO.longitude,
     summary: groupDTO.summary,
     banner: groupDTO.banner,
-    members: groupDTO.membership_set.map((memberDTO) =>
-      adaptMembership(memberDTO),
+    members: groupDTO.members.map((studentDTO) =>
+      adaptStudentPreview(studentDTO),
     ),
   };
 }

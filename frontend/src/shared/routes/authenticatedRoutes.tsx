@@ -5,8 +5,9 @@ import { QueryClient } from '@tanstack/react-query';
 
 import { PageTemplate } from '#shared/components/PageTemplate/PageTemplate';
 
-const EmailPage = lazy(() => import('#pages/Email/Email.page'));
 import { studentDetailsLoader } from './loader';
+
+const EmailPage = lazy(() => import('#pages/Email/Email.page'));
 
 const EventPage = lazy(() => import('#pages/Event/Event.page'));
 const EventCalendarViewPage = lazy(

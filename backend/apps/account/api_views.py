@@ -22,8 +22,8 @@ from .serializers import (
     RegisterSerializer,
     ShortEmailSerializer,
     UsernameSerializer,
-    VisibilitySerializer,
     UserSerializer,
+    VisibilitySerializer,
 )
 from .utils import send_email_confirmation
 

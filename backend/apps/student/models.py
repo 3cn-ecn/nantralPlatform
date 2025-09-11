@@ -44,8 +44,8 @@ class Student(models.Model):
         null=True,
         blank=True,
         size=(500, 500),
-        name_from_field="user",
         crop=True,
+        name_from_field="user",
     )
     faculty = models.CharField(
         max_length=200,

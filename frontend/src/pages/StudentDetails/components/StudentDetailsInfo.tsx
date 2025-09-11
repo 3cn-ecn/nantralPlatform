@@ -19,7 +19,11 @@ export function StudentDetailsInfo({ student }: { student: Partial<Student> }) {
         )}
       </FlexRow>
       <Typography color="gray" mb={1}>
-        @{student.username}
+        @
+        <Typography color={'lightgray'} component={'span'}>
+          {student.username}
+        </Typography>
+        :nantral-platform.fr
       </Typography>
       <FlexRow flexWrap={'wrap'} gap={1}>
         <Chip label={`Année d'entrée: ${student.promo}`}></Chip>

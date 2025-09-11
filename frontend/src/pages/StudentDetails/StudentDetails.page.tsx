@@ -8,7 +8,6 @@ import { FlexRow } from '#shared/components/FlexBox/FlexBox';
 import { Spacer } from '#shared/components/Spacer/Spacer';
 
 import { StudentGroupsSection } from './components/Section/StudentGroupSection';
-import { StudentHousingSection } from './components/Section/StudentHousingSection';
 import { StudentDetailsInfo } from './components/StudentDetailsInfo';
 import { StudentEditButton } from './components/StudentEditButton';
 import { useStudentDetails } from './hooks/useStudentDetails';
@@ -35,7 +34,6 @@ export default function StudentDetailsPage() {
         {student.description}
       </Typography>
       <Divider sx={{ my: 2 }} />
-      <StudentHousingSection student={student} />
       <StudentGroupsSection student={student} />
       <Spacer vertical={10} />
       {isMe && <StudentEditButton />}

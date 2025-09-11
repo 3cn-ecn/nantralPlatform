@@ -1,5 +1,6 @@
 import { MembershipDTO } from '#modules/group/infra/membership.dto';
 import { SocialLinkDTO } from '#modules/social_link/infra/socialLink.dto';
+import { StudentPreviewDTO } from '#modules/student/infra/student.dto';
 
 import { GroupTypePreviewDTO } from './groupType.dto';
 
@@ -52,7 +53,7 @@ export type MapGroupPreviewDTO = GroupPreviewDTO &
     GroupDTO,
     'address' | 'latitude' | 'longitude' | 'summary' | 'banner'
   > & {
-    membership_set: MembershipDTO[];
+    members: StudentPreviewDTO[];
   };
 
 export type MapGroupSearchDTO = Pick<GroupDTO, 'id' | 'name' | 'icon'>;

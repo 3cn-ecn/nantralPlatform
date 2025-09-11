@@ -1,7 +1,7 @@
 import { Paper, Table, TableBody, TableContainer } from '@mui/material';
 
 import { Email } from '#modules/account/email.type';
-import { EmailRowSkeleton } from '#modules/event/view/Email/EmailRowSkeleton';
+import { EmailRowSkeleton } from '#modules/account/view/Email/EmailRowSkeleton';
 
 import { EmailRow } from './EmailRow';
 

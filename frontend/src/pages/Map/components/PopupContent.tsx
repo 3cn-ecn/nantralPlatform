@@ -68,18 +68,12 @@ export function PopupContent({
       </CardActions>
       <List dense={true} sx={{ py: 0 }}>
         {group.members.map((member) => (
-          <ListItem disablePadding key={member.student.id}>
-            <ListItemButton component={Link} to={member.student.url}>
+          <ListItem disablePadding key={member.id}>
+            <ListItemButton component={Link} to={member.url}>
               <ListItemAvatar>
-                <Avatar
-                  src={member.student.picture}
-                  alt={member.student.name}
-                />
+                <Avatar src={member.picture} alt={member.name} />
               </ListItemAvatar>
-              <ListItemText
-                primary={member.student.name}
-                secondary={member.summary}
-              />
+              <ListItemText primary={member.name} />
             </ListItemButton>
           </ListItem>
         ))}

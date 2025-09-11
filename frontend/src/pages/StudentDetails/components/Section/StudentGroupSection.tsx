@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { Chip, Divider, Typography } from '@mui/material';
@@ -7,33 +7,19 @@ import { roundToNearestMinutes } from 'date-fns';
 import { Student } from '#modules/student/student.types';
 import { useGroupTypes } from '#pages/Group/hooks/useGroupTypes';
 import { MembersGrid } from '#pages/GroupDetails/GroupMembers/MembersGrid';
+import { MembersInfiniteGrid } from '#pages/GroupDetails/GroupMembers/MembersInfiniteGrid';
 import { useInfiniteMembership } from '#pages/GroupDetails/hooks/useInfiniteMemberships';
 import { FlexRow } from '#shared/components/FlexBox/FlexBox';
 import { CheckboxField } from '#shared/components/FormFields';
+import { InfiniteList } from '#shared/components/InfiniteList/InfiniteList';
 import { useTranslation } from '#shared/i18n/useTranslation';
 
 export function StudentGroupsSection({ student }: { student: Student }) {
   const { groupTypesQuery } = useGroupTypes(1);
   const { t } = useTranslation();
   const today = roundToNearestMinutes(new Date());
-  const [type, setType] = useState<string>('all');
+  const [type, setType] = useState<string | undefined>(undefined);
   const [showFormerGroups, setShowFormerGroups] = useState(false);
-  const membershipQuery = useInfiniteMembership({
-    options: {
-      student: student?.id,
-      from: today,
-      groupType: type === 'all' ? undefined : type,
-    },
-  });
-
-  const formerMembershipQuery = useInfiniteMembership({
-    options: {
-      student: student?.id,
-      to: today,
-      groupType: type === 'all' ? undefined : type,
-    },
-    enabled: showFormerGroups,
-  });
 
   return (
     <>
@@ -47,9 +33,9 @@ export function StudentGroupsSection({ student }: { student: Student }) {
         sx={{ scrollbarWidth: 'none' }}
       >
         <Chip
-          variant={type === 'all' ? 'filled' : 'outlined'}
+          variant={type === undefined ? 'filled' : 'outlined'}
           label={'All'}
-          onClick={() => setType('all')}
+          onClick={() => setType(undefined)}
         />
         {groupTypesQuery.data?.results.map((groupType) => (
           <Chip
@@ -60,38 +46,27 @@ export function StudentGroupsSection({ student }: { student: Student }) {
           />
         ))}
       </FlexRow>
-
-      <MembersGrid query={membershipQuery} />
       {!groupTypesQuery.data?.results.find((item) => type == item.slug)
         ?.noMembershipDates && (
-        <>
-          <CheckboxField
-            label={
-              showFormerGroups
-                ? t('student.detail.hideFormerGroups')
-                : t('student.detail.showFormerGroups')
-            }
-            value={showFormerGroups}
-            checkboxProps={{
-              icon: <Visibility />,
-              checkedIcon: <VisibilityOff />,
-            }}
-            handleChange={(val) => setShowFormerGroups(val)}
-          />
-          {showFormerGroups && (
-            <>
-              <FlexRow alignItems="center">
-                <Divider sx={{ flex: 1, backgroundColor: 'red' }} />
-                <Typography sx={{ mx: 2, color: 'red' }}>
-                  Former groups
-                </Typography>
-                <Divider sx={{ flex: 1, backgroundColor: 'red' }} />
-              </FlexRow>
-              <MembersGrid query={formerMembershipQuery} />
-            </>
-          )}
-        </>
+        <CheckboxField
+          label={
+            showFormerGroups
+              ? t('student.detail.hideFormerGroups')
+              : t('student.detail.showFormerGroups')
+          }
+          value={showFormerGroups}
+          checkboxProps={{
+            icon: <Visibility />,
+            checkedIcon: <VisibilityOff />,
+          }}
+          handleChange={(val) => setShowFormerGroups(val)}
+        />
       )}
+
+      <MembersInfiniteGrid
+        filters={{ previous: showFormerGroups, groupType: type }}
+        student={student}
+      />
     </>
   );
 }

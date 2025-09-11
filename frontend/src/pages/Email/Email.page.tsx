@@ -1,7 +1,7 @@
 import { Container, Typography } from '@mui/material';
 
-import { EmailForm } from '#modules/event/view/Email/EmailForm';
-import { EmailList } from '#modules/event/view/Email/EmailList';
+import { EmailForm } from '#modules/account/view/Email/EmailForm';
+import { EmailList } from '#modules/account/view/Email/EmailList';
 import { Spacer } from '#shared/components/Spacer/Spacer';
 import { useTranslation } from '#shared/i18n/useTranslation';
 
