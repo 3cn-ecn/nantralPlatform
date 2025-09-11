@@ -16,6 +16,7 @@ import getTheme from '../../theme';
 interface ChangeThemeCallback {
   changeThemeMode: (mode: PaletteMode | 'auto') => void;
   themeMode: PaletteMode | 'auto';
+  currentThemeMode: PaletteMode;
 }
 
 const getCachedThemeMode = (): PaletteMode | 'auto' => {
@@ -38,13 +39,14 @@ export function CustomThemeProvider({ children }: PropsWithChildren) {
     ? 'dark'
     : 'light';
 
+  const currentThemeMode = useMemo(
+    () => (themeMode === 'auto' ? systemThemeMode : themeMode),
+    [themeMode, systemThemeMode],
+  );
+
   const theme = useMemo(
-    () =>
-      getTheme(
-        themeMode === 'auto' ? systemThemeMode : themeMode,
-        i18n.language,
-      ),
-    [themeMode, systemThemeMode, i18n.language],
+    () => getTheme(currentThemeMode, i18n.language),
+    [currentThemeMode, i18n.language],
   );
 
   const changeThemeMode = useCallback(
@@ -59,8 +61,9 @@ export function CustomThemeProvider({ children }: PropsWithChildren) {
     () => ({
       changeThemeMode,
       themeMode,
+      currentThemeMode,
     }),
-    [themeMode, changeThemeMode],
+    [themeMode, changeThemeMode, currentThemeMode],
   );
 
   return (

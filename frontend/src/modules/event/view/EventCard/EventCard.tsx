@@ -11,7 +11,7 @@ import {
   CardContent,
   CardMedia,
   Typography,
-} from '@mui/material/';
+} from '@mui/material';
 import { differenceInHours, differenceInMonths } from 'date-fns';
 
 import { EventPreview } from '#modules/event/event.type';

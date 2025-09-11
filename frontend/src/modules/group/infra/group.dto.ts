@@ -1,4 +1,5 @@
 import { SocialLinkDTO } from '#modules/social_link/infra/socialLink.dto';
+import { StudentPreviewDTO } from '#modules/student/infra/student.dto';
 
 import { GroupTypePreviewDTO } from './groupType.dto';
 
@@ -29,6 +30,9 @@ export interface GroupDTO {
   category: string;
   sub_category?: string;
   social_links: SocialLinkDTO[];
+  address: string;
+  latitude: number;
+  longitude: number;
 }
 
 export type GroupPreviewDTO = Pick<
@@ -42,6 +46,16 @@ export type GroupPreviewDTO = Pick<
   | 'category'
   | 'sub_category'
 >;
+
+export type MapGroupPreviewDTO = GroupPreviewDTO &
+  Pick<
+    GroupDTO,
+    'address' | 'latitude' | 'longitude' | 'summary' | 'banner'
+  > & {
+    members: StudentPreviewDTO[];
+  };
+
+export type MapGroupSearchDTO = Pick<GroupDTO, 'id' | 'name' | 'icon'>;
 
 export type CreateGroupFormDTO = Pick<
   GroupDTO,
@@ -59,6 +73,9 @@ export type CreateGroupFormDTO = Pick<
   | 'description'
   | 'meeting_place'
   | 'lock_memberships'
+  | 'address'
+  | 'latitude'
+  | 'longitude'
 > & {
   children_label?: string;
   icon?: File;

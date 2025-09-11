@@ -5,24 +5,12 @@ from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.shortcuts import redirect
 from django.urls.base import reverse
 from django.views.decorators.http import require_http_methods
-from django.views.generic import DetailView, ListView, UpdateView
+from django.views.generic import DetailView, UpdateView
 
 from apps.roommates.models import NamedMembershipRoommates
 
 from .forms import ChangePassForm
 from .models import Student
-
-
-class StudentList(LoginRequiredMixin, ListView):
-    model = Student
-    template_name = "student/list.html"
-    ordering = ["user__last_name", "user__first_name"]
-    paginate_by = 50
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context["ariane"] = [{"target": "#", "label": "Annuaire Étudiant"}]
-        return context
 
 
 class StudentProfile(LoginRequiredMixin, DetailView):
@@ -35,7 +23,7 @@ class StudentProfile(LoginRequiredMixin, DetailView):
             student=self.object,
         )
         context["ariane"] = [
-            {"target": reverse("student:list"), "label": "Annuaire"},
+            {"target": "/student", "label": "Annuaire"},
             {"target": "#", "label": self.get_object().name},
         ]
         return context

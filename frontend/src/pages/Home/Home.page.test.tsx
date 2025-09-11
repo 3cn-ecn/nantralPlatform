@@ -65,6 +65,7 @@ describe('Home page', () => {
       username: '',
       name: '',
       has_updated_username: true,
+      has_opened_matrix: true,
       picture: '',
     });
 
@@ -101,6 +102,7 @@ describe('Home page', () => {
       username: '',
       name: '',
       has_updated_username: true,
+      has_opened_matrix: true,
       picture: '',
     });
 

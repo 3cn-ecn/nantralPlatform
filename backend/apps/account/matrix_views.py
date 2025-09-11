@@ -35,7 +35,9 @@ class CheckCredentials(views.APIView):
 
         # Check authentication method (email, matrix id or username)
         if username:
-            if username[0] == "@":  # Check for matrix id and convert to username
+            if (
+                username[0] == "@"
+            ):  # Check for matrix id and convert to username
                 username = username.split(":")[0][1:]
             if "@" in username:  # Username is an email address
                 email = username
@@ -55,7 +57,9 @@ class CheckCredentials(views.APIView):
         # Lock the change of username after matrix account has been created
         if not user.has_opened_matrix:
             user.has_opened_matrix = True
-            user.has_updated_username = True  # it's too late so we say they have already changed
+            user.has_updated_username = (
+                True  # it's too late so we say they have already changed
+            )
             user.save()
 
         # Return user data

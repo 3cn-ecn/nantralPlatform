@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.db.models import Count, F, Q, QuerySet
 from django.http.request import QueryDict
 from django.shortcuts import get_object_or_404
@@ -6,20 +7,23 @@ from django.utils import timezone
 from django.utils.dateparse import parse_datetime
 from django.utils.translation import gettext as _
 
+import requests
 from requests import Request
 from rest_framework import (
     decorators,
     exceptions,
     filters,
     permissions,
+    renderers,
     response,
     serializers,
     status,
     viewsets,
 )
+from rest_framework.settings import api_settings
 
 from apps.utils.discord import respond_admin_request, send_admin_request
-from apps.utils.parse_bool import parse_bool
+from apps.utils.parse import parse_bool
 
 from .models import Group, GroupType, Label, Membership
 from .permissions import (
@@ -37,10 +41,18 @@ from .serializers import (
     GroupTypeSerializer,
     GroupWriteSerializer,
     LabelSerializer,
+    MapGroupPreviewSerializer,
+    MapGroupSearchSerializer,
+    MapGroupSerializer,
     MembershipSerializer,
     NewMembershipSerializer,
     SubscriptionSerializer,
 )
+
+
+class GeoJsonRender(renderers.JSONRenderer):
+    media_type = "application/json"
+    format = "points"
 
 
 class GroupTypeViewSet(viewsets.ReadOnlyModelViewSet):
@@ -50,7 +62,12 @@ class GroupTypeViewSet(viewsets.ReadOnlyModelViewSet):
     ordering = ["-priority"]
     ordering_fields = ["slug", "name", "priority"]
     lookup_url_kwarg = "slug"
-    queryset = GroupType.objects.all()
+
+    def get_queryset(self):
+        is_map = parse_bool(self.request.query_params.get("is_map"))
+        if is_map is not None:
+            return GroupType.objects.filter(is_map=is_map)
+        return GroupType.objects.all()
 
 
 class GroupViewSet(viewsets.ModelViewSet):
@@ -72,6 +89,12 @@ class GroupViewSet(viewsets.ModelViewSet):
         The max number of items to return per page
     - parent: string (multiple)
         Filter by one or multiple parent group slug
+    - map: bool
+        Filter by map groups
+    - search: string
+        Search by group name, shortName, members__first_name, or members_last_name
+    - archived: bool
+        Filter by archived groups
 
     Actions
     -------
@@ -86,29 +109,47 @@ class GroupViewSet(viewsets.ModelViewSet):
 
     permission_classes = [GroupPermission]
     filter_backends = [filters.SearchFilter]
-    search_fields = ["name", "short_name", "slug"]
     lookup_field = "slug"
     lookup_url_kwarg = "slug"
+    renderer_classes = [*api_settings.DEFAULT_RENDERER_CLASSES, GeoJsonRender]
 
     @property
     def query_params(self) -> QueryDict:
         return self.request.query_params
 
+    @property
+    def search_fields(self):
+        search_fields = ["name", "short_name", "slug"]
+        is_map = parse_bool(self.query_params.get("map"))
+        if is_map is True:
+            search_fields += [
+                "members__user__first_name",
+                "members__user__last_name",
+            ]
+        return search_fields
+
     def get_serializer_class(self):
         preview = parse_bool(self.query_params.get("preview"))
+        is_map = parse_bool(self.query_params.get("map"))
+        search = self.query_params.get("search")
+        if self.request.accepted_renderer.format == "points":
+            if is_map is True:
+                return MapGroupPreviewSerializer
+            else:
+                raise exceptions.NotAcceptable(
+                    "GeoJSON format is only supported for map groups"
+                )
         if self.action == "update_subscription":
             return SubscriptionSerializer
         if self.request.method in ["POST", "PUT", "PATCH"]:
             return GroupWriteSerializer
-        if preview is True:
-            return GroupPreviewSerializer
-        if preview is False:
-            return GroupSerializer
-        if self.detail:
+        if is_map is True:
+            return MapGroupSerializer if search is None else MapGroupSearchSerializer
+        if preview is False or self.detail:
             return GroupSerializer
         return GroupPreviewSerializer
 
-    def get_queryset(self) -> QuerySet[Group]:
+    def get_queryset(self) -> QuerySet[Group]:  # noqa: C901
         user = self.request.user
         group_type = GroupType.objects.filter(
             slug=self.query_params.get("type"),
@@ -122,19 +163,18 @@ class GroupViewSet(viewsets.ModelViewSet):
         )
         slugs = self.query_params.getlist("slug")
         parents = self.query_params.getlist("parent")
+        is_map = parse_bool(self.query_params.get("map"))
+        archived = parse_bool(self.query_params.get("archived"), False)
 
         queryset = (
             Group.objects
-            # hide archived groups
-            .filter(archived=False)
             # hide groups without active members (ie end_date > today)
             .annotate(
                 num_active_members=Count(
                     "membership_set",
                     filter=Q(membership_set__end_date__gte=timezone.now()),
                 ),
-            )
-            .filter(
+            ).filter(
                 Q(num_active_members__gt=0)
                 | Q(group_type__hide_no_active_members=False),
             )
@@ -175,6 +215,12 @@ class GroupViewSet(viewsets.ModelViewSet):
         # filter by parent
         if parents:
             queryset = queryset.filter(parent__slug__in=parents)
+        # filter if map
+        if is_map is not None:
+            queryset = queryset.filter(group_type__is_map=is_map)
+        # filter by archived
+        if archived is not True:
+            queryset = queryset.filter(archived=False)
 
         return (
             queryset
@@ -224,7 +270,9 @@ class GroupViewSet(viewsets.ModelViewSet):
     )
     def history(self, request: Request, *args, **kwargs):
         group: Group = self.get_object()
-        serialized_data = GroupHistorySerializer(group.history.all(), many=True).data
+        serialized_data = GroupHistorySerializer(
+            group.history.all(), many=True
+        ).data
         return response.Response(serialized_data)
 
 
@@ -307,6 +355,7 @@ class MembershipViewSet(viewsets.ModelViewSet):
         to_date = parse_datetime(self.query_params.get("to", ""))
         group_slug = self.query_params.get("group")
         student_id = self.query_params.get("student")
+        group_type = self.query_params.get("group_type")
         # make queryset
         qs = Membership.objects.all()
         # filter by memberships you are allowed to see
@@ -324,7 +373,10 @@ class MembershipViewSet(viewsets.ModelViewSet):
                 Q(end_date__gte=from_date) | Q(end_date__isnull=True),
             )
         if to_date:
-            qs = qs.filter(Q(end_date__lt=to_date) | Q(begin_date__isnull=True))
+            qs = qs.filter(Q(end_date__lt=to_date) | Q(begin_date__isnull=True)).filter(group__group_type__no_membership_dates=False)
+        if group_type:
+            qs = qs.filter(group__group_type__slug=group_type)
+
         if self.action == "admin_requests":
             qs = qs.filter(admin_request=True)
 
@@ -578,3 +630,38 @@ class LabelViewSet(viewsets.ModelViewSet):
             qs = qs.filter(group_type=group_type)
 
         return qs
+
+
+class MapViewSet(viewsets.ViewSet):
+    @decorators.action(detail=False, methods=["GET"])
+    def geocode(self, request):
+        """Get the geocode of a given address."""
+        search = request.query_params.get("search")
+
+        request_data = {
+            "q": search,
+            "access_token": settings.MAPBOX_API_KEY,
+            "autocomplete": "true",
+            "proximity": "-1.5559043178340437,47.21789054262203",
+            "types": "address",
+        }
+        mapbox_response = requests.get(
+            "https://api.mapbox.com/search/geocode/v6/forward",
+            params=request_data,
+            timeout=10,
+        )
+        mapbox_response.raise_for_status()
+        results = [
+            {
+                "address": feature.get("properties").get("full_address"),
+                "latitude": feature.get("properties")
+                .get("coordinates")
+                .get("latitude"),
+                "longitude": feature.get("properties")
+                .get("coordinates")
+                .get("longitude"),
+            }
+            for feature in mapbox_response.json().get("features", [])
+        ]
+
+        return response.Response(data=results)

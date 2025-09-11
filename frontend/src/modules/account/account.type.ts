@@ -27,5 +27,6 @@ export interface Username {
   username: string;
   name: string;
   hasUpdatedUsername: boolean;
+  hasOpenedMatrix: boolean;
   picture?: string;
 }

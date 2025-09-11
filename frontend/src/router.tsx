@@ -22,7 +22,7 @@ export const router = (queryClient: QueryClient) =>
           element: (
             <AuthenticationRedirect authenticated={false} redirectTo="/login" />
           ),
-          children: [authenticatedRoutes],
+          children: [authenticatedRoutes(queryClient)],
         },
         publicRoutes(queryClient),
       ],

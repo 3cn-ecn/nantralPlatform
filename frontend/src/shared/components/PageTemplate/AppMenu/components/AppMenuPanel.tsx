@@ -44,10 +44,9 @@ export function AppMenuPanel({ menuOpen, onClose }: AppMenuPanelProps) {
           closeMenu={onClose}
         />
         <AppMenuItem
-          label={t('navbar.flatshare')}
-          path="/colocs/"
+          label={t('navbar.map')}
+          path="/map/?type=colocs"
           iconPath="/static/img/icons/cropped/roommates.svg"
-          isOnBackend
           closeMenu={onClose}
         />
         <AppMenuItem
@@ -61,7 +60,6 @@ export function AppMenuPanel({ menuOpen, onClose }: AppMenuPanelProps) {
           label={t('navbar.student')}
           path="/student/"
           iconPath="/static/img/icons/cropped/list.svg"
-          isOnBackend
           closeMenu={onClose}
         />
         <AppMenuItem
