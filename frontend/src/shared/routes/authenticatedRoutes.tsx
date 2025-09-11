@@ -7,8 +7,6 @@ import { PageTemplate } from '#shared/components/PageTemplate/PageTemplate';
 
 import { studentDetailsLoader } from './loader';
 
-const EmailPage = lazy(() => import('#pages/Email/Email.page'));
-
 const EventPage = lazy(() => import('#pages/Event/Event.page'));
 const EventCalendarViewPage = lazy(
   () => import('#pages/Event/EventCalendar/EventCalendarView.page'),
@@ -54,11 +52,6 @@ export const authenticatedRoutes: (queryClient: QueryClient) => RouteObject = (
     {
       path: '/update-username',
       element: <UpdateUsernamePage />,
-    },
-    {
-      path: '/account/email',
-      element: <EmailPage />,
-      handle: { crumb: t('breadcrumbs.email.index') },
     },
     {
       path: '/event',

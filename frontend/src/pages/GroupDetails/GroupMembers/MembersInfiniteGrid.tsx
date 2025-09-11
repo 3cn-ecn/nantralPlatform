@@ -12,17 +12,17 @@ import { getScholarYear } from '#shared/utils/dateUtils';
 import { useInfiniteMembership } from '../hooks/useInfiniteMemberships';
 import { MembersGrid } from './MembersGrid';
 
-interface InfiniteMembershipGridProps<IsGroup extends boolean, G, S> {
+interface InfiniteMembershipGridProps {
   filters: { previous: boolean; groupType?: string };
-  group?: G extends IsGroup ? Group : never;
-  student?: S extends IsGroup ? never : Student;
+  group?: Group;
+  student?: Student;
 }
 
-export function MembersInfiniteGrid<IsGroup extends boolean, G, S>({
+export function MembersInfiniteGrid({
   filters,
   group,
   student,
-}: InfiniteMembershipGridProps<IsGroup, G, S>) {
+}: InfiniteMembershipGridProps) {
   const today = new Date(new Date().toDateString());
 
   const membershipsQuery = useInfiniteMembership({
