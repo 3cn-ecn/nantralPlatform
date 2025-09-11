@@ -496,8 +496,8 @@
       },
       "summary": {
         "label": "Résumé",
-        "mapPlaceholder": "Apt. 101",
-        "mapLabel": "Complément d'adresse"
+        "mapLabel": "Complément d'adresse",
+        "mapPlaceholder": "Apt. 101"
       },
       "title": {
         "advancedOptions": "Options avancées",
@@ -874,6 +874,7 @@
       "changePassword": "Changer de mot de passe",
       "editPassword": "Changer de mot de passe",
       "editProfile": "Modifier son profil",
+      "emails": "Emails",
       "form": {
         "firstName": {
           "label": "Prénom"
@@ -882,7 +883,8 @@
       "housing": "Colocation",
       "links": "Liens",
       "password": "Mot de passe",
-      "profile": "Profil"
+      "profile": "Profil",
+      "schooling": "Cursus"
     },
     "filters": {
       "title": "Filtres"

@@ -1,4 +1,3 @@
-import { MembershipDTO } from '#modules/group/infra/membership.dto';
 import { SocialLinkDTO } from '#modules/social_link/infra/socialLink.dto';
 import { StudentPreviewDTO } from '#modules/student/infra/student.dto';
 

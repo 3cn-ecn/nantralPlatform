@@ -76,7 +76,7 @@ export function EditProfileFormFields({
         multiline
       />
       <Typography variant="h3" m={1}>
-        Schooling
+        {t('student.details.schooling')}
       </Typography>
       <DateField
         label={t('login.arrivalYear')}

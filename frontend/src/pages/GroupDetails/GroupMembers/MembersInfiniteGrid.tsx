@@ -1,11 +1,7 @@
 import { Divider, Typography } from '@mui/material';
-import {
-  useInfiniteQuery,
-  UseInfiniteQueryResult,
-} from '@tanstack/react-query';
+import { UseInfiniteQueryResult } from '@tanstack/react-query';
 import { groupBy } from 'lodash-es';
 
-import { getMembershipListApi } from '#modules/group/api/getMembershipList.api';
 import { Group } from '#modules/group/types/group.types';
 import { Membership } from '#modules/group/types/membership.types';
 import { Student } from '#modules/student/student.types';

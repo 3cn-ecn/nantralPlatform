@@ -496,8 +496,8 @@
       },
       "summary": {
         "label": "Summary",
-        "mapPlaceholder": "Apt. 101",
-        "mapLabel": "Address supplement"
+        "mapLabel": "Address supplement",
+        "mapPlaceholder": "Apt. 101"
       },
       "title": {
         "advancedOptions": "Advanced options",
@@ -874,6 +874,7 @@
       "changePassword": "Change password",
       "editPassword": "Change password",
       "editProfile": "Edit your profile",
+      "emails": "Emails",
       "form": {
         "firstName": {
           "label": "First name"
@@ -882,7 +883,8 @@
       "housing": "Shared accommodation",
       "links": "Links",
       "password": "Password",
-      "profile": "Profile"
+      "profile": "Profile",
+      "schooling": "Schooling"
     },
     "filters": {
       "title": "Filters"

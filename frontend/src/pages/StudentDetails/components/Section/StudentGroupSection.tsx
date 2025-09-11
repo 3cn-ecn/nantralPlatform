@@ -1,23 +1,18 @@
 import { useState } from 'react';
 
 import { Visibility, VisibilityOff } from '@mui/icons-material';
-import { Chip, Divider, Typography } from '@mui/material';
-import { roundToNearestMinutes } from 'date-fns';
+import { Chip, Typography } from '@mui/material';
 
 import { Student } from '#modules/student/student.types';
 import { useGroupTypes } from '#pages/Group/hooks/useGroupTypes';
-import { MembersGrid } from '#pages/GroupDetails/GroupMembers/MembersGrid';
 import { MembersInfiniteGrid } from '#pages/GroupDetails/GroupMembers/MembersInfiniteGrid';
-import { useInfiniteMembership } from '#pages/GroupDetails/hooks/useInfiniteMemberships';
 import { FlexRow } from '#shared/components/FlexBox/FlexBox';
 import { CheckboxField } from '#shared/components/FormFields';
-import { InfiniteList } from '#shared/components/InfiniteList/InfiniteList';
 import { useTranslation } from '#shared/i18n/useTranslation';
 
 export function StudentGroupsSection({ student }: { student: Student }) {
   const { groupTypesQuery } = useGroupTypes(1);
   const { t } = useTranslation();
-  const today = roundToNearestMinutes(new Date());
   const [type, setType] = useState<string | undefined>(undefined);
   const [showFormerGroups, setShowFormerGroups] = useState(false);
 

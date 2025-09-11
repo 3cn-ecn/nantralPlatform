@@ -1,11 +1,18 @@
 import { useState } from 'react';
 
-import { Edit, Person, Link as LinkIcon, Password } from '@mui/icons-material';
+import {
+  Edit,
+  Person,
+  Link as LinkIcon,
+  Password,
+  AlternateEmail,
+} from '@mui/icons-material';
 import { Avatar, Tab, Tabs, useTheme } from '@mui/material';
 import { useQueryClient } from '@tanstack/react-query';
 
 import { EditSocialLinkForm } from '#modules/social_link/view/shared/EditSocialLinkForm';
 import { useCurrentUserData } from '#modules/student/hooks/useCurrentUser.data';
+import EmailTab from '#pages/StudentDetails/components/EditProfile/Email.tab';
 import {
   ResponsiveDialog,
   ResponsiveDialogContent,
@@ -39,12 +46,19 @@ export function ModalEditProfile({ onClose }: { onClose: () => void }) {
       <Tabs
         onChange={(_, newVal) => setTab(newVal)}
         value={tab}
-        allowScrollButtonsMobile
+        variant={'scrollable'}
+        scrollButtons={false}
       >
         <Tab
           icon={<Person />}
           label={t('student.details.profile')}
           value={'profile'}
+          iconPosition="start"
+        />
+        <Tab
+          icon={<AlternateEmail />}
+          label={t('student.details.emails')}
+          value={'emails'}
           iconPosition="start"
         />
         <Tab
@@ -62,6 +76,7 @@ export function ModalEditProfile({ onClose }: { onClose: () => void }) {
       </Tabs>
       <ResponsiveDialogContent sx={{ height: 800 }}>
         {tab === 'profile' && <EditProfileTab />}
+        {tab === 'emails' && <EmailTab />}
         {tab === 'links' && (
           <EditSocialLinkForm
             socialLinks={socialLinks}
