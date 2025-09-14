@@ -14,7 +14,6 @@ export function GroupGrid({
   groups?: GroupPreview[];
   isLoading?: boolean;
   estimatedSize?: number;
-  reloadDocument?: boolean;
   extraComponent?: JSX.Element;
 }) {
   return (

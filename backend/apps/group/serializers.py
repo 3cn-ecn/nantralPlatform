@@ -1,5 +1,7 @@
 from datetime import date
 
+from django.db.models.query_utils import Q
+from django.utils import timezone
 from django.utils.translation import gettext as _
 
 from rest_framework import exceptions, serializers
@@ -10,6 +12,7 @@ from apps.sociallink.serializers import (
 )
 from apps.student.serializers import StudentPreviewSerializer
 
+from ..student.models import Student
 from .models import Group, GroupType, Label, Membership
 
 
@@ -47,6 +50,7 @@ class GroupTypeSerializer(serializers.ModelSerializer):
         fields = [
             "name",
             "slug",
+            "is_map",
             "no_membership_dates",
             "can_create",
             "can_have_parent",
@@ -167,6 +171,27 @@ class GroupWriteSerializer(serializers.ModelSerializer):
             return GroupType.objects.get(slug=group_type)
         else:
             return group.group_type
+
+    def validate_address(self, value: str) -> str:
+        if self.get_group_type().is_map and not value:
+            raise exceptions.ValidationError(
+                _("This field is required for map groups.")
+            )
+        return value
+
+    def validate_latitude(self, value: float) -> float:
+        if self.get_group_type().is_map and not value:
+            raise exceptions.ValidationError(
+                _("This field is required for map groups.")
+            )
+        return value
+
+    def validate_longitude(self, value: float) -> float:
+        if self.get_group_type().is_map and not value:
+            raise exceptions.ValidationError(
+                _("This field is required for map groups.")
+            )
+        return value
 
     def validate_parent(self, parent: Group | None):
         if parent is None:
@@ -339,12 +364,76 @@ class SubscriptionSerializer(serializers.Serializer):
     subscribe = serializers.BooleanField()
 
 
+class MapGroupSerializer(serializers.ModelSerializer):
+    url = serializers.SerializerMethodField()
+    category = serializers.SerializerMethodField()
+    sub_category = serializers.SerializerMethodField()
+    members = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Group
+        fields = [
+            "name",
+            "short_name",
+            "category",
+            "sub_category",
+            "slug",
+            "url",
+            "icon",
+            "id",
+            "summary",
+            "banner",
+            "address",
+            "latitude",
+            "longitude",
+            "members",
+        ]
+        read_only_fields = fields
+
+    def get_url(self, obj: Group) -> str:
+        return obj.get_absolute_url()
+
+    def get_category(self, obj: Group) -> str:
+        return obj.get_category()
+
+    def get_sub_category(self, obj: Group) -> str:
+        return obj.get_sub_category()
+
+    def get_members(self, obj: Group) -> str:
+        from_date = timezone.now()
+        serialized_data = StudentPreviewSerializer(
+            Student.objects.filter(
+                Q(membership_set__group_id=obj.id, membership_set__end_date__gte=from_date) | Q(membership_set__group_id=obj.id, membership_set__end_date__isnull=True)
+            ),
+            many=True,
+        ).data
+        return serialized_data
+
+
+class MapGroupSearchSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Group
+        fields = ["id", "name", "icon"]
+
+
+class MapGroupPreviewSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Group
+        fields = ["id", "slug", "latitude", "longitude", "name", "icon"]
+
+
 class GroupHistorySerializer(serializers.ModelSerializer):
     user = serializers.SerializerMethodField()
 
     class Meta:
         model = Group.history.model
-        fields = ["pk", "history_date", "user", "history_change_reason", "history_type"]
+        fields = [
+            "pk",
+            "history_date",
+            "user",
+            "history_change_reason",
+            "history_type",
+        ]
 
     def get_user(self, obj):
         if obj.history_user:

@@ -52,7 +52,7 @@ pyjwt = ">=2.4"
 
 [dev-packages]
 coverage = "~=7.3"
-ruff = "~=0.4"
+ruff = "<0.12"
 
 [requires]
 python_version = "3.13"

@@ -341,9 +341,7 @@ class TestEditUsername(TestCase):
             "username": "_tesssst",
         }
         response = self.client.put(
-            self.url,
-            data=payload,
-            content_type="application/json"
+            self.url, data=payload, content_type="application/json"
         )
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
@@ -486,6 +484,7 @@ class TestEmailResend(TestCase):
         response = self.client.post(self.url, {"email": "not email"})
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
+
 class TestMatrix(TestCase):
     url = reverse("matrix_api:check_credentials")
 
@@ -499,22 +498,35 @@ class TestMatrix(TestCase):
         self.user.email.save()
 
     def test_check_credentials_email(self):
-        payload = {"user": {"password": "<PASSWORD>", "email": "test@ec-nantes.fr"}}
-        response = self.client.post(self.url, data=payload, content_type="application/json")
+        payload = {
+            "user": {"password": "<PASSWORD>", "email": "test@ec-nantes.fr"}
+        }
+        response = self.client.post(
+            self.url, data=payload, content_type="application/json"
+        )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.user.refresh_from_db()
         self.assertTrue(self.user.has_opened_matrix)
 
     def test_check_credentials_username(self):
         payload = {"user": {"password": "<PASSWORD>", "id": "teeeest"}}
-        response = self.client.post(self.url, data=payload, content_type="application/json")
+        response = self.client.post(
+            self.url, data=payload, content_type="application/json"
+        )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.user.refresh_from_db()
         self.assertTrue(self.user.has_opened_matrix)
 
     def test_check_credentials_mxid(self):
-        payload = {"user": {"password": "<PASSWORD>", "id": "@teeeest:nantral-platform.fr"}}
-        response = self.client.post(self.url, data=payload, content_type="application/json")
+        payload = {
+            "user": {
+                "password": "<PASSWORD>",
+                "id": "@teeeest:nantral-platform.fr",
+            }
+        }
+        response = self.client.post(
+            self.url, data=payload, content_type="application/json"
+        )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.user.refresh_from_db()
         self.assertTrue(self.user.has_opened_matrix)

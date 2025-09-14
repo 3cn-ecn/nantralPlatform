@@ -8,7 +8,7 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 
 from apps.student.serializers import StudentPreviewSerializer
-from apps.utils.parse_bool import parse_bool
+from apps.utils.parse import parse_bool
 
 from .models import Event
 from .serializers import (

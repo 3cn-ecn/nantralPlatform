@@ -1,4 +1,5 @@
 import { SocialLink } from '#modules/social_link/types/socialLink.type';
+import { StudentPreview } from '#modules/student/student.types';
 
 import { GroupTypePreview } from './groupType.types';
 
@@ -29,6 +30,9 @@ export interface Group {
   category: string;
   socialLinks: SocialLink[];
   subCategory?: string;
+  address: string;
+  latitude: number;
+  longitude: number;
 }
 
 export type GroupPreview = Pick<
@@ -42,6 +46,11 @@ export type GroupPreview = Pick<
   | 'category'
   | 'subCategory'
 >;
+
+export type MapGroupPreview = GroupPreview &
+  Pick<Group, 'address' | 'latitude' | 'longitude' | 'summary' | 'banner'> & {
+    members: StudentPreview[];
+  };
 
 export type CreateGroupForm = Pick<
   Group,
@@ -59,6 +68,9 @@ export type CreateGroupForm = Pick<
   | 'description'
   | 'meetingPlace'
   | 'lockMemberships'
+  | 'address'
+  | 'latitude'
+  | 'longitude'
 > & {
   childrenLabel?: string;
   icon?: File;
@@ -68,3 +80,10 @@ export type CreateGroupForm = Pick<
   parent?: number;
   changeReason?: string;
 };
+
+export type MapGroupPoint = Pick<
+  Group,
+  'id' | 'icon' | 'latitude' | 'longitude' | 'slug' | 'name'
+>;
+
+export type MapGroupSearch = Pick<Group, 'id' | 'icon' | 'name'>;

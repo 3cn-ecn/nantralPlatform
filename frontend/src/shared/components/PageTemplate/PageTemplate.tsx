@@ -9,7 +9,7 @@ import {
   useTheme,
 } from '@mui/material';
 
-import { FlexRow } from '../FlexBox/FlexBox';
+import { FlexCol, FlexRow } from '../FlexBox/FlexBox';
 import { NavBar } from './NavBar/NavBar';
 
 export function PageTemplate() {
@@ -26,7 +26,7 @@ export function PageTemplate() {
       <CssBaseline />
       <ScrollRestoration />
       <NavBar />
-      <Box component="main">
+      <FlexCol component="main" sx={{ height: '100vh' }}>
         <Toolbar />
         <Suspense
           fallback={
@@ -37,7 +37,7 @@ export function PageTemplate() {
         >
           <Outlet />
         </Suspense>
-      </Box>
+      </FlexCol>
     </Box>
   );
 }
