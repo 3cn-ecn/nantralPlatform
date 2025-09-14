@@ -139,7 +139,7 @@ export function CustomMap({
 
         mapRef.current?.flyTo({
           center: feature.geometry.coordinates,
-          zoom: zoom !== null ? zoom : undefined,
+          zoom: zoom ? zoom + 0.01 : undefined,
           duration: 500,
         });
       });
@@ -172,7 +172,7 @@ export function CustomMap({
           data: { type: 'FeatureCollection', features: points },
           cluster: true,
           clusterMaxZoom: 15,
-          clusterRadius: 50,
+          clusterRadius: 30,
         });
 
         event.target.addLayer(clusterLayer);
