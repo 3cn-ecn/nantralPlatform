@@ -10,7 +10,7 @@ export const clusterLayer: CircleLayerSpecification = {
   filter: ['has', 'point_count'],
   paint: {
     'circle-color': '#1978c8',
-    'circle-radius': 20,
+    'circle-radius': 15,
     'circle-stroke-width': 3,
     'circle-stroke-color': '#fff',
   },
@@ -24,6 +24,7 @@ export const clusterCountLayer: SymbolLayerSpecification = {
   layout: {
     'text-field': '{point_count_abbreviated}',
     'text-font': ['DIN Offc Pro Medium', 'Arial Unicode MS Bold'],
+    'text-allow-overlap': true,
     'text-size': 15,
   },
   paint: {
@@ -39,6 +40,7 @@ export const unclusteredPointLayer: SymbolLayerSpecification = {
   layout: {
     'icon-image': ['image', 'marker'],
     'icon-anchor': 'bottom',
+    'icon-allow-overlap': true,
     'icon-size': 0.5,
   },
 };

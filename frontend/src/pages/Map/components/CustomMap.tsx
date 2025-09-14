@@ -78,8 +78,8 @@ export function CustomMap({
         setParams(params, { preventScrollReset: true });
         mapRef.current?.flyTo({
           // small bias to ensure that the popup is visible
-          center: [group.longitude, group.latitude - 0.0015],
-          zoom: 15.5,
+          center: [group.longitude, group.latitude - 0.0005],
+          zoom: 16.5,
           duration: 500,
         });
       });
@@ -171,7 +171,7 @@ export function CustomMap({
           type: 'geojson',
           data: { type: 'FeatureCollection', features: points },
           cluster: true,
-          clusterMaxZoom: 15,
+          clusterMaxZoom: 16,
           clusterRadius: 30,
         });
 
