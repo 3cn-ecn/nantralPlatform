@@ -9,7 +9,7 @@ import { MapGroupSearch } from '#modules/group/types/group.types';
 import { useGroupTypeDetails } from '#pages/GroupList/hooks/useGroupTypeDetails';
 import { MoreActionButton } from '#pages/Map/components/MoreActionButton';
 import { SelectTypeButton } from '#pages/Map/components/SelectTypeButton';
-import { FlexRow } from '#shared/components/FlexBox/FlexBox';
+import { FlexCol, FlexRow } from '#shared/components/FlexBox/FlexBox';
 import { AutocompleteSearchField } from '#shared/components/FormFields';
 import { Spacer } from '#shared/components/Spacer/Spacer';
 import { useBreakpoint } from '#shared/hooks/useBreakpoint';
@@ -45,53 +45,55 @@ export default function MapPage() {
   const groupTypeQuery = useGroupTypeDetails(type || undefined);
 
   return (
-    <Container sx={{ my: 3 }}>
-      <FlexRow alignItems="center" gap={2} mb={4}>
-        <Typography variant="h1">{t('map.title')}</Typography>
-        <SelectTypeButton groupTypeQuery={groupTypeQuery} />
-        {!isSmaller && (
-          <>
-            <Spacer flex="auto" />
-            <Button
-              component={Link}
-              to={`/group?type=${type}`}
-              variant="contained"
-              color="secondary"
-            >
-              {t('map.viewList')}
-            </Button>
-          </>
-        )}
-      </FlexRow>
-      <FlexRow alignItems="center" gap={2} mb={4}>
-        <AutocompleteSearchField<MapGroupSearch, 'name', 'icon'>
-          name="group"
-          label={t('group.search.placeholder')}
-          value={groupId}
-          handleChange={handleChange}
-          size="small"
-          margin="none"
-          fetchOptions={async (searchInput): Promise<MapGroupSearch[]> => {
-            const res = await getMapGroupListApi({
-              search: searchInput,
-              pageSize: 6 * 3,
-              type: type,
-              archived: showArchive,
-            });
-            return res.results;
-          }}
-          labelPropName={'name'}
-          imagePropName={'icon'}
-        />
-        <MoreActionButton
-          showArchive={showArchive}
-          setShowArchive={setShowArchive}
-          groupTypeQuery={groupTypeQuery}
-        />
-      </FlexRow>
-      <Spacer vertical={2} />
-      <CustomMap groupType={type || undefined} showArchived={showArchive} />
-      <Spacer vertical={2} />
+    <Container sx={{ my: 3, height: '100%' }}>
+      <FlexCol sx={{ height: '100%', minHeight: '500px' }}>
+        <FlexRow alignItems="center" gap={2} mb={4}>
+          <Typography variant="h1">{t('map.title')}</Typography>
+          <SelectTypeButton groupTypeQuery={groupTypeQuery} />
+          {!isSmaller && (
+            <>
+              <Spacer flex="auto" />
+              <Button
+                component={Link}
+                to={`/group?type=${type}`}
+                variant="contained"
+                color="secondary"
+              >
+                {t('map.viewList')}
+              </Button>
+            </>
+          )}
+        </FlexRow>
+        <FlexRow alignItems="center" gap={2} mb={4}>
+          <AutocompleteSearchField<MapGroupSearch, 'name', 'icon'>
+            name="group"
+            label={t('group.search.placeholder')}
+            value={groupId}
+            handleChange={handleChange}
+            size="small"
+            margin="none"
+            fetchOptions={async (searchInput): Promise<MapGroupSearch[]> => {
+              const res = await getMapGroupListApi({
+                search: searchInput,
+                pageSize: 6 * 3,
+                type: type,
+                archived: showArchive,
+              });
+              return res.results;
+            }}
+            labelPropName={'name'}
+            imagePropName={'icon'}
+          />
+          <MoreActionButton
+            showArchive={showArchive}
+            setShowArchive={setShowArchive}
+            groupTypeQuery={groupTypeQuery}
+          />
+        </FlexRow>
+        <Spacer vertical={2} />
+        <CustomMap groupType={type || undefined} showArchived={showArchive} />
+        <Spacer vertical={2} />
+      </FlexCol>
     </Container>
   );
 }

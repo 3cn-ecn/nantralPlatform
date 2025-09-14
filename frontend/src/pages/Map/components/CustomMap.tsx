@@ -180,7 +180,6 @@ export function CustomMap({
         event.target.addLayer(unclusteredPointLayer);
       }}
       mapboxAccessToken={MAPBOX_TOKEN}
-      style={{ height: '60vh' }}
       mapStyle="mapbox://styles/mapbox/standard"
       interactiveLayerIds={[clusterLayer.id, unclusteredPointLayer.id]}
       onClick={onClick}
