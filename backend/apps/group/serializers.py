@@ -12,6 +12,7 @@ from apps.sociallink.serializers import (
 )
 from apps.student.serializers import StudentPreviewSerializer
 
+from ..student.models import Student
 from .models import Group, GroupType, Label, Membership
 
 
@@ -401,8 +402,8 @@ class MapGroupSerializer(serializers.ModelSerializer):
     def get_members(self, obj: Group) -> str:
         from_date = timezone.now()
         serialized_data = StudentPreviewSerializer(
-            obj.membership_set.filter(
-                Q(end_date__gte=from_date) | Q(end_date__isnull=True)
+            Student.objects.filter(
+                Q(membership_set__group_id=obj.id, membership_set__end_date__gte=from_date) | Q(membership_set__group_id=obj.id, membership_set__end_date__isnull=True)
             ),
             many=True,
         ).data

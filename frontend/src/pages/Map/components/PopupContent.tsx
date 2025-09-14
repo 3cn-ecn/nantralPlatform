@@ -45,6 +45,18 @@ export function PopupContent({
       <CardContent color="secondary" sx={{ py: 0 }}>
         <Typography variant={'h3'}>{group.name}</Typography>
       </CardContent>
+      <List dense={true} sx={{ py: 0 }}>
+        {group.members.map((member) => (
+          <ListItem disablePadding key={member.id}>
+            <ListItemButton component={Link} to={member.url}>
+              <ListItemAvatar>
+                <Avatar src={member.picture} alt={member.name} />
+              </ListItemAvatar>
+              <ListItemText primary={member.name} />
+            </ListItemButton>
+          </ListItem>
+        ))}
+      </List>
       <CardActions>
         <FlexRow gap={2}>
           <Button
@@ -66,18 +78,6 @@ export function PopupContent({
           </Button>
         </FlexRow>
       </CardActions>
-      <List dense={true} sx={{ py: 0 }}>
-        {group.members.map((member) => (
-          <ListItem disablePadding key={member.id}>
-            <ListItemButton component={Link} to={member.url}>
-              <ListItemAvatar>
-                <Avatar src={member.picture} alt={member.name} />
-              </ListItemAvatar>
-              <ListItemText primary={member.name} />
-            </ListItemButton>
-          </ListItem>
-        ))}
-      </List>
       <CardMedia component={'img'} src={group.banner} sx={{ maxHeight: 150 }} />
     </Card>
   );
