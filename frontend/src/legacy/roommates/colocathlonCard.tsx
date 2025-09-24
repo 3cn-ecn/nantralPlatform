@@ -90,6 +90,7 @@ function Root(): JSX.Element {
         <ParticipateButton
           API_URL={API_URL}
           ROOMMATES_SLUG={ROOMMATES_SLUG}
+          NO_COLOCATHLON_QUOTA={NO_COLOCATHLON_QUOTA}
           isParticipating={
             roommates.colocathlon_participants.filter((e) => e.user === USER_ID)
               .length > 0
