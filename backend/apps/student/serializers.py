@@ -1,5 +1,6 @@
 from rest_framework import serializers
 
+from ..account.models import User
 from .models import Student
 
 
@@ -7,6 +8,7 @@ class StudentSerializer(serializers.ModelSerializer):
     name = serializers.SerializerMethodField()
     url = serializers.SerializerMethodField()
     staff = serializers.SerializerMethodField()
+    user = serializers.PrimaryKeyRelatedField(queryset=User.objects.all())
 
     class Meta:
         model = Student
@@ -19,6 +21,7 @@ class StudentSerializer(serializers.ModelSerializer):
             "path",
             "url",
             "staff",
+            "user",
         ]
 
     def get_name(self, obj: Student) -> str:
