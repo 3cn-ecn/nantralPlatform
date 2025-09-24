@@ -88,22 +88,21 @@ class RoommatesDetails(APIView):
         # add_or_delete == 1 --> Delete user
         # add_or_delete == 0 --> Add user
         if add_or_delete == 0:
-            if Setting.get("NO_COLOCATHLON_QUOTA", False):
-                group.colocathlon_participants.add(request.user.student)
-                return Response(status=200)
-            if group.colocathlon_quota > group.colocathlon_participants.count():
+            no_colocathlon_quota = Setting.get("NO_COLOCATHLON_QUOTA", False)
+            if group.colocathlon_quota <= group.colocathlon_participants.count():
+                return Response(status=403)
+            elif not no_colocathlon_quota:
                 roommates = Roommates.objects.filter(
                     colocathlon_participants=request.user.student,
                 )
-                if not roommates.exists():
-                    group.colocathlon_participants.add(request.user.student)
-                    return Response(status=200)
-                else:
+                if roommates.exists():
                     return Response(
                         data=RoommatesSerializer(roommates.first()).data,
                         status=403,
                     )
-            return Response(status=403)
+            group.colocathlon_participants.add(request.user.student)
+            return Response(status=200)
+
         if Roommates.objects.filter(
             colocathlon_participants=request.user.student,
         ).exists():
