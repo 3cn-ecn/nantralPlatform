@@ -3,6 +3,7 @@
 export interface ParticipateButtonProps {
   API_URL: string;
   ROOMMATES_SLUG: string;
+  NO_COLOCATHLON_QUOTA: boolean;
   isParticipating: boolean;
   participants: ColocathlonParticipant[];
   quota: number;

@@ -32,7 +32,11 @@ export function ParticipateButton(props: ParticipateButtonProps): JSX.Element {
             return;
           }
           setIsLoading(true);
-          if (numberOfParticipants >= props.quota && !isParticipating) {
+          if (
+            !props.NO_COLOCATHLON_QUOTA &&
+            numberOfParticipants >= props.quota &&
+            !isParticipating
+          ) {
             setIsLoading(false);
             return;
           }
@@ -67,7 +71,7 @@ export function ParticipateButton(props: ParticipateButtonProps): JSX.Element {
           </>
         ) : isParticipating ? (
           'Libérer ma place'
-        ) : numberOfParticipants < props.quota ? (
+        ) : props.NO_COLOCATHLON_QUOTA || numberOfParticipants < props.quota ? (
           'Réserver ma place !'
         ) : (
           'Complet'
@@ -78,7 +82,8 @@ export function ParticipateButton(props: ParticipateButtonProps): JSX.Element {
           {isLoading ? (
             <Spinner animation="border" role="status" style={spinnerStyle} />
           ) : (
-            `${numberOfParticipants}/${props.quota}`
+            numberOfParticipants.toString() +
+            (props.NO_COLOCATHLON_QUOTA ? '' : `/${props.quota}`)
           )}
         </span>
       </Button>

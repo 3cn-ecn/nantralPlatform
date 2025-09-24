@@ -1,6 +1,7 @@
 from django.db.models import Q
 from django.utils import timezone
 
+from extra_settings.models import Setting
 from rest_framework import generics, permissions
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -87,7 +88,7 @@ class RoommatesDetails(APIView):
         # add_or_delete == 1 --> Delete user
         # add_or_delete == 0 --> Add user
         if add_or_delete == 0:
-            if group.colocathlon_quota > group.colocathlon_participants.count():
+            if group.colocathlon_quota > group.colocathlon_participants.count() or Setting.get("NO_COLOCATHLON_QUOTA", False):
                 roommates = Roommates.objects.filter(
                     colocathlon_participants=request.user.student,
                 )
