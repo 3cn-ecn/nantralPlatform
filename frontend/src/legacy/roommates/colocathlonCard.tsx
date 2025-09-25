@@ -12,6 +12,7 @@ declare const EDIT_URL: string;
 declare const IS_ADMIN: string;
 declare const PHASE: number;
 declare const USER_ID: number;
+declare const NO_COLOCATHLON_QUOTA: boolean;
 
 function Root(): JSX.Element {
   const isAdmin = IS_ADMIN === 'True';
@@ -56,6 +57,7 @@ function Root(): JSX.Element {
           <ParticipateButton
             API_URL={API_URL}
             ROOMMATES_SLUG={ROOMMATES_SLUG}
+            NO_COLOCATHLON_QUOTA={NO_COLOCATHLON_QUOTA}
             isParticipating={
               roommates.colocathlon_participants.filter(
                 (e) => e.user === USER_ID,
@@ -88,6 +90,7 @@ function Root(): JSX.Element {
         <ParticipateButton
           API_URL={API_URL}
           ROOMMATES_SLUG={ROOMMATES_SLUG}
+          NO_COLOCATHLON_QUOTA={NO_COLOCATHLON_QUOTA}
           isParticipating={
             roommates.colocathlon_participants.filter((e) => e.user === USER_ID)
               .length > 0
