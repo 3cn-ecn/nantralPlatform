@@ -37,3 +37,10 @@ class UserFactory(DjangoModelFactory):
         "apps.student.factories.StudentFactory",
         factory_related_name="user",
     )
+
+    @classmethod
+    def _create(cls, model_class, *args, **kwargs):
+        """Override the default ``_create`` with our custom call."""
+        manager = cls._get_manager(model_class)
+        # The default would use ``manager.create(*args, **kwargs)``
+        return manager.create_user(*args, **kwargs)
