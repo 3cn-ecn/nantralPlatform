@@ -1,0 +1,22 @@
+{% extends "base_empty.html" %}
+{% load django_vite %}
+
+{% block asset %}
+  <script>
+  const user_name = '{{ user.student.name }}';
+  const client = {
+        name: '{{ client.name }}',
+        client_type: '{{ client.client_type }}',
+        client_id: '{{ client.client_id }}',
+        website_url: '{{ client.website_url }}',
+        terms_url: '{{ client.terms_url }}',
+        contact_email: '{{ client.contact_email }}',
+        {% if client.logo %}
+          logo: '{{ client.logo.url }}',
+        {% endif %}
+      };
+  const post_url = '{{ end_session_prompt_url }}'
+  const csrf_token = '{% csrf_token %}';
+  </script>
+    {% vite_asset "src/templates/oidc_provider/end_session_prompt.tsx" %}
+{% endblock asset %}

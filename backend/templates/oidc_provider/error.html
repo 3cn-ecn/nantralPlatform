@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+
+    <div class="card border-danger mb-3">
+        <div class="card-body text-danger">
+            <h1 class="card-title">{{ error }}</h1>
+            <p class="card-text">{{ description }}</p>
+        </div>
+    </div>
+    <br>
+    <p>
+        Ce que vous pouvez faire maintenant :
+    </p>
+    <ul>
+        <li>Vous pouvez <a href="/feedback/">nous signaler l'erreur ici</a></li>
+      {% if client and client.contact_email %}
+          <li>Contacter l'administrateur de {{ client.name }}&nbsp;: <a
+                  href="mailto:{{ client.contact_email }}">{{ client.contact_email }}</a></li>
+      {% endif %}
+        <li>Sinon, retournez à la page d'accueil en cliquant sur le mouton :</li>
+    </ul>
+    <a class="btn btn-light"
+       href="{% if client and client.website_url %}{{ client.website_url }}{% else %}{% url "core:home" %}{% endif %}">
+        <img src='{% static "/img/sheep.png" %}' style="width:40%;max-width:150px;">
+    </a>
+
+{% endblock %}
