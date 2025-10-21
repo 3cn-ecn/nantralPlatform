@@ -97,10 +97,13 @@ export default function LoginPage() {
           <form
             onSubmit={(event) => {
               event.preventDefault();
-              login(formValues).then(() => {
-                const next_url = searchParams.get('next');
-                if (next_url) {
-                  window.location.href = next_url;
+              login(formValues).then((code) => {
+                if (code === 0) {
+                  // code == 0 ->  SUCCESS
+                  const next_url = searchParams.get('next');
+                  if (next_url) {
+                    window.location.href = next_url;
+                  }
                 }
               });
             }}
