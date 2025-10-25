@@ -1,4 +1,9 @@
-import { Navigate, Outlet, useLocation } from 'react-router-dom';
+import {
+  Navigate,
+  Outlet,
+  useLocation,
+  useSearchParams,
+} from 'react-router-dom';
 
 import { useAuth } from '#shared/context/Auth.context';
 
@@ -18,14 +23,23 @@ export function AuthenticationRedirect({
 }: AuthenticationRedirectProps) {
   const location = useLocation();
   const { isAuthenticated } = useAuth();
+  const [searchParams] = useSearchParams();
+  const next = searchParams.get('next');
 
-  return isAuthenticated !== authenticated ? (
-    <Outlet />
-  ) : (
-    <Navigate
-      to={location.state?.from || redirectTo}
-      state={{ from: location }}
-      replace
-    />
-  );
+  if (isAuthenticated !== authenticated) {
+    return <Outlet />;
+  } else {
+    if (next) {
+      // if the backend requested an authentification, redirect to the page on the backend
+      window.location.href = next;
+    } else {
+      return (
+        <Navigate
+          to={location.state?.from || redirectTo}
+          state={{ from: location }}
+          replace
+        />
+      );
+    }
+  }
 }

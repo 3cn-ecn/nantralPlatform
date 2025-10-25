@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 import { Check } from '@mui/icons-material';
 import {
@@ -27,7 +27,6 @@ export default function LoginPage() {
   const { t } = useTranslation();
   const theme = useTheme();
   const navigate = useNavigate();
-  const [searchParams] = useSearchParams();
 
   const [formValues, setFormValues] = useState<{
     email: string;
@@ -97,15 +96,7 @@ export default function LoginPage() {
           <form
             onSubmit={(event) => {
               event.preventDefault();
-              login(formValues).then((code) => {
-                if (code === 0) {
-                  // code == 0 ->  SUCCESS
-                  const next_url = searchParams.get('next');
-                  if (next_url) {
-                    window.location.href = next_url;
-                  }
-                }
-              });
+              login(formValues);
             }}
           >
             {error?.response?.data?.message && (
