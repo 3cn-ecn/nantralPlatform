@@ -31,12 +31,22 @@ def send_email_confirmation(email, request: HttpRequest) -> None:
         "validation_link": request.build_absolute_uri(path),
     }
 
-    send_email(
-        subject="Activation de votre compte Nantral Platform",
-        to=email.email,
-        template_name="email-confirmation",
-        context=context,
-    )
+    try:
+        send_email(
+            subject="Activation de votre compte Nantral Platform",
+            to=email.email,
+            template_name="email-confirmation",
+            context=context,
+        )
+    except Exception:
+        messages.error(
+            request,
+            (
+                "Une erreur est survenue lors de l'envoi du mail. "
+                "Merci de contacter l'administrateur."
+            ),
+        )
+        return
 
     if request:
         if not email.is_ecn_email():
