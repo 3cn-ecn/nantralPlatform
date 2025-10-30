@@ -29,7 +29,7 @@ export function ParticipateButton({ event, sx }: ParticipateButtonProps) {
   const { register, unregister, isLoading } = useRegistrationMutation(event.id);
   const { t, formatDate, formatTime } = useTranslation();
 
-  const now = new Date()
+  const now = new Date();
 
   const [, setTick] = useState(0); // juste pour forcer le re-render
 
@@ -47,7 +47,7 @@ export function ParticipateButton({ event, sx }: ParticipateButtonProps) {
     }
 
     if (nextUpdate !== null) {
-      const timer = setTimeout(() => setTick(t => t + 1), nextUpdate);
+      const timer = setTimeout(() => setTick((t) => t + 1), nextUpdate);
       return () => clearTimeout(timer);
     }
   }, [event.startRegistration, event.endRegistration]);
