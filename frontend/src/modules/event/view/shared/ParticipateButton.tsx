@@ -31,17 +31,17 @@ export function ParticipateButton({ event, sx }: ParticipateButtonProps) {
 
   const now = new Date();
 
-  const [, setTick] = useState(0); // juste pour forcer le re-render
+  const [, setTick] = useState(0); // just to force the re-render
 
   useEffect(() => {
     const now = new Date();
     let nextUpdate: number | null = null;
 
-    // Si le shotgun n’a pas encore commencé
+    // If the shotgun has not yet started
     if (event.startRegistration && event.startRegistration > now) {
       nextUpdate = event.startRegistration.getTime() - now.getTime();
     }
-    // Si le shotgun est terminé mais qu’on veut re-render à la fin
+    // If the shotgun is finished but you want to re-render at the end
     else if (event.endRegistration && event.endRegistration > now) {
       nextUpdate = event.endRegistration.getTime() - now.getTime();
     }
