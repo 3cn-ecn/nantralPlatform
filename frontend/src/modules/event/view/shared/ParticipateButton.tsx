@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import {
   AddCircle as AddCircleIcon,
@@ -30,6 +30,27 @@ export function ParticipateButton({ event, sx }: ParticipateButtonProps) {
   const { t, formatDate, formatTime } = useTranslation();
 
   const now = new Date();
+
+  const [, setTick] = useState(0); // just to force the re-render
+
+  useEffect(() => {
+    const now = new Date();
+    let nextUpdate: number | null = null;
+
+    // If the shotgun has not yet started
+    if (event.startRegistration && event.startRegistration > now) {
+      nextUpdate = event.startRegistration.getTime() - now.getTime();
+    }
+    // If the shotgun is finished but you want to re-render at the end
+    else if (event.endRegistration && event.endRegistration > now) {
+      nextUpdate = event.endRegistration.getTime() - now.getTime();
+    }
+
+    if (nextUpdate !== null) {
+      const timer = setTimeout(() => setTick((t) => t + 1), nextUpdate);
+      return () => clearTimeout(timer);
+    }
+  }, [event.startRegistration, event.endRegistration]);
 
   const isShotgun =
     !!event.maxParticipant ||
