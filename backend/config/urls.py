@@ -30,6 +30,7 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("__debug__/", include(debug_toolbar.urls)),
     path("ckeditor5/", include("django_ckeditor_5.urls")),
+    path("openid/", include("oidc_provider.urls", namespace="oidc_provider")),
     # legacy views
     path("account/", include("apps.account.urls", namespace="account")),
     path("student/", include("apps.student.urls", namespace="student")),

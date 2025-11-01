@@ -46,6 +46,8 @@
       </div>
     </div>
 
-    {% vite_asset 'src/index.tsx' %}
+  {% block asset %}
+  {% vite_asset 'src/index.tsx' %}
+  {% endblock asset %}
   </body>
 </html>

@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-import { ApiErrorDTO, adaptApiErrors } from '#shared/infra/errors';
+import { adaptApiErrors, ApiErrorDTO } from '#shared/infra/errors';
 
 export interface LoginApiBody {
   email?: string;
@@ -9,7 +9,7 @@ export interface LoginApiBody {
 }
 
 export async function loginApi(body: LoginApiBody) {
-  const { status } = await axios
+  const { data, status } = await axios
     .post('/api/account/login/', {
       email: body?.email,
       password: body?.password,
@@ -18,5 +18,5 @@ export async function loginApi(body: LoginApiBody) {
     .catch((err: ApiErrorDTO) => {
       throw adaptApiErrors(err);
     });
-  return status;
+  return { data, status };
 }

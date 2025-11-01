@@ -26,10 +26,11 @@ django-debug-toolbar = "~=4.1"
 django-environ = "~=0.9"
 django-extra-settings = "~=0.5"
 django-modeltranslation = "~=0.18.11"
-django-push-notifications = {version = "~=3.0", extras = ["apns", "wp"]}
+django-oidc-provider = "~=0.9.0"
+django-push-notifications = { version = "~=3.0", extras = ["apns", "wp"] }
 django-rest-passwordreset = "~=1.4"
 django-simple-history = "~=3.10"
-django-storages = {version = "~=1.13", extras = ["boto3"]}
+django-storages = { version = "~=1.13", extras = ["boto3"] }
 django-vite = "~=3.0"
 djangorestframework = "~=3.15"
 docutils = "*"
