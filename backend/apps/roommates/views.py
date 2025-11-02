@@ -103,12 +103,17 @@ class CreateRoommatesView(LoginRequiredMixin, CreateView):
 class ColocathlonFormView(UserIsMember, UpdateView):
     template_name = "roommates/coloc/edit/colocathlon.html"
     model = Roommates
-    fields = [
-        "colocathlon_agree",
-        "colocathlon_quota",
-        "colocathlon_hours",
-        "colocathlon_activities",
-    ]
+
+    @property
+    def fields(self):
+        fields = [
+            "colocathlon_agree",
+            "colocathlon_hours",
+            "colocathlon_activities",
+        ]
+        if not Setting.get("NO_COLOCATHLON_QUOTA", False):
+            fields.append("colocathlon_quota")
+        return fields
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -141,6 +146,7 @@ class DetailRoommatesView(DetailGroupView):
             .order_by("-begin_date")
         )
         context["colocathlon"] = Setting.get("PHASE_COLOCATHLON")
+        context["no_colocathlon_quota"] = Setting.get("NO_COLOCATHLON_QUOTA", False)
         context["nb_participants"] = (
             self.object.colocathlon_participants.count()
         )
