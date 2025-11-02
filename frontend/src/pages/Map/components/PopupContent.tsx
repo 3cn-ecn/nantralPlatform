@@ -52,9 +52,7 @@ const CardWithArrow: FC<CardWithArrowProps> = ({ children }) => {
   return (
     <Box position="relative" top={14} display="inline-block">
       <Arrow />
-      <Card variant={'outlined'}>
-        <CardContent>{children}</CardContent>
-      </Card>
+      <Card variant={'outlined'}>{children}</Card>
     </Box>
   );
 };

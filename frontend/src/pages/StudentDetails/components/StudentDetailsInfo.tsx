@@ -18,9 +18,9 @@ export function StudentDetailsInfo({ student }: { student: Partial<Student> }) {
           <AdminPanelSettings fontSize="large" color="secondary" />
         )}
       </FlexRow>
-      <Typography color="gray" mb={1}>
+      <Typography color="secondary" mb={1}>
         @
-        <Typography color={'lightgray'} component={'span'}>
+        <Typography color={'primary'} component={'span'}>
           {student.username}
         </Typography>
         :nantral-platform.fr

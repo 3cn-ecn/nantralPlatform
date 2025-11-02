@@ -12,6 +12,7 @@ export function StudentEditButton() {
       <Fab
         sx={{ position: 'fixed', bottom: 24, right: 24 }}
         onClick={() => setOpen(true)}
+        color={'primary'}
       >
         <Edit />
       </Fab>
