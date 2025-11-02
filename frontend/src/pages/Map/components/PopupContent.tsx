@@ -1,7 +1,9 @@
+import { FC, ReactNode } from 'react';
 import { Link } from 'react-router-dom';
 
 import { Close as CloseIcon, OpenInNew } from '@mui/icons-material';
 import {
+  Box,
   Button,
   Card,
   CardContent,
@@ -13,6 +15,7 @@ import {
   ListItemAvatar,
   ListItemButton,
   ListItemText,
+  styled,
   Typography,
 } from '@mui/material';
 import { CardActions } from '@mui/material/';
@@ -21,6 +24,40 @@ import { MapGroupPreview } from '#modules/group/types/group.types';
 import { Avatar } from '#shared/components/Avatar/Avatar';
 import { FlexRow } from '#shared/components/FlexBox/FlexBox';
 import { useTranslation } from '#shared/i18n/useTranslation';
+
+// Styled arrow component
+const Arrow = styled('div')(({ theme }) => {
+  const border = `1px solid ${theme.palette.divider}`;
+
+  return {
+    width: 28,
+    height: 28,
+    background: theme.palette.background.paper,
+    transform: 'rotate(45deg)',
+    position: 'absolute',
+    top: -14,
+    left: '50%',
+    marginLeft: -14,
+    borderTop: border,
+    borderLeft: border,
+    zIndex: 1,
+  };
+});
+
+interface CardWithArrowProps {
+  children: ReactNode;
+}
+
+const CardWithArrow: FC<CardWithArrowProps> = ({ children }) => {
+  return (
+    <Box position="relative" top={14} display="inline-block">
+      <Arrow />
+      <Card variant={'outlined'}>
+        <CardContent>{children}</CardContent>
+      </Card>
+    </Box>
+  );
+};
 
 export function PopupContent({
   group,
@@ -31,7 +68,7 @@ export function PopupContent({
 }) {
   const { t } = useTranslation();
   return (
-    <Card>
+    <CardWithArrow>
       <CardHeader
         title={group.address.split(',')[0]}
         avatar={<Avatar src={group.icon} alt={group.name} />}
@@ -79,6 +116,6 @@ export function PopupContent({
         </FlexRow>
       </CardActions>
       <CardMedia component={'img'} src={group.banner} sx={{ maxHeight: 150 }} />
-    </Card>
+    </CardWithArrow>
   );
 }

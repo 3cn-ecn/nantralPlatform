@@ -648,6 +648,17 @@
     }
   },
   "map": {
+    "controls": {
+      "compass": "Reset rotation",
+      "disable3D": "Disable 3D",
+      "enable3D": "Enable 3D",
+      "exitFullscreen": "Exit fullscreen",
+      "followPosition": "Follow GPS position",
+      "fullscreen": "Fullscreen",
+      "stopFollowPosition": "Stop following position",
+      "zoomIn": "Zoom in",
+      "zoomOut": "Zoom out"
+    },
     "moreButton": {
       "addGroup": "Add a new group",
       "hideArchive": "Hide archived groups",

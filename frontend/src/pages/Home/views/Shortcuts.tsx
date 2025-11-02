@@ -37,7 +37,6 @@ export default function Shortcuts() {
         label={t('navbar.map')}
         path="/map/?type=colocs"
         iconPath="/static/img/icons/cropped/roommates.svg"
-        isOnBackend
       />
       <ShortcutItem
         label={t('navbar.family')}

@@ -16,11 +16,13 @@ export async function changePasswordApi({
   confirmNewPassword: string;
 }) {
   if (confirmNewPassword !== newPassword) {
-    const error: ApiFormError<{
-      old_password: string;
-      new_password: string;
-      confirm_new_password: string;
-    }> = {
+    const error: ApiFormError<
+      Partial<{
+        old_password: string;
+        new_password: string;
+        confirm_new_password: string;
+      }>
+    > = {
       fields: { confirm_new_password: ['Password must match'] },
       globalErrors: [],
       isAxiosError: false,

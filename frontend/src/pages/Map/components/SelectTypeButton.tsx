@@ -1,7 +1,7 @@
 import { MouseEvent, useMemo, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 
-import { KeyboardArrowDown, KeyboardArrowUp } from '@mui/icons-material';
+import { ArrowDropDown, ArrowDropUp } from '@mui/icons-material';
 import { Menu, MenuItem, Skeleton } from '@mui/material';
 
 import { useGroupTypes } from '#pages/Group/hooks/useGroupTypes';
@@ -42,7 +42,7 @@ export function SelectTypeButton({
         aria-expanded={open ? 'true' : undefined}
         onClick={handleClick}
         loading={groupTypeQuery.isLoading}
-        endIcon={open ? <KeyboardArrowUp /> : <KeyboardArrowDown />}
+        endIcon={open ? <ArrowDropUp /> : <ArrowDropDown />}
       >
         {type ? (
           groupTypeQuery.isLoading ? (
@@ -62,6 +62,7 @@ export function SelectTypeButton({
         MenuListProps={{
           'aria-labelledby': 'type-button',
         }}
+        disablePortal // show menu when map is fullscreen
       >
         {groupTypesQuery.isSuccess &&
           groupTypesQuery.data.results.map((type) => (

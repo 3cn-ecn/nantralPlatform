@@ -25,10 +25,12 @@ export function CreateGroupModal({
   onClose,
   groupType,
   parent,
+  disablePortal,
 }: {
   onClose: () => void;
   groupType: GroupTypePreview;
   parent?: Group;
+  disablePortal?: boolean;
 }) {
   const { t } = useTranslation();
   const value = useGroupFormValues({ parent: parent });
@@ -55,7 +57,11 @@ export function CreateGroupModal({
     mutate(formValues);
   }
   return (
-    <ResponsiveDialog onClose={onClose} disableEnforceFocus>
+    <ResponsiveDialog
+      onClose={onClose}
+      disableEnforceFocus
+      disablePortal={disablePortal}
+    >
       <ResponsiveDialogHeader
         onClose={onClose}
         leftIcon={

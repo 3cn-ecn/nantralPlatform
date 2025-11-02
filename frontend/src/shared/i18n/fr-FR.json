@@ -648,6 +648,17 @@
     }
   },
   "map": {
+    "controls": {
+      "compass": "Réinitialiser l'orientation",
+      "disable3D": "Désactiver la vue 3D",
+      "enable3D": "Activer la vue 3D",
+      "exitFullscreen": "Sortir du mode plein écran",
+      "followPosition": "Suivre la position GPS",
+      "fullscreen": "Plein écran",
+      "stopFollowPosition": "Arrêter de suivre la position",
+      "zoomIn": "Zoomer",
+      "zoomOut": "Dézoomer"
+    },
     "moreButton": {
       "addGroup": "Ajouter un groupe",
       "hideArchive": "Cacher les groupes archivés",

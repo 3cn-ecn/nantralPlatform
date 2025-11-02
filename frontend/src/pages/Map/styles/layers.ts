@@ -13,6 +13,7 @@ export const clusterLayer: CircleLayerSpecification = {
     'circle-radius': 15,
     'circle-stroke-width': 3,
     'circle-stroke-color': '#fff',
+    'circle-emissive-strength': 1.0,
   },
 };
 

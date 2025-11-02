@@ -12,11 +12,11 @@ import { useTranslation } from '#shared/i18n/useTranslation';
 
 export function MoreActionButton({
   showArchive,
-  setShowArchive,
+  setShowArchived,
   groupTypeQuery,
 }: {
   showArchive: boolean;
-  setShowArchive: (showArchive: boolean) => void;
+  setShowArchived: (showArchive: boolean) => void;
   groupTypeQuery: ReturnType<typeof useGroupTypeDetails>;
 }) {
   const { t } = useTranslation();
@@ -29,13 +29,17 @@ export function MoreActionButton({
 
   return (
     <>
-      <IconMenu Icon={MoreHoriz} size={'medium'}>
+      <IconMenu
+        Icon={MoreHoriz}
+        size={'medium'}
+        disablePortal // show menu when map is fullscreen
+      >
         {isSmaller && (
           <MenuItem component={Link} to={`/group?type=${type}`}>
             {t('map.viewList')}
           </MenuItem>
         )}
-        <MenuItem onClick={() => setShowArchive(!showArchive)}>
+        <MenuItem onClick={() => setShowArchived(!showArchive)}>
           {showArchive
             ? t('map.moreButton.hideArchive')
             : t('map.moreButton.viewArchive')}
@@ -50,6 +54,7 @@ export function MoreActionButton({
         <CreateGroupModal
           onClose={() => setGroupFormOpen(false)}
           groupType={groupTypeQuery.data}
+          disablePortal // show menu when map is fullscreen
         />
       )}
     </>
