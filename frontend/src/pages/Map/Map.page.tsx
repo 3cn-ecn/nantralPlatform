@@ -1,5 +1,11 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import Map, { MapRef, Popup, ScaleControl } from 'react-map-gl/mapbox';
+import Map, {
+  Layer,
+  MapRef,
+  Popup,
+  ScaleControl,
+  Source,
+} from 'react-map-gl/mapbox';
 import { useSearchParams } from 'react-router-dom';
 
 import { Box } from '@mui/material';
@@ -31,6 +37,7 @@ export default function MapPage() {
   const { currentThemeMode } = useChangeThemeMode();
   const [popupInfo, setPopupInfo] = useState<MapGroupPreview | null>(null);
   const mapRef = useRef<MapRef>(null);
+  const [mapLoaded, setMapLoaded] = useState(false);
 
   // Get points from API
   const groupListQuery = useInfiniteQuery({
@@ -157,6 +164,8 @@ export default function MapPage() {
         pitch: 0,
       }}
       onLoad={(event) => {
+        setMapLoaded(true);
+
         // load the marker image
         event.target.loadImage('/static/img/marker.png', (error, result) => {
           if (error || !result) {
@@ -165,19 +174,6 @@ export default function MapPage() {
           }
           event.target.addImage('marker', result);
         });
-
-        // add the GeoJSON data and compute the clusters
-        event.target.addSource('groups', {
-          type: 'geojson',
-          data: { type: 'FeatureCollection', features: points },
-          cluster: true,
-          clusterMaxZoom: 16,
-          clusterRadius: 30,
-        });
-
-        event.target.addLayer(clusterLayer);
-        event.target.addLayer(clusterCountLayer);
-        event.target.addLayer(unclusteredPointLayer);
       }}
       mapboxAccessToken={MAPBOX_TOKEN}
       mapStyle="mapbox://styles/mapbox/standard"
@@ -193,6 +189,20 @@ export default function MapPage() {
       maxZoom={19}
       minZoom={1}
     >
+      {mapLoaded && (
+        <Source
+          type={'geojson'}
+          id={'groups'}
+          data={{ type: 'FeatureCollection', features: points }}
+          cluster
+          clusterMaxZoom={16}
+          clusterRadius={30}
+        >
+          <Layer {...clusterLayer} />
+          <Layer {...clusterCountLayer} />
+          <Layer {...unclusteredPointLayer} />
+        </Source>
+      )}
       <Box position={'absolute'} p={2} width={'100%'} maxWidth={'sm'}>
         <SearchBar
           showArchived={showArchived}
