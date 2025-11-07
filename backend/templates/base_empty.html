@@ -45,7 +45,9 @@
         <div class="spinner"><img src="{% static "/img/logo/scalable/logo.svg" %}" alt="Loading..." /></div>
       </div>
     </div>
-
+    <script type="text/javascript">
+      const MAPBOX_TOKEN = "{{MAPBOX_API_KEY}}";
+    </script>
     {% vite_asset 'src/index.tsx' %}
   </body>
 </html>

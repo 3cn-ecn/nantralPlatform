@@ -9,7 +9,7 @@ import { useTranslation } from '#shared/i18n/useTranslation';
 interface MembersGridProps {
   memberships: Membership[];
   showSkeletonsAtEnd: boolean;
-  group: Group;
+  group?: Group;
 }
 
 export function MembersGrid({
@@ -24,7 +24,7 @@ export function MembersGrid({
       {memberships.map((member) => (
         <MembershipCard group={group} key={member.id} item={member} />
       ))}
-      {memberships.length === 0 && (
+      {memberships.length === 0 && group && (
         <Typography px={2}>
           {t('group.details.modal.editGroup.noMembers')}
         </Typography>

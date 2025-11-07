@@ -11,7 +11,7 @@ export async function createGroupSocialLinkApi(
   form: SocialLinkForm,
 ) {
   const { data } = await axios
-    .post<SocialLinkForm>('/api/sociallink/sociallink/', {
+    .post<SocialLinkForm>('/api/sociallink/group/', {
       ...convertSocialLinkForm(form),
       group: group_slug,
     })

@@ -1,5 +1,19 @@
-import { AdminPanelSettings as AdminPanelSettingsIcon } from '@mui/icons-material';
-import { Box, IconButton, Skeleton, Tooltip, Typography } from '@mui/material';
+import { Link as RouterLink } from 'react-router-dom';
+
+import {
+  AdminPanelSettings as AdminPanelSettingsIcon,
+  OpenInNew,
+  PlaceOutlined as PlaceIcon,
+} from '@mui/icons-material';
+import {
+  Box,
+  Button,
+  IconButton,
+  Link,
+  Skeleton,
+  Tooltip,
+  Typography,
+} from '@mui/material';
 
 import { Group } from '#modules/group/types/group.types';
 import { sortLinks } from '#modules/social_link/utils/sortLinks';
@@ -93,9 +107,37 @@ export function GroupInfo({
           slug={group?.slug}
         />
 
-        {(group?.meetingHour || group?.meetingPlace) && (
-          <TimeAndPlace time={group?.meetingHour} place={group?.meetingPlace} />
-        )}
+        {group &&
+          (group.groupType.isMap ? (
+            <Link
+              component={RouterLink}
+              to={`/map?type=${group.groupType.slug}&id=${group.id}`}
+              mt={1}
+              ml="-3px"
+            >
+              <FlexRow flexWrap="nowrap" alignItems="center" gap="3.5px">
+                <PlaceIcon
+                  color="secondary"
+                  titleAccess={t('group.form.address.label')}
+                />
+                <Typography
+                  color="secondary"
+                  variant="subtitle2"
+                  component="p"
+                  lineHeight={1.3}
+                >
+                  {group.address}
+                </Typography>
+              </FlexRow>
+            </Link>
+          ) : (
+            (group.meetingHour || group.meetingPlace) && (
+              <TimeAndPlace
+                time={group.meetingHour}
+                place={group.meetingPlace}
+              />
+            )
+          ))}
 
         {group?.summary && <Typography mt={2}>{group?.summary}</Typography>}
 
@@ -106,12 +148,23 @@ export function GroupInfo({
             ))}
           </FlexRow>
         )}
-        <FlexRow py={2} gap={1}>
+        <FlexRow py={2} gap={1} flexWrap="wrap">
           {isAuthenticated && group && (
             <SubscribeButton
               groupSlug={group.slug}
               isSubscribed={group?.isSubscribed}
             />
+          )}
+          {group?.groupType.isMap && (
+            <Button
+              variant="outlined"
+              component={RouterLink}
+              to={`https://www.google.com/maps/dir/?api=1&travelmode=transit&destination=${group.address}`}
+              target="_blank"
+              endIcon={<OpenInNew />}
+            >
+              {t('map.popup.go')}
+            </Button>
           )}
           {group && <HistoryButton group={group} />}
           {group?.isAdmin && <EditButton group={group} />}

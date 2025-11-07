@@ -18,6 +18,9 @@ const defaultGroupFormValues: CreateGroupForm = {
   creationYear: new Date().getFullYear(),
   label: -1,
   lockMemberships: false,
+  address: '',
+  latitude: 0,
+  longitude: 0,
 };
 
 function convertToForm(group: Group): CreateGroupForm {
@@ -41,6 +44,9 @@ function convertToForm(group: Group): CreateGroupForm {
     childrenLabel: 'Sous-Groupes',
     creationYear: group.creationYear,
     lockMemberships: group.lockMemberships,
+    address: group.address,
+    latitude: group.latitude,
+    longitude: group.longitude,
   };
 }
 

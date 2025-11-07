@@ -7,10 +7,17 @@ interface IconMenuProps {
   Icon: SvgIconComponent;
   size: 'small' | 'medium' | 'large';
   tooltip?: string;
+  disablePortal?: boolean;
   children: ReactNode;
 }
 
-export function IconMenu({ Icon, size, tooltip, children }: IconMenuProps) {
+export function IconMenu({
+  Icon,
+  size,
+  tooltip,
+  disablePortal,
+  children,
+}: IconMenuProps) {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -27,7 +34,12 @@ export function IconMenu({ Icon, size, tooltip, children }: IconMenuProps) {
           <Icon fontSize="inherit" />
         </IconButton>
       </Tooltip>
-      <Menu anchorEl={anchorEl} open={open} onClose={handleClose}>
+      <Menu
+        anchorEl={anchorEl}
+        open={open}
+        onClose={handleClose}
+        disablePortal={disablePortal}
+      >
         {children}
       </Menu>
     </>

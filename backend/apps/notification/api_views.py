@@ -13,7 +13,7 @@ from rest_framework.views import APIView
 from rest_framework.viewsets import ReadOnlyModelViewSet
 
 from apps.group.models import Group
-from apps.utils.parse_bool import parse_bool
+from apps.utils.parse import parse_bool
 
 from .models import SentNotification
 from .serializers import SentNotificationSerializer

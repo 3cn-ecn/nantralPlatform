@@ -1,0 +1,15 @@
+/* Hide the mapboxgl popup in order to customize it using react MUI components */
+
+.mapboxgl-popup {
+    max-width: 350px !important;
+}
+
+.mapboxgl-popup-tip {
+    display: none !important;
+}
+
+.mapboxgl-popup-content {
+    background: transparent !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+}

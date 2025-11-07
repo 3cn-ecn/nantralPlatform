@@ -26,6 +26,9 @@
     "legal": {
       "index": "Mentions légales"
     },
+    "map": {
+      "index": "Carte"
+    },
     "notFound": {
       "index": "Erreur 404"
     },
@@ -35,6 +38,7 @@
   },
   "button": {
     "add": "Ajouter",
+    "apply": "Appliquer",
     "back": "Retour",
     "cancel": "Annuler",
     "confirm": "Valider",
@@ -357,6 +361,7 @@
         }
       },
       "formerMembers": "Anciens membres",
+      "hideFormerMembers": "Cacher les anciens membres",
       "history": "Voir l'historique",
       "infoLine": {
         "events_one": "{{count}} événement",
@@ -402,6 +407,7 @@
       "requestAdmin": "Demander a être admin",
       "requestSent": "Demande envoyée",
       "requestToBeAdmin": "{{student}} demande à être admin",
+      "showFormerMembers": "Afficher les anciens membres",
       "subGroupOf": "Sous-groupe de",
       "subgroups": "Sous-Groupes",
       "subscribe": "S'abonner",
@@ -415,6 +421,9 @@
       }
     },
     "form": {
+      "address": {
+        "label": "Adresse"
+      },
       "admin": {
         "label": "Admin"
       },
@@ -450,9 +459,16 @@
         "label": "Label",
         "none": "Aucun"
       },
+      "latitude": {
+        "helperText": "Modifiez uniquement si la valeur automatique est incorrecte",
+        "label": "Latitude"
+      },
       "lockMemberships": {
         "helperText": "Les utilisateurs ne peuvent plus s'ajouter eux-mêmes au groupe.",
         "label": "Vérouiller les membres"
+      },
+      "longitude": {
+        "label": "Longitude"
       },
       "meetingHour": {
         "label": "Heure de réunion"
@@ -479,7 +495,9 @@
         "label": "Nom raccourci"
       },
       "summary": {
-        "label": "Résumé"
+        "label": "Résumé",
+        "mapLabel": "Complément d'adresse",
+        "mapPlaceholder": "Apt. 101"
       },
       "title": {
         "advancedOptions": "Options avancées",
@@ -495,6 +513,7 @@
     },
     "list": {
       "editType": "Modifier le type",
+      "gotoMap": "Voir sur la carte",
       "noGroup": "Aucun groupe à afficher 🤔"
     },
     "modal": {
@@ -601,6 +620,7 @@
     "email": "Email",
     "formationFollowed": {
       "PhD": "Doctorat",
+      "all": "Toutes",
       "bachelor": "Bachelor",
       "generalEngineer": "Ingénieur généraliste",
       "label": "Formation suivie",
@@ -627,6 +647,36 @@
       "ecn": "Le site web étudiant de Centrale Nantes !"
     }
   },
+  "map": {
+    "controls": {
+      "compass": "Réinitialiser l'orientation",
+      "disable3D": "Désactiver la vue 3D",
+      "enable3D": "Activer la vue 3D",
+      "exitFullscreen": "Sortir du mode plein écran",
+      "followPosition": "Suivre la position GPS",
+      "fullscreen": "Plein écran",
+      "permissionDenied": "Veuillez autoriser l'accès à la position",
+      "positionUnavailable": "La position n'est pas accessible",
+      "stopFollowPosition": "Arrêter de suivre la position",
+      "timeout": "La recherche de position a mis trop de temps à répondre",
+      "zoomIn": "Zoomer",
+      "zoomOut": "Dézoomer"
+    },
+    "moreButton": {
+      "addGroup": "Ajouter un groupe",
+      "hideArchive": "Cacher les groupes archivés",
+      "viewArchive": "Voir les groupes archivés"
+    },
+    "popup": {
+      "details": "Détails",
+      "go": "Y aller"
+    },
+    "selectType": {
+      "all": "Tous les types"
+    },
+    "title": "Carte",
+    "viewList": "Voir la liste"
+  },
   "modal": {
     "closeButton": {
       "label": "Fermer"
@@ -638,9 +688,9 @@
   "navbar": {
     "events": "Évènements",
     "family": "Parrainage",
-    "flatshare": "Carte des colocs",
     "group": "Groupes",
     "home": "Accueil",
+    "map": "Carte",
     "signature": "Signature ECN",
     "student": "Annuaire Étudiant"
   },
@@ -819,6 +869,66 @@
       }
     },
     "new": "Nouveau lien"
+  },
+  "student": {
+    "arrivalYear": "Promo",
+    "confirmNewPassword": "Confirmer le nouveau mot de passe",
+    "currentPassword": {
+      "label": "Mot de passe actuel"
+    },
+    "description": {
+      "label": "Description",
+      "placeholder": "Décrivez-vous en une ou deux phrases"
+    },
+    "detail": {
+      "hideFormerGroups": "Cacher les anciens groupes",
+      "showFormerGroups": "Montrer les anciens groupes"
+    },
+    "details": {
+      "changePassword": "Changer de mot de passe",
+      "editPassword": "Changer de mot de passe",
+      "editProfile": "Modifier son profil",
+      "emails": "Emails",
+      "form": {
+        "firstName": {
+          "label": "Prénom"
+        }
+      },
+      "housing": "Colocation",
+      "links": "Liens",
+      "password": "Mot de passe",
+      "profile": "Profil",
+      "schooling": "Cursus"
+    },
+    "filters": {
+      "title": "Filtres"
+    },
+    "firstName": {
+      "label": "Prénom"
+    },
+    "lastName": {
+      "label": "Nom"
+    },
+    "list": {
+      "labelDisplayedRows": "Page {{ page }} sur {{ pageSize }} ({{ count }} résultats)"
+    },
+    "name": {
+      "label": "Nom"
+    },
+    "newPassword": {
+      "label": "Nouveau mot de passe"
+    },
+    "picture": {
+      "helperText": "Taille recommandée: 400 x 400",
+      "label": "Image"
+    },
+    "searchBar": {
+      "placeholder": "Rechercher un élève"
+    },
+    "username": {
+      "disabledText": "Vous ne pouvez plus changer votre nom d'utilisateur car vous avez créé un compte Matrix",
+      "label": "Nom d'utilisateur"
+    }
   },
   "userMenu": {
     "button": {

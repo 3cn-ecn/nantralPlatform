@@ -62,7 +62,6 @@ export function AdminRequestRow({
             src={adminRequest.student.picture}
             component={Link}
             to={adminRequest.student.url}
-            reloadDocument
           />
           <Typography variant="caption">
             {t('group.details.requestToBeAdmin', {

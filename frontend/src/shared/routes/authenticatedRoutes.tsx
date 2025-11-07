@@ -1,9 +1,12 @@
 import { lazy } from 'react';
 import { RouteObject } from 'react-router-dom';
 
+import { QueryClient } from '@tanstack/react-query';
+
 import { PageTemplate } from '#shared/components/PageTemplate/PageTemplate';
 
-const EmailPage = lazy(() => import('#pages/Email/Email.page'));
+import { studentDetailsLoader } from './loader';
+
 const EventPage = lazy(() => import('#pages/Event/Event.page'));
 const EventCalendarViewPage = lazy(
   () => import('#pages/Event/EventCalendar/EventCalendarView.page'),
@@ -14,6 +17,7 @@ const EventGridViewPage = lazy(
 const EventDetailsPage = lazy(
   () => import('#pages/EventDetails/EventDetails.page'),
 );
+const MapPage = lazy(() => import('#pages/Map/Map.page'));
 const HomePage = lazy(() => import('#pages/Home/Home.page'));
 const NotFoundPage = lazy(() => import('#pages/NotFound/NotFound.page'));
 const Signature = lazy(() => import('#pages/Signature/Signature.page'));
@@ -23,13 +27,21 @@ const FeedbackHomePage = lazy(
 const FeedbackFormPage = lazy(
   () => import('#pages/Feedback/FeedbackForm.page'),
 );
+const StudentListPage = lazy(
+  () => import('#pages/StudentList/StudentList.page'),
+);
+const StudentDetailsPage = lazy(
+  () => import('#pages/StudentDetails/StudentDetails.page'),
+);
 const UpdateUsernamePage = lazy(
   () => import('#pages/UpdateUsername/UpdateUsername.page'),
 );
 
 const t = (key: string) => key;
 
-export const authenticatedRoutes: RouteObject = {
+export const authenticatedRoutes: (queryClient: QueryClient) => RouteObject = (
+  queryClient,
+) => ({
   element: <PageTemplate />,
   children: [
     {
@@ -40,11 +52,6 @@ export const authenticatedRoutes: RouteObject = {
     {
       path: '/update-username',
       element: <UpdateUsernamePage />,
-    },
-    {
-      path: '/account/email',
-      element: <EmailPage />,
-      handle: { crumb: t('breadcrumbs.email.index') },
     },
     {
       path: '/event',
@@ -79,6 +86,18 @@ export const authenticatedRoutes: RouteObject = {
       handle: { crumb: t('breadcrumbs.signature.index') },
     },
     {
+      path: '/student',
+      handle: { crumb: t('navbar.student') },
+      children: [
+        { index: true, element: <StudentListPage /> },
+        {
+          path: ':id',
+          element: <StudentDetailsPage />,
+          loader: (params) => studentDetailsLoader(params, queryClient),
+        },
+      ],
+    },
+    {
       path: '/feedback',
       handle: { crumb: t('breadcrumbs.feedback.home') },
       children: [
@@ -99,9 +118,14 @@ export const authenticatedRoutes: RouteObject = {
       ],
     },
     {
+      path: '/map',
+      element: <MapPage />,
+      handle: { crumb: t('breadcrumbs.map.index') },
+    },
+    {
       path: '*',
       element: <NotFoundPage />,
       handle: { crumb: t('breadcrumbs.notFound.index') },
     },
   ],
-};
+});
