@@ -655,7 +655,10 @@
       "exitFullscreen": "Exit fullscreen",
       "followPosition": "Follow GPS position",
       "fullscreen": "Fullscreen",
+      "permissionDenied": "Please authorize localisation access",
+      "positionUnavailable": "Localisation is not available",
       "stopFollowPosition": "Stop following position",
+      "timeout": "Localisation access timed out",
       "zoomIn": "Zoom in",
       "zoomOut": "Zoom out"
     },

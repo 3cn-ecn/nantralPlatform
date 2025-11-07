@@ -655,7 +655,10 @@
       "exitFullscreen": "Sortir du mode plein écran",
       "followPosition": "Suivre la position GPS",
       "fullscreen": "Plein écran",
+      "permissionDenied": "Veuillez autoriser l'accès à la position",
+      "positionUnavailable": "La position n'est pas accessible",
       "stopFollowPosition": "Arrêter de suivre la position",
+      "timeout": "La recherche de position a mis trop de temps à répondre",
       "zoomIn": "Zoomer",
       "zoomOut": "Dézoomer"
     },
