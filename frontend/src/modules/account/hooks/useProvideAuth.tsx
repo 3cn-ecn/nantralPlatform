@@ -19,9 +19,7 @@ export interface ProvideAuthValues {
         fields?: DjangoRestApiFieldValidationError<LoginApiBody>;
       })
     | null;
-  login: (
-    body: LoginApiBody,
-  ) => Promise<{ data: { message?: string; code?: number }; status: number }>;
+  login: (body: LoginApiBody) => Promise<number>;
   logout: () => Promise<number>;
 }
 
@@ -52,7 +50,7 @@ export function useProvideAuth(): ProvideAuthValues {
     mutateAsync: login,
     error,
   } = useMutation<
-    { data: { message?: string; code?: number }; status: number },
+    number,
     AxiosError<{ message?: string; code?: string }>,
     LoginApiBody
   >(loginApi, {

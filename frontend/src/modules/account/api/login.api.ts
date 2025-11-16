@@ -9,7 +9,7 @@ export interface LoginApiBody {
 }
 
 export async function loginApi(body: LoginApiBody) {
-  const { data, status } = await axios
+  const { status } = await axios
     .post('/api/account/login/', {
       email: body?.email,
       password: body?.password,
@@ -18,5 +18,5 @@ export async function loginApi(body: LoginApiBody) {
     .catch((err: ApiErrorDTO) => {
       throw adaptApiErrors(err);
     });
-  return { data, status };
+  return status;
 }
