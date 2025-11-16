@@ -1,4 +1,5 @@
 import { MouseEvent, useState } from 'react';
+import { useLocation } from 'react-router';
 import { Link } from 'react-router-dom';
 
 import {
@@ -19,6 +20,7 @@ import { UserMenuItem } from './components/UserMenuItem';
 
 export function UserMenuUnauthenticated() {
   const { t } = useTranslation();
+  const location = useLocation();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [menuOpen, setMenuOpen] = useState<null | 'main' | 'theme' | 'lang'>(
     null,
@@ -59,6 +61,7 @@ export function UserMenuUnauthenticated() {
           component={Link}
           to="/login/"
           onClick={() => setMenuOpen(null)}
+          state={{ from: location }}
         />
         <Divider />
         <UserMenuItem
