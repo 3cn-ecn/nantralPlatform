@@ -4,7 +4,7 @@ import { AxiosError } from 'axios';
 import { DjangoRestApiFieldValidationError } from '#shared/infra/errors';
 
 import { isAuthenticatedApi } from '../api/isAuthenticated.api';
-import { LoginApiBody, loginApi } from '../api/login.api';
+import { loginApi, LoginApiBody } from '../api/login.api';
 import { logoutApi } from '../api/logout.api';
 
 export interface ProvideAuthValues {

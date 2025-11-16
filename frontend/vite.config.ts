@@ -18,6 +18,11 @@ const legacyEntryPoints = [
   'notification/deviceSubscribeButton.tsx',
 ];
 
+const templatesEntryPoints = [
+  'oidc_provider/authorize.tsx',
+  'oidc_provider/end_session_prompt.tsx',
+];
+
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [svgr(), react(), visualizer({ template: 'sunburst' })],
@@ -43,6 +48,9 @@ export default defineConfig({
       input: [
         path.join(__dirname, '/src/index.tsx'),
         ...legacyEntryPoints.map((p) => path.join(__dirname, '/src/legacy', p)),
+        ...templatesEntryPoints.map((p) =>
+          path.join(__dirname, '/src/templates', p),
+        ),
       ],
     },
   },
