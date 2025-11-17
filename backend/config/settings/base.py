@@ -333,3 +333,5 @@ AUTH_PASSWORD_VALIDATORS = [
 # OICD
 OIDC_USERINFO = "config.oidc_provider_settings.userinfo"
 OIDC_EXTRA_SCOPE_CLAIMS = "config.oidc_provider_settings.CustomScopeClaims"
+OIDC_SESSION_MANAGEMENT_ENABLE = True
+OIDC_IDTOKEN_INCLUDE_CLAIMS = True
