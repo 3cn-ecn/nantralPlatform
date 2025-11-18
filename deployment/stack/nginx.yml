@@ -23,5 +23,5 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.static-http.entrypoints=websecure"
-      - "traefik.http.routers.static-http.rule=(Host(`nantral-platform.fr`) || Host(`dev.nantral-platform.fr`)) && PathPrefix(`/static`) || PathPrefix(`/.well-known`)"
+      - "traefik.http.routers.static-http.rule=(Host(`nantral-platform.fr`) || Host(`dev.nantral-platform.fr`)) && (PathPrefix(`/static`) || PathPrefix(`/.well-known/matrix`))"
       - "traefik.http.routers.static-http.tls.certresolver=letsencrypt"
