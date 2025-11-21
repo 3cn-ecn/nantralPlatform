@@ -38,6 +38,7 @@
   },
   "button": {
     "add": "Add",
+    "allowAccess": "Allow Access",
     "apply": "Apply",
     "back": "Back",
     "cancel": "Cancel",
@@ -50,7 +51,8 @@
     "saved": "Saved",
     "send": "Send",
     "today": "Today",
-    "update": "Update"
+    "update": "Update",
+    "yes": "Yes"
   },
   "email": {
     "changeModal": {
@@ -107,6 +109,11 @@
   "event": {
     "action_menu": {
       "addToCalendar": "Add to Calendar",
+      "delete": "Delete",
+      "deleteModal": {
+        "body": "Do you really wish to delete the event {{ title }}? This action cannot be undone.",
+        "title": "Delete event"
+      },
       "edit": "Edit",
       "share": "Share",
       "unsubscribe": "Unregister"
@@ -724,6 +731,10 @@
     "createModal": {
       "title": "Create new post"
     },
+    "deleteModal": {
+      "body": "Do you really wish to delete the post {{ title }}? Ths cannot be undone.",
+      "title": "Delete post"
+    },
     "editModal": {
       "title": "Edit the post"
     },
@@ -928,6 +939,53 @@
     "username": {
       "disabledText": "You can not change your username because you already created a Matrix account",
       "label": "User name"
+    }
+  },
+  "templates": {
+    "changeLanguage": "Choose a language",
+    "oidc": {
+      "authorize": {
+        "clientType": {
+          "confidential": "This application enforces our data protection rules",
+          "public": "We cannot guarantee data security for this application"
+        },
+        "contact": "You can contact {{ client_name }} admin if you have any questions: <0>{{ contact_email }}</0>",
+        "terms": "Click to see how {{ client_name }} uses your personal data: <0>terms and conditions</0>",
+        "title": "<0><0>{{client_name}}</0></0> wants to get the following personal data"
+      },
+      "description": "Sumary",
+      "endSessionPrompt": {
+        "title": "Hi <0>{{ client_name }}</0>, do you want to log out",
+        "titleAppName": " from <1>{{ client_name }}</1>"
+      },
+      "scope": "Scope",
+      "scopes": {
+        "address": {
+          "description": "Access to your address. Includes country, locality, street and other information.",
+          "name": "Address information"
+        },
+        "email": {
+          "description": "Access to your email address.",
+          "name": "Email"
+        },
+        "mas": {
+          "description": "Access to your information. Includes names, username and profile picture.",
+          "name": "Profile"
+        },
+        "phone": {
+          "description": "Access to your phone number.",
+          "name": "Phone number"
+        },
+        "profile": {
+          "description": "Access to your basic information. Includes names, gender, birthdate and other information.",
+          "name": "Basic profile"
+        }
+      }
+    },
+    "theme": {
+      "auto": "Toggle light theme",
+      "dark": "Toggle system theme",
+      "light": "Toggle dark theme"
     }
   },
   "userMenu": {

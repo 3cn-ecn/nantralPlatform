@@ -4,11 +4,11 @@ export function FloatingContainer({ children, ...props }: ContainerProps) {
   return (
     <Container
       sx={{
-        margin: 0,
-        position: 'absolute',
-        top: '50%',
-        left: '50%',
-        transform: 'translate(-50%, -50%)',
+        py: 3,
+        justifyContent: 'center',
+        alignItems: 'center',
+        display: 'flex',
+        minHeight: '100%',
       }}
       {...props}
     >

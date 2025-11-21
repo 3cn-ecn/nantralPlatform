@@ -29,7 +29,7 @@ export default function RegisterPage() {
   };
 
   return (
-    <FloatingContainer maxWidth={'md'} sx={{ paddingTop: 2, paddingBottom: 2 }}>
+    <FloatingContainer maxWidth={'md'}>
       <Card
         sx={{
           padding: 5,

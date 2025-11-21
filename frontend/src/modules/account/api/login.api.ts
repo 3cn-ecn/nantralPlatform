@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-import { ApiErrorDTO, adaptApiErrors } from '#shared/infra/errors';
+import { adaptApiErrors, ApiErrorDTO } from '#shared/infra/errors';
 
 export interface LoginApiBody {
   email?: string;

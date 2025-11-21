@@ -48,6 +48,9 @@
     <script type="text/javascript">
       const MAPBOX_TOKEN = "{{MAPBOX_API_KEY}}";
     </script>
+
+    {% block asset %}
     {% vite_asset 'src/index.tsx' %}
+    {% endblock asset %}
   </body>
 </html>

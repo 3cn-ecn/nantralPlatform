@@ -13,6 +13,7 @@ services:
       - ../config/nginx/global_nginx.conf:/etc/nginx/nginx.conf
       - ../config/nginx/server_nginx.conf:/etc/nginx/conf.d/default.conf
       - ../config/nginx/custom_413.html:/var/www/html/custom_413.html
+      - ../config/nginx/.well-known:/var/www/json/.well-known
       - static_volume:/var/app/staticfiles/
       - static_volume_staging:/var/app/staticfiles_staging/
     depends_on:
@@ -22,5 +23,5 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.static-http.entrypoints=websecure"
-      - "traefik.http.routers.static-http.rule=(Host(`nantral-platform.fr`) || Host(`dev.nantral-platform.fr`)) && PathPrefix(`/static`) || PathPrefix(`/.well-known`)"
+      - "traefik.http.routers.static-http.rule=(Host(`nantral-platform.fr`) || Host(`dev.nantral-platform.fr`)) && (PathPrefix(`/static`) || PathPrefix(`/.well-known/matrix`))"
       - "traefik.http.routers.static-http.tls.certresolver=letsencrypt"

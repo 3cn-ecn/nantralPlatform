@@ -38,6 +38,7 @@
   },
   "button": {
     "add": "Ajouter",
+    "allowAccess": "Autoriser l'accès",
     "apply": "Appliquer",
     "back": "Retour",
     "cancel": "Annuler",
@@ -50,7 +51,8 @@
     "saved": "Enregistré",
     "send": "Envoyer",
     "today": "Aujourd'hui",
-    "update": "Valider"
+    "update": "Valider",
+    "yes": "Oui"
   },
   "email": {
     "changeModal": {
@@ -107,6 +109,11 @@
   "event": {
     "action_menu": {
       "addToCalendar": "Ajouter au calendrier",
+      "delete": "Supprimer",
+      "deleteModal": {
+        "body": "Voulez vous supprimer l'évènement {{ title }} ? Cette action est définitive.",
+        "title": "Supprimer l'évènement"
+      },
       "edit": "Modifier",
       "share": "Partager",
       "unsubscribe": "Se désinscrire"
@@ -724,6 +731,10 @@
     "createModal": {
       "title": "Créer un post"
     },
+    "deleteModal": {
+      "body": "Voulez vous supprimer l'annonce {{ title }} ? Cette action est définitive.",
+      "title": "Supprimer l'annonce"
+    },
     "editModal": {
       "title": "Modifier le post"
     },
@@ -928,6 +939,53 @@
     "username": {
       "disabledText": "Vous ne pouvez plus changer votre nom d'utilisateur car vous avez créé un compte Matrix",
       "label": "Nom d'utilisateur"
+    }
+  },
+  "templates": {
+    "changeLanguage": "Choix de la langue",
+    "oidc": {
+      "authorize": {
+        "clientType": {
+          "confidential": "Cette application applique nos règles de protection des données",
+          "public": "Nous ne pouvons pas garantir la sécurité des données pour cette application"
+        },
+        "contact": "Vous pouvez contacter l'administrateur de {{ client_name }} si vous avez des questions : <0>{{ contact_email }}</0>",
+        "terms": "Cliquez pour voir comment {{ client_name }} utilise vos données : <0>conditions d'utilisation</0>",
+        "title": "<0><0>{{ client_name }}</0></0> demande à accéder aux informations personnelles suivantes"
+      },
+      "description": "Description",
+      "endSessionPrompt": {
+        "title": "Bonjour <0>{{ user_name }}</0>, voulez vous vous deconnecter ",
+        "titleAppName": "de l'application <0><0>{{ client_name }}</0></0> "
+      },
+      "scope": "Portée",
+      "scopes": {
+        "address": {
+          "description": "Accès à votre adresse. Comprend le pays, la ville, la rue et d'autres informations",
+          "name": "Information liées à votre adresse"
+        },
+        "email": {
+          "description": "Accès à votre adresse email",
+          "name": "Courriel"
+        },
+        "mas": {
+          "description": "Accès à vos informations. Comprend vos nom, prénom, nom d'utilisateur et photo de profil",
+          "name": "Profil"
+        },
+        "phone": {
+          "description": "Accès à votre numéro de téléphone",
+          "name": "Numéro de téléphone"
+        },
+        "profile": {
+          "description": "Accès à vos informations de base. Comprend vos noms, genre, date de naissance et d'autres informations",
+          "name": "Profil de base"
+        }
+      }
+    },
+    "theme": {
+      "auto": "Basculer sur le theme clair",
+      "dark": "Basculer sur le theme du système",
+      "light": "Basculer sur le theme sombre"
     }
   },
   "userMenu": {

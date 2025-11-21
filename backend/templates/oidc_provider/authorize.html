@@ -1,0 +1,24 @@
+{% extends "../base_empty.html" %}
+
+{% load django_vite %}
+
+{% block asset %}
+    <script>
+      const client = {
+        name: '{{ client.name }}',
+        client_type: '{{ client.client_type }}',
+        client_id: '{{ client.client_id }}',
+        website_url: '{{ client.website_url }}',
+        terms_url: '{{ client.terms_url }}',
+        contact_email: '{{ client.contact_email }}',
+        {% if client.logo %}
+          logo: '{{ client.logo.url }}',
+        {% endif %}
+      };
+      const hidden_inputs = `{{ hidden_inputs }}`;
+      const scopes = {{ scopes|safe }};
+      const post_url = '{% url "oidc_provider:authorize" %}';
+      const csrf_token = '{% csrf_token %}';
+    </script>
+  {% vite_asset "src/templates/oidc_provider/authorize.tsx" %}
+{% endblock %}
