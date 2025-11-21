@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { Event } from '#modules/event/event.type';
 import { BookmarkedButton } from '#modules/event/view/shared/BookmarkedButton';
 import { ParticipateButton } from '#modules/event/view/shared/ParticipateButton';
+import { DeleteButton } from '#pages/EventDetails/components/ActionButtons/DeleteButton';
 import { FlexRow } from '#shared/components/FlexBox/FlexBox';
 import { MoreActionsButton } from '#shared/components/MoreActionsButton/MoreActionsButton';
 import { Spacer } from '#shared/components/Spacer/Spacer';
@@ -32,7 +33,12 @@ export function ActionButtonsBar({ event }: ActionButtonsBarProps) {
           setMenuIsOpen={setMenuIsOpen}
           menuPosition="bottom-left"
         >
-          {event.group.isAdmin && <EditButton eventId={event.id} />}
+          {event.group.isAdmin && (
+            <>
+              <EditButton eventId={event.id} />
+              <DeleteButton event={event} />
+            </>
+          )}
           <AddToCalendarButton event={event} />
         </MoreActionsButton>
       </FlexRow>

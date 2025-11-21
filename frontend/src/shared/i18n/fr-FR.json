@@ -109,6 +109,11 @@
   "event": {
     "action_menu": {
       "addToCalendar": "Ajouter au calendrier",
+      "delete": "Supprimer",
+      "deleteModal": {
+        "body": "Voulez vous supprimer l'évènement {{ title }} ? Cette action est définitive.",
+        "title": "Supprimer l'évènement"
+      },
       "edit": "Modifier",
       "share": "Partager",
       "unsubscribe": "Se désinscrire"
@@ -725,6 +730,10 @@
   "post": {
     "createModal": {
       "title": "Créer un post"
+    },
+    "deleteModal": {
+      "body": "Voulez vous supprimer l'annonce {{ title }} ? Cette action est définitive.",
+      "title": "Supprimer l'annonce"
     },
     "editModal": {
       "title": "Modifier le post"

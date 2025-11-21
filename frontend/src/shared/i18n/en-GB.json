@@ -109,6 +109,11 @@
   "event": {
     "action_menu": {
       "addToCalendar": "Add to Calendar",
+      "delete": "Delete",
+      "deleteModal": {
+        "body": "Do you really wish to delete the event {{ title }}? This action cannot be undone.",
+        "title": "Delete event"
+      },
       "edit": "Edit",
       "share": "Share",
       "unsubscribe": "Unregister"
@@ -725,6 +730,10 @@
   "post": {
     "createModal": {
       "title": "Create new post"
+    },
+    "deleteModal": {
+      "body": "Do you really wish to delete the post {{ title }}? Ths cannot be undone.",
+      "title": "Delete post"
     },
     "editModal": {
       "title": "Edit the post"
