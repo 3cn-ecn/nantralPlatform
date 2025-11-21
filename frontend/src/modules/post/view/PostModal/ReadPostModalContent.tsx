@@ -1,17 +1,22 @@
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 
 import {
+  AdminPanelSettings as AdminPanelSettingsIcon,
+  Delete as DeleteIcon,
   Edit as EditIcon,
   Group as GroupIcon,
   PushPin as PushPinIcon,
-  AdminPanelSettings as AdminPanelSettingsIcon,
 } from '@mui/icons-material';
 import { Box, IconButton, Tooltip, Typography } from '@mui/material';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 
+import { deletePostApi } from '#modules/post/api/deletePost.api';
 import { Post } from '#modules/post/post.types';
 import { useCurrentUserData } from '#modules/student/hooks/useCurrentUser.data';
 import { Avatar } from '#shared/components/Avatar/Avatar';
 import { FlexRow } from '#shared/components/FlexBox/FlexBox';
+import { ConfirmationModal } from '#shared/components/Modal/ConfirmationModal';
 import {
   ResponsiveDialogContent,
   ResponsiveDialogFooter,
@@ -36,6 +41,16 @@ export function ReadPostModalContent({
 }: ReadPostModalContentProps) {
   const { t, formatRelativeTime } = useTranslation();
   const { staff } = useCurrentUserData();
+  const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
+  const queryClient = useQueryClient();
+  const { isLoading, mutate: deletePost } = useMutation({
+    mutationFn: deletePostApi,
+    onSuccess: () => {
+      setIsConfirmModalOpen(false);
+      queryClient.invalidateQueries(['posts']);
+      onClose();
+    },
+  });
 
   return (
     <>
@@ -93,11 +108,30 @@ export function ReadPostModalContent({
           </Tooltip>
         )}
         {post.isAdmin && (
-          <Tooltip title={t('post.modal.editButton.label')}>
-            <IconButton color="secondary" onClick={onEdit}>
-              <EditIcon />
-            </IconButton>
-          </Tooltip>
+          <>
+            <Tooltip title={t('post.modal.editButton.label')}>
+              <IconButton color="secondary" onClick={onEdit}>
+                <EditIcon />
+              </IconButton>
+            </Tooltip>
+            <Tooltip title={t('post.modal.deleteButton.label')}>
+              <IconButton
+                color="secondary"
+                onClick={() => setIsConfirmModalOpen(true)}
+              >
+                <DeleteIcon />
+              </IconButton>
+            </Tooltip>
+            {isConfirmModalOpen && (
+              <ConfirmationModal
+                title={t('post.deleteModal.title')}
+                body={t('post.deleteModal.body', { title: post.title })}
+                onCancel={() => setIsConfirmModalOpen(false)}
+                onConfirm={() => deletePost(post.id)}
+                loading={isLoading}
+              />
+            )}
+          </>
         )}
       </ResponsiveDialogFooter>
     </>
