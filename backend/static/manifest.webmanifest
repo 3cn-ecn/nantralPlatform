@@ -28,47 +28,61 @@
       "origin": "http://www.nantral-platform.fr"
     }
   ],
-  "screenshots" : [
+  "scope_extensions": [
+    {
+      "origin": "https://nantral-platform.fr"
+    },
+    {
+      "origin": "https://www.nantral-platform.fr"
+    },
+    {
+      "origin": "http://nantral-platform.fr"
+    },
+    {
+      "origin": "http://www.nantral-platform.fr"
+    }
+  ],
+  "screenshots": [
     {
       "src": "/static/img/screenshots/index-wide.png",
-      "sizes": "1280x800",
+      "sizes": "3840x2400",
       "type": "image/png",
-      "platform": "wide",
+      "form_factor": "wide",
       "label": "Login page of Nantral Platform"
     },
     {
       "src": "/static/img/screenshots/index-narrow.png",
-      "sizes": "750x1334",
+      "sizes": "1080x2274",
       "type": "image/png",
-      "platform": "narrow",
+      "form_factor": "narrow",
       "label": "Login page of Nantral Platform"
     },
     {
       "src": "/static/img/screenshots/clubs-wide.png",
-      "sizes": "1280x800",
+      "sizes": "3840x2400",
       "type": "image/png",
-      "platform": "wide",
+      "form_factor": "wide",
       "label": "List page of the clubs of Centrale Nantes"
     },
     {
       "src": "/static/img/screenshots/clubs-narrow.png",
-      "sizes": "750x1334",
+      "sizes": "1080x2274",
       "type": "image/png",
-      "platform": "narrow",
+      "form_factor": "narrow",
       "label": "List page of the clubs of Centrale Nantes"
     },
     {
       "src": "/static/img/screenshots/bde-wide.png",
-      "sizes": "1280x800",
+      "sizes": "3840x2400",
       "type": "image/png",
-      "platform": "wide",
+      "form_factor": "wide",
       "label": "Page of the Student Association (BDE)"
     },
     {
       "src": "/static/img/screenshots/bde-narrow.png",
-      "sizes": "750x1334",
+      "sizes": "1080x2274",
       "type": "image/png",
-      "platform": "narrow",
+      "form_factor": "narrow",
       "label": "Page of the Student Association (BDE)"
     }
   ],
