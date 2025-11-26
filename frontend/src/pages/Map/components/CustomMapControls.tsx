@@ -6,19 +6,15 @@ import { LocationControl } from '#pages/Map/components/Controls/LocationControl'
 import { Toggle3DControl } from '#pages/Map/components/Controls/Toggle3DControl';
 import { ZoomControls } from '#pages/Map/components/Controls/ZoomControls';
 
-export function CustomMapControls({
-  portalContainer,
-}: {
-  portalContainer?: HTMLElement | null;
-}) {
+export function CustomMapControls() {
   return (
     <Paper sx={{ p: 1, alignSelf: 'start' }}>
       <Stack spacing={1}>
-        <ZoomControls portalContainer={portalContainer} />
-        <CompassControl portalContainer={portalContainer} />
-        <LocationControl portalContainer={portalContainer} />
-        <Toggle3DControl portalContainer={portalContainer} />
-        <FullscreenControl portalContainer={portalContainer} />
+        <ZoomControls />
+        <CompassControl />
+        <LocationControl />
+        <Toggle3DControl />
+        <FullscreenControl />
       </Stack>
     </Paper>
   );

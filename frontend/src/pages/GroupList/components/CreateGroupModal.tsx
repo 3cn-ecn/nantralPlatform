@@ -37,17 +37,17 @@ export function CreateGroupModal({
   const navigate = useNavigate();
   const { palette } = useTheme();
   const [formValues, setFormValues] = useState<CreateGroupForm>(value);
-  const { error, isError, mutate } = useMutation<
+  const { error, isError, isPending, mutate } = useMutation<
     Group,
     ApiFormError<CreateGroupForm>,
     CreateGroupForm
-  >(() => createGroupApi(groupType.slug, formValues), {
+  >({
+    mutationFn: () => createGroupApi(groupType.slug, formValues),
     onSuccess: (group) => {
       onClose();
       navigate(group.url);
     },
   });
-  const isLoading = false;
 
   function updateFormValues(val: Partial<CreateGroupForm>) {
     setFormValues({ ...formValues, ...val });
@@ -92,7 +92,7 @@ export function CreateGroupModal({
         <LoadingButton
           form="create-group-form"
           type="submit"
-          loading={isLoading}
+          loading={isPending}
           variant="contained"
         >
           {t('button.confirm')}

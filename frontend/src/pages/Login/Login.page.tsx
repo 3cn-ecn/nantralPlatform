@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { Check } from '@mui/icons-material';
@@ -37,16 +37,14 @@ export default function LoginPage() {
   const {
     isSuccess: isResendSuccess,
     mutate,
-    isLoading: isResendLoading,
-  } = useMutation(resendVerificationEmailApi);
+    isPending: isResendPending,
+  } = useMutation({ mutationFn: resendVerificationEmailApi });
 
-  const { login, error, isLoading } = useAuth();
+  const { login, error, isPending } = useAuth();
 
-  useEffect(() => {
-    if (error?.response?.data.code == '5') {
-      setFormValues((f) => ({ ...f, email_ecn: undefined }));
-    }
-  }, [error]);
+  if (error?.response?.data.code == '5') {
+    setFormValues((f) => ({ ...f, email_ecn: undefined }));
+  }
 
   return (
     <FloatingContainer maxWidth={'sm'}>
@@ -109,7 +107,7 @@ export default function LoginPage() {
                     <Check color="success" />
                   ) : (
                     <LoadingButton
-                      loading={isResendLoading}
+                      loading={isResendPending}
                       variant="outlined"
                       color="inherit"
                       size="small"
@@ -165,7 +163,7 @@ export default function LoginPage() {
               variant="contained"
               size="large"
               fullWidth
-              loading={isLoading}
+              loading={isPending}
             >
               {t('login.login')}
             </LoadingButton>

@@ -1,7 +1,7 @@
 import {
   InfiniteData,
-  UseMutationOptions,
   useMutation,
+  UseMutationOptions,
   useQueryClient,
 } from '@tanstack/react-query';
 
@@ -18,9 +18,9 @@ export function useMarkAllAsSeenMutation() {
   const queryClient = useQueryClient();
   const showToast = useToast();
 
-  const markAllAsSeenMutation = useMutation<number, ApiError>(
-    markAllNotificationsAsSeenApi,
-  );
+  const markAllAsSeenMutation = useMutation<number, ApiError>({
+    mutationFn: markAllNotificationsAsSeenApi,
+  });
 
   const markAllAsSeen = ({
     onSuccess,
@@ -30,7 +30,7 @@ export function useMarkAllAsSeenMutation() {
     markAllAsSeenMutation.mutate(undefined, {
       onSuccess: (...args) => {
         queryClient.setQueriesData(
-          ['notifications', 'list'],
+          { queryKey: ['notifications', 'list'] },
           (data?: InfiniteData<Page<SentNotification>>) =>
             data && {
               ...data,
@@ -41,19 +41,21 @@ export function useMarkAllAsSeenMutation() {
             },
         );
         queryClient.setQueriesData(
-          ['notifications', 'count', { seen: false }],
+          { queryKey: ['notifications', 'count', { seen: false }] },
           () => 0,
         );
         // invalidate queries to force reload the queries we have modified
-        queryClient.invalidateQueries(['notifications']);
+        queryClient.invalidateQueries({
+          queryKey: ['notifications'],
+        });
         return onSuccess?.(...args);
       },
-      onError: (error, variables, context) => {
+      onError: (error, variables, onMutateResult, context) => {
         showToast({
           message: error.message,
           variant: 'error',
         });
-        if (onError) return onError(error, variables, context);
+        if (onError) return onError(error, variables, onMutateResult, context);
       },
       ...options,
     });

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 import { Replay as ReplayIcon, Send as SendIcon } from '@mui/icons-material';
 import {
@@ -22,18 +22,16 @@ import { FlexAuto, FlexCol, FlexRow } from '#shared/components/FlexBox/FlexBox';
 import { useTranslation } from '#shared/i18n/useTranslation';
 
 export default function SignaturePage() {
-  const [markdownContent, setMarkdownCode] = useState('Chargement...');
-  const [isExportModalOpen, setExportModalOpen] = useState(false);
+  // use 0 to represent a closed modal
+  const [exportStep, setExportStep] = useState<0 | 1 | 2>(0);
   const [template, setTemplate] = useState<TemplateType>('ecn');
 
   const { t } = useTranslation();
-  const query = useSignatureInfo({ suspense: true, staleTime: Infinity });
+  const query = useSignatureInfo({ staleTime: Infinity });
 
-  useEffect(() => {
-    if (query.data) {
-      setMarkdownCode(formatSignatureInfoToMarkdown(query.data, template));
-    }
-  }, [query.data, template]);
+  const [markdownContent, setMarkdownCode] = useState(
+    formatSignatureInfoToMarkdown(query.data, template),
+  );
 
   const group =
     (template.startsWith('@') &&
@@ -79,7 +77,7 @@ export default function SignaturePage() {
             <Button
               variant="contained"
               endIcon={<SendIcon />}
-              onClick={() => setExportModalOpen(true)}
+              onClick={() => setExportStep(1)}
             >
               {t('signature.actions.export.label')}
             </Button>
@@ -102,8 +100,8 @@ export default function SignaturePage() {
         </Box>
       </FlexAuto>
       <ExportMethodModal
-        isOpen={isExportModalOpen}
-        onClose={() => setExportModalOpen(false)}
+        step={exportStep}
+        setStep={setExportStep}
         markdownContent={markdownContent}
         group={group}
       />

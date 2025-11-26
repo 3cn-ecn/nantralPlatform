@@ -42,7 +42,7 @@ interface Event {
 function MyComponent() {
   // Create a query object. On the first time, data will be stored in the cache.
   // Then on next queries, the data of the cache will be used while the query
-  // is loading. The 'queryKey' is the index of the cache (add variables in the
+  // is pending. The 'queryKey' is the index of the cache (add variables in the
   // list to update the query when some variables change).
   const eventsQuery = useQuery<Page<Event>, AxiosError>({
     queryKey: ["events"],
@@ -57,8 +57,8 @@ function MyComponent() {
     return <p>Request not started... ⏳</p>;
   }
 
-  // check if the query is loading
-  if (eventsQuery.isLoading) {
+  // check if the query is pending
+  if (eventsQuery.isPending) {
     return <p>Loading... ⏳</p>;
   }
 
@@ -90,14 +90,14 @@ Some explanations on this code:
 
 -  First, we declare the imports and interfaces.
 -  Then we call our API with `axios`. We obtain a list like this:
-   ```js
-   [ { title: 'Title 1', begin_date: '2022-01-01T16:54:000Z', ...}, ...]
+```js
+[ { title: 'Title 1', begin_date: '2022-01-01T16:54:000Z', ...}, ...]
    ```
 -  To respect javascript conventions, we change the format of the keys
-   and convert dates from string to Date objects with the `convertFromPythonData`
-   function:
-   ```js
-   [ { title: 'Title 1', startDate: Date('2022-01-01T16:54:000Z'), ...}, ...]
+and convert dates from string to Date objects with the `convertFromPythonData`
+function:
+```js
+[ { title: 'Title 1', startDate: Date('2022-01-01T16:54:000Z'), ...}, ...]
    ```
 -  We check for errors.
 -  And finally we render the data.

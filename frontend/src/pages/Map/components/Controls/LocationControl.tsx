@@ -11,11 +11,7 @@ import type { GeolocateControl as GeolocateControlType } from 'mapbox-gl';
 import { useToast } from '#shared/context/Toast.context';
 import { useTranslation } from '#shared/i18n/useTranslation';
 
-export function LocationControl({
-  portalContainer,
-}: {
-  portalContainer?: HTMLElement | null;
-}) {
+export function LocationControl() {
   const { t } = useTranslation();
   const showToast = useToast();
   const geoControlRef = useRef<GeolocateControlType>(null);
@@ -32,7 +28,7 @@ export function LocationControl({
             : t('map.controls.followPosition')
         }
         placement={'left'}
-        PopperProps={{ container: portalContainer }}
+        slotProps={{ popper: { disablePortal: true } }}
       >
         {/* use `span` because of disabled button and tooltip */}
         <span>

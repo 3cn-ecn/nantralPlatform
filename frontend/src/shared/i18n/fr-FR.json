@@ -672,6 +672,7 @@
     "moreButton": {
       "addGroup": "Ajouter un groupe",
       "hideArchive": "Cacher les groupes archivés",
+      "tooltip": "Voir plus d'actions",
       "viewArchive": "Voir les groupes archivés"
     },
     "popup": {

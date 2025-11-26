@@ -18,13 +18,13 @@ import { useTranslation } from '#shared/i18n/useTranslation';
  * This component shows a message to advice users to change their username if they did not change it yet
  */
 export default function UpdateUsernameAlert() {
-  const { data, isLoading, isSuccess } = useQuery({
+  const { data, isPending, isSuccess } = useQuery({
     queryFn: getUsernameApi,
     queryKey: ['username'],
   });
   const { t } = useTranslation();
 
-  if (isLoading) {
+  if (isPending) {
     return (
       <Box
         sx={{ display: 'flex', width: '100%', justifyContent: 'center', mb: 3 }}

@@ -65,21 +65,26 @@ export function ModalEditMembership({
   const queryClient = useQueryClient();
   const { palette } = useTheme();
   const { staff } = useCurrentUserData();
-  const { error, isError, mutate, isLoading } = useMutation<
+  const { error, isError, mutate, isPending } = useMutation<
     Membership,
     ApiFormError<MembershipFormDTO>,
     MembershipForm
-  >(() => editMembershipApi(membership.id, formValues), {
+  >({
+    mutationFn: () => editMembershipApi(membership.id, formValues),
+
     onSuccess: () => {
-      queryClient.invalidateQueries(['group', { slug: membership.group.slug }]);
-      queryClient.invalidateQueries([
-        'members',
-        { slug: membership.group.slug },
-      ]);
-      queryClient.invalidateQueries([
-        'membership',
-        { group: membership.group.slug, student: membership.student.id },
-      ]);
+      queryClient.invalidateQueries({
+        queryKey: ['group', { slug: membership.group.slug }],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ['members', { slug: membership.group.slug }],
+      });
+      queryClient.invalidateQueries({
+        queryKey: [
+          'membership',
+          { group: membership.group.slug, student: membership.student.id },
+        ],
+      });
       onClose();
     },
   });
@@ -143,7 +148,7 @@ export function ModalEditMembership({
           <LoadingButton
             form="edit-group-form"
             type="submit"
-            loading={isLoading}
+            loading={isPending}
             variant="contained"
           >
             {t('button.confirm')}

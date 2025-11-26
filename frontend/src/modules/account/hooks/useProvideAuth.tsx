@@ -1,4 +1,8 @@
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import {
+  useMutation,
+  useQueryClient,
+  useSuspenseQuery,
+} from '@tanstack/react-query';
 import { AxiosError } from 'axios';
 
 import { DjangoRestApiFieldValidationError } from '#shared/infra/errors';
@@ -8,7 +12,7 @@ import { loginApi, LoginApiBody } from '../api/login.api';
 import { logoutApi } from '../api/logout.api';
 
 export interface ProvideAuthValues {
-  isLoading: boolean;
+  isPending: boolean;
   isAuthenticated: boolean;
   error:
     | (AxiosError<{
@@ -26,34 +30,32 @@ export interface ProvideAuthValues {
 export function useProvideAuth(): ProvideAuthValues {
   const queryClient = useQueryClient();
 
-  const { data: isAuthenticated, isLoading } = useQuery({
+  const { data: isAuthenticated, isPending } = useSuspenseQuery({
     queryFn: isAuthenticatedApi,
     queryKey: ['isAuthenticated'],
     refetchOnWindowFocus: false,
     retry: false,
     refetchOnMount: false,
-    suspense: true,
   });
 
-  const { mutateAsync: logout, isLoading: isLogoutLoading } = useMutation(
-    logoutApi,
-    {
-      onSuccess: async () => {
-        queryClient.clear();
-        queryClient.setQueryData(['isAuthenticated'], false);
-      },
+  const { mutateAsync: logout, isPending: isLogoutLoading } = useMutation({
+    mutationFn: logoutApi,
+    onSuccess: async () => {
+      queryClient.clear();
+      queryClient.setQueryData(['isAuthenticated'], false);
     },
-  );
+  });
 
   const {
-    isLoading: isLoginLoading,
+    isPending: isLoginLoading,
     mutateAsync: login,
     error,
   } = useMutation<
     number,
     AxiosError<{ message?: string; code?: string }>,
     LoginApiBody
-  >(loginApi, {
+  >({
+    mutationFn: loginApi,
     onSuccess: () => {
       queryClient.clear();
       queryClient.setQueryData(['isAuthenticated'], true);
@@ -61,7 +63,7 @@ export function useProvideAuth(): ProvideAuthValues {
   });
 
   return {
-    isLoading: isLoading || isLogoutLoading || isLoginLoading,
+    isPending: isPending || isLogoutLoading || isLoginLoading,
     isAuthenticated: !!isAuthenticated,
     logout,
     login,

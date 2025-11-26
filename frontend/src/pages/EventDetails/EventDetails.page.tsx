@@ -1,3 +1,4 @@
+import { Spinner } from 'react-bootstrap';
 import { useParams } from 'react-router-dom';
 
 import { AdminPanelSettings as AdminPanelSettingsIcon } from '@mui/icons-material';
@@ -9,15 +10,15 @@ import {
   Typography,
 } from '@mui/material';
 
-import { useEventDetailsQuery } from '#modules/event/hooks/useEventDetails.query';
+import { useEventDetailsSuspenseQuery } from '#modules/event/hooks/useEventDetailsSuspense.query';
 import { useCurrentUserData } from '#modules/student/hooks/useCurrentUser.data';
 import { ErrorPageContent } from '#shared/components/ErrorPageContent/ErrorPageContent';
 import { FlexRow } from '#shared/components/FlexBox/FlexBox';
 import { RichTextRenderer } from '#shared/components/RichTextRenderer/RichTextRenderer';
 import { Spacer } from '#shared/components/Spacer/Spacer';
+import { TopImage } from '#shared/components/TopImage/TopImage';
 import { useTranslation } from '#shared/i18n/useTranslation';
 
-import { TopImage } from '../../shared/components/TopImage/TopImage';
 import { ActionButtonsBar } from './components/ActionButtonsBar';
 import { BackgroundImageOverlay } from './components/BackgroundImageOverlay';
 import { EventInfo } from './components/EventInfo';
@@ -28,14 +29,11 @@ export default function EventDetailsPage() {
   const { staff } = useCurrentUserData();
 
   const { id: eventId } = useParams();
-  // Using suspense: true allows to skip isLoading, isError states: they
+  // Using suspense: true allows to skip isPending, isError states: they
   // are catch by the nearest <Suspense> boundary, in this case the one
   // from <PageTemplate />.
   // We add useErrorBoundary: false to remove the isError state from suspense
-  const eventQuery = useEventDetailsQuery(Number(eventId), {
-    suspense: true,
-    useErrorBoundary: false,
-  });
+  const eventQuery = useEventDetailsSuspenseQuery(Number(eventId));
 
   if (eventQuery.isError) {
     return (
@@ -45,6 +43,10 @@ export default function EventDetailsPage() {
         retryFn={eventQuery.refetch}
       />
     );
+  }
+
+  if (eventQuery.isPending) {
+    return <Spinner />;
   }
 
   if (!eventQuery.isSuccess) {

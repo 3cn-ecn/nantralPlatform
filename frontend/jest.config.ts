@@ -1,6 +1,9 @@
 import { pathsToModuleNameMapper } from 'ts-jest';
+import { readConfigFile, sys } from 'typescript';
 
-import { compilerOptions } from './tsconfig.json';
+const { config } = readConfigFile('./tsconfig.json', sys.readFile);
+
+const { compilerOptions } = config;
 
 export default {
   roots: ['<rootDir>/src'],
@@ -10,7 +13,7 @@ export default {
     '!src/**/*.d.ts',
     '!src/legacy/**/*',
   ],
-  setupFiles: ['react-app-polyfill/jsdom'],
+  setupFiles: ['react-app-polyfill/jsdom', '<rootDir>/jest.setup.ts'],
   setupFilesAfterEnv: ['<rootDir>/src/shared/testing/setupTests.ts'],
   testEnvironment: 'jsdom',
   transform: {

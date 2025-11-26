@@ -33,12 +33,12 @@ import { TimeAndPlace } from './TimeAndPlace';
 
 export function GroupInfo({
   group,
-  isLoading,
+  isPending,
   memberCount,
   eventCount,
 }: {
   group?: Group;
-  isLoading: boolean;
+  isPending: boolean;
   memberCount?: number;
   eventCount?: number;
 }) {
@@ -63,7 +63,7 @@ export function GroupInfo({
           ...(isSmaller && { mx: 'auto' }),
         }}
       >
-        {isLoading ? (
+        {isPending ? (
           <Skeleton
             variant="circular"
             animation="wave"
@@ -81,7 +81,7 @@ export function GroupInfo({
       <FlexCol>
         <FlexRow gap={1} alignItems="center">
           <Typography variant="h1">
-            {isLoading ? (
+            {isPending ? (
               <Skeleton animation="wave" width={200} />
             ) : (
               group?.name
@@ -101,7 +101,7 @@ export function GroupInfo({
         </FlexRow>
 
         <GroupInfoLine
-          isLoading={isLoading}
+          isPending={isPending}
           eventCount={eventCount}
           memberCount={memberCount}
           slug={group?.slug}

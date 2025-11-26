@@ -34,7 +34,9 @@ export function SetMainMenuItem({
         message: message,
         variant: 'success',
       });
-      await queryClient.invalidateQueries(['emails']);
+      await queryClient.invalidateQueries({
+        queryKey: ['emails'],
+      });
     },
     onError: (error) => {
       if (error.fields?.email) {
@@ -79,7 +81,7 @@ export function SetMainMenuItem({
             handleClose();
           }}
           reset={changeEmailMutation.reset}
-          isLoading={changeEmailMutation.isLoading}
+          isPending={changeEmailMutation.isPending}
         />
       )}
     </>

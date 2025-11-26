@@ -1,4 +1,7 @@
 // cspell:ignore facebook, instagram, linkedin, youtube, spotify, discord, fortawesome, fontawesome, youtu
+import { JSX } from 'react';
+
+import { IconProp } from '@fortawesome/fontawesome-svg-core';
 import {
   faDiscord,
   faFacebook,
@@ -38,28 +41,52 @@ export function getIconAndColor(socialLink: SocialLink): {
 
   switch (domain) {
     case 'facebook.com':
-      return { icon: <FAIcon icon={faFacebook} />, color: colors.blue[600] };
+      return {
+        icon: <FAIcon icon={faFacebook as IconProp} />,
+        color: colors.blue[600],
+      };
     case 'instagram.com':
-      return { icon: <FAIcon icon={faInstagram} />, color: colors.pink[600] };
+      return {
+        icon: <FAIcon icon={faInstagram as IconProp} />,
+        color: colors.pink[600],
+      };
     case 'x.com':
     case 'twitter.com':
-      return { icon: <FAIcon icon={faXTwitter} />, color: colors.common.black };
+      return {
+        icon: <FAIcon icon={faXTwitter as IconProp} />,
+        color: colors.common.black,
+      };
     case 'linkedin.com':
-      return { icon: <FAIcon icon={faLinkedin} />, color: colors.blue[600] };
+      return {
+        icon: <FAIcon icon={faLinkedin as IconProp} />,
+        color: colors.blue[600],
+      };
     case 'youtube.com':
     case 'youtu.be':
-      return { icon: <FAIcon icon={faYoutube} />, color: colors.red[600] };
+      return {
+        icon: <FAIcon icon={faYoutube as IconProp} />,
+        color: colors.red[600],
+      };
     case 'spotify.com':
-      return { icon: <FAIcon icon={faSpotify} />, color: colors.green[600] };
+      return {
+        icon: <FAIcon icon={faSpotify as IconProp} />,
+        color: colors.green[600],
+      };
     case 'discord.gg':
-      return { icon: <FAIcon icon={faDiscord} />, color: colors.indigo[400] };
+      return {
+        icon: <FAIcon icon={faDiscord as IconProp} />,
+        color: colors.indigo[400],
+      };
     case 'm.me':
       return {
-        icon: <FAIcon icon={faFacebookMessenger} />,
+        icon: <FAIcon icon={faFacebookMessenger as IconProp} />,
         color: colors.common.black,
       };
     case 'whatsapp.com':
-      return { icon: <FAIcon icon={faWhatsapp} />, color: colors.green[600] };
+      return {
+        icon: <FAIcon icon={faWhatsapp as IconProp} />,
+        color: colors.green[600],
+      };
     default:
       return { icon: <GlobeIcon />, color: colors.grey[600] };
   }

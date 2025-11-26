@@ -3,14 +3,14 @@ import { Skeleton, Typography } from '@mui/material';
 import { useTranslation } from '#shared/i18n/useTranslation';
 
 interface GroupInfoLineProps {
-  isLoading: boolean;
+  isPending: boolean;
   memberCount?: number;
   eventCount?: number;
   slug?: string;
 }
 
 export function GroupInfoLine({
-  isLoading,
+  isPending,
   memberCount,
   eventCount,
   slug,
@@ -30,7 +30,7 @@ export function GroupInfoLine({
 
   return (
     <Typography color="textSecondary" variant="body2" mt="1px">
-      {isLoading ? (
+      {isPending ? (
         <Skeleton animation="wave" width={200} />
       ) : (
         infos.join(' • ')

@@ -1,167 +1,167 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
 exports[`Home page should render correctly 1`] = `
 <DocumentFragment>
   <div
-    class="MuiContainer-root MuiContainer-maxWidthSm css-1dsi6ev-MuiContainer-root"
+    class="MuiContainer-root MuiContainer-maxWidthSm css-1tl5h06-MuiContainer-root"
   >
     <h1
-      class="MuiTypography-root MuiTypography-h1 css-11v5353-MuiTypography-root"
+      class="MuiTypography-root MuiTypography-h1 css-17l2fn9-MuiTypography-root"
     >
       Legal Notice
     </h1>
     <h4
-      class="MuiTypography-root MuiTypography-h4 css-12wu3qo-MuiTypography-root"
+      class="MuiTypography-root MuiTypography-h4 css-btwmct-MuiTypography-root"
     >
       Site identity
     </h4>
     <p
-      class="MuiTypography-root MuiTypography-body1 css-17s6y1p-MuiTypography-root"
+      class="MuiTypography-root MuiTypography-body1 css-1h2sezf-MuiTypography-root"
     >
       Name of the site : Nantral Platform
     </p>
     <p
-      class="MuiTypography-root MuiTypography-body1 css-17s6y1p-MuiTypography-root"
+      class="MuiTypography-root MuiTypography-body1 css-1h2sezf-MuiTypography-root"
     >
       Link : https://www.nantral-platform.fr
     </p>
     <p
-      class="MuiTypography-root MuiTypography-body1 css-17s6y1p-MuiTypography-root"
+      class="MuiTypography-root MuiTypography-body1 css-1h2sezf-MuiTypography-root"
     >
       Owner : Association des Étudiants de l'École Centrale de Nantes
     </p>
     <h4
-      class="MuiTypography-root MuiTypography-h4 css-12wu3qo-MuiTypography-root"
+      class="MuiTypography-root MuiTypography-h4 css-btwmct-MuiTypography-root"
     >
       The association
     </h4>
     <p
-      class="MuiTypography-root MuiTypography-body1 css-17s6y1p-MuiTypography-root"
+      class="MuiTypography-root MuiTypography-body1 css-1h2sezf-MuiTypography-root"
     >
       ASSOCIATION DES ÉTUDIANTS DE L'ÉCOLE CENTRALE DE NANTES
     </p>
     <p
-      class="MuiTypography-root MuiTypography-body1 css-17s6y1p-MuiTypography-root"
+      class="MuiTypography-root MuiTypography-body1 css-1h2sezf-MuiTypography-root"
     >
       École Centrale de Nantes, 1 rue de la Noë, 44300 Nantes
     </p>
     <p
-      class="MuiTypography-root MuiTypography-body1 css-17s6y1p-MuiTypography-root"
+      class="MuiTypography-root MuiTypography-body1 css-1h2sezf-MuiTypography-root"
     >
       SIREN : 790 010 078
     </p>
     <p
-      class="MuiTypography-root MuiTypography-body1 css-17s6y1p-MuiTypography-root"
+      class="MuiTypography-root MuiTypography-body1 css-1h2sezf-MuiTypography-root"
     >
       APE : 9499Z
     </p>
     <p
-      class="MuiTypography-root MuiTypography-body1 css-17s6y1p-MuiTypography-root"
+      class="MuiTypography-root MuiTypography-body1 css-1h2sezf-MuiTypography-root"
     >
       TVA Intra Num. : FR 49 79 00 10 07 8
     </p>
     <p
-      class="MuiTypography-root MuiTypography-body1 css-17s6y1p-MuiTypography-root"
+      class="MuiTypography-root MuiTypography-body1 css-1h2sezf-MuiTypography-root"
     >
       E-Mail : bde@ec-nantes.fr
     </p>
     <h4
-      class="MuiTypography-root MuiTypography-h4 css-12wu3qo-MuiTypography-root"
+      class="MuiTypography-root MuiTypography-h4 css-btwmct-MuiTypography-root"
     >
       Design and production
     </h4>
     <p
-      class="MuiTypography-root MuiTypography-body1 css-17s6y1p-MuiTypography-root"
+      class="MuiTypography-root MuiTypography-body1 css-1h2sezf-MuiTypography-root"
     >
       CLUB NANTRAL PLATFORM
     </p>
     <h4
-      class="MuiTypography-root MuiTypography-h4 css-12wu3qo-MuiTypography-root"
+      class="MuiTypography-root MuiTypography-h4 css-btwmct-MuiTypography-root"
     >
       Hosting
     </h4>
     <p
-      class="MuiTypography-root MuiTypography-body1 css-17s6y1p-MuiTypography-root"
+      class="MuiTypography-root MuiTypography-body1 css-1h2sezf-MuiTypography-root"
     >
       OVH
     </p>
     <p
-      class="MuiTypography-root MuiTypography-body1 css-17s6y1p-MuiTypography-root"
+      class="MuiTypography-root MuiTypography-body1 css-1h2sezf-MuiTypography-root"
     >
       SAS with a capital of 10 069 020 €
     </p>
     <p
-      class="MuiTypography-root MuiTypography-body1 css-17s6y1p-MuiTypography-root"
+      class="MuiTypography-root MuiTypography-body1 css-1h2sezf-MuiTypography-root"
     >
       RCS Lille Métropole 424 761 419 00045
     </p>
     <p
-      class="MuiTypography-root MuiTypography-body1 css-17s6y1p-MuiTypography-root"
+      class="MuiTypography-root MuiTypography-body1 css-1h2sezf-MuiTypography-root"
     >
       APE Code : 2620Z
     </p>
     <p
-      class="MuiTypography-root MuiTypography-body1 css-17s6y1p-MuiTypography-root"
+      class="MuiTypography-root MuiTypography-body1 css-1h2sezf-MuiTypography-root"
     >
       TVA Num. : FR 22 42 47 61 41 9
     </p>
     <p
-      class="MuiTypography-root MuiTypography-body1 css-17s6y1p-MuiTypography-root"
+      class="MuiTypography-root MuiTypography-body1 css-1h2sezf-MuiTypography-root"
     >
       Head office : 2 rue Kellermann - 59100 Roubaix - France
     </p>
     <h4
-      class="MuiTypography-root MuiTypography-h4 css-12wu3qo-MuiTypography-root"
+      class="MuiTypography-root MuiTypography-h4 css-btwmct-MuiTypography-root"
     >
       Intellectual property
     </h4>
     <p
-      class="MuiTypography-root MuiTypography-body1 css-17s6y1p-MuiTypography-root"
+      class="MuiTypography-root MuiTypography-body1 css-1h2sezf-MuiTypography-root"
     >
       Unless stated otherwise, all the elements accessible on the site (texts, images, logos, icons, sounds, software, etc.) remain the exclusive property of their authors, with regard to intellectual property rights or rights of use.
     </p>
     <p
-      class="MuiTypography-root MuiTypography-body1 css-17s6y1p-MuiTypography-root"
+      class="MuiTypography-root MuiTypography-body1 css-1h2sezf-MuiTypography-root"
     >
       Any reproduction, representation, modification, publication, adaptation of all or part of the elements of the site, whatever the means or process used, is prohibited, except with the prior written authorization of the author.
     </p>
     <p
-      class="MuiTypography-root MuiTypography-body1 css-17s6y1p-MuiTypography-root"
+      class="MuiTypography-root MuiTypography-body1 css-1h2sezf-MuiTypography-root"
     >
       Any unauthorized exploitation of the site or any element it contains is considered to constitute an infringement and prosecuted.
     </p>
     <p
-      class="MuiTypography-root MuiTypography-body1 css-17s6y1p-MuiTypography-root"
+      class="MuiTypography-root MuiTypography-body1 css-1h2sezf-MuiTypography-root"
     >
       The trademarks and logos reproduced on the site are registered by the companies that own them.
     </p>
     <h4
-      class="MuiTypography-root MuiTypography-h4 css-12wu3qo-MuiTypography-root"
+      class="MuiTypography-root MuiTypography-h4 css-btwmct-MuiTypography-root"
     >
       Cookies
     </h4>
     <p
-      class="MuiTypography-root MuiTypography-body1 css-17s6y1p-MuiTypography-root"
+      class="MuiTypography-root MuiTypography-body1 css-1h2sezf-MuiTypography-root"
     >
       Only a session cookie is used on the site and expires after 14 days.
     </p>
     <h4
-      class="MuiTypography-root MuiTypography-h4 css-12wu3qo-MuiTypography-root"
+      class="MuiTypography-root MuiTypography-h4 css-btwmct-MuiTypography-root"
     >
       Embedded content from other sites
     </h4>
     <p
-      class="MuiTypography-root MuiTypography-body1 css-17s6y1p-MuiTypography-root"
+      class="MuiTypography-root MuiTypography-body1 css-1h2sezf-MuiTypography-root"
     >
       The contents on this site may include contents from external sources (for instance videos, images, ...). These embedded contents act in the same way as if the visitor had visited the original site from where this content is based. These sites may therefore use additional cookies.
     </p>
     <h4
-      class="MuiTypography-root MuiTypography-h4 css-12wu3qo-MuiTypography-root"
+      class="MuiTypography-root MuiTypography-h4 css-btwmct-MuiTypography-root"
     >
       Personal data usage
     </h4>
     <p
-      class="MuiTypography-root MuiTypography-body1 css-17s6y1p-MuiTypography-root"
+      class="MuiTypography-root MuiTypography-body1 css-1h2sezf-MuiTypography-root"
     >
       When you register on the site, the personal data you send us will be stored and kept by the Association des Étudiants de l'École Centrale de Nantes until you request the deletion of your user account using the contact form.
     </p>

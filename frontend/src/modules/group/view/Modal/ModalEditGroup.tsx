@@ -1,4 +1,4 @@
-import { FormEvent, useEffect, useState } from 'react';
+import { FormEvent, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 
 import {
@@ -48,20 +48,27 @@ export function ModalEditGroup({
   const queryClient = useQueryClient();
   const { palette } = useTheme();
   const [, setSerachParams] = useSearchParams();
-  const { error, isError, mutate, isLoading } = useMutation<
+  const { error, isError, mutate, isPending } = useMutation<
     Group,
     ApiFormError<CreateGroupForm>,
     CreateGroupForm
-  >(() => updateGroupApi(group.slug, formValues), {
+  >({
+    mutationFn: () => updateGroupApi(group.slug, formValues),
+
     onSuccess: () => {
-      queryClient.invalidateQueries(['group', { slug: group.slug }]);
-      queryClient.invalidateQueries(['history', { slug: group.slug }]);
+      queryClient.invalidateQueries({
+        queryKey: ['group', { slug: group.slug }],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ['history', { slug: group.slug }],
+      });
       setSerachParams({}, { preventScrollReset: true });
       setHasModifications(false);
     },
   });
 
   function updateFormValues(val: Partial<CreateGroupForm>) {
+    setHasModifications(true);
     setFormValues({ ...formValues, ...val });
   }
 
@@ -69,10 +76,6 @@ export function ModalEditGroup({
     e.preventDefault();
     mutate(formValues);
   }
-
-  useEffect(() => {
-    setHasModifications(true);
-  }, [formValues]);
 
   return (
     <ResponsiveDialog onClose={onClose} disableEnforceFocus>
@@ -135,7 +138,7 @@ export function ModalEditGroup({
               <LoadingButton
                 form="edit-group-form"
                 type="submit"
-                loading={isLoading}
+                loading={isPending}
                 variant="contained"
                 disabled={!hasModifications}
                 startIcon={hasModifications && <Save />}

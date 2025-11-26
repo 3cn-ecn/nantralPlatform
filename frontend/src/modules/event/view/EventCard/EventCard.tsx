@@ -32,7 +32,7 @@ interface EventCardProps {
 export function EventCard({ event }: EventCardProps) {
   const { formatDate, formatTime, formatDateTimeRange } = useTranslation();
   const formatDateOptions: Intl.DateTimeFormatOptions =
-    Math.abs(differenceInMonths(event.startDate, Date.now())) > 2
+    Math.abs(differenceInMonths(event.startDate, new Date())) > 2
       ? { dateStyle: 'short' }
       : { weekday: 'short', day: 'numeric', month: 'long' };
   const isLongerThanADay =

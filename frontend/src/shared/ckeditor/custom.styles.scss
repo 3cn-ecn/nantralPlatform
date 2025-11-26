@@ -12,6 +12,8 @@
   --ck-color-focus-outer-shadow: #f7d0d4;
   --ck-color-focus-disabled-shadow: #f7d0d482;
   --ck-color-base-border: rgb(196, 196, 196);
+  /* prevent text color from being always black in the editor */
+  --ck-content-font-color: initial;
   --ck-z-default: 1400;
   --ck-border-radius: 20px;
 
@@ -41,6 +43,7 @@
     button.ck-button:first-of-type {
       border-bottom-left-radius: 20px;
     }
+
     button.ck-button:last-of-type {
       border-bottom-right-radius: 20px;
     }

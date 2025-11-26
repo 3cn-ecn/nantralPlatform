@@ -25,7 +25,7 @@ export function InvalidChip({ email }: { email: Email }) {
       </Tooltip>
     );
   }
-  if (resendMutation.isLoading) {
+  if (resendMutation.isPending) {
     return (
       <Tooltip title={t('email.chip.sendMessage')}>
         <Chip

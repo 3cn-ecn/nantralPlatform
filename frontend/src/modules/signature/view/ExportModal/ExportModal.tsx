@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 import { GroupPreview } from '#modules/group/types/group.types';
 import { ResponsiveDialog } from '#shared/components/ResponsiveDialog';
@@ -7,25 +7,21 @@ import { ChooseMethodModalContent } from './ChooseMethodModalContent';
 import { IncludeSignatureModalContent } from './IncludeSignatureModalContent';
 
 interface ExportMethodModalProps {
-  isOpen: boolean;
-  onClose: () => void;
+  step: 0 | 1 | 2;
+  setStep: (step: 0 | 1 | 2) => void;
   markdownContent: string;
   group?: GroupPreview;
 }
 
 export function ExportMethodModal({
-  isOpen,
-  onClose,
+  step,
+  setStep,
   markdownContent,
   group,
 }: ExportMethodModalProps) {
-  const [step, setStep] = useState<1 | 2>(1);
   const [codeToCopy, setCodeToCopy] = useState<string | undefined>();
   const [image, setImage] = useState<string | undefined>();
-
-  useEffect(() => {
-    if (isOpen) setStep(1);
-  }, [isOpen]);
+  const isOpen = Boolean(step);
 
   const onPreviousStep = () => {
     setStep(1);
@@ -38,17 +34,17 @@ export function ExportMethodModal({
   };
 
   return (
-    <ResponsiveDialog open={isOpen} maxWidth="sm" onClose={onClose}>
+    <ResponsiveDialog open={isOpen} maxWidth="sm" onClose={() => setStep(0)}>
       {step === 1 ? (
         <ChooseMethodModalContent
-          onClose={onClose}
+          onClose={() => setStep(0)}
           onNextStep={onNextStep}
           markdownContent={markdownContent}
           group={group}
         />
       ) : (
         <IncludeSignatureModalContent
-          onClose={onClose}
+          onClose={() => setStep(0)}
           onBack={onPreviousStep}
           codeToCopy={codeToCopy}
           image={image}

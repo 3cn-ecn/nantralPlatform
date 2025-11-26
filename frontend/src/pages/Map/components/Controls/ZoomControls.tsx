@@ -6,11 +6,7 @@ import { IconButton, Tooltip } from '@mui/material';
 
 import { useTranslation } from '#shared/i18n/useTranslation';
 
-export function ZoomControls({
-  portalContainer,
-}: {
-  portalContainer?: HTMLElement | null;
-}) {
+export function ZoomControls() {
   const { current: mapRef } = useMap();
   const [zoom, setZoom] = useState(13);
   const { t } = useTranslation();
@@ -32,7 +28,7 @@ export function ZoomControls({
       <Tooltip
         title={t('map.controls.zoomIn')}
         placement={'left'}
-        PopperProps={{ container: portalContainer }}
+        slotProps={{ popper: { disablePortal: true } }}
       >
         <IconButton
           size="small"
@@ -48,7 +44,7 @@ export function ZoomControls({
       <Tooltip
         title={t('map.controls.zoomOut')}
         placement={'left'}
-        PopperProps={{ container: portalContainer }}
+        slotProps={{ popper: { disablePortal: true } }}
       >
         <IconButton
           size="small"

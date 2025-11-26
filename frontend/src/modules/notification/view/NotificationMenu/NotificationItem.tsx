@@ -23,7 +23,7 @@ export function NotificationItem({
   notification,
   onClose,
 }: NotificationItemProps) {
-  const { markAsSeen, markAsUnseen, isLoading } = useMarkAsSeenMutation(
+  const { markAsSeen, markAsUnseen, isPending } = useMarkAsSeenMutation(
     notification.id,
   );
 
@@ -74,7 +74,7 @@ export function NotificationItem({
             edge="end"
             sx={{ width: 28, height: 28 }}
           >
-            {isLoading ? (
+            {isPending ? (
               <CircularProgress size={12} thickness={6} />
             ) : (
               <Typography

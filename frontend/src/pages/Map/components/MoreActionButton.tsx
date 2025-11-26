@@ -2,11 +2,10 @@ import { useMemo, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 
 import { MoreHoriz } from '@mui/icons-material';
-import { MenuItem } from '@mui/material';
+import { IconButton, Menu, MenuItem, Tooltip } from '@mui/material';
 
 import { CreateGroupModal } from '#pages/GroupList/components/CreateGroupModal';
 import { useGroupTypeDetails } from '#pages/GroupList/hooks/useGroupTypeDetails';
-import { IconMenu } from '#shared/components/IconMenu/IconMenu';
 import { useBreakpoint } from '#shared/hooks/useBreakpoint';
 import { useTranslation } from '#shared/i18n/useTranslation';
 
@@ -25,13 +24,36 @@ export function MoreActionButton({
   const [params] = useSearchParams();
   const type = useMemo(() => params.get('type'), [params]);
 
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const open = Boolean(anchorEl);
+  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+  const handleShowArchive = () => {
+    handleClose();
+    setShowArchived(!showArchive);
+  };
+  const handleCreateGroup = () => {
+    setGroupFormOpen(true);
+    handleClose();
+  };
+
   const [groupFormOpen, setGroupFormOpen] = useState(false);
 
   return (
     <>
-      <IconMenu
-        Icon={MoreHoriz}
-        size={'medium'}
+      <Tooltip title={t('map.moreButton.tooltip')}>
+        <IconButton onClick={handleClick} size={'medium'}>
+          <MoreHoriz fontSize="inherit" />
+        </IconButton>
+      </Tooltip>
+      <Menu
+        anchorEl={anchorEl}
+        open={open}
+        onClose={handleClose}
         disablePortal // show menu when map is fullscreen
       >
         {isSmaller && (
@@ -39,17 +61,17 @@ export function MoreActionButton({
             {t('map.viewList')}
           </MenuItem>
         )}
-        <MenuItem onClick={() => setShowArchived(!showArchive)}>
+        <MenuItem onClick={handleShowArchive}>
           {showArchive
             ? t('map.moreButton.hideArchive')
             : t('map.moreButton.viewArchive')}
         </MenuItem>
-        {type && (
-          <MenuItem onClick={() => setGroupFormOpen(true)}>
+        {type && groupTypeQuery.data?.canCreate && (
+          <MenuItem onClick={handleCreateGroup}>
             {t('map.moreButton.addGroup')}
           </MenuItem>
         )}
-      </IconMenu>
+      </Menu>
       {groupFormOpen && groupTypeQuery.data?.canCreate && (
         <CreateGroupModal
           onClose={() => setGroupFormOpen(false)}

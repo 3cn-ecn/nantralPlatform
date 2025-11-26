@@ -18,14 +18,14 @@ export default function ResetPasswordForm() {
     confirmPassword: '',
   });
 
-  const { error, isLoading, mutate } = useMutation<
+  const { error, isPending, mutate } = useMutation<
     number,
     {
       fields?: { password?: string[]; confirmPassword?: string[] };
       globalErrors?: string[];
     },
     { password: string; confirmPassword: string }
-  >(resetPassword, { onSuccess: () => navigate('success') });
+  >({ mutationFn: resetPassword, onSuccess: () => navigate('success') });
 
   function resetPassword(form: { password: string; confirmPassword: string }) {
     if (!!form?.password && form?.password !== form?.confirmPassword) {
@@ -68,7 +68,7 @@ export default function ResetPasswordForm() {
       />
       <Divider sx={{ marginTop: 2, marginBottom: 2 }} />
       <LoadingButton
-        loading={isLoading}
+        loading={isPending}
         size="large"
         fullWidth
         variant="contained"

@@ -20,17 +20,20 @@ export default function UpdateUsernameForm({ username }: { username: string }) {
 
   const [formValues, setFormValues] = useState({ username });
   // create all states for error, loading, etc. while fetching the API
-  const { mutate, isLoading, error } = useMutation<
+  const { mutate, isPending, error } = useMutation<
     unknown,
     ApiFormError<{ username: string }>,
     { username?: string }
-  >(changeUsernameApi, {
+  >({
+    mutationFn: changeUsernameApi,
     onSuccess: () => {
       showToast({
         message: t('username.success'),
         variant: 'success',
       });
-      queryClient.invalidateQueries(['username']);
+      queryClient.invalidateQueries({
+        queryKey: ['username'],
+      });
       navigate('/');
     },
   });
@@ -64,7 +67,7 @@ export default function UpdateUsernameForm({ username }: { username: string }) {
         variant="contained"
         size="large"
         fullWidth
-        loading={isLoading}
+        loading={isPending}
       >
         {t('button.update')}
       </LoadingButton>

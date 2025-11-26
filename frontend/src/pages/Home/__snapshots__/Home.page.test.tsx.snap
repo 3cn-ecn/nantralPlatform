@@ -1,4 +1,4 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
 exports[`Home page should render correctly without data 1`] = `
 <DocumentFragment>
@@ -11,28 +11,28 @@ exports[`Home page should render correctly without data 1`] = `
     >
       <img
         alt=""
-        class="mui-image-img css-jlmoib"
+        class="mui-image-img css-dih690"
         src="/static/img/header.png"
         style="position: relative; width: 100%; height: 100%; object-fit: cover; transition-property: top, opacity; transition-duration: 120ms, 200ms; transition-timing-function: ease-in; opacity: 0; top: 100px;"
       />
     </div>
     <div
-      class="MuiContainer-root MuiContainer-maxWidthLg css-1csjap5-MuiContainer-root"
+      class="MuiContainer-root MuiContainer-maxWidthLg css-13mbzh2-MuiContainer-root"
     >
       <h4
-        class="MuiTypography-root MuiTypography-h4 css-1pfj0oh-MuiTypography-root"
+        class="MuiTypography-root MuiTypography-h4 css-1f6ub7l-MuiTypography-root"
       >
         Welcome to
       </h4>
       <h1
-        class="MuiTypography-root MuiTypography-poster css-1be4yq0-MuiTypography-root"
+        class="MuiTypography-root MuiTypography-poster css-s3nigg-MuiTypography-root"
       >
         Nantral Platform
       </h1>
     </div>
   </div>
   <div
-    class="MuiContainer-root MuiContainer-maxWidthLg css-1f2kw6w-MuiContainer-root"
+    class="MuiContainer-root MuiContainer-maxWidthLg css-1kj2szu-MuiContainer-root"
   >
     <div
       class="MuiBox-root css-3k8eup"
@@ -41,34 +41,34 @@ exports[`Home page should render correctly without data 1`] = `
         class="MuiBox-root css-1o6pa4a"
       >
         <div
-          class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation1 MuiCard-root css-15m64r9-MuiPaper-root-MuiCard-root"
+          class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation1 MuiCard-root css-1t5rwzo-MuiPaper-root-MuiCard-root"
+          style="--Paper-shadow: 0px 2px 1px -1px rgba(0,0,0,0.2),0px 1px 1px 0px rgba(0,0,0,0.14),0px 1px 3px 0px rgba(0,0,0,0.12);"
         >
           <a
             aria-label="Events"
-            class="MuiButtonBase-root MuiCardActionArea-root css-1oitmrd-MuiButtonBase-root-MuiCardActionArea-root"
+            class="MuiButtonBase-root MuiCardActionArea-root css-coyn9m-MuiButtonBase-root-MuiCardActionArea-root"
+            data-discover="true"
             href="/event/"
             tabindex="0"
           >
             <div
-              class="MuiCardContent-root css-46bh2p-MuiCardContent-root"
+              class="MuiCardContent-root css-1lt5qva-MuiCardContent-root"
             >
               <img
                 aria-hidden="true"
-                class="material-icons notranslate MuiIcon-root MuiIcon-fontSizeLarge css-1gb9piy-MuiIcon-root"
+                class="material-icons notranslate MuiIcon-root MuiIcon-fontSizeLarge css-x6tooo-MuiIcon-root"
                 src="/static/img/icons/cropped/event.svg"
               />
             </div>
             <span
-              class="MuiCardActionArea-focusHighlight css-1v2exvi-MuiCardActionArea-focusHighlight"
-            />
-            <span
-              class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
+              class="MuiCardActionArea-focusHighlight css-1h5un5t-MuiCardActionArea-focusHighlight"
             />
           </a>
         </div>
         <p
           aria-hidden="true"
-          class="MuiTypography-root MuiTypography-body2 MuiTypography-alignCenter css-b7etmd-MuiTypography-root"
+          class="MuiTypography-root MuiTypography-body2 MuiTypography-alignCenter css-1u7shb1-MuiTypography-root"
+          style="--Typography-textAlign: center;"
         >
           Events
         </p>
@@ -77,34 +77,34 @@ exports[`Home page should render correctly without data 1`] = `
         class="MuiBox-root css-1o6pa4a"
       >
         <div
-          class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation1 MuiCard-root css-15m64r9-MuiPaper-root-MuiCard-root"
+          class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation1 MuiCard-root css-1t5rwzo-MuiPaper-root-MuiCard-root"
+          style="--Paper-shadow: 0px 2px 1px -1px rgba(0,0,0,0.2),0px 1px 1px 0px rgba(0,0,0,0.14),0px 1px 3px 0px rgba(0,0,0,0.12);"
         >
           <a
             aria-label="Groups"
-            class="MuiButtonBase-root MuiCardActionArea-root css-1oitmrd-MuiButtonBase-root-MuiCardActionArea-root"
+            class="MuiButtonBase-root MuiCardActionArea-root css-coyn9m-MuiButtonBase-root-MuiCardActionArea-root"
+            data-discover="true"
             href="/group/"
             tabindex="0"
           >
             <div
-              class="MuiCardContent-root css-46bh2p-MuiCardContent-root"
+              class="MuiCardContent-root css-1lt5qva-MuiCardContent-root"
             >
               <img
                 aria-hidden="true"
-                class="material-icons notranslate MuiIcon-root MuiIcon-fontSizeLarge css-1gb9piy-MuiIcon-root"
+                class="material-icons notranslate MuiIcon-root MuiIcon-fontSizeLarge css-x6tooo-MuiIcon-root"
                 src="/static/img/icons/cropped/club.svg"
               />
             </div>
             <span
-              class="MuiCardActionArea-focusHighlight css-1v2exvi-MuiCardActionArea-focusHighlight"
-            />
-            <span
-              class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
+              class="MuiCardActionArea-focusHighlight css-1h5un5t-MuiCardActionArea-focusHighlight"
             />
           </a>
         </div>
         <p
           aria-hidden="true"
-          class="MuiTypography-root MuiTypography-body2 MuiTypography-alignCenter css-b7etmd-MuiTypography-root"
+          class="MuiTypography-root MuiTypography-body2 MuiTypography-alignCenter css-1u7shb1-MuiTypography-root"
+          style="--Typography-textAlign: center;"
         >
           Groups
         </p>
@@ -113,34 +113,34 @@ exports[`Home page should render correctly without data 1`] = `
         class="MuiBox-root css-1o6pa4a"
       >
         <div
-          class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation1 MuiCard-root css-15m64r9-MuiPaper-root-MuiCard-root"
+          class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation1 MuiCard-root css-1t5rwzo-MuiPaper-root-MuiCard-root"
+          style="--Paper-shadow: 0px 2px 1px -1px rgba(0,0,0,0.2),0px 1px 1px 0px rgba(0,0,0,0.14),0px 1px 3px 0px rgba(0,0,0,0.12);"
         >
           <a
             aria-label="Map"
-            class="MuiButtonBase-root MuiCardActionArea-root css-1oitmrd-MuiButtonBase-root-MuiCardActionArea-root"
+            class="MuiButtonBase-root MuiCardActionArea-root css-coyn9m-MuiButtonBase-root-MuiCardActionArea-root"
+            data-discover="true"
             href="/map/?type=colocs"
             tabindex="0"
           >
             <div
-              class="MuiCardContent-root css-46bh2p-MuiCardContent-root"
+              class="MuiCardContent-root css-1lt5qva-MuiCardContent-root"
             >
               <img
                 aria-hidden="true"
-                class="material-icons notranslate MuiIcon-root MuiIcon-fontSizeLarge css-1gb9piy-MuiIcon-root"
+                class="material-icons notranslate MuiIcon-root MuiIcon-fontSizeLarge css-x6tooo-MuiIcon-root"
                 src="/static/img/icons/cropped/roommates.svg"
               />
             </div>
             <span
-              class="MuiCardActionArea-focusHighlight css-1v2exvi-MuiCardActionArea-focusHighlight"
-            />
-            <span
-              class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
+              class="MuiCardActionArea-focusHighlight css-1h5un5t-MuiCardActionArea-focusHighlight"
             />
           </a>
         </div>
         <p
           aria-hidden="true"
-          class="MuiTypography-root MuiTypography-body2 MuiTypography-alignCenter css-b7etmd-MuiTypography-root"
+          class="MuiTypography-root MuiTypography-body2 MuiTypography-alignCenter css-1u7shb1-MuiTypography-root"
+          style="--Typography-textAlign: center;"
         >
           Map
         </p>
@@ -149,34 +149,34 @@ exports[`Home page should render correctly without data 1`] = `
         class="MuiBox-root css-1o6pa4a"
       >
         <div
-          class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation1 MuiCard-root css-15m64r9-MuiPaper-root-MuiCard-root"
+          class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation1 MuiCard-root css-1t5rwzo-MuiPaper-root-MuiCard-root"
+          style="--Paper-shadow: 0px 2px 1px -1px rgba(0,0,0,0.2),0px 1px 1px 0px rgba(0,0,0,0.14),0px 1px 3px 0px rgba(0,0,0,0.12);"
         >
           <a
             aria-label="Family"
-            class="MuiButtonBase-root MuiCardActionArea-root css-1oitmrd-MuiButtonBase-root-MuiCardActionArea-root"
+            class="MuiButtonBase-root MuiCardActionArea-root css-coyn9m-MuiButtonBase-root-MuiCardActionArea-root"
+            data-discover="true"
             href="/parrainage/"
             tabindex="0"
           >
             <div
-              class="MuiCardContent-root css-46bh2p-MuiCardContent-root"
+              class="MuiCardContent-root css-1lt5qva-MuiCardContent-root"
             >
               <img
                 aria-hidden="true"
-                class="material-icons notranslate MuiIcon-root MuiIcon-fontSizeLarge css-1gb9piy-MuiIcon-root"
+                class="material-icons notranslate MuiIcon-root MuiIcon-fontSizeLarge css-x6tooo-MuiIcon-root"
                 src="/static/img/icons/cropped/family.svg"
               />
             </div>
             <span
-              class="MuiCardActionArea-focusHighlight css-1v2exvi-MuiCardActionArea-focusHighlight"
-            />
-            <span
-              class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
+              class="MuiCardActionArea-focusHighlight css-1h5un5t-MuiCardActionArea-focusHighlight"
             />
           </a>
         </div>
         <p
           aria-hidden="true"
-          class="MuiTypography-root MuiTypography-body2 MuiTypography-alignCenter css-b7etmd-MuiTypography-root"
+          class="MuiTypography-root MuiTypography-body2 MuiTypography-alignCenter css-1u7shb1-MuiTypography-root"
+          style="--Typography-textAlign: center;"
         >
           Family
         </p>
@@ -185,34 +185,34 @@ exports[`Home page should render correctly without data 1`] = `
         class="MuiBox-root css-1o6pa4a"
       >
         <div
-          class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation1 MuiCard-root css-15m64r9-MuiPaper-root-MuiCard-root"
+          class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation1 MuiCard-root css-1t5rwzo-MuiPaper-root-MuiCard-root"
+          style="--Paper-shadow: 0px 2px 1px -1px rgba(0,0,0,0.2),0px 1px 1px 0px rgba(0,0,0,0.14),0px 1px 3px 0px rgba(0,0,0,0.12);"
         >
           <a
             aria-label="Student List"
-            class="MuiButtonBase-root MuiCardActionArea-root css-1oitmrd-MuiButtonBase-root-MuiCardActionArea-root"
+            class="MuiButtonBase-root MuiCardActionArea-root css-coyn9m-MuiButtonBase-root-MuiCardActionArea-root"
+            data-discover="true"
             href="/student/"
             tabindex="0"
           >
             <div
-              class="MuiCardContent-root css-46bh2p-MuiCardContent-root"
+              class="MuiCardContent-root css-1lt5qva-MuiCardContent-root"
             >
               <img
                 aria-hidden="true"
-                class="material-icons notranslate MuiIcon-root MuiIcon-fontSizeLarge css-1gb9piy-MuiIcon-root"
+                class="material-icons notranslate MuiIcon-root MuiIcon-fontSizeLarge css-x6tooo-MuiIcon-root"
                 src="/static/img/icons/cropped/list.svg"
               />
             </div>
             <span
-              class="MuiCardActionArea-focusHighlight css-1v2exvi-MuiCardActionArea-focusHighlight"
-            />
-            <span
-              class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
+              class="MuiCardActionArea-focusHighlight css-1h5un5t-MuiCardActionArea-focusHighlight"
             />
           </a>
         </div>
         <p
           aria-hidden="true"
-          class="MuiTypography-root MuiTypography-body2 MuiTypography-alignCenter css-b7etmd-MuiTypography-root"
+          class="MuiTypography-root MuiTypography-body2 MuiTypography-alignCenter css-1u7shb1-MuiTypography-root"
+          style="--Typography-textAlign: center;"
         >
           Student List
         </p>
@@ -221,41 +221,41 @@ exports[`Home page should render correctly without data 1`] = `
         class="MuiBox-root css-1o6pa4a"
       >
         <div
-          class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation1 MuiCard-root css-15m64r9-MuiPaper-root-MuiCard-root"
+          class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation1 MuiCard-root css-1t5rwzo-MuiPaper-root-MuiCard-root"
+          style="--Paper-shadow: 0px 2px 1px -1px rgba(0,0,0,0.2),0px 1px 1px 0px rgba(0,0,0,0.14),0px 1px 3px 0px rgba(0,0,0,0.12);"
         >
           <a
             aria-label="Signature"
-            class="MuiButtonBase-root MuiCardActionArea-root css-1oitmrd-MuiButtonBase-root-MuiCardActionArea-root"
+            class="MuiButtonBase-root MuiCardActionArea-root css-coyn9m-MuiButtonBase-root-MuiCardActionArea-root"
+            data-discover="true"
             href="/signature/"
             tabindex="0"
           >
             <div
-              class="MuiCardContent-root css-46bh2p-MuiCardContent-root"
+              class="MuiCardContent-root css-1lt5qva-MuiCardContent-root"
             >
               <img
                 aria-hidden="true"
-                class="material-icons notranslate MuiIcon-root MuiIcon-fontSizeLarge css-1gb9piy-MuiIcon-root"
+                class="material-icons notranslate MuiIcon-root MuiIcon-fontSizeLarge css-x6tooo-MuiIcon-root"
                 src="/static/img/icons/cropped/sign.svg"
               />
             </div>
             <span
-              class="MuiCardActionArea-focusHighlight css-1v2exvi-MuiCardActionArea-focusHighlight"
-            />
-            <span
-              class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
+              class="MuiCardActionArea-focusHighlight css-1h5un5t-MuiCardActionArea-focusHighlight"
             />
           </a>
         </div>
         <p
           aria-hidden="true"
-          class="MuiTypography-root MuiTypography-body2 MuiTypography-alignCenter css-b7etmd-MuiTypography-root"
+          class="MuiTypography-root MuiTypography-body2 MuiTypography-alignCenter css-1u7shb1-MuiTypography-root"
+          style="--Typography-textAlign: center;"
         >
           Signature
         </p>
       </div>
     </div>
     <div
-      class="MuiSpeedDial-root MuiSpeedDial-directionUp css-1mv8y2l-MuiSpeedDial-root"
+      class="MuiSpeedDial-root MuiSpeedDial-directionUp css-krf2c1-MuiSpeedDial-root"
       role="presentation"
     >
       <button
@@ -263,17 +263,17 @@ exports[`Home page should render correctly without data 1`] = `
         aria-expanded="false"
         aria-haspopup="true"
         aria-label="SpeedDial"
-        class="MuiButtonBase-root MuiFab-root MuiFab-circular MuiFab-sizeLarge MuiFab-primary MuiFab-root MuiFab-circular MuiFab-sizeLarge MuiFab-primary MuiSpeedDial-fab css-1qnbyf7-MuiButtonBase-root-MuiFab-root-MuiSpeedDial-fab"
-        style="transform: none; webkit-transition: transform 225ms cubic-bezier(0.4, 0, 0.2, 1) 0ms; transition: transform 225ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;"
+        class="MuiButtonBase-root MuiFab-root MuiFab-circular MuiFab-sizeLarge MuiFab-primary MuiFab-root MuiFab-circular MuiFab-sizeLarge MuiFab-primary MuiSpeedDial-fab css-t5zvu8-MuiButtonBase-root-MuiFab-root-MuiSpeedDial-fab"
+        style="transform: none; transition: transform 225ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;"
         tabindex="0"
         type="button"
       >
         <span
-          class="MuiSpeedDialIcon-root css-ohncnb-MuiSpeedDialIcon-root"
+          class="MuiSpeedDialIcon-root css-1rfsytv-MuiSpeedDialIcon-root"
         >
           <svg
             aria-hidden="true"
-            class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiSpeedDialIcon-icon css-i4bv87-MuiSvgIcon-root"
+            class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiSpeedDialIcon-icon css-1umw9bq-MuiSvgIcon-root"
             data-testid="AddIcon"
             focusable="false"
             viewBox="0 0 24 24"
@@ -283,22 +283,19 @@ exports[`Home page should render correctly without data 1`] = `
             />
           </svg>
         </span>
-        <span
-          class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
-        />
       </button>
       <div
         aria-orientation="vertical"
-        class="MuiSpeedDial-actions MuiSpeedDial-actionsClosed css-1s28u9o-MuiSpeedDial-actions"
+        class="MuiSpeedDial-actions MuiSpeedDial-actionsClosed css-18b6z52-MuiSpeedDial-actions"
         id="SpeedDial-actions"
         role="menu"
       >
         <span
-          class="MuiSpeedDialAction-staticTooltip MuiSpeedDialAction-tooltipPlacementLeft MuiSpeedDialAction-staticTooltipClosed css-12w19fr-MuiSpeedDialAction-staticTooltip"
+          class="MuiSpeedDialAction-staticTooltip MuiSpeedDialAction-tooltipPlacementLeft MuiSpeedDialAction-staticTooltipClosed css-1skoeac-MuiSpeedDialAction-staticTooltip"
           id="SpeedDial-action-0"
         >
           <span
-            class="MuiSpeedDialAction-staticTooltipLabel css-1b7vtjs-MuiSpeedDialAction-staticTooltipLabel"
+            class="MuiSpeedDialAction-staticTooltipLabel css-ys1otd-MuiSpeedDialAction-staticTooltipLabel"
             id="SpeedDial-action-0-label"
             style="transition-delay: 60ms;"
           >
@@ -306,7 +303,7 @@ exports[`Home page should render correctly without data 1`] = `
           </span>
           <button
             aria-labelledby="SpeedDial-action-0-label"
-            class="MuiButtonBase-root MuiFab-root MuiFab-circular MuiFab-sizeSmall MuiFab-default MuiFab-root MuiFab-circular MuiFab-sizeSmall MuiFab-default MuiSpeedDialAction-fab MuiSpeedDialAction-fabClosed css-rw3h6t-MuiButtonBase-root-MuiFab-root-MuiSpeedDialAction-fab"
+            class="MuiButtonBase-root MuiFab-root MuiFab-circular MuiFab-sizeSmall MuiFab-default MuiFab-root MuiFab-circular MuiFab-sizeSmall MuiFab-default MuiSpeedDialAction-fab MuiSpeedDialAction-fabClosed css-1j4q6yc-MuiButtonBase-root-MuiFab-root-MuiSpeedDialAction-fab"
             role="menuitem"
             style="transition-delay: 60ms;"
             tabindex="-1"
@@ -314,7 +311,7 @@ exports[`Home page should render correctly without data 1`] = `
           >
             <svg
               aria-hidden="true"
-              class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root"
+              class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-1umw9bq-MuiSvgIcon-root"
               data-testid="EventIcon"
               focusable="false"
               viewBox="0 0 24 24"
@@ -323,17 +320,14 @@ exports[`Home page should render correctly without data 1`] = `
                 d="M17 12h-5v5h5zM16 1v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2h-1V1zm3 18H5V8h14z"
               />
             </svg>
-            <span
-              class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
-            />
           </button>
         </span>
         <span
-          class="MuiSpeedDialAction-staticTooltip MuiSpeedDialAction-tooltipPlacementLeft MuiSpeedDialAction-staticTooltipClosed css-12w19fr-MuiSpeedDialAction-staticTooltip"
+          class="MuiSpeedDialAction-staticTooltip MuiSpeedDialAction-tooltipPlacementLeft MuiSpeedDialAction-staticTooltipClosed css-1skoeac-MuiSpeedDialAction-staticTooltip"
           id="SpeedDial-action-1"
         >
           <span
-            class="MuiSpeedDialAction-staticTooltipLabel css-1b7vtjs-MuiSpeedDialAction-staticTooltipLabel"
+            class="MuiSpeedDialAction-staticTooltipLabel css-ys1otd-MuiSpeedDialAction-staticTooltipLabel"
             id="SpeedDial-action-1-label"
             style="transition-delay: 30ms;"
           >
@@ -341,7 +335,7 @@ exports[`Home page should render correctly without data 1`] = `
           </span>
           <button
             aria-labelledby="SpeedDial-action-1-label"
-            class="MuiButtonBase-root MuiFab-root MuiFab-circular MuiFab-sizeSmall MuiFab-default MuiFab-root MuiFab-circular MuiFab-sizeSmall MuiFab-default MuiSpeedDialAction-fab MuiSpeedDialAction-fabClosed css-rw3h6t-MuiButtonBase-root-MuiFab-root-MuiSpeedDialAction-fab"
+            class="MuiButtonBase-root MuiFab-root MuiFab-circular MuiFab-sizeSmall MuiFab-default MuiFab-root MuiFab-circular MuiFab-sizeSmall MuiFab-default MuiSpeedDialAction-fab MuiSpeedDialAction-fabClosed css-1j4q6yc-MuiButtonBase-root-MuiFab-root-MuiSpeedDialAction-fab"
             role="menuitem"
             style="transition-delay: 30ms;"
             tabindex="-1"
@@ -349,7 +343,7 @@ exports[`Home page should render correctly without data 1`] = `
           >
             <svg
               aria-hidden="true"
-              class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root"
+              class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-1umw9bq-MuiSvgIcon-root"
               data-testid="PostAddIcon"
               focusable="false"
               viewBox="0 0 24 24"
@@ -361,9 +355,6 @@ exports[`Home page should render correctly without data 1`] = `
                 d="M19 2h-2v3h-3c.01.01 0 2 0 2h3v2.99c.01.01 2 0 2 0V7h3V5h-3zM7 9h8v2H7zm0 3v2h8v-2h-3zm0 3h8v2H7z"
               />
             </svg>
-            <span
-              class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
-            />
           </button>
         </span>
       </div>
@@ -372,25 +363,26 @@ exports[`Home page should render correctly without data 1`] = `
       class="MuiBox-root css-i3pbo"
     >
       <div
-        class="MuiBox-root css-47fqa9"
+        class="MuiBox-root css-56sb3"
       >
         <h2
-          class="MuiTypography-root MuiTypography-h2 css-2raco3-MuiTypography-root"
+          class="MuiTypography-root MuiTypography-h2 css-6jgoxl-MuiTypography-root"
         >
           Upcoming events
         </h2>
         <a
-          class="MuiButtonBase-root MuiButton-root MuiButton-outlined MuiButton-outlinedSecondary MuiButton-sizeMedium MuiButton-outlinedSizeMedium MuiButton-colorSecondary MuiButton-disableElevation MuiButton-root MuiButton-outlined MuiButton-outlinedSecondary MuiButton-sizeMedium MuiButton-outlinedSizeMedium MuiButton-colorSecondary MuiButton-disableElevation css-lvx8jz-MuiButtonBase-root-MuiButton-root"
+          class="MuiButtonBase-root MuiButton-root MuiButton-outlined MuiButton-outlinedSecondary MuiButton-sizeMedium MuiButton-outlinedSizeMedium MuiButton-colorSecondary MuiButton-disableElevation MuiButton-root MuiButton-outlined MuiButton-outlinedSecondary MuiButton-sizeMedium MuiButton-outlinedSizeMedium MuiButton-colorSecondary MuiButton-disableElevation css-1dzm52w-MuiButtonBase-root-MuiButton-root"
+          data-discover="true"
           href="/event"
           tabindex="0"
         >
           See all
           <span
-            class="MuiButton-icon MuiButton-endIcon MuiButton-iconSizeMedium css-9tj150-MuiButton-endIcon"
+            class="MuiButton-icon MuiButton-endIcon MuiButton-iconSizeMedium css-1gulhci-MuiButton-endIcon"
           >
             <svg
               aria-hidden="true"
-              class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root"
+              class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-1umw9bq-MuiSvgIcon-root"
               data-testid="ChevronRightIcon"
               focusable="false"
               viewBox="0 0 24 24"
@@ -400,13 +392,10 @@ exports[`Home page should render correctly without data 1`] = `
               />
             </svg>
           </span>
-          <span
-            class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
-          />
         </a>
       </div>
       <p
-        class="MuiTypography-root MuiTypography-body1 css-17s6y1p-MuiTypography-root"
+        class="MuiTypography-root MuiTypography-body1 css-1h2sezf-MuiTypography-root"
       >
         No upcoming event... 🥺 Create a new one!
       </p>
@@ -415,16 +404,16 @@ exports[`Home page should render correctly without data 1`] = `
       class="MuiBox-root css-i3pbo"
     >
       <div
-        class="MuiBox-root css-47fqa9"
+        class="MuiBox-root css-56sb3"
       >
         <h2
-          class="MuiTypography-root MuiTypography-h2 css-2raco3-MuiTypography-root"
+          class="MuiTypography-root MuiTypography-h2 css-6jgoxl-MuiTypography-root"
         >
           Posts
         </h2>
       </div>
       <p
-        class="MuiTypography-root MuiTypography-body1 css-17s6y1p-MuiTypography-root"
+        class="MuiTypography-root MuiTypography-body1 css-1h2sezf-MuiTypography-root"
       >
         No post in the last few days... 🥺 Create a new one!
       </p>
@@ -433,25 +422,26 @@ exports[`Home page should render correctly without data 1`] = `
       class="MuiBox-root css-i3pbo"
     >
       <div
-        class="MuiBox-root css-47fqa9"
+        class="MuiBox-root css-56sb3"
       >
         <h2
-          class="MuiTypography-root MuiTypography-h2 css-2raco3-MuiTypography-root"
+          class="MuiTypography-root MuiTypography-h2 css-6jgoxl-MuiTypography-root"
         >
           My groups
         </h2>
         <a
-          class="MuiButtonBase-root MuiButton-root MuiButton-outlined MuiButton-outlinedSecondary MuiButton-sizeMedium MuiButton-outlinedSizeMedium MuiButton-colorSecondary MuiButton-disableElevation MuiButton-root MuiButton-outlined MuiButton-outlinedSecondary MuiButton-sizeMedium MuiButton-outlinedSizeMedium MuiButton-colorSecondary MuiButton-disableElevation css-lvx8jz-MuiButtonBase-root-MuiButton-root"
+          class="MuiButtonBase-root MuiButton-root MuiButton-outlined MuiButton-outlinedSecondary MuiButton-sizeMedium MuiButton-outlinedSizeMedium MuiButton-colorSecondary MuiButton-disableElevation MuiButton-root MuiButton-outlined MuiButton-outlinedSecondary MuiButton-sizeMedium MuiButton-outlinedSizeMedium MuiButton-colorSecondary MuiButton-disableElevation css-1dzm52w-MuiButtonBase-root-MuiButton-root"
+          data-discover="true"
           href="/group"
           tabindex="0"
         >
           See all
           <span
-            class="MuiButton-icon MuiButton-endIcon MuiButton-iconSizeMedium css-9tj150-MuiButton-endIcon"
+            class="MuiButton-icon MuiButton-endIcon MuiButton-iconSizeMedium css-1gulhci-MuiButton-endIcon"
           >
             <svg
               aria-hidden="true"
-              class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root"
+              class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-1umw9bq-MuiSvgIcon-root"
               data-testid="ChevronRightIcon"
               focusable="false"
               viewBox="0 0 24 24"
@@ -461,13 +451,10 @@ exports[`Home page should render correctly without data 1`] = `
               />
             </svg>
           </span>
-          <span
-            class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
-          />
         </a>
       </div>
       <p
-        class="MuiTypography-root MuiTypography-body1 css-17s6y1p-MuiTypography-root"
+        class="MuiTypography-root MuiTypography-body1 css-1h2sezf-MuiTypography-root"
       >
         You are not in any group currently 😔
       </p>
@@ -479,10 +466,10 @@ exports[`Home page should render correctly without data 1`] = `
       class="MuiBox-root css-i3pbo"
     >
       <div
-        class="MuiBox-root css-47fqa9"
+        class="MuiBox-root css-56sb3"
       >
         <h2
-          class="MuiTypography-root MuiTypography-h2 css-2raco3-MuiTypography-root"
+          class="MuiTypography-root MuiTypography-h2 css-6jgoxl-MuiTypography-root"
         >
           Do you like this site?
         </h2>
@@ -491,7 +478,7 @@ exports[`Home page should render correctly without data 1`] = `
         <li>
           Level 1 ⭐️: 
           <a
-            class="MuiTypography-root MuiTypography-inherit MuiLink-root MuiLink-underlineAlways css-18z7zy0-MuiTypography-root-MuiLink-root"
+            class="MuiTypography-root MuiTypography-inherit MuiLink-root MuiLink-underlineAlways css-1ptg00b-MuiTypography-root-MuiLink-root"
             href="https://play.google.com/store/apps/details?id=org.ecn_3cn.nantral_platform"
           >
             Give us 5 stars on the Play Store!
@@ -500,7 +487,7 @@ exports[`Home page should render correctly without data 1`] = `
         <li>
           Level 2 🥰: 
           <a
-            class="MuiTypography-root MuiTypography-inherit MuiLink-root MuiLink-underlineAlways css-18z7zy0-MuiTypography-root-MuiLink-root"
+            class="MuiTypography-root MuiTypography-inherit MuiLink-root MuiLink-underlineAlways css-1ptg00b-MuiTypography-root-MuiLink-root"
             href="https://github.com/3cn-ecn/nantralPlatform"
           >
             Give us a star on Github!
@@ -509,7 +496,8 @@ exports[`Home page should render correctly without data 1`] = `
         <li>
           Level 3 😍: 
           <a
-            class="MuiTypography-root MuiTypography-inherit MuiLink-root MuiLink-underlineAlways css-18z7zy0-MuiTypography-root-MuiLink-root"
+            class="MuiTypography-root MuiTypography-inherit MuiLink-root MuiLink-underlineAlways css-1ptg00b-MuiTypography-root-MuiLink-root"
+            data-discover="true"
             href="/feedback"
           >
             Suggest improvements
@@ -518,7 +506,7 @@ exports[`Home page should render correctly without data 1`] = `
         <li>
           Level 4 🤩: 
           <a
-            class="MuiTypography-root MuiTypography-inherit MuiLink-root MuiLink-underlineAlways css-18z7zy0-MuiTypography-root-MuiLink-root"
+            class="MuiTypography-root MuiTypography-inherit MuiLink-root MuiLink-underlineAlways css-1ptg00b-MuiTypography-root-MuiLink-root"
             href="https://docs.nantral-platform.fr/"
           >
             Help to code!

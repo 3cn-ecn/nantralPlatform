@@ -19,7 +19,8 @@ export function EmailList() {
   const showToast = useToast();
   const queryClient = useQueryClient();
   const query = useInfiniteQuery({
-    queryFn: ({ pageParam = 1 }) =>
+    initialPageParam: 1,
+    queryFn: ({ pageParam }) =>
       getEmailListApi({
         page: pageParam,
         pageSize: 10,
@@ -39,7 +40,9 @@ export function EmailList() {
     mutationFn: ({ emailUuid, isVisible }) =>
       changeEmailVisibilityApi(emailUuid, isVisible),
     onSuccess: async (message) => {
-      await queryClient.invalidateQueries(['emails']);
+      await queryClient.invalidateQueries({
+        queryKey: ['emails'],
+      });
       showToast({
         message: message,
         variant: 'success',
@@ -57,7 +60,7 @@ export function EmailList() {
     <>
       <InfiniteList query={query}>
         <EmailTable
-          isLoading={query.isLoading}
+          isPending={query.isPending}
           emails={query.data?.pages.flatMap((page) => page.results)}
           setSelectedEmail={setSelectedEmail}
           changeVisibility={(emailUuid, isVisible) =>

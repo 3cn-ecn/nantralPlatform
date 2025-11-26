@@ -11,9 +11,12 @@ import { AdminRequestRow } from '../components/AdminRequestRow';
 export function GroupAdminRequests({ group }: { group: Group }) {
   const { t } = useTranslation();
   const { data } = useInfiniteQuery({
-    queryFn: ({ pageParam = 1 }) =>
+    initialPageParam: 1,
+    queryFn: ({ pageParam }) =>
       getAdminRequestListApi(group.slug, { page: pageParam }),
     queryKey: ['adminRequest', { slug: group.slug }],
+    getNextPageParam: (lastPage, allPages) =>
+      lastPage.next ? allPages.length + 1 : undefined,
   });
   return (
     <Container maxWidth="sm">

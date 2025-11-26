@@ -1,8 +1,8 @@
 import { useInfiniteQuery } from '@tanstack/react-query';
 
 import {
-  GetMembershipListApiParams,
   getMembershipListApi,
+  GetMembershipListApiParams,
 } from '#modules/group/api/getMembershipList.api';
 
 export function useInfiniteMembership({
@@ -13,7 +13,8 @@ export function useInfiniteMembership({
   enabled?: boolean;
 }) {
   const query = useInfiniteQuery({
-    queryFn: ({ pageParam = 1 }) =>
+    initialPageParam: 1,
+    queryFn: ({ pageParam }) =>
       getMembershipListApi({ ...options, page: pageParam }),
     getNextPageParam: (lastPage, allPages) =>
       lastPage.next ? allPages.length + 1 : undefined,

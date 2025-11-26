@@ -52,7 +52,7 @@ export function GroupHome({ group }: GroupHomeProps) {
               groups={childrenQuery.data?.pages.flatMap((page) => page.results)}
             />
             {childrenQuery.isFetchingNextPage && (
-              <GroupGrid isLoading estimatedSize={50} />
+              <GroupGrid isPending estimatedSize={50} />
             )}
           </InfiniteList>
         </Paper>
