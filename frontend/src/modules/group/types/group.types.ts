@@ -1,3 +1,4 @@
+import { ShortMembershipForm } from '#modules/group/types/membership.types';
 import { SocialLink } from '#modules/social_link/types/socialLink.type';
 import { StudentPreview } from '#modules/student/student.types';
 
@@ -79,6 +80,7 @@ export type CreateGroupForm = Pick<
   tags: number[];
   parent?: number;
   changeReason?: string;
+  membership?: ShortMembershipForm;
 };
 
 export type MapGroupPoint = Pick<

@@ -1,9 +1,11 @@
 import { AxiosError } from 'axios';
 
 export type DjangoRestApiFieldValidationError<DTO> = {
-  [K in keyof DTO]?: DTO[K] extends object
-    ? DjangoRestApiFieldValidationError<DTO[K]>
-    : string[];
+  [K in keyof DTO]?: NonNullable<DTO[K]> extends File | Blob
+    ? string[]
+    : NonNullable<DTO[K]> extends object
+      ? DjangoRestApiFieldValidationError<DTO[K]>
+      : string[];
 };
 
 interface DjangoRestApiNonFieldValidationError {

@@ -19,3 +19,8 @@ export type MembershipForm = Pick<
   Membership,
   'beginDate' | 'endDate' | 'summary' | 'description' | 'admin'
 > & { student: number; group: number };
+
+export type ShortMembershipForm = Pick<
+  MembershipForm,
+  'summary' | 'description' | 'beginDate' | 'endDate'
+>;
