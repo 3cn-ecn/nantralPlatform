@@ -462,6 +462,11 @@
         "helperText": "Image with a ratio of 1:1 (recommended minimum size: 500x500)",
         "label": "Profile picture"
       },
+      "initialMember": {
+        "enable": "Enable group autojoin",
+        "enableHint": "If you enable this, you will automaticcally join the group as admin. Please fill the short form bellow.",
+        "title": "Become member"
+      },
       "label": {
         "label": "Label",
         "none": "None"

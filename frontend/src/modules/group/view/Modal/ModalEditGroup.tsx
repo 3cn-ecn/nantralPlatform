@@ -15,6 +15,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import { updateGroupApi } from '#modules/group/api/updateGroup.api';
 import { useGroupFormValues } from '#modules/group/hooks/useGroupFormValues';
+import { CreateGroupFormDTO } from '#modules/group/infra/group.dto';
 import { CreateGroupForm, Group } from '#modules/group/types/group.types';
 import { GroupFormFields } from '#modules/group/view/shared/GroupFormFields';
 import { EditSocialLinkForm } from '#modules/social_link/view/shared/EditSocialLinkForm';
@@ -50,7 +51,7 @@ export function ModalEditGroup({
   const [, setSerachParams] = useSearchParams();
   const { error, isError, mutate, isLoading } = useMutation<
     Group,
-    ApiFormError<CreateGroupForm>,
+    ApiFormError<CreateGroupFormDTO>,
     CreateGroupForm
   >(() => updateGroupApi(group.slug, formValues), {
     onSuccess: () => {

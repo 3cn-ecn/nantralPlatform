@@ -19,11 +19,13 @@ import { useQuery } from '@tanstack/react-query';
 
 import { getGroupLabelApi } from '#modules/group/api/getGroupLabel.api';
 import { getGroupListApi } from '#modules/group/api/getGroupList.api';
+import { CreateGroupFormDTO } from '#modules/group/infra/group.dto';
 import {
   CreateGroupForm as GroupForm,
   Group,
 } from '#modules/group/types/group.types';
 import { GroupTypePreview } from '#modules/group/types/groupType.types';
+import { ShortMembershipForm } from '#modules/group/types/membership.types';
 import { getGeocodeListApi } from '#modules/map/api/getGeocodeList.api';
 import { Geocode } from '#modules/map/geocode.type';
 import { FlexAuto, FlexCol } from '#shared/components/FlexBox/FlexBox';
@@ -44,7 +46,7 @@ import { ApiFormError } from '#shared/infra/errors';
 
 interface GroupFormFieldsProps {
   isError: boolean;
-  error: ApiFormError<GroupForm> | null;
+  error: ApiFormError<CreateGroupFormDTO> | null;
   formValues: GroupForm;
   updateFormValues: Dispatch<SetObjectStateAction<GroupForm>>;
   prevData?: Partial<Group>;
@@ -104,6 +106,27 @@ export function GroupFormFields({
     [updateFormValues],
   );
 
+  const today = new Date();
+  const oneYear = new Date();
+  oneYear.setFullYear(today.getFullYear() + 1);
+  const updateMembership = (val: Partial<ShortMembershipForm> | undefined) => {
+    if (typeof val === 'undefined') {
+      updateFormValues({ membership: undefined });
+    } else if (formValues.membership) {
+      updateFormValues({ membership: { ...formValues.membership, ...val } });
+    } else {
+      updateFormValues({
+        membership: {
+          summary: '',
+          description: '',
+          beginDate: today,
+          endDate: oneYear,
+          ...val,
+        },
+      });
+    }
+  };
+
   return (
     <>
       <FormErrorAlert isError={isError} error={error} />
@@ -135,41 +158,104 @@ export function GroupFormFields({
             [updateFormValues],
           )}
           helperText={t('group.form.shortName.helperText')}
-          errors={error?.fields?.shortName}
+          errors={error?.fields?.short_name}
         />
       </FlexAuto>
 
       {!edit && (
-        <FlexAuto columnGap={2}>
-          <DateField
-            label={t('group.form.creationDate.label')}
-            defaultValue={new Date()}
-            views={['year']}
-            onChange={(date) =>
-              updateFormValues({ creationYear: date?.getFullYear() })
-            }
-            disableFuture
-            required
-            fullWidth
-          />
-          <SelectField
-            handleChange={(val) =>
-              updateFormValues({ label: Number.parseInt(val) })
-            }
-            label={t('group.form.label.label')}
-            disabled={!isSuccess || data.count === 0}
-            defaultValue={'-1'}
-            value={formValues.label?.toString()}
-            errors={error?.fields?.label}
-          >
-            <MenuItem value={'-1'}>{t('group.form.label.none')}</MenuItem>
-            {data?.results.map((label) => (
-              <MenuItem key={label.id} value={label.id}>
-                {label.name}
-              </MenuItem>
-            ))}
-          </SelectField>
-        </FlexAuto>
+        <>
+          <FlexAuto columnGap={2}>
+            <DateField
+              label={t('group.form.creationDate.label')}
+              defaultValue={new Date()}
+              views={['year']}
+              onChange={(date) =>
+                updateFormValues({ creationYear: date?.getFullYear() })
+              }
+              disableFuture
+              required
+              fullWidth
+            />
+            <SelectField
+              handleChange={(val) =>
+                updateFormValues({ label: Number.parseInt(val) })
+              }
+              label={t('group.form.label.label')}
+              disabled={!isSuccess || data.count === 0}
+              defaultValue={'-1'}
+              value={formValues.label?.toString()}
+              errors={error?.fields?.label}
+            >
+              <MenuItem value={'-1'}>{t('group.form.label.none')}</MenuItem>
+              {data?.results.map((label) => (
+                <MenuItem key={label.id} value={label.id}>
+                  {label.name}
+                </MenuItem>
+              ))}
+            </SelectField>
+          </FlexAuto>
+          <Box>
+            <Accordion>
+              <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+                {t('group.form.initialMember.title')}
+              </AccordionSummary>
+              <AccordionDetails>
+                <CheckboxField
+                  label={t('group.form.initialMember.enable')}
+                  handleChange={(val) => updateMembership(val ? {} : undefined)}
+                  value={Boolean(formValues.membership)}
+                  helperText={t('group.form.initialMember.enableHint')}
+                />
+                {!groupType.noMembershipDates && (
+                  <FlexAuto gap={2}>
+                    <DateField
+                      label={t('group.form.beginDate.label')}
+                      value={formValues.membership?.beginDate ?? null}
+                      onChange={(val) => {
+                        updateMembership({ beginDate: val ?? undefined });
+                      }}
+                      errors={error?.fields?.membership?.begin_date}
+                      fullWidth
+                      required
+                      disabled={!formValues.membership}
+                    />
+                    <DateField
+                      label={t('group.form.endDate.label')}
+                      minDate={formValues.membership?.beginDate}
+                      value={formValues.membership?.endDate ?? null}
+                      onChange={(val) => {
+                        updateMembership({ endDate: val ?? undefined });
+                      }}
+                      errors={error?.fields?.membership?.end_date}
+                      fullWidth
+                      required
+                      disabled={!formValues.membership}
+                    />
+                  </FlexAuto>
+                )}
+                <TextField
+                  label={t('group.details.form.summary.label')}
+                  value={formValues.membership?.summary ?? ''}
+                  handleChange={(val) =>
+                    updateMembership({ summary: val ?? undefined })
+                  }
+                  errors={error?.fields?.membership?.summary}
+                  disabled={!formValues.membership}
+                />
+                <TextField
+                  label={t('group.details.form.description.label')}
+                  value={formValues.membership?.description ?? ''}
+                  handleChange={(val) =>
+                    updateMembership({ description: val ?? undefined })
+                  }
+                  errors={error?.fields?.membership?.description}
+                  multiline
+                  disabled={!formValues.membership}
+                />
+              </AccordionDetails>
+            </Accordion>
+          </Box>
+        </>
       )}
 
       <TextField
@@ -182,7 +268,7 @@ export function GroupFormFields({
           [updateFormValues],
         )}
         helperText={t('group.form.changeReason.helperText')}
-        errors={error?.fields?.changeReason}
+        errors={error?.fields?._change_reason}
       />
 
       <FlexAuto columnGap={2}>
@@ -282,7 +368,7 @@ export function GroupFormFields({
             label={t('group.form.meetingPlace.label')}
             value={formValues.meetingPlace}
             handleChange={meetingPlaceCallback}
-            errors={error?.fields?.meetingPlace}
+            errors={error?.fields?.meeting_place}
           />
           <TextField
             InputProps={{
@@ -295,7 +381,7 @@ export function GroupFormFields({
             label={t('group.form.meetingHour.label')}
             value={formValues.meetingHour}
             handleChange={meetingHourCallback}
-            errors={error?.fields?.meetingHour}
+            errors={error?.fields?.meeting_hour}
           />
         </FlexAuto>
       )}

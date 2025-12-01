@@ -462,6 +462,11 @@
         "helperText": "Image avec un ratio de 1:1 (taille minimale recommandée : 500x500)",
         "label": "Image de profil"
       },
+      "initialMember": {
+        "enable": "Activer l'appartenance automatique au groupe",
+        "enableHint": "Si vous cochez cette case, vous serez automatiquement ajouté en tant qu'admin du groupe. Veuillez compléter les informations si dessous",
+        "title": "Devenir membre"
+      },
       "label": {
         "label": "Label",
         "none": "Aucun"

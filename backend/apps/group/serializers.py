@@ -143,9 +143,17 @@ class GroupSerializer(serializers.ModelSerializer):
         return obj.get_sub_category()
 
 
+class ShortMemberSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Membership
+        fields = ["summary", "description", "begin_date", "end_date"]
+
+
 class GroupWriteSerializer(serializers.ModelSerializer):
     social_links = GroupSocialLinkSerializer(many=True, read_only=True)
     _change_reason = serializers.CharField(write_only=True, required=False)
+
+    membership = ShortMemberSerializer(required=False, write_only=True)
 
     class Meta:
         model = Group
@@ -158,10 +166,18 @@ class GroupWriteSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data: dict):
         _change_reason = validated_data.pop("_change_reason", None)
+        membership = validated_data.pop("membership", None)
+
         group = Group(**validated_data)
         if _change_reason:
             group._change_reason = _change_reason
         group.save()
+
+        # If requested, add request user to the list of members
+        user = self.context["request"].user
+        if membership is not None and user and user.is_authenticated:
+            Membership.objects.create(group=group, student=user.student, admin=True, **membership)
+
         return group
 
     def get_group_type(self) -> GroupType:

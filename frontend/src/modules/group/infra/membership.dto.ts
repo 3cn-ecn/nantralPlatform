@@ -19,3 +19,8 @@ export type MembershipFormDTO = Pick<
   MembershipDTO,
   'begin_date' | 'end_date' | 'summary' | 'description' | 'admin'
 > & { group: number; student: number };
+
+export type ShortMembershipFormDTO = Pick<
+  MembershipFormDTO,
+  'summary' | 'description' | 'begin_date' | 'end_date'
+>;

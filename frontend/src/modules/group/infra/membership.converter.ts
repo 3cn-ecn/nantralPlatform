@@ -1,5 +1,5 @@
-import { MembershipForm } from '../types/membership.types';
-import { MembershipFormDTO } from './membership.dto';
+import { MembershipForm, ShortMembershipForm } from '../types/membership.types';
+import { MembershipFormDTO, ShortMembershipFormDTO } from './membership.dto';
 
 export function convertMembershipForm(form: MembershipForm): MembershipFormDTO {
   return {
@@ -10,5 +10,16 @@ export function convertMembershipForm(form: MembershipForm): MembershipFormDTO {
     student: form.student,
     summary: form.summary,
     admin: form.admin,
+  };
+}
+
+export function convertShortMembershipForm(
+  form: ShortMembershipForm,
+): ShortMembershipFormDTO {
+  return {
+    summary: form.summary,
+    description: form.description,
+    begin_date: form.beginDate.toISOString().split('T')[0] || '',
+    end_date: form.endDate.toISOString().split('T')[0] || '',
   };
 }

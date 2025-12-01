@@ -7,6 +7,7 @@ import { useMutation } from '@tanstack/react-query';
 
 import { createGroupApi } from '#modules/group/api/createGroup.api';
 import { useGroupFormValues } from '#modules/group/hooks/useGroupFormValues';
+import { CreateGroupFormDTO } from '#modules/group/infra/group.dto';
 import { CreateGroupForm, Group } from '#modules/group/types/group.types';
 import { GroupTypePreview } from '#modules/group/types/groupType.types';
 import { GroupFormFields } from '#modules/group/view/shared/GroupFormFields';
@@ -39,7 +40,7 @@ export function CreateGroupModal({
   const [formValues, setFormValues] = useState<CreateGroupForm>(value);
   const { error, isError, mutate } = useMutation<
     Group,
-    ApiFormError<CreateGroupForm>,
+    ApiFormError<CreateGroupFormDTO>,
     CreateGroupForm
   >(() => createGroupApi(groupType.slug, formValues), {
     onSuccess: (group) => {

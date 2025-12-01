@@ -1,3 +1,4 @@
+import { convertShortMembershipForm } from '#modules/group/infra/membership.converter';
 import { adaptSocialLink } from '#modules/social_link/infra/socialLink.adapter';
 import { adaptStudentPreview } from '#modules/student/infra/student.adapter';
 
@@ -115,6 +116,8 @@ export function adaptGroupForm(groupForm: CreateGroupForm): CreateGroupFormDTO {
     latitude: groupForm.latitude,
     longitude: groupForm.longitude,
     _change_reason: groupForm.changeReason,
+    membership:
+      groupForm.membership && convertShortMembershipForm(groupForm.membership),
   };
 }
 
