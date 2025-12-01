@@ -148,6 +148,29 @@ class ShortMemberSerializer(serializers.ModelSerializer):
         model = Membership
         fields = ["summary", "description", "begin_date", "end_date"]
 
+    def validate_begin_date(self, value: date) -> date:
+        group_type: GroupType = self.instance.group.group_type
+        if not group_type.no_membership_dates and value is None:
+            raise exceptions.ValidationError(_("This field is required."))
+        return value
+
+    def validate_end_date(self, value: date) -> date:
+        group_type: GroupType = self.instance.group.group_type
+        if not group_type.no_membership_dates and value is None:
+            raise exceptions.ValidationError(_("This field is required."))
+        return value
+
+    def validate(self, data: dict[str, any]) -> dict[str, any]:
+        if (
+            data.get("begin_date")
+            and data.get("end_date")
+            and data["begin_date"] > data["end_date"]
+        ):
+            raise exceptions.ValidationError(
+                _("The end date must be after the begin date."),
+            )
+        return data
+
 
 class GroupWriteSerializer(serializers.ModelSerializer):
     social_links = GroupSocialLinkSerializer(many=True, read_only=True)
