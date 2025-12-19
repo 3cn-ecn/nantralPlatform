@@ -78,6 +78,7 @@ urlpatterns = [
         include("apps.sociallink.api_urls", namespace="sociallink_api"),
     ),
     path("api/core/", include("apps.core.api_urls", namespace="core_api")),
+    path("api/wallet/", include("wallet.urls", namespace="wallet_api")),
     # static files
     *(static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)),
     # homepage
