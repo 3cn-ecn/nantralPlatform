@@ -1,6 +1,5 @@
 import { Suspense } from 'react';
 import { Outlet, ScrollRestoration } from 'react-router-dom';
-import { Footer } from './Components/Footer';
 
 import {
   Box,
@@ -11,6 +10,7 @@ import {
 } from '@mui/material';
 
 import { FlexCol, FlexRow } from '../FlexBox/FlexBox';
+import { Footer } from './Components/Footer';
 import { NavBar } from './NavBar/NavBar';
 
 export function PageTemplate() {
@@ -23,11 +23,21 @@ export function PageTemplate() {
   //   defined in the router.tsx
 
   return (
-    <Box className={`global-${theme.palette.mode}-theme`}>
+    <Box
+      className={`global-${theme.palette.mode}-theme`}
+      sx={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}
+    >
       <CssBaseline />
       <ScrollRestoration />
       <NavBar />
-      <FlexCol component="main" sx={{ height: '100vh' }}>
+      <FlexCol
+        component="main"
+        sx={{
+          flexGrow: 1, // prend tout l’espace restant
+          display: 'flex',
+          flexDirection: 'column',
+        }}
+      >
         <Toolbar />
         <Suspense
           fallback={
@@ -37,9 +47,9 @@ export function PageTemplate() {
           }
         >
           <Outlet />
-          <Footer />
         </Suspense>
       </FlexCol>
+      <Footer />
     </Box>
   );
 }
