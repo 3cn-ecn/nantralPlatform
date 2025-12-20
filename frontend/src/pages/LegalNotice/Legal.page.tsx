@@ -1,4 +1,4 @@
-import { Typography, Link } from '@mui/material';
+import { Typography, Link, List, ListItem } from '@mui/material';
 import Container from '@mui/material/Container';
 
 import { useTranslation } from '#shared/i18n/useTranslation';
@@ -30,6 +30,21 @@ export default function LegalNoticePage() {
           {t('legalNotice.paragraphs.publisher.address_line_3')} <br />
           {t('legalNotice.paragraphs.publisher.address_line_4')} <br />
         </Address>
+        {t('legalNotice.paragraphs.publisher.people_text')}
+        <List dense>
+          <ListItem sx={{ py: 0.2 }}>
+            {t('legalNotice.paragraphs.publisher.aecn_president')} -{' '}
+            {t('legalNotice.paragraphs.publisher.aecn_president_title')} ;
+          </ListItem>
+          <ListItem sx={{ py: 0.2 }}>
+            {t('legalNotice.paragraphs.publisher.aecn_dsi')} -{' '}
+            {t('legalNotice.paragraphs.publisher.aecn_dsi_title')} ;
+          </ListItem>
+          <ListItem sx={{ py: 0.2 }}>
+            {t('legalNotice.paragraphs.publisher.3cn_president')} -{' '}
+            {t('legalNotice.paragraphs.publisher.3cn_president_title')}.
+          </ListItem>
+        </List>
       </ParagraphBody>
 
       <ParagraphTitle>
