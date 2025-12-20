@@ -1,5 +1,6 @@
 import { Suspense } from 'react';
 import { Outlet, ScrollRestoration } from 'react-router-dom';
+import { Footer } from './Components/Footer';
 
 import {
   Box,
@@ -36,6 +37,7 @@ export function PageTemplate() {
           }
         >
           <Outlet />
+          <Footer />
         </Suspense>
       </FlexCol>
     </Box>
