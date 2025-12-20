@@ -10,9 +10,11 @@ export function Footer() {
     <FlexCol alignItems="center" justifyContent="center" position="relative">
       <Container sx={{ my: 2 }}>
         <FooterTypography variant="body1">
-            <Link href="/legal-notice">{t('userMenu.menu.legalNotice')}</Link> | &nbsp;
-            <Link href="/feedback">{t('userMenu.menu.feedback')}</Link> | &nbsp;
-            <Link href="https://docs.nantral-platform.fr/">{t('userMenu.menu.documentation')}</Link>
+          <Link href="/legal-notice">{t('userMenu.menu.legalNotice')}</Link> |{' '}
+          <Link href="/feedback">{t('userMenu.menu.feedback')}</Link> |{' '}
+          <Link href="https://docs.nantral-platform.fr/">
+            {t('userMenu.menu.documentation')}
+          </Link>
         </FooterTypography>
       </Container>
     </FlexCol>
