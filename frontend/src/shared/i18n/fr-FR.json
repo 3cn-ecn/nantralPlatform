@@ -573,55 +573,37 @@
   },
   "legalNotice": {
     "paragraphs": {
-      "1": {
-        "lines": {
-          "1": "Nom du site web : Nantral Platform",
-          "2": "Adresse : https://www.nantral-platform.fr",
-          "3": "Propriétaire : Association des Étudiants de l'École Centrale de Nantes"
-        }
+      "publisher": {
+        "title": "Éditeur du site",
+        "text": "Le site Nantral Platform est développé par le club 3CN, affilié à l’AECN (ASSOCIATION DES ÉTUDIANTS DE L'ÉCOLE CENTRALE DE NANTES). La responsabilité du contenu du site incombe à l’AECN, qui en assure également le financement et la gestion.",
+        "address_title": "L’adresse de l’AECN est la suivante :",
+        "address_line_1": "ASSOCIATION DES ÉTUDIANTS DE L'ÉCOLE CENTRALE DE NANTES",
+        "address_line_2": "1 rue de la Noë",
+        "address_line_3": "44300 Nantes",
+        "address_line_4": "France"
       },
-      "2": {
-        "lines": {
-          "1": "ASSOCIATION DES ÉTUDIANTS DE L'ÉCOLE CENTRALE DE NANTES",
-          "2": "École Centrale de Nantes, 1 rue de la Noë, 44300 Nantes",
-          "3": "SIREN : 790 010 078",
-          "4": "APE : 9499Z",
-          "5": "N° TVA Intra : FR 49 79 00 10 07 8",
-          "6": "Mail : bde@ec-nantes.fr"
-        }
+
+      "host_provider": {
+        "title": "Hébergeur",
+        "text": "Le site internet est hébergé par la société OVH SAS, domiciliée à l’adresse suivante :",
+        "address_line_1": "2 rue Kellermann",
+        "address_line_2": "59100 Roubaix",
+        "address_line_3": "France"
       },
-      "3": "CLUB NANTRAL PLATFORM",
-      "4": {
-        "lines": {
-          "1": "OVH",
-          "2": "SAS au capital de 10 069 020 €",
-          "3": "RCS Lille Métropole 424 761 419 00045",
-          "4": "Code APE : 2620Z",
-          "5": "N° TVA : FR 22 42 47 61 41 9",
-          "6": "Siège social : 2 rue Kellermann - 59100 Roubaix - France"
-        }
+
+      "copyright": {
+        "title": "Propriété intellectuelle",
+        "text1": "Le code source de ce site web est la propriété du club 3CN, affilié à l’AECN. Sauf mention contraire, l’ensemble des éléments accessibles sur le site (textes, images, logos, icônes, sons, logiciels, etc.) demeure la propriété exclusive de leurs auteurs, en ce qui concerne les droits de propriété intellectuelle ou les droits d’usage.",
+        "text2": "Toute reproduction, représentation, modification, publication ou adaptation de tout ou partie des éléments du site, quel que soit le moyen ou le procédé utilisé, est interdite, sauf autorisation préalable de l’auteur. Toute exploitation non autorisée du site ou de l’un quelconque des éléments qu’il contient est susceptible de constituer une contrefaçon et d’entraîner des poursuites. "
       },
-      "5": {
-        "lines": {
-          "1": "Sauf mention contraire, tous les éléments accessibles sur le site (textes, images, logo, icônes, sons, logiciels, etc.) restent la propriété exclusive de leurs auteurs, en ce qui concerne les droits de propriété intellectuelle ou les droits d’usage.",
-          "2": "Toute reproduction, représentation, modification, publication, adaptation de tout ou partie des éléments du site, quel que soit le moyen ou le procédé utilisé, est interdite, sauf autorisation écrite préalable de l’auteur.",
-          "3": "Toute exploitation non autorisée du site ou d'un quelconque élément qu’il contient est considérée comme constitutive d’une contrefaçon et poursuivie.",
-          "4": "Les marques et logos reproduits sur le site sont déposés par les sociétés qui en sont propriétaires."
-        }
-      },
-      "6": "Seul un cookie de session est utilisé sur le site et expire après 14 jours.",
-      "7": "Les contenus de ce site peuvent inclure du contenu provenant de sources extérieures (par exemple les vidéos, images, etc…). Ces contenus embarqués agissent de la même manière que si le visiteur avait visité le site original où repose ce contenu. Ces sites peuvent donc utiliser des cookies supplémentaires.",
-      "8": "Lors de votre inscription sur le site, les données personnelles que vous nous transmettez seront stockées et conservées par l’Association des Étudiants de l’École Centrale de Nantes jusqu’à demande de suppression de votre compte utilisateur à l’aide du formulaire de contact"
-    },
-    "subtitles": {
-      "1": "Identité du site",
-      "2": "L'association",
-      "3": "Conception et réalisation",
-      "4": "Hébergement",
-      "5": "Propriété intellectuelle",
-      "6": "Cookies",
-      "7": "Contenu embarqué depuis d'autres sites",
-      "8": "Traitement des données personnelles"
+
+      "rgpd": {
+        "title": "Données personnelles",
+        "text": "Les données personnelles collectées sont utilisées uniquement dans le cadre du bon fonctionnement de Nantral Platform. Leur accès est strictement limité à leur propriétaire ainsi qu’aux personnes expressément autorisées par le conseil d’administration de l’AECN.",
+        "contact_text": "Pour toute question ou demande relative aux données personnelles, vous pouvez nous contacter à l’adresse électronique suivante :",
+        "contact_email": "contact@nantral-platform.fr",
+        "contact_post_email": "."
+      }
     },
     "title": "Mentions Légales"
   },
