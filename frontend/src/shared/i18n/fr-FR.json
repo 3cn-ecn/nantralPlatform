@@ -580,7 +580,14 @@
         "address_line_1": "ASSOCIATION DES ÉTUDIANTS DE L'ÉCOLE CENTRALE DE NANTES",
         "address_line_2": "1 rue de la Noë",
         "address_line_3": "44300 Nantes",
-        "address_line_4": "France"
+        "address_line_4": "France",
+        "people_text": "En particulier, l'équipe du site est sous la direction de: ",
+        "aecn_president_title": "Présidente de l'AECN",
+        "aecn_president": "Victoire GUTH",
+        "aecn_dsi_title": "Directeur des systèmes d'information de l'AECN",
+        "aecn_dsi": "Bastien PAGEAUD",
+        "3cn_president_title": "Président de 3CN",
+        "3cn_president": "Jean Benoit GRIMALDI"
       },
 
       "host_provider": {
@@ -600,7 +607,7 @@
       "rgpd": {
         "title": "Données personnelles",
         "text": "Les données personnelles collectées sont utilisées uniquement dans le cadre du bon fonctionnement de Nantral Platform. Leur accès est strictement limité à leur propriétaire ainsi qu’aux personnes expressément autorisées par le conseil d’administration de l’AECN.",
-        "contact_text": "Pour toute question ou demande relative aux données personnelles, vous pouvez nous contacter à l’adresse électronique suivante :",
+        "contact_text": "Pour toute question ou demande relative aux données personnelles, vous pouvez nous contacter à l’adresse électronique suivante : ",
         "contact_email": "contact@nantral-platform.fr",
         "contact_post_email": "."
       }
