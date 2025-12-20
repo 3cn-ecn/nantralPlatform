@@ -56,7 +56,7 @@ class StudentSerializer(serializers.ModelSerializer):
         if request and hasattr(request, "user"):
             request_user = request.user
 
-        if request_user != user or not user.invitation:
+        if request_user != user or user is None or not user.invitation:
             return None
         return user.invitation.expires_at
 
