@@ -40,6 +40,26 @@ exports[`Home page should render correctly 1`] = `
           <br />
         </p>
       </div>
+      In particular, the site team is under the direction of: 
+      <ul
+        class="MuiList-root MuiList-padding MuiList-dense css-h4y409-MuiList-root"
+      >
+        <li
+          class="MuiListItem-root MuiListItem-dense MuiListItem-gutters MuiListItem-padding css-131zoqk-MuiListItem-root"
+        >
+          Victoire GUTH - AECN President ;
+        </li>
+        <li
+          class="MuiListItem-root MuiListItem-dense MuiListItem-gutters MuiListItem-padding css-131zoqk-MuiListItem-root"
+        >
+          Bastien PAGEAUD - Director of Information Systems at AECN ;
+        </li>
+        <li
+          class="MuiListItem-root MuiListItem-dense MuiListItem-gutters MuiListItem-padding css-131zoqk-MuiListItem-root"
+        >
+          Jean Benoit GRIMALDI - 3CN President.
+        </li>
+      </ul>
     </div>
     <h4
       class="MuiTypography-root MuiTypography-h4 css-1amwp23-MuiTypography-root"
