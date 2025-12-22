@@ -32,15 +32,15 @@ export default function LegalNoticePage() {
         </Address>
         {t('legalNotice.paragraphs.publisher.people_text')}
         <List dense>
-          <ListItem sx={{ py: 0.2 }}>
+          <ListItem sx={{ py: 0.1 }}>
             | {t('legalNotice.paragraphs.publisher.aecn_president')} -{' '}
             {t('legalNotice.paragraphs.publisher.aecn_president_title')} ;
           </ListItem>
-          <ListItem sx={{ py: 0.2 }}>
+          <ListItem sx={{ py: 0.1 }}>
             | {t('legalNotice.paragraphs.publisher.aecn_dsi')} -{' '}
             {t('legalNotice.paragraphs.publisher.aecn_dsi_title')} ;
           </ListItem>
-          <ListItem sx={{ py: 0.2 }}>
+          <ListItem sx={{ py: 0.1 }}>
             | {t('legalNotice.paragraphs.publisher.3cn_president')} -{' '}
             {t('legalNotice.paragraphs.publisher.3cn_president_title')}.
           </ListItem>

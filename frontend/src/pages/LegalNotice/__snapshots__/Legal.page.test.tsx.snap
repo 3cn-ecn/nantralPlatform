@@ -45,19 +45,19 @@ exports[`Home page should render correctly 1`] = `
         class="MuiList-root MuiList-padding MuiList-dense css-h4y409-MuiList-root"
       >
         <li
-          class="MuiListItem-root MuiListItem-dense MuiListItem-gutters MuiListItem-padding css-131zoqk-MuiListItem-root"
+          class="MuiListItem-root MuiListItem-dense MuiListItem-gutters MuiListItem-padding css-1g0nj9f-MuiListItem-root"
         >
-          Victoire GUTH - AECN President ;
+          | Victoire GUTH - AECN President ;
         </li>
         <li
-          class="MuiListItem-root MuiListItem-dense MuiListItem-gutters MuiListItem-padding css-131zoqk-MuiListItem-root"
+          class="MuiListItem-root MuiListItem-dense MuiListItem-gutters MuiListItem-padding css-1g0nj9f-MuiListItem-root"
         >
-          Bastien PAGEAUD - Director of Information Systems at AECN ;
+          | Bastien PAGEAUD - Director of Information Systems at AECN ;
         </li>
         <li
-          class="MuiListItem-root MuiListItem-dense MuiListItem-gutters MuiListItem-padding css-131zoqk-MuiListItem-root"
+          class="MuiListItem-root MuiListItem-dense MuiListItem-gutters MuiListItem-padding css-1g0nj9f-MuiListItem-root"
         >
-          Jean Benoit GRIMALDI - 3CN President.
+          | Jean Benoît GRIMALDI - 3CN President.
         </li>
       </ul>
     </div>
