@@ -15,7 +15,7 @@ class CustomScopeClaims(ScopeClaims):
 
     def scope_mas(self):
         dic = {
-            "sub": self.user.id,
+            "sub": str(self.user.id),
             "preferred_username": self.user.username,
             "name": self.userinfo["name"],
             "picture": self.user.student.picture.url if self.user.student and self.user.student.picture else None,
