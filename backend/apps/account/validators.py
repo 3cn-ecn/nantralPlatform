@@ -12,6 +12,20 @@ MXID_LOCALPART_ALLOWED_CHARACTERS = set(
 )
 GUEST_USER_ID_PATTERN = re.compile(r"^\d+$")
 
+RESERVED_USERNAMES = (
+    "bot",
+    "admin",
+    "server",
+    "internal",
+    "guest",
+    "matrix"
+    "bde",
+    "bds",
+    "bda",
+    "ecn",
+    "test",
+)
+
 def validate_matrix_username(value):
     if any(c not in MXID_LOCALPART_ALLOWED_CHARACTERS for c in value):
         raise ValidationError(_("Enter a valid username. This value can only contain characters a-z, 0-9, or '_-.+'"))
@@ -21,6 +35,9 @@ def validate_matrix_username(value):
 
     if GUEST_USER_ID_PATTERN.fullmatch(value):
         raise ValidationError(_("Numeric username are reserved"))
+
+    if value.lower() in RESERVED_USERNAMES or any(value.lower().startswith(p + ".") for p in RESERVED_USERNAMES):
+        raise ValidationError(_("This username is reserved"))
 
 def validate_email(mail: str):
     if "+" in mail:
