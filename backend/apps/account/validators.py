@@ -24,6 +24,7 @@ RESERVED_USERNAMES = (
     "bda",
     "ecn",
     "test",
+    "bridge",
 )
 
 def validate_matrix_username(value):
