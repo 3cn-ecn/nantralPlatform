@@ -18,7 +18,7 @@ export interface GroupDTO {
   icon?: string;
   group_type: GroupTypePreviewDTO;
   parent?: GroupPreviewDTO;
-  thematic?: GroupThematicDTO;
+  thematic: GroupThematicDTO | null;
   creation_year?: number;
   archived: boolean;
   private: boolean;
@@ -92,8 +92,8 @@ export type CreateGroupFormDTO = Pick<
   | 'address'
   | 'latitude'
   | 'longitude'
-  | 'thematic'
 > & {
+  thematic: number | null;
   children_label?: string;
   icon?: File;
   banner?: File;

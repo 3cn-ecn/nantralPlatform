@@ -10,6 +10,7 @@ const defaultGroupFormValues: CreateGroupForm = {
   englishName: '',
   private: false,
   public: false,
+  thematic: null,
   frenchShortName: '',
   englishShortName: '',
   slug: '',
@@ -55,6 +56,7 @@ function convertToForm(group: Group): CreateGroupForm {
     address: group.address,
     latitude: group.latitude,
     longitude: group.longitude,
+    thematic: group.thematic,
   };
 }
 

@@ -16,10 +16,7 @@ import {
   MapGroupPreviewDTO,
   MapGroupSearchDTO,
 } from './group.dto';
-import {
-  adaptGroupThematic,
-  adaptGroupThematicDTO,
-} from './groupThematic.adapter';
+import { adaptGroupThematic } from './groupThematic.adapter';
 import { adaptGroupTypePreview } from './groupType.adapter';
 
 export function adaptGroupPreview(groupDTO: GroupPreviewDTO): GroupPreview {
@@ -56,6 +53,11 @@ export function adaptMapGroupPreview(
     members: groupDTO.members.map((studentDTO) =>
       adaptStudentPreview(studentDTO),
     ),
+    thematic:
+      groupDTO.thematic &&
+      (groupDTO.thematic != null
+        ? adaptGroupThematic(groupDTO.thematic)
+        : null),
   };
 }
 
@@ -73,7 +75,11 @@ export function adaptGroup(groupDTO: GroupDTO): Group {
     icon: groupDTO.icon,
     groupType: adaptGroupTypePreview(groupDTO.group_type),
     parent: groupDTO.parent && adaptGroupPreview(groupDTO.parent),
-    thematic: groupDTO.thematic && adaptGroupThematic(groupDTO.thematic),
+    thematic:
+      groupDTO.thematic &&
+      (groupDTO.thematic != null
+        ? adaptGroupThematic(groupDTO.thematic)
+        : null),
     creationYear: groupDTO.creation_year,
     archived: groupDTO.archived,
     private: groupDTO.private,
@@ -129,7 +135,7 @@ export function adaptGroupForm(groupForm: CreateGroupForm): CreateGroupFormDTO {
     creation_year: groupForm.creationYear,
     label: (groupForm.label >= 0 && groupForm.label) || null,
     parent: groupForm.parent,
-    thematic: groupForm.thematic && adaptGroupThematicDTO(groupForm.thematic),
+    thematic: (groupForm.thematic && groupForm.thematic.id) || null,
     lock_memberships: groupForm.lockMemberships,
     address: groupForm.address,
     latitude: groupForm.latitude,

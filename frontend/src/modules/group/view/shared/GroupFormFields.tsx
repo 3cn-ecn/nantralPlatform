@@ -19,6 +19,7 @@ import { useQuery } from '@tanstack/react-query';
 
 import { getGroupLabelApi } from '#modules/group/api/getGroupLabel.api';
 import { getGroupListApi } from '#modules/group/api/getGroupList.api';
+import { getGroupThematicsApi } from '#modules/group/api/getGroupThematics.api';
 import { CreateGroupFormDTO } from '#modules/group/infra/group.dto';
 import {
   CreateGroupForm as GroupForm,
@@ -80,6 +81,10 @@ export function GroupFormFields({
       ),
     [groupType.slug],
   );
+  const { data: thematicsData, isLoading: isThematicsLoading } = useQuery({
+    queryKey: ['groupThematics'],
+    queryFn: () => getGroupThematicsApi({ page: 1, pageSize: 100 }),
+  });
   const addressCallback = useCallback(
     (val: string, objectValue: Geocode) =>
       updateFormValues({
@@ -284,6 +289,29 @@ export function GroupFormFields({
           </Box>
         </>
       )}
+      <FlexAuto columnGap={2}>
+        <SelectField
+          label={t('group.form.thematic.label')}
+          value={
+            formValues.thematic?.name ?? t('group.form.thematic.undefined')
+          }
+          handleChange={(val) => {
+            const selected = thematicsData?.results.find((t) => t.name === val);
+            updateFormValues({ thematic: selected ?? undefined });
+          }}
+          disabled={isThematicsLoading || !thematicsData}
+          errors={error?.fields?.thematic}
+        >
+          <MenuItem value={t('group.form.thematic.undefined')}>
+            {t('group.form.thematic.undefined')}
+          </MenuItem>
+          {thematicsData?.results.map((thematic) => (
+            <MenuItem key={thematic.id} value={thematic.name}>
+              {thematic.name}
+            </MenuItem>
+          ))}
+        </SelectField>
+      </FlexAuto>
 
       <TextField
         label={t('group.form.changeReason.label')}

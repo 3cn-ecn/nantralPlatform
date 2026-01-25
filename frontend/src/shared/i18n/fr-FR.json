@@ -428,6 +428,11 @@
       }
     },
     "form": {
+      "thematic": {
+        "label": "Thématique",
+        "helperText": "Le groupe sera listé avec des groupes de cette thématique",
+        "undefined": "Indéfinie"
+      },
       "address": {
         "label": "Adresse"
       },

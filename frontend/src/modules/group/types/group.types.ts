@@ -18,7 +18,7 @@ export interface Group {
   icon?: string;
   groupType: GroupTypePreview;
   parent?: GroupPreview;
-  thematic?: GroupThematic;
+  thematic?: GroupThematic | null;
   creationYear?: number;
   archived: boolean;
   private: boolean;
