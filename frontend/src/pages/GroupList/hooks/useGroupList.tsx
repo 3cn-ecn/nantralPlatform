@@ -14,7 +14,7 @@ export function useGroupList(type?: string) {
 
   const groupsByCategory = groupBy(
     query.data?.pages?.map((page) => page.results).flat(),
-    'category',
+    'thematic.name',
   );
 
   return {

@@ -83,7 +83,7 @@ export default function GroupListPage() {
             Object.keys(groupsByCategory).map((cat) => (
               <FlexCol key={cat}>
                 <Typography variant="h2" mb={4}>
-                  {cat}
+                  {cat == 'undefined' ? t('group.defaultThematic') : cat}
                 </Typography>
                 <GroupGrid estimatedSize={100} groups={groupsByCategory[cat]} />
                 {(groupListQuery.isLoading ||

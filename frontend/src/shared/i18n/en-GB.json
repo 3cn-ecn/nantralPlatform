@@ -427,6 +427,7 @@
         "posts": "Posts"
       }
     },
+    "defaultThematic": "Others",
     "form": {
       "thematic": {
         "label": "Thematic",

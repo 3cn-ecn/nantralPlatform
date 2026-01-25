@@ -80,7 +80,7 @@ class GroupPreviewSerializer(serializers.ModelSerializer):
     sub_category = serializers.SerializerMethodField()
     name = serializers.SerializerMethodField()
     short_name = serializers.SerializerMethodField()
-
+    thematic = ThematicSerializer()
     class Meta:
         model = Group
         fields = [
@@ -93,7 +93,8 @@ class GroupPreviewSerializer(serializers.ModelSerializer):
             "category",
             "sub_category",
             "summary",
-            "description"
+            "description",
+            "thematic",
         ]
         read_only_fields = [
             "slug",
