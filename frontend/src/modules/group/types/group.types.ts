@@ -2,23 +2,33 @@ import { ShortMembershipForm } from '#modules/group/types/membership.types';
 import { SocialLink } from '#modules/social_link/types/socialLink.type';
 import { StudentPreview } from '#modules/student/student.types';
 
+import { GroupThematic } from './groupThematic.types';
 import { GroupTypePreview } from './groupType.types';
 
 export interface Group {
   id: number;
   name: string;
+  englishName: string;
+  frenchName: string;
   shortName: string;
+  frenchShortName: string;
+  englishShortName: string;
   slug: string;
   url: string;
   icon?: string;
   groupType: GroupTypePreview;
   parent?: GroupPreview;
+  thematic?: GroupThematic;
   creationYear?: number;
   archived: boolean;
   private: boolean;
   public: boolean;
   summary: string;
+  frenchSummary: string;
+  englishSummary: string;
   description: string;
+  frenchDescription: string;
+  englishDescription: string;
   meetingPlace: string;
   meetingHour: string;
   banner: string;
@@ -46,6 +56,7 @@ export type GroupPreview = Pick<
   | 'icon'
   | 'category'
   | 'subCategory'
+  | 'thematic'
 >;
 
 export type MapGroupPreview = GroupPreview &
@@ -55,8 +66,10 @@ export type MapGroupPreview = GroupPreview &
 
 export type CreateGroupForm = Pick<
   Group,
-  | 'name'
-  | 'shortName'
+  | 'frenchName'
+  | 'englishName'
+  | 'frenchShortName'
+  | 'englishShortName'
   | 'meetingHour'
   | 'video1'
   | 'video2'
@@ -65,13 +78,16 @@ export type CreateGroupForm = Pick<
   | 'creationYear'
   | 'slug'
   | 'archived'
-  | 'summary'
-  | 'description'
+  | 'frenchSummary'
+  | 'englishSummary'
+  | 'frenchDescription'
+  | 'englishDescription'
   | 'meetingPlace'
   | 'lockMemberships'
   | 'address'
   | 'latitude'
   | 'longitude'
+  | 'thematic'
 > & {
   childrenLabel?: string;
   icon?: File;

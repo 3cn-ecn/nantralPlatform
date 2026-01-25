@@ -38,7 +38,7 @@ class TestGroups(APITestCase):
         self.assertEqual(res.status_code, status.HTTP_200_OK)
         self.assertEqual(len(res.data.get("results")), 0)
         # test with a group
-        g = Group.objects.create(name="G1", group_type=self.t1)
+        g = Group.objects.create(french_name="G1", group_type=self.t1)
         res = self.client.get("/api/group/group/", {"type": "t1"})
         self.assertEqual(res.status_code, status.HTTP_200_OK)
         self.assertEqual(len(res.data.get("results")), 1)
@@ -58,17 +58,17 @@ class TestGroups(APITestCase):
         self.client.force_login(self.u1)
         init_nb = Group.objects.count()
         # test on a type that is forbidden
-        res = self.client.post("/api/group/group/?type=t1", {"name": "G1"})
+        res = self.client.post("/api/group/group/?type=t1", {"french_name": "G1"})
         self.assertEqual(res.status_code, status.HTTP_403_FORBIDDEN)
         self.assertEqual(Group.objects.count(), init_nb)
         # test on a type that is open
-        res = self.client.post("/api/group/group/?type=t2", {"name": "G1"})
+        res = self.client.post("/api/group/group/?type=t2", {"french_name": "G1"})
         self.assertEqual(res.status_code, status.HTTP_201_CREATED)
         self.assertEqual(Group.objects.count(), init_nb + 1)
 
     def test_retrieve(self):
         self.client.force_login(self.u1)
-        g = Group.objects.create(name="G1", group_type=self.t1)
+        g = Group.objects.create(french_name="G1", group_type=self.t1)
         # test to retrieve a normal group
         res = self.client.get(f"/api/group/group/{g.slug}/")
         self.assertEqual(res.status_code, status.HTTP_200_OK)
@@ -92,27 +92,27 @@ class TestGroups(APITestCase):
         self.assertEqual(res.status_code, status.HTTP_200_OK)
 
     def test_update(self):
-        g = Group.objects.create(name="G1", slug="g1", group_type=self.t1)
+        g = Group.objects.create(french_name="G1", slug="g1", group_type=self.t1)
         # test for non-authenticated users
-        res = self.client.put(f"/api/group/group/{g.slug}/", {"name": "G2"})
+        res = self.client.put(f"/api/group/group/{g.slug}/", {"french_name": "G2"})
         self.assertEqual(res.status_code, status.HTTP_403_FORBIDDEN)
         # test with authenticated user
         self.client.force_login(self.u1)
-        res = self.client.put(f"/api/group/group/{g.slug}/", {"name": "G2"})
+        res = self.client.put(f"/api/group/group/{g.slug}/", {"french_name": "G2"})
         self.assertEqual(res.status_code, status.HTTP_403_FORBIDDEN)
         # test with member
         g.members.add(self.u1.student)
-        res = self.client.put(f"/api/group/group/{g.slug}/", {"name": "G2"})
+        res = self.client.put(f"/api/group/group/{g.slug}/", {"french_name": "G2"})
         self.assertEqual(res.status_code, status.HTTP_403_FORBIDDEN)
         # test with admin
         g.membership_set.filter(student=self.u1.student).update(admin=True)
-        res = self.client.put(f"/api/group/group/{g.slug}/", {"name": "G2"})
+        res = self.client.put(f"/api/group/group/{g.slug}/", {"french_name": "G2"})
         self.assertEqual(res.status_code, status.HTTP_200_OK)
         # check the modification is done
         self.assertEqual(Group.objects.get(slug="g1").name, "G2")
 
     def test_delete(self):
-        g = Group.objects.create(name="G1", slug="g1", group_type=self.t1)
+        g = Group.objects.create(french_name="G1", slug="g1", group_type=self.t1)
         # test for non-authenticated users
         res = self.client.delete(f"/api/group/group/{g.slug}/")
         self.assertEqual(res.status_code, status.HTTP_403_FORBIDDEN)
@@ -138,7 +138,7 @@ class TestMemberships(APITestCase):
         self.u2 = create_student_user(username="u2", email="u2@ec-nantes.fr")
         self.u3 = create_student_user(username="u3", email="u3@ec-nantes.fr")
         self.t1 = GroupType.objects.create(name="T1", slug="t1")
-        self.g1 = Group.objects.create(name="G1", group_type=self.t1)
+        self.g1 = Group.objects.create(french_name="G1", group_type=self.t1)
         # deactivate warnings
         logger = logging.getLogger("django.request")
         self.previous_level = logger.getEffectiveLevel()
@@ -364,7 +364,7 @@ class SubscriptionTest(APITestCase):
     def setUp(self):
         self.u1 = create_student_user(username="u1", email="u1@ec-nantes.fr")
         self.t1 = GroupType.objects.create(name="T1", slug="t1")
-        self.g1 = Group.objects.create(name="G1", group_type=self.t1)
+        self.g1 = Group.objects.create(french_name="G1", group_type=self.t1)
         self.url = f"/api/group/group/{self.g1.slug}/update_subscription/"
         # deactivate warnings
         logger = logging.getLogger("django.request")

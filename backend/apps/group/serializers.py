@@ -13,7 +13,7 @@ from apps.sociallink.serializers import (
 from apps.student.serializers import StudentPreviewSerializer
 
 from ..student.models import Student
-from .models import Group, GroupType, Label, Membership
+from .models import Group, GroupType, Label, Membership, Thematic
 
 
 class AdminFieldsMixin:
@@ -44,6 +44,7 @@ class AdminFieldsMixin:
 
 class GroupTypeSerializer(serializers.ModelSerializer):
     can_create = serializers.SerializerMethodField()
+    name = serializers.SerializerMethodField()
 
     class Meta:
         model = GroupType
@@ -60,11 +61,25 @@ class GroupTypeSerializer(serializers.ModelSerializer):
         user = self.context.get("request").user
         return user.is_authenticated and (obj.can_create or user.is_superuser)
 
+    def get_name(self, obj: GroupType):
+        return obj.translated_name
+
+class ThematicSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Thematic
+        fields = [
+            "identifier",
+            "name",
+            "priority",
+        ]
+
 
 class GroupPreviewSerializer(serializers.ModelSerializer):
     url = serializers.SerializerMethodField()
     category = serializers.SerializerMethodField()
     sub_category = serializers.SerializerMethodField()
+    name = serializers.SerializerMethodField()
+    short_name = serializers.SerializerMethodField()
 
     class Meta:
         model = Group
@@ -77,10 +92,10 @@ class GroupPreviewSerializer(serializers.ModelSerializer):
             "id",
             "category",
             "sub_category",
+            "summary",
+            "description"
         ]
         read_only_fields = [
-            "name",
-            "short_name",
             "slug",
             "url",
             "icon",
@@ -95,6 +110,12 @@ class GroupPreviewSerializer(serializers.ModelSerializer):
 
     def get_sub_category(self, obj: Group) -> str:
         return obj.get_sub_category()
+    
+    def get_name(self, obj):
+        return obj.name
+
+    def get_short_name(self, obj):
+        return obj.short_name
 
 
 class GroupSerializer(serializers.ModelSerializer):
@@ -104,9 +125,14 @@ class GroupSerializer(serializers.ModelSerializer):
     is_member = serializers.SerializerMethodField()
     group_type = GroupTypeSerializer(read_only=True)
     parent = GroupPreviewSerializer(read_only=True)
+    thematic = ThematicSerializer(read_only=True)
     category = serializers.SerializerMethodField()
     sub_category = serializers.SerializerMethodField()
     social_links = SocialLinkSerializer(many=True)
+    name = serializers.SerializerMethodField()
+    short_name = serializers.SerializerMethodField()
+    description = serializers.SerializerMethodField()
+    summary = serializers.SerializerMethodField()
 
     class Meta:
         model = Group
@@ -116,6 +142,10 @@ class GroupSerializer(serializers.ModelSerializer):
             "priority",
         ]
         read_only_fields = [
+            "description",
+            "summary",
+            "name",
+            "short_name",
             "group_type",
             "parent",
             "url",
@@ -141,6 +171,18 @@ class GroupSerializer(serializers.ModelSerializer):
 
     def get_sub_category(self, obj: Group) -> str:
         return obj.get_sub_category()
+    
+    def get_name(self, obj):
+        return obj.name
+
+    def get_short_name(self, obj):
+        return obj.short_name
+    
+    def get_description(self, obj):
+        return obj.description
+
+    def get_summary(self, obj):
+        return obj.summary
 
 
 class ShortMemberSerializer(serializers.ModelSerializer):
@@ -199,7 +241,9 @@ class GroupWriteSerializer(serializers.ModelSerializer):
         # If requested, add request user to the list of members
         user = self.context["request"].user
         if membership is not None and user and user.is_authenticated:
-            Membership.objects.create(group=group, student=user.student, admin=True, **membership)
+            Membership.objects.create(
+                group=group, student=user.student, admin=True, **membership
+            )
 
         return group
 
@@ -442,7 +486,14 @@ class MapGroupSerializer(serializers.ModelSerializer):
         from_date = timezone.now()
         serialized_data = StudentPreviewSerializer(
             Student.objects.filter(
-                Q(membership_set__group_id=obj.id, membership_set__end_date__gte=from_date) | Q(membership_set__group_id=obj.id, membership_set__end_date__isnull=True)
+                Q(
+                    membership_set__group_id=obj.id,
+                    membership_set__end_date__gte=from_date,
+                )
+                | Q(
+                    membership_set__group_id=obj.id,
+                    membership_set__end_date__isnull=True,
+                )
             ),
             many=True,
         ).data

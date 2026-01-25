@@ -16,6 +16,10 @@ import {
   MapGroupPreviewDTO,
   MapGroupSearchDTO,
 } from './group.dto';
+import {
+  adaptGroupThematic,
+  adaptGroupThematicDTO,
+} from './groupThematic.adapter';
 import { adaptGroupTypePreview } from './groupType.adapter';
 
 export function adaptGroupPreview(groupDTO: GroupPreviewDTO): GroupPreview {
@@ -28,6 +32,7 @@ export function adaptGroupPreview(groupDTO: GroupPreviewDTO): GroupPreview {
     icon: groupDTO.icon,
     category: groupDTO.category,
     subCategory: groupDTO?.sub_category,
+    thematic: groupDTO.thematic && adaptGroupThematic(groupDTO.thematic),
   };
 }
 
@@ -58,18 +63,27 @@ export function adaptGroup(groupDTO: GroupDTO): Group {
   return {
     id: groupDTO.id,
     name: groupDTO.name,
+    frenchName: groupDTO.french_name,
+    englishName: groupDTO.english_name,
     shortName: groupDTO.short_name,
+    frenchShortName: groupDTO.french_short_name,
+    englishShortName: groupDTO.english_short_name,
     slug: groupDTO.slug,
     url: groupDTO.url,
     icon: groupDTO.icon,
     groupType: adaptGroupTypePreview(groupDTO.group_type),
     parent: groupDTO.parent && adaptGroupPreview(groupDTO.parent),
+    thematic: groupDTO.thematic && adaptGroupThematic(groupDTO.thematic),
     creationYear: groupDTO.creation_year,
     archived: groupDTO.archived,
     private: groupDTO.private,
     public: groupDTO.public,
     summary: groupDTO.summary,
+    frenchSummary: groupDTO.french_summary,
+    englishSummary: groupDTO.english_summary,
     description: groupDTO.description,
+    frenchDescription: groupDTO.french_description,
+    englishDescription: groupDTO.english_description,
     meetingPlace: groupDTO.meeting_place,
     meetingHour: groupDTO.meeting_hour,
     banner: groupDTO.banner,
@@ -94,16 +108,20 @@ export function adaptGroupForm(groupForm: CreateGroupForm): CreateGroupFormDTO {
   return {
     archived: groupForm.archived,
     banner: groupForm.banner,
-    description: groupForm.description,
+    french_description: groupForm.frenchDescription,
+    english_description: groupForm.englishDescription,
     icon: groupForm.icon,
     meeting_hour: groupForm.meetingHour,
     meeting_place: groupForm.meetingPlace,
-    name: groupForm.name,
+    french_name: groupForm.frenchName,
+    english_name: groupForm.englishName,
     private: groupForm.private,
     public: groupForm.public,
-    short_name: groupForm.shortName,
+    french_short_name: groupForm.frenchShortName,
+    english_short_name: groupForm.englishShortName,
     slug: groupForm.slug,
-    summary: groupForm.summary,
+    french_summary: groupForm.frenchSummary,
+    english_summary: groupForm.englishSummary,
     tags: groupForm.tags,
     video1: groupForm.video1,
     video2: groupForm.video2,
@@ -111,6 +129,7 @@ export function adaptGroupForm(groupForm: CreateGroupForm): CreateGroupFormDTO {
     creation_year: groupForm.creationYear,
     label: (groupForm.label >= 0 && groupForm.label) || null,
     parent: groupForm.parent,
+    thematic: groupForm.thematic && adaptGroupThematicDTO(groupForm.thematic),
     lock_memberships: groupForm.lockMemberships,
     address: groupForm.address,
     latitude: groupForm.latitude,

@@ -453,7 +453,8 @@
         "label": "Creation date"
       },
       "description": {
-        "label": "Description"
+        "frenchLabel": "Description (in french)",
+        "englishLabel": "Description (in english)"
       },
       "endDate": {
         "label": "End date"
@@ -489,7 +490,8 @@
         "label": "Meeting place"
       },
       "name": {
-        "label": "Name"
+        "french_label": "Name (in french)",
+        "english_label": "Name (in english)"
       },
       "parent": {
         "label": "Parent group"
@@ -504,10 +506,12 @@
       },
       "shortName": {
         "helperText": "This name will be displayed in the group list.",
-        "label": "Shortened name"
+        "french_label": "Shortened name (in french)",
+        "english_label": "Shortened name (in english)"
       },
       "summary": {
-        "label": "Summary",
+        "frenchLabel": "Summary (in french)",
+        "englishLabel": "Summary (in english)",
         "mapLabel": "Address supplement",
         "mapPlaceholder": "Apt. 101"
       },

@@ -1,4 +1,4 @@
-import { Dispatch, useCallback } from 'react';
+import { useCallback } from 'react';
 
 import { Verified } from '@mui/icons-material';
 
@@ -12,7 +12,6 @@ import {
   DateField,
   TextField,
 } from '#shared/components/FormFields';
-import { SetObjectStateAction } from '#shared/hooks/useObjectState';
 import { useTranslation } from '#shared/i18n/useTranslation';
 import { ApiFormError } from '#shared/infra/errors';
 
@@ -20,7 +19,7 @@ interface JoinGroupFormFieldsProps {
   isError: boolean;
   error: ApiFormError<MembershipFormDTO> | null;
   formValues: MembershipForm;
-  updateFormValues: Dispatch<SetObjectStateAction<MembershipForm>>;
+  updateFormValues: (val: Partial<MembershipForm>) => void;
   isAdmin?: boolean;
   selectStudent?: boolean;
   showDates?: boolean;

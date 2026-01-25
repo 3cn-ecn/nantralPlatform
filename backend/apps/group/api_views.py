@@ -25,7 +25,7 @@ from rest_framework.settings import api_settings
 from apps.utils.discord import respond_admin_request, send_admin_request
 from apps.utils.parse import parse_bool
 
-from .models import Group, GroupType, Label, Membership
+from .models import Group, GroupType, Label, Membership, Thematic
 from .permissions import (
     AdminRequestListPermission,
     AdminRequestPermission,
@@ -47,6 +47,7 @@ from .serializers import (
     MembershipSerializer,
     NewMembershipSerializer,
     SubscriptionSerializer,
+    ThematicSerializer,
 )
 
 
@@ -60,7 +61,7 @@ class GroupTypeViewSet(viewsets.ReadOnlyModelViewSet):
     lookup_field = "slug"
     filter_backends = [filters.OrderingFilter]
     ordering = ["-priority"]
-    ordering_fields = ["slug", "name", "priority"]
+    ordering_fields = ["slug", "translated_name", "priority"]
     lookup_url_kwarg = "slug"
 
     def get_queryset(self):
@@ -68,6 +69,21 @@ class GroupTypeViewSet(viewsets.ReadOnlyModelViewSet):
         if is_map is not None:
             return GroupType.objects.filter(is_map=is_map)
         return GroupType.objects.all()
+
+
+class ThematicViewSet(viewsets.ReadOnlyModelViewSet):
+    serializer_class = ThematicSerializer
+    lookup_field = "identifier"
+    filter_backends = [filters.OrderingFilter]
+    ordering = ["-priority"]
+    ordering_fields = ["identifier", "priority"]
+    lookup_url_kwarg = "identifier"
+
+    def get_queryset(self):
+        queryset = Thematic.objects.filter(visible=True)
+        if not self.request.user.is_authenticated:
+            queryset = queryset.filter(public = True)
+        return queryset
 
 
 class GroupViewSet(viewsets.ModelViewSet):
@@ -119,7 +135,7 @@ class GroupViewSet(viewsets.ModelViewSet):
 
     @property
     def search_fields(self):
-        search_fields = ["name", "short_name", "slug"]
+        search_fields = ["french_name", "french_short_name", "slug"]
         is_map = parse_bool(self.query_params.get("map"))
         if is_map is True:
             search_fields += [
@@ -149,7 +165,7 @@ class GroupViewSet(viewsets.ModelViewSet):
             return GroupSerializer
         return GroupPreviewSerializer
 
-    def get_queryset(self) -> QuerySet[Group]:  # noqa: C901
+    def get_queryset(self) -> QuerySet[Group]:  # noqa: C901, PLR0912
         user = self.request.user
         group_type = GroupType.objects.filter(
             slug=self.query_params.get("type"),
@@ -222,6 +238,24 @@ class GroupViewSet(viewsets.ModelViewSet):
         if archived is not True:
             queryset = queryset.filter(archived=False)
 
+        # this code is used to patch the fact that 'name' was renamed 'french_name'
+        sort_fields = []
+        if group_type:
+            for f in group_type.sort_fields.split(","):
+                if f == "short_name":
+                    sort_fields.append("french_short_name")
+                    sort_fields.append("english_short_name")
+                elif f == "name":
+                    sort_fields.append("english_name")
+                    sort_fields.append("french_name")
+                elif f == "parent__short_name":
+                    sort_fields.append("parent__french_short_name")
+                    sort_fields.append("parent__english_short_name")
+                elif f == "parent__name":
+                    sort_fields.append("parent__english_name")
+                    sort_fields.append("parent__french_name")
+                else:
+                    sort_fields.append(f)
         return (
             queryset
             # prefetch type and parent group for better performances
@@ -229,7 +263,7 @@ class GroupViewSet(viewsets.ModelViewSet):
             # order by category, order and then name
             .order_by(
                 "group_type",
-                *group_type.sort_fields.split(",") if group_type else "",
+                *sort_fields,
             )
             .distinct()
         )
@@ -310,8 +344,10 @@ class MembershipViewSet(viewsets.ModelViewSet):
     search_fields = [
         "student__user__first_name",
         "student__user__last_name",
-        "group__name",
-        "group__short_name",
+        "group__french_name",
+        "group__french_short_name",
+        "group__english_name",
+        "group__english_short_name"
         "summary",
     ]
     ordering_fields = ["begin_date", "end_date", "priority", "admin"]

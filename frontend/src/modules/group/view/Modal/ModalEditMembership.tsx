@@ -15,7 +15,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { editMembershipApi } from '#modules/group/api/editMembership.api';
 import { convertMembershipToForm } from '#modules/group/hooks/useMembershipFormValues';
 import { MembershipFormDTO } from '#modules/group/infra/membership.dto';
-import { CreateGroupForm, Group } from '#modules/group/types/group.types';
+import { Group } from '#modules/group/types/group.types';
 import {
   Membership,
   MembershipForm,
@@ -84,7 +84,7 @@ export function ModalEditMembership({
     },
   });
 
-  function updateFormValues(val: Partial<CreateGroupForm>) {
+  function updateFormValues(val: Partial<MembershipForm>) {
     setFormValues({ ...formValues, ...val });
   }
   function onSubmit(e: FormEvent<HTMLFormElement>) {

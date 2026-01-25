@@ -2,23 +2,33 @@ import { ShortMembershipFormDTO } from '#modules/group/infra/membership.dto';
 import { SocialLinkDTO } from '#modules/social_link/infra/socialLink.dto';
 import { StudentPreviewDTO } from '#modules/student/infra/student.dto';
 
+import { GroupThematicDTO } from './groupThematic.dto';
 import { GroupTypePreviewDTO } from './groupType.dto';
 
 export interface GroupDTO {
   id: number;
   name: string;
+  french_name: string;
+  english_name: string;
   short_name: string;
+  french_short_name: string;
+  english_short_name: string;
   slug: string;
   url: string;
   icon?: string;
   group_type: GroupTypePreviewDTO;
   parent?: GroupPreviewDTO;
+  thematic?: GroupThematicDTO;
   creation_year?: number;
   archived: boolean;
   private: boolean;
   public: boolean;
   summary: string;
+  french_summary: string;
+  english_summary: string;
   description: string;
+  french_description: string;
+  english_description: string;
   meeting_place: string;
   meeting_hour: string;
   banner: string;
@@ -46,6 +56,7 @@ export type GroupPreviewDTO = Pick<
   | 'icon'
   | 'category'
   | 'sub_category'
+  | 'thematic'
 >;
 
 export type MapGroupPreviewDTO = GroupPreviewDTO &
@@ -60,8 +71,10 @@ export type MapGroupSearchDTO = Pick<GroupDTO, 'id' | 'name' | 'icon'>;
 
 export type CreateGroupFormDTO = Pick<
   GroupDTO,
-  | 'name'
-  | 'short_name'
+  | 'french_name'
+  | 'english_name'
+  | 'french_short_name'
+  | 'english_short_name'
   | 'meeting_hour'
   | 'video1'
   | 'video2'
@@ -70,13 +83,16 @@ export type CreateGroupFormDTO = Pick<
   | 'creation_year'
   | 'slug'
   | 'archived'
-  | 'summary'
-  | 'description'
+  | 'french_summary'
+  | 'english_summary'
+  | 'french_description'
+  | 'english_description'
   | 'meeting_place'
   | 'lock_memberships'
   | 'address'
   | 'latitude'
   | 'longitude'
+  | 'thematic'
 > & {
   children_label?: string;
   icon?: File;
