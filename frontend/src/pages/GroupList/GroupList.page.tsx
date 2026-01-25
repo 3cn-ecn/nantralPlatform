@@ -25,7 +25,11 @@ import { useGroupTypeDetails } from './hooks/useGroupTypeDetails';
 export default function GroupListPage() {
   const [params] = useSearchParams();
   const type = params.get('type') || undefined;
-  const { groupsByCategory, query: groupListQuery, count } = useGroupList(type);
+  const {
+    groupsByCategory,
+    query: groupListQuery,
+    count,
+  } = useGroupList(type, type == 'club');
   const { t } = useTranslation();
   const groupTypeQuery = useGroupTypeDetails(type);
   const { staff } = useCurrentUserData();

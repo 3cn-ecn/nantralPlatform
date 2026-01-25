@@ -3,7 +3,7 @@ import { groupBy } from 'lodash-es';
 
 import { getGroupListApi } from '#modules/group/api/getGroupList.api';
 
-export function useGroupList(type?: string) {
+export function useGroupList(type?: string, sortByThematic = false) {
   const query = useInfiniteQuery({
     queryFn: ({ pageParam }) =>
       getGroupListApi({ type: type, page: pageParam, pageSize: 6 * 7 }),
@@ -14,7 +14,7 @@ export function useGroupList(type?: string) {
 
   const groupsByCategory = groupBy(
     query.data?.pages?.map((page) => page.results).flat(),
-    'thematic.name',
+    sortByThematic ? 'thematic.name' : 'category',
   );
 
   return {
