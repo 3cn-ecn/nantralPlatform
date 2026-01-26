@@ -25,7 +25,6 @@ import debug_toolbar
 
 urlpatterns = [
     # default and third-party apps
-    path("", include("apps.account.matrix_urls")),
     path("admin/doc/", include("django.contrib.admindocs.urls")),
     path("admin/", admin.site.urls),
     path("__debug__/", include(debug_toolbar.urls)),
