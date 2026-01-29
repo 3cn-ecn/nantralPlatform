@@ -1,6 +1,6 @@
 services:
   mailserver:
-    image: stalwartlabs/mail-server:latest
+    image: "stalwartlabs/stalwart:v0.15.4"
     container_name: mailserver
     restart: unless-stopped
     hostname: mail.nantral-platform.fr
@@ -15,7 +15,7 @@ services:
     volumes:
       - "/etc/timezone:/etc/timezone:ro"
       - "/etc/localtime:/etc/localtime:ro"
-      - ../appdata/stalwart/data:/opt/stalwart-mail
+      - ../appdata/stalwart/data:/opt/stalwart
       - certs:/data/certs:ro
     labels:
       - traefik.enable=true
