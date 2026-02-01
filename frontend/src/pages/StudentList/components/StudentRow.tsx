@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 import { TableCell, TableRow } from '@mui/material';
 
@@ -12,12 +12,14 @@ interface StudentRowProps {
 
 export function StudentRow({ student }: StudentRowProps) {
   const { t } = useTranslation();
+  const navigate = useNavigate();
   return (
     <TableRow
-      component={Link}
-      to={student.url}
+      hover
+      onClick={() => navigate(student.url)}
+      role={'link'}
       key={student.id}
-      sx={{ textDecoration: 'none' }}
+      sx={{ textDecoration: 'none', cursor: 'pointer' }}
     >
       <TableCell>
         <Avatar alt={student.name} src={student.picture} />

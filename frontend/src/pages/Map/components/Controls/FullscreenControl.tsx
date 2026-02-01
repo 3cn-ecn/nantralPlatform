@@ -9,11 +9,7 @@ import { IconButton, Tooltip } from '@mui/material';
 
 import { useTranslation } from '#shared/i18n/useTranslation';
 
-export function FullscreenControl({
-  portalContainer,
-}: {
-  portalContainer?: HTMLElement | null;
-}) {
+export function FullscreenControl() {
   const { t } = useTranslation();
   const { current: mapRef } = useMap();
   const [isFullscreen, setIsFullscreen] = useState(false);
@@ -45,7 +41,7 @@ export function FullscreenControl({
           : t('map.controls.fullscreen')
       }
       placement={'left'}
-      PopperProps={{ container: portalContainer }}
+      slotProps={{ popper: { disablePortal: true } }}
     >
       <IconButton size="small" color="primary" onClick={handleFullscreen}>
         {isFullscreen ? <FullscreenExitIcon /> : <FullscreenIcon />}

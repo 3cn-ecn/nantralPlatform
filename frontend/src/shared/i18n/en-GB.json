@@ -677,6 +677,7 @@
     "moreButton": {
       "addGroup": "Add a new group",
       "hideArchive": "Hide archived groups",
+      "tooltip": "More actions",
       "viewArchive": "Show archived groups"
     },
     "popup": {

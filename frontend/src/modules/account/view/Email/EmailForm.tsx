@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react';
+import { useState } from 'react';
 
 import { Box } from '@mui/material';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
@@ -13,6 +13,7 @@ import { ApiFormError } from '#shared/infra/errors';
 
 export function EmailForm() {
   const [email, setEmail] = useState('');
+  const [formErrors, setFormErrors] = useState<string[] | undefined>(undefined);
   const { t } = useTranslation();
   const queryClient = useQueryClient();
   const emailMutation = useMutation<
@@ -22,20 +23,22 @@ export function EmailForm() {
   >({
     mutationFn: addEmailApi,
     onSuccess: async () => {
-      await queryClient.invalidateQueries(['emails']);
+      await queryClient.invalidateQueries({
+        queryKey: ['emails'],
+      });
       setEmail('');
     },
+    onError: (e: ApiFormError<{ email: string }>) => {
+      if (!e.fields.email) {
+        setFormErrors(e.globalErrors);
+      } else if (!e.globalErrors) {
+        setFormErrors(e.fields.email);
+      } else {
+        setFormErrors(e.globalErrors.concat(e.fields.email));
+      }
+    },
   });
-  const getAllErrorsCallback = useCallback(() => {
-    if (!emailMutation.error?.fields.email) {
-      return emailMutation.error?.globalErrors;
-    } else if (!emailMutation.error?.globalErrors) {
-      return emailMutation.error?.fields.email;
-    }
-    return emailMutation.error.globalErrors.concat(
-      emailMutation.error.fields.email,
-    );
-  }, [emailMutation.error?.fields.email, emailMutation.error?.globalErrors]);
+
   return (
     <form
       onSubmit={(e) => {
@@ -53,11 +56,11 @@ export function EmailForm() {
             emailMutation.reset();
           }}
           size={'small'}
-          errors={getAllErrorsCallback()}
+          errors={formErrors}
         />
         <Box sx={{ mt: 2, mb: 1 }}>
           <LoadingButton
-            loading={emailMutation.isLoading}
+            loading={emailMutation.isPending}
             variant={'outlined'}
             type={'submit'}
           >

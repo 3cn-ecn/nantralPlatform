@@ -21,7 +21,7 @@ interface ChangeMainEmailModalProps {
   onCancel: () => void;
   reset: () => void;
   errors?: ApiFormError<{ email: string; password: string }>;
-  isLoading: boolean;
+  isPending: boolean;
 }
 export function ChangeMainEmailModal({
   email,
@@ -29,7 +29,7 @@ export function ChangeMainEmailModal({
   onCancel,
   reset,
   errors,
-  isLoading,
+  isPending,
 }: ChangeMainEmailModalProps) {
   const { t } = useTranslation();
   const [password, setPassword] = useState('');
@@ -62,7 +62,7 @@ export function ChangeMainEmailModal({
           {t('button.cancel')}
         </Button>
         <LoadingButton
-          loading={isLoading}
+          loading={isPending}
           onClick={() => mutate({ email: email.email, password: password })}
           variant="contained"
           autoFocus

@@ -1,6 +1,5 @@
 import { MouseEvent, useState } from 'react';
-import { useLocation } from 'react-router';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 
 import {
   DarkMode as DarkModeIcon,
@@ -50,7 +49,7 @@ export function UserMenuUnauthenticated() {
         anchorEl={anchorEl}
         open={menuOpen === 'main'}
         onClose={() => setMenuOpen(null)}
-        TransitionComponent={Collapse}
+        slots={{ transition: Collapse }}
         anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
         transformOrigin={{ vertical: 'top', horizontal: 'right' }}
         slotProps={{ paper: { sx: { minWidth: 200 } } }}

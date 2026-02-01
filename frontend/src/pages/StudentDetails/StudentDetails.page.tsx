@@ -14,11 +14,11 @@ import { useStudentDetails } from './hooks/useStudentDetails';
 
 export default function StudentDetailsPage() {
   const { id } = useParams();
-  const { isLoading, data: student } = useStudentDetails(id);
+  const { isPending, data: student } = useStudentDetails(id);
 
   const currentStudent = useCurrentUserData();
 
-  if (isLoading || !student) {
+  if (isPending || !student) {
     return;
   }
 

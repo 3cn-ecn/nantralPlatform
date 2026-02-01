@@ -1,7 +1,7 @@
 import {
   InfiniteData,
-  UseMutationOptions,
   useMutation,
+  UseMutationOptions,
   useQueryClient,
 } from '@tanstack/react-query';
 
@@ -21,12 +21,12 @@ export function useMarkAsSeenMutation(defaultNotificationId?: number) {
   const queryClient = useQueryClient();
   const showToast = useToast();
 
-  const markAsSeenMutation = useMutation<number, ApiError, number>(
-    markNotificationAsSeenApi,
-  );
-  const markAsUnseenMutation = useMutation<number, ApiError, number>(
-    markNotificationAsUnseenApi,
-  );
+  const markAsSeenMutation = useMutation<number, ApiError, number>({
+    mutationFn: markNotificationAsSeenApi,
+  });
+  const markAsUnseenMutation = useMutation<number, ApiError, number>({
+    mutationFn: markNotificationAsUnseenApi,
+  });
 
   const updateCachedQueries = (
     notificationId: number,
@@ -34,7 +34,7 @@ export function useMarkAsSeenMutation(defaultNotificationId?: number) {
   ) => {
     // update data NOW so that it is displayed to the user
     queryClient.setQueriesData(
-      ['notifications', 'list'],
+      { queryKey: ['notifications', 'list'] },
       (data?: InfiniteData<Page<SentNotification>>) =>
         data && {
           ...data,
@@ -47,7 +47,9 @@ export function useMarkAsSeenMutation(defaultNotificationId?: number) {
         },
     );
     // invalidate queries to force reload the queries we have modified
-    queryClient.invalidateQueries(['notifications']);
+    queryClient.invalidateQueries({
+      queryKey: ['notifications'],
+    });
   };
 
   const markAsSeen = ({
@@ -65,13 +67,13 @@ export function useMarkAsSeenMutation(defaultNotificationId?: number) {
         updateCachedQueries(id, { seen: true });
         return onSuccess?.(...args);
       },
-      onError: (error, variables, context) => {
+      onError: (error, variables, onMutateResult, context) => {
         showToast({
           message: error.message,
           variant: 'error',
         });
         updateCachedQueries(id, {});
-        if (onError) return onError(error, variables, context);
+        if (onError) return onError(error, variables, onMutateResult, context);
       },
       ...options,
     });
@@ -92,13 +94,13 @@ export function useMarkAsSeenMutation(defaultNotificationId?: number) {
         updateCachedQueries(id, { seen: false });
         return onSuccess?.(...args);
       },
-      onError: (error, variables, context) => {
+      onError: (error, variables, onMutateResult, context) => {
         showToast({
           message: error.message,
           variant: 'error',
         });
         updateCachedQueries(id, {});
-        if (onError) return onError(error, variables, context);
+        if (onError) return onError(error, variables, onMutateResult, context);
       },
       ...options,
     });
@@ -107,7 +109,7 @@ export function useMarkAsSeenMutation(defaultNotificationId?: number) {
   return {
     markAsSeen,
     markAsUnseen,
-    isLoading: markAsSeenMutation.isLoading || markAsUnseenMutation.isLoading,
+    isPending: markAsSeenMutation.isPending || markAsUnseenMutation.isPending,
     isError: markAsSeenMutation.isError || markAsUnseenMutation.isError,
     error: markAsSeenMutation.error || markAsUnseenMutation.error,
   };

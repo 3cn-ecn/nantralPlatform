@@ -41,7 +41,8 @@ export default function MapPage() {
 
   // Get points from API
   const groupListQuery = useInfiniteQuery({
-    queryFn: ({ pageParam = 1 }) =>
+    initialPageParam: 1,
+    queryFn: ({ pageParam }) =>
       getMapGroupListPreviewApi({
         type: groupType,
         archived: showArchived,
@@ -107,28 +108,6 @@ export default function MapPage() {
     }
   }, [groupListQuery.data?.pages, handleOpen, params]);
 
-  // convert data from the server to GeoJSON
-  const points: GeoJSON.Feature[] =
-    useMemo(
-      () =>
-        groupListQuery.data?.pages
-          .flatMap((page) => page.results)
-          .map((group) => ({
-            type: 'Feature',
-            properties: {
-              cluster: false,
-              groupId: group.id,
-              slug: group.slug,
-              category: 'group',
-            },
-            geometry: {
-              type: 'Point',
-              coordinates: [group.longitude, group.latitude],
-            },
-          })),
-      [groupListQuery.data?.pages],
-    ) ?? [];
-
   // Action to perform when clicking an item from a layer
   const onClick = (event) => {
     const feature = event?.features?.[0];
@@ -193,7 +172,26 @@ export default function MapPage() {
         <Source
           type={'geojson'}
           id={'groups'}
-          data={{ type: 'FeatureCollection', features: points }}
+          data={
+            groupListQuery.data && {
+              type: 'FeatureCollection',
+              features: groupListQuery.data.pages
+                .flatMap((page) => page.results)
+                .map((group) => ({
+                  type: 'Feature',
+                  properties: {
+                    cluster: false,
+                    groupId: group.id,
+                    slug: group.slug,
+                    category: 'group',
+                  },
+                  geometry: {
+                    type: 'Point',
+                    coordinates: [group.longitude, group.latitude],
+                  },
+                })),
+            }
+          }
           cluster
           clusterMaxZoom={16}
           clusterRadius={30}
@@ -211,7 +209,7 @@ export default function MapPage() {
       </Box>
       <ScaleControl />
       <Box position={'absolute'} bottom={35} right={20}>
-        <CustomMapControls portalContainer={mapRef.current?.getContainer()} />
+        <CustomMapControls />
       </Box>
 
       {popupInfo && (

@@ -14,9 +14,9 @@ export default function EmailSent() {
   const { state } = useLocation();
   const { t } = useTranslation();
   const { email = undefined, firstName = undefined } = state || {};
-  const { isSuccess, mutate, isLoading } = useMutation(
-    resendVerificationEmailApi,
-  );
+  const { isSuccess, mutate, isPending } = useMutation({
+    mutationFn: resendVerificationEmailApi,
+  });
   if (!state) {
     return <Navigate to="/register" replace />;
   }
@@ -72,7 +72,7 @@ export default function EmailSent() {
             </>
           ) : (
             <Button
-              disabled={isLoading}
+              disabled={isPending}
               sx={{ textTransform: 'none' }}
               onClick={() => {
                 mutate(email);

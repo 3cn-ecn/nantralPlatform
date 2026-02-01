@@ -37,7 +37,7 @@ export function EditChildrenView({ group }: { group: Group }) {
       )}
       <InfiniteList query={query}>
         <GroupGrid
-          isLoading={query.isLoading}
+          isPending={query.isPending}
           estimatedSize={6}
           groups={query.data?.pages.flatMap((page) => page.results)}
         />

@@ -38,7 +38,7 @@ export function UpcomingEventsSection({ enabled }: UpcomingEventsSectionProps) {
 
   const eventsQuery = useUpcomingEventsQuery(numberOfEvents, { enabled });
 
-  if (eventsQuery.isLoading) {
+  if (eventsQuery.isPending) {
     return (
       <Section
         title={t('home.eventSection.title')}
@@ -47,7 +47,7 @@ export function UpcomingEventsSection({ enabled }: UpcomingEventsSectionProps) {
         <Grid container spacing={1}>
           {repeat(
             numberOfEvents,
-            <Grid xs={12} sm={6} md={4} item>
+            <Grid size={{ xs: 12, sm: 6, md: 4 }}>
               <EventCardSkeleton />
             </Grid>,
           )}
@@ -89,7 +89,7 @@ export function UpcomingEventsSection({ enabled }: UpcomingEventsSectionProps) {
     >
       <Grid spacing={1} container>
         {upcomingEvents.map((event) => (
-          <Grid key={event.id} xs={12} sm={6} md={4} item>
+          <Grid key={event.id} size={{ xs: 12, sm: 6, md: 4 }}>
             <EventCard event={event} />
           </Grid>
         ))}

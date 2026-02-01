@@ -1,5 +1,4 @@
 import { Divider, Typography } from '@mui/material';
-import { UseInfiniteQueryResult } from '@tanstack/react-query';
 import { groupBy } from 'lodash-es';
 
 import { Group } from '#modules/group/types/group.types';
@@ -48,7 +47,7 @@ export function MembersInfiniteGrid({
   });
 
   const oldMembershipsGroupedByYear = Object.entries(
-    groupBy(getDataList(oldMembershipsQuery), (membership) =>
+    groupBy(getDataList(oldMembershipsQuery.data?.pages), (membership) =>
       getScholarYear(membership.beginDate),
     ),
   );
@@ -57,8 +56,8 @@ export function MembersInfiniteGrid({
     <>
       <InfiniteList query={membershipsQuery}>
         <MembersGrid
-          memberships={getDataList(membershipsQuery)}
-          showSkeletonsAtEnd={getShowSkeleton(membershipsQuery)}
+          memberships={getDataList(membershipsQuery.data?.pages)}
+          showSkeletonsAtEnd={membershipsQuery.isPending}
           group={group}
         />
       </InfiniteList>
@@ -78,7 +77,7 @@ export function MembersInfiniteGrid({
                 <MembersGrid
                   memberships={memberships}
                   showSkeletonsAtEnd={
-                    getShowSkeleton(oldMembershipsQuery) &&
+                    oldMembershipsQuery.isPending &&
                     index === oldMembershipsGroupedByYear.length - 1
                   }
                   group={group}
@@ -92,14 +91,6 @@ export function MembersInfiniteGrid({
   );
 }
 
-function getDataList(
-  query: UseInfiniteQueryResult<Page<Membership>>,
-): Membership[] {
-  return query.data?.pages.flatMap((page) => page.results) ?? [];
-}
-
-function getShowSkeleton(
-  query: UseInfiniteQueryResult<Page<Membership>>,
-): boolean {
-  return query.isLoading || query.isFetchingNextPage;
+function getDataList(pages: Page<Membership>[] | undefined): Membership[] {
+  return pages?.flatMap((page) => page.results) ?? [];
 }

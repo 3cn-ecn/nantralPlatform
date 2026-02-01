@@ -49,18 +49,23 @@ export function ModalJoinGroup({
   });
   const queryClient = useQueryClient();
   const { palette } = useTheme();
-  const { error, isError, mutate, isLoading } = useMutation<
+  const { error, isError, mutate, isPending } = useMutation<
     Membership,
     ApiFormError<MembershipFormDTO>,
     MembershipForm
-  >(() => createMembershipApi(formValues), {
+  >({
+    mutationFn: () => createMembershipApi(formValues),
+
     onSuccess: () => {
-      queryClient.invalidateQueries(['group', { slug: group.slug }]);
-      queryClient.invalidateQueries(['members', { slug: group.slug }]);
-      queryClient.invalidateQueries([
-        'membership',
-        { group: group.slug, student: student.id },
-      ]);
+      queryClient.invalidateQueries({
+        queryKey: ['group', { slug: group.slug }],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ['members', { slug: group.slug }],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ['membership', { group: group.slug, student: student.id }],
+      });
       onClose();
     },
   });
@@ -104,7 +109,7 @@ export function ModalJoinGroup({
         <LoadingButton
           form="edit-group-form"
           type="submit"
-          loading={isLoading}
+          loading={isPending}
           variant="contained"
         >
           {t('button.confirm')}

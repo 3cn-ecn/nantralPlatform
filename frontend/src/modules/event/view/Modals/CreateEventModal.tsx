@@ -45,11 +45,11 @@ export function CreateEventModal({
   });
 
   // create all states for error, loading, etc. while fetching the API
-  const { mutate, isLoading, isError, error } = useMutation<
+  const { mutate, isPending, isError, error } = useMutation<
     Event,
     ApiFormError<EventFormDTO>,
     EventForm
-  >(createEventApi);
+  >({ mutationFn: createEventApi });
 
   // send the form to the server
   const onSubmit = (e: FormEvent, values: EventForm) => {
@@ -59,8 +59,12 @@ export function CreateEventModal({
     mutate(values, {
       onSuccess: (data) => {
         // if success, reset the event data in all queries
-        queryClient.invalidateQueries(['events']);
-        queryClient.invalidateQueries(['notifications']);
+        queryClient.invalidateQueries({
+          queryKey: ['events'],
+        });
+        queryClient.invalidateQueries({
+          queryKey: ['notifications'],
+        });
         // close the modal
         onCreated(data.id);
       },
@@ -104,7 +108,7 @@ export function CreateEventModal({
         <LoadingButton
           form="create-event-form"
           type="submit"
-          loading={isLoading}
+          loading={isPending}
           variant="contained"
         >
           {t('button.confirm')}

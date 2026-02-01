@@ -1,6 +1,8 @@
 import {
-  UseInfiniteQueryOptions,
+  InfiniteData,
+  QueryKey,
   useInfiniteQuery,
+  UseInfiniteQueryOptions,
 } from '@tanstack/react-query';
 
 import {
@@ -13,11 +15,26 @@ import { Page } from '#shared/infra/pagination';
 
 export function useInfiniteEventListQuery(
   filters: Omit<EventListQueryParams, 'page'>,
-  options?: UseInfiniteQueryOptions<Page<EventPreview>>,
+  options?: Partial<
+    UseInfiniteQueryOptions<
+      Page<EventPreview>,
+      ApiError,
+      InfiniteData<Page<EventPreview>, number>,
+      QueryKey,
+      number
+    >
+  >,
 ) {
-  const query = useInfiniteQuery<Page<EventPreview>, ApiError>({
+  const query = useInfiniteQuery<
+    Page<EventPreview>,
+    ApiError,
+    InfiniteData<Page<EventPreview>, number>,
+    QueryKey,
+    number
+  >({
+    initialPageParam: 1,
     queryKey: ['events', 'infiniteList', filters],
-    queryFn: ({ pageParam = 1, signal }) =>
+    queryFn: ({ pageParam, signal }) =>
       getEventListApi(
         {
           ...filters,

@@ -26,7 +26,7 @@ export function GroupPosts({ group }: { group: Group }) {
           {postsQuery.data?.pages
             ?.flatMap((page) => page.results)
             .map((post) => (
-              <Grid key={post.id} xs={12} md={6} lg={4} item>
+              <Grid key={post.id} size={{ xs: 12, sm: 6, md: 4 }}>
                 <PostCard post={post} />
               </Grid>
             ))}

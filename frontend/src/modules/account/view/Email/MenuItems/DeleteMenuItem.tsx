@@ -25,7 +25,9 @@ export function DeleteMenuItem({
   const deleteEmailMutation = useMutation<number, ApiError, string>({
     mutationFn: removeEmailApi,
     onSuccess: async () => {
-      await queryClient.invalidateQueries(['emails']);
+      await queryClient.invalidateQueries({
+        queryKey: ['emails'],
+      });
       showToast({
         variant: 'success',
         message: t('email.delete.success'),
@@ -63,7 +65,7 @@ export function DeleteMenuItem({
             handleClose();
           }}
           onConfirm={() => deleteEmailMutation.mutate(email?.uuid)}
-          loading={deleteEmailMutation.isLoading}
+          loading={deleteEmailMutation.isPending}
         />
       )}
     </>

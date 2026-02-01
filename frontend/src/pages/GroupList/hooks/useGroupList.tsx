@@ -5,6 +5,7 @@ import { getGroupListApi } from '#modules/group/api/getGroupList.api';
 
 export function useGroupList(type?: string) {
   const query = useInfiniteQuery({
+    initialPageParam: 1,
     queryFn: ({ pageParam }) =>
       getGroupListApi({ type: type, page: pageParam, pageSize: 6 * 7 }),
     queryKey: ['getGroupListByType', type],

@@ -6,11 +6,7 @@ import { IconButton, Tooltip } from '@mui/material';
 
 import { useTranslation } from '#shared/i18n/useTranslation';
 
-export function CompassControl({
-  portalContainer,
-}: {
-  portalContainer?: HTMLElement | null;
-}) {
+export function CompassControl() {
   const { t } = useTranslation();
   const { current: mapRef } = useMap();
 
@@ -33,7 +29,7 @@ export function CompassControl({
     <Tooltip
       title={t('map.controls.compass')}
       placement={'left'}
-      PopperProps={{ container: portalContainer }}
+      slotProps={{ popper: { disablePortal: true } }}
     >
       <IconButton
         size="small"

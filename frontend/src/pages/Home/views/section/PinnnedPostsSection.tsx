@@ -19,13 +19,13 @@ export function PinnedPostsSection({
   const { t } = useTranslation();
   const postsQuery = usePinnedPostsQuery(NUMBER_OF_POSTS, { enabled });
 
-  if (postsQuery.isLoading) {
+  if (postsQuery.isPending) {
     return (
       <Section title={t('home.postSection.pinnedTitle')}>
         <Grid container spacing={1}>
           {repeat(
             NUMBER_OF_POSTS,
-            <Grid xs={12} sm={6} md={4} item>
+            <Grid size={{ xs: 12, sm: 6, md: 4 }}>
               <PostCardSkeleton />
             </Grid>,
           )}
@@ -55,7 +55,7 @@ export function PinnedPostsSection({
     <Section title={t('home.postSection.pinnedTitle')}>
       <Grid spacing={1} container>
         {pinnedPosts.map((post) => (
-          <Grid key={post.id} xs={12} sm={6} md={4} item>
+          <Grid key={post.id} size={{ xs: 12, sm: 6, md: 4 }}>
             <PostCard post={post} />
           </Grid>
         ))}

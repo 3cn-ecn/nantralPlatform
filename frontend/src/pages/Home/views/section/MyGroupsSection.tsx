@@ -11,7 +11,7 @@ import { useTranslation } from '#shared/i18n/useTranslation';
 
 export function MyGroupsSection() {
   const { t } = useTranslation();
-  const { data, isLoading } = useQuery({
+  const { data, isPending } = useQuery({
     queryFn: () => getGroupListApi({ isMember: true }),
     queryKey: ['group', { isMember: true }],
   });
@@ -31,13 +31,13 @@ export function MyGroupsSection() {
         </Button>
       }
     >
-      {!isLoading && data?.count === 0 ? (
+      {!isPending && data?.count === 0 ? (
         <Typography>{t('home.myGroupSection.noGroup')}</Typography>
       ) : (
         <GroupGrid
           estimatedSize={6}
           groups={data?.results ?? []}
-          isLoading={isLoading}
+          isPending={isPending}
         />
       )}
     </Section>

@@ -5,11 +5,7 @@ import { IconButton, Tooltip } from '@mui/material';
 
 import { useTranslation } from '#shared/i18n/useTranslation';
 
-export function Toggle3DControl({
-  portalContainer,
-}: {
-  portalContainer?: HTMLElement | null;
-}) {
+export function Toggle3DControl() {
   const { t } = useTranslation();
   const { current: mapRef } = useMap();
   const map = mapRef?.getMap();
@@ -64,7 +60,7 @@ export function Toggle3DControl({
     <Tooltip
       title={is3D ? t('map.controls.disable3D') : t('map.controls.enable3D')}
       placement={'left'}
-      PopperProps={{ container: portalContainer }}
+      slotProps={{ popper: { disablePortal: true } }}
     >
       <IconButton size="small" color="primary" onClick={handleToggle3D}>
         {is3D ? '2D' : '3D'}

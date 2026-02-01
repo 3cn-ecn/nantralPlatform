@@ -1,5 +1,5 @@
-import { PaletteMode, createTheme, responsiveFontSizes } from '@mui/material';
-import { enUS, frFR } from '@mui/x-date-pickers';
+import { createTheme, PaletteMode, responsiveFontSizes } from '@mui/material';
+import { enUS, frFR } from '@mui/x-date-pickers/locales';
 
 import { languages } from '#shared/i18n/config';
 

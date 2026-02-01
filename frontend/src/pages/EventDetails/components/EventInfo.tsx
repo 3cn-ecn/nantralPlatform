@@ -6,7 +6,7 @@ import {
   Schedule as ScheduleIcon,
 } from '@mui/icons-material';
 import { IconButton, Typography } from '@mui/material';
-import { isSameDay as dateFnsIsSameDay, differenceInMonths } from 'date-fns';
+import { differenceInMonths, isSameDay as dateFnsIsSameDay } from 'date-fns';
 
 import { Event } from '#modules/event/event.type';
 import { Avatar } from '#shared/components/Avatar/Avatar';
@@ -31,7 +31,7 @@ export function EventInfo({
   const isSameDay = dateFnsIsSameDay(endDate, startDate);
 
   const isLessThanTwoMonthsFromNow =
-    Math.abs(differenceInMonths(startDate, Date.now())) <= 2;
+    Math.abs(differenceInMonths(startDate, new Date())) <= 2;
 
   const formatDateOptions: Intl.DateTimeFormatOptions =
     isLessThanTwoMonthsFromNow

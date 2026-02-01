@@ -31,10 +31,13 @@ export function ModalAdminRequest({
   const { t } = useTranslation();
   const queryClient = useQueryClient();
   const showToast = useToast();
-  const { isLoading, mutate } = useMutation(sendAdminRequestApi, {
+  const { isPending, mutate } = useMutation({
+    mutationFn: sendAdminRequestApi,
     onSuccess: (data) => {
       showToast({ message: data.detail, variant: 'success' });
-      queryClient.invalidateQueries(['membership', { group: group.slug }]);
+      queryClient.invalidateQueries({
+        queryKey: ['membership', { group: group.slug }],
+      });
       onClose();
     },
   });
@@ -73,7 +76,7 @@ export function ModalAdminRequest({
         <LoadingButton
           form="send-admin-request-form"
           type="submit"
-          loading={isLoading}
+          loading={isPending}
           variant="contained"
         >
           {t('button.send')}

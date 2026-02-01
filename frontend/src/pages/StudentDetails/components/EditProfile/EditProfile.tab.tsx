@@ -43,11 +43,12 @@ export function EditProfileTab() {
 
   const [hasChanges, setHasChanges] = useState(false);
 
-  const { error, mutate, isLoading } = useMutation<
+  const { error, mutate, isPending } = useMutation<
     EditAccountOptionsDTO,
     ApiFormError<EditAccountOptionsDTO>,
     EditAccountOptions
-  >(editAccount, {
+  >({
+    mutationFn: editAccount,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['student', 'current'] });
       queryClient.invalidateQueries({
@@ -117,7 +118,7 @@ export function EditProfileTab() {
       </form>
       <LoadingButton
         variant="contained"
-        loading={isLoading}
+        loading={isPending}
         type="submit"
         form="edit-account-form"
         disabled={!hasChanges}

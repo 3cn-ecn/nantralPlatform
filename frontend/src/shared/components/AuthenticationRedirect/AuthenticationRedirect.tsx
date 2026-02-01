@@ -12,6 +12,10 @@ interface AuthenticationRedirectProps {
   authenticated: boolean;
 }
 
+const redirect = (url: string) => {
+  window.location.href = url;
+};
+
 /**
  * Redirect to a new route depending on the value of `isAuthenticated`
  * @param redirectTo the path to redirect to
@@ -30,7 +34,7 @@ export function AuthenticationRedirect({
     const nextUrl = params.get('next');
     if (nextUrl) {
       // first try normal redirect if the redirect was triggered by django (next utl param)
-      window.location.href = nextUrl;
+      redirect(nextUrl);
     } else {
       // if it is not the case, use React Router redirect.
       return (

@@ -1,4 +1,4 @@
-import { screen } from '@testing-library/react';
+import { screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
 import { UsernameDTO } from '#modules/account/infra/account.dto';
@@ -6,7 +6,10 @@ import { EventDTO } from '#modules/event/infra/event.dto';
 import { GroupPreviewDTO } from '#modules/group/infra/group.dto';
 import { PostDTO } from '#modules/post/infra/post.dto';
 import { mockServer } from '#shared/testing/mockServer';
-import { renderWithProviders } from '#shared/testing/renderWithProviders';
+import {
+  queryClient,
+  renderWithProviders,
+} from '#shared/testing/renderWithProviders';
 
 import HomePage from './Home.page';
 
@@ -70,6 +73,9 @@ describe('Home page', () => {
     });
 
     const component = renderWithProviders(<HomePage />);
+
+    // ensures that all the queries have been completed
+    await waitFor(() => expect(queryClient.isFetching()).toBe(0));
 
     // At this point the page is still loading, so we use findBy and await
     // to wait for the element to appear.

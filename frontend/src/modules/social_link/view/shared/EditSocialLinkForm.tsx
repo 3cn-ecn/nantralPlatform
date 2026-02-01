@@ -80,18 +80,17 @@ export function EditSocialLinkForm({
     error: socialLinkError,
     isError: socialLinkIsError,
     mutate: updateSocialLink,
-  } = useMutation<SocialLinkForm, ApiFormError<SocialLinkDTO>, SocialLinkForm>(
-    (val) => updateSocialLinkApi(val, type),
-    {
-      onSuccess: handleSuccess,
-    },
-  );
+  } = useMutation<SocialLinkForm, ApiFormError<SocialLinkDTO>, SocialLinkForm>({
+    mutationFn: (val) => updateSocialLinkApi(val, type),
+    onSuccess: handleSuccess,
+  });
 
   const { mutate: deleteSocialLink } = useMutation<
     unknown,
     ApiFormError<SocialLinkDTO>,
     SocialLinkForm
-  >((val) => deleteSocialLinkApi(val.id || -1, type), {
+  >({
+    mutationFn: (val) => deleteSocialLinkApi(val.id || -1, type),
     onSuccess: handleSuccess,
   });
 
@@ -99,15 +98,14 @@ export function EditSocialLinkForm({
     error: createError,
     isError: createIsError,
     mutate: createSocialLink,
-  } = useMutation<SocialLinkForm, ApiFormError<SocialLinkDTO>, SocialLinkForm>(
-    (val) =>
+  } = useMutation<SocialLinkForm, ApiFormError<SocialLinkDTO>, SocialLinkForm>({
+    mutationFn: (val) =>
       type == 'group'
         ? createGroupSocialLinkApi(groupSlug || '', val)
         : createUserSocialLinkApi(val),
-    {
-      onSuccess: handleSuccess,
-    },
-  );
+
+    onSuccess: handleSuccess,
+  });
 
   return (
     <>

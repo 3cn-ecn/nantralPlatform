@@ -2,11 +2,11 @@ import { FormEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { Send as SendIcon } from '@mui/icons-material';
-import { Container, Alert, Typography, Button } from '@mui/material';
+import { Alert, Button, Container, Typography } from '@mui/material';
 import { useMutation } from '@tanstack/react-query';
 
 import { submitFeedback } from '#modules/feedback/api/submitFeedback.api';
-import { FeedbackKind, FeedbackForm } from '#modules/feedback/feedback.types';
+import { FeedbackForm, FeedbackKind } from '#modules/feedback/feedback.types';
 import { useFeedbackFormValues } from '#modules/feedback/hooks/useFeedbackFormValues';
 import { FeedbackFormFields } from '#modules/feedback/view/shared/FeedbackFormFields';
 import { LoadingButton } from '#shared/components/LoadingButton/LoadingButton';
@@ -25,7 +25,7 @@ export default function FeedbackFormPage({ kind }: FeedbackHomePageProps) {
   const navigate = useNavigate();
   const showToast = useToast();
 
-  const { error, isLoading, isError, mutate } = useMutation<
+  const { error, isPending, isError, mutate } = useMutation<
     number,
     ApiFormError<FeedbackForm>,
     FeedbackForm
@@ -84,10 +84,9 @@ export default function FeedbackFormPage({ kind }: FeedbackHomePageProps) {
         />
         <LoadingButton
           type="submit"
-          loading={isLoading}
+          loading={isPending}
           variant="contained"
           startIcon={<SendIcon />}
-          disabled={isLoading}
           sx={{ ms: 'auto' }}
         >
           {t('feedback.form.submitButton.label')}
