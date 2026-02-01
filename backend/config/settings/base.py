@@ -101,6 +101,7 @@ COMMON_APPS = [
     "apps.signature",
     "apps.sociallink",
     "apps.student",
+    "apps.wallet",
 ]
 ARCHIVED_APPS = [
     "apps._archived.exchange",
