@@ -1,7 +1,7 @@
 services:
   traefik:
     container_name: traefik
-    image: "traefik:latest"
+    image: "traefik:v3.6.7"
     restart: unless-stopped
     depends_on:
       - socket-proxy
@@ -61,7 +61,7 @@ services:
       - "--certificatesresolvers.letsencrypt.acme.dnschallenge.provider=ovh"
       - "--certificatesresolvers.letsencrypt.acme.email=postmaster@nantral-platform.fr"
       - "--certificatesresolvers.letsencrypt.acme.storage=/letsencrypt/acme.json"
-      - "--certificatesresolvers.letsencrypt.acme.dnschallenge.propagation.delayBeforeChecks=60"
+      # - "--certificatesresolvers.letsencrypt.acme.dnschallenge.propagation.delayBeforeChecks=60"
       # - "--certificatesresolvers.letsencrypt.acme.caserver=https://acme-staging-v02.api.letsencrypt.org/directory"
 
       - "--global.checknewversion=true"
