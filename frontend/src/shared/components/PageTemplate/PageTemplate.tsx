@@ -22,21 +22,11 @@ export function PageTemplate() {
   //   defined in the router.tsx
 
   return (
-    <Box
-      className={`global-${theme.palette.mode}-theme`}
-      sx={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}
-    >
+    <Box className={`global-${theme.palette.mode}-theme`}>
       <CssBaseline />
       <ScrollRestoration />
       <NavBar />
-      <FlexCol
-        component="main"
-        sx={{
-          flexGrow: 1, // prend tout l’espace restant
-          display: 'flex',
-          flexDirection: 'column',
-        }}
-      >
+      <FlexCol component="main" sx={{ height: '100vh' }}>
         <Toolbar />
         <Suspense
           fallback={
