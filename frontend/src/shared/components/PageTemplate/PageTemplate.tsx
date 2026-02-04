@@ -10,7 +10,6 @@ import {
 } from '@mui/material';
 
 import { FlexCol, FlexRow } from '../FlexBox/FlexBox';
-import { Footer } from './Components/Footer';
 import { NavBar } from './NavBar/NavBar';
 
 export function PageTemplate() {
@@ -49,7 +48,6 @@ export function PageTemplate() {
           <Outlet />
         </Suspense>
       </FlexCol>
-      <Footer />
     </Box>
   );
 }
