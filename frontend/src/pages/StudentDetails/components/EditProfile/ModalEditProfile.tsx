@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
 
 import {
   AlternateEmail,
@@ -25,6 +25,13 @@ import { useTranslation } from '#shared/i18n/useTranslation';
 import { ChangePasswordTab } from './ChangePassword.tab';
 import { EditProfileTab } from './EditProfile.tab';
 
+export enum TabType {
+  'profile',
+  'emails',
+  'links',
+  'password',
+}
+
 export function ModalEditProfile({
   onClose,
   student,
@@ -32,9 +39,10 @@ export function ModalEditProfile({
   onClose: () => void;
   student: Student;
 }) {
+  const [params, setParams] = useSearchParams();
+  const tab = params.get('tab') || 'profile';
   const { palette } = useTheme();
   const { t } = useTranslation();
-  const [tab, setTab] = useState('profile');
   const { socialLinks } = useCurrentUserData();
   const queryClient = useQueryClient();
   return (
@@ -51,7 +59,10 @@ export function ModalEditProfile({
         <Spacer flex={1} />
       </ResponsiveDialogHeader>
       <Tabs
-        onChange={(_, newVal) => setTab(newVal)}
+        onChange={(_, newVal) => {
+          params.set('tab', newVal);
+          setParams(params);
+        }}
         value={tab}
         variant={'scrollable'}
         scrollButtons={false}
@@ -82,7 +93,7 @@ export function ModalEditProfile({
         />
       </Tabs>
       <ResponsiveDialogContent sx={{ height: 800 }}>
-        {tab === 'profile' && <EditProfileTab />}
+        {tab === 'profile' && <EditProfileTab student={student} />}
         {tab === 'emails' && <EmailTab studentId={student.id} />}
         {tab === 'links' && (
           <EditSocialLinkForm
