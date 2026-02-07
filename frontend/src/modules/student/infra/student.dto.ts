@@ -11,6 +11,7 @@ export interface StudentDTO {
   staff: boolean;
   description: string;
   social_links: SocialLinkDTO[];
+  emails: { email: string }[];
   username: string;
 }
 

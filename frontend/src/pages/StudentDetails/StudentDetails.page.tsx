@@ -36,7 +36,7 @@ export default function StudentDetailsPage() {
       <Divider sx={{ my: 2 }} />
       <StudentGroupsSection student={student} />
       <Spacer vertical={10} />
-      {isMe && <StudentEditButton />}
+      {isMe && <StudentEditButton student={student} />}
     </Container>
   );
 }

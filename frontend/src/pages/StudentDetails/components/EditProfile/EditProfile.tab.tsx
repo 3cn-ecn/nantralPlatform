@@ -88,6 +88,7 @@ export function EditProfileTab() {
       picture: convertPictureToURL(),
       promo: form.promo,
       socialLinks: [],
+      emails: [],
       staff: false,
       url: '',
       username: form.username,

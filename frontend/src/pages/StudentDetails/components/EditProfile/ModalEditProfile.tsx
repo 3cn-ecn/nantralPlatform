@@ -1,17 +1,18 @@
 import { useState } from 'react';
 
 import {
+  AlternateEmail,
   Edit,
-  Person,
   Link as LinkIcon,
   Password,
-  AlternateEmail,
+  Person,
 } from '@mui/icons-material';
 import { Avatar, Tab, Tabs, useTheme } from '@mui/material';
 import { useQueryClient } from '@tanstack/react-query';
 
 import { EditSocialLinkForm } from '#modules/social_link/view/shared/EditSocialLinkForm';
 import { useCurrentUserData } from '#modules/student/hooks/useCurrentUser.data';
+import { Student } from '#modules/student/student.types';
 import EmailTab from '#pages/StudentDetails/components/EditProfile/Email.tab';
 import {
   ResponsiveDialog,
@@ -24,7 +25,13 @@ import { useTranslation } from '#shared/i18n/useTranslation';
 import { ChangePasswordTab } from './ChangePassword.tab';
 import { EditProfileTab } from './EditProfile.tab';
 
-export function ModalEditProfile({ onClose }: { onClose: () => void }) {
+export function ModalEditProfile({
+  onClose,
+  student,
+}: {
+  onClose: () => void;
+  student: Student;
+}) {
   const { palette } = useTheme();
   const { t } = useTranslation();
   const [tab, setTab] = useState('profile');
@@ -76,7 +83,7 @@ export function ModalEditProfile({ onClose }: { onClose: () => void }) {
       </Tabs>
       <ResponsiveDialogContent sx={{ height: 800 }}>
         {tab === 'profile' && <EditProfileTab />}
-        {tab === 'emails' && <EmailTab />}
+        {tab === 'emails' && <EmailTab studentId={student.id} />}
         {tab === 'links' && (
           <EditSocialLinkForm
             socialLinks={socialLinks}

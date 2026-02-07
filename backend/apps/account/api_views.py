@@ -78,7 +78,9 @@ class AuthViewSet(GenericViewSet):
 
         # Not verified primary email
         elif not user.is_email_valid():
-            data["message"] = _("Your e-mail is not verified. Please click on the link verification link")
+            data["message"] = _(
+                "Your e-mail is not verified. Please click on the link verification link"
+            )
             data["code"] = EMAIL_NOT_VALIDATED
             response_status = status.HTTP_401_UNAUTHORIZED
 
@@ -98,7 +100,9 @@ class AuthViewSet(GenericViewSet):
                 email_ecn = serializer.validated_data.get("email_ecn")
                 if email_ecn:
                     user.add_email(email_ecn, request=request)
-                    data["message"] = _("Please check your emails in order to verify the new email address")
+                    data["message"] = _(
+                        "Please check your emails in order to verify the new email address"
+                    )
                     data["code"] = EMAIL_CHANGED
                     response_status = status.HTTP_401_UNAUTHORIZED
                 else:
@@ -114,7 +118,11 @@ class AuthViewSet(GenericViewSet):
                     "add another address"
                 )
                 data["code"] = ECN_EMAIL_NOT_VALIDATED
-                data["emails_ecn"] = [email.email for email in user.emails.filter(is_valid=False) if email.is_ecn_email()]
+                data["emails_ecn"] = [
+                    email.email
+                    for email in user.emails.filter(is_valid=False)
+                    if email.is_ecn_email()
+                ]
                 response_status = status.HTTP_401_UNAUTHORIZED
             else:
                 # Here, the user has a valid ECN email but invitation is not null, so we fix it
@@ -146,9 +154,13 @@ class AuthViewSet(GenericViewSet):
         data = request.data
 
         if data.get("invitation_uuid"):
-            serializer = InvitationRegisterSerializer(data=data, context={"request": request})
+            serializer = InvitationRegisterSerializer(
+                data=data, context={"request": request}
+            )
         else:
-            serializer = RegisterSerializer(data=data, context={"request": request})
+            serializer = RegisterSerializer(
+                data=data, context={"request": request}
+            )
 
         if not serializer.is_valid():
             return Response(
@@ -282,7 +294,12 @@ class AuthViewSet(GenericViewSet):
         return Response(serializer.validated_data, status=status.HTTP_200_OK)
 
 
-class EmailViewSet(mixins.CreateModelMixin, mixins.ListModelMixin, mixins.DestroyModelMixin, GenericViewSet):
+class EmailViewSet(
+    mixins.CreateModelMixin,
+    mixins.ListModelMixin,
+    mixins.DestroyModelMixin,
+    GenericViewSet,
+):
     serializer_class = EmailSerializer
     permission_classes = [IsAuthenticated]
     lookup_field = "uuid"
@@ -324,7 +341,9 @@ class EmailViewSet(mixins.CreateModelMixin, mixins.ListModelMixin, mixins.Destro
     def destroy(self, request, *args, **kwargs):
         instance = self.get_object()
         if instance.user.email == instance:
-            raise exceptions.ValidationError(_("You cannot delete the main email address of your account"))
+            raise exceptions.ValidationError(
+                _("You cannot delete the main email address of your account")
+            )
         return super().destroy(request, *args, **kwargs)
 
     @action(
@@ -332,7 +351,7 @@ class EmailViewSet(mixins.CreateModelMixin, mixins.ListModelMixin, mixins.Destro
         methods=["POST"],
         serializer_class=ShortEmailSerializer,
         throttle_classes=[AnonRateThrottle],
-        permission_classes=[]
+        permission_classes=[],
     )
     def resend(self, request: Request):
         """Resend email in case it is not received"""
@@ -345,7 +364,9 @@ class EmailViewSet(mixins.CreateModelMixin, mixins.ListModelMixin, mixins.Destro
         email = serializer.validated_data.get("email")
 
         # always send the same response to not give informations
-        message = _("A confirmation email has been sent to verify provided email")
+        message = _(
+            "A confirmation email has been sent to verify provided email"
+        )
         response = Response(
             {"message": message},
             status=status.HTTP_200_OK,
@@ -373,6 +394,11 @@ class EmailViewSet(mixins.CreateModelMixin, mixins.ListModelMixin, mixins.Destro
         if serialed_data.is_valid():
             email.is_visible = serialed_data.validated_data.get("is_visible")
             email.save()
-            return Response({"message": _("The visibility has been changed")}, status=status.HTTP_200_OK)
+            return Response(
+                {"message": _("The visibility has been changed")},
+                status=status.HTTP_200_OK,
+            )
         else:
-            return Response(serialed_data.errors, status=status.HTTP_400_BAD_REQUEST)
+            return Response(
+                serialed_data.errors, status=status.HTTP_400_BAD_REQUEST
+            )

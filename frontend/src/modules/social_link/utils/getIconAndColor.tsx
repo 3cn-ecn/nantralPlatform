@@ -12,19 +12,21 @@ import {
 } from '@fortawesome/free-brands-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
-  AlternateEmail as EmailIcon,
+  AlternateEmail as AtIcon,
+  EmailOutlined as EmailIcon,
   Language as GlobeIcon,
   Phone as PhoneIcon,
+  Tag as TagIcon,
 } from '@mui/icons-material';
-import { colors, styled } from '@mui/material';
+import { colors, styled, Theme } from '@mui/material';
 
 import { SocialLink } from '../types/socialLink.type';
 import { getDomain } from './getDomain';
 
-export function getIconAndColor(socialLink: SocialLink): {
-  icon: JSX.Element;
-  color: string;
-} {
+export function getIconAndColor(
+  socialLink: Pick<SocialLink, 'uri' | 'label'>,
+  theme: Theme,
+): { icon: JSX.Element; color: string } {
   const parsedUrl = new URL(socialLink.uri);
 
   if (parsedUrl.protocol == 'mailto:') {
@@ -43,7 +45,10 @@ export function getIconAndColor(socialLink: SocialLink): {
       return { icon: <FAIcon icon={faInstagram} />, color: colors.pink[600] };
     case 'x.com':
     case 'twitter.com':
-      return { icon: <FAIcon icon={faXTwitter} />, color: colors.common.black };
+      return {
+        icon: <FAIcon icon={faXTwitter} />,
+        color: theme.palette.text.primary,
+      };
     case 'linkedin.com':
       return { icon: <FAIcon icon={faLinkedin} />, color: colors.blue[600] };
     case 'youtube.com':
@@ -56,10 +61,15 @@ export function getIconAndColor(socialLink: SocialLink): {
     case 'm.me':
       return {
         icon: <FAIcon icon={faFacebookMessenger} />,
-        color: colors.common.black,
+        color: colors.blue[400],
       };
     case 'whatsapp.com':
       return { icon: <FAIcon icon={faWhatsapp} />, color: colors.green[600] };
+    case 'matrix.to':
+      return {
+        icon: parsedUrl.hash.startsWith('#/@') ? <AtIcon /> : <TagIcon />,
+        color: colors.lightGreen[800],
+      };
     default:
       return { icon: <GlobeIcon />, color: colors.grey[600] };
   }

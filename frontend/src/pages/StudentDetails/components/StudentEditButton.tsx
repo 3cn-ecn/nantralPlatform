@@ -3,9 +3,15 @@ import { useState } from 'react';
 import { Edit } from '@mui/icons-material';
 import { Fab } from '@mui/material';
 
+import { Student } from '#modules/student/student.types';
+
 import { ModalEditProfile } from './EditProfile/ModalEditProfile';
 
-export function StudentEditButton() {
+interface StudentEditButtonProps {
+  student: Student;
+}
+
+export function StudentEditButton({ student }: StudentEditButtonProps) {
   const [open, setOpen] = useState(false);
   return (
     <>
@@ -16,7 +22,9 @@ export function StudentEditButton() {
       >
         <Edit />
       </Fab>
-      {open && <ModalEditProfile onClose={() => setOpen(false)} />}
+      {open && (
+        <ModalEditProfile onClose={() => setOpen(false)} student={student} />
+      )}
     </>
   );
 }

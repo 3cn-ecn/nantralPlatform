@@ -912,6 +912,7 @@
       },
       "housing": "Colocation",
       "links": "Liens",
+      "matrix": "{{ username }} sur Matrix",
       "password": "Mot de passe",
       "profile": "Profil",
       "schooling": "Cursus"

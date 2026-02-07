@@ -12,6 +12,7 @@ export interface Student {
   description: string;
   username: string;
   socialLinks: SocialLink[];
+  emails: string[];
 }
 
 export type StudentPreview = Pick<Student, 'id' | 'name' | 'url' | 'picture'>;

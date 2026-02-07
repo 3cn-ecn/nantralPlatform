@@ -16,6 +16,7 @@ export function adaptStudent(studentDTO: StudentDTO): Student {
     description: studentDTO.description,
     username: studentDTO.username,
     socialLinks: studentDTO.social_links.map((link) => adaptSocialLink(link)),
+    emails: studentDTO.emails.map((email) => email.email),
   };
 }
 

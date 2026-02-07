@@ -18,13 +18,6 @@ export function StudentDetailsInfo({ student }: { student: Partial<Student> }) {
           <AdminPanelSettings fontSize="large" color="secondary" />
         )}
       </FlexRow>
-      <Typography color="secondary" mb={1}>
-        @
-        <Typography color={'primary'} component={'span'}>
-          {student.username}
-        </Typography>
-        :nantral-platform.fr
-      </Typography>
       <FlexRow flexWrap={'wrap'} gap={1}>
         <Chip label={`Année d'entrée: ${student.promo}`}></Chip>
         {student.faculty && <Chip label={t(Faculties[student.faculty])}></Chip>}
@@ -33,6 +26,21 @@ export function StudentDetailsInfo({ student }: { student: Partial<Student> }) {
         )}
       </FlexRow>
       <FlexRow my={1} flexWrap={'wrap'}>
+        <SocialLinkItem
+          socialLink={{
+            uri:
+              'https://matrix.to/#/@' +
+              student.username +
+              ':nantral-platform.fr',
+            label: t('student.details.matrix', { username: student.username }),
+          }}
+        />
+        {student.emails?.map((email) => (
+          <SocialLinkItem
+            key={email}
+            socialLink={{ uri: 'mailto:' + email, label: email }}
+          />
+        ))}
         {student.socialLinks?.map((link) => (
           <SocialLinkItem key={link.id} socialLink={link} />
         ))}

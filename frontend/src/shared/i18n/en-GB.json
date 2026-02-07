@@ -912,6 +912,7 @@
       },
       "housing": "Shared accommodation",
       "links": "Links",
+      "matrix": "{{ username }} on Matrix",
       "password": "Password",
       "profile": "Profile",
       "schooling": "Schooling"

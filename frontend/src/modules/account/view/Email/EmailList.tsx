@@ -15,7 +15,11 @@ import { InfiniteList } from '#shared/components/InfiniteList/InfiniteList';
 import { useToast } from '#shared/context/Toast.context';
 import { ApiFormError } from '#shared/infra/errors';
 
-export function EmailList() {
+interface EmailListProps {
+  studentId: number;
+}
+
+export function EmailList({ studentId }: EmailListProps) {
   const showToast = useToast();
   const queryClient = useQueryClient();
   const query = useInfiniteQuery({
@@ -40,6 +44,10 @@ export function EmailList() {
       changeEmailVisibilityApi(emailUuid, isVisible),
     onSuccess: async (message) => {
       await queryClient.invalidateQueries(['emails']);
+      await queryClient.invalidateQueries([
+        'student',
+        { id: studentId.toString() },
+      ]);
       showToast({
         message: message,
         variant: 'success',

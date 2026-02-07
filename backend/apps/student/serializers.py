@@ -5,6 +5,7 @@ from rest_framework import serializers
 
 from apps.sociallink.serializers import SocialLinkSerializer
 
+from ..account.serializers import ShortEmailSerializer
 from .models import Student
 
 if TYPE_CHECKING:
@@ -18,6 +19,7 @@ class StudentSerializer(serializers.ModelSerializer):
     username = serializers.SerializerMethodField()
     expires_at = serializers.SerializerMethodField()
     social_links = SocialLinkSerializer(many=True, read_only=True)
+    emails = serializers.SerializerMethodField()
 
     class Meta:
         model = Student
@@ -32,6 +34,7 @@ class StudentSerializer(serializers.ModelSerializer):
             "staff",
             "description",
             "social_links",
+            "emails",
             "username",
             "expires_at",
         ]
@@ -59,6 +62,11 @@ class StudentSerializer(serializers.ModelSerializer):
         if request_user != user or not user.invitation:
             return None
         return user.invitation.expires_at
+
+    def get_emails(self, obj: Student) -> list[dict]:
+        return ShortEmailSerializer(
+            obj.user.emails.filter(is_visible=True), many=True
+        ).data
 
 
 class StudentPreviewSerializer(serializers.ModelSerializer):
