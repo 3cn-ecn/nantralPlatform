@@ -14,13 +14,13 @@ For the example, we will use this model:
 ```python title="models.py"
 from django.db import models
 
-from apps.student.models import Student
+from apps.account.models import User
 
 class Event(models.Model):
     title = models.CharField(max_length=100)
     begin_date = models.DateTimeField("Début")
     end_date = models.DateTimeField("Fin")
-    participants = models.ManyToManyField(to=Student, blank=True)
+    participants = models.ManyToManyField(to=User, blank=True)
 ```
 
 ## The Serializer classes
@@ -43,8 +43,8 @@ class EventSerializer(serializers.ModelSerializer):
 
     # how to compute the value of the 'is_participating' field
     def get_is_participating(self, obj: Event) -> bool:
-        student = self.context['request'].user.student
-        return obj.participants.contains(student)
+        user = self.context['request'].user
+        return obj.participants.contains(user)
 
     # this is called each time an Event object is sent TO the server
     def validate(self, data: dict[str, any]) -> dict[str, any]:

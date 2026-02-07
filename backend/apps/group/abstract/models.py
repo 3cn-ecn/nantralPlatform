@@ -10,7 +10,6 @@ from discord_webhook import DiscordEmbed, DiscordWebhook
 from django_ckeditor_5.fields import CKEditor5Field
 
 from apps.account.models import User
-from apps.student.models import Student
 from apps.utils.fields.image_field import CustomImageField
 from apps.utils.slug import (
     SlugModel,
@@ -72,7 +71,7 @@ class AbstractGroup(models.Model, SlugModel):
 
     # paramètres techniques
     members = models.ManyToManyField(
-        Student,
+        User,
         verbose_name="Membres du groupe",
         related_name="%(class)s_members",
         through="NamedMembership",
@@ -114,30 +113,21 @@ class AbstractGroup(models.Model, SlugModel):
 
     def is_admin(self, user: User) -> bool:
         """Indicates if a user is admin."""
-        if (
-            user.is_anonymous
-            or not user.is_authenticated
-            or not hasattr(user, "student")
-        ):
+        if user.is_anonymous or not user.is_authenticated:
             return False
-        student = Student.objects.filter(user=user).first()
         if user.is_superuser:
             return True
         if self.is_member(user):
             members_list = self.members.through.objects.filter(group=self)
-            my_member = members_list.filter(student=student).first()
+            my_member = members_list.filter(user=user).first()
             return my_member.admin
         return False
 
     def is_member(self, user: User) -> bool:
         """Indicates if a user is member."""
-        if (
-            user.is_anonymous
-            or not user.is_authenticated
-            or not hasattr(user, "student")
-        ):
+        if user.is_anonymous or not user.is_authenticated:
             return False
-        return user.student in self.members.all()
+        return user in self.members.all()
 
     def delete(self, *args, **kwargs):
         self.logo.delete()
@@ -147,21 +137,21 @@ class AbstractGroup(models.Model, SlugModel):
 
 class NamedMembership(models.Model):
     admin = models.BooleanField(default=False)
-    student = models.ForeignKey(to=Student, on_delete=models.CASCADE)
+    user = models.ForeignKey(to=User, on_delete=models.CASCADE)
     group = models.ForeignKey(to=AbstractGroup, on_delete=models.CASCADE)
 
     class Meta:
         abstract = True
 
     def __str__(self):
-        return self.student.__str__()
+        return self.user.__str__()
 
 
 class AdminRightsRequest(models.Model):
     """A model to request admin rights on a group."""
 
     group = models.SlugField(verbose_name="Groupe demandé.")
-    student = models.ForeignKey(to=Student, on_delete=models.CASCADE)
+    user = models.ForeignKey(to=User, on_delete=models.CASCADE)
     date = models.DateField(
         verbose_name="Date de la requête",
         default=timezone.now,
@@ -183,7 +173,7 @@ class AdminRightsRequest(models.Model):
                 url=settings.DISCORD_ADMIN_MODERATION_WEBHOOK,
             )
             embed = DiscordEmbed(
-                title=f"{self.student} demande à devenir admin de {group}",
+                title=f"{self.user} demande à devenir admin de {group}",
                 description=self.reason,
                 color=242424,
             )
@@ -197,8 +187,8 @@ class AdminRightsRequest(models.Model):
                 value=f"[Refuser]({self.deny_url})",
                 inline=True,
             )
-            if self.student.picture:
-                embed.thumbnail = {"url": self.student.picture.url}
+            if self.user.picture:
+                embed.thumbnail = {"url": self.user.picture.url}
             webhook.add_embed(embed)
             webhook.execute()
         except Exception as e:
@@ -225,24 +215,24 @@ class AdminRightsRequest(models.Model):
 
     def accept(self):
         group = get_object_from_full_slug(self.group)
-        if group.is_member(self.student.user):
+        if group.is_member(self.user):
             membership = group.members.through.objects.get(
-                student=self.student.id,
+                user=self.user.id,
                 group=group,
             )
             membership.admin = True
             membership.save()
         else:
             group.members.through.objects.create(
-                student=self.student,
+                user=self.user,
                 group=group,
                 admin=True,
             )
         mail = render_to_string(
             "abstract_group/mail/new_admin.html",
-            {"group": group, "user": self.student.user},
+            {"group": group, "user": self.user},
         )
-        self.student.user.email_user(
+        self.user.email_user(
             f"Vous êtes admin de {group}",
             mail,
             from_email=None,
@@ -251,7 +241,7 @@ class AdminRightsRequest(models.Model):
         webhook = DiscordWebhook(url=settings.DISCORD_ADMIN_MODERATION_WEBHOOK)
         embed = DiscordEmbed(
             title=(
-                f"La demande de {self.student} pour rejoindre {group} "
+                f"La demande de {self.user} pour rejoindre {group} "
                 "a été acceptée."
             ),
             description="",
@@ -266,7 +256,7 @@ class AdminRightsRequest(models.Model):
         webhook = DiscordWebhook(url=settings.DISCORD_ADMIN_MODERATION_WEBHOOK)
         embed = DiscordEmbed(
             title=(
-                f"La demande de {self.student} pour rejoindre {group} "
+                f"La demande de {self.user} pour rejoindre {group} "
                 "a été refusée."
             ),
             description="",

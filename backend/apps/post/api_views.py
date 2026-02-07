@@ -91,12 +91,12 @@ class PostViewSet(viewsets.ModelViewSet):
         user = self.request.user
 
         query = Post.objects.filter(
-            Q(publicity="Pub") | Q(group__members__user=user),
+            Q(publicity="Pub") | Q(group__members=user),
         )
         if is_member is True:
-            query = query.filter(group__members__user=user)
+            query = query.filter(group__members=user)
         if is_member is False:
-            query = query.exclude(group__members__user=user)
+            query = query.exclude(group__members=user)
         if pinned is not None:
             query = query.filter(pinned=pinned)
         if len(groups) > 0:

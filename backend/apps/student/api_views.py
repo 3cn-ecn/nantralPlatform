@@ -4,29 +4,31 @@ from rest_framework.response import Response
 
 from apps.utils.parse import parse_int
 
-from .models import Student
+from ..account.models import User
 from .serializers import StudentSerializer
 
 
 class StudentPermission(permissions.BasePermission):
-    def has_object_permission(self, request, view, obj: Student) -> bool:
+    def has_object_permission(self, request, view, obj: User) -> bool:
         if request.method in permissions.SAFE_METHODS:
             return True
-        return request.user == obj.user
+        return request.user == obj
 
 
-class StudentViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin, viewsets.GenericViewSet):
-    """An API endpoint for students."""
+class StudentViewSet(
+    mixins.ListModelMixin, mixins.RetrieveModelMixin, viewsets.GenericViewSet
+):
+    """An API endpoint for users."""
 
     permission_classes = [permissions.IsAuthenticated, StudentPermission]
     serializer_class = StudentSerializer
-    search_fields = ["user__first_name", "user__last_name"]
+    search_fields = ["first_name", "last_name"]
     filter_backends = [filters.SearchFilter, filters.OrderingFilter]
-    ordering_fields = ["promo", "user__first__name", "user___last_name", "path"]
-    ordering = ["user__first_name", "user__last_name"]
+    ordering_fields = ["promo", "first__name", "last_name", "path"]
+    ordering = ["first_name", "last_name"]
 
     def get_queryset(self):
-        queryset = Student.objects.all()
+        queryset = User.objects.all()
 
         promo = parse_int(self.request.GET.get("promo"))
         path = self.request.GET.get("path")
@@ -44,5 +46,5 @@ class StudentViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin, viewsets.
     @action(detail=False, methods=["GET"])
     def me(self, request, *args, **kwargs):
         """A view to get the current user."""
-        serializer = self.get_serializer(request.user.student)
+        serializer = self.get_serializer(request.user)
         return Response(serializer.data)

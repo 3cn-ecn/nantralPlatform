@@ -49,7 +49,7 @@ class HomeAdminView(UserIsInGroup, TemplateView):
         # MEMBERS 1A
         members_1A = members.filter(role="1A")
         context["nb_1A"] = members_1A.count()
-        context["nb_itii"] = members_1A.filter(student__faculty="Iti").count()
+        context["nb_itii"] = members_1A.filter(faculty="Iti").count()
         context["nb_1A_unplaced"] = members_1A.filter(
             group__isnull=True,
         ).count()

@@ -9,7 +9,6 @@ import {
   EditAccountOptionsDTO,
 } from '#modules/account/api/editAccount';
 import getUsernameApi from '#modules/account/api/getUsername.api';
-import { useCurrentUserData } from '#modules/student/hooks/useCurrentUser.data';
 import { Student } from '#modules/student/student.types';
 import { Avatar } from '#shared/components/Avatar/Avatar';
 import { FlexRow } from '#shared/components/FlexBox/FlexBox';
@@ -20,8 +19,11 @@ import { ApiFormError } from '#shared/infra/errors';
 import { EditProfileFormFields } from '../FormFields/EditProfileFormFields';
 import { StudentDetailsInfo } from '../StudentDetailsInfo';
 
-export function EditProfileTab() {
-  const student = useCurrentUserData();
+interface EditProfileTabProps {
+  student: Student;
+}
+
+export function EditProfileTab({ student }: EditProfileTabProps) {
   const { data: userData } = useQuery({
     queryFn: getUsernameApi,
     queryKey: ['username'],
@@ -78,6 +80,7 @@ export function EditProfileTab() {
     }
     return student.picture;
   }
+
   function convertToPreview(form: EditAccountOptions): Student {
     return {
       description: form.description,

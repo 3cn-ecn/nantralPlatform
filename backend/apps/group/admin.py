@@ -51,12 +51,12 @@ class GroupAdmin(SimpleHistoryAdmin):
 
 class MembershipAdmin(admin.ModelAdmin):
     search_fields = [
-        "student__user__first_name",
-        "student__user__last_name",
+        "user__first_name",
+        "user__last_name",
         "group__name",
         "group__short_name",
     ]
-    list_display = ["student", "group", "admin", "id"]
+    list_display = ["user", "group", "admin", "id"]
     list_filter = ["admin", "group__group_type"]
     readonly_fields = ["id"]
 

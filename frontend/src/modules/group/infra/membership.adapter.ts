@@ -7,7 +7,7 @@ import { MembershipDTO } from './membership.dto';
 export function adaptMembership(membershipDTO: MembershipDTO): Membership {
   return {
     id: membershipDTO.id,
-    student: adaptStudentPreview(membershipDTO.student),
+    student: adaptStudentPreview(membershipDTO.user),
     group: adaptGroupPreview(membershipDTO.group),
     summary: membershipDTO.summary,
     description: membershipDTO.description,

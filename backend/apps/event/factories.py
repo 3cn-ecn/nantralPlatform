@@ -7,10 +7,10 @@ from factory.django import DjangoModelFactory
 from faker import Faker as RealFaker
 
 from apps.group.models import Group
-from apps.student.models import Student
 from apps.utils.factories.fake_data_generator import FakeDataGenerator
 from apps.utils.factories.random_maybe import random_maybe
 
+from ..account.models import User
 from .models import Event
 
 
@@ -68,7 +68,7 @@ class EventFactory(DjangoModelFactory):
         if not create:
             return
         nb_participants = random.randint(0, 15)
-        queryset = Student.objects.order_by("?")[:nb_participants]
+        queryset = User.objects.order_by("?")[:nb_participants]
         self.participants.add(*queryset)
 
     @factory.post_generation
@@ -76,7 +76,7 @@ class EventFactory(DjangoModelFactory):
         if not create:
             return
         nb_bookmarks = random.randint(0, 15)
-        queryset = Student.objects.order_by("?")[:nb_bookmarks]
+        queryset = User.objects.order_by("?")[:nb_bookmarks]
         self.bookmarks.add(*queryset)
 
 

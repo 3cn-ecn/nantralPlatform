@@ -1,14 +1,10 @@
-from typing import TYPE_CHECKING
-
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 
 from apps.group.models import Group
 
+from ..account.models import User
 from .models import SocialLink
-
-if TYPE_CHECKING:
-    from apps.student.models import Student
 
 
 class SocialLinkSerializer(serializers.ModelSerializer):
@@ -48,11 +44,11 @@ class UserSocialLinkSerializer(serializers.ModelSerializer):
         ]
 
     def create(self, validated_data: dict):
-        student: Student = self.context["request"].user.student
+        user: User = self.context["request"].user
 
-        if student is None:
+        if user is None:
             raise ValidationError("An error occurred")
 
-        social_link = student.social_links.create(**validated_data)
+        social_link = user.social_links.create(**validated_data)
 
         return social_link

@@ -1,7 +1,7 @@
 import axios from 'axios';
 
-import { ApiErrorDTO, adaptApiErrors } from '#shared/infra/errors';
-import { PageDTO, adaptPage } from '#shared/infra/pagination';
+import { adaptApiErrors, ApiErrorDTO } from '#shared/infra/errors';
+import { adaptPage, PageDTO } from '#shared/infra/pagination';
 
 import { adaptMembership } from '../infra/membership.adapter';
 import { MembershipDTO } from '../infra/membership.dto';
@@ -23,7 +23,7 @@ export async function getMembershipListApi(
   const { data } = await axios
     .get<PageDTO<MembershipDTO>>('/api/group/membership/', {
       params: {
-        student: options.student,
+        user: options.student,
         from: options.from?.toISOString(),
         to: options.to?.toISOString(),
         group: options.group,

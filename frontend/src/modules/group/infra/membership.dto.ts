@@ -4,7 +4,7 @@ import { GroupPreviewDTO } from './group.dto';
 
 export interface MembershipDTO {
   id: number;
-  student: StudentPreviewDTO;
+  user: StudentPreviewDTO;
   group: GroupPreviewDTO;
   summary: string;
   description: string;
@@ -18,7 +18,7 @@ export interface MembershipDTO {
 export type MembershipFormDTO = Pick<
   MembershipDTO,
   'begin_date' | 'end_date' | 'summary' | 'description' | 'admin'
-> & { group: number; student: number };
+> & { group: number; user: number };
 
 export type ShortMembershipFormDTO = Pick<
   MembershipFormDTO,

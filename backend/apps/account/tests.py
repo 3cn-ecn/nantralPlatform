@@ -144,8 +144,8 @@ class TestRegister(TestCase):
         self.assertIsNotNone(user)
         # check user informations
         self.assertFalse(user.is_email_valid())
-        self.assertEqual(user.student.promo, self.payload["promo"])
-        self.assertEqual(user.student.faculty, self.payload["faculty"])
+        self.assertEqual(user.promo, self.payload["promo"])
+        self.assertEqual(user.faculty, self.payload["faculty"])
 
         self.assertEqual(len(mail.outbox), 1)
 

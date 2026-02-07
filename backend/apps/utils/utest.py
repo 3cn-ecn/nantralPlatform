@@ -18,9 +18,7 @@ class TestMixin:
     password = "secured_password"  # noqa: S105
 
     def user_setup(self) -> None:
-        """Create 3 standards users: u1, u2 and u3. Only u2 and u3
-        are linked to a Student instance.
-        """
+        """Create 3 standards users: u1, u2 and u3."""
         self.u1 = create_student_user(
             username="admin",
             email="admin@ec-nantes.fr",

@@ -1,5 +1,6 @@
 import uuid
 
+from django.apps import apps
 from django.contrib import admin
 from django.contrib.auth.models import AbstractUser
 from django.db import models
@@ -8,12 +9,34 @@ from django.utils.translation import gettext_lazy as _
 
 from rest_framework import exceptions
 
+from ..sociallink.models import SocialLink
+from ..utils.fields.image_field import CustomImageField
 from .manager import UserManager
 from .utils import send_email_confirmation
 from .validators import (
     ecn_email_validator,
     validate_matrix_username,
 )
+
+FACULTIES = [
+    ("Gen", "Ingénieur Généraliste"),
+    ("Iti", "Ingénieur de Spécialité (ITII)"),
+    ("Mas", "Master"),
+    ("Doc", "Doctorat"),
+    ("Bac", "Bachelor"),
+    ("MSp", "Mastère Spécialisé"),
+]
+
+PATHS = [
+    ("Cla", ""),
+    ("Alt", "Alternance"),
+    ("I-A", "Ingénieur-Architecte"),
+    ("A-I", "Architecte-Ingénieur"),
+    ("I-M", "Ingénieur-Manager"),
+    ("M-I", "Manager-Ingénieur"),
+    ("I-O", "Ingénieur-Officier"),
+    ("O-I", "Officier-Ingénieur"),
+]
 
 
 class InvitationLink(models.Model):
@@ -55,7 +78,13 @@ class User(AbstractUser):
             "unique": _("This username is already taken."),
         },
     )
-    email = models.OneToOneField("Email", verbose_name=_("Main email"), on_delete=models.RESTRICT, related_name="primary_from", null=True)
+    email = models.OneToOneField(
+        "Email",
+        verbose_name=_("Main email"),
+        on_delete=models.RESTRICT,
+        related_name="primary_from",
+        null=True,
+    )
     invitation = models.ForeignKey(
         InvitationLink,
         null=True,
@@ -66,6 +95,78 @@ class User(AbstractUser):
     # after it is too late since we won't be able to change the matrix username
     has_opened_matrix = models.BooleanField(default=False)
     has_updated_username = models.BooleanField(default=False)
+    promo = models.IntegerField(
+        verbose_name=_("Année de promotion entrante"),
+        null=True,
+        blank=True,
+    )
+    picture = CustomImageField(
+        verbose_name=_("Photo de profil"),
+        null=True,
+        blank=True,
+        size=(500, 500),
+        crop=True,
+        name_from_field="user",
+    )
+    faculty = models.CharField(
+        max_length=200,
+        verbose_name=_("Filière"),
+        choices=FACULTIES,
+    )
+    path = models.CharField(  # noqa: DJ001
+        max_length=200,
+        verbose_name=_("Cursus"),
+        choices=PATHS,
+        null=True,
+        blank=True,
+    )
+    description = models.CharField(max_length=300, blank=True)
+    social_links = models.ManyToManyField(
+        to=SocialLink,
+        verbose_name=_("Social networks"),
+        related_name="user_set",
+        blank=True,
+    )
+
+    def get_absolute_url(self) -> str:
+        return f"/student/{self.pk}"
+
+    @property
+    def name(self):
+        """Renvoie le nom de l'utilisateur au format Prénom NOM."""
+        if self.first_name and self.last_name:
+            return f"{self.first_name.title()} {self.last_name.upper()}"
+        elif self.first_name:
+            return self.first_name.title()
+        elif self.last_name:
+            return self.last_name.title()
+        else:
+            return self.username
+
+    @property
+    def alphabetical_name(self):
+        """Renvoie le nom de l'utilisateur au format NOM Prénom."""
+        if self.first_name and self.last_name:
+            return f"{self.last_name.upper()} {self.first_name.title()}"
+        else:
+            return self.name
+
+    def can_pin(self) -> bool:
+        # to avoid circular import
+        membership = apps.get_model("group.Membership")
+        return (
+            membership.objects.filter(
+                user=self,
+                admin=True,
+                group__can_pin=True,
+                group__archived=False,
+            ).exists()
+            or self.is_superuser
+        )
+
+    def delete(self, *args, **kwargs):
+        self.picture.delete()
+        super().delete(*args, **kwargs)
 
     def save(self, *args, **kwargs):
         self.first_name = self.first_name.lower()
@@ -75,7 +176,9 @@ class User(AbstractUser):
 
     @admin.display(boolean=True)
     def has_valid_ecn_email(self):
-        return any(email.is_ecn_email() for email in self.emails.filter(is_valid=True))
+        return any(
+            email.is_ecn_email() for email in self.emails.filter(is_valid=True)
+        )
 
     @admin.display(boolean=True)
     def has_ecn_email(self):
@@ -97,12 +200,16 @@ class User(AbstractUser):
 
     def remove_email(self, email):
         if email == self.email.email:
-            raise exceptions.ValidationError(_("You cannot delete the main email address of your account"))
+            raise exceptions.ValidationError(
+                _("You cannot delete the main email address of your account")
+            )
         return self.emails.filter(email__iexact=email).delete()
 
     @admin.display(boolean=True)
     def is_email_valid(self):
-        return self.emails.filter(is_valid=True, email__iexact=self.email.email).exists()
+        return self.emails.filter(
+            is_valid=True, email__iexact=self.email.email
+        ).exists()
 
     @property
     def email__email(self):
@@ -113,19 +220,17 @@ class User(AbstractUser):
         ordering = ["last_name", "first_name", "username"]
 
     def __str__(self):
-        if hasattr(self, "student"):
-            name = self.student.alphabetical_name
-        elif hasattr(self, "email"):
-            name = str(self.email)
-        else:
-            return self.username
-        return f"{name} ({self.username})"
+        return f"{self.alphabetical_name} ({self.username})"
 
 
 class Email(models.Model):
     email = models.EmailField(primary_key=True)
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="emails")
-    is_valid = models.BooleanField(verbose_name=_("Verified email?"), default=False)
+    user = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name="emails"
+    )
+    is_valid = models.BooleanField(
+        verbose_name=_("Verified email?"), default=False
+    )
     is_visible = models.BooleanField(
         verbose_name=_("Visibility"),
         default=False,
@@ -143,7 +248,9 @@ class Email(models.Model):
 
     def delete(self, using=None, keep_parents=False):
         if self.user.email == self.email:
-            raise exceptions.ValidationError(_("You cannot delete the main email address of your account"))
+            raise exceptions.ValidationError(
+                _("You cannot delete the main email address of your account")
+            )
         return super().delete(using=using, keep_parents=keep_parents)
 
     @admin.display(boolean=True)

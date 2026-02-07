@@ -1,7 +1,7 @@
 from django.contrib.auth import authenticate, login, logout
 from django.utils.translation import gettext_lazy as _
 
-from rest_framework import exceptions, mixins, status
+from rest_framework import exceptions, mixins, permissions, status
 from rest_framework.authentication import SessionAuthentication
 from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
@@ -21,7 +21,6 @@ from .serializers import (
     LoginSerializer,
     RegisterSerializer,
     ShortEmailSerializer,
-    UsernameSerializer,
     UserSerializer,
     VisibilitySerializer,
 )
@@ -34,6 +33,15 @@ ACCOUNT_TEMPORARY = 3
 FAILED = 4
 EMAIL_CHANGED = 5
 ECN_EMAIL_NOT_VALIDATED = 6
+
+
+class CanEditProfileOrReadOnly(permissions.BasePermission):
+    def has_object_permission(self, request, view, obj):
+        if request.method in permissions.SAFE_METHODS:
+            return True
+        return request.user is not None and (
+            request.user.pk == obj.pk or request.user.is_superuser
+        )
 
 
 class AuthViewSet(GenericViewSet):
@@ -241,19 +249,9 @@ class AuthViewSet(GenericViewSet):
         )
 
     @action(
-        detail=False,
-        methods=["GET"],
-        permission_classes=[IsAuthenticated],
-    )
-    def username(self, request: Request):
-        """Edit account informations"""
-        serializer = UsernameSerializer(instance=request.user)
-        return Response(serializer.data, status=status.HTTP_200_OK)
-
-    @action(
-        detail=False,
+        detail=True,
         methods=["PUT", "GET"],
-        permission_classes=[IsAuthenticated],
+        permission_classes=[CanEditProfileOrReadOnly, IsAuthenticated],
         serializer_class=UserSerializer,
     )
     def edit(self, request: Request):
@@ -261,7 +259,7 @@ class AuthViewSet(GenericViewSet):
 
         if request.method == "PUT":
             serializer = UserSerializer(
-                instance=request.user, data=request.data
+                instance=self.get_object(), data=request.data
             )
             serializer.is_valid(raise_exception=True)
             serializer.save()
@@ -271,27 +269,9 @@ class AuthViewSet(GenericViewSet):
             )
 
         if request.method == "GET":
-            serializer = UserSerializer(instance=request.user)
+            serializer = UserSerializer(instance=self.get_object())
 
             return Response(serializer.data, status=status.HTTP_200_OK)
-
-    @action(
-        detail=False,
-        methods=["PUT"],
-        permission_classes=[IsAuthenticated],
-    )
-    def edit_username(self, request: Request):
-        """Edit account informations"""
-        serializer = UsernameSerializer(
-            instance=request.user, data=request.data
-        )
-        if not serializer.is_valid():
-            return Response(
-                serializer.errors,
-                status=status.HTTP_400_BAD_REQUEST,
-            )
-        serializer.save()
-        return Response(serializer.validated_data, status=status.HTTP_200_OK)
 
 
 class EmailViewSet(
@@ -301,7 +281,7 @@ class EmailViewSet(
     GenericViewSet,
 ):
     serializer_class = EmailSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [CanEditProfileOrReadOnly, IsAuthenticated]
     lookup_field = "uuid"
 
     def get_queryset(self):
@@ -310,7 +290,6 @@ class EmailViewSet(
     @action(
         detail=False,
         methods=["PUT"],
-        permission_classes=[IsAuthenticated],
         serializer_class=ChangeEmailSerializer,
     )
     def change(self, request: Request):
@@ -363,7 +342,7 @@ class EmailViewSet(
             )
         email = serializer.validated_data.get("email")
 
-        # always send the same response to not give informations
+        # always send the same response to not give information
         message = _(
             "A confirmation email has been sent to verify provided email"
         )
@@ -387,7 +366,12 @@ class EmailViewSet(
         )
         return response
 
-    @action(detail=True, methods=["PUT"], serializer_class=VisibilitySerializer)
+    @action(
+        detail=True,
+        methods=["PUT"],
+        serializer_class=VisibilitySerializer,
+        permission_classes=[CanEditProfileOrReadOnly, IsAuthenticated],
+    )
     def visibility(self, request: Request, *args, **kwargs):
         email = self.get_object()
         serialed_data = self.get_serializer(data=request.data)

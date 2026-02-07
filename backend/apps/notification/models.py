@@ -3,8 +3,8 @@ from django.shortcuts import get_object_or_404
 from django.utils import timezone
 
 from apps.group.models import Group
-from apps.student.models import Student
 
+from ..account.models import User
 from .webpush import send_webpush_notification
 
 # How notifications work:
@@ -40,7 +40,7 @@ class Notification(models.Model):
         verbose_name="Visibilité de la notification",
     )
     receivers = models.ManyToManyField(
-        Student,
+        User,
         related_name="notification_set",
         through="SentNotification",
     )
@@ -55,10 +55,10 @@ class Notification(models.Model):
         super().save(*args, **kwargs)
         # initiate
         page = get_object_or_404(Group, slug=self.sender)
-        receivers = Student.objects.none()
+        receivers = User.objects.none()
         # if receivers are everyone
         if self.publicity == "Pub":
-            receivers = Student.objects.all()
+            receivers = User.objects.all()
         # if receivers are only members
         elif self.publicity == "Mem":
             self.high_priority = True
@@ -81,7 +81,7 @@ class Notification(models.Model):
                 subscriptions__slug=self.sender,
             )
         SentNotification.objects.filter(
-            student__in=sub_receivers,
+            user__in=sub_receivers,
             notification=self,
         ).update(subscribed=True)
         # finally we save again because we updated the high_priority field
@@ -128,7 +128,7 @@ class Notification(models.Model):
 class SentNotification(models.Model):
     """Table des notifications envoyées à chaque utilisateur."""
 
-    student = models.ForeignKey(Student, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     notification = models.ForeignKey(Notification, on_delete=models.CASCADE)
     seen = models.BooleanField("Vu", default=False)
     subscribed = models.BooleanField(
@@ -140,7 +140,7 @@ class SentNotification(models.Model):
     class Meta:
         verbose_name = "Notification envoyée"
         verbose_name_plural = "Notifications envoyées"
-        unique_together = ["student", "notification"]
+        unique_together = ["user", "notification"]
 
     @property
     def date(self):

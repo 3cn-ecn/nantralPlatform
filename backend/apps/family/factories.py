@@ -46,7 +46,7 @@ class MembershipFamilyFactory(DjangoModelFactory):
     class Meta:
         model = MembershipFamily
 
-    student = factory.SubFactory("apps.student.factories.StudentFactory")
+    user = factory.SubFactory("apps.user.factories.UserFactory")
     role = factory.Iterator(["1A", "2A+"])
 
     @factory.lazy_attribute
@@ -88,7 +88,7 @@ class AnswerMemberFactory(DjangoModelFactory):
 
 
 class FamilyFakeData(FakeDataGenerator):
-    dependencies = ["GroupFakeData", "StudentFakeData"]
+    dependencies = ["GroupFakeData", "UserFakeData"]
 
     def make_families(self):
         for i in range(FAMILY_NUMBER):

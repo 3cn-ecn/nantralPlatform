@@ -3,9 +3,8 @@ from django.urls import reverse
 
 from rest_framework import status
 
+from apps.account.models import User
 from apps.utils.utest import TestMixin
-
-from .models import Student
 
 
 class TestStudent(TestCase, TestMixin):
@@ -17,19 +16,22 @@ class TestStudent(TestCase, TestMixin):
         self.user_setup()
 
     def test_student_profile_update(self):
-        student = Student.objects.get(id=self.u1.id)
-        url = reverse("student:update", args=[student.pk])
+        url = reverse("student:update", args=[self.u1.pk])
         response = self.client.get(url)
         # Check that you have to be logged in
         self.assertEqual(response.status_code, status.HTTP_302_FOUND)
 
-        ok = self.client.login(username=self.u3.email.email, password=self.password)
+        ok = self.client.login(
+            username=self.u3.email.email, password=self.password
+        )
         self.assertTrue(ok)
         with self.assertLogs("django.request", level="WARNING"):
             response = self.client.get(url)
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
         self.client.logout()
-        ok = self.client.login(username=self.u1.email.email, password=self.password)
+        ok = self.client.login(
+            username=self.u1.email.email, password=self.password
+        )
         self.assertTrue(ok)
 
         response = self.client.get(url)
@@ -42,13 +44,15 @@ class TestStudent(TestCase, TestMixin):
             "new_password1": self.new_password,
             "new_password2": self.new_password,
         }
-        student = Student.objects.all().first()
-        url = reverse("student:change_pass", args=[student.pk])
+        user = User.objects.all().first()
+        url = reverse("student:change_pass", args=[user.pk])
         response = self.client.post(url, data=password_change)
         self.assertEqual(response.status_code, status.HTTP_302_FOUND)
         self.client.logout()
 
-        ok = self.client.login(username=self.u2.email.email, password=self.password)
+        ok = self.client.login(
+            username=self.u2.email.email, password=self.password
+        )
         self.assertTrue(ok)
 
         password_change = {
@@ -56,7 +60,7 @@ class TestStudent(TestCase, TestMixin):
             "new_password1": self.new_password,
             "new_password2": self.new_password,
         }
-        url = reverse("student:change_pass", args=[student.pk])
+        url = reverse("student:change_pass", args=[user.pk])
         response = self.client.post(
             url,
             data=password_change,
@@ -64,7 +68,9 @@ class TestStudent(TestCase, TestMixin):
         )
         self.assertEqual(response.status_code, status.HTTP_302_FOUND)
 
-        ok = self.client.login(username=self.u2.email.email, password=self.new_password)
+        ok = self.client.login(
+            username=self.u2.email.email, password=self.new_password
+        )
         self.assertTrue(ok)
 
     def tearDown(self):

@@ -12,7 +12,7 @@ from apps.sociallink.serializers import (
 )
 from apps.student.serializers import StudentPreviewSerializer
 
-from ..student.models import Student
+from ..account.models import User
 from .models import Group, GroupType, Label, Membership
 
 
@@ -199,7 +199,9 @@ class GroupWriteSerializer(serializers.ModelSerializer):
         # If requested, add request user to the list of members
         user = self.context["request"].user
         if membership is not None and user and user.is_authenticated:
-            Membership.objects.create(group=group, student=user.student, admin=True, **membership)
+            Membership.objects.create(
+                group=group, user=user, admin=True, **membership
+            )
 
         return group
 
@@ -282,14 +284,14 @@ class GroupWriteSerializer(serializers.ModelSerializer):
 class MembershipSerializer(AdminFieldsMixin, serializers.ModelSerializer):
     """Membership serializer for getting or editing objects."""
 
-    student = StudentPreviewSerializer(read_only=True)
+    user = StudentPreviewSerializer(read_only=True)
     group = GroupPreviewSerializer(read_only=True)
 
     class Meta:
         model = Membership
         fields = [
             "id",
-            "student",
+            "user",
             "group",
             "summary",
             "description",
@@ -299,7 +301,7 @@ class MembershipSerializer(AdminFieldsMixin, serializers.ModelSerializer):
             "admin",
             "admin_request",
         ]
-        read_only_fields = ["id", "student", "group", "admin_request"]
+        read_only_fields = ["id", "user", "group", "admin_request"]
         admin_fields = ["priority", "admin"]
 
     def validate_begin_date(self, value: date) -> date:
@@ -333,7 +335,7 @@ class NewMembershipSerializer(AdminFieldsMixin, serializers.ModelSerializer):
     class Meta:
         model = Membership
         fields = [
-            "student",
+            "user",
             "group",
             "summary",
             "description",
@@ -346,7 +348,7 @@ class NewMembershipSerializer(AdminFieldsMixin, serializers.ModelSerializer):
     def validate(self, data: dict[str, any]) -> dict[str, any]:
         group: Group = data["group"]
         user = self.context["request"].user  # the user making the request
-        if not (user.student == data["student"] or group.is_admin(user)):
+        if not (user == data["user"] or group.is_admin(user)):
             raise exceptions.PermissionDenied(
                 _(
                     "You can only create new membership for yourself or for "
@@ -392,11 +394,11 @@ class AdminRequestValidateSerializer(serializers.Serializer):
 
 
 class AdminRequestSerializer(serializers.ModelSerializer):
-    student = StudentPreviewSerializer(read_only=True)
+    user = StudentPreviewSerializer(read_only=True)
 
     class Meta:
         model = Membership
-        fields = ["student", "admin", "admin_request_message", "id"]
+        fields = ["user", "admin", "admin_request_message", "id"]
 
 
 class SubscriptionSerializer(serializers.Serializer):
@@ -441,8 +443,15 @@ class MapGroupSerializer(serializers.ModelSerializer):
     def get_members(self, obj: Group) -> str:
         from_date = timezone.now()
         serialized_data = StudentPreviewSerializer(
-            Student.objects.filter(
-                Q(membership_set__group_id=obj.id, membership_set__end_date__gte=from_date) | Q(membership_set__group_id=obj.id, membership_set__end_date__isnull=True)
+            User.objects.filter(
+                Q(
+                    membership_set__group_id=obj.id,
+                    membership_set__end_date__gte=from_date,
+                )
+                | Q(
+                    membership_set__group_id=obj.id,
+                    membership_set__end_date__isnull=True,
+                )
             ),
             many=True,
         ).data
@@ -476,6 +485,6 @@ class GroupHistorySerializer(serializers.ModelSerializer):
 
     def get_user(self, obj):
         if obj.history_user:
-            return obj.history_user.student.name
+            return obj.history_user.name
         else:
             return obj.history_user

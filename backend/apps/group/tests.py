@@ -49,7 +49,7 @@ class TestGroups(APITestCase):
         self.assertEqual(res.status_code, status.HTTP_200_OK)
         self.assertEqual(len(res.data.get("results")), 0)
         # test with a private group where the user is member
-        g.members.add(self.u1.student)
+        g.members.add(self.u1)
         res = self.client.get("/api/group/group/", {"type": "t1"})
         self.assertEqual(res.status_code, status.HTTP_200_OK)
         self.assertEqual(len(res.data.get("results")), 1)
@@ -77,7 +77,7 @@ class TestGroups(APITestCase):
         g.save()
         res = self.client.get(f"/api/group/group/{g.slug}/")
         self.assertEqual(res.status_code, status.HTTP_403_FORBIDDEN)
-        g.members.add(self.u1.student)
+        g.members.add(self.u1)
         res = self.client.get(f"/api/group/group/{g.slug}/")
         self.assertEqual(res.status_code, status.HTTP_200_OK)
         g.private = False
@@ -101,11 +101,11 @@ class TestGroups(APITestCase):
         res = self.client.put(f"/api/group/group/{g.slug}/", {"name": "G2"})
         self.assertEqual(res.status_code, status.HTTP_403_FORBIDDEN)
         # test with member
-        g.members.add(self.u1.student)
+        g.members.add(self.u1)
         res = self.client.put(f"/api/group/group/{g.slug}/", {"name": "G2"})
         self.assertEqual(res.status_code, status.HTTP_403_FORBIDDEN)
         # test with admin
-        g.membership_set.filter(student=self.u1.student).update(admin=True)
+        g.membership_set.filter(user=self.u1).update(admin=True)
         res = self.client.put(f"/api/group/group/{g.slug}/", {"name": "G2"})
         self.assertEqual(res.status_code, status.HTTP_200_OK)
         # check the modification is done
@@ -121,11 +121,11 @@ class TestGroups(APITestCase):
         res = self.client.delete(f"/api/group/group/{g.slug}/")
         self.assertEqual(res.status_code, status.HTTP_403_FORBIDDEN)
         # test with member
-        g.members.add(self.u1.student)
+        g.members.add(self.u1)
         res = self.client.delete(f"/api/group/group/{g.slug}/")
         self.assertEqual(res.status_code, status.HTTP_403_FORBIDDEN)
         # test with admin
-        g.membership_set.filter(student=self.u1.student).update(admin=True)
+        g.membership_set.filter(user=self.u1).update(admin=True)
         res = self.client.delete(f"/api/group/group/{g.slug}/")
         self.assertEqual(res.status_code, status.HTTP_204_NO_CONTENT)
         # check the modification is done
@@ -158,7 +158,7 @@ class TestMemberships(APITestCase):
         self.assertEqual(res.status_code, status.HTTP_200_OK)
         self.assertEqual(len(res.data.get("results")), 0)
         # test with one membership
-        self.g1.members.add(self.u2.student)
+        self.g1.members.add(self.u2)
         res = self.client.get("/api/group/membership/", {"group": "g1"})
         self.assertEqual(res.status_code, status.HTTP_200_OK)
         self.assertEqual(len(res.data.get("results")), 1)
@@ -169,14 +169,14 @@ class TestMemberships(APITestCase):
         self.assertEqual(res.status_code, status.HTTP_200_OK)
         self.assertEqual(len(res.data.get("results")), 0)
         # test with a private group where the user is member
-        self.g1.members.add(self.u1.student)
+        self.g1.members.add(self.u1)
         res = self.client.get("/api/group/membership/", {"group": "g1"})
         self.assertEqual(res.status_code, status.HTTP_200_OK)
         self.assertEqual(len(res.data.get("results")), 2)
         self.g1.private = False
         self.g1.save()
-        # test on student
-        res = self.client.get("/api/group/membership/", {"student": self.u2.id})
+        # test on user
+        res = self.client.get("/api/group/membership/", {"user": self.u2.id})
         self.assertEqual(res.status_code, status.HTTP_200_OK)
         self.assertEqual(len(res.data.get("results")), 1)
         # test if non authenticated
@@ -190,7 +190,7 @@ class TestMemberships(APITestCase):
         # test without dates
         res = self.client.post(
             "/api/group/membership/",
-            {"group": self.g1.id, "student": self.u1.id},
+            {"group": self.g1.id, "user": self.u1.id},
         )
         self.assertEqual(res.status_code, status.HTTP_400_BAD_REQUEST)
         # test with dates
@@ -198,7 +198,7 @@ class TestMemberships(APITestCase):
             "/api/group/membership/",
             {
                 "group": self.g1.id,
-                "student": self.u1.id,
+                "user": self.u1.id,
                 "begin_date": "2022-01-01",
                 "end_date": "2023-01-01",
             },
@@ -206,36 +206,36 @@ class TestMemberships(APITestCase):
         self.assertEqual(res.status_code, status.HTTP_201_CREATED)
         self.assertEqual(self.g1.members.count(), init_nb + 1)
         # test for groups with no_memberships_dates
-        self.g1.membership_set.filter(student=self.u1.student).delete()
+        self.g1.membership_set.filter(user=self.u1).delete()
         self.t1.no_membership_dates = True
         self.t1.save()
         res = self.client.post(
             "/api/group/membership/",
-            {"group": self.g1.id, "student": self.u1.id},
+            {"group": self.g1.id, "user": self.u1.id},
         )
         self.assertEqual(res.status_code, status.HTTP_201_CREATED)
         self.assertEqual(self.g1.members.count(), init_nb + 1)
         # test for creating the a duplicate membership
         res = self.client.post(
             "/api/group/membership/",
-            {"group": self.g1.id, "student": self.u1.id},
+            {"group": self.g1.id, "user": self.u1.id},
         )
         self.assertEqual(res.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(self.g1.members.count(), init_nb + 1)
         # test for adding another member
         res = self.client.post(
             "/api/group/membership/",
-            {"group": self.g1.id, "student": self.u2.id},
+            {"group": self.g1.id, "user": self.u2.id},
         )
         self.assertEqual(res.status_code, status.HTTP_403_FORBIDDEN)
         self.assertEqual(self.g1.members.count(), init_nb + 1)
         # test for adding a new member if admin
-        self.g1.membership_set.filter(student=self.u1.student).update(
+        self.g1.membership_set.filter(user=self.u1).update(
             admin=True,
         )
         res = self.client.post(
             "/api/group/membership/",
-            {"group": self.g1.id, "student": self.u2.id},
+            {"group": self.g1.id, "user": self.u2.id},
         )
         self.assertEqual(res.status_code, status.HTTP_201_CREATED)
         self.assertEqual(self.g1.members.count(), init_nb + 2)
@@ -245,12 +245,12 @@ class TestMemberships(APITestCase):
         self.client.force_login(self.u3)
         res = self.client.post(
             "/api/group/membership/",
-            {"group": self.g1.id, "student": self.u3.id},
+            {"group": self.g1.id, "user": self.u3.id},
         )
         self.assertEqual(res.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_retrieve(self):
-        m2 = Membership.objects.create(student=self.u2.student, group=self.g1)
+        m2 = Membership.objects.create(user=self.u2, group=self.g1)
         # test to retrieve
         self.client.force_login(self.u1)
         res = self.client.get(f"/api/group/membership/{m2.id}/")
@@ -272,8 +272,8 @@ class TestMemberships(APITestCase):
         self.assertEqual(res.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_update(self):
-        m1 = Membership.objects.create(student=self.u1.student, group=self.g1)
-        m2 = Membership.objects.create(student=self.u2.student, group=self.g1)
+        m1 = Membership.objects.create(user=self.u1, group=self.g1)
+        m2 = Membership.objects.create(user=self.u2, group=self.g1)
         # test for non-authenticated users
         res = self.client.put(
             f"/api/group/membership/{m1.id}/",
@@ -302,17 +302,17 @@ class TestMemberships(APITestCase):
         self.assertEqual(res.status_code, status.HTTP_200_OK)
         # check the modifications are done
         self.assertEqual(
-            self.g1.membership_set.get(student=self.u1.student).summary,
+            self.g1.membership_set.get(user=self.u1).summary,
             "Test",
         )
         self.assertEqual(
-            self.g1.membership_set.get(student=self.u2.student).summary,
+            self.g1.membership_set.get(user=self.u2).summary,
             "Test2",
         )
 
     def test_delete(self):
-        m1 = Membership.objects.create(student=self.u1.student, group=self.g1)
-        m2 = Membership.objects.create(student=self.u2.student, group=self.g1)
+        m1 = Membership.objects.create(user=self.u1, group=self.g1)
+        m2 = Membership.objects.create(user=self.u2, group=self.g1)
         # test for non-authenticated users
         res = self.client.delete(f"/api/group/membership/{m2.id}/")
         self.assertEqual(res.status_code, status.HTTP_403_FORBIDDEN)
@@ -336,10 +336,10 @@ class TestMemberships(APITestCase):
         self.client.force_login(self.u1)
         m1 = Membership.objects.create(
             group=self.g1,
-            student=self.u1.student,
+            user=self.u1,
             admin=True,
         )
-        m2 = Membership.objects.create(group=self.g1, student=self.u2.student)
+        m2 = Membership.objects.create(group=self.g1, user=self.u2)
         # test to order u1 before u2
         res = self.client.post(
             f"/api/group/membership/reorder/?group={self.g1.slug}",
@@ -347,8 +347,8 @@ class TestMemberships(APITestCase):
         )
         self.assertEqual(res.status_code, status.HTTP_200_OK)
         ms = self.g1.membership_set.all().order_by("-priority")
-        self.assertEqual(ms[0].student, self.u1.student)
-        self.assertEqual(ms[1].student, self.u2.student)
+        self.assertEqual(ms[0].user, self.u1)
+        self.assertEqual(ms[1].user, self.u2)
         # test to order u2 before u1
         res = self.client.post(
             f"/api/group/membership/reorder/?group={self.g1.slug}",
@@ -356,8 +356,8 @@ class TestMemberships(APITestCase):
         )
         self.assertEqual(res.status_code, status.HTTP_200_OK)
         ms = self.g1.membership_set.all().order_by("-priority")
-        self.assertEqual(ms[0].student, self.u2.student)
-        self.assertEqual(ms[1].student, self.u1.student)
+        self.assertEqual(ms[0].user, self.u2)
+        self.assertEqual(ms[1].user, self.u1)
 
 
 class SubscriptionTest(APITestCase):
@@ -378,12 +378,12 @@ class SubscriptionTest(APITestCase):
         # add subscription
         res = self.client.post(self.url, {"subscribe": True})
         self.assertEqual(res.status_code, status.HTTP_200_OK)
-        self.assertTrue(self.g1.subscribers.contains(self.u1.student))
+        self.assertTrue(self.g1.subscribers.contains(self.u1))
         # add again
         res = self.client.post(self.url, {"subscribe": True})
         self.assertEqual(res.status_code, status.HTTP_200_OK)
-        self.assertTrue(self.g1.subscribers.contains(self.u1.student))
+        self.assertTrue(self.g1.subscribers.contains(self.u1))
         # remove subscription
         res = self.client.post(self.url, {"subscribe": False})
         self.assertEqual(res.status_code, status.HTTP_200_OK)
-        self.assertFalse(self.g1.subscribers.contains(self.u1.student))
+        self.assertFalse(self.g1.subscribers.contains(self.u1))

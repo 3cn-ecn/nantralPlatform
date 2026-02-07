@@ -4,8 +4,8 @@ from django.db import models
 from django.urls.base import reverse
 from django.utils import timezone
 
+from apps.account.models import User
 from apps.group.abstract.models import AbstractGroup, NamedMembership
-from apps.student.models import Student
 
 MAX_2APLUS_PER_FAMILY = 8
 MIN_2APLUS_PER_FAMILY = 3
@@ -14,7 +14,7 @@ MIN_2APLUS_PER_FAMILY = 3
 class Family(AbstractGroup):
     """Famille de parrainage."""
 
-    members = models.ManyToManyField(Student, through="MembershipFamily")
+    members = models.ManyToManyField(User, through="MembershipFamily")
     year = models.IntegerField("Année de parrainage")
     non_subscribed_members = models.CharField(
         "Autres parrains",
@@ -76,8 +76,8 @@ class MembershipFamily(NamedMembership):
         blank=True,
         related_name="memberships",
     )
-    student = models.ForeignKey(
-        to=Student,
+    user = models.ForeignKey(
+        to=User,
         verbose_name="Parrain/Marraine",
         on_delete=models.CASCADE,
         related_name="membershipfamily",
@@ -90,11 +90,11 @@ class MembershipFamily(NamedMembership):
 
     class Meta:
         verbose_name = "Membre"
-        ordering = ["student"]
-        unique_together = ["group", "student"]
+        ordering = ["user"]
+        unique_together = ["group", "user"]
 
     def __str__(self):
-        return self.student.__str__()
+        return self.user.__str__()
 
     def get_answers_dict(self, page):
         initial = {}

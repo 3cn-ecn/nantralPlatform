@@ -7,21 +7,16 @@ from django.urls.base import reverse
 from django.views.decorators.http import require_http_methods
 from django.views.generic import DetailView, UpdateView
 
-from apps.roommates.models import NamedMembershipRoommates
-
+from ..account.models import User
 from .forms import ChangePassForm
-from .models import Student
 
 
 class StudentProfile(LoginRequiredMixin, DetailView):
-    model = Student
+    model = User
     template_name = "student/profile.html"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["colocs"] = NamedMembershipRoommates.objects.filter(
-            student=self.object,
-        )
         context["ariane"] = [
             {"target": "/student", "label": "Annuaire"},
             {"target": "#", "label": self.get_object().name},
@@ -30,15 +25,14 @@ class StudentProfile(LoginRequiredMixin, DetailView):
 
 
 class StudentProfileEdit(UserPassesTestMixin, UpdateView):
-    model = Student
+    model = User
     fields = ["promo", "picture", "faculty", "path"]
     template_name = "student/update_profile.html"
 
     def test_func(self):
         self.object = self.get_object()
         return (
-            self.object.user == self.request.user
-            or self.request.user.is_superuser
+            self.object == self.request.user or self.request.user.is_superuser
         )
 
     def get_context_data(self, **kwargs):

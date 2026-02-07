@@ -106,7 +106,7 @@ def get_answer(member: MembershipFamily, question):
     else:
         # bug case : a member must not have two answers for the same question
         raise Exception(
-            f"User {member.student} has multiple answers for the {question.id} \
+            f"User {member.user} has multiple answers for the {question.id} \
             question",
         )
 
@@ -132,9 +132,9 @@ def get_member_1A_list(question_list, itii=False):
         "group__answerfamily_set__question",
     )
     if itii:
-        data = data.filter(student__faculty="Iti")
+        data = data.filter(user__faculty="Iti")
     else:
-        data = data.exclude(student__faculty="Iti")
+        data = data.exclude(user__faculty="Iti")
     member_1A_list = []
     for membership in data:
         if len(membership.answermember_set.all()) >= len(question_list):

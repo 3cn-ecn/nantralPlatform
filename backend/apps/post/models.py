@@ -7,7 +7,6 @@ from django_ckeditor_5.fields import CKEditor5Field
 from apps.account.models import User
 from apps.group.models import Group
 from apps.notification.models import Notification, NotificationAction
-from apps.student.models import Student
 from apps.utils.fields.image_field import CustomImageField
 from apps.utils.slug import SlugModel
 
@@ -62,7 +61,7 @@ class AbstractPublication(models.Model, SlugModel):
     # Log infos
     created_at = models.DateTimeField(auto_now_add=True)
     created_by = models.ForeignKey(
-        Student,
+        User,
         blank=True,
         null=True,
         on_delete=models.SET_NULL,
@@ -70,7 +69,7 @@ class AbstractPublication(models.Model, SlugModel):
     )
     updated_at = models.DateTimeField(auto_now=True)
     updated_by = models.ForeignKey(
-        Student,
+        User,
         blank=True,
         null=True,
         on_delete=models.SET_NULL,

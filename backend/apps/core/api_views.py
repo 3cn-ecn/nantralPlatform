@@ -16,7 +16,7 @@ class CreateFeedbackView(generics.CreateAPIView):
     def perform_create(self, serializer: FeedbackSerializer):
         data = serializer.validated_data
         student_url = self.request.build_absolute_uri(
-            self.request.user.student.get_absolute_url(),
+            self.request.user.get_absolute_url(),
         )
 
         resp_code = create_issue(

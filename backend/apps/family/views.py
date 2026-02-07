@@ -9,10 +9,10 @@ from django.views.generic import CreateView, DetailView, FormView, TemplateView
 from extra_settings.models import Setting
 
 from apps.family.serializers import FamilyMembersSerializer
-from apps.student.models import Student
 from apps.student.serializers import StudentSerializer
 from apps.utils.access_mixins import UserIsAdmin
 
+from ..account.models import User
 from .forms import (
     CreateFamilyForm,
     FamilyQuestionItiiForm,
@@ -47,7 +47,7 @@ class HomeFamilyView(LoginRequiredMixin, TemplateView):
             self.request.user,
             membership,
         )
-        context["is_itii"] = self.request.user.student.faculty == "Iti"
+        context["is_itii"] = self.request.user.faculty == "Iti"
         context["membership"] = membership
         if membership:
             context["form_perso_complete"] = membership.form_complete()
@@ -76,13 +76,13 @@ class ListFamilyView(LoginRequiredMixin, TemplateView):
             for f in Family.objects.all()
         ]
         memberships = MembershipFamily.objects.all().select_related(
-            "student__user",
+            "user",
             "group",
         )
         if show_data:
             context["list_2A"] = [
                 {
-                    "name": m.student.alphabetical_name,
+                    "name": m.user.alphabetical_name,
                     "family": m.group.name,
                     "url": m.group.get_absolute_url(),
                 }
@@ -91,7 +91,7 @@ class ListFamilyView(LoginRequiredMixin, TemplateView):
         if phase >= 3:  # noqa: PLR2004
             context["list_1A"] = [
                 {
-                    "name": m.student.alphabetical_name,
+                    "name": m.user.alphabetical_name,
                     "family": (
                         m.group.name
                         if show_data and phase > 3  # noqa: PLR2004
@@ -132,7 +132,7 @@ class CreateFamilyView(LoginRequiredMixin, CreateView):
             self.object = form.save()
             MembershipFamily.objects.create(
                 group=self.object,
-                student=self.request.user.student,
+                user=self.request.user,
                 role="2A+",
                 admin=True,
             )
@@ -198,7 +198,7 @@ class JoinFamilyView(LoginRequiredMixin, DetailView):
             for name in names_list:
                 if name == selected_name:
                     MembershipFamily.objects.create(
-                        student=request.user.student,
+                        user=request.user,
                         group=family,
                         role="2A+",
                         admin=True,
@@ -223,18 +223,18 @@ class UpdateFamilyView(UserIsAdmin, TemplateView):
         return super().test_func()
 
     def get_members(self):
-        students = (
+        users = (
             MembershipFamily.objects.filter(role="2A+", group=self.get_family())
             .order_by("pk")
-            .values_list("student")
+            .values_list("user")
             .all()
         )
 
         return StudentSerializer(
             instance=[
-                Student.objects.filter(pk=value[0]).first()
-                for value in students
-                if Student.objects.filter(pk=value[0]).exists()
+                User.objects.filter(pk=value[0]).first()
+                for value in users
+                if User.objects.filter(pk=value[0]).exists()
             ],
             many=True,
         ).data
@@ -287,9 +287,9 @@ class UpdateFamilyView(UserIsAdmin, TemplateView):
             "current_members": json.dumps(
                 StudentSerializer(
                     instance=[
-                        Student.objects.filter(pk=value).first()
+                        User.objects.filter(pk=value).first()
                         for value in serializer.data.values()
-                        if Student.objects.filter(pk=value).exists()
+                        if User.objects.filter(pk=value).exists()
                     ],
                     many=True,
                 ).data
@@ -334,7 +334,7 @@ class QuestionnaryPageView(LoginRequiredMixin, FormView):
         if membership is None:
             if is_first_year(self.request.user):
                 membership = MembershipFamily.objects.create(
-                    student=self.request.user.student,
+                    user=self.request.user,
                     role="1A",
                 )
             else:

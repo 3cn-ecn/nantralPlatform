@@ -14,7 +14,7 @@
     te permet de recevoir les notifications liées à cette page directement sur
     ton appareil !</p>
 <ul>
-{% for group in user.student.subscriptions.all %}
+{% for group in user.subscriptions.all %}
     <li><a href="{{ group.get_absolute_url }}">{{ group.name }}</li>
 {% empty %}
     <li>Aucun abonnement pour l'instant.</li>

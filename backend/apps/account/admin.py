@@ -2,12 +2,13 @@ from typing import Any
 
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
-from django.db.models import F
+from django.db.models import Count, F
 from django.db.models.query import QuerySet
 from django.http.request import HttpRequest
+from django.template.response import TemplateResponse
+from django.urls import URLPattern, path
 from django.utils.translation import gettext_lazy as _
 
-from apps.student.admin import StudentInline
 from apps.utils.send_email import send_mass_email
 
 from .models import Email, InvitationLink, User
@@ -37,9 +38,13 @@ class ECNantesDomainFilter(admin.SimpleListFilter):
 
     def queryset(self, request, queryset):
         if self.value() == "with_domain":
-            return queryset.filter(emails__email__regex=r"@(\w+\.)?ec-nantes\.fr$")
+            return queryset.filter(
+                emails__email__regex=r"@(\w+\.)?ec-nantes\.fr$"
+            )
         if self.value() == "without_domain":
-            return queryset.exclude(emails__email__regex=r"@(\w+\.)?ec-nantes\.fr$")
+            return queryset.exclude(
+                emails__email__regex=r"@(\w+\.)?ec-nantes\.fr$"
+            )
 
 
 class NoPasswordFilter(admin.SimpleListFilter):
@@ -66,9 +71,13 @@ class IsEmailValidFilter(admin.SimpleListFilter):
 
     def queryset(self, request, queryset):
         if self.value() == "email_valid":
-            return queryset.filter(emails__is_valid=True, emails__email__iexact=F("email"))
+            return queryset.filter(
+                emails__is_valid=True, emails__email__iexact=F("email")
+            )
         if self.value() == "email_invalid":
-            return queryset.filter(emails__is_valid=False, emails__email__iexact=F("email"))
+            return queryset.filter(
+                emails__is_valid=False, emails__email__iexact=F("email")
+            )
 
 
 @admin.register(InvitationLink)
@@ -120,7 +129,7 @@ class CustomUserAdmin(UserAdmin):
                     "is_active",
                     "is_staff",
                     "is_superuser",
-                    "groups",
+                    "group_set",
                     "user_permissions",
                 ),
             },
@@ -148,15 +157,21 @@ class CustomUserAdmin(UserAdmin):
             },
         ),
     )
-    readonly_fields = ("date_joined", "last_login", "has_opened_matrix", "has_updated_username", "is_email_valid")
-    inlines = (StudentInline, EmailInline)
+    readonly_fields = (
+        "date_joined",
+        "last_login",
+        "has_opened_matrix",
+        "has_updated_username",
+        "is_email_valid",
+    )
+    inlines = (EmailInline,)
     search_fields = ("username", "first_name", "last_name", "emails__email")
 
     list_filter = (
         "is_staff",
         "is_superuser",
         "is_active",
-        "groups",
+        "group_set",
         "invitation",
         IsEmailValidFilter,
         UppercaseEmailFilter,
@@ -164,10 +179,36 @@ class CustomUserAdmin(UserAdmin):
         NoPasswordFilter,
     )
 
+    def get_urls(self) -> list[URLPattern]:
+        urls = super().get_urls()
+        custom_urls = [
+            path(
+                "metrics/",
+                self.admin_site.admin_view(self.metrics_view),
+                name="student-metrics",
+            ),
+        ]
+        return custom_urls + urls
+
+    def metrics_view(self, request):
+        context = dict(
+            self.admin_site.each_context(request=request),
+            promos=User.objects.all()
+            .values("promo")
+            .annotate(count=Count("promo"))
+            .order_by(),
+            nb_students=User.objects.all().count(),
+        )
+        return TemplateResponse(
+            request=request,
+            template="admin/student/metrics.html",
+            context=context,
+        )
+
     def get_form(self, request, obj=None, change=False, **kwargs):
         form = super().get_form(request, obj=obj, change=change, **kwargs)
         form.base_fields["username"].help_text = _(
-            "NEVER UPDATE THE USERNAME. Doing this will cause the users to loose all their matrix data"
+            "NEVER UPDATE THE USERNAME. Doing this will cause the users to loose access to their matrix account"
         )
         return form
 
@@ -189,6 +230,9 @@ class CustomUserAdmin(UserAdmin):
                 if user.invitation is not None
             ],
             recipient_list=[
-                user.email for user in queryset if user.invitation is not None and not user.has_valid_ecn_email()
+                user.email.email
+                for user in queryset
+                if user.invitation is not None
+                and not user.has_valid_ecn_email()
             ],
         )

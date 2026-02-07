@@ -29,7 +29,7 @@
             </p>
             <p>
             {% if request.user == object.user %}
-                <a class='btn btn-dark btn-sm' href="{% url 'student:update' request.user.student.pk %}">
+                <a class='btn btn-dark btn-sm' href="{% url 'student:update' request.user.pk %}">
                     <i class="fa fa-edit"></i>
                     Modifier mon profil
                 </a>

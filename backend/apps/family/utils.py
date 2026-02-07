@@ -64,16 +64,14 @@ def get_membership(
 
     """
     try:
-        member = MembershipFamily.objects.get(
-            student=user.student,
+        member = user.membershipfamily_set.get(
             role="2A+",
             group__year=year,
         )
         return member
     except MembershipFamily.DoesNotExist:
         try:
-            member = MembershipFamily.objects.get(
-                student=user.student,
+            member = user.membershipfamily_set.get(
                 role="1A",
             )
             return member
@@ -112,7 +110,7 @@ def is_first_year(
     if membership:
         return membership.role == "1A"
 
-    promo = user.student.promo
+    promo = user.promo
     return promo == scholar_year()
 
 

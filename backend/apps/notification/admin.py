@@ -10,7 +10,7 @@ class NotificationAdmin(admin.ModelAdmin):
 
 
 class SentNotificationAdmin(admin.ModelAdmin):
-    list_display = ["student", "notification", "date"]
+    list_display = ["user", "notification", "date"]
 
 
 admin.site.register(Notification, NotificationAdmin)

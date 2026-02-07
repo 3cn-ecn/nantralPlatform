@@ -9,11 +9,11 @@ from push_notifications.webpush import WebPushError
 
 
 @shared_task
-def send_webpush_notification_task(student_ids: list[int], message: dict):
-    """The celery task for sending notifications to studends."""
+def send_webpush_notification_task(user_ids: list[int], message: dict):
+    """The celery task for sending notifications to users."""
 
-    # get devices from students
-    devices = WebPushDevice.objects.filter(user__student__id__in=student_ids)
+    # get devices from users
+    devices = WebPushDevice.objects.filter(user__id__in=user_ids)
     # convert the message in json
     data = json.dumps(message)
     # send the message for each device
