@@ -50,7 +50,7 @@ export function MembershipFormFields({
             updateFormValues({ student: val || undefined })
           }
           defaultObjectValue={null}
-          errors={error?.fields?.student}
+          errors={error?.fields?.user}
           required
           fetchOptions={fetchOptions}
           labelPropName="name"

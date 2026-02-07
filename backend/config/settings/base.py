@@ -99,7 +99,6 @@ COMMON_APPS = [
     "apps.post",
     "apps.signature",
     "apps.sociallink",
-    "apps.student",
 ]
 ARCHIVED_APPS = [
     "apps._archived.exchange",
@@ -108,6 +107,7 @@ ARCHIVED_APPS = [
     "apps._archived.administration",
     "apps._archived.academic",
     "apps._archived.roommates",
+    "apps._archived.student",
 ]
 INSTALLED_APPS = COMMON_APPS + DJANGO_APPS + THIRD_PARTY_APPS + ARCHIVED_APPS
 

@@ -6,24 +6,24 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('event', '0018_event_bookmarks_users_event_created_by_user_and_more'),
+        ("event", "0018_event_bookmarks_users_event_created_by_user_and_more"),
     ]
 
     operations = [
         migrations.RemoveField(
-            model_name='event',
-            name='bookmarks',
+            model_name="event",
+            name="bookmarks",
         ),
         migrations.RemoveField(
-            model_name='event',
-            name='created_by',
+            model_name="event",
+            name="created_by",
         ),
         migrations.RemoveField(
-            model_name='event',
-            name='participants',
+            model_name="event",
+            name="participants",
         ),
         migrations.RemoveField(
-            model_name='event',
-            name='updated_by',
+            model_name="event",
+            name="updated_by",
         ),
     ]

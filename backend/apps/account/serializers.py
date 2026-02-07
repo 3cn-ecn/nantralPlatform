@@ -95,8 +95,9 @@ class RegisterSerializer(serializers.Serializer):
             has_updated_username=True,  # Already had a chance to change username
             promo=validated_data["promo"],
             faculty=validated_data["faculty"],
-            path=validated_data["path"],
         )
+        if "path" in validated_data:
+            user.path = validated_data["path"]
 
         # IMPORTANT: hash password and remove password from validated_data
         user.set_password(self.validated_data.pop("password"))
@@ -268,21 +269,9 @@ class UserSerializer(serializers.ModelSerializer):
             "picture",
             "has_opened_matrix",
         ]
-        read_only_fields = ["has_opened_matrix"]
-
-    def validate_username(self, value):
-        if self.instance.has_opened_matrix and self.instance.username != value:
-            raise serializers.ValidationError(
-                "You can not change username because you created a matrix account"
-            )
-        return value
+        read_only_fields = ["has_opened_matrix", "username"]
 
     def update(self, obj: User, data: dict):
-        if self.instance.has_opened_matrix:
-            data.pop(
-                "username"
-            )  # Remove username to prevent user from changing it
-
         for attr, value in data.items():
             setattr(obj, attr, value)
 

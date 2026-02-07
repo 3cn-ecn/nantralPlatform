@@ -6,28 +6,28 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('event', '0019_remove_event_bookmarks_remove_event_created_by_and_more'),
+        ("event", "0019_remove_event_bookmarks_remove_event_created_by_and_more"),
     ]
 
     operations = [
         migrations.RenameField(
-            model_name='event',
-            old_name='bookmarks_users',
-            new_name='bookmarks',
+            model_name="event",
+            old_name="bookmarks_users",
+            new_name="bookmarks",
         ),
         migrations.RenameField(
-            model_name='event',
-            old_name='created_by_user',
-            new_name='created_by',
+            model_name="event",
+            old_name="created_by_user",
+            new_name="created_by",
         ),
         migrations.RenameField(
-            model_name='event',
-            old_name='participants_users',
-            new_name='participants',
+            model_name="event",
+            old_name="participants_users",
+            new_name="participants",
         ),
         migrations.RenameField(
-            model_name='event',
-            old_name='updated_by_user',
-            new_name='updated_by',
+            model_name="event",
+            old_name="updated_by_user",
+            new_name="updated_by",
         ),
     ]

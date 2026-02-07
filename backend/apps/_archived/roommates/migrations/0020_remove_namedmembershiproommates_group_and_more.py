@@ -6,37 +6,37 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('roommates', '0019_merge_20251102_2132'),
+        ("roommates", "0019_merge_20251102_2132"),
     ]
 
     operations = [
         migrations.RemoveField(
-            model_name='namedmembershiproommates',
-            name='group',
+            model_name="namedmembershiproommates",
+            name="group",
         ),
         migrations.RemoveField(
-            model_name='namedmembershiproommates',
-            name='student',
+            model_name="namedmembershiproommates",
+            name="student",
         ),
         migrations.RemoveField(
-            model_name='roommates',
-            name='colocathlon_participants',
+            model_name="roommates",
+            name="colocathlon_participants",
         ),
         migrations.RemoveField(
-            model_name='roommates',
-            name='housing',
+            model_name="roommates",
+            name="housing",
         ),
         migrations.RemoveField(
-            model_name='roommates',
-            name='members',
+            model_name="roommates",
+            name="members",
         ),
         migrations.DeleteModel(
-            name='Housing',
+            name="Housing",
         ),
         migrations.DeleteModel(
-            name='NamedMembershipRoommates',
+            name="NamedMembershipRoommates",
         ),
         migrations.DeleteModel(
-            name='Roommates',
+            name="Roommates",
         ),
     ]

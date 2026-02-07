@@ -6,19 +6,19 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('sociallink', '0006_alter_sociallink_network'),
+        ("sociallink", "0006_alter_sociallink_network"),
     ]
 
     operations = [
         migrations.RemoveField(
-            model_name='sociallink',
-            name='network',
+            model_name="sociallink",
+            name="network",
         ),
         migrations.RemoveField(
-            model_name='sociallink',
-            name='slug',
+            model_name="sociallink",
+            name="slug",
         ),
         migrations.DeleteModel(
-            name='SocialNetwork',
+            name="SocialNetwork",
         ),
     ]

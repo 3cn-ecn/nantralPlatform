@@ -8,25 +8,25 @@ class Migration(migrations.Migration):
 
     dependencies = [
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
-        ('family', '0012_membershipfamily_user'),
+        ("family", "0012_membershipfamily_user"),
     ]
 
     operations = [
         migrations.AlterModelOptions(
-            name='membershipfamily',
-            options={'ordering': ['user'], 'verbose_name': 'Membre'},
+            name="membershipfamily",
+            options={"ordering": ["user"], "verbose_name": "Membre"},
         ),
         migrations.AlterUniqueTogether(
-            name='membershipfamily',
-            unique_together={('group', 'user')},
+            name="membershipfamily",
+            unique_together={("group", "user")},
         ),
         migrations.AlterField(
-            model_name='family',
-            name='members',
-            field=models.ManyToManyField(through='family.MembershipFamily', to=settings.AUTH_USER_MODEL),
+            model_name="family",
+            name="members",
+            field=models.ManyToManyField(through="family.MembershipFamily", to=settings.AUTH_USER_MODEL),
         ),
         migrations.RemoveField(
-            model_name='membershipfamily',
-            name='student',
+            model_name="membershipfamily",
+            name="student",
         ),
     ]

@@ -38,7 +38,7 @@ export function EditProfileFormFields({
         name="picture"
         label={t('student.picture.label')}
         helperText={t('student.picture.helperText')}
-        errors={error?.fields?.student?.picture}
+        errors={error?.fields?.picture}
         accept="image/*"
       />
       <TextField
@@ -72,7 +72,7 @@ export function EditProfileFormFields({
         placeholder={t('student.description.placeholder')}
         rows={2}
         value={formValues.description}
-        errors={error?.fields?.student?.description}
+        errors={error?.fields?.description}
         multiline
       />
       <Typography variant="h3" m={1}>
@@ -97,7 +97,7 @@ export function EditProfileFormFields({
         required
         value={formValues?.faculty}
         label={t('login.formationFollowed.label')}
-        errors={error?.fields?.student?.faculty}
+        errors={error?.fields?.faculty}
       >
         <MenuItem value={'Gen'}>
           {t('login.formationFollowed.generalEngineer')}
@@ -122,7 +122,7 @@ export function EditProfileFormFields({
         }
         value={formValues?.path}
         label={t('login.specialProgram.label')}
-        errors={error?.fields?.student?.path}
+        errors={error?.fields?.path}
       >
         <MenuItem value={'Cla'}>{t('login.specialProgram.none')}</MenuItem>
         <MenuItem value={'Alt'}>

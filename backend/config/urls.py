@@ -32,7 +32,6 @@ urlpatterns = [
     path("openid/", include("oidc_provider.urls", namespace="oidc_provider")),
     # legacy views
     path("account/", include("apps.account.urls", namespace="account")),
-    path("student/", include("apps.student.urls", namespace="student")),
     path("parrainage/", include("apps.family.urls", namespace="family")),
     path(
         "parrainage/admin/",

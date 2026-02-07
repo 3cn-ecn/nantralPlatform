@@ -174,7 +174,6 @@ export function EditSocialLinkForm({
                 socialLink={{
                   uri: 'https://no-link',
                   label: t('socialLink.new'),
-                  id: -1,
                 }}
                 clickable={false}
               />

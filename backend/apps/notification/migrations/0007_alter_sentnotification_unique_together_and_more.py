@@ -8,21 +8,21 @@ class Migration(migrations.Migration):
 
     dependencies = [
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
-        ('notification', '0006_sentnotification_user'),
+        ("notification", "0006_sentnotification_user"),
     ]
 
     operations = [
         migrations.AlterUniqueTogether(
-            name='sentnotification',
-            unique_together={('user', 'notification')},
+            name="sentnotification",
+            unique_together={("user", "notification")},
         ),
         migrations.AlterField(
-            model_name='notification',
-            name='receivers',
-            field=models.ManyToManyField(related_name='notification_set', through='notification.SentNotification', to=settings.AUTH_USER_MODEL),
+            model_name="notification",
+            name="receivers",
+            field=models.ManyToManyField(related_name="notification_set", through="notification.SentNotification", to=settings.AUTH_USER_MODEL),
         ),
         migrations.RemoveField(
-            model_name='sentnotification',
-            name='student',
+            model_name="sentnotification",
+            name="student",
         ),
     ]
