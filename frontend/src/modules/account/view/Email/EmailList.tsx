@@ -24,10 +24,13 @@ export function EmailList({ studentId }: EmailListProps) {
   const queryClient = useQueryClient();
   const query = useInfiniteQuery({
     queryFn: ({ pageParam = 1 }) =>
-      getEmailListApi({
-        page: pageParam,
-        pageSize: 10,
-      }),
+      getEmailListApi(
+        {
+          page: pageParam,
+          pageSize: 10,
+        },
+        studentId,
+      ),
     getNextPageParam: (lastPage, allPages) =>
       lastPage.next ? allPages.length + 1 : undefined,
     queryKey: ['emails'],
@@ -41,7 +44,7 @@ export function EmailList({ studentId }: EmailListProps) {
     { emailUuid: string; isVisible: boolean }
   >({
     mutationFn: ({ emailUuid, isVisible }) =>
-      changeEmailVisibilityApi(emailUuid, isVisible),
+      changeEmailVisibilityApi(emailUuid, isVisible, studentId),
     onSuccess: async (message) => {
       await queryClient.invalidateQueries(['emails']);
       await queryClient.invalidateQueries([
@@ -77,6 +80,7 @@ export function EmailList({ studentId }: EmailListProps) {
 
       <MoreActionMenu
         email={selectedEmail}
+        studentId={studentId}
         anchorEl={anchorEl}
         setAnchorEl={setAnchorEl}
       />

@@ -8,7 +8,8 @@ export interface StudentDTO {
   faculty: string;
   path: string;
   url: string;
-  staff: boolean;
+  is_staff: boolean;
+  is_superuser: boolean;
   description: string;
   social_links: SocialLinkDTO[];
   emails: { email: string }[];

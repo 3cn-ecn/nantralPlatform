@@ -10,7 +10,6 @@ from ..account.serializers import ShortEmailSerializer
 
 class StudentSerializer(serializers.ModelSerializer):
     url = serializers.SerializerMethodField()
-    staff = serializers.SerializerMethodField()
     expires_at = serializers.SerializerMethodField()
     social_links = SocialLinkSerializer(many=True, read_only=True)
     emails = serializers.SerializerMethodField()
@@ -25,7 +24,8 @@ class StudentSerializer(serializers.ModelSerializer):
             "faculty",
             "path",
             "url",
-            "staff",
+            "is_staff",
+            "is_superuser",
             "description",
             "social_links",
             "emails",
@@ -35,9 +35,6 @@ class StudentSerializer(serializers.ModelSerializer):
 
     def get_url(self, obj: User) -> str:
         return obj.get_absolute_url()
-
-    def get_staff(self, obj: User) -> bool:
-        return obj.is_staff
 
     def get_expires_at(self, obj: User) -> datetime | None:
         # send expiring date only to the current user

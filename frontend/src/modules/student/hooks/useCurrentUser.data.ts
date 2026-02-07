@@ -16,8 +16,10 @@ const emptyUser: Student = {
   path: '',
   url: '',
   staff: false,
+  admin: false,
   username: '',
   socialLinks: [],
+  emails: [],
   description: '',
 };
 

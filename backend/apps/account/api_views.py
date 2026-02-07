@@ -4,6 +4,7 @@ from django.utils.translation import gettext_lazy as _
 from rest_framework import exceptions, mixins, permissions, status
 from rest_framework.authentication import SessionAuthentication
 from rest_framework.decorators import action
+from rest_framework.generics import get_object_or_404
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.request import Request
 from rest_framework.response import Response
@@ -11,6 +12,7 @@ from rest_framework.serializers import Serializer
 from rest_framework.throttling import AnonRateThrottle
 from rest_framework.viewsets import GenericViewSet
 
+from ..utils.parse import parse_int
 from .models import Email, InvitationLink, User
 from .serializers import (
     ChangeEmailSerializer,
@@ -39,9 +41,14 @@ class CanEditProfileOrReadOnly(permissions.BasePermission):
     def has_object_permission(self, request, view, obj):
         if request.method in permissions.SAFE_METHODS:
             return True
-        return request.user is not None and (
-            request.user.pk == obj.pk or request.user.is_superuser
-        )
+        if isinstance(obj, User):
+            return request.user is not None and (
+                request.user == obj or request.user.is_superuser
+            )
+        if isinstance(obj, Email):
+            return request.user is not None and (
+                request.user == obj.user or request.user.is_superuser
+            )
 
 
 class AuthViewSet(GenericViewSet):
@@ -253,8 +260,9 @@ class AuthViewSet(GenericViewSet):
         methods=["PUT", "GET"],
         permission_classes=[CanEditProfileOrReadOnly, IsAuthenticated],
         serializer_class=UserSerializer,
+        queryset=User.objects.all(),
     )
-    def edit(self, request: Request):
+    def edit(self, request: Request, pk):
         """Edit account informations"""
 
         if request.method == "PUT":
@@ -284,8 +292,17 @@ class EmailViewSet(
     permission_classes = [CanEditProfileOrReadOnly, IsAuthenticated]
     lookup_field = "uuid"
 
+    @property
+    def user(self):
+        user_id = parse_int(self.request.query_params.get("user"))
+        if user_id:
+            return get_object_or_404(User, id=user_id)
+        return self.request.user
+
     def get_queryset(self):
-        return self.request.user.emails.all()
+        if self.request.user.is_authenticated:
+            return self.user.emails.all()
+        return Email.objects.none()
 
     @action(
         detail=False,
@@ -300,7 +317,7 @@ class EmailViewSet(
                 serializer.errors,
                 status=status.HTTP_400_BAD_REQUEST,
             )
-        user: User = request.user
+        user: User = self.user
         email = serializer.validated_data["email"]
         if not user.has_email(email):
             user.email = user.add_email(email, request=request)

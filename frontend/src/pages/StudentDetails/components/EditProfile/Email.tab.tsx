@@ -18,7 +18,7 @@ export default function EmailTab({ studentId }: EmailTabProps) {
       <Spacer vertical={2} />
       <EmailList studentId={studentId} />
       <Spacer vertical={2} />
-      <EmailForm />
+      <EmailForm studentId={studentId} />
     </>
   );
 }

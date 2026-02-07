@@ -14,9 +14,11 @@ import { ApiFormError } from '#shared/infra/errors';
 export function SetMainMenuItem({
   email,
   handleClose,
+  studentId,
 }: {
   email: Email;
   handleClose: () => void;
+  studentId: number;
 }) {
   const showToast = useToast();
   const queryClient = useQueryClient();
@@ -28,7 +30,8 @@ export function SetMainMenuItem({
     ApiFormError<{ email: string; password: string }>,
     { email: string; password: string }
   >({
-    mutationFn: ({ email, password }) => changeMainEmailApi(email, password),
+    mutationFn: ({ email, password }) =>
+      changeMainEmailApi(email, password, studentId),
     onSuccess: async (message) => {
       showToast({
         message: message,

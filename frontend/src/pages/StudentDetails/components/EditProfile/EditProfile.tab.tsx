@@ -49,7 +49,7 @@ export function EditProfileTab({ student }: EditProfileTabProps) {
     EditAccountOptionsDTO,
     ApiFormError<EditAccountOptionsDTO>,
     EditAccountOptions
-  >(editAccount, {
+  >((formData) => editAccount(formData, student.id), {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['student', 'current'] });
       queryClient.invalidateQueries({
@@ -93,6 +93,7 @@ export function EditProfileTab({ student }: EditProfileTabProps) {
       socialLinks: [],
       emails: [],
       staff: false,
+      admin: false,
       url: '',
       username: form.username,
     };

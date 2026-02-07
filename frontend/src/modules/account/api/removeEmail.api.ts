@@ -1,10 +1,10 @@
 import axios from 'axios';
 
-import { ApiErrorDTO, adaptApiErrors } from '#shared/infra/errors';
+import { adaptApiErrors, ApiErrorDTO } from '#shared/infra/errors';
 
-export async function removeEmailApi(emailUuid: string) {
+export async function removeEmailApi(emailUuid: string, user: number) {
   const { status } = await axios
-    .delete(`/api/account/email/${emailUuid}/`)
+    .delete(`/api/account/email/${emailUuid}/`, { params: { user } })
     .catch((err: ApiErrorDTO) => {
       throw adaptApiErrors(err);
     });

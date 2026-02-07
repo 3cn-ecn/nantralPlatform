@@ -9,6 +9,7 @@ export interface Student {
   path: string;
   url: string;
   staff: boolean;
+  admin: boolean;
   description: string;
   username: string;
   socialLinks: SocialLink[];

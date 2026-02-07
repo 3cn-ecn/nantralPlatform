@@ -8,10 +8,12 @@ import { useTranslation } from '#shared/i18n/useTranslation';
 
 export function MoreActionMenu({
   email,
+  studentId,
   anchorEl,
   setAnchorEl,
 }: {
   email: null | Email;
+  studentId: number;
   anchorEl: null | HTMLElement;
   setAnchorEl: (anchorEl: null | HTMLElement) => void;
 }) {
@@ -27,10 +29,18 @@ export function MoreActionMenu({
         <>
           <Menu anchorEl={anchorEl} open={open} onClose={handleClose}>
             {!email?.isMain && (
-              <DeleteMenuItem email={email} handleClose={handleClose} />
+              <DeleteMenuItem
+                email={email}
+                handleClose={handleClose}
+                studentId={studentId}
+              />
             )}
             {!email.isMain && email.isValid && (
-              <SetMainMenuItem email={email} handleClose={handleClose} />
+              <SetMainMenuItem
+                email={email}
+                handleClose={handleClose}
+                studentId={studentId}
+              />
             )}
             {!email?.isValid && (
               <MenuItem onClick={handleClose}>
