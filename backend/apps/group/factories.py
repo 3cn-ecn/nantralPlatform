@@ -4,9 +4,9 @@ import factory
 from factory.django import DjangoModelFactory
 from faker import Faker as RealFaker
 
+from apps.account.models import User
 from apps.utils.factories.fake_data_generator import FakeDataGenerator
 
-from ..account.models import User
 from .models import Group, GroupType, Membership
 
 

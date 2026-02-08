@@ -6,13 +6,13 @@ from django.utils.translation import gettext as _
 
 from rest_framework import exceptions, serializers
 
+from apps.account.models import User
+from apps.account.serializers import StudentPreviewSerializer
 from apps.sociallink.serializers import (
     GroupSocialLinkSerializer,
     SocialLinkSerializer,
 )
-from apps.student.serializers import StudentPreviewSerializer
 
-from ..account.models import User
 from .models import Group, GroupType, Label, Membership
 
 

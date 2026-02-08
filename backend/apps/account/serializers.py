@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from django.db.models import F
 from django.utils import timezone
 from django.utils.translation import gettext as _
@@ -5,6 +7,8 @@ from django.utils.translation import gettext as _
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 from rest_framework.validators import UniqueValidator
+
+from apps.sociallink.serializers import SocialLinkSerializer
 
 from .models import FACULTIES, PATHS, Email, InvitationLink, User
 from .utils import clean_username
@@ -220,6 +224,7 @@ class EmailSerializer(serializers.ModelSerializer):
         required=True,
     )
     is_main = serializers.SerializerMethodField()
+    is_ecn_email = serializers.SerializerMethodField()
 
     class Meta:
         model = Email
@@ -249,12 +254,15 @@ class EmailSerializer(serializers.ModelSerializer):
     def get_is_main(self, obj: Email):
         return obj.user.email == obj
 
+    def get_is_ecn_email(self, obj: Email):
+        return obj.is_ecn_email()
+
 
 class InvitationValidSerializer(serializers.Serializer):
     uuid = serializers.UUIDField()
 
 
-class UserSerializer(serializers.ModelSerializer):
+class EditUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = [
@@ -269,12 +277,63 @@ class UserSerializer(serializers.ModelSerializer):
         ]
         read_only_fields = ["username"]
 
-    def update(self, obj: User, data: dict):
-        for attr, value in data.items():
-            setattr(obj, attr, value)
 
-        obj.save()
+class UserSerializer(serializers.ModelSerializer):
+    url = serializers.SerializerMethodField()
+    expires_at = serializers.SerializerMethodField()
+    social_links = SocialLinkSerializer(many=True, read_only=True)
+    emails = serializers.SerializerMethodField()
 
-        self.validated_data["picture"] = data.get("picture")
+    class Meta:
+        model = User
+        fields = [
+            "id",
+            "name",
+            "promo",
+            "picture",
+            "faculty",
+            "path",
+            "url",
+            "is_staff",
+            "is_superuser",
+            "description",
+            "social_links",
+            "emails",
+            "username",
+            "expires_at",
+        ]
 
-        return obj
+    def get_url(self, obj: User) -> str:
+        return obj.get_absolute_url()
+
+    def get_expires_at(self, obj: User) -> datetime | None:
+        # send expiring date only to the current user
+        request_user = None
+        request = self.context.get("request")
+        if request and hasattr(request, "user"):
+            request_user = request.user
+
+        if request_user != obj or not obj.invitation:
+            return None
+        return obj.invitation.expires_at
+
+    def get_emails(self, obj: User) -> list[dict]:
+        return ShortEmailSerializer(
+            obj.emails.filter(is_visible=True), many=True
+        ).data
+
+
+class StudentPreviewSerializer(serializers.ModelSerializer):
+    name = serializers.SerializerMethodField()
+    url = serializers.SerializerMethodField()
+
+    class Meta:
+        model = User
+        fields = ["id", "name", "url", "picture"]
+        read_only = ["picture"]
+
+    def get_name(self, obj: User) -> str:
+        return obj.name
+
+    def get_url(self, obj: User) -> str:
+        return obj.get_absolute_url()

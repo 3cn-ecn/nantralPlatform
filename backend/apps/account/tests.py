@@ -426,7 +426,7 @@ class TestEditProfile(TestCase):
             promo=2020,
             faculty="Gen",
         )
-        self.url = reverse("account_api:account-edit", args=[self.user.pk])
+        self.url = reverse("account_api:user-detail", args=[self.user.pk])
 
     def test_edit_profile(self):
         self.client.force_login(self.user)

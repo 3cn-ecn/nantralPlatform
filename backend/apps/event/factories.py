@@ -6,11 +6,11 @@ import factory
 from factory.django import DjangoModelFactory
 from faker import Faker as RealFaker
 
+from apps.account.models import User
 from apps.group.models import Group
 from apps.utils.factories.fake_data_generator import FakeDataGenerator
 from apps.utils.factories.random_maybe import random_maybe
 
-from ..account.models import User
 from .models import Event
 
 

@@ -11,7 +11,7 @@ interface GetCurrentUserApiParams {
 export async function getCurrentUserApi({
   signal,
 }: GetCurrentUserApiParams): Promise<Student> {
-  const { data } = await axios.get<StudentDTO>('/api/student/student/me/', {
+  const { data } = await axios.get<StudentDTO>('/api/account/user/me/', {
     signal,
   });
 

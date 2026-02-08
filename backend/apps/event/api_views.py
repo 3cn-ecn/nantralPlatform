@@ -7,7 +7,7 @@ from rest_framework import exceptions, filters, permissions, status, viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
-from apps.student.serializers import StudentPreviewSerializer
+from apps.account.serializers import StudentPreviewSerializer
 from apps.utils.parse import parse_bool
 
 from .models import Event

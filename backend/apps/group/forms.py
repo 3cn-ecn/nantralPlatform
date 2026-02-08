@@ -1,8 +1,8 @@
 from django.forms import ModelForm, modelformset_factory
 
+from apps.account.models import User
 from apps.sociallink.models import SocialLink
 
-from ..account.models import User
 from .models import Group, Membership
 
 

@@ -3,9 +3,9 @@ from django.db.models import Q
 
 from rest_framework import exceptions, serializers
 
+from apps.account.models import User
 from apps.family.utils import scholar_year
 
-from ..account.models import User
 from .models import (
     MAX_2APLUS_PER_FAMILY,
     MIN_2APLUS_PER_FAMILY,

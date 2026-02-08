@@ -46,10 +46,6 @@ urlpatterns = [
         "api/account/",
         include("apps.account.api_urls", namespace="account-api"),
     ),
-    path(
-        "api/student/",
-        include("apps.student.api_urls", namespace="student_api"),
-    ),
     path("api/post/", include("apps.post.api_urls", namespace="post_api")),
     path("api/event/", include("apps.event.api_urls", namespace="event_api")),
     path(

@@ -1,7 +1,7 @@
 from django.contrib.auth import authenticate, login, logout
 from django.utils.translation import gettext_lazy as _
 
-from rest_framework import exceptions, mixins, permissions, status
+from rest_framework import exceptions, filters, mixins, permissions, status
 from rest_framework.authentication import SessionAuthentication
 from rest_framework.decorators import action
 from rest_framework.generics import get_object_or_404
@@ -12,11 +12,14 @@ from rest_framework.serializers import Serializer
 from rest_framework.throttling import AnonRateThrottle
 from rest_framework.viewsets import GenericViewSet
 
-from ..utils.parse import parse_int
+from apps.utils.parse import parse_int
+
 from .models import Email, InvitationLink, User
+from .permissions import CanEditProfileOrReadOnly
 from .serializers import (
     ChangeEmailSerializer,
     ChangePasswordSerializer,
+    EditUserSerializer,
     EmailSerializer,
     InvitationRegisterSerializer,
     InvitationValidSerializer,
@@ -35,20 +38,6 @@ ACCOUNT_TEMPORARY = 3
 FAILED = 4
 EMAIL_CHANGED = 5
 ECN_EMAIL_NOT_VALIDATED = 6
-
-
-class CanEditProfileOrReadOnly(permissions.BasePermission):
-    def has_object_permission(self, request, view, obj):
-        if request.method in permissions.SAFE_METHODS:
-            return True
-        if isinstance(obj, User):
-            return request.user is not None and (
-                request.user == obj or request.user.is_superuser
-            )
-        if isinstance(obj, Email):
-            return request.user is not None and (
-                request.user == obj.user or request.user.is_superuser
-            )
 
 
 class AuthViewSet(GenericViewSet):
@@ -255,32 +244,6 @@ class AuthViewSet(GenericViewSet):
             status=status.HTTP_200_OK,
         )
 
-    @action(
-        detail=True,
-        methods=["PUT", "GET"],
-        permission_classes=[CanEditProfileOrReadOnly, IsAuthenticated],
-        serializer_class=UserSerializer,
-        queryset=User.objects.all(),
-    )
-    def edit(self, request: Request, pk):
-        """Edit account informations"""
-
-        if request.method == "PUT":
-            serializer = UserSerializer(
-                instance=self.get_object(), data=request.data
-            )
-            serializer.is_valid(raise_exception=True)
-            serializer.save()
-
-            return Response(
-                serializer.validated_data, status=status.HTTP_200_OK
-            )
-
-        if request.method == "GET":
-            serializer = UserSerializer(instance=self.get_object())
-
-            return Response(serializer.data, status=status.HTTP_200_OK)
-
 
 class EmailViewSet(
     mixins.CreateModelMixin,
@@ -403,3 +366,45 @@ class EmailViewSet(
             return Response(
                 serialed_data.errors, status=status.HTTP_400_BAD_REQUEST
             )
+
+
+class UserViewSet(
+    mixins.ListModelMixin,
+    mixins.RetrieveModelMixin,
+    mixins.UpdateModelMixin,
+    GenericViewSet,
+):
+    """An API endpoint for users."""
+
+    permission_classes = [CanEditProfileOrReadOnly, permissions.IsAuthenticated]
+    search_fields = ["first_name", "last_name"]
+    filter_backends = [filters.SearchFilter, filters.OrderingFilter]
+    ordering_fields = ["promo", "first__name", "last_name", "path"]
+    ordering = ["first_name", "last_name"]
+
+    def get_serializer_class(self):
+        if self.action == "update":
+            return EditUserSerializer
+        return UserSerializer
+
+    def get_queryset(self):
+        queryset = User.objects.all()
+
+        promo = parse_int(self.request.GET.get("promo"))
+        path = self.request.GET.get("path")
+        faculty = self.request.GET.get("faculty")
+
+        if promo:
+            queryset = queryset.filter(promo=promo)
+        if faculty:
+            queryset = queryset.filter(faculty=faculty)
+        if path:
+            queryset = queryset.filter(path=path)
+
+        return queryset
+
+    @action(detail=False, methods=["GET"])
+    def me(self, request, *args, **kwargs):
+        """A view to get the current user."""
+        serializer = self.get_serializer(request.user)
+        return Response(serializer.data)

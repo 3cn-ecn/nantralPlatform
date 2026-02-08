@@ -27,7 +27,7 @@ export interface EditAccountOptionsDTO {
 export async function editAccount(formData: EditAccountOptions, user: number) {
   const { data } = await axios
     .put<EditAccountOptionsDTO>(
-      `/api/account/${user}/edit/`,
+      `/api/account/user/${user}/`,
       {
         username: formData.username,
         first_name: formData.firstName,

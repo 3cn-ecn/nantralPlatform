@@ -11,6 +11,6 @@ interface GetStudentDetailsApiParams {
 export async function getStudentDetailsApi({
   id,
 }: GetStudentDetailsApiParams): Promise<Student> {
-  const { data } = await axios.get<StudentDTO>(`/api/student/student/${id}/`);
+  const { data } = await axios.get<StudentDTO>(`/api/account/user/${id}/`);
   return adaptStudent(data);
 }

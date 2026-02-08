@@ -6,7 +6,7 @@ from rest_framework.exceptions import ValidationError
 from apps.group.models import Group
 
 if TYPE_CHECKING:
-    from ..account.models import User
+    from apps.account.models import User
 from .models import SocialLink
 
 

@@ -197,7 +197,7 @@ class CustomUserAdmin(UserAdmin):
         )
         return TemplateResponse(
             request=request,
-            template="admin/student/metrics.html",
+            template="admin/account/metrics.html",
             context=context,
         )
 

@@ -2,9 +2,9 @@ from django.db import models
 from django.shortcuts import get_object_or_404
 from django.utils import timezone
 
+from apps.account.models import User
 from apps.group.models import Group
 
-from ..account.models import User
 from .webpush import send_webpush_notification
 
 # How notifications work:

@@ -9,8 +9,9 @@ from django.utils.translation import gettext_lazy as _
 
 from rest_framework import exceptions
 
-from ..sociallink.models import SocialLink
-from ..utils.fields.image_field import CustomImageField
+from apps.sociallink.models import SocialLink
+from apps.utils.fields.image_field import CustomImageField
+
 from .manager import UserManager
 from .utils import send_email_confirmation
 from .validators import (
