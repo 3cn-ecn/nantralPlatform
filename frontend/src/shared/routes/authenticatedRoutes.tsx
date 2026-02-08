@@ -33,9 +33,6 @@ const StudentListPage = lazy(
 const StudentDetailsPage = lazy(
   () => import('#pages/StudentDetails/StudentDetails.page'),
 );
-const UpdateUsernamePage = lazy(
-  () => import('#pages/UpdateUsername/UpdateUsername.page'),
-);
 
 const t = (key: string) => key;
 
@@ -48,10 +45,6 @@ export const authenticatedRoutes: (queryClient: QueryClient) => RouteObject = (
       path: '/',
       element: <HomePage />,
       handle: { crumb: t('breadcrumbs.home.index') },
-    },
-    {
-      path: '/update-username',
-      element: <UpdateUsernamePage />,
     },
     {
       path: '/event',

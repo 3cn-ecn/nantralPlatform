@@ -92,7 +92,6 @@ class RegisterSerializer(serializers.Serializer):
         user = User(
             first_name=validated_data["first_name"],
             last_name=validated_data["last_name"],
-            has_updated_username=True,  # Already had a chance to change username
             promo=validated_data["promo"],
             faculty=validated_data["faculty"],
         )
@@ -267,9 +266,8 @@ class UserSerializer(serializers.ModelSerializer):
             "faculty",
             "description",
             "picture",
-            "has_opened_matrix",
         ]
-        read_only_fields = ["has_opened_matrix", "username"]
+        read_only_fields = ["username"]
 
     def update(self, obj: User, data: dict):
         for attr, value in data.items():
@@ -280,54 +278,3 @@ class UserSerializer(serializers.ModelSerializer):
         self.validated_data["picture"] = data.get("picture")
 
         return obj
-
-
-class UsernameSerializer(serializers.ModelSerializer):
-    picture = serializers.SerializerMethodField()
-    name = serializers.SerializerMethodField()
-
-    username = serializers.CharField(
-        max_length=200,
-        validators=[
-            UniqueValidator(
-                User.objects.all(),
-                message=_("This username is already taken."),
-            ),
-            validate_matrix_username,
-        ],
-        required=True,
-    )
-
-    class Meta:
-        model = User
-        fields = [
-            "username",
-            "picture",
-            "name",
-            "has_updated_username",
-            "has_opened_matrix",
-        ]
-        read_only_fields = ["has_updated_username", "has_opened_matrix"]
-
-    def validate_username(self, value):
-        if self.instance.has_opened_matrix and self.instance.username != value:
-            raise serializers.ValidationError(
-                _(
-                    "You can not change username because you created a matrix account"
-                )
-            )
-        return value
-
-    def save(self):
-        self.validated_data["has_updated_username"] = True
-        super().save()
-
-    def get_picture(self, obj):
-        pic = obj.picture
-        if pic:
-            return pic.url
-        else:
-            return None
-
-    def get_name(self, obj):
-        return obj.name

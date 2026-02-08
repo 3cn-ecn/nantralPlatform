@@ -91,10 +91,6 @@ class User(AbstractUser):
         blank=True,
         on_delete=models.SET_NULL,
     )
-    # While a user has not created his matrix account, they can alter their username
-    # after it is too late since we won't be able to change the matrix username
-    has_opened_matrix = models.BooleanField(default=False)
-    has_updated_username = models.BooleanField(default=False)
     promo = models.IntegerField(
         verbose_name=_("Année de promotion entrante"),
         null=True,

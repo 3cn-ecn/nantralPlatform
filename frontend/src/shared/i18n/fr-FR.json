@@ -943,7 +943,6 @@
       "placeholder": "Rechercher un élève"
     },
     "username": {
-      "disabledText": "Vous ne pouvez plus changer votre nom d'utilisateur car vous avez créé un compte Matrix",
       "label": "Nom d'utilisateur"
     }
   },
@@ -1016,16 +1015,6 @@
         "title": "Apparence"
       }
     }
-  },
-  "username": {
-    "alert": {
-      "link": "Cliquez sur ce lien",
-      "message1": "Nous avons ajouté la possibilité de modifier votre nom d'utilisateur.",
-      "message2": "pour effectuer le changement. Nous vous conseillons de réaliser l'opération rapidement en prévision d'une mise à jour future.",
-      "title": "Mise à jour importante - Noms d'utilisateurs"
-    },
-    "success": "Mise à jour du nom d'utilisateur effectuée avec succès",
-    "update": "Choisissez un nouveau nom d'utilisateur"
   },
   "utils": {
     "shareLink": {

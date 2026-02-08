@@ -1,14 +1,13 @@
 import { FormEvent, useState } from 'react';
 
 import { Divider } from '@mui/material';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import {
   editAccount,
   EditAccountOptions,
   EditAccountOptionsDTO,
 } from '#modules/account/api/editAccount';
-import getUsernameApi from '#modules/account/api/getUsername.api';
 import { Student } from '#modules/student/student.types';
 import { Avatar } from '#shared/components/Avatar/Avatar';
 import { FlexRow } from '#shared/components/FlexBox/FlexBox';
@@ -24,11 +23,6 @@ interface EditProfileTabProps {
 }
 
 export function EditProfileTab({ student }: EditProfileTabProps) {
-  const { data: userData } = useQuery({
-    queryFn: getUsernameApi,
-    queryKey: ['username'],
-  });
-
   const queryClient = useQueryClient();
   const { t } = useTranslation();
 
@@ -117,7 +111,6 @@ export function EditProfileTab({ student }: EditProfileTabProps) {
           previousValues={student}
           updateFormValues={updateFormValues}
           error={error}
-          hasOpenedMatrix={userData?.hasOpenedMatrix}
         />
       </form>
       <LoadingButton

@@ -943,7 +943,6 @@
       "placeholder": "Search for a student"
     },
     "username": {
-      "disabledText": "You can not change your username because you already created a Matrix account",
       "label": "User name"
     }
   },
@@ -1016,16 +1015,6 @@
         "title": "Appearance"
       }
     }
-  },
-  "username": {
-    "alert": {
-      "link": "Click here",
-      "message1": "We made you able to choose an username.",
-      "message2": "to make the change. Please perform this action quickly to prepare for a future update.",
-      "title": "Important Update - Usernames"
-    },
-    "success": "Successfully updated username",
-    "update": "Choose a new username"
   },
   "utils": {
     "shareLink": {

@@ -129,7 +129,7 @@ class CustomUserAdmin(UserAdmin):
                     "is_active",
                     "is_staff",
                     "is_superuser",
-                    "group_set",
+                    "groups",
                     "user_permissions",
                 ),
             },
@@ -140,8 +140,6 @@ class CustomUserAdmin(UserAdmin):
                 "fields": (
                     "is_email_valid",
                     "invitation",
-                    "has_updated_username",
-                    "has_opened_matrix",
                 ),
             },
         ),
@@ -160,8 +158,6 @@ class CustomUserAdmin(UserAdmin):
     readonly_fields = (
         "date_joined",
         "last_login",
-        "has_opened_matrix",
-        "has_updated_username",
         "is_email_valid",
     )
     inlines = (EmailInline,)
