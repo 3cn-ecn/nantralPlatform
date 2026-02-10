@@ -9,7 +9,7 @@ from django.views.generic import CreateView, DetailView, FormView, TemplateView
 from extra_settings.models import Setting
 
 from apps.account.models import User
-from apps.account.serializers import EditUserSerializer
+from apps.account.serializers import UserSerializer
 from apps.family.serializers import FamilyMembersSerializer
 from apps.utils.access_mixins import UserIsAdmin
 
@@ -228,7 +228,7 @@ class UpdateFamilyView(UserIsAdmin, TemplateView):
             .all()
         )
 
-        return EditUserSerializer(
+        return UserSerializer(
             instance=[
                 User.objects.filter(pk=value[0]).first()
                 for value in users
@@ -283,7 +283,7 @@ class UpdateFamilyView(UserIsAdmin, TemplateView):
         context = {
             "update_form": forms[0],
             "current_members": json.dumps(
-                EditUserSerializer(
+                UserSerializer(
                     instance=[
                         User.objects.filter(pk=value).first()
                         for value in serializer.data.values()

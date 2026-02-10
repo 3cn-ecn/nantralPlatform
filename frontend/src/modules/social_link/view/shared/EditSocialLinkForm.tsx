@@ -33,19 +33,21 @@ import { ApiFormError } from '#shared/infra/errors';
 
 import { SocialLinkItem } from './SocialLinkItem';
 
-interface EditSocialLinkFormProps<ForGroup extends boolean> {
+type GroupOrUser =
+  | { userId: number; groupSlug?: never }
+  | { userId?: never; groupSlug: string };
+
+type EditSocialLinkFormProps = GroupOrUser & {
   socialLinks: SocialLink[];
   onSuccess?: () => void;
-  userId: ForGroup extends true ? never : number;
-  groupSlug: ForGroup extends false ? never : string;
-}
+};
 
-export function EditSocialLinkForm<ForGroup extends boolean>({
+export function EditSocialLinkForm({
   socialLinks,
   userId,
   groupSlug,
   onSuccess,
-}: EditSocialLinkFormProps<ForGroup>) {
+}: EditSocialLinkFormProps) {
   const type = userId ? 'user' : 'group';
   const sortedSocialLinks = sortLinks(socialLinks);
   const addButtonRef = useRef<HTMLButtonElement>(null);

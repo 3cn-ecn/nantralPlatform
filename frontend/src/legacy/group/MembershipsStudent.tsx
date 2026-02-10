@@ -17,7 +17,7 @@ import { Membership, Page } from './interfaces';
 declare const studentId: string;
 
 interface QueryParams {
-  student: string;
+  user: string;
   from?: string;
   to?: string;
   page?: number;

@@ -64,14 +64,14 @@ def get_membership(
 
     """
     try:
-        member = user.membershipfamily_set.get(
+        member = user.membershipfamily.get(
             role="2A+",
             group__year=year,
         )
         return member
     except MembershipFamily.DoesNotExist:
         try:
-            member = user.membershipfamily_set.get(
+            member = user.membershipfamily.get(
                 role="1A",
             )
             return member

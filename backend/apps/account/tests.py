@@ -287,18 +287,18 @@ class TestChangePassword(TestCase):
 
 
 class TestChangeEmail(TestCase):
-    url = reverse("account_api:email-change")
-
     def setUp(self) -> None:
         self.user: User = User.objects.create_user(
             email="test@ec-nantes.fr",
             password="test",
             username="test",
         )
+        self.email = self.user.add_email("new@ec-nantes.fr")
+        self.url = reverse("account_api:email-detail", args=[self.email.uuid])
 
     def test_change_email(self):
         self.client.force_login(self.user)
-        payload = {"password": "test", "email": "new@ec-nantes.fr"}
+        payload = {"password": "test", "is_main": True}
         response = self.client.put(
             self.url,
             data=payload,
@@ -306,25 +306,14 @@ class TestChangeEmail(TestCase):
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
-        self.assertEqual(len(mail.outbox), 1)
+        self.assertEqual(len(mail.outbox), 0)
         self.user.refresh_from_db()
-        self.assertEqual(self.user.email.email, payload["email"])
-        self.assertTrue(self.user.has_email(payload["email"]))
+        self.assertEqual(self.user.email.email, self.email.email)
+        self.assertTrue(self.user.has_email(self.email.email))
 
     def test_wrong_password(self):
         self.client.force_login(self.user)
-        payload = {"password": "wrongpassword", "email": "new@ec-nantes.fr"}
-        response = self.client.put(
-            self.url,
-            data=payload,
-            content_type="application/json",
-        )
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-
-    def test_wrong_email(self):
-        self.client.force_login(self.user)
-        # with + in the email
-        payload = {"password": "test", "email": "ne+w@ec-nantes.fr"}
+        payload = {"password": "wrongpassword", "is_main": True}
         response = self.client.put(
             self.url,
             data=payload,
@@ -333,13 +322,48 @@ class TestChangeEmail(TestCase):
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_is_authenticated(self):
-        payload = {"password": "test", "email": "new@ec-nantes.fr"}
+        payload = {"password": "test", "is_main": True}
         response = self.client.put(
             self.url,
             data=payload,
             content_type="application/json",
         )
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+
+class TestAddEmail(TestCase):
+    uri = reverse("account_api:email-list")
+
+    def setUp(self) -> None:
+        self.user: User = User.objects.create_user(
+            email="test@ec-nantes.fr",
+            password="test",
+            username="test",
+        )
+
+    def test_add_wrong_email(self):
+        self.client.force_login(self.user)
+        # with + in the email
+        payload = {"email": "ne+w@ec-nantes.fr"}
+        response = self.client.post(
+            self.uri,
+            data=payload,
+            content_type="application/json",
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_add_email(self):
+        self.client.force_login(self.user)
+        payload = {"email": "new@ec-nantes.fr"}
+        response = self.client.post(
+            self.uri,
+            data=payload,
+            content_type="application/json",
+        )
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(len(mail.outbox), 1)
+        self.user.refresh_from_db()
+        self.assertTrue(self.user.has_email(payload["email"]))
 
 
 class TestForgottenPassword(TestCase):
