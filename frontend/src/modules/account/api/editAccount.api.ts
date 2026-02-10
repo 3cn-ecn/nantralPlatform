@@ -3,7 +3,6 @@ import axios from 'axios';
 import { adaptApiFormErrors, ApiFormErrorDTO } from '#shared/infra/errors';
 
 export interface EditAccountOptions {
-  username: string;
   firstName: string;
   lastName: string;
   description: string;
@@ -14,7 +13,6 @@ export interface EditAccountOptions {
 }
 
 export interface EditAccountOptionsDTO {
-  username: string;
   first_name: string;
   last_name: string;
   description: string;
@@ -32,7 +30,6 @@ export async function editAccountApi(
     .put<EditAccountOptionsDTO>(
       `/api/account/user/${user}/`,
       {
-        username: formData.username,
         first_name: formData.firstName,
         last_name: formData.lastName,
         description: formData.description,

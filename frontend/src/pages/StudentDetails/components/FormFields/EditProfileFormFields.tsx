@@ -54,14 +54,6 @@ export function EditProfileFormFields({
         errors={error?.fields?.last_name}
       />
       <TextField
-        value={formValues.username}
-        handleChange={(val) => updateFormValues({ username: val })}
-        label={t('student.username.label')}
-        errors={error?.fields?.username}
-        required
-        disabled
-      />
-      <TextField
         handleChange={(val) => updateFormValues({ description: val })}
         label={t('student.description.label')}
         placeholder={t('student.description.placeholder')}

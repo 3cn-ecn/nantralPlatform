@@ -283,7 +283,6 @@ class EditUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = [
-            "username",
             "first_name",
             "last_name",
             "path",
@@ -292,7 +291,6 @@ class EditUserSerializer(serializers.ModelSerializer):
             "description",
             "picture",
         ]
-        read_only_fields = ["username"]
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -319,6 +317,14 @@ class UserSerializer(serializers.ModelSerializer):
             "username",
             "expires_at",
         ]
+        read_only_fields = (
+            "id",
+            "url",
+            "is_staff",
+            "is_superuser",
+            "username",
+            "expires_at",
+        )
 
     def get_url(self, obj: User) -> str:
         return obj.get_absolute_url()
@@ -340,7 +346,7 @@ class UserSerializer(serializers.ModelSerializer):
         ).data
 
 
-class StudentPreviewSerializer(serializers.ModelSerializer):
+class UserPreviewSerializer(serializers.ModelSerializer):
     name = serializers.SerializerMethodField()
     url = serializers.SerializerMethodField()
 

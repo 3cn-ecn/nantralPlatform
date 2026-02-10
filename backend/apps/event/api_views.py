@@ -7,7 +7,7 @@ from rest_framework import exceptions, filters, permissions, status, viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
-from apps.account.serializers import StudentPreviewSerializer
+from apps.account.serializers import UserPreviewSerializer
 from apps.utils.parse import parse_bool
 
 from .models import Event
@@ -173,7 +173,7 @@ class EventViewSet(viewsets.ModelViewSet):
     def participants(self, request, pk=None):
         event: Event = self.get_object()
         page = self.paginate_queryset(event.participants.all())
-        serializer = StudentPreviewSerializer(page, many=True)
+        serializer = UserPreviewSerializer(page, many=True)
         return self.get_paginated_response(serializer.data)
 
     @action(detail=True, methods=["POST", "DELETE"])

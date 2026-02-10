@@ -7,7 +7,7 @@ from django.utils.translation import gettext as _
 from rest_framework import exceptions, serializers
 
 from apps.account.models import User
-from apps.account.serializers import StudentPreviewSerializer
+from apps.account.serializers import UserPreviewSerializer
 from apps.sociallink.serializers import (
     GroupSocialLinkSerializer,
     SocialLinkSerializer,
@@ -284,7 +284,7 @@ class GroupWriteSerializer(serializers.ModelSerializer):
 class MembershipSerializer(AdminFieldsMixin, serializers.ModelSerializer):
     """Membership serializer for getting or editing objects."""
 
-    user = StudentPreviewSerializer(read_only=True)
+    user = UserPreviewSerializer(read_only=True)
     group = GroupPreviewSerializer(read_only=True)
 
     class Meta:
@@ -394,7 +394,7 @@ class AdminRequestValidateSerializer(serializers.Serializer):
 
 
 class AdminRequestSerializer(serializers.ModelSerializer):
-    user = StudentPreviewSerializer(read_only=True)
+    user = UserPreviewSerializer(read_only=True)
 
     class Meta:
         model = Membership
@@ -442,7 +442,7 @@ class MapGroupSerializer(serializers.ModelSerializer):
 
     def get_members(self, obj: Group) -> str:
         from_date = timezone.now()
-        serialized_data = StudentPreviewSerializer(
+        serialized_data = UserPreviewSerializer(
             User.objects.filter(
                 Q(
                     membership_set__group_id=obj.id,
