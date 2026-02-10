@@ -45,7 +45,9 @@ class UserSocialLinkSerializer(serializers.ModelSerializer):
 
 
 class UserCreateSocialLinkSerializer(serializers.ModelSerializer):
-    user = serializers.PrimaryKeyRelatedField(queryset=User.objects.all())
+    user = serializers.PrimaryKeyRelatedField(
+        queryset=User.objects.all(), write_only=True
+    )
 
     class Meta:
         model = SocialLink

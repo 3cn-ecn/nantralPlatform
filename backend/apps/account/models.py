@@ -103,7 +103,6 @@ class User(AbstractUser):
         blank=True,
         size=(500, 500),
         crop=True,
-        name_from_field="user",
     )
     faculty = models.CharField(
         max_length=200,
