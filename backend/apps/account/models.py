@@ -93,12 +93,12 @@ class User(AbstractUser):
         on_delete=models.SET_NULL,
     )
     promo = models.IntegerField(
-        verbose_name=_("Année de promotion entrante"),
+        verbose_name=_("Year of entry"),
         null=True,
         blank=True,
     )
     picture = CustomImageField(
-        verbose_name=_("Photo de profil"),
+        verbose_name=_("Profile picture"),
         null=True,
         blank=True,
         size=(500, 500),
@@ -107,12 +107,12 @@ class User(AbstractUser):
     )
     faculty = models.CharField(
         max_length=200,
-        verbose_name=_("Filière"),
+        verbose_name=_("Faculty"),
         choices=FACULTIES,
     )
     path = models.CharField(  # noqa: DJ001
         max_length=200,
-        verbose_name=_("Cursus"),
+        verbose_name=_("Path"),
         choices=PATHS,
         null=True,
         blank=True,

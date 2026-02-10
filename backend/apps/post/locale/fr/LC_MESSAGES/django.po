@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-07-08 10:37+0200\n"
+"POT-Creation-Date: 2026-02-10 19:48+0100\n"
 "PO-Revision-Date: 2023-04-10 15:24+0200\n"
 "Last-Translator: Alexis Delage <alexidelage@gmail.com>\n"
 "Language-Team: \n"
@@ -18,19 +18,19 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Generator: Poedit 3.1.1\n"
 
-#: models.py:35
+#: models.py:34
 msgid "Title"
 msgstr "Titre"
 
-#: models.py:37
+#: models.py:35
 msgid "Description"
 msgstr "Description"
 
-#: models.py:40
+#: models.py:38
 msgid "Organiser"
 msgstr "Organisateur"
 
-#: models.py:43
+#: models.py:42
 msgid "Visibility"
 msgstr "Visibilité"
 
@@ -38,14 +38,14 @@ msgstr "Visibilité"
 msgid "Banner"
 msgstr "Bannière"
 
-#: models.py:51
-msgid "Your banner will be displayed at 1320x492 pixels."
-msgstr "Votre bannière sera affichée au format 1320x492 pixels."
+#: models.py:50
+msgid "Your banner will be displayed with a 16/9 ratio."
+msgstr "Votre bannière sera affichée au format 16/9."
 
-#: models.py:123
+#: models.py:140
 msgid "Pin publication"
 msgstr "Épingler la publication"
 
-#: serializers.py:45
+#: serializers.py:61
 msgid "You have to be admin to add or update a post"
 msgstr "Vous devez être admin du groupe pour créer ou modifier un post"

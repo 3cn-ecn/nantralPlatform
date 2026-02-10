@@ -32,7 +32,7 @@ class GroupType(models.Model):
         crop=True,
         name_from_field="slug",
     )
-    is_map = models.BooleanField(verbose_name=_("Is map"), default=False)
+    is_map = models.BooleanField(verbose_name=_("Is a location"), default=False)
 
     # Members settings
     no_membership_dates = models.BooleanField(

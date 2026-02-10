@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-24 16:31+0100\n"
+"POT-Creation-Date: 2026-02-10 19:46+0100\n"
 "PO-Revision-Date: 2023-10-20 20:08+0200\n"
 "Last-Translator: Alexis Delage <alexidelage@gmail.com>\n"
 "Language-Team: \n"
@@ -18,64 +18,64 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Poedit 3.4\n"
 
-#: admin.py:29
+#: admin.py:30
 msgid "Your Centrale Nantes email"
 msgstr "Mail Centrale Nantes"
 
-#: admin.py:35
+#: admin.py:36
 msgid "Other providers"
 msgstr "Autres hébergeurs"
 
-#: admin.py:46 admin.py:50
+#: admin.py:51 admin.py:55
 msgid "Empty passsword"
 msgstr "Mot de passe vide"
 
-#: admin.py:58 models.py:128
+#: admin.py:63 models.py:229
 msgid "Verified email?"
 msgstr "Email vérifié ?"
 
-#: admin.py:63
+#: admin.py:68
 msgid "Yes"
 msgstr "Oui"
 
-#: admin.py:64
+#: admin.py:69
 msgid "No"
 msgstr "Non"
 
-#: admin.py:113
+#: admin.py:122
 msgid "Personal info"
 msgstr "Info personnelles"
 
-#: admin.py:117
+#: admin.py:126
 msgid "Permissions"
 msgstr "Permissions"
 
-#: admin.py:129
+#: admin.py:138
 msgid "Account Validation"
 msgstr "Validation du compte"
 
-#: admin.py:139
+#: admin.py:146
 msgid "Important dates"
 msgstr "Dates Importantes"
 
-#: admin.py:170
+#: admin.py:207
 msgid ""
-"NEVER UPDATE THE USERNAME. Doing this will cause the users to loose all "
-"their matrix data"
+"NEVER UPDATE THE USERNAME. Doing this will cause the users to loose access "
+"to their matrix account"
 msgstr ""
-"NE JAMAIS MODIFIER LE NOM D'UTILISATEUR. Cela causera la perte de toutes les "
-"donnée du compte matrix de l'utilisateur"
+"NE JAMAIS MODIFIER LE NOM D'UTILISATEUR. Cela causera la perte du compte matrix "
+"de l'utilisateur"
 
-#: api_views.py:75
+#: api_views.py:79
 msgid "Authentication failed"
 msgstr "L'authentification à échoué"
 
-#: api_views.py:81
+#: api_views.py:86
 msgid "Your e-mail is not verified. Please click on the link verification link"
 msgstr ""
 "Votre e-mail n'est pas vérifié. Merci de cliquer sur le lien de vérification"
 
-#: api_views.py:89
+#: api_views.py:95
 msgid ""
 "Connection successful, your account is temporary, please add your ECN email "
 "address as soon as possible."
@@ -83,11 +83,11 @@ msgstr ""
 "Connection réussie, votre compte est temporaire, veuillez ajouter votre "
 "adresse mail Centrale au plus vite."
 
-#: api_views.py:101
+#: api_views.py:108
 msgid "Please check your emails in order to verify the new email address"
 msgstr "Veuillez consulter votre boîte mail pour vérifier la nouvelle adresse"
 
-#: api_views.py:106
+#: api_views.py:114
 msgid ""
 "Your account is not verified and has been disabled. Pleas add an email "
 "address from Centrale Nantes to reactivate your account."
@@ -95,7 +95,7 @@ msgstr ""
 "Votre compte n'est pas vérifié et a été désactivé. Veuillez ajouter une "
 "adresse mail Centrale pour réactiver votre compte."
 
-#: api_views.py:113
+#: api_views.py:121
 msgid ""
 "Your ECN e-mail is not verified. Please click on the verification link or "
 "add another address"
@@ -103,42 +103,27 @@ msgstr ""
 "Votre e-mail Centrale n'est pas vérifié. Merci de cliquer sur le lien de "
 "vérification ou renseigner une autre adresse"
 
-#: api_views.py:124 api_views.py:129
+#: api_views.py:136 api_views.py:141
 msgid "Successfully connected"
 msgstr "Connection réussie"
 
-#: api_views.py:203
+#: api_views.py:219
 msgid "The new password has been saved"
 msgstr "Le mot de passe à bien été mis à jour."
 
-#: api_views.py:312
-msgid ""
-"Your main e-mail has been saved. Please click on the link verification link"
-msgstr ""
-"Votre email principal a bien été enregistré. Merci de cliquer sur le lien de "
-"vérification qui à vous a été envoyé."
-
-#: api_views.py:316
-msgid "Your main email has been saved"
-msgstr "Votre email principal a bien été enregistré."
-
-#: api_views.py:327 models.py:100 models.py:146
+#: api_views.py:289 models.py:201
 msgid "You cannot delete the main email address of your account"
 msgstr "Vous ne pouvez pas supprimer l'email principal de votre compte"
 
-#: api_views.py:348
+#: api_views.py:311
 msgid "A confirmation email has been sent to verify provided email"
 msgstr "Un mail de confirmation a été renvoyé à l'email fourni."
 
-#: api_views.py:376
-msgid "The visibility has been changed"
-msgstr "La visibilité a été changée."
-
-#: models.py:47
+#: models.py:71
 msgid "Username"
 msgstr "Nom d'utilisateur"
 
-#: models.py:51
+#: models.py:75
 msgid ""
 "Required. 150 characters or fewer. Lower case letters, digits and ./_/-/+ "
 "only."
@@ -146,52 +131,63 @@ msgstr ""
 "Requis. 150 caractères ou moins. Lettres minuscules, chiffres et . _ - + "
 "seulement."
 
-#: models.py:55 serializers.py:70 serializers.py:290
+#: models.py:79 serializers.py:76
 msgid "This username is already taken."
 msgstr "Ce nom d'utilisateur est déjà pris"
 
-#: models.py:58
+#: models.py:84
 msgid "Main email"
 msgstr "Email principal"
 
-#: models.py:130
+#: models.py:96
+msgid "Year of entry"
+msgstr "Année de promotion entrante"
+
+#: models.py:101
+msgid "Profile picture"
+msgstr "Photo de profil"
+
+#: models.py:110
+msgid "Faculty"
+msgstr "Filière"
+
+#: models.py:115
+msgid "Path"
+msgstr "Cursus"
+
+#: models.py:123
+msgid "Social networks"
+msgstr "Réseaux sociaux"
+
+#: models.py:232
 msgid "Visibility"
 msgstr "Visibilité"
 
-#: models.py:132
+#: models.py:234
 msgid "Check this to make this email visible for all users"
 msgstr "Cochez cette case pour rendre l'email visible à tous les utilisateurs"
 
-#: models.py:135
+#: models.py:237
 msgid "Unique ID"
 msgstr "Identifiant unique"
 
-#: serializers.py:34 serializers.py:52 serializers.py:153 serializers.py:187
-#: serializers.py:210
+#: serializers.py:37 serializers.py:57 serializers.py:156 serializers.py:257
 msgid "An account has already been created with this email address"
 msgstr "Un compte à déjà été créé avec cette adresse email"
 
-#: serializers.py:140 serializers.py:181
+#: serializers.py:142 serializers.py:207
 msgid "Invalid passsword"
 msgstr "Mot de passe invalide"
 
-#: serializers.py:191
-msgid "You cannot use this address because it is not verified"
-msgstr "Vous ne pouvez pas utiliser cette adresse car elle n'est pas vérifiée."
+#: serializers.py:212
+msgid "This field cannot be set to false"
+msgstr "Ce champ ne peut pas être défini comme faux"
 
-#: serializers.py:224
-msgid "You cannot change the email address. Please add a new one"
-msgstr ""
-"L'adresse mail ne peut pas être modifiée. Veuillez ajouter une nouvelle "
-"adresse"
+#: serializers.py:222
+msgid "Password is required to set an email as main"
+msgstr "Le mot de passe est nécessaire pour changer l'email principal"
 
-#: serializers.py:305
-msgid "You can not change username because you created a matrix account"
-msgstr ""
-"Vous ne pouvez pas modifier votre nom d'utilisateur car vous avez déjà créé "
-"votre compte matrix."
-
-#: validators.py:31
+#: validators.py:32
 msgid ""
 "Enter a valid username. This value can only contain characters a-z, 0-9, or "
 "'_-.+'"
@@ -199,23 +195,23 @@ msgstr ""
 "Entrez un nom d'utilisateur valide. Il doit être composé uniquement des "
 "caractères a-z, 0-9, ou '_-.+'"
 
-#: validators.py:34
+#: validators.py:35
 msgid "Username may not begin with _"
 msgstr "Le nom d'utilisateur ne peut pas commencer par _"
 
-#: validators.py:37
+#: validators.py:38
 msgid "Numeric username are reserved"
 msgstr "Les nombres sont des noms d'utilisateur réservés"
 
-#: validators.py:40
+#: validators.py:41
 msgid "This username is reserved"
 msgstr "Ce nom d'utilisateur est réservé"
 
-#: validators.py:45
+#: validators.py:46
 msgid "The email address should not include special characters"
 msgstr "L'adresse email ne doit pas contenir de caractères spéciaux"
 
-#: validators.py:61
+#: validators.py:62
 msgid ""
 "You must use a valid ECN email address (ending in ec-nantes.fr or "
 "centraliens-nantes.org)"

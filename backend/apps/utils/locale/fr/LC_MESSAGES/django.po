@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-09-30 12:22+0200\n"
+"POT-Creation-Date: 2026-02-10 19:48+0100\n"
 "PO-Revision-Date: 2023-09-30 12:24+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -18,6 +18,6 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Generator: Poedit 3.3.2\n"
 
-#: translation_model_serializer.py:78
+#: translation_model_serializer.py:80
 msgid "This field is required."
 msgstr "Ce champ est obligatoire."
