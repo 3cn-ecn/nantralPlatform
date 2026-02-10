@@ -29,4 +29,6 @@ class GroupSocialLinkPermission(permissions.BasePermission):
 
 class UserSocialLinkPermission(permissions.BasePermission):
     def has_object_permission(self, request, view, obj: SocialLink):
-        return request.user.social_links.contains(obj)
+        return (
+            request.user.social_links.contains(obj) or request.user.is_superuser
+        )

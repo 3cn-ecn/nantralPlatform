@@ -5,7 +5,7 @@ from django.utils import timezone
 from django.utils.translation import gettext as _
 
 from rest_framework import serializers
-from rest_framework.exceptions import ValidationError
+from rest_framework.exceptions import PermissionDenied, ValidationError
 from rest_framework.validators import UniqueValidator
 
 from apps.sociallink.serializers import SocialLinkSerializer
@@ -175,9 +175,31 @@ class InvitationRegisterSerializer(RegisterSerializer):
         return user
 
 
-class ChangeEmailSerializer(serializers.Serializer):
-    password = serializers.CharField(style={"input_type": "password"})
-    email = serializers.EmailField(validators=[validate_email])
+class EmailSerializer(serializers.ModelSerializer):
+    password = serializers.CharField(
+        style={"input_type": "password"}, required=False, write_only=True
+    )
+    is_main = serializers.BooleanField(required=False)
+    is_ecn_email = serializers.BooleanField(read_only=True)
+
+    class Meta:
+        model = Email
+        fields = (
+            "email",
+            "is_ecn_email",
+            "is_valid",
+            "is_visible",
+            "is_main",
+            "password",
+            "uuid",
+        )
+        read_only_fields = (
+            "email",
+            "is_ecn_email",
+            "is_valid",
+            "uuid",
+        )
+        extra_kwargs = {"is_visible": {"required": False}}
 
     def validate_password(self, val):
         user: User = self.context.get("request").user
@@ -185,77 +207,72 @@ class ChangeEmailSerializer(serializers.Serializer):
             raise ValidationError(_("Invalid passsword"))
         return val
 
-    def validate_email(self, val: str):
-        user = self.context.get("request").user
-        if Email.objects.exclude(user=user).filter(email=val).exists():
-            raise serializers.ValidationError(
-                _("An account has already been created with this email address")
-            )
-        try:
-            email = Email.objects.get(email=val)
-            if not email.is_valid:
-                raise serializers.ValidationError(
-                    _("You cannot use this address because it is not verified")
-                )
-        except Email.DoesNotExist:
-            pass
+    def validate_is_main(self, val: bool):
+        if not val:
+            raise ValidationError(_("This field cannot be set to false"))
         return val
+
+    def validate(self, validated_data: dict):
+        if (
+            "is_main" in validated_data
+            and "password" not in validated_data
+            and not self.context.get("request").user.is_superuser
+        ):
+            raise ValidationError(
+                {"password": _("Password is required to set an email as main")}
+            )
+        return validated_data
+
+    def update(self, instance: Email, validated_data: dict):
+        if validated_data.pop("is_main", False):
+            user = instance.user
+            user.email = instance
+            user.save()
+        return super().update(instance, validated_data)
 
 
 class ShortEmailSerializer(serializers.Serializer):
     email = serializers.EmailField()
 
 
-class VisibilitySerializer(serializers.Serializer):
-    is_visible = serializers.BooleanField(required=True)
-
-
-class EmailSerializer(serializers.ModelSerializer):
-    email = serializers.EmailField(
-        validators=[
-            validate_email,
-            UniqueValidator(
-                Email.objects.all(),
-                message=_(
-                    "An account has already been created with this email address"
-                ),
-            ),
-        ],
-        required=True,
+class CreateEmailSerializer(serializers.ModelSerializer):
+    user = serializers.PrimaryKeyRelatedField(
+        queryset=User.objects.all(), default=serializers.CurrentUserDefault()
     )
-    is_main = serializers.SerializerMethodField()
-    is_ecn_email = serializers.SerializerMethodField()
 
     class Meta:
         model = Email
         fields = (
             "email",
-            "is_valid",
-            "is_ecn_email",
-            "is_main",
             "is_visible",
-            "uuid",
+            "user",
         )
-        read_only_fields = ("is_valid", "is_ecn_email", "is_main", "uuid")
+        extra_kwargs = {
+            "email": {
+                "validators": [
+                    validate_email,
+                    UniqueValidator(
+                        Email.objects.all(),
+                        message=_(
+                            "An account has already been created with this email address"
+                        ),
+                    ),
+                ]
+            }
+        }
 
-    def validate_email(self, val: str):
-        if self.instance and val != self.instance.email:
-            raise serializers.ValidationError(
-                _("You cannot change the email address. Please add a new one")
-            )
+    def validate_user(self, val: User):
+        request_user = self.context.get("request").user
+        if val != request_user and not request_user.is_superuser:
+            raise PermissionDenied
         return val
 
     def create(self, validated_data: dict):
-        request = self.context.get("request")
-        return request.user.add_email(
-            validated_data.get("email"), request=self.context.get("request")
+        user = validated_data.pop("user")
+        return user.add_email(
+            validated_data.get("email"),
+            request=self.context.get("request", None),
         )
-
-    def get_is_main(self, obj: Email):
-        return obj.user.email == obj
-
-    def get_is_ecn_email(self, obj: Email):
-        return obj.is_ecn_email()
 
 
 class InvitationValidSerializer(serializers.Serializer):

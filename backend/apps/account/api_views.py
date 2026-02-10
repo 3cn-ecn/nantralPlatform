@@ -4,7 +4,6 @@ from django.utils.translation import gettext_lazy as _
 from rest_framework import exceptions, filters, mixins, permissions, status
 from rest_framework.authentication import SessionAuthentication
 from rest_framework.decorators import action
-from rest_framework.generics import get_object_or_404
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.request import Request
 from rest_framework.response import Response
@@ -17,8 +16,8 @@ from apps.utils.parse import parse_int
 from .models import Email, InvitationLink, User
 from .permissions import CanEditProfileOrReadOnly
 from .serializers import (
-    ChangeEmailSerializer,
     ChangePasswordSerializer,
+    CreateEmailSerializer,
     EditUserSerializer,
     EmailSerializer,
     InvitationRegisterSerializer,
@@ -27,7 +26,6 @@ from .serializers import (
     RegisterSerializer,
     ShortEmailSerializer,
     UserSerializer,
-    VisibilitySerializer,
 )
 from .utils import send_email_confirmation
 
@@ -70,7 +68,9 @@ class AuthViewSet(GenericViewSet):
         email = serializer.validated_data.get("email")
         password = serializer.validated_data.get("password")
 
-        user: User = authenticate(username=email, password=password)
+        user: User = authenticate(
+            request=self.request, username=email, password=password
+        )
 
         data = {}
 
@@ -90,7 +90,7 @@ class AuthViewSet(GenericViewSet):
 
         # Temporary account
         elif user.invitation is not None and user.invitation.is_valid():
-            login(request=request, user=user)
+            login(request=self.request, user=user)
             data["message"] = _(
                 "Connection successful, your account is temporary, please add your ECN email "
                 "address as soon as possible."
@@ -132,12 +132,12 @@ class AuthViewSet(GenericViewSet):
                 # Here, the user has a valid ECN email but invitation is not null, so we fix it
                 user.invitation = None
                 user.save()
-                login(user=user, request=self.request)
+                login(request=self.request, user=user)
                 data["message"] = _("Successfully connected")
                 data["code"] = SUCCESS
                 response_status = status.HTTP_200_OK
         else:
-            login(request=request, user=user)
+            login(request=self.request, user=user)
             data["message"] = _("Successfully connected")
             data["code"] = SUCCESS
             response_status = status.HTTP_200_OK
@@ -249,53 +249,38 @@ class EmailViewSet(
     mixins.CreateModelMixin,
     mixins.ListModelMixin,
     mixins.DestroyModelMixin,
+    mixins.UpdateModelMixin,
+    mixins.RetrieveModelMixin,
     GenericViewSet,
 ):
     serializer_class = EmailSerializer
     permission_classes = [CanEditProfileOrReadOnly, IsAuthenticated]
     lookup_field = "uuid"
 
-    @property
-    def user(self):
-        user_id = parse_int(self.request.query_params.get("user"))
-        if user_id:
-            return get_object_or_404(User, id=user_id)
-        return self.request.user
+    def get_serializer_class(self):
+        if self.action == "resend":
+            return ShortEmailSerializer
+        elif self.action == "create":
+            return CreateEmailSerializer
+        return EmailSerializer
 
     def get_queryset(self):
-        if self.request.user.is_authenticated:
-            return self.user.emails.all()
-        return Email.objects.none()
-
-    @action(
-        detail=False,
-        methods=["PUT"],
-        serializer_class=ChangeEmailSerializer,
-    )
-    def change(self, request: Request):
-        """Change email. This will send a confirmation email to the new email"""
-        serializer = self.get_serializer(data=request.data)
-        if not serializer.is_valid():
-            return Response(
-                serializer.errors,
-                status=status.HTTP_400_BAD_REQUEST,
-            )
-        user: User = self.user
-        email = serializer.validated_data["email"]
-        if not user.has_email(email):
-            user.email = user.add_email(email, request=request)
-            message = _(
-                "Your main e-mail has been saved. Please click on the link verification link"
-            )
-        else:
-            user.email = user.emails.get(email__iexact=email)
-            message = _("Your main email has been saved")
-        user.save()
-
-        return Response(
-            {"message": message},
-            status=status.HTTP_200_OK,
-        )
+        user_id = parse_int(self.request.query_params.get("user"))
+        if not self.request.user.is_authenticated:
+            return Email.objects.none()
+        queryset = Email.objects.all()
+        if user_id:
+            queryset = queryset.filter(user_id=user_id)
+            if (
+                not self.request.user.is_superuser
+                and self.request.user.id != user_id
+            ):
+                return Email.objects.filter(is_visible=True)
+        elif not self.request.user.is_superuser:
+            queryset = queryset.filter(
+                user=self.request.user
+            ) | queryset.filter(is_visible=True)
+        return queryset
 
     def destroy(self, request, *args, **kwargs):
         instance = self.get_object()
@@ -308,7 +293,6 @@ class EmailViewSet(
     @action(
         detail=False,
         methods=["POST"],
-        serializer_class=ShortEmailSerializer,
         throttle_classes=[AnonRateThrottle],
         permission_classes=[],
     )
@@ -345,27 +329,6 @@ class EmailViewSet(
             self.request,
         )
         return response
-
-    @action(
-        detail=True,
-        methods=["PUT"],
-        serializer_class=VisibilitySerializer,
-        permission_classes=[CanEditProfileOrReadOnly, IsAuthenticated],
-    )
-    def visibility(self, request: Request, *args, **kwargs):
-        email = self.get_object()
-        serialed_data = self.get_serializer(data=request.data)
-        if serialed_data.is_valid():
-            email.is_visible = serialed_data.validated_data.get("is_visible")
-            email.save()
-            return Response(
-                {"message": _("The visibility has been changed")},
-                status=status.HTTP_200_OK,
-            )
-        else:
-            return Response(
-                serialed_data.errors, status=status.HTTP_400_BAD_REQUEST
-            )
 
 
 class UserViewSet(

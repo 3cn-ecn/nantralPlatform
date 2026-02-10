@@ -243,13 +243,6 @@ class Email(models.Model):
         self.email = self.email.lower()
         super().save(*args, **kwargs)
 
-    def delete(self, using=None, keep_parents=False):
-        if self.user.email == self.email:
-            raise exceptions.ValidationError(
-                _("You cannot delete the main email address of your account")
-            )
-        return super().delete(using=using, keep_parents=keep_parents)
-
     @admin.display(boolean=True)
     def is_ecn_email(self):
         try:
@@ -257,3 +250,7 @@ class Email(models.Model):
             return True
         except exceptions.ValidationError:
             return False
+
+    @admin.display(boolean=True)
+    def is_main(self):
+        return self.user.email == self

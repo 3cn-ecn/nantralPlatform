@@ -1,12 +1,9 @@
-from typing import TYPE_CHECKING
-
 from rest_framework import serializers
-from rest_framework.exceptions import ValidationError
+from rest_framework.exceptions import PermissionDenied, ValidationError
 
+from apps.account.models import User
 from apps.group.models import Group
 
-if TYPE_CHECKING:
-    from apps.account.models import User
 from .models import SocialLink
 
 
@@ -46,8 +43,27 @@ class UserSocialLinkSerializer(serializers.ModelSerializer):
             "label",
         ]
 
+
+class UserCreateSocialLinkSerializer(serializers.ModelSerializer):
+    user = serializers.PrimaryKeyRelatedField(queryset=User.objects.all())
+
+    class Meta:
+        model = SocialLink
+        fields = [
+            "id",
+            "uri",
+            "label",
+            "user",
+        ]
+
+    def validate_user(self, val: User):
+        current_user = self.context["request"].user
+        if current_user != val and not current_user.is_superuser:
+            raise PermissionDenied
+        return val
+
     def create(self, validated_data: dict):
-        user: User = self.context["request"].user
+        user: User = validated_data.pop("user")
 
         if user is None:
             raise ValidationError("An error occurred")
