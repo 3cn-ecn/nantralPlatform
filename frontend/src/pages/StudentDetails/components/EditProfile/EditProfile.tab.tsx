@@ -29,7 +29,6 @@ export function EditProfileTab({ user }: EditProfileTabProps) {
   const [formValues, setFormValues] = useState<EditAccountOptions>({
     firstName: user.name.split(' ')[0],
     lastName: user.name.split(' ')[1],
-    username: user.username,
     description: user.description,
     faculty: user.faculty,
     path: user.path,
@@ -80,16 +79,16 @@ export function EditProfileTab({ user }: EditProfileTabProps) {
       description: form.description,
       faculty: form.faculty,
       name: form.firstName + ' ' + form.lastName.toUpperCase(),
-      id: -1,
+      id: user.id,
       path: form.path,
       picture: convertPictureToURL(),
       promo: form.promo,
-      socialLinks: [],
-      emails: [],
-      staff: false,
-      admin: false,
-      url: '',
-      username: form.username,
+      socialLinks: user.socialLinks,
+      emails: user.emails,
+      staff: user.staff,
+      admin: user.admin,
+      url: user.url,
+      username: user.username,
     };
   }
 
