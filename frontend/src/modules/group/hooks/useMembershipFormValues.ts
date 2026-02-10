@@ -9,7 +9,7 @@ export function convertMembershipToForm(
     description: membership.description,
     summary: membership.summary,
     group: membership.group.id,
-    student: membership.student.id,
+    user: membership.user.id,
     admin: membership.admin,
   };
 }

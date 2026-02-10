@@ -2,9 +2,9 @@ import { Divider, Typography } from '@mui/material';
 import { UseInfiniteQueryResult } from '@tanstack/react-query';
 import { groupBy } from 'lodash-es';
 
+import { User } from '#modules/account/user.types';
 import { Group } from '#modules/group/types/group.types';
 import { Membership } from '#modules/group/types/membership.types';
-import { Student } from '#modules/student/student.types';
 import { InfiniteList } from '#shared/components/InfiniteList/InfiniteList';
 import { Page } from '#shared/infra/pagination';
 import { getScholarYear } from '#shared/utils/dateUtils';
@@ -15,20 +15,20 @@ import { MembersGrid } from './MembersGrid';
 interface InfiniteMembershipGridProps {
   filters: { previous: boolean; groupType?: string };
   group?: Group;
-  student?: Student;
+  user?: User;
 }
 
 export function MembersInfiniteGrid({
   filters,
   group,
-  student,
+  user,
 }: InfiniteMembershipGridProps) {
   const today = new Date(new Date().toDateString());
 
   const membershipsQuery = useInfiniteMembership({
     options: {
       group: group && group.slug,
-      student: student && student.id,
+      user: user && user.id,
       from: today,
       pageSize: 6 * 5,
       groupType: filters.groupType,
@@ -38,7 +38,7 @@ export function MembersInfiniteGrid({
   const oldMembershipsQuery = useInfiniteMembership({
     options: {
       group: group && group.slug,
-      student: student && student.id,
+      user: user && user.id,
       to: today,
       orderBy: '-begin_date',
       pageSize: 6 * 5,

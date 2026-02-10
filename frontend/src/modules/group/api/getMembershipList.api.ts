@@ -7,7 +7,7 @@ import { adaptMembership } from '../infra/membership.adapter';
 import { MembershipDTO } from '../infra/membership.dto';
 
 export interface GetMembershipListApiParams {
-  student?: number;
+  user?: number;
   group?: string;
   from?: Date;
   to?: Date;
@@ -23,7 +23,7 @@ export async function getMembershipListApi(
   const { data } = await axios
     .get<PageDTO<MembershipDTO>>('/api/group/membership/', {
       params: {
-        user: options.student,
+        user: options.user,
         from: options.from?.toISOString(),
         to: options.to?.toISOString(),
         group: options.group,

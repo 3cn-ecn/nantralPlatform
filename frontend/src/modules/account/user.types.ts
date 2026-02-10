@@ -1,6 +1,6 @@
 import { SocialLink } from '#modules/social_link/types/socialLink.type';
 
-export interface Student {
+export interface User {
   id: number;
   name: string;
   promo: number;
@@ -16,7 +16,7 @@ export interface Student {
   emails: string[];
 }
 
-export type StudentPreview = Pick<Student, 'id' | 'name' | 'url' | 'picture'>;
+export type UserPreview = Pick<User, 'id' | 'name' | 'url' | 'picture'>;
 
 export type FacultyOptions = 'Gen' | 'Iti' | 'Mas' | 'Doc' | 'Bac' | 'Msp';
 export type PathOptions =

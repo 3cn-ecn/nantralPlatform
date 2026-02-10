@@ -1,8 +1,8 @@
-import { StudentPreview } from '#modules/student/student.types';
+import { UserPreview } from '#modules/account/user.types';
 
 export interface AdminRequest {
   id: number;
-  student: StudentPreview;
+  user: UserPreview;
   admin: boolean;
   adminRequestMessage: string;
 }

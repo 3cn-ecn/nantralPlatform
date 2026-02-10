@@ -40,7 +40,7 @@ export function ModalAddMember({
     endDate: oneYear,
     description: '',
     group: group.id,
-    student: -1,
+    user: -1,
     summary: '',
     admin: false,
   });
@@ -87,7 +87,7 @@ export function ModalAddMember({
             error={error}
             formValues={formValues}
             updateFormValues={updateFormValues}
-            selectStudent
+            selectUser
             showDates={!group.groupType.noMembershipDates}
           />
         </form>

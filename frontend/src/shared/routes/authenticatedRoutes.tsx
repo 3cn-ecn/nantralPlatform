@@ -5,7 +5,7 @@ import { QueryClient } from '@tanstack/react-query';
 
 import { PageTemplate } from '#shared/components/PageTemplate/PageTemplate';
 
-import { studentDetailsLoader } from './loader';
+import { userDetailsLoader } from './loader';
 
 const EventPage = lazy(() => import('#pages/Event/Event.page'));
 const EventCalendarViewPage = lazy(
@@ -86,7 +86,7 @@ export const authenticatedRoutes: (queryClient: QueryClient) => RouteObject = (
         {
           path: ':id',
           element: <StudentDetailsPage />,
-          loader: (params) => studentDetailsLoader(params, queryClient),
+          loader: (params) => userDetailsLoader(params, queryClient),
         },
       ],
     },

@@ -2,36 +2,36 @@ import { LoaderFunctionArgs, redirect } from 'react-router-dom';
 
 import { QueryClient } from '@tanstack/react-query';
 
+import { getCurrentUserApi } from '#modules/account/api/getCurrentUser.api';
+import { getUserDetailsApi } from '#modules/account/api/getUserDetails.api';
+import { User } from '#modules/account/user.types';
 import { getGroupDetailsApi } from '#modules/group/api/getGroupDetails.api';
 import { getGroupTypeDetailsApi } from '#modules/group/api/getGroupTypeDetails.api';
 import { Group } from '#modules/group/types/group.types';
 import { GroupTypePreview } from '#modules/group/types/groupType.types';
-import { getCurrentUserApi } from '#modules/student/api/getCurrentUser.api';
-import { getStudentDetailsApi } from '#modules/student/api/getStudentDetails.api';
-import { Student } from '#modules/student/student.types';
 
-export async function studentDetailsLoader(
+export async function userDetailsLoader(
   { params }: LoaderFunctionArgs,
   queryClient: QueryClient,
 ) {
   const { id } = params;
-  const currentStudent =
-    (queryClient.getQueryData(['student', 'current']) as Student) ??
+  const currentUser =
+    (queryClient.getQueryData(['user', 'current']) as User) ??
     (await queryClient.fetchQuery({
       queryFn: ({ signal }) => getCurrentUserApi({ signal }),
-      queryKey: ['student', 'current'],
+      queryKey: ['user', 'current'],
     }));
 
   if (id === 'me') {
-    return redirect(`/student/${currentStudent.id}`);
+    return redirect(`/student/${currentUser.id}`);
   }
 
-  if (id === currentStudent.id.toString()) {
+  if (id === currentUser.id.toString()) {
     return {
       extraCrumb: {
-        id: 'student me',
-        label: currentStudent.name,
-        path: `/student/${currentStudent.id}`,
+        id: 'user me',
+        label: currentUser.name,
+        path: `/student/${currentUser.id}`,
       },
     };
   }
@@ -42,18 +42,23 @@ export async function studentDetailsLoader(
     return redirect('/404');
   }
 
-  const student =
-    (queryClient.getQueryData(['student', parsedId]) as Student) ??
+  const user =
+    (queryClient.getQueryData(['user', parsedId]) as User) ??
     (await queryClient.fetchQuery({
-      queryFn: () => getStudentDetailsApi({ id: parsedId }),
-      queryKey: ['student', { id }],
+      queryFn: () =>
+        getUserDetailsApi({ id: parsedId }).catch(() => ({ id: -1 }) as User),
+      queryKey: ['user', { id }],
     }));
+
+  if (user.id === -1) {
+    return redirect('/404');
+  }
 
   return {
     extraCrumb: {
-      id: `student ${student.id}`,
-      label: student.name,
-      path: student.url,
+      id: `user ${user.id}`,
+      label: user.name,
+      path: user.url,
     },
   };
 }

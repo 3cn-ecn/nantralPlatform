@@ -87,14 +87,23 @@
       "label": "New email address"
     },
     "more": {
-      "resend": "Resend confirmation email"
+      "resend": "Resend confirmation email",
+      "resendError": "An error occured while sending the mail.",
+      "resendSuccess": "Confirmation email has been sent"
     },
     "page": {
       "title": "Manage your email addresses"
     },
     "setMain": {
       "error": "An error occured while changing main email address",
-      "label": "Set as main address"
+      "errorWithFields": "",
+      "label": "Set as main address",
+      "passwordError": "Error on password: {{ details }}",
+      "success": "The main email address has been changed. From now on, please use this address to login."
+    },
+    "visibility": {
+      "setHidden": "Your email has been removed from your profile.",
+      "setVisible": "Your email will be shown on your profile."
     }
   },
   "error": {

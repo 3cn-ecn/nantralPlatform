@@ -1,7 +1,7 @@
 import { Grid } from '@mui/material';
 
+import { User } from '#modules/account/user.types';
 import { Group } from '#modules/group/types/group.types';
-import { Student } from '#modules/student/student.types';
 
 import { Membership } from '../interfaces';
 import CardMembership from './CardMembership';
@@ -12,7 +12,7 @@ import CardMembership from './CardMembership';
 function ListMembershipsGrid(props: {
   members: Membership[];
   group?: Group;
-  student: Student;
+  student: User;
   updateMembership?: (member: Membership) => Promise<void>;
   deleteMembership?: (member: Membership) => Promise<void>;
 }): JSX.Element {

@@ -1,4 +1,4 @@
-import { adaptStudentPreview } from '#modules/student/infra/student.adapter';
+import { adaptUserPreview } from '#modules/account/infra/user.adapter';
 
 import { Membership } from '../types/membership.types';
 import { adaptGroupPreview } from './group.adapter';
@@ -7,7 +7,7 @@ import { MembershipDTO } from './membership.dto';
 export function adaptMembership(membershipDTO: MembershipDTO): Membership {
   return {
     id: membershipDTO.id,
-    student: adaptStudentPreview(membershipDTO.user),
+    user: adaptUserPreview(membershipDTO.user),
     group: adaptGroupPreview(membershipDTO.group),
     summary: membershipDTO.summary,
     description: membershipDTO.description,

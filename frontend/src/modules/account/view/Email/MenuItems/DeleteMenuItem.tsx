@@ -13,11 +13,9 @@ import { ApiError } from '#shared/infra/errors';
 
 export function DeleteMenuItem({
   email,
-  studentId,
   handleClose,
 }: {
   email: Email;
-  studentId: number;
   handleClose: () => void;
 }) {
   const showToast = useToast();
@@ -25,7 +23,7 @@ export function DeleteMenuItem({
   const { t } = useTranslation();
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const deleteEmailMutation = useMutation<number, ApiError, string>({
-    mutationFn: (val) => removeEmailApi(val, studentId),
+    mutationFn: (val) => removeEmailApi(val),
     onSuccess: async () => {
       await queryClient.invalidateQueries(['emails']);
       showToast({

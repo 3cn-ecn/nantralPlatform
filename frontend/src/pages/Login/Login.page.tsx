@@ -12,7 +12,7 @@ import {
 } from '@mui/material';
 import { useMutation } from '@tanstack/react-query';
 
-import { resendVerificationEmailApi } from '#modules/account/api/email.api';
+import { resendVerificationEmailApi } from '#modules/account/api/resendVerificationEmail.api';
 import { LoginFormFields } from '#modules/account/view/shared/LoginFormFields';
 import { FlexCol, FlexRow } from '#shared/components/FlexBox/FlexBox';
 import { FloatingContainer } from '#shared/components/FloatingContainer/FloatingContainer';

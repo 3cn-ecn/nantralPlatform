@@ -1,8 +1,8 @@
-import { StudentPreview } from '#modules/student/student.types';
+import { UserPreview } from '#modules/account/user.types';
 
 export interface AdminRequestDTO {
   id: number;
-  student: StudentPreview;
+  user: UserPreview;
   admin: boolean;
   admin_request_message: string;
 }

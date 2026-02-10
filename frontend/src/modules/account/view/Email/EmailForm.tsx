@@ -11,7 +11,7 @@ import { LoadingButton } from '#shared/components/LoadingButton/LoadingButton';
 import { useTranslation } from '#shared/i18n/useTranslation';
 import { ApiFormError } from '#shared/infra/errors';
 
-export function EmailForm({ studentId }: { studentId: number }) {
+export function EmailForm({ userId }: { userId: number }) {
   const [email, setEmail] = useState('');
   const { t } = useTranslation();
   const queryClient = useQueryClient();
@@ -20,7 +20,7 @@ export function EmailForm({ studentId }: { studentId: number }) {
     ApiFormError<{ email: string }>,
     string
   >({
-    mutationFn: (value) => addEmailApi(value, studentId),
+    mutationFn: (value) => addEmailApi(value, userId),
     onSuccess: async () => {
       await queryClient.invalidateQueries(['emails']);
       setEmail('');

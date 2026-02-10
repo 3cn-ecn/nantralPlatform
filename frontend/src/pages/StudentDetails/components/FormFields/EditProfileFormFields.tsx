@@ -4,8 +4,8 @@ import { RegisterForm } from '#modules/account/account.type';
 import {
   EditAccountOptions,
   EditAccountOptionsDTO,
-} from '#modules/account/api/editAccount';
-import { Student } from '#modules/student/student.types';
+} from '#modules/account/api/editAccount.api';
+import { User } from '#modules/account/user.types';
 import {
   DateField,
   FileField,
@@ -22,7 +22,7 @@ export function EditProfileFormFields({
   error,
 }: {
   formValues: EditAccountOptions;
-  previousValues: Student;
+  previousValues: User;
   updateFormValues: (val: Partial<EditAccountOptions>) => void;
   error: ApiFormError<EditAccountOptionsDTO> | null;
 }) {

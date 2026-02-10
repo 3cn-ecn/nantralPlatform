@@ -6,4 +6,5 @@ export interface SocialLinkDTO {
 
 export type SocialLinkFormDTO = Pick<SocialLinkDTO, 'label' | 'uri'> & {
   id?: number;
+  user?: number;
 };

@@ -3,15 +3,15 @@ import { useSearchParams } from 'react-router-dom';
 import { Edit } from '@mui/icons-material';
 import { Fab } from '@mui/material';
 
-import { Student } from '#modules/student/student.types';
+import { User } from '#modules/account/user.types';
 
 import { ModalEditProfile, TabType } from './EditProfile/ModalEditProfile';
 
 interface StudentEditButtonProps {
-  student: Student;
+  user: User;
 }
 
-export function StudentEditButton({ student }: StudentEditButtonProps) {
+export function StudentEditButton({ user }: StudentEditButtonProps) {
   const [params, setParams] = useSearchParams();
   const tab = params.get('tab');
   const open = Boolean(tab && tab in TabType);
@@ -33,7 +33,7 @@ export function StudentEditButton({ student }: StudentEditButtonProps) {
             params.delete('tab');
             setParams(params);
           }}
-          student={student}
+          user={user}
         />
       )}
     </>

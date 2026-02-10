@@ -6,7 +6,7 @@ import {
 } from '@mui/icons-material';
 import { Alert, Box, Button, IconButton, Snackbar } from '@mui/material';
 
-import { Student } from '#modules/student/student.types';
+import { User } from '#modules/account/user.types';
 
 import axios from '../utils/axios';
 import { wrapAndRenderLegacyCode } from '../utils/wrapAndRenderLegacyCode';
@@ -29,7 +29,7 @@ interface QueryParams {
  */
 function MembershipsStudent(): JSX.Element {
   // data
-  const [student, setStudent] = useState<Student | null>(null);
+  const [student, setStudent] = useState<User | null>(null);
   const [members, setMembers] = useState<Membership[]>([]);
   const [loadState, setLoadState] = useState<'load' | 'success' | 'fail'>(
     'load',
@@ -43,7 +43,7 @@ function MembershipsStudent(): JSX.Element {
   const [prevUrl, setPrevUrl] = useState('');
   const [nextUrl, setNextUrl] = useState('');
   const [filters, setFilters] = useState<QueryParams>({
-    student: studentId,
+    user: studentId,
     from: new Date().toISOString(),
   });
 
@@ -75,9 +75,9 @@ function MembershipsStudent(): JSX.Element {
     Promise.all([
       // fetch memberships objects
       getMemberships(),
-      // fetch student objet
+      // fetch user objet
       axios
-        .get<Student>('/api/student/student/me')
+        .get<User>('/api/account/user/me')
         .then((res) => setStudent(res.data)),
     ])
       .then(() => setLoadState('success'))

@@ -1,10 +1,10 @@
-import { StudentPreviewDTO } from '#modules/student/infra/student.dto';
+import { UserPreviewDTO } from '#modules/account/infra/user.dto';
 
 import { GroupPreviewDTO } from './group.dto';
 
 export interface MembershipDTO {
   id: number;
-  user: StudentPreviewDTO;
+  user: UserPreviewDTO;
   group: GroupPreviewDTO;
   summary: string;
   description: string;

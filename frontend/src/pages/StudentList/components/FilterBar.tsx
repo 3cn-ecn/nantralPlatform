@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { FilterAlt } from '@mui/icons-material';
 import { Button, Chip } from '@mui/material';
 
-import { Curriculum, Faculties } from '#modules/student/student.types';
+import { Curriculum, Faculties } from '#modules/account/user.types';
 import { FlexRow } from '#shared/components/FlexBox/FlexBox';
 import { SearchField } from '#shared/components/FormFields';
 import { useTranslation } from '#shared/i18n/useTranslation';

@@ -42,11 +42,11 @@ export function MemberDraggableListItem({ item, index, onClickEdit }: Props) {
             color={snapshot.isDragging ? 'action' : 'disabled'}
           />
           <ListItemAvatar>
-            <Avatar src={item.student.picture} alt={item.student.name}>
+            <Avatar src={item.user.picture} alt={item.user.name}>
               <InboxIcon />
             </Avatar>
           </ListItemAvatar>
-          <ListItemText primary={item.student.name} secondary={item.summary} />
+          <ListItemText primary={item.user.name} secondary={item.summary} />
           <ListItemIcon>
             {item.admin && <Verified color="secondary" />}
           </ListItemIcon>

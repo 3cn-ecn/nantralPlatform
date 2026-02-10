@@ -33,19 +33,20 @@ import { ApiFormError } from '#shared/infra/errors';
 
 import { SocialLinkItem } from './SocialLinkItem';
 
-interface EditSocialLinkFormProps {
+interface EditSocialLinkFormProps<ForGroup extends boolean> {
   socialLinks: SocialLink[];
-  type: 'user' | 'group';
-  groupSlug?: string;
   onSuccess?: () => void;
+  userId: ForGroup extends true ? never : number;
+  groupSlug: ForGroup extends false ? never : string;
 }
 
-export function EditSocialLinkForm({
+export function EditSocialLinkForm<ForGroup extends boolean>({
   socialLinks,
-  type,
+  userId,
   groupSlug,
   onSuccess,
-}: EditSocialLinkFormProps) {
+}: EditSocialLinkFormProps<ForGroup>) {
+  const type = userId ? 'user' : 'group';
   const sortedSocialLinks = sortLinks(socialLinks);
   const addButtonRef = useRef<HTMLButtonElement>(null);
 
@@ -55,6 +56,7 @@ export function EditSocialLinkForm({
   const [socialLinkForm, setSocialLinkForm] = useState<SocialLinkForm>({
     label: '',
     uri: '',
+    user: userId,
   });
 
   // hack to scroll to bottom when creating a new item
@@ -120,7 +122,7 @@ export function EditSocialLinkForm({
             onChange={(_, isExpanded) => {
               if (isExpanded) {
                 const val = socialLinks[index];
-                setSocialLinkForm({ ...val });
+                setSocialLinkForm({ ...val, user: userId });
                 setExpanded(val.id);
               } else {
                 setExpanded(undefined);
@@ -222,6 +224,7 @@ export function EditSocialLinkForm({
             setSocialLinkForm({
               label: '',
               uri: '',
+              user: userId,
             });
           }}
         >
@@ -235,6 +238,7 @@ export function EditSocialLinkForm({
             setSocialLinkForm({
               label: '',
               uri: 'mailto:example@example.com',
+              user: userId,
             });
           }}
         >
@@ -248,6 +252,7 @@ export function EditSocialLinkForm({
             setSocialLinkForm({
               label: '',
               uri: 'tel:+33 6 01 01 01 01',
+              user: userId,
             });
           }}
         >

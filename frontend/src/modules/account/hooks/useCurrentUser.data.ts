@@ -5,9 +5,9 @@ import { useToast } from '#shared/context/Toast.context';
 import { ApiError } from '#shared/infra/errors';
 
 import { getCurrentUserApi } from '../api/getCurrentUser.api';
-import { Student } from '../student.types';
+import { User } from '../user.types';
 
-const emptyUser: Student = {
+const emptyUser: User = {
   id: -1,
   name: 'Chargement...',
   promo: 1919,
@@ -25,8 +25,8 @@ const emptyUser: Student = {
 
 export function useCurrentUserData() {
   const { isAuthenticated } = useAuth();
-  const query = useQuery<Student, ApiError>({
-    queryKey: ['student', 'current'],
+  const query = useQuery<User, ApiError>({
+    queryKey: ['user', 'current'],
     queryFn: ({ signal }) => getCurrentUserApi({ signal }),
     enabled: isAuthenticated,
   });

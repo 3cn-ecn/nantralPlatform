@@ -5,7 +5,7 @@ import { Check, MarkEmailReadRounded } from '@mui/icons-material';
 import { Box, Button, CardContent, Paper, Typography } from '@mui/material';
 import { useMutation } from '@tanstack/react-query';
 
-import { resendVerificationEmailApi } from '#modules/account/api/email.api';
+import { resendVerificationEmailApi } from '#modules/account/api/resendVerificationEmail.api';
 import { FlexCol, FlexRow } from '#shared/components/FlexBox/FlexBox';
 import { useTranslation } from '#shared/i18n/useTranslation';
 

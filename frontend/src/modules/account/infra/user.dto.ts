@@ -1,6 +1,6 @@
 import { SocialLinkDTO } from '#modules/social_link/infra/socialLink.dto';
 
-export interface StudentDTO {
+export interface UserDTO {
   id: number;
   name: string;
   promo: number;
@@ -16,7 +16,4 @@ export interface StudentDTO {
   username: string;
 }
 
-export type StudentPreviewDTO = Pick<
-  StudentDTO,
-  'id' | 'name' | 'url' | 'picture'
->;
+export type UserPreviewDTO = Pick<UserDTO, 'id' | 'name' | 'url' | 'picture'>;

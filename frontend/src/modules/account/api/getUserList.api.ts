@@ -2,10 +2,10 @@ import axios from 'axios';
 
 import { adaptPage, PageDTO } from '#shared/infra/pagination';
 
-import { adaptStudent } from '../infra/student.adapter';
-import { StudentDTO } from '../infra/student.dto';
+import { adaptUser } from '../infra/user.adapter';
+import { UserDTO } from '../infra/user.dto';
 
-export interface GetStudentListApiParams {
+export interface GetUserListApiParams {
   search?: string;
   pageSize?: number;
   page?: number;
@@ -14,8 +14,8 @@ export interface GetStudentListApiParams {
   faculty?: string;
 }
 
-export async function getStudentListApi(options: GetStudentListApiParams) {
-  const { data } = await axios.get<PageDTO<StudentDTO>>('/api/account/user/', {
+export async function getUserListApi(options: GetUserListApiParams) {
+  const { data } = await axios.get<PageDTO<UserDTO>>('/api/account/user/', {
     params: {
       search: options.search,
       page: options.page,
@@ -26,5 +26,5 @@ export async function getStudentListApi(options: GetStudentListApiParams) {
     },
   });
 
-  return adaptPage(data, adaptStudent);
+  return adaptPage(data, adaptUser);
 }

@@ -6,4 +6,5 @@ export interface SocialLink {
 
 export type SocialLinkForm = Pick<SocialLink, 'label' | 'uri'> & {
   id?: number;
+  user?: number;
 };

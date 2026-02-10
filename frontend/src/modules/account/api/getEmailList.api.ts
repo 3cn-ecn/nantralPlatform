@@ -13,7 +13,7 @@ interface GetEmailListOptions {
 
 export async function getEmailListApi(
   options: GetEmailListOptions,
-  user: number,
+  user?: number,
 ): Promise<Page<Email>> {
   const { data } = await axios
     .get<PageDTO<EmailDTO>>('/api/account/email/', {
