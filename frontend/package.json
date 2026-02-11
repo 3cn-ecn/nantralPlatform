@@ -86,7 +86,7 @@
     "@types/mapbox-gl": "^3.4.1",
     "@vitejs/plugin-react": "^4.0.0",
     "array-move": "^4.0.0",
-    "axios": "^1.7.4",
+    "axios": "^1.13.5",
     "ckeditor5": "^43.1.0",
     "calendar-link": "^2.7.0",
     "date-fns": "^2.30.0",
