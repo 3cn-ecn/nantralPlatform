@@ -167,7 +167,7 @@ class CustomUserAdmin(UserAdmin):
         "is_staff",
         "is_superuser",
         "is_active",
-        "group_set",
+        "groups",
         "invitation",
         IsEmailValidFilter,
         UppercaseEmailFilter,
