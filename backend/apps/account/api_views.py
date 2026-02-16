@@ -9,7 +9,7 @@ from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.serializers import Serializer
 from rest_framework.throttling import AnonRateThrottle
-from rest_framework.viewsets import GenericViewSet
+from rest_framework.viewsets import GenericViewSet, ModelViewSet
 
 from apps.utils.parse import parse_int
 
@@ -245,14 +245,7 @@ class AuthViewSet(GenericViewSet):
         )
 
 
-class EmailViewSet(
-    mixins.CreateModelMixin,
-    mixins.ListModelMixin,
-    mixins.DestroyModelMixin,
-    mixins.UpdateModelMixin,
-    mixins.RetrieveModelMixin,
-    GenericViewSet,
-):
+class EmailViewSet(ModelViewSet):
     serializer_class = EmailSerializer
     permission_classes = [CanEditProfileOrReadOnly, IsAuthenticated]
     lookup_field = "uuid"

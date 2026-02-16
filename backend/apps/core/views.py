@@ -13,7 +13,6 @@ import requests
 from django_vite.apps import DjangoViteAssetLoader
 
 from apps.account.models import User
-from apps.group.models import Group, GroupType
 
 # FRONTEND section
 
@@ -47,9 +46,7 @@ def current_user_roommates_view(request):
     """Shortcut to the current user roommates instance (/my_coloc)"""
     now = timezone.now()
     roommates = (
-        Group.objects.filter(
-            members=request.user, type=GroupType.objects.get(slug="colocs")
-        )
+        request.user.membership_set.filter(group__group_type__slug="colocs")
         .filter(
             Q(
                 Q(begin_date__lte=now)
@@ -57,6 +54,7 @@ def current_user_roommates_view(request):
             ),
         )
         .first()
+        .group
     )
     if roommates:
         return redirect(f"/group/@{roommates.slug}/")
