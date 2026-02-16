@@ -220,15 +220,15 @@ class GroupWriteSerializer(serializers.ModelSerializer):
             )
         return value
 
-    def validate_latitude(self, value: float) -> float:
-        if self.get_group_type().is_map and not value:
+    def validate_latitude(self, value: float | None) -> float | None:
+        if self.get_group_type().is_map and value is None:
             raise exceptions.ValidationError(
                 _("This field is required for map groups.")
             )
         return value
 
-    def validate_longitude(self, value: float) -> float:
-        if self.get_group_type().is_map and not value:
+    def validate_longitude(self, value: float | None) -> float | None:
+        if self.get_group_type().is_map and value is None:
             raise exceptions.ValidationError(
                 _("This field is required for map groups.")
             )
