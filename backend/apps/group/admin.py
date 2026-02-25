@@ -2,7 +2,7 @@ from django.contrib import admin
 
 from simple_history.admin import SimpleHistoryAdmin
 
-from .models import Group, GroupType, Label, Membership, Tag
+from .models import Group, GroupType, Label, Membership, Tag, Thematic
 
 
 class LabelInline(admin.TabularInline):
@@ -19,6 +19,10 @@ class GroupTypeAdmin(admin.ModelAdmin):
     list_display = ["name", "slug", "is_map"]
     autocomplete_fields = ["extra_parents"]
     inlines = [LabelInline, TagInline]
+
+
+class ThematicAdmin(admin.ModelAdmin):
+    list_display = ["name", "priority", "public", "visible"]
 
 
 class GroupAdmin(SimpleHistoryAdmin):
@@ -64,3 +68,4 @@ class MembershipAdmin(admin.ModelAdmin):
 admin.site.register(GroupType, GroupTypeAdmin)
 admin.site.register(Group, GroupAdmin)
 admin.site.register(Membership, MembershipAdmin)
+admin.site.register(Thematic, ThematicAdmin)

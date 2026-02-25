@@ -78,6 +78,7 @@ class GroupPreviewSerializer(TranslationModelSerializer):
     category = serializers.SerializerMethodField()
     sub_category = serializers.SerializerMethodField()
     short_name = serializers.SerializerMethodField()
+    thematic = ThematicSerializer(read_only=True)
 
     class Meta:
         model = Group
@@ -90,6 +91,7 @@ class GroupPreviewSerializer(TranslationModelSerializer):
             "id",
             "category",
             "sub_category",
+            "thematic",
         ]
         read_only_fields = [
             "name",
@@ -129,6 +131,7 @@ class GroupSerializer(TranslationModelSerializer):
     sub_category = serializers.SerializerMethodField()
     social_links = SocialLinkSerializer(many=True)
     short_name = serializers.SerializerMethodField()
+    thematic = ThematicSerializer(read_only=True)
 
     class Meta:
         model = Group

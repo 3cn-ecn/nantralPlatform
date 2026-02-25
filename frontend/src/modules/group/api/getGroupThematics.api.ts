@@ -10,12 +10,14 @@ import { GroupThematic } from '../types/groupThematic.types';
 export async function getGroupThematicsApi(options: {
   page?: number;
   pageSize?: number;
+  search?: string | null;
 }): Promise<Page<GroupThematic>> {
   const { data } = await axios
     .get<PageDTO<GroupThematicDTO>>('/api/group/thematic/', {
       params: {
         page: options.page,
         pageSize: options.pageSize,
+        search: options.search,
       },
     })
     .catch((err: ApiErrorDTO) => {

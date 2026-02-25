@@ -189,6 +189,9 @@ class Group(models.Model, SlugModel):
         blank=True,
     )
     tags = models.ManyToManyField(to=Tag, verbose_name=_("Tags"), blank=True)
+    thematic = models.ForeignKey(
+        to=Thematic, on_delete=models.CASCADE, null=True, blank=True
+    )
     parent = models.ForeignKey(
         to="self",
         verbose_name=_("Parent group"),
@@ -342,6 +345,7 @@ class Group(models.Model, SlugModel):
             "summary_en",
             "description_fr",
             "description_en",
+            "thematic",
         ),
         related_name="versions",
     )
@@ -350,7 +354,7 @@ class Group(models.Model, SlugModel):
         verbose_name = "groupe"
 
     def __str__(self) -> str:
-        return self.short_name
+        return self.name
 
     def save(self, *args, **kwargs) -> None:
         """Save an instance of the model in the database."""

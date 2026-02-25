@@ -81,10 +81,21 @@ export function GroupFormFields({
       ),
     [groupType.slug],
   );
-  const { data: thematicsData, isLoading: isThematicsLoading } = useQuery({
+  const { data: thematicsData } = useQuery({
     queryKey: ['groupThematics'],
     queryFn: () => getGroupThematicsApi({ page: 1, pageSize: 100 }),
   });
+  const fetchThematicOptions = useCallback(
+    (searchText: string) =>
+      getGroupThematicsApi({ search: searchText, pageSize: 10 }).then(
+        (data) => data.results,
+      ),
+    [],
+  );
+  const fetchInitialThematicOptions = useCallback(
+    () => getGroupThematicsApi({ pageSize: 7 }).then((data) => data.results),
+    [],
+  );
   const addressCallback = useCallback(
     (val: string, objectValue: Geocode) =>
       updateFormValues({
@@ -263,27 +274,24 @@ export function GroupFormFields({
         </>
       )}
       <FlexAuto columnGap={2}>
-        <SelectField
+        <AutocompleteSearchField
+          name="thematic"
           label={t('group.form.thematic.label')}
-          value={
-            formValues.thematic?.name ?? t('group.form.thematic.undefined')
-          }
-          handleChange={(val) => {
-            const selected = thematicsData?.results.find((t) => t.name === val);
-            updateFormValues({ thematic: selected ?? undefined });
-          }}
-          disabled={isThematicsLoading || !thematicsData}
+          value={formValues.thematic?.id ?? null}
+          handleChange={useCallback(
+            (val: number) =>
+              updateFormValues({
+                thematic: thematicsData?.results.find((t) => t.id === val),
+              }),
+            [updateFormValues, thematicsData],
+          )}
+          defaultObjectValue={formValues.thematic || null}
           errors={error?.fields?.thematic}
-        >
-          <MenuItem value={t('group.form.thematic.undefined')}>
-            {t('group.form.thematic.undefined')}
-          </MenuItem>
-          {thematicsData?.results.map((thematic) => (
-            <MenuItem key={thematic.id} value={thematic.name}>
-              {thematic.name}
-            </MenuItem>
-          ))}
-        </SelectField>
+          required
+          fetchInitialOptions={fetchInitialThematicOptions}
+          fetchOptions={fetchThematicOptions}
+          labelPropName="name"
+        />
       </FlexAuto>
 
       <TextField
