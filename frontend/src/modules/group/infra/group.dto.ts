@@ -2,6 +2,7 @@ import { UserPreviewDTO } from '#modules/account/infra/user.dto';
 import { ShortMembershipFormDTO } from '#modules/group/infra/membership.dto';
 import { SocialLinkDTO } from '#modules/social_link/infra/socialLink.dto';
 
+import { GroupThematicDTO } from './groupThematic.dto';
 import { GroupTypePreviewDTO } from './groupType.dto';
 
 export interface GroupDTO {
@@ -13,12 +14,17 @@ export interface GroupDTO {
   icon?: string;
   group_type: GroupTypePreviewDTO;
   parent?: GroupPreviewDTO;
+  thematic: GroupThematicDTO | null;
   creation_year?: number;
   archived: boolean;
   private: boolean;
   public: boolean;
   summary: string;
+  summary_fr: string;
+  summary_en: string;
   description: string;
+  description_fr: string;
+  description_en: string;
   meeting_place: string;
   meeting_hour: string;
   banner: string;
@@ -46,6 +52,7 @@ export type GroupPreviewDTO = Pick<
   | 'icon'
   | 'category'
   | 'sub_category'
+  | 'thematic'
 >;
 
 export type MapGroupPreviewDTO = GroupPreviewDTO &
@@ -70,14 +77,17 @@ export type CreateGroupFormDTO = Pick<
   | 'creation_year'
   | 'slug'
   | 'archived'
-  | 'summary'
-  | 'description'
+  | 'summary_fr'
+  | 'summary_en'
+  | 'description_fr'
+  | 'description_en'
   | 'meeting_place'
   | 'lock_memberships'
   | 'address'
   | 'latitude'
   | 'longitude'
 > & {
+  thematic: number | null;
   children_label?: string;
   icon?: File;
   banner?: File;

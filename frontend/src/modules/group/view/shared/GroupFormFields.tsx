@@ -19,6 +19,7 @@ import { useQuery } from '@tanstack/react-query';
 
 import { getGroupLabelApi } from '#modules/group/api/getGroupLabel.api';
 import { getGroupListApi } from '#modules/group/api/getGroupList.api';
+import { getGroupThematicsApi } from '#modules/group/api/getGroupThematics.api';
 import { CreateGroupFormDTO } from '#modules/group/infra/group.dto';
 import {
   CreateGroupForm as GroupForm,
@@ -80,6 +81,21 @@ export function GroupFormFields({
       ),
     [groupType.slug],
   );
+  const { data: thematicsData } = useQuery({
+    queryKey: ['groupThematics'],
+    queryFn: () => getGroupThematicsApi({ page: 1, pageSize: 100 }),
+  });
+  const fetchThematicOptions = useCallback(
+    (searchText: string) =>
+      getGroupThematicsApi({ search: searchText, pageSize: 10 }).then(
+        (data) => data.results,
+      ),
+    [],
+  );
+  const fetchInitialThematicOptions = useCallback(
+    () => getGroupThematicsApi({ pageSize: 7 }).then((data) => data.results),
+    [],
+  );
   const addressCallback = useCallback(
     (val: string, objectValue: Geocode) =>
       updateFormValues({
@@ -105,7 +121,7 @@ export function GroupFormFields({
     (val: string) => updateFormValues({ meetingHour: val }),
     [updateFormValues],
   );
-
+  console.log(formValues);
   const today = new Date();
   const oneYear = new Date();
   oneYear.setFullYear(today.getFullYear() + 1);
@@ -257,6 +273,26 @@ export function GroupFormFields({
           </Box>
         </>
       )}
+      <FlexAuto columnGap={2}>
+        <AutocompleteSearchField
+          name="thematic"
+          label={t('group.form.thematic.label')}
+          value={formValues.thematic?.id ?? null}
+          handleChange={useCallback(
+            (val: number) =>
+              updateFormValues({
+                thematic: thematicsData?.results.find((t) => t.id === val),
+              }),
+            [updateFormValues, thematicsData],
+          )}
+          defaultObjectValue={formValues.thematic || null}
+          errors={error?.fields?.thematic}
+          required
+          fetchInitialOptions={fetchInitialThematicOptions}
+          fetchOptions={fetchThematicOptions}
+          labelPropName="name"
+        />
+      </FlexAuto>
 
       <TextField
         label={t('group.form.changeReason.label')}
@@ -324,16 +360,35 @@ export function GroupFormFields({
         label={
           groupType.isMap
             ? t('group.form.summary.mapLabel')
-            : t('group.form.summary.label')
+            : t('group.form.summary.frenchLabel')
         }
-        value={formValues.summary}
+        value={formValues.frenchSummary}
         handleChange={useCallback(
           (val) => {
-            updateFormValues({ summary: val });
+            updateFormValues({ frenchSummary: val });
           },
           [updateFormValues],
         )}
-        errors={error?.fields?.summary}
+        errors={error?.fields?.summary_fr}
+        placeholder={
+          groupType.isMap ? t('group.form.summary.mapPlaceholder') : undefined
+        }
+      />
+      <TextField
+        hidden={groupType.isMap}
+        label={
+          groupType.isMap
+            ? t('group.form.summary.mapLabel')
+            : t('group.form.summary.englishLabel')
+        }
+        value={formValues.englishSummary}
+        handleChange={useCallback(
+          (val) => {
+            updateFormValues({ englishSummary: val });
+          },
+          [updateFormValues],
+        )}
+        errors={error?.fields?.summary_en}
         placeholder={
           groupType.isMap ? t('group.form.summary.mapPlaceholder') : undefined
         }
@@ -428,15 +483,27 @@ export function GroupFormFields({
       </FlexAuto>
 
       <RichTextField
-        label={t('group.form.description.label')}
-        value={formValues.description}
+        label={t('group.form.description.frenchLabel')}
+        value={formValues.frenchDescription}
         handleChange={useCallback(
           (val) => {
-            updateFormValues({ description: val });
+            updateFormValues({ frenchDescription: val });
           },
           [updateFormValues],
         )}
-        errors={error?.fields?.description}
+        errors={error?.fields?.description_fr}
+      />
+
+      <RichTextField
+        label={t('group.form.description.englishLabel')}
+        value={formValues.englishDescription}
+        handleChange={useCallback(
+          (val) => {
+            updateFormValues({ englishDescription: val });
+          },
+          [updateFormValues],
+        )}
+        errors={error?.fields?.description_en}
       />
 
       <Box mt={2}>

@@ -3,7 +3,7 @@
 exports[`Home page should render correctly 1`] = `
 <DocumentFragment>
   <div
-    class="MuiContainer-root MuiContainer-maxWidthSm css-1dsi6ev-MuiContainer-root"
+    class="MuiContainer-root MuiContainer-maxWidthLg css-r96aq8-MuiContainer-root"
   >
     <h1
       class="MuiTypography-root MuiTypography-h1 css-11v5353-MuiTypography-root"
@@ -11,160 +11,122 @@ exports[`Home page should render correctly 1`] = `
       Legal Notice
     </h1>
     <h4
-      class="MuiTypography-root MuiTypography-h4 css-12wu3qo-MuiTypography-root"
+      class="MuiTypography-root MuiTypography-h4 css-1amwp23-MuiTypography-root"
     >
-      Site identity
+      Website publisher
     </h4>
-    <p
-      class="MuiTypography-root MuiTypography-body1 css-17s6y1p-MuiTypography-root"
+    <div
+      class="MuiTypography-root MuiTypography-body1 MuiTypography-paragraph css-1eygakl-MuiTypography-root"
     >
-      Name of the site : Nantral Platform
-    </p>
-    <p
-      class="MuiTypography-root MuiTypography-body1 css-17s6y1p-MuiTypography-root"
+      The Nantral Platform website is developed by the 3CN club, affiliated with the AECN (ASSOCIATION DES ÉTUDIANTS DE L'ÉCOLE CENTRALE DE NANTES). Responsibility for the content of the website lies with the AECN, which also ensures its funding and management.
+    </div>
+    <div
+      class="MuiTypography-root MuiTypography-body1 MuiTypography-paragraph css-1eygakl-MuiTypography-root"
     >
-      Link : https://www.nantral-platform.fr
-    </p>
-    <p
-      class="MuiTypography-root MuiTypography-body1 css-17s6y1p-MuiTypography-root"
-    >
-      Owner : Association des Étudiants de l'École Centrale de Nantes
-    </p>
+      The address of the AECN is as follows:
+      <div
+        class="MuiTypography-root MuiTypography-body1 MuiTypography-paragraph css-1qg2aev-MuiTypography-root"
+      >
+        <p
+          class="MuiTypography-root MuiTypography-body1 css-5fg32r-MuiTypography-root"
+        >
+          ASSOCIATION DES ÉTUDIANTS DE L'ÉCOLE CENTRALE DE NANTES 
+          <br />
+          1 rue de la Noë 
+          <br />
+          44300 Nantes 
+          <br />
+          France 
+          <br />
+        </p>
+      </div>
+      In particular, the site team is under the direction of: 
+      <ul
+        class="MuiList-root MuiList-padding MuiList-dense css-h4y409-MuiList-root"
+      >
+        <li
+          class="MuiListItem-root MuiListItem-dense MuiListItem-gutters MuiListItem-padding css-1g0nj9f-MuiListItem-root"
+        >
+          | Victoire GUTH - AECN President ;
+        </li>
+        <li
+          class="MuiListItem-root MuiListItem-dense MuiListItem-gutters MuiListItem-padding css-1g0nj9f-MuiListItem-root"
+        >
+          | Bastien PAGEAUD - Director of Information Systems at AECN ;
+        </li>
+        <li
+          class="MuiListItem-root MuiListItem-dense MuiListItem-gutters MuiListItem-padding css-1g0nj9f-MuiListItem-root"
+        >
+          | Jean Benoît GRIMALDI - 3CN President.
+        </li>
+      </ul>
+    </div>
     <h4
-      class="MuiTypography-root MuiTypography-h4 css-12wu3qo-MuiTypography-root"
+      class="MuiTypography-root MuiTypography-h4 css-1amwp23-MuiTypography-root"
     >
-      The association
+      Hosting provider
     </h4>
-    <p
-      class="MuiTypography-root MuiTypography-body1 css-17s6y1p-MuiTypography-root"
+    <div
+      class="MuiTypography-root MuiTypography-body1 MuiTypography-paragraph css-1eygakl-MuiTypography-root"
     >
-      ASSOCIATION DES ÉTUDIANTS DE L'ÉCOLE CENTRALE DE NANTES
-    </p>
-    <p
-      class="MuiTypography-root MuiTypography-body1 css-17s6y1p-MuiTypography-root"
-    >
-      École Centrale de Nantes, 1 rue de la Noë, 44300 Nantes
-    </p>
-    <p
-      class="MuiTypography-root MuiTypography-body1 css-17s6y1p-MuiTypography-root"
-    >
-      SIREN : 790 010 078
-    </p>
-    <p
-      class="MuiTypography-root MuiTypography-body1 css-17s6y1p-MuiTypography-root"
-    >
-      APE : 9499Z
-    </p>
-    <p
-      class="MuiTypography-root MuiTypography-body1 css-17s6y1p-MuiTypography-root"
-    >
-      TVA Intra Num. : FR 49 79 00 10 07 8
-    </p>
-    <p
-      class="MuiTypography-root MuiTypography-body1 css-17s6y1p-MuiTypography-root"
-    >
-      E-Mail : bde@ec-nantes.fr
-    </p>
+      The website is hosted by OVH SAS, whose registered office is located at the following address:
+      <div
+        class="MuiTypography-root MuiTypography-body1 MuiTypography-paragraph css-1qg2aev-MuiTypography-root"
+      >
+        <p
+          class="MuiTypography-root MuiTypography-body1 css-5fg32r-MuiTypography-root"
+        >
+          2 rue Kellermann 
+          <br />
+          59100 Roubaix 
+          <br />
+          France 
+          <br />
+        </p>
+      </div>
+    </div>
     <h4
-      class="MuiTypography-root MuiTypography-h4 css-12wu3qo-MuiTypography-root"
-    >
-      Design and production
-    </h4>
-    <p
-      class="MuiTypography-root MuiTypography-body1 css-17s6y1p-MuiTypography-root"
-    >
-      CLUB NANTRAL PLATFORM
-    </p>
-    <h4
-      class="MuiTypography-root MuiTypography-h4 css-12wu3qo-MuiTypography-root"
-    >
-      Hosting
-    </h4>
-    <p
-      class="MuiTypography-root MuiTypography-body1 css-17s6y1p-MuiTypography-root"
-    >
-      OVH
-    </p>
-    <p
-      class="MuiTypography-root MuiTypography-body1 css-17s6y1p-MuiTypography-root"
-    >
-      SAS with a capital of 10 069 020 €
-    </p>
-    <p
-      class="MuiTypography-root MuiTypography-body1 css-17s6y1p-MuiTypography-root"
-    >
-      RCS Lille Métropole 424 761 419 00045
-    </p>
-    <p
-      class="MuiTypography-root MuiTypography-body1 css-17s6y1p-MuiTypography-root"
-    >
-      APE Code : 2620Z
-    </p>
-    <p
-      class="MuiTypography-root MuiTypography-body1 css-17s6y1p-MuiTypography-root"
-    >
-      TVA Num. : FR 22 42 47 61 41 9
-    </p>
-    <p
-      class="MuiTypography-root MuiTypography-body1 css-17s6y1p-MuiTypography-root"
-    >
-      Head office : 2 rue Kellermann - 59100 Roubaix - France
-    </p>
-    <h4
-      class="MuiTypography-root MuiTypography-h4 css-12wu3qo-MuiTypography-root"
+      class="MuiTypography-root MuiTypography-h4 css-1amwp23-MuiTypography-root"
     >
       Intellectual property
     </h4>
-    <p
-      class="MuiTypography-root MuiTypography-body1 css-17s6y1p-MuiTypography-root"
+    <div
+      class="MuiTypography-root MuiTypography-body1 MuiTypography-paragraph css-1eygakl-MuiTypography-root"
     >
-      Unless stated otherwise, all the elements accessible on the site (texts, images, logos, icons, sounds, software, etc.) remain the exclusive property of their authors, with regard to intellectual property rights or rights of use.
-    </p>
-    <p
-      class="MuiTypography-root MuiTypography-body1 css-17s6y1p-MuiTypography-root"
-    >
-      Any reproduction, representation, modification, publication, adaptation of all or part of the elements of the site, whatever the means or process used, is prohibited, except with the prior written authorization of the author.
-    </p>
-    <p
-      class="MuiTypography-root MuiTypography-body1 css-17s6y1p-MuiTypography-root"
-    >
-      Any unauthorized exploitation of the site or any element it contains is considered to constitute an infringement and prosecuted.
-    </p>
-    <p
-      class="MuiTypography-root MuiTypography-body1 css-17s6y1p-MuiTypography-root"
-    >
-      The trademarks and logos reproduced on the site are registered by the companies that own them.
-    </p>
+      The source code of this website is the property of the 3CN club, affiliated with the AECN. Unless otherwise stated, all elements accessible on the website (texts, images, logos, icons, sounds, software, etc.) remain the exclusive property of their respective authors with regard to intellectual property rights or usage rights. Any reproduction, representation, modification, publication or adaptation of all or part of the elements of the website, by any means or process whatsoever, is prohibited without the prior authorization of the author. Any unauthorized use of the website or any of its elements may constitute an infringement and may result in legal action.
+    </div>
     <h4
-      class="MuiTypography-root MuiTypography-h4 css-12wu3qo-MuiTypography-root"
+      class="MuiTypography-root MuiTypography-h4 css-1amwp23-MuiTypography-root"
     >
-      Cookies
+      Personal data
     </h4>
-    <p
-      class="MuiTypography-root MuiTypography-body1 css-17s6y1p-MuiTypography-root"
+    <div
+      class="MuiTypography-root MuiTypography-body1 MuiTypography-paragraph css-1eygakl-MuiTypography-root"
     >
-      Only a session cookie is used on the site and expires after 14 days.
-    </p>
+      Personal data collected are used solely for the proper functioning of Nantral Platform. Access to such data is strictly limited to their owner and to persons expressly authorized by the board of directors of the AECN.
+    </div>
+    <div
+      class="MuiTypography-root MuiTypography-body1 MuiTypography-paragraph css-1eygakl-MuiTypography-root"
+    >
+      For any questions or requests regarding personal data, you may contact us at the following email address: 
+      <a
+        class="MuiTypography-root MuiTypography-inherit MuiLink-root MuiLink-underlineAlways css-18z7zy0-MuiTypography-root-MuiLink-root"
+        href="mailto:contact@nantral-platform.fr"
+      >
+        contact@nantral-platform.fr
+      </a>
+      .
+    </div>
     <h4
-      class="MuiTypography-root MuiTypography-h4 css-12wu3qo-MuiTypography-root"
+      class="MuiTypography-root MuiTypography-h4 css-1amwp23-MuiTypography-root"
     >
-      Embedded content from other sites
+      Use of Cookies
     </h4>
-    <p
-      class="MuiTypography-root MuiTypography-body1 css-17s6y1p-MuiTypography-root"
+    <div
+      class="MuiTypography-root MuiTypography-body1 MuiTypography-paragraph css-1eygakl-MuiTypography-root"
     >
-      The contents on this site may include contents from external sources (for instance videos, images, ...). These embedded contents act in the same way as if the visitor had visited the original site from where this content is based. These sites may therefore use additional cookies.
-    </p>
-    <h4
-      class="MuiTypography-root MuiTypography-h4 css-12wu3qo-MuiTypography-root"
-    >
-      Personal data usage
-    </h4>
-    <p
-      class="MuiTypography-root MuiTypography-body1 css-17s6y1p-MuiTypography-root"
-    >
-      When you register on the site, the personal data you send us will be stored and kept by the Association des Étudiants de l'École Centrale de Nantes until you request the deletion of your user account using the contact form.
-    </p>
+      Nantral Platform uses only cookies that are strictly necessary for the proper functioning of the website and for user authentication. These cookies allow, in particular, the maintenance of your session after login, access to groups and events, and the personalization of your profile. These cookies are not used for advertising or tracking purposes and do not require prior consent in accordance with applicable regulations. Authentication cookies are retained for the period strictly necessary to manage the session or in compliance with applicable legal obligations. You may configure your browser to block cookies; however, certain features of the website may not function properly.
+    </div>
   </div>
 </DocumentFragment>
 `;

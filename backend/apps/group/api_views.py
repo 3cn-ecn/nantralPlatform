@@ -25,7 +25,7 @@ from rest_framework.settings import api_settings
 from apps.utils.discord import respond_admin_request, send_admin_request
 from apps.utils.parse import parse_bool
 
-from .models import Group, GroupType, Label, Membership
+from .models import Group, GroupType, Label, Membership, Thematic
 from .permissions import (
     AdminRequestListPermission,
     AdminRequestPermission,
@@ -47,12 +47,26 @@ from .serializers import (
     MembershipSerializer,
     NewMembershipSerializer,
     SubscriptionSerializer,
+    ThematicSerializer,
 )
 
 
 class GeoJsonRender(renderers.JSONRenderer):
     media_type = "application/json"
     format = "points"
+
+
+class ThematicViewSet(viewsets.ReadOnlyModelViewSet):
+    serializer_class = ThematicSerializer
+    filter_backends = [filters.OrderingFilter]
+    ordering = ["-priority"]
+    ordering_fields = ["priority", "name"]
+
+    def get_queryset(self):
+        queryset = Thematic.objects.filter(visible=True)
+        if not self.request.user.is_authenticated:
+            queryset = queryset.filter(public=True)
+        return queryset
 
 
 class GroupTypeViewSet(viewsets.ReadOnlyModelViewSet):

@@ -2,6 +2,7 @@ import { UserPreview } from '#modules/account/user.types';
 import { ShortMembershipForm } from '#modules/group/types/membership.types';
 import { SocialLink } from '#modules/social_link/types/socialLink.type';
 
+import { GroupThematic } from './groupThematic.types';
 import { GroupTypePreview } from './groupType.types';
 
 export interface Group {
@@ -13,12 +14,17 @@ export interface Group {
   icon?: string;
   groupType: GroupTypePreview;
   parent?: GroupPreview;
+  thematic?: GroupThematic | null;
   creationYear?: number;
   archived: boolean;
   private: boolean;
   public: boolean;
   summary: string;
+  frenchSummary: string;
+  englishSummary: string;
   description: string;
+  frenchDescription: string;
+  englishDescription: string;
   meetingPlace: string;
   meetingHour: string;
   banner: string;
@@ -46,6 +52,7 @@ export type GroupPreview = Pick<
   | 'icon'
   | 'category'
   | 'subCategory'
+  | 'thematic'
 >;
 
 export type MapGroupPreview = GroupPreview &
@@ -65,13 +72,16 @@ export type CreateGroupForm = Pick<
   | 'creationYear'
   | 'slug'
   | 'archived'
-  | 'summary'
-  | 'description'
+  | 'frenchSummary'
+  | 'englishSummary'
+  | 'frenchDescription'
+  | 'englishDescription'
   | 'meetingPlace'
   | 'lockMemberships'
   | 'address'
   | 'latitude'
   | 'longitude'
+  | 'thematic'
 > & {
   childrenLabel?: string;
   icon?: File;

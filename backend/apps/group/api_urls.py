@@ -6,6 +6,7 @@ from .api_views import (
     LabelViewSet,
     MapViewSet,
     MembershipViewSet,
+    ThematicViewSet,
 )
 
 app_name = "api_group"
@@ -17,6 +18,7 @@ router = DefaultRouter()
 router.register("membership", MembershipViewSet, basename="membership")
 router.register("group", GroupViewSet, basename="group")
 router.register("grouptype", GroupTypeViewSet, basename="grouptype")
+router.register("thematic", ThematicViewSet, basename="thematic")
 router.register("label", LabelViewSet, basename="label")
 router.register("map", MapViewSet, basename="map")
 urlpatterns = router.urls

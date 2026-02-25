@@ -25,7 +25,11 @@ import { useGroupTypeDetails } from './hooks/useGroupTypeDetails';
 export default function GroupListPage() {
   const [params] = useSearchParams();
   const type = params.get('type') || undefined;
-  const { groupsByCategory, query: groupListQuery, count } = useGroupList(type);
+  const {
+    groupsByCategory,
+    query: groupListQuery,
+    count,
+  } = useGroupList(type, type == 'club');
   const { t } = useTranslation();
   const groupTypeQuery = useGroupTypeDetails(type);
   const { staff } = useCurrentUserData();
@@ -83,7 +87,7 @@ export default function GroupListPage() {
             Object.keys(groupsByCategory).map((cat) => (
               <FlexCol key={cat}>
                 <Typography variant="h2" mb={4}>
-                  {cat}
+                  {cat == 'undefined' ? t('group.defaultThematic') : cat}
                 </Typography>
                 <GroupGrid estimatedSize={100} groups={groupsByCategory[cat]} />
                 {(groupListQuery.isLoading ||

@@ -10,7 +10,11 @@ export function SeeGroupsButton() {
 
   return (
     <Card variant="elevation">
-      <CardActionArea component={Link} to="/group" sx={{ display: 'flex' }}>
+      <CardActionArea
+        component={Link}
+        to="/group/?type=club"
+        sx={{ display: 'flex' }}
+      >
         <FlexRow sx={{ padding: 2, gap: 3, alignItems: 'center' }}>
           <img
             style={{

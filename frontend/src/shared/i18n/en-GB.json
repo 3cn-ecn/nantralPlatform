@@ -350,6 +350,7 @@
     }
   },
   "group": {
+    "defaultThematic": "Others",
     "details": {
       "accept": "Accept",
       "accepted": "Accepted",
@@ -436,7 +437,13 @@
         "posts": "Posts"
       }
     },
+    "defaultThematic": "Others",
     "form": {
+      "thematic": {
+        "label": "Thematic",
+        "undefined": "Undefined",
+        "helperText": "This group will be displayed with other groups with the same thematic."
+      },
       "address": {
         "label": "Address"
       },
@@ -462,7 +469,8 @@
         "label": "Creation date"
       },
       "description": {
-        "label": "Description"
+        "frenchLabel": "Description (in french)",
+        "englishLabel": "Description (in english)"
       },
       "endDate": {
         "label": "End date"
@@ -516,7 +524,8 @@
         "label": "Shortened name"
       },
       "summary": {
-        "label": "Summary",
+        "frenchLabel": "Summary (in french)",
+        "englishLabel": "Summary (in english)",
         "mapLabel": "Address supplement",
         "mapPlaceholder": "Apt. 101"
       },
@@ -582,55 +591,48 @@
   },
   "legalNotice": {
     "paragraphs": {
-      "1": {
-        "lines": {
-          "1": "Name of the site : Nantral Platform",
-          "2": "Link : https://www.nantral-platform.fr",
-          "3": "Owner : Association des Étudiants de l'École Centrale de Nantes"
-        }
+      "publisher": {
+        "title": "Website publisher",
+        "text": "The Nantral Platform website is developed by the 3CN club, affiliated with the AECN (ASSOCIATION DES ÉTUDIANTS DE L'ÉCOLE CENTRALE DE NANTES). Responsibility for the content of the website lies with the AECN, which also ensures its funding and management.",
+        "address_title": "The address of the AECN is as follows:",
+        "address_line_1": "ASSOCIATION DES ÉTUDIANTS DE L'ÉCOLE CENTRALE DE NANTES",
+        "address_line_2": "1 rue de la Noë",
+        "address_line_3": "44300 Nantes",
+        "address_line_4": "France",
+        "people_text": "In particular, the site team is under the direction of: ",
+        "aecn_president_title": "AECN President",
+        "aecn_president": "Victoire GUTH",
+        "aecn_dsi_title": "Director of Information Systems at AECN",
+        "aecn_dsi": "Bastien PAGEAUD",
+        "3cn_president_title": "3CN President",
+        "3cn_president": "Jean Benoît GRIMALDI"
       },
-      "2": {
-        "lines": {
-          "1": "ASSOCIATION DES ÉTUDIANTS DE L'ÉCOLE CENTRALE DE NANTES",
-          "2": "École Centrale de Nantes, 1 rue de la Noë, 44300 Nantes",
-          "3": "SIREN : 790 010 078",
-          "4": "APE : 9499Z",
-          "5": "TVA Intra Num. : FR 49 79 00 10 07 8",
-          "6": "E-Mail : bde@ec-nantes.fr"
-        }
+
+      "host_provider": {
+        "title": "Hosting provider",
+        "text": "The website is hosted by OVH SAS, whose registered office is located at the following address:",
+        "address_line_1": "2 rue Kellermann",
+        "address_line_2": "59100 Roubaix",
+        "address_line_3": "France"
       },
-      "3": "CLUB NANTRAL PLATFORM",
-      "4": {
-        "lines": {
-          "1": "OVH",
-          "2": "SAS with a capital of 10 069 020 €",
-          "3": "RCS Lille Métropole 424 761 419 00045",
-          "4": "APE Code : 2620Z",
-          "5": "TVA Num. : FR 22 42 47 61 41 9",
-          "6": "Head office : 2 rue Kellermann - 59100 Roubaix - France"
-        }
+
+      "copyright": {
+        "title": "Intellectual property",
+        "text1": "The source code of this website is the property of the 3CN club, affiliated with the AECN. Unless otherwise stated, all elements accessible on the website (texts, images, logos, icons, sounds, software, etc.) remain the exclusive property of their respective authors with regard to intellectual property rights or usage rights. ",
+        "text2": "Any reproduction, representation, modification, publication or adaptation of all or part of the elements of the website, by any means or process whatsoever, is prohibited without the prior authorization of the author. Any unauthorized use of the website or any of its elements may constitute an infringement and may result in legal action."
       },
-      "5": {
-        "lines": {
-          "1": "Unless stated otherwise, all the elements accessible on the site (texts, images, logos, icons, sounds, software, etc.) remain the exclusive property of their authors, with regard to intellectual property rights or rights of use.",
-          "2": "Any reproduction, representation, modification, publication, adaptation of all or part of the elements of the site, whatever the means or process used, is prohibited, except with the prior written authorization of the author.",
-          "3": "Any unauthorized exploitation of the site or any element it contains is considered to constitute an infringement and prosecuted.",
-          "4": "The trademarks and logos reproduced on the site are registered by the companies that own them."
-        }
+
+      "rgpd": {
+        "title": "Personal data",
+        "text": "Personal data collected are used solely for the proper functioning of Nantral Platform. Access to such data is strictly limited to their owner and to persons expressly authorized by the board of directors of the AECN.",
+        "contact_text": "For any questions or requests regarding personal data, you may contact us at the following email address: ",
+        "contact_email": "contact@nantral-platform.fr",
+        "contact_post_email": "."
       },
-      "6": "Only a session cookie is used on the site and expires after 14 days.",
-      "7": "The contents on this site may include contents from external sources (for instance videos, images, ...). These embedded contents act in the same way as if the visitor had visited the original site from where this content is based. These sites may therefore use additional cookies.",
-      "8": "When you register on the site, the personal data you send us will be stored and kept by the Association des Étudiants de l'École Centrale de Nantes until you request the deletion of your user account using the contact form."
-    },
-    "subtitles": {
-      "1": "Site identity",
-      "2": "The association",
-      "3": "Design and production",
-      "4": "Hosting",
-      "5": "Intellectual property",
-      "6": "Cookies",
-      "7": "Embedded content from other sites",
-      "8": "Personal data usage"
+      "cookies": {
+        "title": "Use of Cookies",
+        "text": "Nantral Platform uses only cookies that are strictly necessary for the proper functioning of the website and for user authentication. These cookies allow, in particular, the maintenance of your session after login, access to groups and events, and the personalization of your profile. These cookies are not used for advertising or tracking purposes and do not require prior consent in accordance with applicable regulations. Authentication cookies are retained for the period strictly necessary to manage the session or in compliance with applicable legal obligations. You may configure your browser to block cookies; however, certain features of the website may not function properly."
+      }
     },
     "title": "Legal Notice"
   },

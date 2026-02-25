@@ -122,6 +122,21 @@ class Label(models.Model):
         return self.name
 
 
+class Thematic(models.Model):
+    identifier = models.AutoField(unique=True, primary_key=True)
+    name = models.CharField(_("Name"), max_length=30, unique=True)
+    priority = models.IntegerField(_("Priority"), default=0)
+    visible = models.BooleanField(default=True)
+    public = models.BooleanField(default=True)
+
+    class Meta:
+        verbose_name = _("Thematic")
+        verbose_name_plural = _("Thematics")
+
+    def __str__(self) -> str:
+        return self.name
+
+
 class Tag(models.Model):
     name = models.CharField(_("Tag Name"), max_length=50)
     group_type = models.ForeignKey(
@@ -173,6 +188,9 @@ class Group(models.Model, SlugModel):
         blank=True,
     )
     tags = models.ManyToManyField(to=Tag, verbose_name=_("Tags"), blank=True)
+    thematic = models.ForeignKey(
+        to=Thematic, on_delete=models.CASCADE, null=True, blank=True
+    )
     parent = models.ForeignKey(
         to="self",
         verbose_name=_("Parent group"),
@@ -322,6 +340,11 @@ class Group(models.Model, SlugModel):
             "address",
             "latitude",
             "longitude",
+            "summary_fr",
+            "summary_en",
+            "description_fr",
+            "description_en",
+            "thematic",
         ),
         related_name="versions",
     )
@@ -330,7 +353,7 @@ class Group(models.Model, SlugModel):
         verbose_name = "groupe"
 
     def __str__(self) -> str:
-        return self.short_name
+        return self.name
 
     def save(self, *args, **kwargs) -> None:
         """Save an instance of the model in the database."""

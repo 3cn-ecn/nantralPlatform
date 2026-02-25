@@ -12,8 +12,9 @@ from apps.sociallink.serializers import (
     GroupSocialLinkSerializer,
     SocialLinkSerializer,
 )
+from apps.utils.translation_model_serializer import TranslationModelSerializer
 
-from .models import Group, GroupType, Label, Membership
+from .models import Group, GroupType, Label, Membership, Thematic
 
 
 class AdminFieldsMixin:
@@ -61,10 +62,23 @@ class GroupTypeSerializer(serializers.ModelSerializer):
         return user.is_authenticated and (obj.can_create or user.is_superuser)
 
 
-class GroupPreviewSerializer(serializers.ModelSerializer):
+class ThematicSerializer(TranslationModelSerializer):
+    class Meta:
+        model = Thematic
+        fields = [
+            "identifier",
+            "name",
+            "priority",
+        ]
+        translations_fields = ["name"]
+
+
+class GroupPreviewSerializer(TranslationModelSerializer):
     url = serializers.SerializerMethodField()
     category = serializers.SerializerMethodField()
     sub_category = serializers.SerializerMethodField()
+    short_name = serializers.SerializerMethodField()
+    thematic = ThematicSerializer(read_only=True)
 
     class Meta:
         model = Group
@@ -77,6 +91,7 @@ class GroupPreviewSerializer(serializers.ModelSerializer):
             "id",
             "category",
             "sub_category",
+            "thematic",
         ]
         read_only_fields = [
             "name",
@@ -86,6 +101,7 @@ class GroupPreviewSerializer(serializers.ModelSerializer):
             "icon",
             "category",
         ]
+        translations_fields = ["summary", "description"]
 
     def get_url(self, obj: Group) -> str:
         return obj.get_absolute_url()
@@ -96,8 +112,15 @@ class GroupPreviewSerializer(serializers.ModelSerializer):
     def get_sub_category(self, obj: Group) -> str:
         return obj.get_sub_category()
 
+    def get_short_name(self, obj: Group) -> str:
+        return (
+            obj.short_name
+            if obj.short_name and len(obj.short_name) > 0
+            else obj.name
+        )
 
-class GroupSerializer(serializers.ModelSerializer):
+
+class GroupSerializer(TranslationModelSerializer):
     url = serializers.SerializerMethodField()
     is_admin = serializers.SerializerMethodField()
     is_subscribed = serializers.SerializerMethodField()
@@ -107,6 +130,8 @@ class GroupSerializer(serializers.ModelSerializer):
     category = serializers.SerializerMethodField()
     sub_category = serializers.SerializerMethodField()
     social_links = SocialLinkSerializer(many=True)
+    short_name = serializers.SerializerMethodField()
+    thematic = ThematicSerializer(read_only=True)
 
     class Meta:
         model = Group
@@ -123,6 +148,7 @@ class GroupSerializer(serializers.ModelSerializer):
             "sub_category",
             "parent",
         ]
+        translations_fields = ["summary", "description"]
 
     def get_url(self, obj: Group) -> str:
         return obj.get_absolute_url()
@@ -141,6 +167,13 @@ class GroupSerializer(serializers.ModelSerializer):
 
     def get_sub_category(self, obj: Group) -> str:
         return obj.get_sub_category()
+
+    def get_short_name(self, obj: Group) -> str:
+        return (
+            obj.short_name
+            if obj.short_name and len(obj.short_name) > 0
+            else obj.name
+        )
 
 
 class ShortMemberSerializer(serializers.ModelSerializer):
@@ -172,7 +205,7 @@ class ShortMemberSerializer(serializers.ModelSerializer):
         return data
 
 
-class GroupWriteSerializer(serializers.ModelSerializer):
+class GroupWriteSerializer(TranslationModelSerializer):
     social_links = GroupSocialLinkSerializer(many=True, read_only=True)
     _change_reason = serializers.CharField(write_only=True, required=False)
 
@@ -186,6 +219,7 @@ class GroupWriteSerializer(serializers.ModelSerializer):
             "priority",
         ]
         read_only_fields = ["group_type", "url", "tags"]
+        translations_fields = ["summary", "description"]
 
     def create(self, validated_data: dict):
         _change_reason = validated_data.pop("_change_reason", None)
