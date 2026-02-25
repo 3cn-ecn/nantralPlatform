@@ -17,8 +17,20 @@ class CustomScopeClaims(ScopeClaims):
         dic = {
             "sub": str(self.user.id),
             "preferred_username": self.user.username,
-            "name": self.userinfo["name"],
+            "name": self.user.name,
             "picture": self.user.picture.url if self.user.picture else None,
+        }
+
+        return dic
+
+    info_groups = (
+        _("Groups"),
+        _("Information about the groups you belong to, used for access control in some applications."),
+    )
+
+    def scope_groups(self):
+        dic = {
+            "groups": [group.name for group in self.user.groups.all()],
         }
 
         return dic
@@ -27,6 +39,7 @@ class CustomScopeClaims(ScopeClaims):
 def userinfo(claims, user: User):
     # Populate claims dict.
     claims["name"] = user.name
+    claims["username"] = user.username
     claims["email"] = user.email.email
     claims["email_verified"] = user.email.is_valid
 
