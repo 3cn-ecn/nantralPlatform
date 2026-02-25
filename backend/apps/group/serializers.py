@@ -12,10 +12,8 @@ from apps.sociallink.serializers import (
     GroupSocialLinkSerializer,
     SocialLinkSerializer,
 )
-from apps.student.serializers import StudentPreviewSerializer
 from apps.utils.translation_model_serializer import TranslationModelSerializer
 
-from ..student.models import Student
 from .models import Group, GroupType, Label, Membership, Thematic
 
 
