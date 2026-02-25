@@ -12,8 +12,7 @@ from django.views.decorators.http import require_http_methods
 import requests
 from django_vite.apps import DjangoViteAssetLoader
 
-from apps.roommates.models import Roommates
-from apps.student.models import Student
+from apps.account.models import User
 
 # FRONTEND section
 
@@ -36,8 +35,8 @@ def react_app_view(request):
 @login_required
 def current_user_page_view(request):
     """Shortcut to the current user profile (/me)"""
-    student = get_object_or_404(Student, pk=request.user.student.pk)
-    response = redirect(f"/student/{student.pk}")
+    user = get_object_or_404(User, pk=request.user.pk)
+    response = redirect(user.get_absolute_url())
     return response
 
 
@@ -47,7 +46,7 @@ def current_user_roommates_view(request):
     """Shortcut to the current user roommates instance (/my_coloc)"""
     now = timezone.now()
     roommates = (
-        Roommates.objects.filter(members=request.user.student)
+        request.user.membership_set.filter(group__group_type__slug="colocs")
         .filter(
             Q(
                 Q(begin_date__lte=now)
@@ -55,11 +54,12 @@ def current_user_roommates_view(request):
             ),
         )
         .first()
+        .group
     )
     if roommates:
-        return redirect("roommates:detail", roommates.slug)
+        return redirect(f"/group/@{roommates.slug}/")
     else:
-        return redirect("roommates:housing-map")
+        return redirect("/map/?type=colocs")
 
 
 @require_http_methods(["GET"])

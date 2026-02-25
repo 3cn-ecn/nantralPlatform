@@ -24,7 +24,7 @@ class PostSerializer(TranslationModelSerializer):
 
     def get_can_pin(self, obj: Post) -> str:
         user = self.context["request"].user
-        return user.student.can_pin()
+        return user.can_pin()
 
 
 class PostPreviewSerializer(PostSerializer):

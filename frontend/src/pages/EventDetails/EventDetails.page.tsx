@@ -9,8 +9,8 @@ import {
   Typography,
 } from '@mui/material';
 
+import { useCurrentUserData } from '#modules/account/hooks/useCurrentUser.data';
 import { useEventDetailsQuery } from '#modules/event/hooks/useEventDetails.query';
-import { useCurrentUserData } from '#modules/student/hooks/useCurrentUser.data';
 import { ErrorPageContent } from '#shared/components/ErrorPageContent/ErrorPageContent';
 import { FlexRow } from '#shared/components/FlexBox/FlexBox';
 import { RichTextRenderer } from '#shared/components/RichTextRenderer/RichTextRenderer';

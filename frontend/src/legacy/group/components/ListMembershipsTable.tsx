@@ -3,8 +3,8 @@ import { useState } from 'react';
 import {
   DragDropContext,
   Draggable,
-  DropResult,
   Droppable,
+  DropResult,
   OnDragEndResponder,
 } from '@hello-pangea/dnd';
 import {
@@ -28,8 +28,8 @@ import {
   Typography,
 } from '@mui/material';
 
+import { User } from '#modules/account/user.types';
 import { Group } from '#modules/group/types/group.types';
-import { Student } from '#modules/student/student.types';
 
 import { Membership } from '../interfaces';
 import Avatar from './Avatar';
@@ -130,7 +130,7 @@ function MembershipRow(props: {
   item: Membership;
   index: number;
   group: Group;
-  student: Student;
+  student: User;
   updateMembership: (member: Membership, reload?: boolean) => Promise<void>;
   deleteMembership: (member: Membership) => Promise<void>;
 }): JSX.Element {
@@ -149,13 +149,9 @@ function MembershipRow(props: {
       </TableCell>
       <TableCell>
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
-          <Avatar
-            url={item.student.picture}
-            title={item.student.name}
-            size="small"
-          />
+          <Avatar url={item.user.picture} title={item.user.name} size="small" />
           <Typography noWrap fontWeight="lg">
-            {item.student.name}
+            {item.user.name}
           </Typography>
         </Box>
       </TableCell>
@@ -237,7 +233,7 @@ function MembershipRow(props: {
 function ListMembershipsTable(props: {
   members: Membership[];
   group: Group;
-  student: Student;
+  student: User;
   reorderMemberships: (
     reorderedMembers: Membership[],
     member: Membership,

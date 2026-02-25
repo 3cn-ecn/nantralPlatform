@@ -15,10 +15,10 @@ import {
   Typography,
 } from '@mui/material';
 
+import { useCurrentUserData } from '#modules/account/hooks/useCurrentUser.data';
 import { Group } from '#modules/group/types/group.types';
 import { sortLinks } from '#modules/social_link/utils/sortLinks';
 import { SocialLinkItem } from '#modules/social_link/view/shared/SocialLinkItem';
-import { useCurrentUserData } from '#modules/student/hooks/useCurrentUser.data';
 import HistoryButton from '#pages/GroupDetails/GroupHistory/HistoryButton';
 import { Avatar } from '#shared/components/Avatar/Avatar';
 import { FlexCol, FlexRow } from '#shared/components/FlexBox/FlexBox';

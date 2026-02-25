@@ -3,8 +3,8 @@ from django.db.models import Q
 
 from rest_framework import exceptions, serializers
 
+from apps.account.models import User
 from apps.family.utils import scholar_year
-from apps.student.models import Student
 
 from .models import (
     MAX_2APLUS_PER_FAMILY,
@@ -27,18 +27,18 @@ class FamilyMembersSerializer(serializers.Serializer):
         previous_members = MembershipFamily.objects.filter(
             group=self.context.get("family"), role="2A+"
         ).all()
-        previous_members_pks = [member.student.pk for member in previous_members]
+        previous_members_pks = [member.user.pk for member in previous_members]
         new_members = list(self.validated_data.values())
 
         with transaction.atomic():
             for member in previous_members:
-                if member.student.pk not in new_members:
+                if member.user.pk not in new_members:
                     member.delete()
 
             for member in new_members:
                 if member and member not in previous_members_pks:
                     MembershipFamily.objects.create(
-                        student=Student.objects.get(id=member),
+                        user=User.objects.get(id=member),
                         role="2A+",
                         admin=True,
                         group=self.context.get("family"),
@@ -53,7 +53,10 @@ class FamilyMembersSerializer(serializers.Serializer):
         if len(unique_values) != len(values):
             raise exceptions.ValidationError("Un membre a été ajouté 2 fois")
 
-        if len(values) < MIN_2APLUS_PER_FAMILY or len(values) > MAX_2APLUS_PER_FAMILY:
+        if (
+            len(values) < MIN_2APLUS_PER_FAMILY
+            or len(values) > MAX_2APLUS_PER_FAMILY
+        ):
             raise exceptions.ValidationError(
                 "Erreur : une famille doit avoir minimum 3 membres \
                     et maximum 8 membres"
@@ -89,7 +92,7 @@ class FamilyMembersSerializer(serializers.Serializer):
         if val is None:
             return val
 
-        student = Student.objects.filter(
+        student = User.objects.filter(
             Q(id=val) & Q(promo__lt=scholar_year())
         ).first()
         if student is None:

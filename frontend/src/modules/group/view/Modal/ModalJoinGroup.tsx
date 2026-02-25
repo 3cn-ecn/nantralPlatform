@@ -4,6 +4,7 @@ import { PersonAdd } from '@mui/icons-material';
 import { Avatar, Button, useTheme } from '@mui/material';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
+import { User } from '#modules/account/user.types';
 import { createMembershipApi } from '#modules/group/api/createMembership.api';
 import { MembershipFormDTO } from '#modules/group/infra/membership.dto';
 import { Group } from '#modules/group/types/group.types';
@@ -11,7 +12,6 @@ import {
   Membership,
   MembershipForm,
 } from '#modules/group/types/membership.types';
-import { Student } from '#modules/student/student.types';
 import { LoadingButton } from '#shared/components/LoadingButton/LoadingButton';
 import {
   ResponsiveDialog,
@@ -28,11 +28,11 @@ import { MembershipFormFields } from '../shared/MembershipFormFields';
 export function ModalJoinGroup({
   onClose,
   group,
-  student,
+  user,
 }: {
   onClose: () => void;
   group: Group;
-  student: Student;
+  user: User;
 }) {
   const { t } = useTranslation();
   const today = new Date();
@@ -43,7 +43,7 @@ export function ModalJoinGroup({
     endDate: oneYear,
     description: '',
     group: group.id,
-    student: student.id,
+    user: user.id,
     summary: '',
     admin: false,
   });
@@ -59,7 +59,7 @@ export function ModalJoinGroup({
       queryClient.invalidateQueries(['members', { slug: group.slug }]);
       queryClient.invalidateQueries([
         'membership',
-        { group: group.slug, student: student.id },
+        { group: group.slug, user: user.id },
       ]);
       onClose();
     },

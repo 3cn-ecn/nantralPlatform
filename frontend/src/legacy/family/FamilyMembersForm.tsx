@@ -1,13 +1,13 @@
 import { useState } from 'react';
 
-import { getStudentListApi } from '#modules/student/api/getStudentList.api';
-import { Student } from '#modules/student/student.types';
+import { getUserListApi } from '#modules/account/api/getUserList.api';
+import { User } from '#modules/account/user.types';
 import { FormErrorAlert } from '#shared/components/FormErrorAlert/FormErrorAlert';
 import { AutocompleteSearchField } from '#shared/components/FormFields';
 
 import { wrapAndRenderLegacyCode } from '../utils/wrapAndRenderLegacyCode';
 
-declare const CURRENT_MEMBERS: Student[];
+declare const CURRENT_MEMBERS: User[];
 declare const ERRORS: {
   student0?: string[];
   student1?: string[];
@@ -38,7 +38,7 @@ function FamilyMembersForm() {
   }
 
   async function fetchOptions(search: string) {
-    const data = await getStudentListApi({ search: search });
+    const data = await getUserListApi({ search: search });
     return data.results;
   }
   console.log(formValues);

@@ -2,7 +2,7 @@ import { Check, Close, ErrorOutline } from '@mui/icons-material';
 import { Chip, CircularProgress, Tooltip } from '@mui/material';
 import { useMutation } from '@tanstack/react-query';
 
-import { resendVerificationEmailApi } from '#modules/account/api/email.api';
+import { resendVerificationEmailApi } from '#modules/account/api/resendVerificationEmail.api';
 import { Email } from '#modules/account/email.type';
 import { useTranslation } from '#shared/i18n/useTranslation';
 

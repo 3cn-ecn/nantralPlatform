@@ -1,7 +1,7 @@
 from django.forms import ModelForm, modelformset_factory
 
+from apps.account.models import User
 from apps.sociallink.models import SocialLink
-from apps.student.models import Student
 
 from .models import Group, Membership
 
@@ -56,21 +56,21 @@ class MembershipForm(ModelForm):
     def __init__(
         self,
         group: Group = None,
-        student: Student = None,
+        user: User = None,
         instance: Membership = None,
         *args,
         **kwargs,
     ):
-        if not (instance or (group and student)):
+        if not (instance or (group and user)):
             raise ValueError(
                 "AddMembershipForm.__init__() required both "
-                "'group' and 'student' arguments or 'instance'",
+                "'group' and 'user' arguments or 'instance'",
             )
         super().__init__(*args, instance=instance, **kwargs)
-        # manually add the group or the student to the instance
+        # manually add the group or the user to the instance
         if not instance:
             self.instance.group = group
-            self.instance.student = student
+            self.instance.user = user
         # customize the form
         if self.instance.group.group_type.no_membership_dates:
             del self.fields["begin_date"]

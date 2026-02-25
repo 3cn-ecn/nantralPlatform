@@ -6,6 +6,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import { changeMainEmailApi } from '#modules/account/api/changeMainEmail.api';
 import { Email } from '#modules/account/email.type';
+import { EmailDTO } from '#modules/account/infra/email.dto';
 import { ChangeMainEmailModal } from '#modules/account/view/Email/ChangeMainEmailModal';
 import { useToast } from '#shared/context/Toast.context';
 import { useTranslation } from '#shared/i18n/useTranslation';
@@ -24,27 +25,32 @@ export function SetMainMenuItem({
 
   const [mainModalOpen, setMainModalOpen] = useState(false);
   const changeEmailMutation = useMutation<
-    string,
-    ApiFormError<{ email: string; password: string }>,
-    { email: string; password: string }
+    EmailDTO,
+    ApiFormError<{ password: string }>,
+    { password: string }
   >({
-    mutationFn: ({ email, password }) => changeMainEmailApi(email, password),
-    onSuccess: async (message) => {
+    mutationFn: ({ password }) => changeMainEmailApi(email.uuid, password),
+    onSuccess: async () => {
       showToast({
-        message: message,
+        message: t('email.setMain.success'),
         variant: 'success',
       });
       await queryClient.invalidateQueries(['emails']);
     },
     onError: (error) => {
-      if (error.fields?.email) {
+      if (error.globalErrors) {
         showToast({
-          message:
-            "Erreur sur l'adresse sélectionnée : " +
-            error.fields.email.join(', '),
+          message: error.globalErrors.join(', '),
           variant: 'error',
         });
-      } else {
+      }
+      if (error.message) {
+        showToast({
+          message: error.message,
+          variant: 'error',
+        });
+      }
+      if (!error.globalErrors && !error.message) {
         showToast({
           variant: 'error',
           message: t('email.setMain.error'),

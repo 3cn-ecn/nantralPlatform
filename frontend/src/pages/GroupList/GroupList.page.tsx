@@ -10,8 +10,8 @@ import {
   Typography,
 } from '@mui/material';
 
+import { useCurrentUserData } from '#modules/account/hooks/useCurrentUser.data';
 import { GroupGrid } from '#modules/group/view/GroupGrid/GroupGrid';
-import { useCurrentUserData } from '#modules/student/hooks/useCurrentUser.data';
 import { FlexCol, FlexRow } from '#shared/components/FlexBox/FlexBox';
 import { IconMenu } from '#shared/components/IconMenu/IconMenu';
 import { InfiniteList } from '#shared/components/InfiniteList/InfiniteList';

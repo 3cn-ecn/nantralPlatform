@@ -87,14 +87,23 @@
       "label": "New email address"
     },
     "more": {
-      "resend": "Resend confirmation email"
+      "resend": "Resend confirmation email",
+      "resendError": "An error occured while sending the mail.",
+      "resendSuccess": "Confirmation email has been sent"
     },
     "page": {
       "title": "Manage your email addresses"
     },
     "setMain": {
       "error": "An error occured while changing main email address",
-      "label": "Set as main address"
+      "errorWithFields": "",
+      "label": "Set as main address",
+      "passwordError": "Error on password: {{ details }}",
+      "success": "The main email address has been changed. From now on, please use this address to login."
+    },
+    "visibility": {
+      "setHidden": "Your email has been removed from your profile.",
+      "setVisible": "Your email will be shown on your profile."
     }
   },
   "error": {
@@ -914,6 +923,7 @@
       },
       "housing": "Shared accommodation",
       "links": "Links",
+      "matrix": "{{ username }} on Matrix",
       "password": "Password",
       "profile": "Profile",
       "schooling": "Schooling"
@@ -944,7 +954,6 @@
       "placeholder": "Search for a student"
     },
     "username": {
-      "disabledText": "You can not change your username because you already created a Matrix account",
       "label": "User name"
     }
   },
@@ -1017,16 +1026,6 @@
         "title": "Appearance"
       }
     }
-  },
-  "username": {
-    "alert": {
-      "link": "Click here",
-      "message1": "We made you able to choose an username.",
-      "message2": "to make the change. Please perform this action quickly to prepare for a future update.",
-      "title": "Important Update - Usernames"
-    },
-    "success": "Successfully updated username",
-    "update": "Choose a new username"
   },
   "utils": {
     "shareLink": {

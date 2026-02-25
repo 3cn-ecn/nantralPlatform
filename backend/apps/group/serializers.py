@@ -6,6 +6,8 @@ from django.utils.translation import gettext as _
 
 from rest_framework import exceptions, serializers
 
+from apps.account.models import User
+from apps.account.serializers import UserPreviewSerializer
 from apps.sociallink.serializers import (
     GroupSocialLinkSerializer,
     SocialLinkSerializer,
@@ -234,7 +236,7 @@ class GroupWriteSerializer(TranslationModelSerializer):
         user = self.context["request"].user
         if membership is not None and user and user.is_authenticated:
             Membership.objects.create(
-                group=group, student=user.student, admin=True, **membership
+                group=group, user=user, admin=True, **membership
             )
 
         return group
@@ -254,15 +256,15 @@ class GroupWriteSerializer(TranslationModelSerializer):
             )
         return value
 
-    def validate_latitude(self, value: float) -> float:
-        if self.get_group_type().is_map and not value:
+    def validate_latitude(self, value: float | None) -> float | None:
+        if self.get_group_type().is_map and value is None:
             raise exceptions.ValidationError(
                 _("This field is required for map groups.")
             )
         return value
 
-    def validate_longitude(self, value: float) -> float:
-        if self.get_group_type().is_map and not value:
+    def validate_longitude(self, value: float | None) -> float | None:
+        if self.get_group_type().is_map and value is None:
             raise exceptions.ValidationError(
                 _("This field is required for map groups.")
             )
@@ -318,14 +320,14 @@ class GroupWriteSerializer(TranslationModelSerializer):
 class MembershipSerializer(AdminFieldsMixin, serializers.ModelSerializer):
     """Membership serializer for getting or editing objects."""
 
-    student = StudentPreviewSerializer(read_only=True)
+    user = UserPreviewSerializer(read_only=True)
     group = GroupPreviewSerializer(read_only=True)
 
     class Meta:
         model = Membership
         fields = [
             "id",
-            "student",
+            "user",
             "group",
             "summary",
             "description",
@@ -335,7 +337,7 @@ class MembershipSerializer(AdminFieldsMixin, serializers.ModelSerializer):
             "admin",
             "admin_request",
         ]
-        read_only_fields = ["id", "student", "group", "admin_request"]
+        read_only_fields = ["id", "user", "group", "admin_request"]
         admin_fields = ["priority", "admin"]
 
     def validate_begin_date(self, value: date) -> date:
@@ -369,7 +371,7 @@ class NewMembershipSerializer(AdminFieldsMixin, serializers.ModelSerializer):
     class Meta:
         model = Membership
         fields = [
-            "student",
+            "user",
             "group",
             "summary",
             "description",
@@ -382,7 +384,7 @@ class NewMembershipSerializer(AdminFieldsMixin, serializers.ModelSerializer):
     def validate(self, data: dict[str, any]) -> dict[str, any]:
         group: Group = data["group"]
         user = self.context["request"].user  # the user making the request
-        if not (user.student == data["student"] or group.is_admin(user)):
+        if not (user == data["user"] or group.is_admin(user)):
             raise exceptions.PermissionDenied(
                 _(
                     "You can only create new membership for yourself or for "
@@ -428,11 +430,11 @@ class AdminRequestValidateSerializer(serializers.Serializer):
 
 
 class AdminRequestSerializer(serializers.ModelSerializer):
-    student = StudentPreviewSerializer(read_only=True)
+    user = UserPreviewSerializer(read_only=True)
 
     class Meta:
         model = Membership
-        fields = ["student", "admin", "admin_request_message", "id"]
+        fields = ["user", "admin", "admin_request_message", "id"]
 
 
 class SubscriptionSerializer(serializers.Serializer):
@@ -476,8 +478,8 @@ class MapGroupSerializer(serializers.ModelSerializer):
 
     def get_members(self, obj: Group) -> str:
         from_date = timezone.now()
-        serialized_data = StudentPreviewSerializer(
-            Student.objects.filter(
+        serialized_data = UserPreviewSerializer(
+            User.objects.filter(
                 Q(
                     membership_set__group_id=obj.id,
                     membership_set__end_date__gte=from_date,
@@ -519,6 +521,6 @@ class GroupHistorySerializer(serializers.ModelSerializer):
 
     def get_user(self, obj):
         if obj.history_user:
-            return obj.history_user.student.name
+            return obj.history_user.name
         else:
             return obj.history_user

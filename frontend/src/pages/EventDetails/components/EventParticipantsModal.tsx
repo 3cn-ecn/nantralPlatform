@@ -89,13 +89,13 @@ export function EventParticipantsModal({
       ) : (
         <ResponsiveDialogContent sx={{ p: 0 }}>
           <List>
-            {participants.map((student) => (
-              <ListItem key={student.id} disablePadding>
-                <ListItemButton href={student.url}>
+            {participants.map((user) => (
+              <ListItem key={user.id} disablePadding>
+                <ListItemButton href={user.url}>
                   <ListItemAvatar>
-                    <Avatar alt={student.name} src={student.picture} />
+                    <Avatar alt={user.name} src={user.picture} />
                   </ListItemAvatar>
-                  <ListItemText>{student.name}</ListItemText>
+                  <ListItemText>{user.name}</ListItemText>
                 </ListItemButton>
               </ListItem>
             ))}

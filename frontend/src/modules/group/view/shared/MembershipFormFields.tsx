@@ -2,9 +2,9 @@ import { useCallback } from 'react';
 
 import { Verified } from '@mui/icons-material';
 
+import { getUserListApi } from '#modules/account/api/getUserList.api';
 import { MembershipFormDTO } from '#modules/group/infra/membership.dto';
 import { MembershipForm } from '#modules/group/types/membership.types';
-import { getStudentListApi } from '#modules/student/api/getStudentList.api';
 import { FlexAuto, FlexRow } from '#shared/components/FlexBox/FlexBox';
 import {
   AutocompleteSearchField,
@@ -21,7 +21,7 @@ interface JoinGroupFormFieldsProps {
   formValues: MembershipForm;
   updateFormValues: (val: Partial<MembershipForm>) => void;
   isAdmin?: boolean;
-  selectStudent?: boolean;
+  selectUser?: boolean;
   showDates?: boolean;
 }
 
@@ -30,26 +30,24 @@ export function MembershipFormFields({
   formValues,
   updateFormValues,
   isAdmin = false,
-  selectStudent = false,
+  selectUser = false,
   showDates = true,
 }: JoinGroupFormFieldsProps) {
   async function fetchOptions(search: string) {
-    const data = await getStudentListApi({ search: search });
+    const data = await getUserListApi({ search: search });
     return data.results;
   }
   const { t } = useTranslation();
   return (
     <>
-      {selectStudent && (
+      {selectUser && (
         <AutocompleteSearchField
           name="user"
           label={t('group.details.form.user.label')}
-          value={formValues.student}
-          handleChange={(val) =>
-            updateFormValues({ student: val || undefined })
-          }
+          value={formValues.user}
+          handleChange={(val) => updateFormValues({ user: val || undefined })}
           defaultObjectValue={null}
-          errors={error?.fields?.student}
+          errors={error?.fields?.user}
           required
           fetchOptions={fetchOptions}
           labelPropName="name"

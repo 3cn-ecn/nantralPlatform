@@ -1,17 +1,17 @@
-import { useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
 
 import {
+  AlternateEmail,
   Edit,
-  Person,
   Link as LinkIcon,
   Password,
-  AlternateEmail,
+  Person,
 } from '@mui/icons-material';
 import { Avatar, Tab, Tabs, useTheme } from '@mui/material';
 import { useQueryClient } from '@tanstack/react-query';
 
+import { User } from '#modules/account/user.types';
 import { EditSocialLinkForm } from '#modules/social_link/view/shared/EditSocialLinkForm';
-import { useCurrentUserData } from '#modules/student/hooks/useCurrentUser.data';
 import EmailTab from '#pages/StudentDetails/components/EditProfile/Email.tab';
 import {
   ResponsiveDialog,
@@ -24,11 +24,24 @@ import { useTranslation } from '#shared/i18n/useTranslation';
 import { ChangePasswordTab } from './ChangePassword.tab';
 import { EditProfileTab } from './EditProfile.tab';
 
-export function ModalEditProfile({ onClose }: { onClose: () => void }) {
+export enum TabType {
+  'profile',
+  'emails',
+  'links',
+  'password',
+}
+
+export function ModalEditProfile({
+  onClose,
+  user,
+}: {
+  onClose: () => void;
+  user: User;
+}) {
+  const [params, setParams] = useSearchParams();
+  const tab = params.get('tab') || 'profile';
   const { palette } = useTheme();
   const { t } = useTranslation();
-  const [tab, setTab] = useState('profile');
-  const { socialLinks } = useCurrentUserData();
   const queryClient = useQueryClient();
   return (
     <ResponsiveDialog onClose={onClose} disableEnforceFocus maxWidth="md">
@@ -44,7 +57,10 @@ export function ModalEditProfile({ onClose }: { onClose: () => void }) {
         <Spacer flex={1} />
       </ResponsiveDialogHeader>
       <Tabs
-        onChange={(_, newVal) => setTab(newVal)}
+        onChange={(_, newVal) => {
+          params.set('tab', newVal);
+          setParams(params);
+        }}
         value={tab}
         variant={'scrollable'}
         scrollButtons={false}
@@ -75,17 +91,18 @@ export function ModalEditProfile({ onClose }: { onClose: () => void }) {
         />
       </Tabs>
       <ResponsiveDialogContent sx={{ height: 800 }}>
-        {tab === 'profile' && <EditProfileTab />}
-        {tab === 'emails' && <EmailTab />}
+        {tab === 'profile' && <EditProfileTab user={user} />}
+        {tab === 'emails' && <EmailTab userId={user.id} />}
         {tab === 'links' && (
           <EditSocialLinkForm
-            socialLinks={socialLinks}
-            type="user"
-            onSuccess={() =>
+            socialLinks={user.socialLinks}
+            userId={user.id}
+            onSuccess={() => {
               queryClient.invalidateQueries({
-                queryKey: ['student', 'current'],
-              })
-            }
+                queryKey: ['user', { id: user.id.toString() }],
+              });
+              queryClient.invalidateQueries({ queryKey: ['user', 'current'] });
+            }}
           />
         )}
         {tab === 'password' && <ChangePasswordTab />}

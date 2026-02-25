@@ -46,23 +46,23 @@ class SubscriptionAPIView(APIView):
     def get(self, request, slug, *args, **kwargs):
         """Get the state of the subscription of current user to a page."""
 
-        res = request.user.student.subscriptions.filter(slug=slug).exists()
+        res = request.user.subscriptions.filter(slug=slug).exists()
         return Response(data=res)
 
     def post(self, request, slug, *args, **kwargs):
         """Register the subscription of a user to a page"""
 
-        student = request.user.student
+        user = request.user
         group = get_object_or_404(Group, slug=slug)
-        group.subscribers.add(student)
+        group.subscribers.add(user)
         return Response(status=status.HTTP_201_CREATED, data=True)
 
     def delete(self, request, slug, *args, **kwargs):
         """Delete the subscription of a user to a page"""
 
-        student = request.user.student
+        user = request.user
         group = get_object_or_404(Group, slug=slug)
-        group.subscribers.remove(student)
+        group.subscribers.remove(user)
         return Response(status=status.HTTP_204_NO_CONTENT, data=False)
 
 
@@ -98,7 +98,7 @@ class NotificationsViewSet(ReadOnlyModelViewSet):
         subscribed = parse_bool(self.query_params.get("subscribed"))
         seen = parse_bool(self.query_params.get("seen"))
 
-        query = SentNotification.objects.filter(student__user=user)
+        query = user.sentnotification_set
         if subscribed is not None:
             query = query.filter(subscribed=subscribed)
         if seen is not None:
@@ -112,11 +112,7 @@ class NotificationsViewSet(ReadOnlyModelViewSet):
 
     @action(detail=False, methods=["POST"])
     def all_seen(self, request, *args, **kwargs):
-        (
-            SentNotification.objects.filter(student__user=request.user).update(
-                seen=True,
-            )
-        )
+        request.user.sentnotification_set.update(seen=True)
         return Response(status=status.HTTP_200_OK)
 
     @action(detail=True, methods=["POST", "DELETE"])

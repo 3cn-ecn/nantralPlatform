@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-07-12 23:10+0200\n"
+"POT-Creation-Date: 2026-02-10 19:47+0100\n"
 "PO-Revision-Date: 2023-04-10 15:22+0200\n"
 "Last-Translator: Alexis Delage <alexidelage@gmail.com>\n"
 "Language-Team: \n"
@@ -18,80 +18,84 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Generator: Poedit 3.1.1\n"
 
-#: api_views.py:173
+#: api_views.py:191
 #, python-format
 msgid "Too soon! Registration will start at %(datetime)s."
 msgstr "Un peu de patience ! Les inscriptions débuteront le %(datetime)s."
 
-#: api_views.py:177
+#: api_views.py:196
 #, python-format
 msgid "Too late! Registration has ended at %(datetime)s."
 msgstr "Trop tard ! Les inscriptions se sont terminées le %(datetime)s."
 
-#: api_views.py:182
+#: api_views.py:205
 msgid "Too late! The maximum number of participants have been reached."
 msgstr "Trop tard ! Le nombre maximum de participants a été atteint."
 
-#: models.py:16
+#: models.py:13
 msgid "Start date"
 msgstr "Date de début"
 
-#: models.py:17 models.py:20
+#: models.py:14 models.py:18
 msgid "Enter date in format DD/MM/YYYY HH:MM"
 msgstr "Entrez une date au format JJ/MM/AAAA HH:mm"
 
-#: models.py:19
+#: models.py:17
 msgid "End date"
 msgstr "Date de fin"
 
-#: models.py:22
+#: models.py:21
 msgid "Location"
 msgstr "Lieu"
 
-#: models.py:25
+#: models.py:27
 msgid "Participants"
 msgstr "Participants"
 
-#: models.py:30
+#: models.py:33
 msgid "Bookmarks"
 msgstr "Favoris"
 
-#: models.py:32
+#: models.py:35
 msgid "Users who have bookmarked this event."
 msgstr "Utilisateurs ayant marqué cet évènement comme favoris."
 
-#: models.py:35
+#: models.py:39
 msgid "Link to external form"
 msgstr "Lien vers un form externe"
 
-#: models.py:39
+#: models.py:44
 msgid "Maximum number of participants"
 msgstr "Nombre maximum de participants"
 
-#: models.py:43
+#: models.py:49
 msgid "Start date for registration"
 msgstr "Date de début d'inscription"
 
-#: models.py:46
+#: models.py:52
 msgid "Users cannot register before this date."
 msgstr "Les utilisateurs ne peuvent pas s'inscrire avant cette date."
 
-#: models.py:48
+#: models.py:55
 msgid "End date for registration"
 msgstr "Date de fin d'inscription"
 
-#: models.py:51
+#: models.py:58
 msgid "Users cannot register after this date."
 msgstr "Les utilisateurs ne peuvent plus s'inscrire après cette date."
 
-#: serializers.py:106
+#: serializers.py:132
 msgid "Must be a positive integer"
 msgstr "Doit être un nombre entier positif"
 
-#: serializers.py:112
+#: serializers.py:138
 msgid "You have to be admin to add or update an event"
 msgstr "Tu dois être admin du groupe pour ajouter ou modifier un event"
 
-#: serializers.py:118
+#: serializers.py:145
 msgid "The end date must be after the begin date."
 msgstr "La date de fin doit être après la date de début."
+
+#: serializers.py:154
+msgid "The end-registration date must be after the start-registration date."
+msgstr "La date de fin d'inscription doit être après la date de début d'inscription."

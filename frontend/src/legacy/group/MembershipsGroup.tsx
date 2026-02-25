@@ -7,8 +7,8 @@ import {
 } from '@mui/icons-material';
 import { Button, IconButton, Typography } from '@mui/material';
 
+import { User } from '#modules/account/user.types';
 import { useGroupDetailsQuery } from '#modules/group/hooks/useGroupDetails.query';
-import { Student } from '#modules/student/student.types';
 import { FlexRow } from '#shared/components/FlexBox/FlexBox';
 import { Spacer } from '#shared/components/Spacer/Spacer';
 import { useToast } from '#shared/context/Toast.context';
@@ -40,7 +40,7 @@ function MembershipsGroup(): JSX.Element {
   const showToast = useToast();
   const { group } = useGroupDetailsQuery(groupSlug);
   // data
-  const [student, setStudent] = useState<Student | null>(null);
+  const [student, setStudent] = useState<User | null>(null);
   const [members, setMembers] = useState<Membership[]>([]);
   const [loadState, setLoadState] = useState<'load' | 'success' | 'fail'>(
     'load',
@@ -85,9 +85,9 @@ function MembershipsGroup(): JSX.Element {
     Promise.all([
       // fetch memberships objects
       getMemberships(),
-      // fetch student objet
+      // fetch user objet
       axios
-        .get<Student>('/api/student/student/me/')
+        .get<User>('/api/account/user/me/')
         .then((res) => setStudent(res.data)),
     ])
       .then(() => setLoadState('success'))

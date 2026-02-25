@@ -58,14 +58,14 @@ export function AdminRequestRow({
       <CardContent>
         <FlexRow alignItems={'center'} gap={1}>
           <Avatar
-            alt={adminRequest.student.name}
-            src={adminRequest.student.picture}
+            alt={adminRequest.user.name}
+            src={adminRequest.user.picture}
             component={Link}
-            to={adminRequest.student.url}
+            to={adminRequest.user.url}
           />
           <Typography variant="caption">
             {t('group.details.requestToBeAdmin', {
-              student: adminRequest.student.name,
+              user: adminRequest.user.name,
             })}
           </Typography>
         </FlexRow>

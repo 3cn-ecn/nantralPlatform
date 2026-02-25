@@ -6,7 +6,7 @@ from apps.utils.slug import get_object_from_slug
 
 
 def user_is_connected(user: User) -> bool:
-    """Test if a user is connected and have a Student object.
+    """Test if a user is connected
 
     Parameters
     ----------
@@ -16,13 +16,9 @@ def user_is_connected(user: User) -> bool:
     Returns
     -------
     bool
-        True if user is connected and have a student object.
+        True if user is connected.
     """
-    return (
-        not (user.is_anonymous)
-        and user.is_authenticated
-        and hasattr(user, "student")
-    )
+    return not (user.is_anonymous) and user.is_authenticated
 
 
 class UserIsMember(UserPassesTestMixin):

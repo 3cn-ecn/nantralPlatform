@@ -2,8 +2,8 @@ from django.db import models
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
+from apps.account.models import User
 from apps.post.models import AbstractPublication
-from apps.student.models import Student
 
 
 class Event(AbstractPublication):
@@ -23,13 +23,13 @@ class Event(AbstractPublication):
         blank=True,
     )
     participants = models.ManyToManyField(
-        to=Student,
+        to=User,
         verbose_name=_("Participants"),
         blank=True,
         related_name="participating_events",
     )
     bookmarks = models.ManyToManyField(
-        to=Student,
+        to=User,
         verbose_name=_("Bookmarks"),
         blank=True,
         help_text=_("Users who have bookmarked this event."),

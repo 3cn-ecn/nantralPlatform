@@ -7,7 +7,7 @@ from rest_framework import exceptions, filters, permissions, status, viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
-from apps.student.serializers import StudentPreviewSerializer
+from apps.account.serializers import UserPreviewSerializer
 from apps.utils.parse import parse_bool
 
 from .models import Event
@@ -126,7 +126,7 @@ class EventViewSet(viewsets.ModelViewSet):
 
         # filtering
         qs = Event.objects.filter(
-            Q(publicity="Pub") | Q(group__members__user=user),
+            Q(publicity="Pub") | Q(group__members=user),
         )
         if len(groups) > 0:
             qs = qs.filter(group__slug__in=groups)
@@ -135,17 +135,17 @@ class EventViewSet(viewsets.ModelViewSet):
         if to_date:
             qs = qs.filter(start_date__lte=to_date)
         if is_member is True:
-            qs = qs.filter(group__members__user=user)
+            qs = qs.filter(group__members=user)
         if is_member is False:
-            qs = qs.exclude(group__members__user=user)
+            qs = qs.exclude(group__members=user)
         if is_participating is True:
-            qs = qs.filter(participants__user=user)
+            qs = qs.filter(participants=user)
         if is_participating is False:
-            qs = qs.exclude(participants__user=user)
+            qs = qs.exclude(participants=user)
         if is_bookmarked is True:
-            qs = qs.filter(bookmarks__user=user)
+            qs = qs.filter(bookmarks=user)
         if is_bookmarked is False:
-            qs = qs.exclude(bookmarks__user=user)
+            qs = qs.exclude(bookmarks=user)
         if is_shotgun is True:
             qs = qs.filter(
                 Q(max_participant__isnull=False)
@@ -173,7 +173,7 @@ class EventViewSet(viewsets.ModelViewSet):
     def participants(self, request, pk=None):
         event: Event = self.get_object()
         page = self.paginate_queryset(event.participants.all())
-        serializer = StudentPreviewSerializer(page, many=True)
+        serializer = UserPreviewSerializer(page, many=True)
         return self.get_paginated_response(serializer.data)
 
     @action(detail=True, methods=["POST", "DELETE"])
@@ -182,7 +182,7 @@ class EventViewSet(viewsets.ModelViewSet):
         event: Event = self.get_object()
         # user asks to remove himself from participants
         if request.method == "DELETE":
-            event.participants.remove(request.user.student)
+            event.participants.remove(request.user)
             return Response(status=status.HTTP_204_NO_CONTENT)
         # user asks to add himself to participants
         now = timezone.now()
@@ -207,7 +207,7 @@ class EventViewSet(viewsets.ModelViewSet):
                 ),
             )
         # if we pass all criteria, add the user
-        event.participants.add(request.user.student)
+        event.participants.add(request.user)
         return Response(status=status.HTTP_201_CREATED)
 
     @action(detail=True, methods=["POST", "DELETE"])
@@ -215,7 +215,7 @@ class EventViewSet(viewsets.ModelViewSet):
         """A view to add or remove this event to the bookmarks of the user."""
         event: Event = self.get_object()
         if request.method == "DELETE":
-            event.bookmarks.remove(request.user.student)
+            event.bookmarks.remove(request.user)
             return Response(status=status.HTTP_204_NO_CONTENT)
-        event.bookmarks.add(request.user.student)
+        event.bookmarks.add(request.user)
         return Response(status=status.HTTP_201_CREATED)

@@ -12,7 +12,7 @@
             {% if unplaced_1A %}
                 <ul>
                     {% for m in unplaced_1A %}
-                        <li><a href="{{ m.student.get_absolute_url}}">{{m}}</a></li>
+                        <li><a href="{{ m.user.get_absolute_url}}">{{m}}</a></li>
                     {% endfor %}
                 </ul>
             {% endif %}
@@ -21,7 +21,7 @@
             {% if non_complete_1A %}
                 <ul>
                     {% for m in non_complete_1A %}
-                        <li><a href="{{ m.student.get_absolute_url}}">{{m}}</a></li>
+                        <li><a href="{{ m.user.get_absolute_url}}">{{m}}</a></li>
                     {% endfor %}
                 </ul>
             {% endif %}
@@ -56,7 +56,7 @@
             {% if non_complete_2A %}
                 <ul>
                     {% for m in non_complete_2A %}
-                        <li><a href="{{m.student.get_absolute_url}}">{{m}}</a> (<a href="{{ m.group.get_absolute_url }}">{{m.group.name}}</a>)</li>
+                        <li><a href="{{m.user.get_absolute_url}}">{{m}}</a> (<a href="{{ m.group.get_absolute_url }}">{{m.group.name}}</a>)</li>
                     {% endfor %}
                 </ul>
             {% endif %}

@@ -14,7 +14,6 @@ from freezegun import freeze_time
 from rest_framework import status
 
 from apps.account.models import InvitationLink
-from apps.utils.testing.mocks import create_student_user
 
 from .api_views import (
     ACCOUNT_TEMPORARY,
@@ -144,8 +143,8 @@ class TestRegister(TestCase):
         self.assertIsNotNone(user)
         # check user informations
         self.assertFalse(user.is_email_valid())
-        self.assertEqual(user.student.promo, self.payload["promo"])
-        self.assertEqual(user.student.faculty, self.payload["faculty"])
+        self.assertEqual(user.promo, self.payload["promo"])
+        self.assertEqual(user.faculty, self.payload["faculty"])
 
         self.assertEqual(len(mail.outbox), 1)
 
@@ -287,88 +286,19 @@ class TestChangePassword(TestCase):
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
 
-class TestEditUsername(TestCase):
-    url = reverse("account-api:account-edit-username")
-
-    def setUp(self) -> None:
-        self.user: User = User.objects.create_user(
-            email="test@ec-nantes.fr",
-            password="test",
-            username="test",
-        )
-
-    def test_edit(self):
-        self.client.force_login(self.user)
-        payload = {
-            "username": "tesssst",
-        }
-        response = self.client.put(
-            self.url,
-            data=payload,
-            content_type="application/json",
-        )
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.user.refresh_from_db()
-        self.assertEqual(self.user.username, payload["username"])
-
-    def test_taken_username(self):
-        self.client.force_login(self.user)
-        User.objects.create_user(
-            email="test2@ec-nantes.fr",
-            password="password",
-            username="tesssst",
-        )
-        payload = {
-            "username": "tesssst",
-        }
-        response = self.client.put(
-            self.url,
-            data=payload,
-            content_type="application/json",
-        )
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-
-    def test_is_authenticated(self):
-        payload = {
-            "username": "tesssst",
-        }
-        response = self.client.put(self.url, data=payload)
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
-
-    def test_invalid_username_underscore(self):
-        self.client.force_login(self.user)
-        payload = {
-            "username": "_tesssst",
-        }
-        response = self.client.put(
-            self.url, data=payload, content_type="application/json"
-        )
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-
-    def test_invalid_username_char(self):
-        self.client.force_login(self.user)
-        payload = {
-            "username": "Tesssst",
-        }
-        response = self.client.put(
-            self.url, data=payload, content_type="application/json"
-        )
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-
-
 class TestChangeEmail(TestCase):
-    url = reverse("account_api:email-change")
-
     def setUp(self) -> None:
         self.user: User = User.objects.create_user(
             email="test@ec-nantes.fr",
             password="test",
             username="test",
         )
+        self.email = self.user.add_email("new@ec-nantes.fr")
+        self.url = reverse("account_api:email-detail", args=[self.email.uuid])
 
     def test_change_email(self):
         self.client.force_login(self.user)
-        payload = {"password": "test", "email": "new@ec-nantes.fr"}
+        payload = {"password": "test", "is_main": True}
         response = self.client.put(
             self.url,
             data=payload,
@@ -376,25 +306,14 @@ class TestChangeEmail(TestCase):
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
-        self.assertEqual(len(mail.outbox), 1)
+        self.assertEqual(len(mail.outbox), 0)
         self.user.refresh_from_db()
-        self.assertEqual(self.user.email.email, payload["email"])
-        self.assertTrue(self.user.has_email(payload["email"]))
+        self.assertEqual(self.user.email.email, self.email.email)
+        self.assertTrue(self.user.has_email(self.email.email))
 
     def test_wrong_password(self):
         self.client.force_login(self.user)
-        payload = {"password": "wrongpassword", "email": "new@ec-nantes.fr"}
-        response = self.client.put(
-            self.url,
-            data=payload,
-            content_type="application/json",
-        )
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-
-    def test_wrong_email(self):
-        self.client.force_login(self.user)
-        # with + in the email
-        payload = {"password": "test", "email": "ne+w@ec-nantes.fr"}
+        payload = {"password": "wrongpassword", "is_main": True}
         response = self.client.put(
             self.url,
             data=payload,
@@ -403,13 +322,48 @@ class TestChangeEmail(TestCase):
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_is_authenticated(self):
-        payload = {"password": "test", "email": "new@ec-nantes.fr"}
+        payload = {"password": "test", "is_main": True}
         response = self.client.put(
             self.url,
             data=payload,
             content_type="application/json",
         )
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+
+class TestAddEmail(TestCase):
+    uri = reverse("account_api:email-list")
+
+    def setUp(self) -> None:
+        self.user: User = User.objects.create_user(
+            email="test@ec-nantes.fr",
+            password="test",
+            username="test",
+        )
+
+    def test_add_wrong_email(self):
+        self.client.force_login(self.user)
+        # with + in the email
+        payload = {"email": "ne+w@ec-nantes.fr"}
+        response = self.client.post(
+            self.uri,
+            data=payload,
+            content_type="application/json",
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_add_email(self):
+        self.client.force_login(self.user)
+        payload = {"email": "new@ec-nantes.fr"}
+        response = self.client.post(
+            self.uri,
+            data=payload,
+            content_type="application/json",
+        )
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(len(mail.outbox), 1)
+        self.user.refresh_from_db()
+        self.assertTrue(self.user.has_email(payload["email"]))
 
 
 class TestForgottenPassword(TestCase):
@@ -418,7 +372,7 @@ class TestForgottenPassword(TestCase):
     """
 
     def setUp(self):
-        self.user = create_student_user(
+        self.user = User.objects.create_user(
             email="test@ec-nantes.fr",
             password="test",
         )
@@ -483,3 +437,38 @@ class TestEmailResend(TestCase):
 
         response = self.client.post(self.url, {"email": "not email"})
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+
+class TestEditProfile(TestCase):
+    def setUp(self) -> None:
+        self.user = User.objects.create_user(
+            username="test",
+            email="test@test.ec-nantes.fr",
+            password="test",
+            first_name="first name",
+            last_name="last name",
+            promo=2020,
+            faculty="Gen",
+        )
+        self.url = reverse("account_api:user-detail", args=[self.user.pk])
+
+    def test_edit_profile(self):
+        self.client.force_login(self.user)
+        payload = {
+            "first_name": "new name",
+            "promo": 2021,
+            "faculty": "Iti",
+            "username": "newusername",
+        }
+        response = self.client.put(
+            self.url,
+            data=payload,
+            content_type="application/json",
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.user.refresh_from_db()
+        self.assertEqual(self.user.first_name, payload["first_name"])
+        self.assertEqual(self.user.promo, payload["promo"])
+        self.assertEqual(self.user.faculty, payload["faculty"])
+        # username should not be updated
+        self.assertNotEqual(self.user.username, payload["username"])

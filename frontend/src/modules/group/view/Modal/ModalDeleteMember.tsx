@@ -33,7 +33,7 @@ export function ModalDeleteMember({
       queryClient.invalidateQueries(['members', { slug: member.group.slug }]);
       queryClient.invalidateQueries([
         'membership',
-        { group: member.group.slug, student: member.student.id },
+        { group: member.group.slug, user: member.user.id },
       ]);
       queryClient.invalidateQueries(['group', { slug: member.group.slug }]);
       onClose(true);
@@ -55,7 +55,7 @@ export function ModalDeleteMember({
         )}
         <DialogContentText>
           {t('group.details.modal.deleteMember.text', {
-            student: member.student.name,
+            user: member.user.name,
             group: member.group.name,
           })}
         </DialogContentText>

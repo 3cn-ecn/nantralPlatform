@@ -87,14 +87,23 @@
       "label": "Nouvelle adresse mail"
     },
     "more": {
-      "resend": "Renvoyer le mail de confirmation"
+      "resend": "Renvoyer le mail de confirmation",
+      "resendError": "Une erreur est survenue lors de l'envoi du mail",
+      "resendSuccess": "L'email de confirmation a bien été envoyé"
     },
     "page": {
       "title": "Gérer vos adresses mail"
     },
     "setMain": {
       "error": "Une erreur est survenue lors du changement d'email principal",
-      "label": "Définir comme principale"
+      "errorWithFields": "Erreur sur l'addresse séléctionnée",
+      "label": "Définir comme principale",
+      "passwordError": "Erreur sur le mot de passe : {{ details }}",
+      "success": "L'email principal a été changé. Utilisez maintenant cette adresse pour vous connecter."
+    },
+    "visibility": {
+      "setHidden": "Votre email a été retiré de votre profil",
+      "setVisible": "Votre email sera maintenant affiché sur votre profil"
     }
   },
   "error": {
@@ -910,6 +919,7 @@
       },
       "housing": "Colocation",
       "links": "Liens",
+      "matrix": "{{ username }} sur Matrix",
       "password": "Mot de passe",
       "profile": "Profil",
       "schooling": "Cursus"
@@ -940,7 +950,6 @@
       "placeholder": "Rechercher un élève"
     },
     "username": {
-      "disabledText": "Vous ne pouvez plus changer votre nom d'utilisateur car vous avez créé un compte Matrix",
       "label": "Nom d'utilisateur"
     }
   },
@@ -1013,16 +1022,6 @@
         "title": "Apparence"
       }
     }
-  },
-  "username": {
-    "alert": {
-      "link": "Cliquez sur ce lien",
-      "message1": "Nous avons ajouté la possibilité de modifier votre nom d'utilisateur.",
-      "message2": "pour effectuer le changement. Nous vous conseillons de réaliser l'opération rapidement en prévision d'une mise à jour future.",
-      "title": "Mise à jour importante - Noms d'utilisateurs"
-    },
-    "success": "Mise à jour du nom d'utilisateur effectuée avec succès",
-    "update": "Choisissez un nouveau nom d'utilisateur"
   },
   "utils": {
     "shareLink": {

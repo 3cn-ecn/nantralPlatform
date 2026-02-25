@@ -11,9 +11,9 @@ import {
 import { Box, IconButton, Tooltip, Typography } from '@mui/material';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
+import { useCurrentUserData } from '#modules/account/hooks/useCurrentUser.data';
 import { deletePostApi } from '#modules/post/api/deletePost.api';
 import { Post } from '#modules/post/post.types';
-import { useCurrentUserData } from '#modules/student/hooks/useCurrentUser.data';
 import { Avatar } from '#shared/components/Avatar/Avatar';
 import { FlexRow } from '#shared/components/FlexBox/FlexBox';
 import { ConfirmationModal } from '#shared/components/Modal/ConfirmationModal';

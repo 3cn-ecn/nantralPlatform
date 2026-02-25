@@ -5,9 +5,9 @@ import { AdminPanelSettings as AdminPanelSettingsIcon } from '@mui/icons-materia
 import { Container, IconButton, Tooltip, Typography } from '@mui/material';
 import { useInfiniteQuery } from '@tanstack/react-query';
 
+import { useCurrentUserData } from '#modules/account/hooks/useCurrentUser.data';
 import { getGroupListApi } from '#modules/group/api/getGroupList.api';
 import { GroupGrid } from '#modules/group/view/GroupGrid/GroupGrid';
-import { useCurrentUserData } from '#modules/student/hooks/useCurrentUser.data';
 import { FlexCol, FlexRow } from '#shared/components/FlexBox/FlexBox';
 import { SearchField } from '#shared/components/FormFields';
 import { InfiniteList } from '#shared/components/InfiniteList/InfiniteList';

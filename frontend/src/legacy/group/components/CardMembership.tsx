@@ -9,8 +9,8 @@ import {
   Typography,
 } from '@mui/material';
 
+import { User } from '#modules/account/user.types';
 import { Group } from '#modules/group/types/group.types';
-import { Student } from '#modules/student/student.types';
 
 import { Membership } from '../interfaces';
 import Avatar from './Avatar';
@@ -27,7 +27,7 @@ import ModalEditMember from './ModalEditMember';
 function MembershipCard(props: {
   item: Membership;
   group?: Group;
-  student: Student;
+  student: User;
   updateMembership?: (member: Membership) => Promise<void>;
   deleteMembership?: (member: Membership) => Promise<void>;
 }) {
@@ -47,13 +47,13 @@ function MembershipCard(props: {
             sx={{ display: 'flex', alignItems: 'center', gap: 1, p: 1 }}
           >
             <Avatar
-              url={group ? item.student.picture : item.group.icon}
-              title={group ? item.student.name : item.group.name}
+              url={group ? item.user.picture : item.group.icon}
+              title={group ? item.user.name : item.group.name}
               size="medium"
             />
             <Box sx={{ minWidth: 0 }}>
               <Typography variant="body1" noWrap>
-                {group ? item.student.name : item.group.name}
+                {group ? item.user.name : item.group.name}
               </Typography>
               <Typography variant="body2" color="secondary" noWrap>
                 {item.summary}

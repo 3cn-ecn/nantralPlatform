@@ -1,6 +1,6 @@
+import { UserPreviewDTO } from '#modules/account/infra/user.dto';
 import { ShortMembershipFormDTO } from '#modules/group/infra/membership.dto';
 import { SocialLinkDTO } from '#modules/social_link/infra/socialLink.dto';
-import { StudentPreviewDTO } from '#modules/student/infra/student.dto';
 
 import { GroupThematicDTO } from './groupThematic.dto';
 import { GroupTypePreviewDTO } from './groupType.dto';
@@ -60,7 +60,7 @@ export type MapGroupPreviewDTO = GroupPreviewDTO &
     GroupDTO,
     'address' | 'latitude' | 'longitude' | 'summary' | 'banner'
   > & {
-    members: StudentPreviewDTO[];
+    members: UserPreviewDTO[];
   };
 
 export type MapGroupSearchDTO = Pick<GroupDTO, 'id' | 'name' | 'icon'>;

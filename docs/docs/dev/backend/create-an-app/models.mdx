@@ -12,13 +12,13 @@ an app.
 ```python title="models.py"
 from django.db import models
 
-from apps.student.models import Student
+from apps.account.models import User
 
 class Event(models.Model):
     title = models.CharField(max_length=100)
     begin_date = models.DateTimeField("Début")
     end_date = models.DateTimeField("Fin")
-    publisher = models.ForeignKey(to=Student, on_delete=models.CASCADE)
+    publisher = models.ForeignKey(to=User, on_delete=models.CASCADE)
 ```
 
 :::danger Important note
@@ -74,10 +74,9 @@ def my_view(request):
     recent_events = event_list.filter(begin_date__gte="2021-01-01")
 
     # Get events from a specific publisher
-    current_student = request.user.student
-    published_events = Event.objects.filter(publisher=current_student)
+    published_events = Event.objects.filter(publisher=request.user)
     # or use the reverse relation
-    published_events = current_student.event_set.all()
+    published_events = request.user.event_set.all()
 ```
 
 Learn more on queries in the [official documentation](https://docs.djangoproject.com/en/5.0/topics/db/queries/).

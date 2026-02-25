@@ -18,14 +18,15 @@ class CustomScopeClaims(ScopeClaims):
             "sub": str(self.user.id),
             "preferred_username": self.user.username,
             "name": self.userinfo["name"],
-            "picture": self.user.student.picture.url if self.user.student and self.user.student.picture else None,
+            "picture": self.user.picture.url if self.user.picture else None,
         }
 
         return dic
 
+
 def userinfo(claims, user: User):
     # Populate claims dict.
-    claims["name"] = user.student.name if hasattr(user, "student") else user.username
+    claims["name"] = user.name
     claims["email"] = user.email.email
     claims["email_verified"] = user.email.is_valid
 

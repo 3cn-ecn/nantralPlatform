@@ -23,7 +23,7 @@ export function DeleteMenuItem({
   const { t } = useTranslation();
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const deleteEmailMutation = useMutation<number, ApiError, string>({
-    mutationFn: removeEmailApi,
+    mutationFn: (val) => removeEmailApi(val),
     onSuccess: async () => {
       await queryClient.invalidateQueries(['emails']);
       showToast({

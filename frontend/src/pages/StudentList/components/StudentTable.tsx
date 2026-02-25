@@ -10,7 +10,7 @@ import {
 import TablePaginationActions from '@mui/material/TablePagination/TablePaginationActions';
 import { useQuery } from '@tanstack/react-query';
 
-import { getStudentListApi } from '#modules/student/api/getStudentList.api';
+import { getUserListApi } from '#modules/account/api/getUserList.api';
 import { FlexRow } from '#shared/components/FlexBox/FlexBox';
 import { useTranslation } from '#shared/i18n/useTranslation';
 
@@ -26,8 +26,8 @@ interface StudentTableProps {
 export function StudentTable({ filters, updateFilters }: StudentTableProps) {
   const { t } = useTranslation();
   const { data, isSuccess, isFetching, isLoading } = useQuery({
-    queryFn: () => getStudentListApi(filters),
-    queryKey: ['student', filters],
+    queryFn: () => getUserListApi(filters),
+    queryKey: ['user', filters],
     keepPreviousData: true,
   });
 
@@ -54,8 +54,8 @@ export function StudentTable({ filters, updateFilters }: StudentTableProps) {
           {isSuccess &&
             !isLoading &&
             !isFetching &&
-            data.results.map((student) => (
-              <StudentRow key={student.id} student={student} />
+            data.results.map((user) => (
+              <StudentRow key={user.id} user={user} />
             ))}
         </TableBody>
       </Table>

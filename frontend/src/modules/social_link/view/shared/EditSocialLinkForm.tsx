@@ -33,19 +33,22 @@ import { ApiFormError } from '#shared/infra/errors';
 
 import { SocialLinkItem } from './SocialLinkItem';
 
-interface EditSocialLinkFormProps {
+type GroupOrUser =
+  | { userId: number; groupSlug?: never }
+  | { userId?: never; groupSlug: string };
+
+type EditSocialLinkFormProps = GroupOrUser & {
   socialLinks: SocialLink[];
-  type: 'user' | 'group';
-  groupSlug?: string;
   onSuccess?: () => void;
-}
+};
 
 export function EditSocialLinkForm({
   socialLinks,
-  type,
+  userId,
   groupSlug,
   onSuccess,
 }: EditSocialLinkFormProps) {
+  const type = userId ? 'user' : 'group';
   const sortedSocialLinks = sortLinks(socialLinks);
   const addButtonRef = useRef<HTMLButtonElement>(null);
 
@@ -55,6 +58,7 @@ export function EditSocialLinkForm({
   const [socialLinkForm, setSocialLinkForm] = useState<SocialLinkForm>({
     label: '',
     uri: '',
+    user: userId,
   });
 
   // hack to scroll to bottom when creating a new item
@@ -120,7 +124,7 @@ export function EditSocialLinkForm({
             onChange={(_, isExpanded) => {
               if (isExpanded) {
                 const val = socialLinks[index];
-                setSocialLinkForm({ ...val });
+                setSocialLinkForm({ ...val, user: userId });
                 setExpanded(val.id);
               } else {
                 setExpanded(undefined);
@@ -174,7 +178,6 @@ export function EditSocialLinkForm({
                 socialLink={{
                   uri: 'https://no-link',
                   label: t('socialLink.new'),
-                  id: -1,
                 }}
                 clickable={false}
               />
@@ -223,6 +226,7 @@ export function EditSocialLinkForm({
             setSocialLinkForm({
               label: '',
               uri: '',
+              user: userId,
             });
           }}
         >
@@ -236,6 +240,7 @@ export function EditSocialLinkForm({
             setSocialLinkForm({
               label: '',
               uri: 'mailto:example@example.com',
+              user: userId,
             });
           }}
         >
@@ -249,6 +254,7 @@ export function EditSocialLinkForm({
             setSocialLinkForm({
               label: '',
               uri: 'tel:+33 6 01 01 01 01',
+              user: userId,
             });
           }}
         >

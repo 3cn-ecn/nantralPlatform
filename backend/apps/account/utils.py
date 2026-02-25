@@ -16,7 +16,7 @@ def clean_username(username: str):
     )  # split the Unicode characters
     normalized = normalized.lower()
     cleaned = re.sub(
-        r"[^a-z0-9._\-+]", "", normalized
+        r"[^a-z0-9._\-]", "", normalized
     )  # remove unauthorized Unicode chars
     cleaned.strip(
         "_"

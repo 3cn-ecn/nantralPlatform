@@ -1,13 +1,13 @@
 import { Link } from 'react-router-dom';
 
-import { Chip } from '@mui/material';
+import { Chip, useTheme } from '@mui/material';
 
 import { SocialLink } from '#modules/social_link/types/socialLink.type';
 import { getIconAndColor } from '#modules/social_link/utils/getIconAndColor';
 import { getLabel } from '#modules/social_link/utils/getLabel';
 
 interface SocialLinkItemProps {
-  socialLink: SocialLink;
+  socialLink: Pick<SocialLink, 'uri' | 'label'>;
   clickable?: boolean;
 }
 
@@ -16,7 +16,7 @@ export function SocialLinkItem({
   clickable = true,
 }: SocialLinkItemProps) {
   const label = getLabel(socialLink);
-  const { icon, color } = getIconAndColor(socialLink);
+  const { icon, color } = getIconAndColor(socialLink, useTheme());
 
   const clickableProps = clickable
     ? {

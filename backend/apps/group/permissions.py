@@ -30,9 +30,7 @@ class GroupPermission(permissions.BasePermission):
     def has_object_permission(self, request, view, obj: Group):
         user = request.user
         if view.action == "admin_request":
-            return obj.membership_set.filter(
-                student__user=request.user
-            ).exists()
+            return obj.membership_set.filter(user=request.user).exists()
         if request.method in permissions.SAFE_METHODS:
             if obj.public:
                 return True
@@ -46,9 +44,7 @@ class MembershipPermission(permissions.BasePermission):
     def has_object_permission(self, request, view, obj: Membership):
         if request.method in permissions.SAFE_METHODS:
             return not obj.group.private or obj.group.is_member(request.user)
-        return obj.student.user == request.user or obj.group.is_admin(
-            request.user
-        )
+        return obj.user == request.user or obj.group.is_admin(request.user)
 
 
 class AdminRequestPermission(permissions.BasePermission):

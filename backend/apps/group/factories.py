@@ -4,7 +4,7 @@ import factory
 from factory.django import DjangoModelFactory
 from faker import Faker as RealFaker
 
-from apps.student.models import Student
+from apps.account.models import User
 from apps.utils.factories.fake_data_generator import FakeDataGenerator
 
 from .models import Group, GroupType, Membership
@@ -48,10 +48,10 @@ class GroupFactory(DjangoModelFactory):
 class MembershipFactory(DjangoModelFactory):
     class Meta:
         model = Membership
-        django_get_or_create = ("group", "student")
+        django_get_or_create = ("group", "user")
 
     group = factory.Iterator(Group.objects.all())
-    student = factory.Iterator(Student.objects.all())
+    user = factory.Iterator(User.objects.all())
     admin = factory.Faker("boolean", chance_of_getting_true=0.1)
     summary = factory.Faker("sentence", nb_words=10)
     description = factory.Faker("paragraph", nb_sentences=5)
@@ -69,7 +69,7 @@ class MembershipFactory(DjangoModelFactory):
 
 
 class GroupFakeData(FakeDataGenerator):
-    dependencies = ["StudentFakeData"]
+    dependencies = ["UserFakeData"]
 
     def make_clubs(self):
         clubs = GroupTypeFactory.create(

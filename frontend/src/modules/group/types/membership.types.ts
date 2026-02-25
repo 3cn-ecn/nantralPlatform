@@ -1,10 +1,10 @@
-import { StudentPreview } from '#modules/student/student.types';
+import { UserPreview } from '#modules/account/user.types';
 
 import { GroupPreview } from './group.types';
 
 export interface Membership {
   id: number;
-  student: StudentPreview;
+  user: UserPreview;
   group: GroupPreview;
   summary: string;
   description: string;
@@ -18,7 +18,7 @@ export interface Membership {
 export type MembershipForm = Pick<
   Membership,
   'beginDate' | 'endDate' | 'summary' | 'description' | 'admin'
-> & { student: number; group: number };
+> & { user: number; group: number };
 
 export type ShortMembershipForm = Pick<
   MembershipForm,

@@ -24,7 +24,7 @@ class SignatureApiView(views.APIView):
 
     def get_year(self) -> int:
         """Returns 1st year, 2nd year, or 3d year."""
-        promo = self.request.user.student.promo
+        promo = self.request.user.promo
         year = timezone.now().year - promo
         if timezone.now().month >= FIRST_MONTH_OF_NEW_CYCLE:
             year += 1
@@ -33,7 +33,7 @@ class SignatureApiView(views.APIView):
 
     def get_academic_groups(self) -> QuerySet[Group]:
         user: User = self.request.user
-        academic_memberships = user.student.membership_set.filter(
+        academic_memberships = user.membership_set.filter(
             group__group_type__slug="academic",
         )
         max_year = academic_memberships.aggregate(
@@ -47,7 +47,7 @@ class SignatureApiView(views.APIView):
 
     def get_club_memberships(self) -> QuerySet[Membership]:
         user: User = self.request.user
-        club_memberships = user.student.membership_set.filter(
+        club_memberships = user.membership_set.filter(
             group__group_type__slug__in=["club", "admin"],
             begin_date__lte=timezone.now(),
             end_date__gte=timezone.now(),
@@ -58,7 +58,7 @@ class SignatureApiView(views.APIView):
         """Get info for a signature."""
         user: User = request.user
         email = user.email.email
-        name = user.student.name
+        name = user.name
         year = self.get_year()
         academic_groups = self.get_academic_groups()
         club_memberships = self.get_club_memberships()

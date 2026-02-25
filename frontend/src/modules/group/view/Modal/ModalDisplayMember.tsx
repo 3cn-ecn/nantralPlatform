@@ -17,9 +17,9 @@ import {
   Typography,
 } from '@mui/material';
 
+import { UserPreview } from '#modules/account/user.types';
 import { Group } from '#modules/group/types/group.types';
 import { Membership } from '#modules/group/types/membership.types';
-import { StudentPreview } from '#modules/student/student.types';
 import { Avatar } from '#shared/components/Avatar/Avatar';
 import { useTranslation } from '#shared/i18n/useTranslation';
 
@@ -29,9 +29,9 @@ export function ModalShowMember(props: {
   open: boolean;
   member: Membership;
   group?: Group;
-  student: StudentPreview;
+  user: UserPreview;
 }) {
-  const { closeModal, openEditModal, open, member, group, student } = props;
+  const { closeModal, openEditModal, open, member, group, user } = props;
   const { t } = useTranslation();
   return (
     <Dialog
@@ -42,14 +42,14 @@ export function ModalShowMember(props: {
       <DialogTitle sx={{ m: 0, p: 2 }}>
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
           <Avatar
-            src={group ? member.student.picture : member.group.icon}
-            alt={group ? member.student.name : member.group.name}
+            src={group ? member.user.picture : member.group.icon}
+            alt={group ? member.user.name : member.group.name}
             size="l"
           />
           <Box sx={{ minWidth: 0 }}>
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
               <Typography variant="h5" sx={{ fontWeight: 600 }}>
-                {group ? member.student.name : member.group.name}
+                {group ? member.user.name : member.group.name}
               </Typography>
               {member.admin ? <VerifiedIcon color="secondary" /> : <></>}
             </Box>
@@ -89,7 +89,7 @@ export function ModalShowMember(props: {
       <DialogActions>
         <Button
           component={Link}
-          to={group ? member.student.url : member.group.url}
+          to={group ? member.user.url : member.group.url}
           variant="text"
           color="secondary"
           endIcon={<OpenInNewIcon />}
@@ -101,8 +101,7 @@ export function ModalShowMember(props: {
         {group?.isAdmin && (
           <Button
             hidden={
-              !openEditModal ||
-              (!group?.isAdmin && student.id !== member.student.id)
+              !openEditModal || (!group?.isAdmin && user.id !== member.user.id)
             }
             onClick={openEditModal}
             variant="outlined"

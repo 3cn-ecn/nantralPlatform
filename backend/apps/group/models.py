@@ -7,7 +7,6 @@ from simple_history.models import HistoricalRecords
 
 from apps.account.models import User
 from apps.sociallink.models import SocialLink
-from apps.student.models import Student
 from apps.utils.fields.image_field import CustomImageField
 from apps.utils.slug import SlugModel
 
@@ -33,7 +32,7 @@ class GroupType(models.Model):
         crop=True,
         name_from_field="slug",
     )
-    is_map = models.BooleanField(verbose_name=_("Is map"), default=False)
+    is_map = models.BooleanField(verbose_name=_("Is a location"), default=False)
 
     # Members settings
     no_membership_dates = models.BooleanField(
@@ -162,14 +161,14 @@ class Group(models.Model, SlugModel):
         help_text=_("This name will be used in the list of groups."),
     )
     members = models.ManyToManyField(
-        to=Student,
+        to=User,
         verbose_name=_("Members"),
-        related_name="groups",
+        related_name="group_set",
         through="Membership",
         blank=True,
     )
     subscribers = models.ManyToManyField(
-        to=Student,
+        to=User,
         verbose_name=_("Subscribers"),
         related_name="subscriptions",
         blank=True,
@@ -375,8 +374,10 @@ class Group(models.Model, SlugModel):
     def clean(self) -> None:
         """Test if the object is valid (no incompatibility between fields)."""
         # If the group type has a map, check if map fields are not empty
-        if self.group_type.is_map and not (
-            self.address and self.latitude and self.longitude
+        if self.group_type.is_map and (
+            self.address is None
+            or self.latitude is None
+            or self.longitude is None
         ):
             raise ValidationError(
                 f"Address and latitude are required for group type {self.group_type}."
@@ -395,11 +396,7 @@ class Group(models.Model, SlugModel):
 
     @property
     def created_by(self):
-        user = self.history.earliest().history_user
-        if user:
-            return user.student
-        else:
-            return None
+        return self.history.earliest().history_user
 
     @property
     def updated_at(self):
@@ -407,11 +404,7 @@ class Group(models.Model, SlugModel):
 
     @property
     def updated_by(self):
-        user = self.history.latest().history_user
-        if user:
-            return user.student
-        else:
-            return None
+        return self.history.latest().history_user
 
     @property
     def scholar_year(self) -> str:
@@ -425,7 +418,7 @@ class Group(models.Model, SlugModel):
 
         Example:
         -------
-        >>> group = Group.objects.all().firs()
+        >>> group = Group.objects.all().first()
         >>> group.year = 2019
         >>> group.scholar_year
         '2019-2020'
@@ -454,7 +447,7 @@ class Group(models.Model, SlugModel):
             user.is_superuser
             or (
                 self.is_member(user)
-                and self.membership_set.get(student=user.student).admin
+                and self.membership_set.get(user=user).admin
             )
             or (self.parent is not None and self.parent.is_admin(user))
         )
@@ -473,11 +466,7 @@ class Group(models.Model, SlugModel):
             True if the user is a member of this group.
 
         """
-        return (
-            user.is_authenticated
-            and hasattr(user, "student")
-            and self.subscribers.contains(user.student)
-        )
+        return user.is_authenticated and self.subscribers.contains(user)
 
     def is_member(self, user: User) -> bool:
         """Check if a user is a member for this group.
@@ -493,11 +482,7 @@ class Group(models.Model, SlugModel):
             True if the user is a member of this group.
 
         """
-        return (
-            user.is_authenticated
-            and hasattr(user, "student")
-            and self.members.contains(user.student)
-        )
+        return user.is_authenticated and self.members.contains(user)
 
     def _eval_as_str(self, expr: str) -> str | None:
         """Evaluate an expression containing with this group as a context variable
@@ -544,8 +529,8 @@ class Group(models.Model, SlugModel):
 class Membership(models.Model):
     """A class for memberships of each group."""
 
-    student = models.ForeignKey(
-        to=Student,
+    user = models.ForeignKey(
+        to=User,
         on_delete=models.CASCADE,
         related_name="membership_set",
     )
@@ -571,12 +556,12 @@ class Membership(models.Model):
     admin_request_message = models.TextField(_("Request message"), blank=True)
 
     class Meta:
-        unique_together = ("student", "group")
-        ordering = ["group", "-priority", "student"]
+        unique_together = ("user", "group")
+        ordering = ["group", "-priority", "user"]
         verbose_name = "membre"
 
     def __str__(self) -> str:
-        return str(self.student)
+        return str(self.user)
 
     def save(self, *args, **kwargs) -> None:
         """Save the membership object."""

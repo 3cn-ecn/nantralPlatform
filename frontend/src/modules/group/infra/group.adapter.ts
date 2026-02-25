@@ -1,6 +1,6 @@
+import { adaptUserPreview } from '#modules/account/infra/user.adapter';
 import { convertShortMembershipForm } from '#modules/group/infra/membership.converter';
 import { adaptSocialLink } from '#modules/social_link/infra/socialLink.adapter';
-import { adaptStudentPreview } from '#modules/student/infra/student.adapter';
 
 import {
   CreateGroupForm,
@@ -50,14 +50,12 @@ export function adaptMapGroupPreview(
     longitude: groupDTO.longitude,
     summary: groupDTO.summary,
     banner: groupDTO.banner,
-    members: groupDTO.members.map((studentDTO) =>
-      adaptStudentPreview(studentDTO),
-    ),
     thematic:
       groupDTO.thematic &&
       (groupDTO.thematic != null
         ? adaptGroupThematic(groupDTO.thematic)
         : null),
+    members: groupDTO.members.map((userDTO) => adaptUserPreview(userDTO)),
   };
 }
 

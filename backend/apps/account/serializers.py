@@ -1,14 +1,16 @@
+from datetime import datetime
+
 from django.db.models import F
 from django.utils import timezone
 from django.utils.translation import gettext as _
 
 from rest_framework import serializers
-from rest_framework.exceptions import ValidationError
+from rest_framework.exceptions import PermissionDenied, ValidationError
 from rest_framework.validators import UniqueValidator
 
-from apps.student.models import FACULTIES, PATHS, Student
+from apps.sociallink.serializers import SocialLinkSerializer
 
-from .models import Email, InvitationLink, User
+from .models import FACULTIES, PATHS, Email, InvitationLink, User
 from .utils import clean_username
 from .validators import (
     django_validate_password,
@@ -31,7 +33,9 @@ class LoginSerializer(serializers.Serializer):
             ecn_email_validator,
             UniqueValidator(
                 Email.objects.all().annotate(email_ecn=F("email")),
-                message=_("An account has already been created with this email address"),
+                message=_(
+                    "An account has already been created with this email address"
+                ),
             ),
         ],
         required=False,
@@ -49,7 +53,9 @@ class RegisterSerializer(serializers.Serializer):
             ecn_email_validator,
             UniqueValidator(
                 Email.objects.all(),
-                message=_("An account has already been created with this email address"),
+                message=_(
+                    "An account has already been created with this email address"
+                ),
             ),
         ],
         required=True,
@@ -90,8 +96,11 @@ class RegisterSerializer(serializers.Serializer):
         user = User(
             first_name=validated_data["first_name"],
             last_name=validated_data["last_name"],
-            has_updated_username=True,  # Already had a chance to change username
+            promo=validated_data["promo"],
+            faculty=validated_data["faculty"],
         )
+        if "path" in validated_data:
+            user.path = validated_data["path"]
 
         # IMPORTANT: hash password and remove password from validated_data
         user.set_password(self.validated_data.pop("password"))
@@ -101,7 +110,9 @@ class RegisterSerializer(serializers.Serializer):
         # save to generate the primary key for default username and main email
         user.save()
 
-        user.email = user.add_email(validated_data["email"], request=self.context.get("request"))
+        user.email = user.add_email(
+            validated_data["email"], request=self.context.get("request")
+        )
 
         user.username = validated_data.get("username")
 
@@ -113,15 +124,6 @@ class RegisterSerializer(serializers.Serializer):
             )
         # save again
         user.save()
-        # add student informations
-        student = Student(
-            user=user,
-            promo=validated_data.get("promo"),
-            faculty=validated_data.get("faculty"),
-            path=validated_data.get("path"),
-        )
-        student.save()
-
 
         return user
 
@@ -150,7 +152,9 @@ class InvitationRegisterSerializer(RegisterSerializer):
             validate_email,
             UniqueValidator(
                 Email.objects.all(),
-                message=_("An account has already been created with this email address"),
+                message=_(
+                    "An account has already been created with this email address"
+                ),
             ),
         ],
         required=True,
@@ -171,9 +175,31 @@ class InvitationRegisterSerializer(RegisterSerializer):
         return user
 
 
-class ChangeEmailSerializer(serializers.Serializer):
-    password = serializers.CharField(style={"input_type": "password"})
-    email = serializers.EmailField(validators=[validate_email])
+class EmailSerializer(serializers.ModelSerializer):
+    password = serializers.CharField(
+        style={"input_type": "password"}, required=False, write_only=True
+    )
+    is_main = serializers.BooleanField(required=False)
+    is_ecn_email = serializers.BooleanField(read_only=True)
+
+    class Meta:
+        model = Email
+        fields = (
+            "email",
+            "is_ecn_email",
+            "is_valid",
+            "is_visible",
+            "is_main",
+            "password",
+            "uuid",
+        )
+        read_only_fields = (
+            "email",
+            "is_ecn_email",
+            "is_valid",
+            "uuid",
+        )
+        extra_kwargs = {"is_visible": {"required": False}}
 
     def validate_password(self, val):
         user: User = self.context.get("request").user
@@ -181,141 +207,156 @@ class ChangeEmailSerializer(serializers.Serializer):
             raise ValidationError(_("Invalid passsword"))
         return val
 
-    def validate_email(self, val: str):
-        user = self.context.get("request").user
-        if Email.objects.exclude(user=user).filter(email=val).exists():
-            raise serializers.ValidationError(_("An account has already been created with this email address"))
-        try:
-            email = Email.objects.get(email=val)
-            if not email.is_valid:
-                raise serializers.ValidationError(_("You cannot use this address because it is not verified"))
-        except Email.DoesNotExist:
-            pass
+    def validate_is_main(self, val: bool):
+        if not val:
+            raise ValidationError(_("This field cannot be set to false"))
         return val
+
+    def validate(self, validated_data: dict):
+        if (
+            "is_main" in validated_data
+            and "password" not in validated_data
+            and not self.context.get("request").user.is_superuser
+        ):
+            raise ValidationError(
+                {"password": _("Password is required to set an email as main")}
+            )
+        return validated_data
+
+    def update(self, instance: Email, validated_data: dict):
+        if validated_data.pop("is_main", False):
+            user = instance.user
+            user.email = instance
+            user.save()
+        return super().update(instance, validated_data)
 
 
 class ShortEmailSerializer(serializers.Serializer):
     email = serializers.EmailField()
 
-class VisibilitySerializer(serializers.Serializer):
-    is_visible = serializers.BooleanField(required=True)
 
-
-class EmailSerializer(serializers.ModelSerializer):
-    email = serializers.EmailField(
-        validators=[
-            validate_email,
-            UniqueValidator(
-                Email.objects.all(),
-                message=_("An account has already been created with this email address"),
-            )
-        ],
-        required=True,
+class CreateEmailSerializer(serializers.ModelSerializer):
+    user = serializers.PrimaryKeyRelatedField(
+        queryset=User.objects.all(), default=serializers.CurrentUserDefault()
     )
-    is_main = serializers.SerializerMethodField()
 
     class Meta:
         model = Email
-        fields = ("email", "is_valid", "is_ecn_email", "is_main", "is_visible", "uuid")
-        read_only_fields = ("is_valid", "is_ecn_email", "is_main", "uuid")
+        fields = (
+            "email",
+            "is_visible",
+            "user",
+        )
+        extra_kwargs = {
+            "email": {
+                "validators": [
+                    validate_email,
+                    UniqueValidator(
+                        Email.objects.all(),
+                        message=_(
+                            "An account has already been created with this email address"
+                        ),
+                    ),
+                ]
+            }
+        }
 
-    def validate_email(self, val: str):
-        if self.instance and val != self.instance.email:
-            raise serializers.ValidationError(_("You cannot change the email address. Please add a new one"))
+    def validate_user(self, val: User):
+        request_user = self.context.get("request").user
+        if val != request_user and not request_user.is_superuser:
+            raise PermissionDenied
         return val
 
     def create(self, validated_data: dict):
-        request = self.context.get("request")
-        return request.user.add_email(validated_data.get("email"), request=self.context.get("request"))
-
-    def get_is_main(self, obj: Email):
-        return obj.user.email == obj
+        user = validated_data.pop("user")
+        return user.add_email(
+            validated_data.get("email"),
+            request=self.context.get("request", None),
+        )
 
 
 class InvitationValidSerializer(serializers.Serializer):
     uuid = serializers.UUIDField()
 
 
-class EditStudentSerializer(serializers.ModelSerializer):
+class EditUserSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Student
-        fields = ["path", "promo", "description", "picture"]
+        model = User
+        fields = [
+            "first_name",
+            "last_name",
+            "path",
+            "promo",
+            "faculty",
+            "description",
+            "picture",
+        ]
 
 
 class UserSerializer(serializers.ModelSerializer):
-    student = EditStudentSerializer()
+    url = serializers.SerializerMethodField()
+    expires_at = serializers.SerializerMethodField()
+    social_links = SocialLinkSerializer(many=True, read_only=True)
+    emails = serializers.SerializerMethodField()
 
     class Meta:
         model = User
-        fields = ["username", "first_name", "last_name", "student", "has_opened_matrix"]
-        read_only_fields = ["has_opened_matrix"]
-
-    def validate_username(self, value):
-        if self.instance.has_opened_matrix and self.instance.username != value:
-            raise serializers.ValidationError("You can not change username because you created a matrix account")
-        return value
-
-    def update(self, obj: User, data: dict):
-        student_data = data.pop("student")
-        if self.instance.has_opened_matrix:
-            data.pop("username")  # Remove username to prevent user from changing it
-
-        for attr, value in data.items():
-            setattr(obj, attr, value)
-
-        student_serializer = EditStudentSerializer(
-            instance=obj.student, data=student_data
+        fields = [
+            "id",
+            "name",
+            "promo",
+            "picture",
+            "faculty",
+            "path",
+            "url",
+            "is_staff",
+            "is_superuser",
+            "description",
+            "social_links",
+            "emails",
+            "username",
+            "expires_at",
+        ]
+        read_only_fields = (
+            "id",
+            "url",
+            "is_staff",
+            "is_superuser",
+            "username",
+            "expires_at",
         )
 
-        if student_serializer.is_valid():
-            obj.save()  # Save only if all the data is valid
+    def get_url(self, obj: User) -> str:
+        return obj.get_absolute_url()
 
-            student_serializer.save()
-            self.validated_data["student"]["picture"] = (
-                student_serializer.data.get("picture")
-            )
+    def get_expires_at(self, obj: User) -> datetime | None:
+        # send expiring date only to the current user
+        request_user = None
+        request = self.context.get("request")
+        if request and hasattr(request, "user"):
+            request_user = request.user
 
-        return obj
+        if request_user != obj or not obj.invitation:
+            return None
+        return obj.invitation.expires_at
+
+    def get_emails(self, obj: User) -> list[dict]:
+        return ShortEmailSerializer(
+            obj.emails.filter(is_visible=True), many=True
+        ).data
 
 
-class UsernameSerializer(serializers.ModelSerializer):
-    picture = serializers.SerializerMethodField()
+class UserPreviewSerializer(serializers.ModelSerializer):
     name = serializers.SerializerMethodField()
-
-    username = serializers.CharField(
-        max_length=200,
-        validators=[
-            UniqueValidator(
-                User.objects.all(),
-                message=_("This username is already taken."),
-            ),
-            validate_matrix_username,
-        ],
-        required=True,
-    )
+    url = serializers.SerializerMethodField()
 
     class Meta:
         model = User
-        fields = ["username", "picture", "name", "has_updated_username", "has_opened_matrix"]
-        read_only_fields = ["has_updated_username", "has_opened_matrix"]
+        fields = ["id", "name", "url", "picture"]
+        read_only = ["picture"]
 
-    def validate_username(self, value):
-        if self.instance.has_opened_matrix and self.instance.username != value:
-            raise serializers.ValidationError(_(
-                "You can not change username because you created a matrix account"
-            ))
-        return value
+    def get_name(self, obj: User) -> str:
+        return obj.name
 
-    def save(self):
-        self.validated_data["has_updated_username"] = True
-        super().save()
-
-    def get_picture(self, obj):
-        pic = obj.student.picture
-        if pic:
-            return pic.url
-        else:
-            return None
-
-    def get_name(self, obj):
-        return obj.student.name
+    def get_url(self, obj: User) -> str:
+        return obj.get_absolute_url()
