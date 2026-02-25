@@ -33,6 +33,8 @@ class CustomScopeClaims(ScopeClaims):
             "groups": [group.name for group in self.user.groups.all()],
         }
 
+        return dic
+
 
 def userinfo(claims, user: User):
     # Populate claims dict.
