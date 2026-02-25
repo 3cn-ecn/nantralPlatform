@@ -341,6 +341,7 @@
     }
   },
   "group": {
+    "defaultThematic": "Autres",
     "details": {
       "accept": "Accepter",
       "accepted": "Acceptée",
@@ -427,13 +428,7 @@
         "posts": "Posts"
       }
     },
-    "defaultThematic": "Autres",
     "form": {
-      "thematic": {
-        "label": "Thématique",
-        "helperText": "Le groupe sera listé avec des groupes de cette thématique",
-        "undefined": "Indéfinie"
-      },
       "address": {
         "label": "Adresse"
       },
@@ -459,8 +454,8 @@
         "label": "Date de création"
       },
       "description": {
-        "frenchLabel": "Description (en français)",
-        "englishLabel": "Description (en anglais)"
+        "englishLabel": "Description (en anglais)",
+        "frenchLabel": "Description (en français)"
       },
       "endDate": {
         "label": "Date de fin"
@@ -514,10 +509,15 @@
         "label": "Nom raccourci"
       },
       "summary": {
-        "frenchLabel": "Résumé (en français)",
         "englishLabel": "Résumé (en anglais)",
+        "frenchLabel": "Résumé (en français)",
         "mapLabel": "Complément d'adresse",
         "mapPlaceholder": "Apt. 101"
+      },
+      "thematic": {
+        "helperText": "Le groupe sera listé avec des groupes de cette thématique",
+        "label": "Thématique",
+        "undefined": "Indéfinie"
       },
       "title": {
         "advancedOptions": "Options avancées",
@@ -581,43 +581,44 @@
   },
   "legalNotice": {
     "paragraphs": {
+      "copyright": {
+        "text1": "Le code source de ce site web est la propriété du club 3CN, affilié à l’AECN. Sauf mention contraire, l’ensemble des éléments accessibles sur le site (textes, images, logos, icônes, sons, logiciels, etc.) demeure la propriété exclusive de leurs auteurs, en ce qui concerne les droits de propriété intellectuelle ou les droits d’usage.",
+        "text2": "Toute reproduction, représentation, modification, publication ou adaptation de tout ou partie des éléments du site, quel que soit le moyen ou le procédé utilisé, est interdite, sauf autorisation préalable de l’auteur. Toute exploitation non autorisée du site ou de l’un quelconque des éléments qu’il contient est susceptible de constituer une contrefaçon et d’entraîner des poursuites. ",
+        "title": "Propriété intellectuelle"
+      },
+      "host_provider": {
+        "address_line_1": "2 rue Kellermann",
+        "address_line_2": "59100 Roubaix",
+        "address_line_3": "France",
+        "text": "Le site internet est hébergé par la société OVH SAS, domiciliée à l’adresse suivante :",
+        "title": "Hébergeur"
+      },
       "publisher": {
-        "title": "Éditeur du site",
-        "text": "Le site Nantral Platform est développé par le club 3CN, affilié à l’AECN (ASSOCIATION DES ÉTUDIANTS DE L'ÉCOLE CENTRALE DE NANTES). La responsabilité du contenu du site incombe à l’AECN, qui en assure également le financement et la gestion.",
-        "address_title": "L’adresse de l’AECN est la suivante :",
+        "3cn_president": "Jean Benoît GRIMALDI",
+        "3cn_president_title": "Président de 3CN",
         "address_line_1": "ASSOCIATION DES ÉTUDIANTS DE L'ÉCOLE CENTRALE DE NANTES",
         "address_line_2": "1 rue de la Noë",
         "address_line_3": "44300 Nantes",
         "address_line_4": "France",
-        "people_text": "En particulier, l'équipe du site est sous la direction de: ",
-        "aecn_president_title": "Présidente de l'AECN",
-        "aecn_president": "Victoire GUTH",
-        "aecn_dsi_title": "Directeur des systèmes d'information de l'AECN",
+        "address_title": "L’adresse de l’AECN est la suivante :",
         "aecn_dsi": "Bastien PAGEAUD",
-        "3cn_president_title": "Président de 3CN",
-        "3cn_president": "Jean Benoît GRIMALDI"
+        "aecn_dsi_title": "Directeur des systèmes d'information de l'AECN",
+        "aecn_president": "Victoire GUTH",
+        "aecn_president_title": "Présidente de l'AECN",
+        "people_text": "En particulier, l'équipe du site est sous la direction de: ",
+        "text": "Le site Nantral Platform est développé par le club 3CN, affilié à l’AECN (ASSOCIATION DES ÉTUDIANTS DE L'ÉCOLE CENTRALE DE NANTES). La responsabilité du contenu du site incombe à l’AECN, qui en assure également le financement et la gestion.",
+        "title": "Éditeur du site"
       },
-
-      "host_provider": {
-        "title": "Hébergeur",
-        "text": "Le site internet est hébergé par la société OVH SAS, domiciliée à l’adresse suivante :",
-        "address_line_1": "2 rue Kellermann",
-        "address_line_2": "59100 Roubaix",
-        "address_line_3": "France"
-      },
-
-      "copyright": {
-        "title": "Propriété intellectuelle",
-        "text1": "Le code source de ce site web est la propriété du club 3CN, affilié à l’AECN. Sauf mention contraire, l’ensemble des éléments accessibles sur le site (textes, images, logos, icônes, sons, logiciels, etc.) demeure la propriété exclusive de leurs auteurs, en ce qui concerne les droits de propriété intellectuelle ou les droits d’usage.",
-        "text2": "Toute reproduction, représentation, modification, publication ou adaptation de tout ou partie des éléments du site, quel que soit le moyen ou le procédé utilisé, est interdite, sauf autorisation préalable de l’auteur. Toute exploitation non autorisée du site ou de l’un quelconque des éléments qu’il contient est susceptible de constituer une contrefaçon et d’entraîner des poursuites. "
-      },
-
       "rgpd": {
-        "title": "Données personnelles",
-        "text": "Les données personnelles collectées sont utilisées uniquement dans le cadre du bon fonctionnement de Nantral Platform. Leur accès est strictement limité à leur propriétaire ainsi qu’aux personnes expressément autorisées par le conseil d’administration de l’AECN.",
-        "contact_text": "Pour toute question ou demande relative aux données personnelles, vous pouvez nous contacter à l’adresse électronique suivante : ",
         "contact_email": "contact@nantral-platform.fr",
-        "contact_post_email": "."
+        "contact_post_email": ".",
+        "contact_text": "Pour toute question ou demande relative aux données personnelles, vous pouvez nous contacter à l’adresse électronique suivante : ",
+        "text": "Les données personnelles collectées sont utilisées uniquement dans le cadre du bon fonctionnement de Nantral Platform. Leur accès est strictement limité à leur propriétaire ainsi qu’aux personnes expressément autorisées par le conseil d’administration de l’AECN.",
+        "title": "Données personnelles"
+      },
+      "cookies": {
+        "title": "Utilisation des cookies",
+        "text": "Nantral Platform utilise uniquement des cookies strictement nécessaires au fonctionnement du site et à l’authentification des utilisateurs. Ces cookies permettent notamment de maintenir votre session active après connexion, d’accéder aux groupes et évènements, ainsi que de personnaliser votre profil. Ces cookies ne sont pas utilisés à des fins publicitaires ou de suivi et ne nécessitent pas de consentement préalable conformément à la réglementation applicable. Les cookies d’authentification sont conservés pour la durée strictement nécessaire à la gestion de la session ou conformément aux obligations légales applicables. Vous pouvez configurer votre navigateur afin de bloquer les cookies ; toutefois, certaines fonctionnalités du site pourraient ne plus fonctionner correctement."
       }
     },
     "title": "Mentions Légales"

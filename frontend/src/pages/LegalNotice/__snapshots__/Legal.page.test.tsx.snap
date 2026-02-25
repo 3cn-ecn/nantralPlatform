@@ -117,6 +117,16 @@ exports[`Home page should render correctly 1`] = `
       </a>
       .
     </div>
+    <h4
+      class="MuiTypography-root MuiTypography-h4 css-1amwp23-MuiTypography-root"
+    >
+      Use of Cookies
+    </h4>
+    <div
+      class="MuiTypography-root MuiTypography-body1 MuiTypography-paragraph css-1eygakl-MuiTypography-root"
+    >
+      Nantral Platform uses only cookies that are strictly necessary for the proper functioning of the website and for user authentication. These cookies allow, in particular, the maintenance of your session after login, access to groups and events, and the personalization of your profile. These cookies are not used for advertising or tracking purposes and do not require prior consent in accordance with applicable regulations. Authentication cookies are retained for the period strictly necessary to manage the session or in compliance with applicable legal obligations. You may configure your browser to block cookies; however, certain features of the website may not function properly.
+    </div>
   </div>
 </DocumentFragment>
 `;

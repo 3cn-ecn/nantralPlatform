@@ -74,6 +74,10 @@ export default function LegalNoticePage() {
         </Link>
         {t('legalNotice.paragraphs.rgpd.contact_post_email')}
       </ParagraphBody>
+      <ParagraphTitle>
+        {t('legalNotice.paragraphs.cookies.title')}
+      </ParagraphTitle>
+      <ParagraphBody>{t('legalNotice.paragraphs.cookies.text')}</ParagraphBody>
     </Container>
   );
 }
