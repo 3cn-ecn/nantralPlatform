@@ -3,14 +3,14 @@ import { useState } from 'react';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { Chip, Typography } from '@mui/material';
 
-import { Student } from '#modules/student/student.types';
+import { User } from '#modules/account/user.types';
 import { useGroupTypes } from '#pages/Group/hooks/useGroupTypes';
 import { MembersInfiniteGrid } from '#pages/GroupDetails/GroupMembers/MembersInfiniteGrid';
 import { FlexRow } from '#shared/components/FlexBox/FlexBox';
 import { CheckboxField } from '#shared/components/FormFields';
 import { useTranslation } from '#shared/i18n/useTranslation';
 
-export function StudentGroupsSection({ student }: { student: Student }) {
+export function StudentGroupsSection({ user }: { user: User }) {
   const { groupTypesQuery } = useGroupTypes(1);
   const { t } = useTranslation();
   const [type, setType] = useState<string | undefined>(undefined);
@@ -60,7 +60,7 @@ export function StudentGroupsSection({ student }: { student: Student }) {
 
       <MembersInfiniteGrid
         filters={{ previous: showFormerGroups, groupType: type }}
-        student={student}
+        user={user}
       />
     </>
   );

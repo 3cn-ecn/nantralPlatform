@@ -14,7 +14,7 @@ import {
 } from '@mui/icons-material';
 import { Collapse, Divider, Icon, IconButton, Menu } from '@mui/material';
 
-import { useCurrentUserData } from '#modules/student/hooks/useCurrentUser.data';
+import { useCurrentUserData } from '#modules/account/hooks/useCurrentUser.data';
 import { Avatar } from '#shared/components/Avatar/Avatar';
 import { useAuth } from '#shared/context/Auth.context';
 import { useTranslation } from '#shared/i18n/useTranslation';

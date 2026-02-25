@@ -17,10 +17,10 @@ import { ApiFormError } from '#shared/infra/errors';
 
 interface ChangeMainEmailModalProps {
   email: Email;
-  mutate: ({ email, password }: { email: string; password: string }) => void;
+  mutate: ({ password }: { password: string }) => void;
   onCancel: () => void;
   reset: () => void;
-  errors?: ApiFormError<{ email: string; password: string }>;
+  errors?: ApiFormError<{ password: string }>;
   isLoading: boolean;
 }
 export function ChangeMainEmailModal({
@@ -63,7 +63,7 @@ export function ChangeMainEmailModal({
         </Button>
         <LoadingButton
           loading={isLoading}
-          onClick={() => mutate({ email: email.email, password: password })}
+          onClick={() => mutate({ password: password })}
           variant="contained"
           autoFocus
         >

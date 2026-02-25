@@ -55,7 +55,7 @@ class EventSerializer(TranslationModelSerializer):
 
     def get_is_participating(self, obj: Event) -> bool:
         user = self.context["request"].user
-        return obj.participants.contains(user.student)
+        return obj.participants.contains(user)
 
     def get_is_group_member(self, obj: Event) -> bool:
         user = self.context["request"].user
@@ -67,7 +67,7 @@ class EventSerializer(TranslationModelSerializer):
 
     def get_is_bookmarked(self, obj: Event) -> bool:
         user = self.context["request"].user
-        return obj.bookmarks.contains(user.student)
+        return obj.bookmarks.contains(user)
 
     def get_url(self, obj: Event) -> str:
         return obj.get_absolute_url()

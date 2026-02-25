@@ -15,7 +15,7 @@ class PostAdmin(admin.ModelAdmin):
         form,
         change,
     ):
-        obj.updated_by = request.user.student
+        obj.updated_by = request.user
         super().save_model(request, obj, form, change)
 
 

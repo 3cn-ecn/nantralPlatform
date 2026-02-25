@@ -12,6 +12,7 @@ import {
 } from '@mui/material';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
+import { useCurrentUserData } from '#modules/account/hooks/useCurrentUser.data';
 import { editMembershipApi } from '#modules/group/api/editMembership.api';
 import { convertMembershipToForm } from '#modules/group/hooks/useMembershipFormValues';
 import { MembershipFormDTO } from '#modules/group/infra/membership.dto';
@@ -20,7 +21,6 @@ import {
   Membership,
   MembershipForm,
 } from '#modules/group/types/membership.types';
-import { useCurrentUserData } from '#modules/student/hooks/useCurrentUser.data';
 import { FlexRow } from '#shared/components/FlexBox/FlexBox';
 import { LoadingButton } from '#shared/components/LoadingButton/LoadingButton';
 import {
@@ -78,7 +78,7 @@ export function ModalEditMembership({
       ]);
       queryClient.invalidateQueries([
         'membership',
-        { group: membership.group.slug, student: membership.student.id },
+        { group: membership.group.slug, user: membership.user.id },
       ]);
       onClose();
     },
@@ -103,7 +103,7 @@ export function ModalEditMembership({
             </Avatar>
           }
         >
-          {membership.student.name}
+          {membership.user.name}
           <Spacer flex={1} />
         </ResponsiveDialogHeader>
         <ResponsiveDialogContent>

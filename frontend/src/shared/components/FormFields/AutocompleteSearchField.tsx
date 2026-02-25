@@ -1,12 +1,12 @@
-import { SyntheticEvent, memo, useEffect, useState } from 'react';
+import { memo, SyntheticEvent, useEffect, useState } from 'react';
 
 import {
   Autocomplete,
   AutocompleteInputChangeReason,
   AutocompleteProps,
+  AutocompleteValue as MuiAutocompleteValue,
   ChipTypeMap,
   CircularProgress,
-  AutocompleteValue as MuiAutocompleteValue,
   TextField,
 } from '@mui/material';
 import { debounce, isNil, uniqBy } from 'lodash-es';
@@ -79,7 +79,7 @@ type AutocompleteSearchFieldProps<
 };
 
 /**
- * A custom Autocomplete field for searching elements like Group or Student on
+ * A custom Autocomplete field for searching elements like Group or User on
  * our django REST API.
  *
  * @param value - The id of the element selected

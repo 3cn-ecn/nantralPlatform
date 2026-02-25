@@ -1,14 +1,9 @@
-from typing import TYPE_CHECKING
-
 from rest_framework import permissions
 from rest_framework.request import Request
 
 from apps.group.models import Group
 
 from .models import SocialLink
-
-if TYPE_CHECKING:
-    from apps.student.models import Student
 
 
 class GroupSocialLinkPermission(permissions.BasePermission):
@@ -22,9 +17,7 @@ class GroupSocialLinkPermission(permissions.BasePermission):
 
         return True
 
-    def has_object_permission(
-        self, request: Request, view, obj: SocialLink
-    ):
+    def has_object_permission(self, request: Request, view, obj: SocialLink):
         if request.method in permissions.SAFE_METHODS:
             return True
 
@@ -36,5 +29,6 @@ class GroupSocialLinkPermission(permissions.BasePermission):
 
 class UserSocialLinkPermission(permissions.BasePermission):
     def has_object_permission(self, request, view, obj: SocialLink):
-        student: Student = request.user.student
-        return student.social_links.contains(obj)
+        return (
+            request.user.social_links.contains(obj) or request.user.is_superuser
+        )

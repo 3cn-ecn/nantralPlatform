@@ -1,5 +1,4 @@
 from apps.account.models import User
-from apps.utils.testing.mocks import create_student_user
 
 
 class TestMixin:
@@ -18,19 +17,16 @@ class TestMixin:
     password = "secured_password"  # noqa: S105
 
     def user_setup(self) -> None:
-        """Create 3 standards users: u1, u2 and u3. Only u2 and u3
-        are linked to a Student instance.
-        """
-        self.u1 = create_student_user(
+        """Create 3 standards users: u1, u2 and u3."""
+        self.u1 = User.objects.create_superuser(
             username="admin",
             email="admin@ec-nantes.fr",
             password=self.password,
-            is_superuser=True,
         )
-        self.u2 = create_student_user(
+        self.u2 = User.objects.create_user(
             username="user2", email="user@ec-nantes.fr", password=self.password
         )
-        self.u3 = create_student_user(
+        self.u3 = User.objects.create_user(
             username="user3", email="user3@ec-nantes.fr", password=self.password
         )
 

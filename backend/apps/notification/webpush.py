@@ -4,15 +4,15 @@ from django.db.models.query import QuerySet
 from .tasks import send_webpush_notification_task
 
 
-def send_webpush_notification(students: QuerySet, message: dict):
-    """Send a notification on devices, to several students, with one message,
+def send_webpush_notification(users: QuerySet, message: dict):
+    """Send a notification on devices, to several users, with one message,
     by creating a celery task in background.
 
     Parameters
     ----------
 
-    students : QuerySet<Student>
-        A queryset of student objects
+    users : QuerySet<User>
+        A queryset of user objects
 
     message : dict
         A message to send, as a dict, with the structure of the "options"
@@ -31,14 +31,14 @@ def send_webpush_notification(students: QuerySet, message: dict):
         else False
     """
 
-    # we first convert the queryset of student to a list, because we cannot
+    # we first convert the queryset of user to a list, because we cannot
     # pass a queryset for an async function with celery
-    student_ids = list(students.all().values_list("id", flat=True))
+    user_ids = list(users.all().values_list("id", flat=True))
     # check if celery is launched with a docker instance
     if hasattr(settings, "CELERY_BROKER_URL"):
         # launch the celery task for sending notifications in async
         # mode, so as to continue the process without waiting we have send all
-        send_webpush_notification_task.delay(student_ids, message)
+        send_webpush_notification_task.delay(user_ids, message)
     else:
         # if the celery task does not work, send notifications in normal mode
-        send_webpush_notification_task(student_ids, message)
+        send_webpush_notification_task(user_ids, message)

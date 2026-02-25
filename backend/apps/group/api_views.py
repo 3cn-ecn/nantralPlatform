@@ -123,8 +123,8 @@ class GroupViewSet(viewsets.ModelViewSet):
         is_map = parse_bool(self.query_params.get("map"))
         if is_map is True:
             search_fields += [
-                "members__user__first_name",
-                "members__user__last_name",
+                "members__first_name",
+                "members__last_name",
             ]
         return search_fields
 
@@ -144,7 +144,11 @@ class GroupViewSet(viewsets.ModelViewSet):
         if self.request.method in ["POST", "PUT", "PATCH"]:
             return GroupWriteSerializer
         if is_map is True:
-            return MapGroupSerializer if search is None else MapGroupSearchSerializer
+            return (
+                MapGroupSerializer
+                if search is None
+                else MapGroupSearchSerializer
+            )
         if preview is False or self.detail:
             return GroupSerializer
         return GroupPreviewSerializer
@@ -192,7 +196,7 @@ class GroupViewSet(viewsets.ModelViewSet):
         # hide private groups unless user is member
         if user.is_authenticated:
             queryset = queryset.filter(
-                Q(private=False) | Q(members=user.student),
+                Q(private=False) | Q(members=user),
             )
         # and hide non-public group if user is not authenticated
         else:
@@ -202,11 +206,11 @@ class GroupViewSet(viewsets.ModelViewSet):
             queryset = queryset.filter(group_type=group_type)
         # filter by groups where current user is member
         if is_member:
-            queryset = queryset.filter(members=user.student)
+            queryset = queryset.filter(members=user)
         # filter by groups where current user is admin
         if is_admin:
             queryset = queryset.filter(
-                membership_set__student=user.student,
+                membership_set__user=user,
                 membership_set__admin=True,
             )
         # filter by slug
@@ -253,14 +257,14 @@ class GroupViewSet(viewsets.ModelViewSet):
         group: Group = self.get_object()
         serializer = SubscriptionSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        student = self.request.user.student
-        subscribed = group.subscribers.contains(student)
+        user = self.request.user
+        subscribed = group.subscribers.contains(user)
         subscribe: bool = serializer.data.get("subscribe")
 
         if not subscribe and subscribed:
-            group.subscribers.remove(student)
+            group.subscribers.remove(user)
         elif subscribe and not subscribed:
-            group.subscribers.add(student)
+            group.subscribers.add(user)
 
         return response.Response(status=status.HTTP_200_OK)
 
@@ -282,8 +286,8 @@ class MembershipViewSet(viewsets.ModelViewSet):
 
     Query Params
     ------------
-    student: id
-        The student id
+    user: id
+        The user id
     group: str
         The group slug
     from: Date
@@ -299,7 +303,7 @@ class MembershipViewSet(viewsets.ModelViewSet):
     -------
     GET .../membership/ : list all memberships
     POST .../membership/ : create a new membership
-    GET .../membership/search/ : search a membership by group or student name
+    GET .../membership/search/ : search a membership by group or user name
     GET .../membership/<id>/ : get a membership details
     PUT .../membership/<id>/ : update a membership
     DELETE .../membership/<id>/ : delete a membership object
@@ -308,8 +312,8 @@ class MembershipViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAuthenticated, MembershipPermission]
     filter_backends = [filters.SearchFilter, filters.OrderingFilter]
     search_fields = [
-        "student__user__first_name",
-        "student__user__last_name",
+        "user__first_name",
+        "user__last_name",
         "group__name",
         "group__short_name",
         "summary",
@@ -317,8 +321,8 @@ class MembershipViewSet(viewsets.ModelViewSet):
     ordering_fields = ["begin_date", "end_date", "priority", "admin"]
     ordering = [
         "-priority",
-        "student__user__first_name",
-        "student__user__last_name",
+        "user__first_name",
+        "user__last_name",
     ]
 
     @property
@@ -354,33 +358,35 @@ class MembershipViewSet(viewsets.ModelViewSet):
         from_date = parse_datetime(self.query_params.get("from", ""))
         to_date = parse_datetime(self.query_params.get("to", ""))
         group_slug = self.query_params.get("group")
-        student_id = self.query_params.get("student")
+        user_id = self.query_params.get("user")
         group_type = self.query_params.get("group_type")
         # make queryset
         qs = Membership.objects.all()
         # filter by memberships you are allowed to see
         if not user.is_superuser:
             qs = qs.filter(
-                Q(group__private=False) | Q(group__members=user.student),
+                Q(group__private=False) | Q(group__members=user),
             )
         # filter by params
         if group_slug:
             qs = qs.filter(group__slug=group_slug)
-        if student_id:
-            qs = qs.filter(student__id=student_id)
+        if user_id:
+            qs = qs.filter(user__id=user_id)
         if from_date:
             qs = qs.filter(
                 Q(end_date__gte=from_date) | Q(end_date__isnull=True),
             )
         if to_date:
-            qs = qs.filter(Q(end_date__lt=to_date) | Q(begin_date__isnull=True)).filter(group__group_type__no_membership_dates=False)
+            qs = qs.filter(
+                Q(end_date__lt=to_date) | Q(begin_date__isnull=True)
+            ).filter(group__group_type__no_membership_dates=False)
         if group_type:
             qs = qs.filter(group__group_type__slug=group_type)
 
         if self.action == "admin_requests":
             qs = qs.filter(admin_request=True)
 
-        qs = qs.prefetch_related("student__user").distinct()
+        qs = qs.prefetch_related("user").distinct()
         self.queryset = qs
         return qs
 
@@ -485,7 +491,7 @@ class MembershipViewSet(viewsets.ModelViewSet):
             )
             url = self.request.build_absolute_uri(relative_url)
             send_admin_request(
-                f"{membership.student} demande à "
+                f"{membership.user} demande à "
                 f"devenir admin de {membership.group.short_name}",
                 membership.admin_request_message,
                 url,
@@ -529,9 +535,9 @@ class MembershipViewSet(viewsets.ModelViewSet):
             # send response by email
             mail = render_to_string(
                 "group/mail/accept_admin_request.html",
-                {"group": group, "user": membership.student.user},
+                {"group": group, "user": membership.user},
             )
-            membership.student.user.email_user(
+            membership.user.email_user(
                 subject=(
                     _("Your admin request for %(group)s has been accepted.")
                     % {"group": membership.group.name}
@@ -545,8 +551,8 @@ class MembershipViewSet(viewsets.ModelViewSet):
         try:
             # send response on discord
             respond_admin_request(
-                f"La demande de {membership.student} pour rejoindre {membership.group} "
-                f"a été acceptée par {request.user.student}."
+                f"La demande de {membership.user} pour rejoindre {membership.group} "
+                f"a été acceptée par {request.user}."
             )
         except Exception:
             ...
@@ -554,7 +560,7 @@ class MembershipViewSet(viewsets.ModelViewSet):
         return response.Response(
             {
                 "message": _("The user %(user)s is now admin!")
-                % {"user": membership.student}
+                % {"user": membership.user}
             },
             status=status.HTTP_202_ACCEPTED,
         )
@@ -580,9 +586,9 @@ class MembershipViewSet(viewsets.ModelViewSet):
             # send response by email
             mail = render_to_string(
                 "group/mail/deny_admin_request.html",
-                {"group": group, "user": membership.student.user},
+                {"group": group, "user": membership.user},
             )
-            membership.student.user.email_user(
+            membership.user.email_user(
                 subject=(
                     _("Your admin request for %(group)s has been denied.")
                     % {"group": membership.group.name}
@@ -596,8 +602,8 @@ class MembershipViewSet(viewsets.ModelViewSet):
         try:
             # send response on discord
             respond_admin_request(
-                f"La demande de {membership.student} pour rejoindre {membership.group} "
-                f"a été refusée par {request.user.student}."
+                f"La demande de {membership.user} pour rejoindre {membership.group} "
+                f"a été refusée par {request.user}."
             )
         except Exception:
             ...
@@ -605,7 +611,7 @@ class MembershipViewSet(viewsets.ModelViewSet):
         return response.Response(
             {
                 "message": _("The admin request from %(user)s has been denied.")
-                % {"user": membership.student}
+                % {"user": membership.user}
             },
             status=status.HTTP_202_ACCEPTED,
         )

@@ -1,6 +1,6 @@
 export interface Membership {
   id: number;
-  student: {
+  user: {
     id: number;
     name: string;
     url: string;

@@ -2,7 +2,7 @@ import { useParams } from 'react-router-dom';
 
 import { Container, Divider, Typography } from '@mui/material';
 
-import { useCurrentUserData } from '#modules/student/hooks/useCurrentUser.data';
+import { useCurrentUserData } from '#modules/account/hooks/useCurrentUser.data';
 import { Avatar } from '#shared/components/Avatar/Avatar';
 import { FlexRow } from '#shared/components/FlexBox/FlexBox';
 import { Spacer } from '#shared/components/Spacer/Spacer';
@@ -10,33 +10,33 @@ import { Spacer } from '#shared/components/Spacer/Spacer';
 import { StudentGroupsSection } from './components/Section/StudentGroupSection';
 import { StudentDetailsInfo } from './components/StudentDetailsInfo';
 import { StudentEditButton } from './components/StudentEditButton';
-import { useStudentDetails } from './hooks/useStudentDetails';
+import { useUserDetails } from './hooks/useUserDetails';
 
 export default function StudentDetailsPage() {
   const { id } = useParams();
-  const { isLoading, data: student } = useStudentDetails(id);
+  const { isLoading, data: user } = useUserDetails(id);
 
-  const currentStudent = useCurrentUserData();
+  const currentUser = useCurrentUserData();
 
-  if (isLoading || !student) {
+  if (isLoading || !user) {
     return;
   }
 
-  const isMe = student.id === currentStudent.id;
+  const isMe = user.id === currentUser.id;
 
   return (
     <Container sx={{ my: 3 }}>
       <FlexRow flexWrap={'wrap'} gap={3}>
-        <Avatar alt={student.name} src={student.picture} size="xxl"></Avatar>
-        <StudentDetailsInfo student={student} />
+        <Avatar alt={user.name} src={user.picture} size="xxl"></Avatar>
+        <StudentDetailsInfo user={user} />
       </FlexRow>
       <Typography sx={{ lineBreak: 'anywhere' }} my={2}>
-        {student.description}
+        {user.description}
       </Typography>
       <Divider sx={{ my: 2 }} />
-      <StudentGroupsSection student={student} />
+      <StudentGroupsSection user={user} />
       <Spacer vertical={10} />
-      {isMe && <StudentEditButton />}
+      {(isMe || currentUser.admin) && <StudentEditButton user={user} />}
     </Container>
   );
 }

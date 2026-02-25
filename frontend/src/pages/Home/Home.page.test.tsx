@@ -1,7 +1,6 @@
 import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
-import { UsernameDTO } from '#modules/account/infra/account.dto';
 import { EventDTO } from '#modules/event/infra/event.dto';
 import { GroupPreviewDTO } from '#modules/group/infra/group.dto';
 import { PostDTO } from '#modules/post/infra/post.dto';
@@ -50,10 +49,6 @@ function mockGroupApiCall(results: GroupPreviewDTO[]) {
     .reply(200, { count: results.length, results });
 }
 
-function mockUsernameApiCall(result: UsernameDTO) {
-  mockServer.get('/api/account/username/').query({}).reply(200, result);
-}
-
 describe('Home page', () => {
   it('should render correctly without data', async () => {
     // mock the api (since the backend does not exist during tests)
@@ -61,13 +56,6 @@ describe('Home page', () => {
     mockPostApiCall({ pinned: true }, []);
     mockPostApiCall({ pinned: false }, []);
     mockGroupApiCall([]);
-    mockUsernameApiCall({
-      username: '',
-      name: '',
-      has_updated_username: true,
-      has_opened_matrix: true,
-      picture: '',
-    });
 
     const component = renderWithProviders(<HomePage />);
 
@@ -98,13 +86,6 @@ describe('Home page', () => {
     mockPostApiCall({ pinned: true }, []);
     mockPostApiCall({ pinned: false }, []);
     mockGroupApiCall([]);
-    mockUsernameApiCall({
-      username: '',
-      name: '',
-      has_updated_username: true,
-      has_opened_matrix: true,
-      picture: '',
-    });
 
     // create a fake event page for testing
     const fakeEventRoute = { path: '/event', element: <p>Events</p> };

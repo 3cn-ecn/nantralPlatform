@@ -29,7 +29,7 @@ class TestSubscription(TransactionTestCase, TestMixin):
     def test_reading_api(self):
         "test to read subscription states in database"
         # subscribe u2
-        Group.objects.get(slug=self.slug).subscribers.add(self.u2.student)
+        Group.objects.get(slug=self.slug).subscribers.add(self.u2)
         # check u2 has subscribed
         self.client.login(username=self.u2.email.email, password=self.password)
         self.assertTrue(self.client.get(self.url).data)
@@ -46,21 +46,21 @@ class TestSubscription(TransactionTestCase, TestMixin):
         self.assertEqual(resp.status_code, status.HTTP_201_CREATED)
         self.assertTrue(self.client.get(self.url).data)
         self.assertEqual(
-            self.g.subscribers.filter(id=self.u2.student.id).count(),
+            self.g.subscribers.filter(id=self.u2.id).count(),
             1,
         )
         # try to subscribe again and check we keep the same
         resp = self.client.post(self.url)
         self.assertEqual(resp.status_code, status.HTTP_201_CREATED)
         self.assertEqual(
-            self.g.subscribers.filter(id=self.u2.student.id).count(),
+            self.g.subscribers.filter(id=self.u2.id).count(),
             1,
         )
 
     def test_delete_api(self):
         "test to unsubscribe"
         # subscribe
-        Group.objects.get(slug=self.slug).subscribers.add(self.u2.student)
+        Group.objects.get(slug=self.slug).subscribers.add(self.u2)
         # delete subscription
         self.client.login(username=self.u2.email.email, password=self.password)
         resp = self.client.delete(self.url)
@@ -68,14 +68,14 @@ class TestSubscription(TransactionTestCase, TestMixin):
         self.assertEqual(resp.status_code, status.HTTP_204_NO_CONTENT)
         self.assertFalse(self.client.get(self.url).data)
         self.assertEqual(
-            self.g.subscribers.filter(id=self.u2.student.id).count(),
+            self.g.subscribers.filter(id=self.u2.id).count(),
             0,
         )
         # try to delete again and check we keep the same
         resp = self.client.delete(self.url)
         self.assertEqual(resp.status_code, status.HTTP_204_NO_CONTENT)
         self.assertEqual(
-            self.g.subscribers.filter(id=self.u2.student.id).count(),
+            self.g.subscribers.filter(id=self.u2.id).count(),
             0,
         )
 
@@ -98,7 +98,7 @@ class TestNotification(TransactionTestCase, TestMixin):
 
     def test_notification_api(self):
         # create subscriptions and notifications
-        Group.objects.get(slug=self.club1).subscribers.add(self.u2.student)
+        Group.objects.get(slug=self.club1).subscribers.add(self.u2)
         Notification.objects.create(
             body="Notif de test 1",
             url="/",

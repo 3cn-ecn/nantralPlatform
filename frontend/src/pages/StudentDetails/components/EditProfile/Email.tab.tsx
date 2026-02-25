@@ -5,16 +5,20 @@ import { EmailList } from '#modules/account/view/Email/EmailList';
 import { Spacer } from '#shared/components/Spacer/Spacer';
 import { useTranslation } from '#shared/i18n/useTranslation';
 
-export default function EmailTab() {
+interface EmailTabProps {
+  userId: number;
+}
+
+export default function EmailTab({ userId }: EmailTabProps) {
   const { t } = useTranslation();
 
   return (
     <>
       <Typography variant="h2">{t('email.page.title')}</Typography>
       <Spacer vertical={2} />
-      <EmailList />
+      <EmailList userId={userId} />
       <Spacer vertical={2} />
-      <EmailForm />
+      <EmailForm userId={userId} />
     </>
   );
 }

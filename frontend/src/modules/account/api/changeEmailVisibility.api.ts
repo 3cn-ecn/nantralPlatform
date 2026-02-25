@@ -1,17 +1,16 @@
 import axios from 'axios';
 
+import { EmailDTO } from '#modules/account/infra/email.dto';
 import { adaptApiFormErrors } from '#shared/infra/errors';
 
 export async function changeEmailVisibilityApi(
   emailUuid: string,
   isVisible: boolean,
-): Promise<string> {
+): Promise<EmailDTO> {
   const { data } = await axios
-    .put(`/api/account/email/${emailUuid}/visibility/`, {
-      is_visible: isVisible,
-    })
+    .put(`/api/account/email/${emailUuid}/`, { is_visible: isVisible })
     .catch((e) => {
       throw adaptApiFormErrors(e);
     });
-  return data.message;
+  return data;
 }

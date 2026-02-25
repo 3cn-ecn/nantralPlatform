@@ -12,18 +12,18 @@ import {
 import { Button, Menu, MenuItem, Typography } from '@mui/material';
 import { useQuery } from '@tanstack/react-query';
 
+import { useCurrentUserData } from '#modules/account/hooks/useCurrentUser.data';
 import { getMembershipListApi } from '#modules/group/api/getMembershipList.api';
 import { Group } from '#modules/group/types/group.types';
 import { ModalAdminRequest } from '#modules/group/view/Modal/ModalAdminRequest';
 import { ModalEditMembership } from '#modules/group/view/Modal/ModalEditMembership';
 import { ModalJoinGroup } from '#modules/group/view/Modal/ModalJoinGroup';
-import { useCurrentUserData } from '#modules/student/hooks/useCurrentUser.data';
 import { useAuth } from '#shared/context/Auth.context';
 import { useTranslation } from '#shared/i18n/useTranslation';
 
 export function JoinButton({ group }: { group?: Group }) {
   const { isAuthenticated } = useAuth();
-  const student = useCurrentUserData();
+  const user = useCurrentUserData();
   const { t } = useTranslation();
   const [modalOpen, setJoinModalOpen] = useState(false);
   const [adminRequestModalOpen, setAdminRequestModalOpen] = useState(false);
@@ -43,9 +43,8 @@ export function JoinButton({ group }: { group?: Group }) {
   };
 
   const { data: memberships } = useQuery({
-    queryFn: () =>
-      getMembershipListApi({ group: group?.slug, student: student.id }),
-    queryKey: ['membership', { group: group?.slug, student: student.id }],
+    queryFn: () => getMembershipListApi({ group: group?.slug, user: user.id }),
+    queryKey: ['membership', { group: group?.slug, user: user.id }],
   });
 
   const member = memberships?.results?.[0];
@@ -107,7 +106,7 @@ export function JoinButton({ group }: { group?: Group }) {
         {modalOpen && !group?.isMember && (
           <ModalJoinGroup
             group={group}
-            student={student}
+            user={user}
             onClose={() => setJoinModalOpen(false)}
           />
         )}

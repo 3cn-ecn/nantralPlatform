@@ -1,6 +1,6 @@
+import { UserPreview } from '#modules/account/user.types';
 import { ShortMembershipForm } from '#modules/group/types/membership.types';
 import { SocialLink } from '#modules/social_link/types/socialLink.type';
-import { StudentPreview } from '#modules/student/student.types';
 
 import { GroupTypePreview } from './groupType.types';
 
@@ -50,7 +50,7 @@ export type GroupPreview = Pick<
 
 export type MapGroupPreview = GroupPreview &
   Pick<Group, 'address' | 'latitude' | 'longitude' | 'summary' | 'banner'> & {
-    members: StudentPreview[];
+    members: UserPreview[];
   };
 
 export type CreateGroupForm = Pick<

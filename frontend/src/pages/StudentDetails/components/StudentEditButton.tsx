@@ -1,22 +1,41 @@
-import { useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
 
 import { Edit } from '@mui/icons-material';
 import { Fab } from '@mui/material';
 
-import { ModalEditProfile } from './EditProfile/ModalEditProfile';
+import { User } from '#modules/account/user.types';
 
-export function StudentEditButton() {
-  const [open, setOpen] = useState(false);
+import { ModalEditProfile, TabType } from './EditProfile/ModalEditProfile';
+
+interface StudentEditButtonProps {
+  user: User;
+}
+
+export function StudentEditButton({ user }: StudentEditButtonProps) {
+  const [params, setParams] = useSearchParams();
+  const tab = params.get('tab');
+  const open = Boolean(tab && tab in TabType);
   return (
     <>
       <Fab
         sx={{ position: 'fixed', bottom: 24, right: 24 }}
-        onClick={() => setOpen(true)}
+        onClick={() => {
+          params.set('tab', 'profile');
+          setParams(params);
+        }}
         color={'primary'}
       >
         <Edit />
       </Fab>
-      {open && <ModalEditProfile onClose={() => setOpen(false)} />}
+      {open && (
+        <ModalEditProfile
+          onClose={() => {
+            params.delete('tab');
+            setParams(params);
+          }}
+          user={user}
+        />
+      )}
     </>
   );
 }

@@ -18,8 +18,8 @@ import {
   Typography,
 } from '@mui/material';
 
+import { User } from '#modules/account/user.types';
 import { Group } from '#modules/group/types/group.types';
-import { Student } from '#modules/student/student.types';
 
 import FormGroup, { FieldType } from '../../utils/form';
 import { Membership } from '../interfaces';
@@ -79,8 +79,8 @@ function createFormFields(group: Group, member: Membership): FieldType[] {
     defaultFields.splice(0, 0, {
       kind: 'autocomplete',
       label: 'Utilisateur',
-      name: 'student',
-      endPoint: '/api/student/student',
+      name: 'user',
+      endPoint: '/api/account/user/',
       getOptionLabel: (m) => m?.name || '',
     });
   }
@@ -93,14 +93,14 @@ function createFormFields(group: Group, member: Membership): FieldType[] {
  * @param group - the group of the membership
  * @returns A blank membership
  */
-function createBlankMember(group: Group, student: Student): Membership {
+function createBlankMember(group: Group, student: User): Membership {
   const date = new Date();
   const today = date.toISOString().split('T')[0];
   date.setFullYear(date.getFullYear() + 1);
   const oneYearLater = date.toISOString().split('T')[0];
   const member = {
     id: null,
-    student: group.isAdmin ? null : (student.id as any),
+    user: group.isAdmin ? null : (student.id as any),
     group: group.id as any,
     summary: '',
     description: '',
@@ -117,7 +117,7 @@ function EditMemberModal(props: {
   open: boolean;
   member?: Membership;
   group?: Group;
-  student: Student;
+  student: User;
   saveMembership: (member: Membership) => Promise<any>;
   closeModal: () => void;
   openDeleteModal?: () => void;
@@ -171,12 +171,12 @@ function EditMemberModal(props: {
         <DialogTitle sx={{ m: 0, p: 2 }}>
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
             <Avatar
-              title={member?.student?.name || 'Ajouter un membre'}
+              title={member?.user?.name || 'Ajouter un membre'}
               icon={<EditIcon />}
             />
             <Box sx={{ minWidth: 0 }}>
               <Typography variant="h5" sx={{ fontWeight: 600 }}>
-                {member?.student?.name || 'Ajouter un membre'}
+                {member?.user?.name || 'Ajouter un membre'}
               </Typography>
             </Box>
             <IconButton

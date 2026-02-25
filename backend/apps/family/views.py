@@ -8,9 +8,9 @@ from django.views.generic import CreateView, DetailView, FormView, TemplateView
 
 from extra_settings.models import Setting
 
+from apps.account.models import User
+from apps.account.serializers import UserSerializer
 from apps.family.serializers import FamilyMembersSerializer
-from apps.student.models import Student
-from apps.student.serializers import StudentSerializer
 from apps.utils.access_mixins import UserIsAdmin
 
 from .forms import (
@@ -39,16 +39,15 @@ class HomeFamilyView(LoginRequiredMixin, TemplateView):
 
     def get_context_data(self, **kwargs):
         # by default all functions call data for the current year only
-        membership = get_membership(self.request.user)
-        context = {}
-        context["phase"] = Setting.get("PHASE_PARRAINAGE")
-        context["is_2Aplus"] = not is_first_year(self.request.user, membership)
-        context["show_sensible_data"] = show_sensible_data(
-            self.request.user,
-            membership,
-        )
-        context["is_itii"] = self.request.user.student.faculty == "Iti"
-        context["membership"] = membership
+        user: User = self.request.user
+        membership = get_membership(user)
+        context = {
+            "phase": Setting.get("PHASE_PARRAINAGE"),
+            "is_2Aplus": not is_first_year(user, membership),
+            "show_sensible_data": show_sensible_data(user, membership),
+            "is_itii": user.faculty == "Iti",
+            "membership": membership,
+        }
         if membership:
             context["form_perso_complete"] = membership.form_complete()
             family = membership.group
@@ -66,23 +65,24 @@ class ListFamilyView(LoginRequiredMixin, TemplateView):
     def get_context_data(self, *args, **kwargs):
         phase = Setting.get("PHASE_PARRAINAGE")
         show_data = show_sensible_data(self.request.user)
-        context = {}
-        context["list_family"] = [
-            {
-                "name": f.name if show_data else f"Famille n°{f.id}",
-                "url": f.get_absolute_url(),
-                "id": f.id,
-            }
-            for f in Family.objects.all()
-        ]
+        context = {
+            "list_family": [
+                {
+                    "name": f.name if show_data else f"Famille n°{f.id}",
+                    "url": f.get_absolute_url(),
+                    "id": f.id,
+                }
+                for f in Family.objects.all()
+            ]
+        }
         memberships = MembershipFamily.objects.all().select_related(
-            "student__user",
+            "user",
             "group",
         )
         if show_data:
             context["list_2A"] = [
                 {
-                    "name": m.student.alphabetical_name,
+                    "name": m.user.alphabetical_name,
                     "family": m.group.name,
                     "url": m.group.get_absolute_url(),
                 }
@@ -91,7 +91,7 @@ class ListFamilyView(LoginRequiredMixin, TemplateView):
         if phase >= 3:  # noqa: PLR2004
             context["list_1A"] = [
                 {
-                    "name": m.student.alphabetical_name,
+                    "name": m.user.alphabetical_name,
                     "family": (
                         m.group.name
                         if show_data and phase > 3  # noqa: PLR2004
@@ -123,16 +123,15 @@ class CreateFamilyView(LoginRequiredMixin, CreateView):
     form_class = CreateFamilyForm
 
     def can_create(self):
-        return get_membership(self.request.user) is None and not is_first_year(
-            self.request.user,
-        )
+        user: User = self.request.user
+        return get_membership(user) is None and not is_first_year(user)
 
     def form_valid(self, form):
         if self.can_create():
             self.object = form.save()
             MembershipFamily.objects.create(
                 group=self.object,
-                student=self.request.user.student,
+                user=self.request.user,
                 role="2A+",
                 admin=True,
             )
@@ -176,9 +175,8 @@ class JoinFamilyView(LoginRequiredMixin, DetailView):
         return Family.objects.get(pk=self.kwargs["pk"])
 
     def can_join(self):
-        return get_membership(self.request.user) is None and not is_first_year(
-            self.request.user,
-        )
+        user: User = self.request.user
+        return get_membership(user) is None and not is_first_year(user)
 
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
@@ -198,7 +196,7 @@ class JoinFamilyView(LoginRequiredMixin, DetailView):
             for name in names_list:
                 if name == selected_name:
                     MembershipFamily.objects.create(
-                        student=request.user.student,
+                        user=request.user,
                         group=family,
                         role="2A+",
                         admin=True,
@@ -223,18 +221,18 @@ class UpdateFamilyView(UserIsAdmin, TemplateView):
         return super().test_func()
 
     def get_members(self):
-        students = (
+        users = (
             MembershipFamily.objects.filter(role="2A+", group=self.get_family())
             .order_by("pk")
-            .values_list("student")
+            .values_list("user")
             .all()
         )
 
-        return StudentSerializer(
+        return UserSerializer(
             instance=[
-                Student.objects.filter(pk=value[0]).first()
-                for value in students
-                if Student.objects.filter(pk=value[0]).exists()
+                User.objects.filter(pk=value[0]).first()
+                for value in users
+                if User.objects.filter(pk=value[0]).exists()
             ],
             many=True,
         ).data
@@ -285,11 +283,11 @@ class UpdateFamilyView(UserIsAdmin, TemplateView):
         context = {
             "update_form": forms[0],
             "current_members": json.dumps(
-                StudentSerializer(
+                UserSerializer(
                     instance=[
-                        Student.objects.filter(pk=value).first()
+                        User.objects.filter(pk=value).first()
                         for value in serializer.data.values()
-                        if Student.objects.filter(pk=value).exists()
+                        if User.objects.filter(pk=value).exists()
                     ],
                     many=True,
                 ).data
@@ -330,11 +328,12 @@ class QuestionnaryPageView(LoginRequiredMixin, FormView):
     template_name = "family/forms/questionnary.html"
 
     def get_member(self):
-        membership = get_membership(self.request.user)
+        user: User = self.request.user
+        membership = get_membership(user)
         if membership is None:
-            if is_first_year(self.request.user):
+            if is_first_year(user):
                 membership = MembershipFamily.objects.create(
-                    student=self.request.user.student,
+                    user=self.request.user,
                     role="1A",
                 )
             else:

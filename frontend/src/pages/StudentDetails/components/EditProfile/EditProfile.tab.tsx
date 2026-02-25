@@ -1,16 +1,14 @@
 import { FormEvent, useState } from 'react';
 
 import { Divider } from '@mui/material';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import {
-  editAccount,
+  editAccountApi,
   EditAccountOptions,
   EditAccountOptionsDTO,
-} from '#modules/account/api/editAccount';
-import getUsernameApi from '#modules/account/api/getUsername.api';
-import { useCurrentUserData } from '#modules/student/hooks/useCurrentUser.data';
-import { Student } from '#modules/student/student.types';
+} from '#modules/account/api/editAccount.api';
+import { User } from '#modules/account/user.types';
 import { Avatar } from '#shared/components/Avatar/Avatar';
 import { FlexRow } from '#shared/components/FlexBox/FlexBox';
 import { LoadingButton } from '#shared/components/LoadingButton/LoadingButton';
@@ -20,24 +18,21 @@ import { ApiFormError } from '#shared/infra/errors';
 import { EditProfileFormFields } from '../FormFields/EditProfileFormFields';
 import { StudentDetailsInfo } from '../StudentDetailsInfo';
 
-export function EditProfileTab() {
-  const student = useCurrentUserData();
-  const { data: userData } = useQuery({
-    queryFn: getUsernameApi,
-    queryKey: ['username'],
-  });
+interface EditProfileTabProps {
+  user: User;
+}
 
+export function EditProfileTab({ user }: EditProfileTabProps) {
   const queryClient = useQueryClient();
   const { t } = useTranslation();
 
   const [formValues, setFormValues] = useState<EditAccountOptions>({
-    firstName: student.name.split(' ')[0],
-    lastName: student.name.split(' ')[1],
-    username: student.username,
-    description: student.description,
-    faculty: student.faculty,
-    path: student.path,
-    promo: student.promo,
+    firstName: user.name.split(' ')[0],
+    lastName: user.name.split(' ')[1],
+    description: user.description,
+    faculty: user.faculty,
+    path: user.path,
+    promo: user.promo,
     picture: undefined,
   });
 
@@ -47,11 +42,11 @@ export function EditProfileTab() {
     EditAccountOptionsDTO,
     ApiFormError<EditAccountOptionsDTO>,
     EditAccountOptions
-  >(editAccount, {
+  >((formData) => editAccountApi(formData, user.id), {
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['student', 'current'] });
+      queryClient.invalidateQueries({ queryKey: ['user', 'current'] });
       queryClient.invalidateQueries({
-        queryKey: ['student', { id: student.id.toString() }],
+        queryKey: ['user', { id: user.id.toString() }],
       });
       queryClient.invalidateQueries({ queryKey: ['username'] });
       setHasChanges(false);
@@ -76,21 +71,24 @@ export function EditProfileTab() {
         return URL.createObjectURL(formValues.picture);
       }
     }
-    return student.picture;
+    return user.picture;
   }
-  function convertToPreview(form: EditAccountOptions): Student {
+
+  function convertToPreview(form: EditAccountOptions): User {
     return {
       description: form.description,
       faculty: form.faculty,
       name: form.firstName + ' ' + form.lastName.toUpperCase(),
-      id: -1,
+      id: user.id,
       path: form.path,
       picture: convertPictureToURL(),
       promo: form.promo,
-      socialLinks: [],
-      staff: false,
-      url: '',
-      username: form.username,
+      socialLinks: user.socialLinks,
+      emails: user.emails,
+      staff: user.staff,
+      admin: user.admin,
+      url: user.url,
+      username: user.username,
     };
   }
 
@@ -103,16 +101,15 @@ export function EditProfileTab() {
           size="xl"
           sx={{ m: 1 }}
         />
-        <StudentDetailsInfo student={convertToPreview(formValues)} />
+        <StudentDetailsInfo user={convertToPreview(formValues)} />
       </FlexRow>
       <Divider sx={{ my: 2 }} />
       <form id="edit-account-form" onSubmit={(e) => onSubmit(e)}>
         <EditProfileFormFields
           formValues={formValues}
-          previousValues={student}
+          previousValues={user}
           updateFormValues={updateFormValues}
           error={error}
-          hasOpenedMatrix={userData?.hasOpenedMatrix}
         />
       </form>
       <LoadingButton

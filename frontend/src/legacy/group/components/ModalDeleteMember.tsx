@@ -46,7 +46,7 @@ function DeleteMemberModal(props: {
           {globalErrors}
         </Alert>
         <DialogContentText>
-          Voulez-vous vraiment supprimer {member.student.name} des membres de{' '}
+          Voulez-vous vraiment supprimer {member.user.name} des membres de{' '}
           {member.group.name} ?
         </DialogContentText>
       </DialogContent>

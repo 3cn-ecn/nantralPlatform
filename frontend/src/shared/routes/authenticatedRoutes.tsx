@@ -5,7 +5,7 @@ import { QueryClient } from '@tanstack/react-query';
 
 import { PageTemplate } from '#shared/components/PageTemplate/PageTemplate';
 
-import { studentDetailsLoader } from './loader';
+import { userDetailsLoader } from './loader';
 
 const EventPage = lazy(() => import('#pages/Event/Event.page'));
 const EventCalendarViewPage = lazy(
@@ -33,9 +33,6 @@ const StudentListPage = lazy(
 const StudentDetailsPage = lazy(
   () => import('#pages/StudentDetails/StudentDetails.page'),
 );
-const UpdateUsernamePage = lazy(
-  () => import('#pages/UpdateUsername/UpdateUsername.page'),
-);
 
 const t = (key: string) => key;
 
@@ -48,10 +45,6 @@ export const authenticatedRoutes: (queryClient: QueryClient) => RouteObject = (
       path: '/',
       element: <HomePage />,
       handle: { crumb: t('breadcrumbs.home.index') },
-    },
-    {
-      path: '/update-username',
-      element: <UpdateUsernamePage />,
     },
     {
       path: '/event',
@@ -93,7 +86,7 @@ export const authenticatedRoutes: (queryClient: QueryClient) => RouteObject = (
         {
           path: ':id',
           element: <StudentDetailsPage />,
-          loader: (params) => studentDetailsLoader(params, queryClient),
+          loader: (params) => userDetailsLoader(params, queryClient),
         },
       ],
     },

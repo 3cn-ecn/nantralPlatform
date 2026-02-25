@@ -15,8 +15,8 @@ import {
   Typography,
 } from '@mui/material';
 
+import { User } from '#modules/account/user.types';
 import { Group } from '#modules/group/types/group.types';
-import { Student } from '#modules/student/student.types';
 
 import { Membership } from '../interfaces';
 import Avatar from './Avatar';
@@ -27,7 +27,7 @@ function ShowMemberModal(props: {
   open: boolean;
   member: Membership;
   group?: Group;
-  student: Student;
+  student: User;
 }) {
   const { closeModal, openEditModal, open, member, group, student } = props;
 
@@ -40,14 +40,14 @@ function ShowMemberModal(props: {
       <DialogTitle sx={{ m: 0, p: 2 }}>
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
           <Avatar
-            url={group ? member.student.picture : member.group.icon}
-            title={group ? member.student.name : member.group.name}
+            url={group ? member.user.picture : member.group.icon}
+            title={group ? member.user.name : member.group.name}
             size="large"
           />
           <Box sx={{ minWidth: 0 }}>
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
               <Typography variant="h5" sx={{ fontWeight: 600 }}>
-                {group ? member.student.name : member.group.name}
+                {group ? member.user.name : member.group.name}
               </Typography>
               {member.admin ? <VerifiedIcon color="secondary" /> : <></>}
             </Box>
@@ -81,7 +81,7 @@ function ShowMemberModal(props: {
       </DialogContent>
       <DialogActions>
         <Button
-          href={group ? member.student.url : member.group.url}
+          href={group ? member.user.url : member.group.url}
           variant="text"
           color="secondary"
           endIcon={<OpenInNewIcon />}
@@ -90,8 +90,7 @@ function ShowMemberModal(props: {
         </Button>
         <Button
           hidden={
-            !openEditModal ||
-            (!group?.isAdmin && student.id !== member.student.id)
+            !openEditModal || (!group?.isAdmin && student.id !== member.user.id)
           }
           onClick={openEditModal}
           variant="outlined"

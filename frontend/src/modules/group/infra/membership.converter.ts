@@ -7,7 +7,7 @@ export function convertMembershipForm(form: MembershipForm): MembershipFormDTO {
     end_date: form.endDate.toISOString().split('T')[0] || '',
     description: form.description,
     group: form.group,
-    student: form.student,
+    user: form.user,
     summary: form.summary,
     admin: form.admin,
   };
