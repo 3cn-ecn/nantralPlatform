@@ -110,7 +110,7 @@ export function GroupFormFields({
     (val: string) => updateFormValues({ meetingHour: val }),
     [updateFormValues],
   );
-
+  console.log(formValues);
   const today = new Date();
   const oneYear = new Date();
   oneYear.setFullYear(today.getFullYear() + 1);
@@ -141,56 +141,29 @@ export function GroupFormFields({
       <FlexAuto columnGap={2}>
         <TextField
           name={'name'}
-          key={'frenchTitle'}
-          label={t('group.form.name.french_label')}
-          value={formValues.frenchName}
+          key={'title'}
+          label={t('group.form.name.label')}
+          value={formValues.name}
           handleChange={useCallback(
             (val) => {
-              updateFormValues({ frenchName: val });
+              updateFormValues({ name: val });
             },
             [updateFormValues],
           )}
-          errors={error?.fields?.french_name}
+          errors={error?.fields?.name}
           required
         />
         <TextField
-          name={'englishName'}
-          key={'englishTitle'}
-          label={t('group.form.name.english_label')}
-          value={formValues.englishName}
+          label={t('group.form.shortName.label')}
+          value={formValues.shortName}
           handleChange={useCallback(
             (val) => {
-              updateFormValues({ englishName: val });
-            },
-            [updateFormValues],
-          )}
-          errors={error?.fields?.english_name}
-          required
-        />
-      </FlexAuto>
-      <FlexAuto columnGap={2}>
-        <TextField
-          label={t('group.form.shortName.french_label')}
-          value={formValues.frenchShortName}
-          handleChange={useCallback(
-            (val) => {
-              updateFormValues({ frenchShortName: val });
+              updateFormValues({ shortName: val });
             },
             [updateFormValues],
           )}
           helperText={t('group.form.shortName.helperText')}
-          errors={error?.fields?.french_short_name}
-        />
-        <TextField
-          label={t('group.form.shortName.english_label')}
-          value={formValues.englishShortName}
-          handleChange={useCallback(
-            (val) => {
-              updateFormValues({ englishShortName: val });
-            },
-            [updateFormValues],
-          )}
-          errors={error?.fields?.english_short_name}
+          errors={error?.fields?.short_name}
         />
       </FlexAuto>
 
@@ -388,7 +361,7 @@ export function GroupFormFields({
           },
           [updateFormValues],
         )}
-        errors={error?.fields?.french_summary}
+        errors={error?.fields?.summary_fr}
         placeholder={
           groupType.isMap ? t('group.form.summary.mapPlaceholder') : undefined
         }
@@ -407,7 +380,7 @@ export function GroupFormFields({
           },
           [updateFormValues],
         )}
-        errors={error?.fields?.english_summary}
+        errors={error?.fields?.summary_en}
         placeholder={
           groupType.isMap ? t('group.form.summary.mapPlaceholder') : undefined
         }
@@ -510,7 +483,7 @@ export function GroupFormFields({
           },
           [updateFormValues],
         )}
-        errors={error?.fields?.french_description}
+        errors={error?.fields?.description_fr}
       />
 
       <RichTextField
@@ -522,7 +495,7 @@ export function GroupFormFields({
           },
           [updateFormValues],
         )}
-        errors={error?.fields?.english_description}
+        errors={error?.fields?.description_en}
       />
 
       <Box mt={2}>

@@ -8,11 +8,7 @@ import { GroupTypePreviewDTO } from './groupType.dto';
 export interface GroupDTO {
   id: number;
   name: string;
-  french_name: string;
-  english_name: string;
   short_name: string;
-  french_short_name: string;
-  english_short_name: string;
   slug: string;
   url: string;
   icon?: string;
@@ -24,11 +20,11 @@ export interface GroupDTO {
   private: boolean;
   public: boolean;
   summary: string;
-  french_summary: string;
-  english_summary: string;
+  summary_fr: string;
+  summary_en: string;
   description: string;
-  french_description: string;
-  english_description: string;
+  description_fr: string;
+  description_en: string;
   meeting_place: string;
   meeting_hour: string;
   banner: string;
@@ -71,10 +67,8 @@ export type MapGroupSearchDTO = Pick<GroupDTO, 'id' | 'name' | 'icon'>;
 
 export type CreateGroupFormDTO = Pick<
   GroupDTO,
-  | 'french_name'
-  | 'english_name'
-  | 'french_short_name'
-  | 'english_short_name'
+  | 'name'
+  | 'short_name'
   | 'meeting_hour'
   | 'video1'
   | 'video2'
@@ -83,10 +77,10 @@ export type CreateGroupFormDTO = Pick<
   | 'creation_year'
   | 'slug'
   | 'archived'
-  | 'french_summary'
-  | 'english_summary'
-  | 'french_description'
-  | 'english_description'
+  | 'summary_fr'
+  | 'summary_en'
+  | 'description_fr'
+  | 'description_en'
   | 'meeting_place'
   | 'lock_memberships'
   | 'address'

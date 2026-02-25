@@ -496,8 +496,7 @@
         "label": "Lieu de réunion"
       },
       "name": {
-        "french_label": "Nom (en français)",
-        "english_label": "Nom (en anglais)"
+        "label": "Nom"
       },
       "parent": {
         "label": "Groupe parent"
@@ -512,8 +511,7 @@
       },
       "shortName": {
         "helperText": "Ce nom sera affiché dans la liste des groupes.",
-        "french_label": "Nom raccourci (en français)",
-        "english_label": "Nom raccourci (en anglais)"
+        "label": "Nom raccourci"
       },
       "summary": {
         "frenchLabel": "Résumé (en français)",

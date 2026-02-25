@@ -94,6 +94,7 @@ export function GroupInfo({
                 href={`/admin/group/group/${group?.id}/change/`}
                 target="_blank"
               >
+                {' '}
                 <AdminPanelSettingsIcon fontSize="inherit" />
               </IconButton>
             </Tooltip>

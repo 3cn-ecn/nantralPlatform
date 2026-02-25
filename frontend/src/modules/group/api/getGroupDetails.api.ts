@@ -19,6 +19,5 @@ export async function getGroupDetailsApi(
     .catch((err: ApiErrorDTO) => {
       throw adaptApiErrors(err);
     });
-  console.log(data);
   return adaptGroup(data);
 }

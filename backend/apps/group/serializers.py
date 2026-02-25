@@ -11,6 +11,7 @@ from apps.sociallink.serializers import (
     SocialLinkSerializer,
 )
 from apps.student.serializers import StudentPreviewSerializer
+from apps.utils.translation_model_serializer import TranslationModelSerializer
 
 from ..student.models import Student
 from .models import Group, GroupType, Label, Membership, Thematic
@@ -44,7 +45,6 @@ class AdminFieldsMixin:
 
 class GroupTypeSerializer(serializers.ModelSerializer):
     can_create = serializers.SerializerMethodField()
-    name = serializers.SerializerMethodField()
 
     class Meta:
         model = GroupType
@@ -61,10 +61,8 @@ class GroupTypeSerializer(serializers.ModelSerializer):
         user = self.context.get("request").user
         return user.is_authenticated and (obj.can_create or user.is_superuser)
 
-    def get_name(self, obj: GroupType):
-        return obj.translated_name
 
-class ThematicSerializer(serializers.ModelSerializer):
+class ThematicSerializer(TranslationModelSerializer):
     class Meta:
         model = Thematic
         fields = [
@@ -72,15 +70,15 @@ class ThematicSerializer(serializers.ModelSerializer):
             "name",
             "priority",
         ]
+        translations_fields = ["name"]
 
 
-class GroupPreviewSerializer(serializers.ModelSerializer):
+class GroupPreviewSerializer(TranslationModelSerializer):
     url = serializers.SerializerMethodField()
     category = serializers.SerializerMethodField()
     sub_category = serializers.SerializerMethodField()
-    name = serializers.SerializerMethodField()
     short_name = serializers.SerializerMethodField()
-    thematic = ThematicSerializer()
+
     class Meta:
         model = Group
         fields = [
@@ -92,16 +90,16 @@ class GroupPreviewSerializer(serializers.ModelSerializer):
             "id",
             "category",
             "sub_category",
-            "summary",
-            "description",
-            "thematic",
         ]
         read_only_fields = [
+            "name",
+            "short_name",
             "slug",
             "url",
             "icon",
             "category",
         ]
+        translations_fields = ["summary", "description"]
 
     def get_url(self, obj: Group) -> str:
         return obj.get_absolute_url()
@@ -111,29 +109,26 @@ class GroupPreviewSerializer(serializers.ModelSerializer):
 
     def get_sub_category(self, obj: Group) -> str:
         return obj.get_sub_category()
-    
-    def get_name(self, obj):
-        return obj.name
 
-    def get_short_name(self, obj):
-        return obj.short_name
+    def get_short_name(self, obj: Group) -> str:
+        return (
+            obj.short_name
+            if obj.short_name and len(obj.short_name) > 0
+            else obj.name
+        )
 
 
-class GroupSerializer(serializers.ModelSerializer):
+class GroupSerializer(TranslationModelSerializer):
     url = serializers.SerializerMethodField()
     is_admin = serializers.SerializerMethodField()
     is_subscribed = serializers.SerializerMethodField()
     is_member = serializers.SerializerMethodField()
     group_type = GroupTypeSerializer(read_only=True)
     parent = GroupPreviewSerializer(read_only=True)
-    thematic = ThematicSerializer(read_only=True)
     category = serializers.SerializerMethodField()
     sub_category = serializers.SerializerMethodField()
     social_links = SocialLinkSerializer(many=True)
-    name = serializers.SerializerMethodField()
     short_name = serializers.SerializerMethodField()
-    description = serializers.SerializerMethodField()
-    summary = serializers.SerializerMethodField()
 
     class Meta:
         model = Group
@@ -143,10 +138,6 @@ class GroupSerializer(serializers.ModelSerializer):
             "priority",
         ]
         read_only_fields = [
-            "description",
-            "summary",
-            "name",
-            "short_name",
             "group_type",
             "parent",
             "url",
@@ -154,6 +145,7 @@ class GroupSerializer(serializers.ModelSerializer):
             "sub_category",
             "parent",
         ]
+        translations_fields = ["summary", "description"]
 
     def get_url(self, obj: Group) -> str:
         return obj.get_absolute_url()
@@ -172,18 +164,13 @@ class GroupSerializer(serializers.ModelSerializer):
 
     def get_sub_category(self, obj: Group) -> str:
         return obj.get_sub_category()
-    
-    def get_name(self, obj):
-        return obj.name
 
-    def get_short_name(self, obj):
-        return obj.short_name
-    
-    def get_description(self, obj):
-        return obj.description
-
-    def get_summary(self, obj):
-        return obj.summary
+    def get_short_name(self, obj: Group) -> str:
+        return (
+            obj.short_name
+            if obj.short_name and len(obj.short_name) > 0
+            else obj.name
+        )
 
 
 class ShortMemberSerializer(serializers.ModelSerializer):
@@ -215,7 +202,7 @@ class ShortMemberSerializer(serializers.ModelSerializer):
         return data
 
 
-class GroupWriteSerializer(serializers.ModelSerializer):
+class GroupWriteSerializer(TranslationModelSerializer):
     social_links = GroupSocialLinkSerializer(many=True, read_only=True)
     _change_reason = serializers.CharField(write_only=True, required=False)
 
@@ -229,6 +216,7 @@ class GroupWriteSerializer(serializers.ModelSerializer):
             "priority",
         ]
         read_only_fields = ["group_type", "url", "tags"]
+        translations_fields = ["summary", "description"]
 
     def create(self, validated_data: dict):
         _change_reason = validated_data.pop("_change_reason", None)

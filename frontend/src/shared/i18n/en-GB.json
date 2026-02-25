@@ -341,6 +341,7 @@
     }
   },
   "group": {
+    "defaultThematic": "Others",
     "details": {
       "accept": "Accept",
       "accepted": "Accepted",
@@ -427,13 +428,7 @@
         "posts": "Posts"
       }
     },
-    "defaultThematic": "Others",
     "form": {
-      "thematic": {
-        "label": "Thematic",
-        "undefined": "Undefined",
-        "helperText": "This group will be displayed with other groups with the same thematic."
-      },
       "address": {
         "label": "Address"
       },
@@ -459,8 +454,8 @@
         "label": "Creation date"
       },
       "description": {
-        "frenchLabel": "Description (in french)",
-        "englishLabel": "Description (in english)"
+        "englishLabel": "Description (in english)",
+        "frenchLabel": "Description (in french)"
       },
       "endDate": {
         "label": "End date"
@@ -496,8 +491,8 @@
         "label": "Meeting place"
       },
       "name": {
-        "french_label": "Name (in french)",
-        "english_label": "Name (in english)"
+        "english_label": "Name (in english)",
+        "french_label": "Name (in french)"
       },
       "parent": {
         "label": "Parent group"
@@ -512,14 +507,18 @@
       },
       "shortName": {
         "helperText": "This name will be displayed in the group list.",
-        "french_label": "Shortened name (in french)",
-        "english_label": "Shortened name (in english)"
+        "label": "   "
       },
       "summary": {
-        "frenchLabel": "Summary (in french)",
         "englishLabel": "Summary (in english)",
+        "frenchLabel": "Summary (in french)",
         "mapLabel": "Address supplement",
         "mapPlaceholder": "Apt. 101"
+      },
+      "thematic": {
+        "helperText": "This group will be displayed with other groups with the same thematic.",
+        "label": "Thematic",
+        "undefined": "Undefined"
       },
       "title": {
         "advancedOptions": "Advanced options",
@@ -583,43 +582,40 @@
   },
   "legalNotice": {
     "paragraphs": {
+      "copyright": {
+        "text1": "The source code of this website is the property of the 3CN club, affiliated with the AECN. Unless otherwise stated, all elements accessible on the website (texts, images, logos, icons, sounds, software, etc.) remain the exclusive property of their respective authors with regard to intellectual property rights or usage rights. ",
+        "text2": "Any reproduction, representation, modification, publication or adaptation of all or part of the elements of the website, by any means or process whatsoever, is prohibited without the prior authorization of the author. Any unauthorized use of the website or any of its elements may constitute an infringement and may result in legal action.",
+        "title": "Intellectual property"
+      },
+      "host_provider": {
+        "address_line_1": "2 rue Kellermann",
+        "address_line_2": "59100 Roubaix",
+        "address_line_3": "France",
+        "text": "The website is hosted by OVH SAS, whose registered office is located at the following address:",
+        "title": "Hosting provider"
+      },
       "publisher": {
-        "title": "Website publisher",
-        "text": "The Nantral Platform website is developed by the 3CN club, affiliated with the AECN (ASSOCIATION DES ÉTUDIANTS DE L'ÉCOLE CENTRALE DE NANTES). Responsibility for the content of the website lies with the AECN, which also ensures its funding and management.",
-        "address_title": "The address of the AECN is as follows:",
+        "3cn_president": "Jean Benoît GRIMALDI",
+        "3cn_president_title": "3CN President",
         "address_line_1": "ASSOCIATION DES ÉTUDIANTS DE L'ÉCOLE CENTRALE DE NANTES",
         "address_line_2": "1 rue de la Noë",
         "address_line_3": "44300 Nantes",
         "address_line_4": "France",
-        "people_text": "In particular, the site team is under the direction of: ",
-        "aecn_president_title": "AECN President",
-        "aecn_president": "Victoire GUTH",
-        "aecn_dsi_title": "Director of Information Systems at AECN",
+        "address_title": "The address of the AECN is as follows:",
         "aecn_dsi": "Bastien PAGEAUD",
-        "3cn_president_title": "3CN President",
-        "3cn_president": "Jean Benoît GRIMALDI"
+        "aecn_dsi_title": "Director of Information Systems at AECN",
+        "aecn_president": "Victoire GUTH",
+        "aecn_president_title": "AECN President",
+        "people_text": "In particular, the site team is under the direction of: ",
+        "text": "The Nantral Platform website is developed by the 3CN club, affiliated with the AECN (ASSOCIATION DES ÉTUDIANTS DE L'ÉCOLE CENTRALE DE NANTES). Responsibility for the content of the website lies with the AECN, which also ensures its funding and management.",
+        "title": "Website publisher"
       },
-
-      "host_provider": {
-        "title": "Hosting provider",
-        "text": "The website is hosted by OVH SAS, whose registered office is located at the following address:",
-        "address_line_1": "2 rue Kellermann",
-        "address_line_2": "59100 Roubaix",
-        "address_line_3": "France"
-      },
-
-      "copyright": {
-        "title": "Intellectual property",
-        "text1": "The source code of this website is the property of the 3CN club, affiliated with the AECN. Unless otherwise stated, all elements accessible on the website (texts, images, logos, icons, sounds, software, etc.) remain the exclusive property of their respective authors with regard to intellectual property rights or usage rights. ",
-        "text2": "Any reproduction, representation, modification, publication or adaptation of all or part of the elements of the website, by any means or process whatsoever, is prohibited without the prior authorization of the author. Any unauthorized use of the website or any of its elements may constitute an infringement and may result in legal action."
-      },
-
       "rgpd": {
-        "title": "Personal data",
-        "text": "Personal data collected are used solely for the proper functioning of Nantral Platform. Access to such data is strictly limited to their owner and to persons expressly authorized by the board of directors of the AECN.",
-        "contact_text": "For any questions or requests regarding personal data, you may contact us at the following email address: ",
         "contact_email": "contact@nantral-platform.fr",
-        "contact_post_email": "."
+        "contact_post_email": ".",
+        "contact_text": "For any questions or requests regarding personal data, you may contact us at the following email address: ",
+        "text": "Personal data collected are used solely for the proper functioning of Nantral Platform. Access to such data is strictly limited to their owner and to persons expressly authorized by the board of directors of the AECN.",
+        "title": "Personal data"
       }
     },
     "title": "Legal Notice"

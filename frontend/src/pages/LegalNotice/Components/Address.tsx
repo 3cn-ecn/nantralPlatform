@@ -1,8 +1,8 @@
-import { PropsWithChildren } from 'react';
+import { ReactNode } from 'react';
 
 import { Typography } from '@mui/material';
 
-export function Address({ children }: PropsWithChildren) {
+export function Address({ children }: { children: ReactNode }) {
   return (
     <Typography sx={{ ml: 2, mt: 1 }} component="div" paragraph>
       <Typography sx={{ lineHeight: 1.6 }}>{children}</Typography>

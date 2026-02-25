@@ -1,6 +1,5 @@
 from django.core.exceptions import ValidationError
 from django.db import models
-from django.utils.translation import get_language
 from django.utils.translation import gettext_lazy as _
 
 from django_ckeditor_5.fields import CKEditor5Field
@@ -21,16 +20,9 @@ class GroupType(models.Model):
 
     # Type infos
     name = models.CharField(
-        verbose_name=_("Type french name"),
+        verbose_name=_("Type name"),
         unique=True,
         max_length=30,
-    )
-    english_name = models.CharField(
-        verbose_name=_("Type english name"),
-        unique=False,
-        max_length=30,
-        blank=True,
-        default="",
     )
     slug = models.SlugField(primary_key=True, max_length=10)
     icon = CustomImageField(
@@ -117,38 +109,6 @@ class GroupType(models.Model):
         self.icon.delete(save=False)
         super().delete(*args, **kwargs)
 
-    @property
-    def translated_name(self):
-        lang = get_language()
-        if lang == "fr":
-            return self.name
-        return self.english_name
-
-
-class Thematic(models.Model):
-    identifier = models.AutoField(unique=True, primary_key=True)
-    french_name = models.CharField(_("French Name"), max_length=30, unique=True)
-    english_name = models.CharField(
-        _("English Name"), max_length=30, unique=True
-    )
-    priority = models.IntegerField(_("Priority"), default=0)
-    visible = models.BooleanField(default=True)
-    public = models.BooleanField(default=True)
-
-    class Meta:
-        verbose_name = _("Thematic")
-        verbose_name_plural = _("Thematics")
-
-    def __str__(self) -> str:
-        return self.french_name
-
-    @property
-    def name(self):
-        lang = get_language()
-        if lang == "fr":
-            return self.french_name
-        return self.english_name
-
 
 class Label(models.Model):
     name = models.CharField(_("Label Name"), max_length=30)
@@ -158,6 +118,21 @@ class Label(models.Model):
         verbose_name=_("Type of group"),
         on_delete=models.CASCADE,
     )
+
+    def __str__(self) -> str:
+        return self.name
+
+
+class Thematic(models.Model):
+    identifier = models.AutoField(unique=True, primary_key=True)
+    name = models.CharField(_("Name"), max_length=30, unique=True)
+    priority = models.IntegerField(_("Priority"), default=0)
+    visible = models.BooleanField(default=True)
+    public = models.BooleanField(default=True)
+
+    class Meta:
+        verbose_name = _("Thematic")
+        verbose_name_plural = _("Thematics")
 
     def __str__(self) -> str:
         return self.name
@@ -179,23 +154,9 @@ class Group(models.Model, SlugModel):
     """Database of all groups, with different types: clubs, flat-shares..."""
 
     # General data
-    french_name = models.CharField(
-        verbose_name=_("French name"), unique=True, max_length=100
-    )
-    english_name = models.CharField(
-        verbose_name=_("English name"),
-        unique=False,
-        max_length=100,
-        blank=True,
-    )
-    french_short_name = models.CharField(
-        verbose_name=_("French short name"),
-        max_length=100,
-        blank=True,
-        help_text=_("This name will be used in the list of groups."),
-    )
-    english_short_name = models.CharField(
-        verbose_name=_("English short name"),
+    name = models.CharField(verbose_name=_("Name"), unique=True, max_length=100)
+    short_name = models.CharField(
+        verbose_name=_("Short name"),
         max_length=100,
         blank=True,
         help_text=_("This name will be used in the list of groups."),
@@ -212,12 +173,6 @@ class Group(models.Model, SlugModel):
         verbose_name=_("Subscribers"),
         related_name="subscriptions",
         blank=True,
-    )
-    thematic = models.ForeignKey(
-        to=Thematic,
-        default=None,
-        null=True,
-        on_delete=models.CASCADE,
     )
 
     # Technical data
@@ -291,23 +246,12 @@ class Group(models.Model, SlugModel):
     )
 
     # Profile
-    french_summary = models.CharField(
-        verbose_name=_("French summary"),
-        max_length=500,
-        blank=True,
-        default="",
-    )
-    english_summary = models.CharField(
-        verbose_name=_("English summary"),
+    summary = models.CharField(
+        verbose_name=_("Summary"),
         max_length=500,
         blank=True,
     )
-    french_description = CKEditor5Field(
-        verbose_name=_("French description"), blank=True
-    )
-    english_description = CKEditor5Field(
-        verbose_name=_("English description"), blank=True
-    )
+    description = CKEditor5Field(verbose_name=_("Description"), blank=True)
     meeting_place = models.CharField(
         verbose_name=_("Meeting place"),
         max_length=50,
@@ -327,7 +271,7 @@ class Group(models.Model, SlugModel):
         ),
         size=(500, 500),
         crop=False,
-        name_from_field="french_name",
+        name_from_field="name",
         delete_on_save=False,
     )
     banner = CustomImageField(
@@ -338,7 +282,7 @@ class Group(models.Model, SlugModel):
             "Image with 3:1 ratio (recommended minimum size: 1200x400)"
         ),
         size=(1200, 400),
-        name_from_field="french_name",
+        name_from_field="name",
         delete_on_save=False,
     )
     video1 = models.URLField(
@@ -372,10 +316,7 @@ class Group(models.Model, SlugModel):
     # Field to handle history of the updates to the group
     history = HistoricalRecords(
         excluded_fields=(
-            "french_name",
-            "french_short_name",
-            "french_summary",
-            "french_description",
+            "short_name",
             "members",
             "subscribers",
             "group_type",
@@ -397,11 +338,10 @@ class Group(models.Model, SlugModel):
             "address",
             "latitude",
             "longitude",
-            "thematic",
-            "english_name",
-            "english_short_name",
-            "english_summary",
-            "english_description",
+            "summary_fr",
+            "summary_en",
+            "description_fr",
+            "description_en",
         ),
         related_name="versions",
     )
@@ -410,21 +350,17 @@ class Group(models.Model, SlugModel):
         verbose_name = "groupe"
 
     def __str__(self) -> str:
-        return self.french_short_name
+        return self.short_name
 
     def save(self, *args, **kwargs) -> None:
         """Save an instance of the model in the database."""
         # fill default values
-        if not self.french_name:
-            raise ValueError("french_name must be set before saving!")
-        if not self.french_short_name:
-            self.french_short_name = self.french_name
-        if not self.english_short_name:
-            self.english_short_name = self.english_name
+        if not self.short_name:
+            self.short_name = self.name
         if self.pk is None and self.group_type.private_by_default:
             self.private = True
         # create the slug
-        self.set_slug(self.french_short_name, max_length=40)
+        self.set_slug(self.short_name, max_length=40)
         # save the instance
         super().save(*args, **kwargs)
 
@@ -495,38 +431,6 @@ class Group(models.Model, SlugModel):
             return f"{self.creation_year}-{self.creation_year + 1}"
         else:
             return ""
-
-    @property
-    def name(self):
-        lang = get_language()
-        if lang.startswith("en") and self.english_name and self.english_name != "":
-            return self.english_name
-        return self.french_name
-    
-    @name.setter
-    def name(self, value):
-        self.french_name = value
-
-    @property
-    def short_name(self):
-        lang = get_language()
-        if lang.startswith("en") and self.english_short_name and self.english_short_name != "":
-            return self.english_short_name
-        return self.french_short_name
-
-    @property
-    def description(self):
-        lang = get_language()
-        if lang.startswith("en") and self.english_description and self.english_description != "":
-            return self.english_description
-        return self.french_description
-
-    @property
-    def summary(self):
-        lang = get_language()
-        if lang.startswith("en") and self.english_summary and self.english_summary != "":
-            return self.english_summary
-        return self.french_summary
 
     def is_admin(self, user: User) -> bool:
         """Check if a user has the admin rights for this group.

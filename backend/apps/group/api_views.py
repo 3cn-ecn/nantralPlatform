@@ -56,12 +56,25 @@ class GeoJsonRender(renderers.JSONRenderer):
     format = "points"
 
 
+class ThematicViewSet(viewsets.ReadOnlyModelViewSet):
+    serializer_class = ThematicSerializer
+    filter_backends = [filters.OrderingFilter]
+    ordering = ["-priority"]
+    ordering_fields = ["priority", "name"]
+
+    def get_queryset(self):
+        queryset = Thematic.objects.filter(visible=True)
+        if not self.request.user.is_authenticated:
+            queryset = queryset.filter(public=True)
+        return queryset
+
+
 class GroupTypeViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = GroupTypeSerializer
     lookup_field = "slug"
     filter_backends = [filters.OrderingFilter]
     ordering = ["-priority"]
-    ordering_fields = ["slug", "translated_name", "priority"]
+    ordering_fields = ["slug", "name", "priority"]
     lookup_url_kwarg = "slug"
 
     def get_queryset(self):
@@ -69,21 +82,6 @@ class GroupTypeViewSet(viewsets.ReadOnlyModelViewSet):
         if is_map is not None:
             return GroupType.objects.filter(is_map=is_map)
         return GroupType.objects.all()
-
-
-class ThematicViewSet(viewsets.ReadOnlyModelViewSet):
-    serializer_class = ThematicSerializer
-    lookup_field = "identifier"
-    filter_backends = [filters.OrderingFilter]
-    ordering = ["-priority"]
-    ordering_fields = ["identifier", "priority"]
-    lookup_url_kwarg = "identifier"
-
-    def get_queryset(self):
-        queryset = Thematic.objects.filter(visible=True)
-        if not self.request.user.is_authenticated:
-            queryset = queryset.filter(public = True)
-        return queryset
 
 
 class GroupViewSet(viewsets.ModelViewSet):
@@ -135,7 +133,7 @@ class GroupViewSet(viewsets.ModelViewSet):
 
     @property
     def search_fields(self):
-        search_fields = ["french_name", "french_short_name", "slug"]
+        search_fields = ["name", "short_name", "slug"]
         is_map = parse_bool(self.query_params.get("map"))
         if is_map is True:
             search_fields += [
@@ -160,12 +158,16 @@ class GroupViewSet(viewsets.ModelViewSet):
         if self.request.method in ["POST", "PUT", "PATCH"]:
             return GroupWriteSerializer
         if is_map is True:
-            return MapGroupSerializer if search is None else MapGroupSearchSerializer
+            return (
+                MapGroupSerializer
+                if search is None
+                else MapGroupSearchSerializer
+            )
         if preview is False or self.detail:
             return GroupSerializer
         return GroupPreviewSerializer
 
-    def get_queryset(self) -> QuerySet[Group]:  # noqa: C901, PLR0912
+    def get_queryset(self) -> QuerySet[Group]:  # noqa: C901
         user = self.request.user
         group_type = GroupType.objects.filter(
             slug=self.query_params.get("type"),
@@ -238,24 +240,6 @@ class GroupViewSet(viewsets.ModelViewSet):
         if archived is not True:
             queryset = queryset.filter(archived=False)
 
-        # this code is used to patch the fact that 'name' was renamed 'french_name'
-        sort_fields = []
-        if group_type:
-            for f in group_type.sort_fields.split(","):
-                if f == "short_name":
-                    sort_fields.append("french_short_name")
-                    sort_fields.append("english_short_name")
-                elif f == "name":
-                    sort_fields.append("english_name")
-                    sort_fields.append("french_name")
-                elif f == "parent__short_name":
-                    sort_fields.append("parent__french_short_name")
-                    sort_fields.append("parent__english_short_name")
-                elif f == "parent__name":
-                    sort_fields.append("parent__english_name")
-                    sort_fields.append("parent__french_name")
-                else:
-                    sort_fields.append(f)
         return (
             queryset
             # prefetch type and parent group for better performances
@@ -263,7 +247,7 @@ class GroupViewSet(viewsets.ModelViewSet):
             # order by category, order and then name
             .order_by(
                 "group_type",
-                *sort_fields,
+                *group_type.sort_fields.split(",") if group_type else "",
             )
             .distinct()
         )
@@ -344,10 +328,8 @@ class MembershipViewSet(viewsets.ModelViewSet):
     search_fields = [
         "student__user__first_name",
         "student__user__last_name",
-        "group__french_name",
-        "group__french_short_name",
-        "group__english_name",
-        "group__english_short_name"
+        "group__name",
+        "group__short_name",
         "summary",
     ]
     ordering_fields = ["begin_date", "end_date", "priority", "admin"]
@@ -409,7 +391,9 @@ class MembershipViewSet(viewsets.ModelViewSet):
                 Q(end_date__gte=from_date) | Q(end_date__isnull=True),
             )
         if to_date:
-            qs = qs.filter(Q(end_date__lt=to_date) | Q(begin_date__isnull=True)).filter(group__group_type__no_membership_dates=False)
+            qs = qs.filter(
+                Q(end_date__lt=to_date) | Q(begin_date__isnull=True)
+            ).filter(group__group_type__no_membership_dates=False)
         if group_type:
             qs = qs.filter(group__group_type__slug=group_type)
 

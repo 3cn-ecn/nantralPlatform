@@ -8,11 +8,7 @@ import { GroupTypePreview } from './groupType.types';
 export interface Group {
   id: number;
   name: string;
-  englishName: string;
-  frenchName: string;
   shortName: string;
-  frenchShortName: string;
-  englishShortName: string;
   slug: string;
   url: string;
   icon?: string;
@@ -66,10 +62,8 @@ export type MapGroupPreview = GroupPreview &
 
 export type CreateGroupForm = Pick<
   Group,
-  | 'frenchName'
-  | 'englishName'
-  | 'frenchShortName'
-  | 'englishShortName'
+  | 'name'
+  | 'shortName'
   | 'meetingHour'
   | 'video1'
   | 'video2'
