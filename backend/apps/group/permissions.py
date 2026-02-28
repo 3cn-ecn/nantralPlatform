@@ -2,6 +2,7 @@ from django.utils.translation import gettext_lazy as _
 
 from requests import Request
 from rest_framework import exceptions, permissions
+from rest_framework.generics import get_object_or_404
 
 from .models import Group, GroupType, Membership
 
@@ -38,6 +39,26 @@ class GroupPermission(permissions.BasePermission):
                 return obj.is_member(user) or user.is_superuser
             return user.is_authenticated
         return obj.is_admin(request.user)
+
+
+class GroupHistoryPermission(GroupPermission):
+    def has_permission(self, request, view):
+        group = get_object_or_404(
+            Group.objects.all(), slug=view.kwargs.get("slug")
+        )
+        if request.method in permissions.SAFE_METHODS:
+            if (
+                group.private
+                and not group.is_member(request.user)
+                and not request.user.is_superuser
+            ):
+                return False
+            return request.user.is_authenticated or group.public
+        return group.is_admin(request.user)
+
+    def has_object_permission(self, request, view, obj_hist):
+        obj = obj_hist.instance
+        return super().has_object_permission(request, view, obj)
 
 
 class MembershipPermission(permissions.BasePermission):

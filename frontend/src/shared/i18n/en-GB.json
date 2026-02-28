@@ -96,9 +96,7 @@
     },
     "setMain": {
       "error": "An error occured while changing main email address",
-      "errorWithFields": "",
       "label": "Set as main address",
-      "passwordError": "Error on password: {{ details }}",
       "success": "The main email address has been changed. From now on, please use this address to login."
     },
     "visibility": {
@@ -378,7 +376,11 @@
       },
       "formerMembers": "Former members",
       "hideFormerMembers": "Hide old members",
-      "history": "See old versions",
+      "history": {
+        "currentVersion": "Current version",
+        "index": "See old versions"
+      },
+      "historyTimeAndUser": "{{ time }} by {{ user }}",
       "infoLine": {
         "events_one": "{{count}} event",
         "events_other": "{{count}} events",
@@ -400,16 +402,35 @@
           "openProfile": "Open profile"
         },
         "editGroup": {
+          "deleteHistorySuccess": "Successfully deleted historical record",
+          "editHistorySuccess": "Successfully edited summary",
           "error": "An error occurred",
+          "history": "History Management",
           "members": "Members",
           "noMembers": "No members at the moment",
+          "restoreHistorySuccess": "The selected version has been successfully restored.",
           "tabs": {
             "general": "General",
+            "history": "History",
             "links": "Links",
             "members": "Members",
             "subgroups": "Subgroups"
           },
           "title": "Edit group"
+        },
+        "editHistory": {
+          "changeReasonInput": "Change reason",
+          "changeReasonModal": "Edit change reason",
+          "confirmDeleteBody": "Do you really want to delete this historical record? It will be removed from the available versions. Warning: deleting a record will not change the current state of the group. To achieve this behavior, please restore the desired version.",
+          "confirmDeleteTitle": "Delete Historical Record",
+          "confirmRestoreBody": "Do you really want to restore this historical record? The group will be modified and a new record will be created.",
+          "confirmRestoreTitle": "Restore an historical record",
+          "delete": "Delete this historical record",
+          "edit": "Update summary",
+          "noChangeReason": "No summary provided",
+          "restore": "Restore this historical record",
+          "timeAndUser": "{{ time }} by <0>{{ user }}</0>",
+          "view": "View group at this historical record"
         },
         "editMembership": {
           "error": "Network error: rearrangement not saved",
@@ -523,7 +544,9 @@
       "title": {
         "advancedOptions": "Advanced options",
         "general": "General",
-        "presentation": "Presentation"
+        "presentation": "Presentation",
+        "versionWarning": "Your are editing an old version. If you save, all changes that are more recent will be canceled. If that is not what you are looking for, please go back to the latest version (recommanded).",
+        "versionWarningAction": "Latest version"
       },
       "video1": {
         "label": "Video Link 1"

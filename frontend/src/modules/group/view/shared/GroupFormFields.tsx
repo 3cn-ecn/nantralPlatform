@@ -258,6 +258,15 @@ export function GroupFormFields({
         </>
       )}
 
+      {edit && (
+        <CheckboxField
+          label={t('group.form.saveHistroryRecord')}
+          value={formValues.saveHistoryRecord}
+          handleChange={(val) => updateFormValues({ saveHistoryRecord: val })}
+          helperText={t('group.form.saveHistroryRecord.helperText')}
+          errors={error?.fields?._save_history_record}
+        />
+      )}
       <TextField
         label={t('group.form.changeReason.label')}
         value={formValues.changeReason}
@@ -269,6 +278,7 @@ export function GroupFormFields({
         )}
         helperText={t('group.form.changeReason.helperText')}
         errors={error?.fields?._change_reason}
+        disabled={edit && !formValues.saveHistoryRecord}
       />
 
       <FlexAuto columnGap={2}>

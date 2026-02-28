@@ -66,4 +66,3 @@ class PasswordResetConfirmRedirect(View):
         context = {"DJANGO_VITE_DEV_MODE": settings.DJANGO_VITE_DEV_MODE}
         response = render(request, "base_empty.html", context)
         return response
-

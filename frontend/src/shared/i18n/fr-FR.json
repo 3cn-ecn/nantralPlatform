@@ -96,9 +96,7 @@
     },
     "setMain": {
       "error": "Une erreur est survenue lors du changement d'email principal",
-      "errorWithFields": "Erreur sur l'addresse séléctionnée",
       "label": "Définir comme principale",
-      "passwordError": "Erreur sur le mot de passe : {{ details }}",
       "success": "L'email principal a été changé. Utilisez maintenant cette adresse pour vous connecter."
     },
     "visibility": {
@@ -378,7 +376,11 @@
       },
       "formerMembers": "Anciens membres",
       "hideFormerMembers": "Cacher les anciens membres",
-      "history": "Voir l'historique",
+      "history": {
+        "currentVersion": "Version actuelle",
+        "index": "Voir l'historique"
+      },
+      "historyTimeAndUser": "{{ time }} par {{ user }}",
       "infoLine": {
         "events_one": "{{count}} événement",
         "events_other": "{{count}} événements",
@@ -400,16 +402,35 @@
           "openProfile": "Ouvrir le profil"
         },
         "editGroup": {
+          "deleteHistorySuccess": "Point d'historique supprimé avec succés",
+          "editHistorySuccess": "La modification a été enregistrée",
           "error": "Une erreur s'est produite",
+          "history": "Gestion des versions",
           "members": "Membres",
           "noMembers": "Aucun membre pour le moment",
+          "restoreHistorySuccess": "La version choisie a bien été restaurée",
           "tabs": {
             "general": "Général",
+            "history": "Historique",
             "links": "Liens",
             "members": "Membres",
             "subgroups": "Sous-groupes"
           },
           "title": "Modifier le groupe"
+        },
+        "editHistory": {
+          "changeReasonInput": "Motif du changement",
+          "changeReasonModal": "Modifier le motif de changement",
+          "confirmDeleteBody": "Êtes-vous sûr de vouloir supprimer ce point d'historique ? Il n'apparaitra plus dans la liste des versions disponibles. Attention: supprimer une version ne modifie pas l'état actuel du groupe : pour cela, veuillez restaurer la version souhaitée.",
+          "confirmDeleteTitle": "Suppression d'un point d'historique",
+          "confirmRestoreBody": "Voulez vous restaurer ce point d'historique ? Le groupe sera modifié et un nouveau point sera ajouté.",
+          "confirmRestoreTitle": "Restaurer un point d'historique",
+          "delete": "Supprimer ce point d'historique",
+          "edit": "Mettre à jour le résumé",
+          "noChangeReason": "Pas de résumé",
+          "restore": "Restorer ce point d'historique",
+          "timeAndUser": "{{ time }} par <0>{{ user }}</0>",
+          "view": "Voir le groupe à ce point d'historique"
         },
         "editMembership": {
           "error": "Erreur de réseau : le réagencement n'est pas sauvegardé",
@@ -456,7 +477,7 @@
       },
       "changeReason": {
         "helperText": "Si vous le souhaitez, ajoutez quelques mots expliquant pourquoi vous créez/modifiez ce groupe",
-        "label": "Modif de changement"
+        "label": "Motif de changement"
       },
       "creationDate": {
         "label": "Date de création"
@@ -523,7 +544,9 @@
       "title": {
         "advancedOptions": "Options avancées",
         "general": "Général",
-        "presentation": "Présentation"
+        "presentation": "Présentation",
+        "versionWarning": "Vous modifiez une ancienne version. Si vous enregistrez, toutes les modifications plus récentes seront annulées. Si vous ne le souhaitez pas, merci de passer à la dernière version (recommandé).",
+        "versionWarningAction": "Dernière version"
       },
       "video1": {
         "label": "Lien Vidéo 1"

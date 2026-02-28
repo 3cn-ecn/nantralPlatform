@@ -4,16 +4,16 @@ import { adaptGroupHistory } from '#modules/group/infra/groupHistory.adapter';
 import { GroupHistoryDTO } from '#modules/group/infra/groupHistory.dto';
 import { GroupHistory } from '#modules/group/types/groupHistory.type';
 import { adaptApiErrors, ApiErrorDTO } from '#shared/infra/errors';
+import { adaptPage, Page, PageDTO } from '#shared/infra/pagination';
 
-export async function getGroupHistoryApi(
+export async function getGroupHistoryListApi(
   slug: string,
-  pk: number,
-): Promise<GroupHistory> {
+): Promise<Page<GroupHistory>> {
   const { data } = await axios
-    .get<GroupHistoryDTO>(`/api/group/group/${slug}/history/${pk}`)
+    .get<PageDTO<GroupHistoryDTO>>(`/api/group/group/${slug}/history/`)
     .catch((err: ApiErrorDTO) => {
       throw adaptApiErrors(err);
     });
 
-  return adaptGroupHistory(data);
+  return adaptPage(data, adaptGroupHistory);
 }

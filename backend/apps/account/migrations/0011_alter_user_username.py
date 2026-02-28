@@ -14,7 +14,6 @@ def forwards(apps, schema_editor):
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("account", "0010_idregistration_expires_at_user_email_next_and_more"),
     ]
@@ -23,7 +22,15 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name="user",
             name="username",
-            field=models.CharField(error_messages={"unique": "A user with that username already exists."}, help_text="Required. 150 characters or fewer. Lower case letters, digits and ./_/=/-///+ only.", max_length=150, unique=True, verbose_name="username"),
+            field=models.CharField(
+                error_messages={
+                    "unique": "A user with that username already exists."
+                },
+                help_text="Required. 150 characters or fewer. Lower case letters, digits and ./_/=/-///+ only.",
+                max_length=150,
+                unique=True,
+                verbose_name="username",
+            ),
         ),
         migrations.RunPython(forwards),
     ]

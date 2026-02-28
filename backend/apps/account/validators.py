@@ -18,8 +18,7 @@ RESERVED_USERNAMES = (
     "server",
     "internal",
     "guest",
-    "matrix"
-    "bde",
+    "matrixbde",
     "bds",
     "bda",
     "ecn",
@@ -27,9 +26,14 @@ RESERVED_USERNAMES = (
     "bridge",
 )
 
+
 def validate_matrix_username(value):
     if any(c not in MXID_LOCALPART_ALLOWED_CHARACTERS for c in value):
-        raise ValidationError(_("Enter a valid username. This value can only contain characters a-z, 0-9, or '_-.+'"))
+        raise ValidationError(
+            _(
+                "Enter a valid username. This value can only contain characters a-z, 0-9, or '_-.+'"
+            )
+        )
 
     if value[0] == "_":
         raise ValidationError(_("Username may not begin with _"))
@@ -37,8 +41,11 @@ def validate_matrix_username(value):
     if GUEST_USER_ID_PATTERN.fullmatch(value):
         raise ValidationError(_("Numeric username are reserved"))
 
-    if value.lower() in RESERVED_USERNAMES or any(value.lower().startswith(p + ".") for p in RESERVED_USERNAMES):
+    if value.lower() in RESERVED_USERNAMES or any(
+        value.lower().startswith(p + ".") for p in RESERVED_USERNAMES
+    ):
         raise ValidationError(_("This username is reserved"))
+
 
 def validate_email(mail: str):
     if "+" in mail:
@@ -57,7 +64,14 @@ def django_validate_password(password):
 
 
 def ecn_email_validator(mail: str):
-    if re.search(r"@([\w\-.]+\.)?(ec-nantes\.fr|centraliens-nantes\.org)$", mail) is None:
+    if (
+        re.search(
+            r"@([\w\-.]+\.)?(ec-nantes\.fr|centraliens-nantes\.org)$", mail
+        )
+        is None
+    ):
         raise ValidationError(
-            _("You must use a valid ECN email address (ending in ec-nantes.fr or centraliens-nantes.org)"),
+            _(
+                "You must use a valid ECN email address (ending in ec-nantes.fr or centraliens-nantes.org)"
+            ),
         )
