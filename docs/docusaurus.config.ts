@@ -16,7 +16,11 @@ const config: Config = {
   deploymentBranch: 'gh-pages',
 
   onBrokenLinks: 'throw',
-  onBrokenMarkdownLinks: 'warn',
+  markdown: {
+    hooks: {
+      onBrokenMarkdownLinks: 'warn',
+    },
+  },
 
   plugins: ['docusaurus-plugin-sass'],
   themes: [

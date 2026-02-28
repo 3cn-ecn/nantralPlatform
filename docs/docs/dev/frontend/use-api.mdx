@@ -88,16 +88,16 @@ function MyComponent() {
 
 Some explanations on this code:
 
--  First, we declare the imports and interfaces.
--  Then we call our API with `axios`. We obtain a list like this:
+- First, we declare the imports and interfaces.
+- Then we call our API with `axios`. We obtain a list like this:
    ```js
    [ { title: 'Title 1', begin_date: '2022-01-01T16:54:000Z', ...}, ...]
    ```
--  To respect javascript conventions, we change the format of the keys
-   and convert dates from string to Date objects with the `convertFromPythonData`
-   function:
+- To respect javascript conventions, we change the format of the keys
+  and convert dates from string to Date objects with the `convertFromPythonData`
+  function:
    ```js
    [ { title: 'Title 1', startDate: Date('2022-01-01T16:54:000Z'), ...}, ...]
    ```
--  We check for errors.
--  And finally we render the data.
+- We check for errors.
+- And finally we render the data.

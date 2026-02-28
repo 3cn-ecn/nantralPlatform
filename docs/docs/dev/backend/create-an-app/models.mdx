@@ -97,14 +97,14 @@ Learn more on queries in the [official documentation](https://docs.djangoproject
 
 ### Good practices
 
--  Try to **merge** migration files into **one file** as much as possible: we
-   try to have as few migration files as possible. To do so, **_un-apply_** your
-   last migrations files, **_delete_** them, and
-   **_recreate a new_** migration file.
-   :::warning Be careful
-   You can't change migration files once they are uploaded to
-   the `master` branch on the server.
-   :::
+- Try to **merge** migration files into **one file** as much as possible: we
+  try to have as few migration files as possible. To do so, **_un-apply_** your
+  last migrations files, **_delete_** them, and
+  **_recreate a new_** migration file.
+  :::warning Be careful
+  You can't change migration files once they are uploaded to
+  the `master` branch on the server.
+  :::
 
 ### Applying and un-applying migrations
 
@@ -121,16 +121,16 @@ Only the first 2 migrations are applied on your database:
 
 Now you can do multiple things:
 
--  If you want to apply **all migrations** (3, 4 and 5):
+- If you want to apply **all migrations** (3, 4 and 5):
    ```bash
    pipenv run migrate event
    ```
--  If you want to apply **only** migrations 3 and 4, but not 5:
+- If you want to apply **only** migrations 3 and 4, but not 5:
    ```bash
    pipenv run migrate event 0004
    ```
--  If you want to **un-apply** the migration n°2,
-   and return to the state after the migration n°1:
+- If you want to **un-apply** the migration n°2,
+  and return to the state after the migration n°1:
    ```bash
    pipenv run migrate event 0001
    ```
