@@ -54,6 +54,18 @@ See [More on migrations](#more-on-migrations) for more details.
 
 Learn more on models and fields in the [official documentation](https://docs.djangoproject.com/en/5.0/topics/db/models/).
 
+### Group History
+
+We use [django-simple-history](https://django-simple-history.readthedocs.io/en/latest/) to keep a history of changes
+on our group model. A few things needs to be considered:
+
+- When adding a new field to the model, it will automatically be added to the tracked fields of the history model.
+  If you don't want to track this field, you can set `excluded_fields` in the model's `history` attribute.
+- When tracking a file field, the link with the original file is broken and only the path is stored in
+  the database in the historical record. If you want to keep the file in the storage and are using our
+  `CustomImageField`, you can set `delete_on_save` to `False` in the field parameters. This way, the image will not
+  be deleted when updating the model.
+
 ## Query objects
 
 In your view, you will often need to query objects from the database.
