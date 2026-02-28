@@ -17,23 +17,23 @@
     "format": "prettier --write \"**/*.{js,jsx,ts,tsx,md,mdx}\""
   },
   "dependencies": {
-    "@docusaurus/core": "^3.1.1",
-    "@docusaurus/preset-classic": "^3.1.1",
-    "@easyops-cn/docusaurus-search-local": "^0.44.1",
-    "@mdx-js/react": "^3.0.0",
-    "clsx": "^2.0.0",
-    "docusaurus-plugin-sass": "^0.2.3",
-    "prism-react-renderer": "^2.3.0",
-    "react": "^18.0.0",
-    "react-dom": "^18.0.0",
-    "sass": "^1.58.0"
+    "@docusaurus/core": "^3.9.2",
+    "@docusaurus/preset-classic": "^3.9.2",
+    "@easyops-cn/docusaurus-search-local": "^0.55.1",
+    "@mdx-js/react": "^3.1.1",
+    "clsx": "^2.1.1",
+    "docusaurus-plugin-sass": "^0.2.6",
+    "prism-react-renderer": "^2.4.1",
+    "react": "^19.2.4",
+    "react-dom": "^19.2.4",
+    "sass": "^1.97.3"
   },
   "devDependencies": {
-    "@docusaurus/module-type-aliases": "^3.1.1",
-    "@docusaurus/tsconfig": "^3.1.1",
-    "@docusaurus/types": "^3.1.1",
-    "prettier": "~3.3.0",
-    "typescript": "^5.2.2"
+    "@docusaurus/module-type-aliases": "^3.9.2",
+    "@docusaurus/tsconfig": "^3.9.2",
+    "@docusaurus/types": "^3.9.2",
+    "prettier": "~3.8.1",
+    "typescript": "^5.9.3"
   },
   "browserslist": {
     "production": [
@@ -48,6 +48,6 @@
     ]
   },
   "engines": {
-    "node": ">=18.0"
+    "node": ">=24.0"
   }
 }
