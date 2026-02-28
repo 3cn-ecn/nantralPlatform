@@ -47,6 +47,7 @@ function convertToForm(group: Group): CreateGroupForm {
     address: group.address,
     latitude: group.latitude,
     longitude: group.longitude,
+    saveHistoryRecord: true,
   };
 }
 

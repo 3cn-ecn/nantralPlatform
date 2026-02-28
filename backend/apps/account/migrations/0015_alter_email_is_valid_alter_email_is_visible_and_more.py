@@ -7,35 +7,57 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ("account", "0014_remove_user_email_next_remove_user_is_email_valid_and_more"),
+        (
+            "account",
+            "0014_remove_user_email_next_remove_user_is_email_valid_and_more",
+        ),
     ]
 
     operations = [
         migrations.AlterField(
             model_name="email",
             name="is_valid",
-            field=models.BooleanField(default=False, verbose_name="Verified email?"),
+            field=models.BooleanField(
+                default=False, verbose_name="Verified email?"
+            ),
         ),
         migrations.AlterField(
             model_name="email",
             name="is_visible",
-            field=models.BooleanField(default=False, help_text="Check this to make this email visible for all users", verbose_name="Visibility"),
+            field=models.BooleanField(
+                default=False,
+                help_text="Check this to make this email visible for all users",
+                verbose_name="Visibility",
+            ),
         ),
         migrations.AlterField(
             model_name="email",
             name="uuid",
-            field=models.UUIDField(default=uuid.uuid4, unique=True, verbose_name="Unique ID"),
+            field=models.UUIDField(
+                default=uuid.uuid4, unique=True, verbose_name="Unique ID"
+            ),
         ),
         migrations.AlterField(
             model_name="user",
             name="email",
-            field=models.OneToOneField(null=True, on_delete=django.db.models.deletion.RESTRICT, related_name="primary_from", to="account.email", verbose_name="Main email"),
+            field=models.OneToOneField(
+                null=True,
+                on_delete=django.db.models.deletion.RESTRICT,
+                related_name="primary_from",
+                to="account.email",
+                verbose_name="Main email",
+            ),
         ),
         migrations.AlterField(
             model_name="user",
             name="username",
-            field=models.CharField(error_messages={"unique": "This username is already taken."}, help_text="Required. 150 characters or fewer. Lower case letters, digits and ./_/-/+ only.", max_length=150, unique=True, verbose_name="Username"),
+            field=models.CharField(
+                error_messages={"unique": "This username is already taken."},
+                help_text="Required. 150 characters or fewer. Lower case letters, digits and ./_/-/+ only.",
+                max_length=150,
+                unique=True,
+                verbose_name="Username",
+            ),
         ),
     ]

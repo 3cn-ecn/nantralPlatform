@@ -15,10 +15,10 @@ Discover the architecture of the back-end!
 The back-end is the part of the application that runs on the **server**.
 Its role is to:
 
--  send data from the database to the front-end
--  receive data from the front-end and store it in the database
--  check if the user is authenticated
--  check the permissions of the user to access content
+- send data from the database to the front-end
+- receive data from the front-end and store it in the database
+- check if the user is authenticated
+- check the permissions of the user to access content
 
 In our case, the back-end is built with the [**Django**](https://docs.djangoproject.com) framework.
 
@@ -31,10 +31,10 @@ _account_, _groups_, _events_, _roommates_, _mentorship_...
 Then, each app is organized as explained in the schema above.
 We have:
 
--  the _models_ in the `models.py` files
--  the _views_ in the `views.py` or `api_views.py` files
--  the _serializers_ in the `serializers.py` files
--  the _urls_ in the `urls.py` or `api_urls.py` files
+- the _models_ in the `models.py` files
+- the _views_ in the `views.py` or `api_views.py` files
+- the _serializers_ in the `serializers.py` files
+- the _urls_ in the `urls.py` or `api_urls.py` files
 
 ## The old (legacy) back-end
 
@@ -51,7 +51,7 @@ but today, we try to _remove_ these files and only use React for the front-end.
 There are 2 other types of files that are important, which are used to help
 developers:
 
--  **admin.py**: they are used to configure the admin interface of django,
-   which you can access with an admin account
--  **tests.py**: they are used to write tests for the app, which are very
-   important to be sure we don't break anything when we modify the code
+- **admin.py**: they are used to configure the admin interface of django,
+  which you can access with an admin account
+- **tests.py**: they are used to write tests for the app, which are very
+  important to be sure we don't break anything when we modify the code

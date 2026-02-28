@@ -25,7 +25,9 @@ class CustomScopeClaims(ScopeClaims):
 
     info_groups = (
         _("Groups"),
-        _("Information about the groups you belong to, used for access control in some applications."),
+        _(
+            "Information about the groups you belong to, used for access control in some applications."
+        ),
     )
 
     def scope_groups(self):

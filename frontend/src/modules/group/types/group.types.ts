@@ -80,6 +80,7 @@ export type CreateGroupForm = Pick<
   tags: number[];
   parent?: number;
   changeReason?: string;
+  saveHistoryRecord?: boolean;
   membership?: ShortMembershipForm;
 };
 

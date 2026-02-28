@@ -8,67 +8,68 @@ line-length = 80
 
 [tool.ruff.lint]
 select = [
-  "F",     # Pyflakes
-  "E",     # pycodestyle
-  "C90",   # mccabe
-  "I",     # isort
-  "N",     # pep8-naming
-  "UP",    # pyupgrade
-  "ASYNC", # flake8-async
-  "S",     # flake8-bandit
-  "B0",    # flake8-bugbear
-  "A",     # flake8-builtins
-  "C4",    # flake8-comprehensions
-  "DTZ",   # flake8-datetimez
-  "T10",   # flake8-debugger
-  "DJ",    # flake8-django
-  "FA",    # flake8-future-annotations
-  "ISC",   # flake8-implicit-str-concat
-  "ICN",   # flake8-import-conventions
-  "LOG",   # flake8-logging
-  "G",     # flake8-logging-format
-  "INP",   # flake8-no-pep420
-  "PIE",   # flake8-pie
-  "T20",   # flake8-print
-  "PYI",   # flake8-pyi
-  "Q",     # flake8-quotes
-  "SLOT",  # flake8-slots
-  "SIM",   # flake8-simplify
-  "TCH",   # flake8-type-checking
-  "INT",   # flake8-gettext
-  "TD",    # flake8-todos
-  "ERA",   # eradicate
-  "PD",    # pandas-vet
-  "PGH",   # pygrep-hooks
-  "PL",    # Pylint
-  "FLY",   # flynt
-  "NPY",   # NumPy-specific rules
-  "AIR",   # Airflow
-  "PERF",  # Perflint
-  "RUF",   # Ruff-specific rules
+    "F", # Pyflakes
+    "E", # pycodestyle
+    "C90", # mccabe
+    "I", # isort
+    "N", # pep8-naming
+    "UP", # pyupgrade
+    "ASYNC", # flake8-async
+    "S", # flake8-bandit
+    "B0", # flake8-bugbear
+    "A", # flake8-builtins
+    "C4", # flake8-comprehensions
+    "DTZ", # flake8-datetimez
+    "T10", # flake8-debugger
+    "DJ", # flake8-django
+    "FA", # flake8-future-annotations
+    "ISC", # flake8-implicit-str-concat
+    "ICN", # flake8-import-conventions
+    "LOG", # flake8-logging
+    "G", # flake8-logging-format
+    "INP", # flake8-no-pep420
+    "PIE", # flake8-pie
+    "T20", # flake8-print
+    "PYI", # flake8-pyi
+    "Q", # flake8-quotes
+    "SLOT", # flake8-slots
+    "SIM", # flake8-simplify
+    "TCH", # flake8-type-checking
+    "INT", # flake8-gettext
+    "TD", # flake8-todos
+    "ERA", # eradicate
+    "PD", # pandas-vet
+    "PGH", # pygrep-hooks
+    "PL", # Pylint
+    "FLY", # flynt
+    "NPY", # NumPy-specific rules
+    "AIR", # Airflow
+    "PERF", # Perflint
+    "RUF", # Ruff-specific rules
 ]
 ignore = [
-  "E501",    # line too long
-  "S311",    # using random
-  "SIM105",  # using try-except-pass
-  "S110",    # using try-except-pass
-  "PERF203", # using try-except in loops
-  "RUF012",  # for typing only
-  "ISC001",  # implicit str concat (interfere with formatter),
-  "G00",     # logging format
-  "DJ008",   # force __str__ on all django models
+    "E501", # line too long
+    "S311", # using random
+    "SIM105", # using try-except-pass
+    "S110", # using try-except-pass
+    "PERF203", # using try-except in loops
+    "RUF012", # for typing only
+    "ISC001", # implicit str concat (interfere with formatter),
+    "G00", # logging format
+    "DJ008", # force __str__ on all django models
+    "PLC0415", # import outside top level
 ]
 allowed-confusables = [" "]
 
 [tool.ruff.lint.isort]
 known-first-party = ["apps", "config"]
 section-order = [
-  "future",
-  "standard-library",
-  "django",
-  "third-party",
-  "first-party",
-  "local-folder",
+    "future",
+    "standard-library",
+    "django",
+    "third-party",
+    "first-party",
+    "local-folder",
 ]
 
 [tool.ruff.lint.isort.sections]

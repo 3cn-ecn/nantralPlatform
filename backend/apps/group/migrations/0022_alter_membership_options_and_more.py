@@ -5,16 +5,21 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
-        ("group", "0021_adminrightsrequest_user_group_subscribers_users_and_more"),
+        (
+            "group",
+            "0021_adminrightsrequest_user_group_subscribers_users_and_more",
+        ),
     ]
 
     operations = [
         migrations.AlterModelOptions(
             name="membership",
-            options={"ordering": ["group", "-priority", "user"], "verbose_name": "membre"},
+            options={
+                "ordering": ["group", "-priority", "user"],
+                "verbose_name": "membre",
+            },
         ),
         migrations.AlterUniqueTogether(
             name="membership",
@@ -31,7 +36,13 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name="group",
             name="members",
-            field=models.ManyToManyField(blank=True, related_name="group_set", through="group.Membership", to=settings.AUTH_USER_MODEL, verbose_name="Members"),
+            field=models.ManyToManyField(
+                blank=True,
+                related_name="group_set",
+                through="group.Membership",
+                to=settings.AUTH_USER_MODEL,
+                verbose_name="Members",
+            ),
         ),
         migrations.RemoveField(
             model_name="membership",

@@ -4,11 +4,9 @@ from django.db import migrations
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("roommates", "0018_create_extra_setting_no_colocathlon_quota"),
         ("roommates", "0018_migrate_to_group"),
     ]
 
-    operations = [
-    ]
+    operations = []

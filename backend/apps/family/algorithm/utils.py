@@ -221,7 +221,7 @@ def get_family_list(member2A_list):
             [m["answers"] for m in member2A_list if m["family"] == fam],
         )
         answers_mean = np.nanmean(answers_list, axis=0)
-        if answers_mean is np.nan:
+        if np.isnan(answers_mean):
             raise Exception(f"Family {fam.name} has no members")
         if vectisnan(answers_mean):
             raise Exception(f"Members of {fam.name} have no answers")
@@ -230,7 +230,7 @@ def get_family_list(member2A_list):
             [m["coeff"] for m in member2A_list if m["family"] == fam],
         )
         coeff_mean = np.nanmean(coeff_list, axis=0)
-        if coeff_mean is np.nan:
+        if np.isnan(coeff_mean):
             raise Exception(f"Family {fam.name} has no members")
         if vectisnan(coeff_mean):
             raise Exception(f"Members of {fam.name} have no answers")

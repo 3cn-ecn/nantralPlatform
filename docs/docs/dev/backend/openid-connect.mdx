@@ -1,0 +1,68 @@
+---
+sidebar_position: 9
+---
+
+# OpenID Connect
+
+[OpenID Connect (OIDC)](https://openid.net/developers/how-connect-works/) is an authentication protocol that
+allows decentralized authentication using third-party identity providers (IdPs).
+
+Nantral Platform uses [Django OIDC provider](https://django-oidc-provider.readthedocs.io/en/master/), a librairy that
+implements the protocol and allow us to act as an identity provider for other applications. This was required
+in order to ensure account sharing between Nantral Platform and [Matrix Authentication Service](https://element-hq.github.io/matrix-authentication-service/).
+
+## How it works (Django side)
+
+### Claims and scopes
+
+In OIDC, a "claim" is a piece of information about a user (e.g., their email, name, or profile picture). Claims are
+grouped into "scopes", which are sets of related claims that an application can request from the identity provider
+during the authentication process.
+
+For instance, the `email` scope includes claims related to the user's email address, such as `email` and `email_verified`.
+
+With Django OIDC provider, we can define custom claims and scopes in the file [`backend/config/oidc_provider_settings.py`](https://github.com/3cn-ecn/nantralPlatform/blob/master/backend/config/oidc_provider_settings.py)
+Please refer to the [Django OIDC provider documentation](https://django-oidc-provider.readthedocs.io/en/master/sections/scopesclaims.html#how-to-add-custom-scopes-and-claims)
+for more details on how to do this.
+
+You can also override the value of the default claims by adding them in the `userinfo` function.
+
+### Flow
+
+The OIDC protocol requires the use of redirects and confirmation prompts. We can't really serve a simple API endpoint
+with the react frontend. Instead, we use the same trick that was used in legacy frontend pages to serve a single page.
+
+## How to use in a client application
+
+To use Nantral Platform as an OIDC provider in your application, you need to register your application as an OIDC client.
+This ensures that only trusted applications can request authentication from the identity provider.
+
+### Registering a new OIDC client
+
+You can create and manage OIDC clients in the Django admin interface https://nantral-platform.fr/admin/oidc_provider/.
+You need to provide the name of your application (used to display to users during authentication prompts),
+the authorization workflow to use (refer to your client implementation), the authorized redirect URIs (idem),
+and the allowed scopes. The client type refers to the confidentiality of the client application (public or confidential).
+Basically, you need to use public if the users data may be shared with a broader audience than Nantral Platform or Matrix
+itself, or if you cannot guarantee the security of the client server.
+
+There is also optional settings that provides more information about your application, such as its website, logo,
+and terms of service. We strongly recommend filling these fields to provide more transparency to users during
+the authentication process.
+
+OpenID Provider creates an Id and a secret key for each registered client application. These credentials are used
+to authenticate the client application during the OIDC flow. These are automatically generated when you create a new OIDC client
+in the Django admin interface.
+
+### Implementing OIDC in your application
+
+You should be able to use any librairy that implements the protocol. Depending on what you choose, or what application
+you try to connect, the configuration may differ. Please refer to the documentation of the librairy or application you are using
+for more details. Here are some general guidelines:
+
+- The OpenId endpoint is `https://nantral-platform.fr/openid`. See the
+  [well-known configuration](https://nantral-platform.fr/openid/.well-known/openid-configuration) for more details
+  on the available endpoints.
+- The client id and client secret can be accessed in the Django admin interface after creating your OIDC client
+- The scopes you can request are the ones you allowed when creating your OIDC client
+- The redirect URI must match one of the authorized redirect URIs you provided when creating your OIDC client

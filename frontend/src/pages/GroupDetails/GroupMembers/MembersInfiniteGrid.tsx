@@ -1,9 +1,14 @@
+import { useMemo } from 'react';
+import { useSearchParams } from 'react-router-dom';
+
 import { Divider, Typography } from '@mui/material';
-import { UseInfiniteQueryResult } from '@tanstack/react-query';
+import { UseInfiniteQueryResult, useQuery } from '@tanstack/react-query';
 import { groupBy } from 'lodash-es';
 
 import { User } from '#modules/account/user.types';
+import { getGroupHistoryApi } from '#modules/group/api/getGroupHistory.api';
 import { Group } from '#modules/group/types/group.types';
+import { GroupHistory } from '#modules/group/types/groupHistory.type';
 import { Membership } from '#modules/group/types/membership.types';
 import { InfiniteList } from '#shared/components/InfiniteList/InfiniteList';
 import { Page } from '#shared/infra/pagination';
@@ -24,12 +29,24 @@ export function MembersInfiniteGrid({
   user,
 }: InfiniteMembershipGridProps) {
   const today = new Date(new Date().toDateString());
+  const [searchParams] = useSearchParams();
+  const versionId = useMemo(() => searchParams.get('version'), [searchParams]);
+  const versionQuery = useQuery<GroupHistory | undefined>({
+    queryKey: ['version', versionId, group?.slug],
+    queryFn: () => {
+      if (!group || versionId === null) {
+        return new Promise(() => undefined);
+      }
+      return getGroupHistoryApi(group?.slug, Number(versionId));
+    },
+  });
 
   const membershipsQuery = useInfiniteMembership({
     options: {
       group: group && group.slug,
       user: user && user.id,
-      from: today,
+      from: versionQuery.data?.historyDate || today,
+      to: versionQuery.data?.nextHistoryDate,
       pageSize: 6 * 5,
       groupType: filters.groupType,
     },
@@ -39,7 +56,7 @@ export function MembersInfiniteGrid({
     options: {
       group: group && group.slug,
       user: user && user.id,
-      to: today,
+      before: versionQuery.data ? undefined : today,
       orderBy: '-begin_date',
       pageSize: 6 * 5,
       groupType: filters.groupType,
@@ -55,13 +72,15 @@ export function MembersInfiniteGrid({
 
   return (
     <>
-      <InfiniteList query={membershipsQuery}>
-        <MembersGrid
-          memberships={getDataList(membershipsQuery)}
-          showSkeletonsAtEnd={getShowSkeleton(membershipsQuery)}
-          group={group}
-        />
-      </InfiniteList>
+      {(!filters.previous || !versionQuery.data) && (
+        <InfiniteList query={membershipsQuery}>
+          <MembersGrid
+            memberships={getDataList(membershipsQuery)}
+            showSkeletonsAtEnd={getShowSkeleton(membershipsQuery)}
+            group={group}
+          />
+        </InfiniteList>
+      )}
       {filters.previous && (
         <InfiniteList query={oldMembershipsQuery}>
           {oldMembershipsGroupedByYear.map(

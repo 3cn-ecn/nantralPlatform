@@ -13,6 +13,7 @@ from rest_framework import (
     decorators,
     exceptions,
     filters,
+    mixins,
     permissions,
     renderers,
     response,
@@ -29,6 +30,7 @@ from .models import Group, GroupType, Label, Membership
 from .permissions import (
     AdminRequestListPermission,
     AdminRequestPermission,
+    GroupHistoryPermission,
     GroupPermission,
     MembershipPermission,
 )
@@ -53,6 +55,12 @@ from .serializers import (
 class GeoJsonRender(renderers.JSONRenderer):
     media_type = "application/json"
     format = "points"
+
+
+class BadRequestException(exceptions.APIException):
+    status_code = status.HTTP_400_BAD_REQUEST
+    default_detail = _("Bad request.")
+    default_code = "bad_request"
 
 
 class GroupTypeViewSet(viewsets.ReadOnlyModelViewSet):
@@ -95,16 +103,18 @@ class GroupViewSet(viewsets.ModelViewSet):
         Search by group name, shortName, members__first_name, or members_last_name
     - archived: bool
         Filter by archived groups
+    - version: int
+        Get a specific version of a group, available for GET .../group/<slug>/ endpoint
 
     Actions
     -------
     GET .../group/ : get the list of groups
     POST .../group/ : create a new group (group_type required)
-    GET .../group/search/ : search a group by name or short_name
-    GET .../group/<id>/ : get a group
-    PUT .../group/<id>/ : update a group
-    DELETE .../group/<id>/ : delete a group
-    POST .../group/<id>/update_subscription/ : change user subscription
+    GET .../group/<slug>/ : get a group
+    PUT .../group/<slug>/ : update a group
+    DELETE .../group/<slug>/ : delete a group
+    POST .../group/<slug>/update_subscription/ : change user subscription
+    .../group/<slug>/history/... : see HistoryGroupViewSet for history endpoints
     """
 
     permission_classes = [GroupPermission]
@@ -268,16 +278,67 @@ class GroupViewSet(viewsets.ModelViewSet):
 
         return response.Response(status=status.HTTP_200_OK)
 
-    @decorators.action(
-        detail=True,
-        methods=["GET"],
-    )
-    def history(self, request: Request, *args, **kwargs):
-        group: Group = self.get_object()
-        serialized_data = GroupHistorySerializer(
-            group.history.all(), many=True
-        ).data
-        return response.Response(serialized_data)
+
+class HistoryGroupViewSet(
+    mixins.RetrieveModelMixin,
+    mixins.ListModelMixin,
+    mixins.UpdateModelMixin,
+    mixins.DestroyModelMixin,
+    viewsets.GenericViewSet,
+):
+    """An API endpoint for groups history. It allows to retrieve, list, update and delete a specific version of a group.
+
+    Query Parameters
+    ----------------
+    page: int
+        The page to get
+    pageSize: int
+        The max number of items to return per page
+
+    Actions
+    -------
+    GET .../group/<slug>/history/ : get the list of all versions of a group
+    GET .../group/<slug>/history/<id>/ : get a specific version of a group
+    PUT .../group/<slug>/history/<id>/ : update a specific version of a group
+    DELETE .../group/<slug>/history/<id>/ : delete a specific version of a group
+    POST .../group/<slug>/history/<id>/restore/ : restore a specific version of a group
+    """
+
+    permission_classes = [GroupHistoryPermission]
+    serializer_class = GroupHistorySerializer
+
+    def get_queryset(self):
+        slug = self.kwargs.get("slug", None)
+        group = get_object_or_404(Group, slug=slug)
+        return group.history.all()
+
+    def destroy(self, request: Request, *args, **kwargs):
+        history = self.get_object()
+        group = history.instance
+
+        if history.history_type == "+":
+            raise BadRequestException(
+                _("You cannot delete the creation version of a group."),
+                code="invalid",
+            )
+        if group and group.history.count() == 1:
+            raise BadRequestException(
+                _("You cannot delete the only version of a group."),
+                code="invalid",
+            )
+
+        history.delete()
+        return response.Response(status=status.HTTP_204_NO_CONTENT)
+
+    @decorators.action(detail=True, methods=["POST"])
+    def restore(self, request: Request, *args, **kwargs):
+        history = self.get_object()
+        group = history.instance
+        group._change_reason = _("Restored to version from %(date)s") % {
+            "date": history.history_date
+        }
+        group.save()
+        return response.Response(status=status.HTTP_204_NO_CONTENT)
 
 
 class MembershipViewSet(viewsets.ModelViewSet):
@@ -292,6 +353,8 @@ class MembershipViewSet(viewsets.ModelViewSet):
         The group slug
     from: Date
         The date from which we want to filter the member list
+    before: Date
+        All members that were not filtered by `from`
     to: Date
         The date to which we want to filter the member list
     page: int
@@ -357,6 +420,7 @@ class MembershipViewSet(viewsets.ModelViewSet):
         # parse params
         from_date = parse_datetime(self.query_params.get("from", ""))
         to_date = parse_datetime(self.query_params.get("to", ""))
+        before_date = parse_datetime(self.query_params.get("before", ""))
         group_slug = self.query_params.get("group")
         user_id = self.query_params.get("user")
         group_type = self.query_params.get("group_type")
@@ -376,10 +440,14 @@ class MembershipViewSet(viewsets.ModelViewSet):
             qs = qs.filter(
                 Q(end_date__gte=from_date) | Q(end_date__isnull=True),
             )
+        if before_date:
+            qs = qs.exclude(
+                Q(end_date__gte=before_date) | Q(end_date__isnull=True)
+            )
         if to_date:
             qs = qs.filter(
-                Q(end_date__lt=to_date) | Q(begin_date__isnull=True)
-            ).filter(group__group_type__no_membership_dates=False)
+                Q(begin_date__lt=to_date) | Q(begin_date__isnull=True)
+            )
         if group_type:
             qs = qs.filter(group__group_type__slug=group_type)
 

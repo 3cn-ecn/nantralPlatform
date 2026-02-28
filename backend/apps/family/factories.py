@@ -36,7 +36,7 @@ class FamilyFactory(DjangoModelFactory):
     class Meta:
         model = Family
 
-    name = factory.LazyFunction(lambda: fake.unique.last_name())
+    name = factory.LazyFunction(fake.unique.last_name)
     description = factory.Faker("sentence", nb_words=10)
     year = factory.LazyFunction(get_current_academic_year)
     non_subscribed_members = factory.Faker("name")

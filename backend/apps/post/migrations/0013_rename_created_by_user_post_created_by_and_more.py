@@ -4,7 +4,6 @@ from django.db import migrations
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("post", "0012_remove_post_created_by_remove_post_updated_by"),
     ]

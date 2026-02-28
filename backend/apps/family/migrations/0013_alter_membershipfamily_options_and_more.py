@@ -5,7 +5,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
         ("family", "0012_membershipfamily_user"),
@@ -23,7 +22,9 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name="family",
             name="members",
-            field=models.ManyToManyField(through="family.MembershipFamily", to=settings.AUTH_USER_MODEL),
+            field=models.ManyToManyField(
+                through="family.MembershipFamily", to=settings.AUTH_USER_MODEL
+            ),
         ),
         migrations.RemoveField(
             model_name="membershipfamily",
