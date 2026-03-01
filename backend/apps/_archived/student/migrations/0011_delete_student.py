@@ -4,12 +4,17 @@ from django.db import migrations
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ("event", "0019_remove_event_bookmarks_remove_event_created_by_and_more"),
+        (
+            "event",
+            "0019_remove_event_bookmarks_remove_event_created_by_and_more",
+        ),
         ("group", "0022_alter_membership_options_and_more"),
         ("post", "0012_remove_post_created_by_remove_post_updated_by"),
-        ("notification", "0007_alter_sentnotification_unique_together_and_more"),
+        (
+            "notification",
+            "0007_alter_sentnotification_unique_together_and_more",
+        ),
         ("family", "0013_alter_membershipfamily_options_and_more"),
         ("student", "0010_alter_student_social_links"),
     ]

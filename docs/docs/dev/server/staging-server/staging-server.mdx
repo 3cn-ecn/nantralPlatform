@@ -13,25 +13,25 @@ deploying them on the production server.
 
 ### 🤔 When should I use the staging server?
 
--  When you update the database (for example creating new migrations or updating
-   the `models.py` files)
--  When you add new dependencies to the project (`Pipfile` or `package.json`)
--  More generally, when you are not sure about your code and want to test it!
+- When you update the database (for example creating new migrations or updating
+  the `models.py` files)
+- When you add new dependencies to the project (`Pipfile` or `package.json`)
+- More generally, when you are not sure about your code and want to test it!
 
 ### 🤔 What can I test on the staging server?
 
 You can test:
 
--  all modifications of the backend (Python code)
--  all modifications of the frontend (Javascript code)
+- all modifications of the backend (Python code)
+- all modifications of the frontend (Javascript code)
 
 You **_cannot_** test:
 
--  the documentation website
--  the periodic celery tasks (scheduled tasks)
--  the docker configuration (`docker-compose.yml` and `Dockerfile`)
--  the deployment scripts (database backup, deployment, etc.)
--  the github actions
+- the documentation website
+- the periodic celery tasks (scheduled tasks)
+- the docker configuration (`docker-compose.yml` and `Dockerfile`)
+- the deployment scripts (database backup, deployment, etc.)
+- the github actions
 
 ## 2. How to test my code on the staging server
 

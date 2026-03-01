@@ -4,7 +4,6 @@ from django.db import migrations
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("event", "0018_event_bookmarks_users_event_created_by_user_and_more"),
     ]

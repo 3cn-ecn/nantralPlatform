@@ -4,9 +4,11 @@ from django.db import migrations
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ("event", "0019_remove_event_bookmarks_remove_event_created_by_and_more"),
+        (
+            "event",
+            "0019_remove_event_bookmarks_remove_event_created_by_and_more",
+        ),
     ]
 
     operations = [

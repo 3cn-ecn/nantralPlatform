@@ -11,6 +11,7 @@ export interface GetMembershipListApiParams {
   group?: string;
   from?: Date;
   to?: Date;
+  before?: Date;
   page?: number;
   pageSize?: number;
   orderBy?: string;
@@ -26,6 +27,7 @@ export async function getMembershipListApi(
         user: options.user,
         from: options.from?.toISOString(),
         to: options.to?.toISOString(),
+        before: options.before?.toISOString(),
         group: options.group,
         page: options.page,
         page_size: options.pageSize,

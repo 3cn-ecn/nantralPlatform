@@ -85,5 +85,6 @@ export type CreateGroupFormDTO = Pick<
   tags: number[];
   parent?: number;
   _change_reason?: string;
+  _save_history_record?: boolean;
   membership?: ShortMembershipFormDTO;
 };

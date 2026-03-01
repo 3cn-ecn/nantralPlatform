@@ -12,7 +12,9 @@ def forwards(apps, schema_editor):
     Email = apps.get_model("account", "Email")
 
     for user in User.objects.all():
-        Email.objects.create(email=user.email, is_valid=user.is_email_valid, user=user)
+        Email.objects.create(
+            email=user.email, is_valid=user.is_email_valid, user=user
+        )
 
 
 def backwards(apps, schema_editor):
@@ -29,8 +31,8 @@ def set_main_email(apps, schema_editor):
     for user in User.objects.all():
         user.email = user.emails.first()
 
-class Migration(migrations.Migration):
 
+class Migration(migrations.Migration):
     dependencies = [
         ("account", "0013_alter_user_username"),
     ]
@@ -43,16 +45,53 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name="user",
             name="username",
-            field=models.CharField(error_messages={"unique": "Ce nom d'utilisateur est déjà pris"}, help_text="Requis. 150 caractères ou moins. Lettres minuscules, chiffres et . _ - + seulement.", max_length=150, unique=True, verbose_name="Nom d'utilisateur"),
+            field=models.CharField(
+                error_messages={"unique": "Ce nom d'utilisateur est déjà pris"},
+                help_text="Requis. 150 caractères ou moins. Lettres minuscules, chiffres et . _ - + seulement.",
+                max_length=150,
+                unique=True,
+                verbose_name="Nom d'utilisateur",
+            ),
         ),
         migrations.CreateModel(
             name="Email",
             fields=[
-                ("email", models.EmailField(max_length=254, primary_key=True, serialize=False)),
-                ("is_valid", models.BooleanField(default=False, verbose_name="Email vérifié\xa0?")),
-                ("is_visible", models.BooleanField(default=False, help_text="Cochez cette case pour rendre l'email visible à tous les utilisateurs", verbose_name="Visibilité")),
-                ("uuid", models.UUIDField(default=uuid.uuid4, unique=True, verbose_name="Identifiant unique")),
-                ("user", models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name="emails", to=settings.AUTH_USER_MODEL)),
+                (
+                    "email",
+                    models.EmailField(
+                        max_length=254, primary_key=True, serialize=False
+                    ),
+                ),
+                (
+                    "is_valid",
+                    models.BooleanField(
+                        default=False, verbose_name="Email vérifié\xa0?"
+                    ),
+                ),
+                (
+                    "is_visible",
+                    models.BooleanField(
+                        default=False,
+                        help_text="Cochez cette case pour rendre l'email visible à tous les utilisateurs",
+                        verbose_name="Visibilité",
+                    ),
+                ),
+                (
+                    "uuid",
+                    models.UUIDField(
+                        default=uuid.uuid4,
+                        unique=True,
+                        verbose_name="Identifiant unique",
+                    ),
+                ),
+                (
+                    "user",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="emails",
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
             ],
         ),
         migrations.RunPython(forwards, backwards),
@@ -63,7 +102,13 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name="user",
             name="email",
-            field=models.OneToOneField(null=True, on_delete=django.db.models.deletion.RESTRICT, related_name="primary_from", to="account.email", verbose_name="Email principal"),
+            field=models.OneToOneField(
+                null=True,
+                on_delete=django.db.models.deletion.RESTRICT,
+                related_name="primary_from",
+                to="account.email",
+                verbose_name="Email principal",
+            ),
         ),
         migrations.RunPython(set_main_email, lambda apps, schema_editor: None),
     ]

@@ -59,10 +59,9 @@ to install everything.
    ```
 
    When asked, complete as follow:
-
-   -  username: `admin`
-   -  email: `admin@ec-nantes.fr`
-   -  password: `admin`
+   - username: `admin`
+   - email: `admin@ec-nantes.fr`
+   - password: `admin`
 
    _Note: if `admin` already exists, run `pipenv run django changepassword admin`
    to change the password of the admin account to `admin`._
@@ -133,9 +132,8 @@ Now it's time to launch the website! To do this:
    8000 is automatically opened in **a new tab**.
 4. Go back into the vscode tab of your browser. You need to change
    the **visibility** of the ports to **public**:
-
-   -  open the **_Ports_** tab on the bottom bar of VS code
-   -  right click on each port, and select _Port visibility_ > _Public_
+   - open the **_Ports_** tab on the bottom bar of VS code
+   - right click on each port, and select _Port visibility_ > _Public_
 
    You can also run this command to change the visibility of both ports:
 
@@ -161,23 +159,21 @@ on this particular database. So let's create one!
    info to create your personal account.
 
    :::tip Note
-
-   -  Your password will be only stored on your computer: this is not really secure,
-      so do not use a password similar to your real online accounts!
-      You can instead use a dummy password like `password` for example.
-   -  The email will not really be checked, so you can use a dummy one too
-      (it must only finish with `ec-nantes.fr`). This allows you to create
-      multiple accounts, to test your code later 😉
-   -  At the end of the process, the website will ask you to validate your account:
-      just ignore it for the moment.
+   - Your password will be only stored on your computer: this is not really secure,
+     so do not use a password similar to your real online accounts!
+     You can instead use a dummy password like `password` for example.
+   - The email will not really be checked, so you can use a dummy one too
+     (it must only finish with `ec-nantes.fr`). This allows you to create
+     multiple accounts, to test your code later 😉
+   - At the end of the process, the website will ask you to validate your account:
+     just ignore it for the moment.
 
    :::
 
 1. Now, open the admin panel ([http://localhost:8000/admin](http://localhost:8000/admin)),
    and **log in** with the fake **admin account** created by default
    (_username: `admin@ec-nantes.fr`, password: `admin`_)
-
-   -  Note: if the password does not work, you can reset the password:
+   - Note: if the password does not work, you can reset the password:
       ```bash
       cd backend
       pipenv run django changepassword admin
@@ -190,12 +186,11 @@ on this particular database. So let's create one!
    and **open** it.
 
 1. Scroll down to the **_Permissions_** section, and check the 3 checkboxes:
-
-   -  `Active` (_Actif_): this will validate your account
-   -  `Staff status` (_Statut équipe_): this allows you to connect to the admin panel
-      with your personal account
-   -  `Superuser status` (_Statut super-utilisateur_): this transforms your personal
-      account into an admin account!
+   - `Active` (_Actif_): this will validate your account
+   - `Staff status` (_Statut équipe_): this allows you to connect to the admin panel
+     with your personal account
+   - `Superuser status` (_Statut super-utilisateur_): this transforms your personal
+     account into an admin account!
 
 1. **Save** your modifications with the button at the bottom.
 

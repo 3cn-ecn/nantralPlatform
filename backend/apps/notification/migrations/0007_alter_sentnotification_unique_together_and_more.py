@@ -5,7 +5,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
         ("notification", "0006_sentnotification_user"),
@@ -19,7 +18,11 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name="notification",
             name="receivers",
-            field=models.ManyToManyField(related_name="notification_set", through="notification.SentNotification", to=settings.AUTH_USER_MODEL),
+            field=models.ManyToManyField(
+                related_name="notification_set",
+                through="notification.SentNotification",
+                to=settings.AUTH_USER_MODEL,
+            ),
         ),
         migrations.RemoveField(
             model_name="sentnotification",

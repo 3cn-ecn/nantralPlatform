@@ -6,17 +6,19 @@ import {
   Edit,
   GridView,
   Groups,
+  ManageHistory,
   Save,
   Settings,
   Share,
 } from '@mui/icons-material';
-import { Avatar, Tab, Tabs, useTheme } from '@mui/material';
+import { Alert, Avatar, Button, Tab, Tabs, useTheme } from '@mui/material';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import { updateGroupApi } from '#modules/group/api/updateGroup.api';
 import { useGroupFormValues } from '#modules/group/hooks/useGroupFormValues';
 import { CreateGroupFormDTO } from '#modules/group/infra/group.dto';
 import { CreateGroupForm, Group } from '#modules/group/types/group.types';
+import { EditHistoryView } from '#modules/group/view/EditHistoryView/EditHistoryView';
 import { GroupFormFields } from '#modules/group/view/shared/GroupFormFields';
 import { EditSocialLinkForm } from '#modules/social_link/view/shared/EditSocialLinkForm';
 import { FlexRow } from '#shared/components/FlexBox/FlexBox';
@@ -32,6 +34,8 @@ import { ApiFormError } from '#shared/infra/errors';
 import { EditChildrenView } from '../EditChildrenView/EditChildrenView';
 import { EditMembersView } from '../EditMembersView/EditMembersView';
 
+type TabValue = 'general' | 'members' | 'links' | 'history' | 'subgroups';
+
 export function ModalEditGroup({
   onClose,
   group,
@@ -40,11 +44,12 @@ export function ModalEditGroup({
   group: Group;
 }) {
   const { t } = useTranslation();
+  const [searchParams, setSearchParams] = useSearchParams();
   const groupValues = useGroupFormValues({ group: group });
 
   const [formValues, setFormValues] = useState<CreateGroupForm>(groupValues);
 
-  const [tab, setTab] = useState(0);
+  const [tab, setTab] = useState<TabValue>('general');
   const [hasModifications, setHasModifications] = useState(false);
   const queryClient = useQueryClient();
   const { palette } = useTheme();
@@ -98,29 +103,61 @@ export function ModalEditGroup({
             label={t('group.details.modal.editGroup.tabs.general')}
             iconPosition="start"
             icon={<Settings />}
+            value={'general'}
           />
           <Tab
             label={t('group.details.modal.editGroup.tabs.members')}
             iconPosition="start"
             icon={<Groups />}
+            value={'members'}
           />
           <Tab
             label={t('group.details.modal.editGroup.tabs.links')}
             iconPosition="start"
             icon={<Share />}
+            value={'links'}
+          />
+          <Tab
+            label={t('group.details.modal.editGroup.tabs.history')}
+            iconPosition="start"
+            icon={<ManageHistory />}
+            value={'history'}
           />
           {!group.parent && group.groupType.canHaveParent && (
             <Tab
               label={t('group.details.modal.editGroup.tabs.subgroups')}
               iconPosition="start"
               icon={<GridView />}
+              value={'subgroups'}
             />
           )}
         </Tabs>
       </div>
       <ResponsiveDialogContent sx={{ height: 800 }}>
-        {tab == 0 && (
+        {tab == 'general' && (
           <>
+            {searchParams.has('version') && (
+              <Alert
+                severity={'warning'}
+                action={
+                  <Button
+                    onClick={() => {
+                      searchParams.delete('version');
+                      setSearchParams(searchParams);
+                      onClose();
+                    }}
+                    color="inherit"
+                    variant={'outlined'}
+                    size={'small'}
+                  >
+                    {t('group.form.title.versionWarningAction')}
+                  </Button>
+                }
+                sx={{ mb: 1 }}
+              >
+                {t('group.form.title.versionWarning')}
+              </Alert>
+            )}
             <form id="edit-group-form" onSubmit={(e) => onSubmit(e)}>
               <GroupFormFields
                 isError={isError}
@@ -147,8 +184,8 @@ export function ModalEditGroup({
             </FlexRow>
           </>
         )}
-        {tab == 1 && <EditMembersView group={group} />}
-        {tab == 2 && (
+        {tab == 'members' && <EditMembersView group={group} />}
+        {tab == 'links' && (
           <EditSocialLinkForm
             socialLinks={group.socialLinks}
             groupSlug={group.slug}
@@ -159,7 +196,10 @@ export function ModalEditGroup({
             }
           />
         )}
-        {tab == 3 && <EditChildrenView group={group} />}
+        {tab == 'history' && (
+          <EditHistoryView group={group} onClose={onClose} />
+        )}
+        {tab == 'subgroups' && <EditChildrenView group={group} />}
       </ResponsiveDialogContent>
     </ResponsiveDialog>
   );

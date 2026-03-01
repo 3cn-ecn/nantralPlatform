@@ -12,15 +12,15 @@ deployment one, and so it will be easier to track issues before they appear.
 
 In practice, using Docker on your local machine will allow you to:
 
--  **Use the cache system**: Django comes with a cachin system, that you can
-   only use with Docker
--  **Use the Postgres database**: by default the database uses SQLite, but
-   the deployment database uses postgresql, and so Docker does
--  **Use the celery service**: the celery service allow you to run asynchronous
-   tasks on the server from the backend
--  **Uses more debug tools**: with Docker, you can for instance access directly
-   your database using PgAdmin for example, or use the Workers Dashboard for
-   celery tasks
+- **Use the cache system**: Django comes with a cachin system, that you can
+  only use with Docker
+- **Use the Postgres database**: by default the database uses SQLite, but
+  the deployment database uses postgresql, and so Docker does
+- **Use the celery service**: the celery service allow you to run asynchronous
+  tasks on the server from the backend
+- **Uses more debug tools**: with Docker, you can for instance access directly
+  your database using PgAdmin for example, or use the Workers Dashboard for
+  celery tasks
 
 ## How to run docker for local dev
 
@@ -48,13 +48,13 @@ You can run this command in another terminal (but always in the `deployment` dir
 
 :::success Useful tips
 
--  You can stop docker by pressing <kbd>CTRL</kbd>+<kbd>C</kbd> in the console if docker
-   is running, or by running the command `docker-compose down`.
--  You can also launch docker services in background by adding the
-   `-d` argument on the up command.
--  If you want to be faster, you can run both command at once by
-   using `docker-compose up --build`
-   :::
+- You can stop docker by pressing <kbd>CTRL</kbd>+<kbd>C</kbd> in the console if docker
+  is running, or by running the command `docker-compose down`.
+- You can also launch docker services in background by adding the
+  `-d` argument on the up command.
+- If you want to be faster, you can run both command at once by
+  using `docker-compose up --build`
+  :::
 
 :::note **What does it do?**
 When you run `docker-compose` without specifying the files to run, it
@@ -89,9 +89,9 @@ These services are launch when you run Docker on your local machine:
 
 1. Go to the `deployment` directory.
 2. Create the environment files at the root of this directory:
-   -  `backend.env` for all environment variables related to django
-   -  `mailu.env` for those related to the mail server
-   -  `frontend.env` for those related to the react frontend
+   - `backend.env` for all environment variables related to django
+   - `mailu.env` for those related to the mail server
+   - `frontend.env` for those related to the react frontend
 3. Build and run the docker-compose files:
    ```bash
    docker-compose -f docker-compose.yml -f docker-compose.prod.yml up --build -d

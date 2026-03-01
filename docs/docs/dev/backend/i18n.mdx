@@ -15,7 +15,7 @@ but also the format of dates and hours for example.
 
 ## Translating texts
 
--  [Django Documentation on Text Translation](https://docs.djangoproject.com/en/4.1/topics/i18n/translation/)
+- [Django Documentation on Text Translation](https://docs.djangoproject.com/en/4.1/topics/i18n/translation/)
 
 ### 1. Use the `gettext` method for all texts
 
@@ -48,9 +48,9 @@ class Group(models.Model):
 
 :::info Conventions
 
--  In your code, write texts in **English**
--  For other languages, like **French**, write the translations in the `.po` files
-   (see the following section)
+- In your code, write texts in **English**
+- For other languages, like **French**, write the translations in the `.po` files
+  (see the following section)
 
 :::
 
@@ -95,17 +95,17 @@ sudo apt-get install gettext
 
 First, create or update the `.po` file:
 
--  Go into the app where you want to add translations:
+- Go into the app where you want to add translations:
    ```bash
    cd apps/<app_name>
    ```
--  Create or update the `.po` files for the French translations:
+- Create or update the `.po` files for the French translations:
    ```bash
    pipenv run django-admin makemessages -l fr
    ```
--  Open the `.po` file created in `locale/fr/LC_MESSAGES`,
-   and fill in all the translations. You can also use a graphical editor,
-   like [Poedit](https://poedit.net/).
+- Open the `.po` file created in `locale/fr/LC_MESSAGES`,
+  and fill in all the translations. You can also use a graphical editor,
+  like [Poedit](https://poedit.net/).
 
 ### 3. Compile the translations
 
@@ -136,11 +136,11 @@ formats.date_format(date, format='SHORT_DATE_FORMAT')
 
 The available formats are:
 
--  `SHORT_DATE_FORMAT` -> 01/01/2022
--  `SHORT_DATETIME_FORMAT` -> 01/01/2022 12:00
--  `DATE_FORMAT` -> January 1, 2022
--  `DATETIME_FORMAT` -> January 1, 2022, 12:00
--  `TIME_FORMAT` -> 12:00
+- `SHORT_DATE_FORMAT` -> 01/01/2022
+- `SHORT_DATETIME_FORMAT` -> 01/01/2022 12:00
+- `DATE_FORMAT` -> January 1, 2022
+- `DATETIME_FORMAT` -> January 1, 2022, 12:00
+- `TIME_FORMAT` -> 12:00
 
 ## Adding a new language
 

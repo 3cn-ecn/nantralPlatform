@@ -23,13 +23,13 @@ _Ask an admin for the `<username>` of the server's user session._
 
 ## 🔄 Automatic Backups
 
--  Backups are run:
-   -  each time you push an update to the server (via the deploy_server workflow)
-   -  every week on Monday at 05:00 AM
-   -  every day at 05:00 AM during September
-   -  once a month, a notification is sent to discord to show backups still work
--  Backups are stored on our S3 bucket on OVH.
--  When a new backup is created, a cleanup is run to keep only the last 20 backups.
+- Backups are run:
+   - each time you push an update to the server (via the deploy_server workflow)
+   - every week on Monday at 05:00 AM
+   - every day at 05:00 AM during September
+   - once a month, a notification is sent to discord to show backups still work
+- Backups are stored on our S3 bucket on OVH.
+- When a new backup is created, a cleanup is run to keep only the last 20 backups.
 
 You can find and download the backups on the OVH platform, in
 _Public Cloud > Object Storage > Backups_.

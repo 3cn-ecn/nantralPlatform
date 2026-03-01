@@ -98,7 +98,7 @@ def get_full_slug_from_slug(app: str, slug: str) -> str:
 
 def get_app_from_full_slug(full_slug: str) -> str:
     """Get the model object app name from a full slug."""
-    return full_slug.split("--")[0]
+    return full_slug.split("--", maxsplit=1)[0]
 
 
 def get_slug_from_full_slug(full_slug: str) -> str:

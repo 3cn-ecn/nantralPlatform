@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-02-10 19:47+0100\n"
+"POT-Creation-Date: 2026-03-01 15:26+0100\n"
 "PO-Revision-Date: 2023-04-10 15:17+0200\n"
 "Last-Translator: Alexis Delage <alexidelage@gmail.com>\n"
 "Language-Team: \n"
@@ -18,37 +18,54 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Poedit 3.1.1\n"
 
-#: api_views.py:420
+#: api_views.py:318
+msgid "You cannot delete the creation version of a group."
+msgstr "Vous ne pouvez pas supprimer la version de création d'un groupe."
+
+#: api_views.py:323
+msgid "You cannot delete the only version of a group."
+msgstr "Vous ne pouvez pas supprimer la seule version d'un groupe."
+
+#: api_views.py:329
+msgid "You cannot delete the most recent version of a group."
+msgstr "Vous ne pouvez pas supprimer la dernière version d'un groupe."
+
+#: api_views.py:340
+#, python-format
+msgid "Restored to version from %(date)s"
+msgstr "Restauré à la version du %(date)s"
+
+#: api_views.py:491
 msgid "All memberships objects must be from the same group."
 msgstr "Tous les objets membres doivent être du même groupe."
 
-#: api_views.py:506
+#: api_views.py:577
 msgid ""
 "Your admin request has been sent! You will receive the answer soon by email."
 msgstr ""
 "Votre demande a bien été envoyée ! Vous recevrez une réponse rapidement par "
 "mail."
 
-#: api_views.py:525 api_views.py:577
+#: api_views.py:596 api_views.py:648
 msgid "Request already answered!"
 msgstr "Cette demande d'admin a déjà été traitée!"
 
-#: api_views.py:542
+#: api_views.py:613
 #, python-format
 msgid "Your admin request for %(group)s has been accepted."
 msgstr "Votre demande d'admin pour %(group)s a été acceptée."
 
-#: api_views.py:562
+#: api_views.py:633
 #, python-format
 msgid "The user %(user)s is now admin!"
 msgstr "L'utilisateur %(user)s est maintenant admin !"
 
-#: api_views.py:593
+#: api_views.py:664
 #, python-format
 msgid "Your admin request for %(group)s has been denied."
 msgstr "Votre demande d'admin pour %(group)s a été refusée."
 
-#: api_views.py:613
+#: api_views.py:684
 #, python-format
 msgid "The admin request from %(user)s has been denied."
 msgstr "La demande d'admin de %(user)s a été refusée."
@@ -81,7 +98,7 @@ msgstr "Privé par défaut"
 msgid "New groups are private by default."
 msgstr "Les nouveaux groupes sont privés par défaut."
 
-#: models.py:48 models.py:114 models.py:194 models.py:525
+#: models.py:48 models.py:114 models.py:194 models.py:527
 msgid "Priority"
 msgstr "Priorité"
 
@@ -251,11 +268,11 @@ msgid "Admin members of this group can pin their posts"
 msgstr ""
 "Les admins du groupe peuvent épingler leurs posts sur la page d'accueil"
 
-#: models.py:234 models.py:518
+#: models.py:234 models.py:520
 msgid "Summary"
 msgstr "Résumé"
 
-#: models.py:238 models.py:522
+#: models.py:238 models.py:524
 msgid "Description"
 msgstr "Description"
 
@@ -307,53 +324,53 @@ msgstr "Latitude"
 msgid "Longitude"
 msgstr "Longitude"
 
-#: models.py:363
+#: models.py:365
 msgid "You cannot set both 'public' and 'private' properties to True."
 msgstr "Les champs 'public' et 'privé' sont incompatibles entre eux."
 
-#: models.py:523
+#: models.py:525
 msgid "Begin date"
 msgstr "Date de début"
 
-#: models.py:524
+#: models.py:526
 msgid "End date"
 msgstr "Date de fin"
 
-#: models.py:526
+#: models.py:528
 msgid "Admin"
 msgstr "Admin"
 
-#: models.py:528
+#: models.py:530
 msgid "Asked to become admin"
 msgstr "A demandé à devenir admin"
 
-#: models.py:531
+#: models.py:533
 msgid "Request message"
 msgstr "Raison de la demande à devenir admin"
 
-#: permissions.py:20
+#: permissions.py:21
 msgid "You must specify a valid group type in query parameters."
 msgstr "Spécifiez un type de groupe valide dans les paramètres de requête."
 
-#: serializers.py:41
+#: serializers.py:39
 msgid "Some fields cannot be updated by non-admins."
 msgstr ""
 "Certains champs ne peuvent pas être modifiés par des utilisateurs qui ne "
 "sont pas admins."
 
-#: serializers.py:154 serializers.py:160 serializers.py:310 serializers.py:316
+#: serializers.py:152 serializers.py:158 serializers.py:334 serializers.py:340
 msgid "This field is required."
 msgstr "Ce champ est obligatoire."
 
-#: serializers.py:170 serializers.py:326 serializers.py:370
+#: serializers.py:168 serializers.py:350 serializers.py:394
 msgid "The end date must be after the begin date."
 msgstr "La date de fin doit être située après la date de début."
 
-#: serializers.py:219 serializers.py:226 serializers.py:233
+#: serializers.py:243 serializers.py:250 serializers.py:257
 msgid "This field is required for map groups."
 msgstr "Ce champ est obligatoire pour les groupes de type carte."
 
-#: serializers.py:354
+#: serializers.py:378
 msgid ""
 "You can only create new membership for yourself or for someone else inside a "
 "group where you are admin."
@@ -361,7 +378,7 @@ msgstr ""
 "Vous pouvez uniquement créer de nouveaux objets membres pour vous-même ou "
 "pour un groupe dont vous êtes admin."
 
-#: serializers.py:363
+#: serializers.py:387
 msgid ""
 "You cannot create create a new membership inside a private group if you are "
 "not admin of this group."
@@ -369,6 +386,6 @@ msgstr ""
 "Vous ne pouvez pas créer d'objets membres dans un groupe privé si vous "
 "n'êtes pas déjà admin du groupe."
 
-#: serializers.py:374
+#: serializers.py:398
 msgid "You must provides 'begin_date' and 'end_date'."
 msgstr "Vous devez indiquer une date de début et une date de fin."

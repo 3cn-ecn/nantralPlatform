@@ -11,9 +11,9 @@ class Command(createsuperuser.Command):
 
         if self.username_is_unique:
             try:
-                self.UserModel._default_manager.db_manager(database).get_by_natural_key(
-                    username
-                )
+                self.UserModel._default_manager.db_manager(
+                    database
+                ).get_by_natural_key(username)
             except self.UserModel.DoesNotExist:
                 pass
             else:

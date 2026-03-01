@@ -6,9 +6,11 @@ import apps.account.validators
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ("account", "0015_alter_email_is_valid_alter_email_is_visible_and_more"),
+        (
+            "account",
+            "0015_alter_email_is_valid_alter_email_is_visible_and_more",
+        ),
     ]
 
     operations = [
@@ -19,6 +21,13 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name="user",
             name="username",
-            field=models.CharField(error_messages={"unique": "This username is already taken."}, help_text="Required. 150 characters or fewer. Lower case letters, digits and ./_/-/+ only.", max_length=150, unique=True, validators=[apps.account.validators.validate_matrix_username], verbose_name="Username"),
+            field=models.CharField(
+                error_messages={"unique": "This username is already taken."},
+                help_text="Required. 150 characters or fewer. Lower case letters, digits and ./_/-/+ only.",
+                max_length=150,
+                unique=True,
+                validators=[apps.account.validators.validate_matrix_username],
+                verbose_name="Username",
+            ),
         ),
     ]

@@ -16,31 +16,31 @@ save you a lot of time!
 
 ## Check-list
 
--  Did you launch the backend with `pipenv run start` ?
--  Is the server still running?
--  Did you pull the latest changes with `git pull`?
--  Are you on the right branch?
--  Did you install the latest dependencies with `pipenv install` or `make update`?
--  Did you apply the latest migrations with `pipenv run migrate` or `make update`?
--  Does the admin interface (http://localhost:8000/admin) work?
+- Did you launch the backend with `pipenv run start` ?
+- Is the server still running?
+- Did you pull the latest changes with `git pull`?
+- Are you on the right branch?
+- Did you install the latest dependencies with `pipenv install` or `make update`?
+- Did you apply the latest migrations with `pipenv run migrate` or `make update`?
+- Does the admin interface (http://localhost:8000/admin) work?
 
 ## If you're still stuck
 
--  **Reset the dependencies**:
-   -  remove the `.venv` folder and all of its content
-   -  run `pipenv install`
--  **Reset the database**:
-   -  Rename your database file (for example `db.sqlite3` to `db.old.sqlite3`)
-   -  Run `pipenv run migrate` to create a new database
-   -  Run `pipenv run django createsuperuser` with _username=admin_ and
-      _password=admin_
-   -  [Create your account on the new database](/dev/get-started/setup-project/#create-your-admin-account)
--  **Ask Google/StackOverflow**: you will likely find an answer there.
-   Be sure to make your search in English to get more results.
--  **Ask an AI on [Poe.com](https://poe.com)**: if you give enough context, it can
-   be very useful and save you a lot of time!
--  **Ask a human**: if you are stuck, you can ask for help on the Discord server
-   in the _`#je-galère-avec-un-truc`_ channel.
-   Be sure to give enough context to your issue, and explain what you have
-   already tried.
-   You can also ask a teacher.
+- **Reset the dependencies**:
+   - remove the `.venv` folder and all of its content
+   - run `pipenv install`
+- **Reset the database**:
+   - Rename your database file (for example `db.sqlite3` to `db.old.sqlite3`)
+   - Run `pipenv run migrate` to create a new database
+   - Run `pipenv run django createsuperuser` with _username=admin_ and
+     _password=admin_
+   - [Create your account on the new database](/dev/get-started/setup-project/#create-your-admin-account)
+- **Ask Google/StackOverflow**: you will likely find an answer there.
+  Be sure to make your search in English to get more results.
+- **Ask an AI on [Poe.com](https://poe.com)**: if you give enough context, it can
+  be very useful and save you a lot of time!
+- **Ask a human**: if you are stuck, you can ask for help on the Discord server
+  in the _`#je-galère-avec-un-truc`_ channel.
+  Be sure to give enough context to your issue, and explain what you have
+  already tried.
+  You can also ask a teacher.

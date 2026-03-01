@@ -11,23 +11,23 @@ This guide describe how to send emails from the Nantral Platform website.
 
 First, create your email template with [react-email](https://react.email/docs/introduction):
 
--  Go into the `email-templates-generator` folder:
+- Go into the `email-templates-generator` folder:
    ```bash
    cd email-templates-generator
    ```
--  Start the preview server (this is not required, but it is very helpful):
+- Start the preview server (this is not required, but it is very helpful):
    ```bash
    npm run start
    ```
    > You can preview your email at [http://localhost:3000](http://localhost:3000)
--  Create a new email template in the `emails` folder, by copying an existing
-   template (for example at the moment we have `email-confirmation.tsx` and
-   `reset-password.tsx`), and edit it to your liking!
-   :::success
-   You can check [the documentation](https://react.email/docs/introduction) to
-   know the available components. Do not use standard HTML tags!
-   :::
--  Once you're happy with the result, compile the template to an HTML file:
+- Create a new email template in the `emails` folder, by copying an existing
+  template (for example at the moment we have `email-confirmation.tsx` and
+  `reset-password.tsx`), and edit it to your liking!
+  :::success
+  You can check [the documentation](https://react.email/docs/introduction) to
+  know the available components. Do not use standard HTML tags!
+  :::
+- Once you're happy with the result, compile the template to an HTML file:
 
    ```bash
    npm run build
@@ -119,17 +119,17 @@ send_email(
 
 :::note Some things to know...
 
--  The name of the django context variables must be put in strings, with
-   double-brackets (`{{variable_name}}`), in the React template. This is because
-   the template with context data is compiled by Django, and not React.
+- The name of the django context variables must be put in strings, with
+  double-brackets (`{{variable_name}}`), in the React template. This is because
+  the template with context data is compiled by Django, and not React.
 
--  You can still use django filters and tags in the variable template (for
-   example `{{user.first_name|title}}`).
+- You can still use django filters and tags in the variable template (for
+  example `{{user.first_name|title}}`).
 
--  If you need to send a link to the website, do not hard-code the domain name
-   `nantral-platform.fr`: instead, use the django method
-   `request.build_absolute_uri('/some/path')` to build the URL. This allows us to
-   use the correct domain name in development, staging and production.
+- If you need to send a link to the website, do not hard-code the domain name
+  `nantral-platform.fr`: instead, use the django method
+  `request.build_absolute_uri('/some/path')` to build the URL. This allows us to
+  use the correct domain name in development, staging and production.
 
 :::
 
@@ -141,20 +141,19 @@ have noticed that this preview does not include the context data.
 To test your email during runtime, you have 2 options:
 
 1. Use **Docker** to locally run the server:
-
-   -  Launch the website locally with docker:
+   - Launch the website locally with docker:
       ```bash
       cd deployment
       docker compose build
       docker compose up
       ```
-   -  Go to [http://localhost](http://localhost) and create a new account
-      (your local account already created will not work, because you are
-      using a different database in docker-mode).
-   -  Go to [http://localhost:8025](http://localhost:8025): this is a fake email
-      server that will run locally. All emails sent from django in local with
-      docker should be redirected here. You should also have received the email
-      to validate the account created at the previous step.
+   - Go to [http://localhost](http://localhost) and create a new account
+     (your local account already created will not work, because you are
+     using a different database in docker-mode).
+   - Go to [http://localhost:8025](http://localhost:8025): this is a fake email
+     server that will run locally. All emails sent from django in local with
+     docker should be redirected here. You should also have received the email
+     to validate the account created at the previous step.
 
    ➡️ Find more info on the [Docker](/dev/server/docker.mdx) page.
 
@@ -173,7 +172,7 @@ Django that send an email, and then call this route in the React frontend.
 
 Check that:
 
--  you have compiled the email template with `npm run build` (for local dev only,
-   this is done automatically in production)
--  the name of the template in the `send_email` function is correct (you should
-   not include the `.tsx`, `.html`, or `.txt` extension)
+- you have compiled the email template with `npm run build` (for local dev only,
+  this is done automatically in production)
+- the name of the template in the `send_email` function is correct (you should
+  not include the `.tsx`, `.html`, or `.txt` extension)

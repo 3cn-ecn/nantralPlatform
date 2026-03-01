@@ -73,9 +73,9 @@ MDN reference for the options here: [NumberFormatOptions](https://developer.mozi
 :::info Find the locale code
 The code of a locale is defined in 2 parts:
 
--  the language (e.g `fr`, `en`...): it defines which translations to use;
--  the region code (e.g. `FR`, `US`, `GB`): it defines the date and number
-   formatting which will be used.
+- the language (e.g `fr`, `en`...): it defines which translations to use;
+- the region code (e.g. `FR`, `US`, `GB`): it defines the date and number
+  formatting which will be used.
 
 :::
 
@@ -83,15 +83,15 @@ The code of a locale is defined in 2 parts:
    international code of the language (e.g. `fr-FR.json` for French).
    Make a copy of one of the existing file and translate all texts.
 2. In `src/shared/i18n/config.ts`:
-   -  Add the language code in the `languages` array:
+   - Add the language code in the `languages` array:
       ```ts
       export const languages = ['fr-FR', 'en-GB', 'en-US'] as const;
       ```
-   -  Import the JSON file:
+   - Import the JSON file:
       ```ts
       import translationFr from './fr-FR.json';
       ```
-   -  Add it to the `resources` key:
+   - Add it to the `resources` key:
       ```ts
       resources: {
        "fr-FR": { translation: translationFr },

@@ -4,7 +4,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("sociallink", "0006_alter_sociallink_network"),
         ("student", "0009_student_description_student_social_links"),
@@ -14,6 +13,11 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name="student",
             name="social_links",
-            field=models.ManyToManyField(blank=True, related_name="student_set", to="sociallink.sociallink", verbose_name="Social networks"),
+            field=models.ManyToManyField(
+                blank=True,
+                related_name="student_set",
+                to="sociallink.sociallink",
+                verbose_name="Social networks",
+            ),
         ),
     ]

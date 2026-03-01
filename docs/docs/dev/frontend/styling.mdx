@@ -17,11 +17,11 @@ If you need to style something, first use this **check-list** to ensure you are
 not doing something wrong:
 
 1. Check if the component you need does not already exist:
-   -  in the [**MUI Components library**](https://mui.com/material-ui/all-components/);
-   -  or in the `frontend/src/shared/components` folder.
+   - in the [**MUI Components library**](https://mui.com/material-ui/all-components/);
+   - or in the `frontend/src/shared/components` folder.
 2. If you want to **modify the styles** of one component:
-   -  you are **_breaking_** the design system => try to use the current
-      **theme**, or update the theme (you can modify it or extend it);
+   - you are **_breaking_** the design system => try to use the current
+     **theme**, or update the theme (you can modify it or extend it);
 3. If the component does not exist, then **create it** in the shared folder (but use
    theme variables to style it)!
 
@@ -31,12 +31,12 @@ not doing something wrong:
 
 Well, this rule is pretty clear 😁 But why is that, you might ask?
 
--  for `margins`, it is better to replace them with `<Spacer>` components, or
-   by using `gap` in `<FlexRow>` or `<FlexColumn>` components;
--  `width` and `height` should be fixed by the grid your component is in, not on
-   the component itself;
--  other styling properties (like `color`, `background`, `border`, etc.) should
-   be managed by the theme.
+- for `margins`, it is better to replace them with `<Spacer>` components, or
+  by using `gap` in `<FlexRow>` or `<FlexColumn>` components;
+- `width` and `height` should be fixed by the grid your component is in, not on
+  the component itself;
+- other styling properties (like `color`, `background`, `border`, etc.) should
+  be managed by the theme.
 
 ## Can I use HTML tags (`div`, `h1`...)?
 
@@ -44,12 +44,12 @@ Well, this rule is pretty clear 😁 But why is that, you might ask?
 
 Ideally, you should always use the `MUI` equivalents of HTML tags:
 
--  `div` => `Box`, `Container`, `FlexRow`, ...
--  `a` => `Link`, with `component={ReactRouterLink}`
-   (cf [React Router](https://reactrouter.com/en/main/components/link))
-   if the link is internal
--  `p` => `Typography`
--  `h1` => `Typography` with `variant="h1"`
+- `div` => `Box`, `Container`, `FlexRow`, ...
+- `a` => `Link`, with `component={ReactRouterLink}`
+  (cf [React Router](https://reactrouter.com/en/main/components/link))
+  if the link is internal
+- `p` => `Typography`
+- `h1` => `Typography` with `variant="h1"`
 
 The reason of that is to ensure that the components are **styled correctly**,
 and **respect** the MUI theme.
@@ -61,8 +61,8 @@ in MUI (and also no need).
 
 Ok, if you need custom styles, you can use these options:
 
--  preferably, use the `sx` props with theme variables from the `useTheme` hook
-   to add CSS properties:
+- preferably, use the `sx` props with theme variables from the `useTheme` hook
+  to add CSS properties:
 
    ```tsx
    import { useTheme } from '@mui/material/styles';
@@ -74,10 +74,10 @@ Ok, if you need custom styles, you can use these options:
    };
    ```
 
--  if the component does not have a `sx` prop (it exists only on MUI components),
-   you can use the `style` prop;
--  if your CSS is too complex, you can create a new **SCSS file** and add your
-   styles there. However, it has some limitations:
-   -  you **can't use theme** variables from MUI;
-   -  on the build phase, all `CSS` and `SCSS` files will be **merged** together,
-      so you should be **_very_** careful with the class names you use.
+- if the component does not have a `sx` prop (it exists only on MUI components),
+  you can use the `style` prop;
+- if your CSS is too complex, you can create a new **SCSS file** and add your
+  styles there. However, it has some limitations:
+   - you **can't use theme** variables from MUI;
+   - on the build phase, all `CSS` and `SCSS` files will be **merged** together,
+     so you should be **_very_** careful with the class names you use.

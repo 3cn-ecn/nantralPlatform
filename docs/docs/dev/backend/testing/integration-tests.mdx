@@ -13,9 +13,9 @@ we want to be sure we're not breaking another feature).
 
 There are different types of tests:
 
--  **Unit tests** are tests that test a single function or a single class.
--  **Integration tests** are tests that test the interaction between different parts of the code.
--  **End-to-end tests** are tests that test the whole application, from the front end to the back end.
+- **Unit tests** are tests that test a single function or a single class.
+- **Integration tests** are tests that test the interaction between different parts of the code.
+- **End-to-end tests** are tests that test the whole application, from the front end to the back end.
 
 On Nantral Platform, we choose to focus on integration tests, because they
 are easy to implement and allow us to quickly find potential bugs or security
@@ -28,9 +28,9 @@ issues.
 A good integration test is a test that reproduces the user experience.
 It should, for a given API route:
 
--  test the result (correctness)
--  test the permissions (security)
--  test the error handling (robustness)
+- test the result (correctness)
+- test the permissions (security)
+- test the error handling (robustness)
 
 ## Write a test
 
@@ -75,10 +75,10 @@ class RetrieveEventTestCase(test.APITestCase):
 
 :::tip Good practices
 
--  You should write 1 class per route
--  If you have too many tests in an app, you can split your tests in multiple
-   files placed in a `tests` folder and rename each file `test_<name>.py`.
--  Use the correct `assert*` method depending of your case.
+- You should write 1 class per route
+- If you have too many tests in an app, you can split your tests in multiple
+  files placed in a `tests` folder and rename each file `test_<name>.py`.
+- Use the correct `assert*` method depending of your case.
 
 :::
 
