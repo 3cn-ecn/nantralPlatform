@@ -1,1 +1,0 @@
-(self.webpackChunknantralplatform_docs=self.webpackChunknantralplatform_docs||[]).push([[5741],{5741:()=>{}}]);
