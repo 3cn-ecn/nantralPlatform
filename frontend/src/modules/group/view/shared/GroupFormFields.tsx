@@ -260,7 +260,7 @@ export function GroupFormFields({
 
       {edit && (
         <CheckboxField
-          label={t('group.form.saveHistroryRecord')}
+          label={t('group.form.saveHistroryRecord.label')}
           value={formValues.saveHistoryRecord}
           handleChange={(val) => updateFormValues({ saveHistoryRecord: val })}
           helperText={t('group.form.saveHistroryRecord.helperText')}

@@ -532,6 +532,10 @@
         "helperText": "Si coché, la page du groupe sera accessible publiquement, y compris à des utilisateurs non-connectés. Les membres, évènements et posts restent toutefois masqués.",
         "label": "Groupe public"
       },
+      "saveHistroryRecord": {
+        "helperText": "Si vous cochez cette case, nous garderons cette version pour que l'on puisse y accéder dans le futur, même si de nouvelles mises à jour sont effectuées. Nous recommandons de la laissé cocher, sauf pour des mises à jour mineures",
+        "label": "Enregistrer un point d'historique"
+      },
       "shortName": {
         "helperText": "Ce nom sera affiché dans la liste des groupes.",
         "label": "Nom raccourci"

@@ -532,6 +532,10 @@
         "helperText": "If checked, the group page will be publicly accessible, including to unconnected users. \nHowever, members, events and posts remain hidden.",
         "label": "Public group"
       },
+      "saveHistroryRecord": {
+        "helperText": "If you tick this, we will store this version in order to access it later, even if other changes are made. We recommand to keep this enabled, if you are not making minor updates.",
+        "label": "Save an historical record"
+      },
       "shortName": {
         "helperText": "This name will be displayed in the group list.",
         "label": "Shortened name"
