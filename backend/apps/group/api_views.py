@@ -1,4 +1,3 @@
-import requests
 from django.conf import settings
 from django.db.models import Count, F, Q, QuerySet
 from django.http.request import QueryDict
@@ -7,6 +6,8 @@ from django.template.loader import render_to_string
 from django.utils import timezone
 from django.utils.dateparse import parse_datetime
 from django.utils.translation import gettext as _
+
+import requests
 from requests import Request
 from rest_framework import (
     decorators,
@@ -24,6 +25,7 @@ from rest_framework.settings import api_settings
 
 from apps.utils.discord import respond_admin_request, send_admin_request
 from apps.utils.parse import parse_bool
+
 from .models import Group, GroupType, Label, Membership
 from .permissions import (
     AdminRequestListPermission,

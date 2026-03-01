@@ -3,6 +3,7 @@ from datetime import date
 from django.db.models.query_utils import Q
 from django.utils import timezone
 from django.utils.translation import gettext as _
+
 from rest_framework import exceptions, serializers
 
 from apps.account.models import User
@@ -11,6 +12,7 @@ from apps.sociallink.serializers import (
     GroupSocialLinkSerializer,
     SocialLinkSerializer,
 )
+
 from .models import Group, GroupType, Label, Membership
 
 
