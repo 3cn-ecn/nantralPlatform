@@ -4,6 +4,7 @@ import string
 from django.contrib.auth.password_validation import validate_password
 from django.core.exceptions import ValidationError as DjangoValidationError
 from django.utils.translation import gettext_lazy as _
+
 from rest_framework.exceptions import ValidationError
 
 MXID_LOCALPART_ALLOWED_CHARACTERS = set(
@@ -42,7 +43,7 @@ def validate_matrix_username(value):
         raise ValidationError(_("Numeric username are reserved"))
 
     if value.lower() in RESERVED_USERNAMES or any(
-            value.lower().startswith(p + ".") for p in RESERVED_USERNAMES
+        value.lower().startswith(p + ".") for p in RESERVED_USERNAMES
     ):
         raise ValidationError(_("This username is reserved"))
 
@@ -65,10 +66,10 @@ def django_validate_password(password):
 
 def ecn_email_validator(mail: str):
     if (
-            re.search(
-                r"@([\w\-.]+\.)?(ec-nantes\.fr|centraliens-nantes\.org)$", mail
-            )
-            is None
+        re.search(
+            r"@([\w\-.]+\.)?(ec-nantes\.fr|centraliens-nantes\.org)$", mail
+        )
+        is None
     ):
         raise ValidationError(
             _(

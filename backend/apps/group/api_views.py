@@ -326,7 +326,10 @@ class HistoryGroupViewSet(
                 code="invalid",
             )
 
-        if group and group.history.most_recent().history_id == history.history_id:
+        if (
+            group
+            and group.history.most_recent().history_id == history.history_id
+        ):
             raise BadRequestException(
                 _("You cannot delete the most recent version of a group."),
                 code="invalid",
@@ -487,7 +490,7 @@ class MembershipViewSet(viewsets.ModelViewSet):
         )
         # check that memberships are from same group
         if (lower and lower.group != member.group) or self.query_params.get(
-                "group"
+            "group"
         ) != member.group.slug:
             raise exceptions.ValidationError(
                 _("All memberships objects must be from the same group."),
@@ -612,8 +615,8 @@ class MembershipViewSet(viewsets.ModelViewSet):
             )
             membership.user.email_user(
                 subject=(
-                        _("Your admin request for %(group)s has been accepted.")
-                        % {"group": membership.group.name}
+                    _("Your admin request for %(group)s has been accepted.")
+                    % {"group": membership.group.name}
                 ),
                 message=mail,
                 html_message=mail,
@@ -633,7 +636,7 @@ class MembershipViewSet(viewsets.ModelViewSet):
         return response.Response(
             {
                 "message": _("The user %(user)s is now admin!")
-                           % {"user": membership.user}
+                % {"user": membership.user}
             },
             status=status.HTTP_202_ACCEPTED,
         )
@@ -663,8 +666,8 @@ class MembershipViewSet(viewsets.ModelViewSet):
             )
             membership.user.email_user(
                 subject=(
-                        _("Your admin request for %(group)s has been denied.")
-                        % {"group": membership.group.name}
+                    _("Your admin request for %(group)s has been denied.")
+                    % {"group": membership.group.name}
                 ),
                 message=mail,
                 html_message=mail,
@@ -684,7 +687,7 @@ class MembershipViewSet(viewsets.ModelViewSet):
         return response.Response(
             {
                 "message": _("The admin request from %(user)s has been denied.")
-                           % {"user": membership.user}
+                % {"user": membership.user}
             },
             status=status.HTTP_202_ACCEPTED,
         )

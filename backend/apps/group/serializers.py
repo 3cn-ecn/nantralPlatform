@@ -162,9 +162,9 @@ class ShortMemberSerializer(serializers.ModelSerializer):
 
     def validate(self, data: dict[str, any]) -> dict[str, any]:
         if (
-                data.get("begin_date")
-                and data.get("end_date")
-                and data["begin_date"] > data["end_date"]
+            data.get("begin_date")
+            and data.get("end_date")
+            and data["begin_date"] > data["end_date"]
         ):
             raise exceptions.ValidationError(
                 _("The end date must be after the begin date."),
@@ -344,9 +344,9 @@ class MembershipSerializer(AdminFieldsMixin, serializers.ModelSerializer):
 
     def validate(self, data: dict[str, any]) -> dict[str, any]:
         if (
-                data.get("begin_date")
-                and data.get("end_date")
-                and data["begin_date"] > data["end_date"]
+            data.get("begin_date")
+            and data.get("end_date")
+            and data["begin_date"] > data["end_date"]
         ):
             raise exceptions.ValidationError(
                 _("The end date must be after the begin date."),
@@ -382,7 +382,7 @@ class NewMembershipSerializer(AdminFieldsMixin, serializers.ModelSerializer):
                 ),
             )
         if (group.private or group.lock_memberships) and not group.is_admin(
-                user,
+            user,
         ):
             raise exceptions.PermissionDenied(
                 _(
