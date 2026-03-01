@@ -3,7 +3,6 @@ from datetime import date
 from django.db.models.query_utils import Q
 from django.utils import timezone
 from django.utils.translation import gettext as _
-
 from rest_framework import exceptions, serializers
 
 from apps.account.models import User
@@ -12,7 +11,6 @@ from apps.sociallink.serializers import (
     GroupSocialLinkSerializer,
     SocialLinkSerializer,
 )
-
 from .models import Group, GroupType, Label, Membership
 
 
@@ -162,9 +160,9 @@ class ShortMemberSerializer(serializers.ModelSerializer):
 
     def validate(self, data: dict[str, any]) -> dict[str, any]:
         if (
-            data.get("begin_date")
-            and data.get("end_date")
-            and data["begin_date"] > data["end_date"]
+                data.get("begin_date")
+                and data.get("end_date")
+                and data["begin_date"] > data["end_date"]
         ):
             raise exceptions.ValidationError(
                 _("The end date must be after the begin date."),
@@ -223,6 +221,12 @@ class GroupWriteSerializer(serializers.ModelSerializer):
             instance.skip_history_when_saving = True
             instance = super().update(instance, validated_data)
             del instance.skip_history_when_saving
+            # Now save the changes to the last history record
+            history = instance.history.most_recent()
+            for field, value in validated_data.items():
+                if hasattr(history, field):
+                    setattr(history, field, value)
+            history.save()
         return instance
 
     def get_group_type(self) -> GroupType:
@@ -338,9 +342,9 @@ class MembershipSerializer(AdminFieldsMixin, serializers.ModelSerializer):
 
     def validate(self, data: dict[str, any]) -> dict[str, any]:
         if (
-            data.get("begin_date")
-            and data.get("end_date")
-            and data["begin_date"] > data["end_date"]
+                data.get("begin_date")
+                and data.get("end_date")
+                and data["begin_date"] > data["end_date"]
         ):
             raise exceptions.ValidationError(
                 _("The end date must be after the begin date."),
@@ -376,7 +380,7 @@ class NewMembershipSerializer(AdminFieldsMixin, serializers.ModelSerializer):
                 ),
             )
         if (group.private or group.lock_memberships) and not group.is_admin(
-            user,
+                user,
         ):
             raise exceptions.PermissionDenied(
                 _(
