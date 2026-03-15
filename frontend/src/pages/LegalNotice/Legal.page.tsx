@@ -1,7 +1,9 @@
-import { Typography } from '@mui/material';
+import { Typography, Link, List, ListItem } from '@mui/material';
 import Container from '@mui/material/Container';
 
 import { useTranslation } from '#shared/i18n/useTranslation';
+
+import { Address, ParagraphBody, ParagraphTitle } from './Components';
 
 /**
  * Legal Notice, like the name and owner of the site, etc.
@@ -11,64 +13,71 @@ export default function LegalNoticePage() {
   const { t } = useTranslation(); // translation module
 
   return (
-    <>
-      <Container maxWidth="sm" sx={{ my: 4 }}>
-        <Typography variant="h1">{t('legalNotice.title')}</Typography>
-        <Typography variant="h4" mt={3} mb={2}>
-          {t('legalNotice.subtitles.1')}
-        </Typography>
-        <Typography>{t('legalNotice.paragraphs.1.lines.1')}</Typography>
-        <Typography>{t('legalNotice.paragraphs.1.lines.2')}</Typography>
-        <Typography>{t('legalNotice.paragraphs.1.lines.3')}</Typography>
+    <Container sx={{ my: 6 }}>
+      <Typography variant="h1">{t('legalNotice.title')}</Typography>
 
-        <Typography variant="h4" mt={3} mb={2}>
-          {t('legalNotice.subtitles.2')}
-        </Typography>
-        <Typography>{t('legalNotice.paragraphs.2.lines.1')}</Typography>
-        <Typography>{t('legalNotice.paragraphs.2.lines.2')}</Typography>
-        <Typography>{t('legalNotice.paragraphs.2.lines.3')}</Typography>
-        <Typography>{t('legalNotice.paragraphs.2.lines.4')}</Typography>
-        <Typography>{t('legalNotice.paragraphs.2.lines.5')}</Typography>
-        <Typography>{t('legalNotice.paragraphs.2.lines.6')}</Typography>
+      <ParagraphTitle>
+        {t('legalNotice.paragraphs.publisher.title')}
+      </ParagraphTitle>
+      <ParagraphBody>
+        {t('legalNotice.paragraphs.publisher.text')}
+      </ParagraphBody>
+      <ParagraphBody>
+        {t('legalNotice.paragraphs.publisher.address_title')}
+        <Address>
+          {t('legalNotice.paragraphs.publisher.address_line_1')} <br />
+          {t('legalNotice.paragraphs.publisher.address_line_2')} <br />
+          {t('legalNotice.paragraphs.publisher.address_line_3')} <br />
+          {t('legalNotice.paragraphs.publisher.address_line_4')} <br />
+        </Address>
+        {t('legalNotice.paragraphs.publisher.people_text')}
+        <List dense>
+          <ListItem sx={{ py: 0.1 }}>
+            | {t('legalNotice.paragraphs.publisher.aecn_president')} -{' '}
+            {t('legalNotice.paragraphs.publisher.aecn_president_title')} ;
+          </ListItem>
+          <ListItem sx={{ py: 0.1 }}>
+            | {t('legalNotice.paragraphs.publisher.aecn_dsi')} -{' '}
+            {t('legalNotice.paragraphs.publisher.aecn_dsi_title')} ;
+          </ListItem>
+          <ListItem sx={{ py: 0.1 }}>
+            | {t('legalNotice.paragraphs.publisher.3cn_president')} -{' '}
+            {t('legalNotice.paragraphs.publisher.3cn_president_title')}.
+          </ListItem>
+        </List>
+      </ParagraphBody>
 
-        <Typography variant="h4" mt={3} mb={2}>
-          {t('legalNotice.subtitles.3')}
-        </Typography>
-        <Typography>{t('legalNotice.paragraphs.3')}</Typography>
-
-        <Typography variant="h4" mt={3} mb={2}>
-          {t('legalNotice.subtitles.4')}
-        </Typography>
-        <Typography>{t('legalNotice.paragraphs.4.lines.1')}</Typography>
-        <Typography>{t('legalNotice.paragraphs.4.lines.2')}</Typography>
-        <Typography>{t('legalNotice.paragraphs.4.lines.3')}</Typography>
-        <Typography>{t('legalNotice.paragraphs.4.lines.4')}</Typography>
-        <Typography>{t('legalNotice.paragraphs.4.lines.5')}</Typography>
-        <Typography>{t('legalNotice.paragraphs.4.lines.6')}</Typography>
-
-        <Typography variant="h4" mt={3} mb={2}>
-          {t('legalNotice.subtitles.5')}
-        </Typography>
-        <Typography>{t('legalNotice.paragraphs.5.lines.1')}</Typography>
-        <Typography>{t('legalNotice.paragraphs.5.lines.2')}</Typography>
-        <Typography>{t('legalNotice.paragraphs.5.lines.3')}</Typography>
-        <Typography>{t('legalNotice.paragraphs.5.lines.4')}</Typography>
-
-        <Typography variant="h4" mt={3} mb={2}>
-          {t('legalNotice.subtitles.6')}
-        </Typography>
-        <Typography>{t('legalNotice.paragraphs.6')}</Typography>
-
-        <Typography variant="h4" mt={3} mb={2}>
-          {t('legalNotice.subtitles.7')}
-        </Typography>
-        <Typography>{t('legalNotice.paragraphs.7')}</Typography>
-
-        <Typography variant="h4" mt={3} mb={2}>
-          {t('legalNotice.subtitles.8')}
-        </Typography>
-        <Typography>{t('legalNotice.paragraphs.8')}</Typography>
-      </Container>
-    </>
+      <ParagraphTitle>
+        {t('legalNotice.paragraphs.host_provider.title')}
+      </ParagraphTitle>
+      <ParagraphBody>
+        {t('legalNotice.paragraphs.host_provider.text')}
+        <Address>
+          {t('legalNotice.paragraphs.host_provider.address_line_1')} <br />
+          {t('legalNotice.paragraphs.host_provider.address_line_2')} <br />
+          {t('legalNotice.paragraphs.host_provider.address_line_3')} <br />
+        </Address>
+      </ParagraphBody>
+      <ParagraphTitle>
+        {t('legalNotice.paragraphs.copyright.title')}
+      </ParagraphTitle>
+      <ParagraphBody>
+        {t('legalNotice.paragraphs.copyright.text1')}
+        {t('legalNotice.paragraphs.copyright.text2')}
+      </ParagraphBody>
+      <ParagraphTitle>{t('legalNotice.paragraphs.rgpd.title')}</ParagraphTitle>
+      <ParagraphBody>{t('legalNotice.paragraphs.rgpd.text')}</ParagraphBody>
+      <ParagraphBody>
+        {t('legalNotice.paragraphs.rgpd.contact_text')}
+        <Link href={`mailto:${t('legalNotice.paragraphs.rgpd.contact_email')}`}>
+          {t('legalNotice.paragraphs.rgpd.contact_email')}
+        </Link>
+        {t('legalNotice.paragraphs.rgpd.contact_post_email')}
+      </ParagraphBody>
+      <ParagraphTitle>
+        {t('legalNotice.paragraphs.cookies.title')}
+      </ParagraphTitle>
+      <ParagraphBody>{t('legalNotice.paragraphs.cookies.text')}</ParagraphBody>
+    </Container>
   );
 }
