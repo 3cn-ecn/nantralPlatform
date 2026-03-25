@@ -7,6 +7,8 @@ import { App } from './App';
 import './index.scss';
 import './shared/i18n/config';
 
+//window.Buffer = Buffer;
+
 axios.defaults.xsrfCookieName = 'csrftoken';
 axios.defaults.xsrfHeaderName = 'X-CSRFToken';
 axios.defaults.paramsSerializer = { indexes: null };

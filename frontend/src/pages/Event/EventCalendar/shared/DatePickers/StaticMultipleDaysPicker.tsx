@@ -76,7 +76,7 @@ export function StaticMultipleDaysPicker({
 }
 
 // A custom Day component renderer to also renders dates between 2 dates
-type CustomDayProps = PickersDayProps<Date> & {
+type CustomDayProps = PickersDayProps & {
   start: Date | null;
   end: Date | null;
 };

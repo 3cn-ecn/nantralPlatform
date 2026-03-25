@@ -46,7 +46,9 @@ export async function userDetailsLoader(
     (queryClient.getQueryData(['user', parsedId]) as User) ??
     (await queryClient.fetchQuery({
       queryFn: () =>
-        getUserDetailsApi({ id: parsedId }).catch(() => ({ id: -1 }) as User),
+        getUserDetailsApi({ id: parsedId }).catch(() => (({
+          id: -1,
+        }) as User)),
       queryKey: ['user', { id }],
     }));
 

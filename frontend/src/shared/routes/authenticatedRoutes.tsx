@@ -17,6 +17,8 @@ const EventGridViewPage = lazy(
 const EventDetailsPage = lazy(
   () => import('#pages/EventDetails/EventDetails.page'),
 );
+const EditForm = lazy(() => import('#pages/Form/EditForm'));
+const FormDetailPage = lazy(() => import('#pages/Form/FormDetail.page'));
 const MapPage = lazy(() => import('#pages/Map/Map.page'));
 const HomePage = lazy(() => import('#pages/Home/Home.page'));
 const NotFoundPage = lazy(() => import('#pages/NotFound/NotFound.page'));
@@ -70,6 +72,21 @@ export const authenticatedRoutes: (queryClient: QueryClient) => RouteObject = (
           path: ':id',
           element: <EventDetailsPage />,
           handle: { crumb: t('breadcrumbs.events.details.index') },
+        },
+      ],
+    },
+    {
+      path: '/form',
+      children: [
+        {
+          path: 'new',
+          element: <EditForm />,
+          handle: { crumb: t('breadcrumbs.form.new') },
+        },
+        {
+          path: ':uuid',
+          element: <FormDetailPage />,
+          handle: { crumb: t('breadcrumbs.form.index') },
         },
       ],
     },

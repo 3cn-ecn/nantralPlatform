@@ -5,11 +5,11 @@ import {
   DatePickerProps,
   LocalizationProvider,
 } from '@mui/x-date-pickers';
-import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFnsV2';
 
 import { useTranslation } from '#shared/i18n/useTranslation';
 
-type DateFieldProps = Omit<DatePickerProps<Date>, 'error'> & {
+type DateFieldProps = Omit<DatePickerProps, 'error'> & {
   name?: string;
   label?: string;
   helperText?: string;

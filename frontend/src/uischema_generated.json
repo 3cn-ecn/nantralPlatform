@@ -1,0 +1,888 @@
+{
+  "$ref": "#/definitions/UISchemaElement",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "definitions": {
+    "AndCondition": {
+      "description": "An and condition.",
+      "properties": {
+        "conditions": {
+          "items": {
+            "$ref": "#/definitions/Condition"
+          },
+          "type": "array"
+        },
+        "type": {
+          "const": "AND",
+          "description": "The type of condition.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "BaseCondition": {
+      "description": "Represents a condition to be evaluated.",
+      "properties": {
+        "type": {
+          "description": "The type of condition.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "BaseUISchemaElement": {
+      "description": "Common base interface for any UI schema element.",
+      "properties": {
+        "options": {
+          "additionalProperties": {},
+          "description": "Any additional options.",
+          "type": "object"
+        },
+        "rule": {
+          "$ref": "#/definitions/Rule",
+          "description": "An optional rule."
+        },
+        "type": {
+          "description": "The type of this UI schema element.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "Categorization": {
+      "description": "The categorization element, which may have children elements.\nA child element may either be itself a Categorization or a Category, hence\nthe categorization element can be used to represent recursive structures like trees.",
+      "properties": {
+        "elements": {
+          "description": "The child elements of this categorization which are either of type\n{@link Category} or {@link Categorization}.",
+          "items": {
+            "anyOf": [
+              {
+                "$ref": "#/definitions/Category"
+              },
+              {
+                "$ref": "#/definitions/Categorization"
+              }
+            ]
+          },
+          "type": "array"
+        },
+        "i18n": {
+          "type": "string"
+        },
+        "label": {
+          "description": "Label for UI schema element.",
+          "type": "string"
+        },
+        "options": {
+          "additionalProperties": {},
+          "description": "Any additional options.",
+          "type": "object"
+        },
+        "rule": {
+          "$ref": "#/definitions/Rule",
+          "description": "An optional rule."
+        },
+        "type": {
+          "const": "Categorization",
+          "description": "The type of this UI schema element.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "Category": {
+      "description": "The category layout.",
+      "properties": {
+        "elements": {
+          "description": "The child elements of this layout.",
+          "items": {
+            "$ref": "#/definitions/UISchemaElement"
+          },
+          "type": "array"
+        },
+        "i18n": {
+          "type": "string"
+        },
+        "label": {
+          "description": "Label for UI schema element.",
+          "type": "string"
+        },
+        "options": {
+          "additionalProperties": {},
+          "description": "Any additional options.",
+          "type": "object"
+        },
+        "rule": {
+          "$ref": "#/definitions/Rule",
+          "description": "An optional rule."
+        },
+        "type": {
+          "const": "Category",
+          "description": "The type of this UI schema element.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "Condition": {
+      "anyOf": [
+        {
+          "$ref": "#/definitions/BaseCondition"
+        },
+        {
+          "$ref": "#/definitions/LeafCondition"
+        },
+        {
+          "$ref": "#/definitions/SchemaBasedCondition"
+        },
+        {
+          "$ref": "#/definitions/ValidateFunctionCondition"
+        },
+        {
+          "$ref": "#/definitions/OrCondition"
+        },
+        {
+          "$ref": "#/definitions/AndCondition"
+        }
+      ],
+      "description": "A union of all available conditions."
+    },
+    "ControlElement": {
+      "description": "A control element. The scope property of the control determines\nto which part of the schema the control should be bound.",
+      "properties": {
+        "i18n": {
+          "type": "string"
+        },
+        "label": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/LabelDescription"
+            },
+            {
+              "type": ["string", "boolean"]
+            }
+          ],
+          "description": "Label for UI schema element."
+        },
+        "options": {
+          "additionalProperties": {},
+          "description": "Any additional options.",
+          "type": "object"
+        },
+        "rule": {
+          "$ref": "#/definitions/Rule",
+          "description": "An optional rule."
+        },
+        "scope": {
+          "description": "The scope that determines to which part this element should be bound to.",
+          "type": "string"
+        },
+        "type": {
+          "const": "Control",
+          "description": "The type of this UI schema element.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "GroupLayout": {
+      "description": "A group resembles a vertical layout, but additionally might have a label.\nThis layout is useful when grouping different elements by a certain criteria.",
+      "properties": {
+        "elements": {
+          "description": "The child elements of this layout.",
+          "items": {
+            "$ref": "#/definitions/UISchemaElement"
+          },
+          "type": "array"
+        },
+        "i18n": {
+          "type": "string"
+        },
+        "label": {
+          "description": "Label for UI schema element.",
+          "type": "string"
+        },
+        "options": {
+          "additionalProperties": {},
+          "description": "Any additional options.",
+          "type": "object"
+        },
+        "rule": {
+          "$ref": "#/definitions/Rule",
+          "description": "An optional rule."
+        },
+        "type": {
+          "const": "Group",
+          "description": "The type of this UI schema element.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "HorizontalLayout": {
+      "description": "A layout which orders its children horizontally (i.e. from left to right).",
+      "properties": {
+        "elements": {
+          "description": "The child elements of this layout.",
+          "items": {
+            "$ref": "#/definitions/UISchemaElement"
+          },
+          "type": "array"
+        },
+        "options": {
+          "additionalProperties": {},
+          "description": "Any additional options.",
+          "type": "object"
+        },
+        "rule": {
+          "$ref": "#/definitions/Rule",
+          "description": "An optional rule."
+        },
+        "type": {
+          "const": "HorizontalLayout",
+          "description": "The type of this UI schema element.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "JsonSchema": {
+      "anyOf": [
+        {
+          "$ref": "#/definitions/JsonSchema4"
+        },
+        {
+          "$ref": "#/definitions/JsonSchema7"
+        }
+      ]
+    },
+    "JsonSchema4": {
+      "properties": {
+        "$ref": {
+          "type": "string"
+        },
+        "$schema": {
+          "description": "It is recommended that the meta-schema is\nincluded in the root of any JSON Schema",
+          "type": "string"
+        },
+        "additionalItems": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/JsonSchema4"
+            },
+            {
+              "type": "boolean"
+            }
+          ]
+        },
+        "additionalProperties": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/JsonSchema4"
+            },
+            {
+              "type": "boolean"
+            }
+          ]
+        },
+        "allOf": {
+          "items": {
+            "$ref": "#/definitions/JsonSchema4"
+          },
+          "type": "array"
+        },
+        "anyOf": {
+          "items": {
+            "$ref": "#/definitions/JsonSchema4"
+          },
+          "type": "array"
+        },
+        "const": {},
+        "default": {
+          "description": "Default json for the object represented by\nthis schema"
+        },
+        "definitions": {
+          "additionalProperties": {
+            "$ref": "#/definitions/JsonSchema4"
+          },
+          "description": "Holds simple JSON Schema definitions for\nreferencing from elsewhere.",
+          "type": "object"
+        },
+        "dependencies": {
+          "additionalProperties": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              {
+                "$ref": "#/definitions/JsonSchema4"
+              }
+            ]
+          },
+          "description": "If the key is present as a property then the\nstring of properties must also be present.\nIf the value is a JSON Schema then it must\nalso be valid for the object if the key is\npresent.",
+          "type": "object"
+        },
+        "description": {
+          "description": "Schema description",
+          "type": "string"
+        },
+        "enum": {
+          "description": "Enumerates the values that this schema can be\ne.g.\n{\"type\": \"string\",\n \"enum\": [\"red\", \"green\", \"blue\"]}",
+          "items": {},
+          "type": "array"
+        },
+        "exclusiveMaximum": {
+          "description": "If true maximum must be > value, >= otherwise",
+          "type": "boolean"
+        },
+        "exclusiveMinimum": {
+          "description": "If true minimum must be < value, <= otherwise",
+          "type": "boolean"
+        },
+        "format": {
+          "type": "string"
+        },
+        "id": {
+          "description": "This is important because it tells refs where\nthe root of the document is located",
+          "type": "string"
+        },
+        "items": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/JsonSchema4"
+            },
+            {
+              "items": {
+                "$ref": "#/definitions/JsonSchema4"
+              },
+              "type": "array"
+            }
+          ]
+        },
+        "maxItems": {
+          "type": "number"
+        },
+        "maxLength": {
+          "type": "number"
+        },
+        "maxProperties": {
+          "type": "number"
+        },
+        "maximum": {
+          "type": "number"
+        },
+        "minItems": {
+          "type": "number"
+        },
+        "minLength": {
+          "type": "number"
+        },
+        "minProperties": {
+          "type": "number"
+        },
+        "minimum": {
+          "type": "number"
+        },
+        "multipleOf": {
+          "description": "The value must be a multiple of the number\n(e.g. 10 is a multiple of 5)",
+          "type": "number"
+        },
+        "not": {
+          "$ref": "#/definitions/JsonSchema4",
+          "description": "The entity being validated must not match this schema"
+        },
+        "oneOf": {
+          "items": {
+            "$ref": "#/definitions/JsonSchema4"
+          },
+          "type": "array"
+        },
+        "pattern": {
+          "description": "This is a regex string that the value must\nconform to",
+          "type": "string"
+        },
+        "patternProperties": {
+          "additionalProperties": {
+            "$ref": "#/definitions/JsonSchema4"
+          },
+          "description": "The key of this object is a regex for which\nproperties the schema applies to",
+          "type": "object"
+        },
+        "properties": {
+          "additionalProperties": {
+            "$ref": "#/definitions/JsonSchema4"
+          },
+          "description": "The keys that can exist on the object with the\njson schema that should validate their value",
+          "type": "object"
+        },
+        "required": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "title": {
+          "description": "Title of the schema",
+          "type": "string"
+        },
+        "type": {
+          "anyOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "string"
+            }
+          ],
+          "description": "The basic type of this schema, can be one of\n[string, number, object, array, boolean, null]\nor an array of the acceptable types"
+        },
+        "uniqueItems": {
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
+    "JsonSchema7": {
+      "properties": {
+        "$id": {
+          "description": "This is important because it tells refs where\nthe root of the document is located",
+          "type": "string"
+        },
+        "$ref": {
+          "type": "string"
+        },
+        "$schema": {
+          "description": "It is recommended that the meta-schema is\nincluded in the root of any JSON Schema",
+          "type": "string"
+        },
+        "additionalItems": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/JsonSchema7"
+            },
+            {
+              "type": "boolean"
+            }
+          ]
+        },
+        "additionalProperties": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/JsonSchema7"
+            },
+            {
+              "type": "boolean"
+            }
+          ]
+        },
+        "allOf": {
+          "items": {
+            "$ref": "#/definitions/JsonSchema7"
+          },
+          "type": "array"
+        },
+        "anyOf": {
+          "items": {
+            "$ref": "#/definitions/JsonSchema7"
+          },
+          "type": "array"
+        },
+        "const": {},
+        "contains": {
+          "$ref": "#/definitions/JsonSchema7"
+        },
+        "default": {
+          "description": "Default json for the object represented by\nthis schema"
+        },
+        "definitions": {
+          "additionalProperties": {
+            "$ref": "#/definitions/JsonSchema7"
+          },
+          "description": "Holds simple JSON Schema definitions for\nreferencing from elsewhere.",
+          "type": "object"
+        },
+        "dependencies": {
+          "additionalProperties": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              {
+                "$ref": "#/definitions/JsonSchema7"
+              }
+            ]
+          },
+          "description": "If the key is present as a property then the\nstring of properties must also be present.\nIf the value is a JSON Schema then it must\nalso be valid for the object if the key is\npresent.",
+          "type": "object"
+        },
+        "description": {
+          "description": "Schema description",
+          "type": "string"
+        },
+        "else": {
+          "$ref": "#/definitions/JsonSchema7"
+        },
+        "enum": {
+          "description": "Enumerates the values that this schema can be\ne.g.\n{\"type\": \"string\",\n \"enum\": [\"red\", \"green\", \"blue\"]}",
+          "items": {},
+          "type": "array"
+        },
+        "errorMessage": {},
+        "examples": {
+          "items": {},
+          "type": "array"
+        },
+        "exclusiveMaximum": {
+          "description": "If true maximum must be > value, >= otherwise",
+          "type": "number"
+        },
+        "exclusiveMinimum": {
+          "description": "If true minimum must be < value, <= otherwise",
+          "type": "number"
+        },
+        "format": {
+          "type": "string"
+        },
+        "if": {
+          "$ref": "#/definitions/JsonSchema7"
+        },
+        "items": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/JsonSchema7"
+            },
+            {
+              "items": {
+                "$ref": "#/definitions/JsonSchema7"
+              },
+              "type": "array"
+            }
+          ]
+        },
+        "maxItems": {
+          "type": "number"
+        },
+        "maxLength": {
+          "type": "number"
+        },
+        "maxProperties": {
+          "type": "number"
+        },
+        "maximum": {
+          "type": "number"
+        },
+        "minItems": {
+          "type": "number"
+        },
+        "minLength": {
+          "type": "number"
+        },
+        "minProperties": {
+          "type": "number"
+        },
+        "minimum": {
+          "type": "number"
+        },
+        "multipleOf": {
+          "description": "The value must be a multiple of the number\n(e.g. 10 is a multiple of 5)",
+          "type": "number"
+        },
+        "not": {
+          "$ref": "#/definitions/JsonSchema7",
+          "description": "The entity being validated must not match this schema"
+        },
+        "oneOf": {
+          "items": {
+            "$ref": "#/definitions/JsonSchema7"
+          },
+          "type": "array"
+        },
+        "pattern": {
+          "description": "This is a regex string that the value must\nconform to",
+          "type": "string"
+        },
+        "patternProperties": {
+          "additionalProperties": {
+            "$ref": "#/definitions/JsonSchema7"
+          },
+          "description": "The key of this object is a regex for which\nproperties the schema applies to",
+          "type": "object"
+        },
+        "properties": {
+          "additionalProperties": {
+            "$ref": "#/definitions/JsonSchema7"
+          },
+          "description": "The keys that can exist on the object with the\njson schema that should validate their value",
+          "type": "object"
+        },
+        "propertyNames": {
+          "$ref": "#/definitions/JsonSchema7"
+        },
+        "readOnly": {
+          "type": "boolean"
+        },
+        "required": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "then": {
+          "$ref": "#/definitions/JsonSchema7"
+        },
+        "title": {
+          "description": "Title of the schema",
+          "type": "string"
+        },
+        "type": {
+          "anyOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "string"
+            }
+          ],
+          "description": "The basic type of this schema, can be one of\n[string, number, object, array, boolean, null]\nor an array of the acceptable types"
+        },
+        "uniqueItems": {
+          "type": "boolean"
+        },
+        "writeOnly": {
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
+    "LabelDescription": {
+      "description": "Represents an object that can be used to configure a label.",
+      "properties": {
+        "show": {
+          "description": "Optional property that determines whether to show this label.",
+          "type": "boolean"
+        },
+        "text": {
+          "description": "An optional text to be displayed.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "LabelElement": {
+      "description": "A label element.",
+      "properties": {
+        "i18n": {
+          "type": "string"
+        },
+        "options": {
+          "additionalProperties": {},
+          "description": "Any additional options.",
+          "type": "object"
+        },
+        "rule": {
+          "$ref": "#/definitions/Rule",
+          "description": "An optional rule."
+        },
+        "text": {
+          "description": "The text of label.",
+          "type": "string"
+        },
+        "type": {
+          "const": "Label",
+          "description": "The type of this UI schema element.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "Layout": {
+      "description": "Represents a layout element which can order its children\nin a specific way.",
+      "properties": {
+        "elements": {
+          "description": "The child elements of this layout.",
+          "items": {
+            "$ref": "#/definitions/UISchemaElement"
+          },
+          "type": "array"
+        },
+        "options": {
+          "additionalProperties": {},
+          "description": "Any additional options.",
+          "type": "object"
+        },
+        "rule": {
+          "$ref": "#/definitions/Rule",
+          "description": "An optional rule."
+        },
+        "type": {
+          "description": "The type of this UI schema element.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "LeafCondition": {
+      "description": "A leaf condition.",
+      "properties": {
+        "expectedValue": {
+          "description": "The expected value when evaluating the condition"
+        },
+        "scope": {
+          "description": "The scope that determines to which part this element should be bound to.",
+          "type": "string"
+        },
+        "type": {
+          "const": "LEAF",
+          "description": "The type of condition.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "OrCondition": {
+      "description": "An or condition.",
+      "properties": {
+        "conditions": {
+          "items": {
+            "$ref": "#/definitions/Condition"
+          },
+          "type": "array"
+        },
+        "type": {
+          "const": "OR",
+          "description": "The type of condition.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "Rule": {
+      "description": "A rule that may be attached to any UI schema element.",
+      "properties": {
+        "condition": {
+          "$ref": "#/definitions/Condition",
+          "description": "The condition of the rule that must evaluate to true in order\nto trigger the effect."
+        },
+        "effect": {
+          "$ref": "#/definitions/RuleEffect",
+          "description": "The effect of the rule"
+        }
+      },
+      "type": "object"
+    },
+    "RuleEffect": {
+      "description": "The different rule effects.",
+      "enum": ["HIDE", "SHOW", "ENABLE", "DISABLE"],
+      "type": "string"
+    },
+    "SchemaBasedCondition": {
+      "properties": {
+        "failWhenUndefined": {
+          "description": "When the scope resolves to undefined and `failWhenUndefined` is set to `true`, the condition\nwill fail. Therefore the reverse effect will be applied.\n\nBackground:\nMost JSON Schemas will successfully validate against `undefined` data. Specifying that a\ncondition shall fail when data is `undefined` requires to lift the scope to being able to use\nJSON Schema's `required`.\n\nUsing `failWhenUndefined` allows to more conveniently express this condition.",
+          "type": "boolean"
+        },
+        "schema": {
+          "$ref": "#/definitions/JsonSchema"
+        },
+        "scope": {
+          "description": "The scope that determines to which part this element should be bound to.",
+          "type": "string"
+        },
+        "type": {
+          "description": "The type of condition.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "UISchemaElement": {
+      "anyOf": [
+        {
+          "$ref": "#/definitions/BaseUISchemaElement"
+        },
+        {
+          "$ref": "#/definitions/ControlElement"
+        },
+        {
+          "$ref": "#/definitions/Layout"
+        },
+        {
+          "$ref": "#/definitions/LabelElement"
+        },
+        {
+          "$ref": "#/definitions/GroupLayout"
+        },
+        {
+          "$ref": "#/definitions/Category"
+        },
+        {
+          "$ref": "#/definitions/Categorization"
+        },
+        {
+          "$ref": "#/definitions/VerticalLayout"
+        },
+        {
+          "$ref": "#/definitions/HorizontalLayout"
+        }
+      ],
+      "description": "A union of all available UI schema elements.\nThis includes all layout elements, control elements, label elements,\ngroup elements, category elements and categorization elements."
+    },
+    "ValidateFunctionCondition": {
+      "description": "A condition using a validation function to determine its fulfillment.",
+      "properties": {
+        "scope": {
+          "description": "The scope that determines to which part this element should be bound to.",
+          "type": "string"
+        },
+        "type": {
+          "description": "The type of condition.",
+          "type": "string"
+        },
+        "validate": {
+          "description": "Validates whether the condition is fulfilled.",
+          "type": "object"
+        }
+      },
+      "type": "object"
+    },
+    "VerticalLayout": {
+      "description": "A layout which orders its child elements vertically (i.e. from top to bottom).",
+      "properties": {
+        "elements": {
+          "description": "The child elements of this layout.",
+          "items": {
+            "$ref": "#/definitions/UISchemaElement"
+          },
+          "type": "array"
+        },
+        "options": {
+          "additionalProperties": {},
+          "description": "Any additional options.",
+          "type": "object"
+        },
+        "rule": {
+          "$ref": "#/definitions/Rule",
+          "description": "An optional rule."
+        },
+        "type": {
+          "const": "VerticalLayout",
+          "description": "The type of this UI schema element.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    }
+  },
+  "description": "A union of all available UI schema elements.\nThis includes all layout elements, control elements, label elements,\ngroup elements, category elements and categorization elements."
+}

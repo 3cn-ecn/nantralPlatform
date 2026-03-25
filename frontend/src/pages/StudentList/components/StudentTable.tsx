@@ -1,13 +1,5 @@
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TablePagination,
-  TableRow,
-} from '@mui/material';
-import TablePaginationActions from '@mui/material/TablePagination/TablePaginationActions';
+import { Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow } from '@mui/material';
+import TablePaginationActions from '@mui/material/TablePaginationActions';
 import { useQuery } from '@tanstack/react-query';
 
 import { getUserListApi } from '#modules/account/api/getUserList.api';
@@ -49,7 +41,7 @@ export function StudentTable({ filters, updateFilters }: StudentTableProps) {
               .fill(0)
               .map((_, i) => (
                 // eslint-disable-next-line react/no-array-index-key
-                <StudentRowSkeleton key={i.toString()} />
+                (<StudentRowSkeleton key={i.toString()} />)
               ))}
           {isSuccess &&
             !isLoading &&
