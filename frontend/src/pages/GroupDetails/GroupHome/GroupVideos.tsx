@@ -8,7 +8,7 @@ export function GroupVideos({ group }: { group?: Group }) {
   return (
     <Grid container spacing={1} mt={1}>
       {group?.video1 && (
-        <Grid item xs={12} md={6} lg={6}>
+        <Grid size={{ xs: 12, md: 6, lg: 6 }}>
           <ReactPlayer
             url={group?.video1}
             width={'100%'}
@@ -19,7 +19,7 @@ export function GroupVideos({ group }: { group?: Group }) {
         </Grid>
       )}
       {group?.video2 && (
-        <Grid item xs={12} md={6} lg={6}>
+        <Grid size={{ xs: 12, md: 6, lg: 6 }}>
           <ReactPlayer
             url={group?.video2}
             width={'100%'}
