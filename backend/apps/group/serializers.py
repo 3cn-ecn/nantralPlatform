@@ -3,8 +3,8 @@ from datetime import date
 from django.db.models.query_utils import Q
 from django.utils import timezone
 from django.utils.translation import gettext as _
-
 from rest_framework import exceptions, serializers
+from rest_framework.generics import get_object_or_404
 
 from apps.account.models import User
 from apps.account.serializers import UserPreviewSerializer
@@ -12,7 +12,6 @@ from apps.sociallink.serializers import (
     GroupSocialLinkSerializer,
     SocialLinkSerializer,
 )
-
 from .models import Group, GroupType, Label, Membership
 
 
@@ -149,13 +148,19 @@ class ShortMemberSerializer(serializers.ModelSerializer):
         fields = ["summary", "description", "begin_date", "end_date"]
 
     def validate_begin_date(self, value: date) -> date:
-        group_type: GroupType = self.instance.group.group_type
+        request = self.context.get("request")
+        group_type: GroupType = get_object_or_404(
+            GroupType.objects.all(), pk=request.query_params["type"]
+        )
         if not group_type.no_membership_dates and value is None:
             raise exceptions.ValidationError(_("This field is required."))
         return value
 
     def validate_end_date(self, value: date) -> date:
-        group_type: GroupType = self.instance.group.group_type
+        request = self.context.get("request")
+        group_type: GroupType = get_object_or_404(
+            GroupType.objects.all(), pk=request.query_params["type"]
+        )
         if not group_type.no_membership_dates and value is None:
             raise exceptions.ValidationError(_("This field is required."))
         return value
