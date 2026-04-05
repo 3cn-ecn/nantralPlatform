@@ -1,14 +1,14 @@
 # COMMANDS FOR UNIX
-CREATE := touch
 PYTHON := python3
+CREATE := touch
 COPY := cp
 PIPENV := pipenv
 EXPORT = export $(1)=$(2)
 
 # MODIFY COMMANDS FOR WINDOWS
 ifeq '$(findstring ;,$(PATH))' ';'
-	CREATE := copy NUL
 	PYTHON := python
+	CREATE := copy NUL
 	COPY := copy
 	PIPENV := $(PYTHON) -m pipenv
 	EXPORT = set $(1)=$(2)
@@ -18,18 +18,18 @@ endif
 # Install the project
 .PHONY: install
 install:
-	$(PYTHON) -m pip install --upgrade --user pipenv
+	$(PYTHON) -m pip install --upgrade pipenv --break-system-packages 2>/dev/null || $(PYTHON) -m pip install --upgrade --user pipenv || $(PYTHON) -m pip install --upgrade pipenv
 	cd deployment && \
 		$(CREATE) backend.env
 	cd backend/config/settings && \
 		$(COPY) .env.example .env
 	cd backend && \
-		mkdir "static/front" -p && \
+		mkdir -p "static/front" && \
 		$(call EXPORT,PIPENV_VENV_IN_PROJECT,1) && \
 		$(PIPENV) sync --dev && \
 		$(PIPENV) run migrate && \
 		$(call EXPORT,DJANGO_SUPERUSER_PASSWORD,admin) && \
-		$(PIPENV) run django createsuperuser --noinput --username admin --email admin@ec-nantes.fr && \
+		$(PIPENV) run django createsuperuser --noinput --username np_admin --email admin@ec-nantes.fr && \
 		$(PIPENV) run fakedata
 	cd frontend && \
 		npm ci
