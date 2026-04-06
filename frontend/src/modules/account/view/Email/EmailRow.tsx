@@ -45,7 +45,7 @@ export function EmailRow({
             <Tooltip title={t('email.chip.organisationTooltip')}>
               <Chip
                 icon={<School />}
-                label={t('email.chip.organisation') + " (" + email.authorizedOrganisation + ")"}
+                label={`${t('email.chip.organisation')} (${email.authorizedOrganisation})`}
                 color={'secondary'}
                 size={'small'}
               />

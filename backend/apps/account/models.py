@@ -14,11 +14,7 @@ from apps.utils.fields.image_field import CustomImageField
 
 from .manager import UserManager
 from .utils import send_email_confirmation
-from .validators import (
-    ecn_email_validator,
-    validate_matrix_username,
-    organisation_email_validator
-)
+from .validators import organisation_email_validator, validate_matrix_username
 
 FACULTIES = [
     ("Gen", "Ingénieur Généraliste"),
@@ -246,7 +242,7 @@ class Email(models.Model):
         super().save(*args, **kwargs)
 
     @admin.display(boolean=True)
-    def has_authorized_organisation_email(self):
+    def is_authorized_organisation_email(self):
         return self.authorized_organisation() is not None
 
     @admin.display(description=_("Authorized Organisation"))

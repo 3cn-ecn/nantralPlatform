@@ -180,14 +180,14 @@ class EmailSerializer(serializers.ModelSerializer):
         style={"input_type": "password"}, required=False, write_only=True
     )
     is_main = serializers.BooleanField(required=False)
-    has_authorized_organisation_email = serializers.BooleanField(read_only=True)
+    is_authorized_organisation_email = serializers.BooleanField(read_only=True)
     authorized_organisation = serializers.CharField(read_only=True)
 
     class Meta:
         model = Email
         fields = (
             "email",
-            "has_authorized_organisation_email",
+            "is_authorized_organisation_email",
             "authorized_organisation",
             "is_valid",
             "is_visible",
@@ -197,7 +197,7 @@ class EmailSerializer(serializers.ModelSerializer):
         )
         read_only_fields = (
             "email",
-            "has_authorized_organisation_email",
+            "is_authorized_organisation_email",
             "authorized_organisation",
             "is_valid",
             "uuid",
