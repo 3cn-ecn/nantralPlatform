@@ -55,7 +55,7 @@ def send_email_confirmation(email, request: HttpRequest) -> None:
         return
 
     if request:
-        if not email.is_ecn_email():
+        if not email.is_authorized_organisation_email:
             messages.success(
                 request,
                 (
@@ -68,7 +68,7 @@ def send_email_confirmation(email, request: HttpRequest) -> None:
                 request,
                 (
                     "Un mail vous a été envoyé pour confirmer votre adresse mail "
-                    "Centrale Nantes.\nVous pouvez accéder à votre boîte mail "
+                    "institutionnelle.\nVous pouvez accéder à votre boîte mail "
                     'école <a href="https://webmail.ec-nantes.fr">ici</a>.'
                 ),
             )

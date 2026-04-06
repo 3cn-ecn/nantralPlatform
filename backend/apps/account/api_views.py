@@ -100,7 +100,7 @@ class AuthViewSet(GenericViewSet):
 
         # Expired invitation
         elif user.invitation is not None and not user.invitation.is_valid():
-            if not user.has_ecn_email():
+            if not user.has_authorized_organisation_email():
                 email_ecn = serializer.validated_data.get("email_ecn")
                 if email_ecn:
                     user.add_email(email_ecn, request=request)
@@ -116,9 +116,9 @@ class AuthViewSet(GenericViewSet):
                     )
                     data["code"] = TEMPORARY_ACCOUNT_EXPIRED
                     response_status = status.HTTP_401_UNAUTHORIZED
-            elif not user.has_valid_ecn_email():
+            elif not user.has_valid_authorized_organisation_email():
                 data["message"] = _(
-                    "Your ECN e-mail is not verified. Please click on the verification link or "
+                    "Your authorized organization e-mail is not verified. Please click on the verification link or "
                     "add another address"
                 )
                 data["code"] = ECN_EMAIL_NOT_VALIDATED

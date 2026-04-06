@@ -44,13 +44,26 @@ install:
 .PHONY: update
 update:
 	cd frontend && \
-		npm i
+		npm update && \
+		npm run build
 	cd email-templates-generator && \
-		npm i && \
+		npm update && \
 		npm run build
 	cd backend && \
-		$(PIPENV) sync --dev && \
+		$(call EXPORT,PIPENV_VENV_IN_PROJECT,1) && \
+		$(PIPENV) update && \
 		$(PIPENV) run migrate
+
+
+# Check outdated dependencies
+.PHONY: outdated
+outdated:
+	@echo "=== Frontend outdated packages ==="
+	@cd frontend && npm outdated || true
+	@echo "\n=== Email templates generator outdated packages ==="
+	@cd email-templates-generator && npm outdated || true
+	@echo "\n=== Backend outdated packages ==="
+	@cd backend && $(call EXPORT,PIPENV_VENV_IN_PROJECT,1) && $(PIPENV) check --outdated || true
 
 
 # Run the tests

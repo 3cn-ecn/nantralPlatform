@@ -64,6 +64,23 @@ def django_validate_password(password):
         raise ValidationError(e.messages)
 
 
+def organisation_email_validator(mail: str):
+    if re.search(r"@eleves\.ec-nantes\.fr$", mail) is not None:
+        return "EC-Nantes Student"
+    elif re.search(r"@ec-nantes\.fr$", mail) is not None:
+        return "EC-Nantes Staff"
+    elif re.search(r"@centraliens-nantes\.org$", mail) is not None:
+        return "EC-Nantes Alumni"
+    elif re.search(r"@fake\.ec-nantes\.fr$", mail) is not None:
+        return "Test email"
+    else:
+        raise ValidationError(
+            _(
+                "You must use a valid email address from an authorized organization."
+            ),
+        )
+
+
 def ecn_email_validator(mail: str):
     if (
         re.search(
