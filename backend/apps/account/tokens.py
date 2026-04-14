@@ -1,7 +1,5 @@
 from django.contrib.auth.tokens import PasswordResetTokenGenerator
 
-import six
-
 
 class EmailConfirmationTokenGenerator(PasswordResetTokenGenerator):
     """Generate tokens based on email id
@@ -11,7 +9,7 @@ class EmailConfirmationTokenGenerator(PasswordResetTokenGenerator):
     """
 
     def _make_hash_value(self, email, timestamp):
-        return six.text_type(email.pk) + six.text_type(timestamp)
+        return str(email.pk) + str(timestamp)
 
 
 email_confirmation_token = EmailConfirmationTokenGenerator()
