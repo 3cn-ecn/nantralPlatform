@@ -5,30 +5,59 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('account', '0019_remove_user_has_opened_matrix_and_more'),
+        ("account", "0019_remove_user_has_opened_matrix_and_more"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='user',
-            name='faculty',
-            field=models.CharField(choices=[('Gen', 'Ingénieur Généraliste'), ('Iti', 'Ingénieur de Spécialité (ITII)'), ('Mas', 'Master'), ('Doc', 'Doctorat'), ('Bac', 'Bachelor'), ('MSp', 'Mastère Spécialisé')], max_length=200, verbose_name='Faculty'),
+            model_name="user",
+            name="faculty",
+            field=models.CharField(
+                choices=[
+                    ("Gen", "Ingénieur Généraliste"),
+                    ("Iti", "Ingénieur de Spécialité (ITII)"),
+                    ("Mas", "Master"),
+                    ("Doc", "Doctorat"),
+                    ("Bac", "Bachelor"),
+                    ("MSp", "Mastère Spécialisé"),
+                ],
+                max_length=200,
+                verbose_name="Faculty",
+            ),
         ),
         migrations.AlterField(
-            model_name='user',
-            name='path',
-            field=models.CharField(blank=True, choices=[('Cla', ''), ('Alt', 'Alternance'), ('I-A', 'Ingénieur-Architecte'), ('A-I', 'Architecte-Ingénieur'), ('I-M', 'Ingénieur-Manager'), ('M-I', 'Manager-Ingénieur'), ('I-O', 'Ingénieur-Officier'), ('O-I', 'Officier-Ingénieur')], max_length=200, null=True, verbose_name='Path'),
+            model_name="user",
+            name="path",
+            field=models.CharField(
+                blank=True,
+                choices=[
+                    ("Cla", ""),
+                    ("Alt", "Alternance"),
+                    ("I-A", "Ingénieur-Architecte"),
+                    ("A-I", "Architecte-Ingénieur"),
+                    ("I-M", "Ingénieur-Manager"),
+                    ("M-I", "Manager-Ingénieur"),
+                    ("I-O", "Ingénieur-Officier"),
+                    ("O-I", "Officier-Ingénieur"),
+                ],
+                max_length=200,
+                null=True,
+                verbose_name="Path",
+            ),
         ),
         migrations.AlterField(
-            model_name='user',
-            name='picture',
-            field=apps.utils.fields.image_field.CustomImageField(blank=True, null=True, verbose_name='Profile picture'),
+            model_name="user",
+            name="picture",
+            field=apps.utils.fields.image_field.CustomImageField(
+                blank=True, null=True, verbose_name="Profile picture"
+            ),
         ),
         migrations.AlterField(
-            model_name='user',
-            name='promo',
-            field=models.IntegerField(blank=True, null=True, verbose_name='Year of entry'),
+            model_name="user",
+            name="promo",
+            field=models.IntegerField(
+                blank=True, null=True, verbose_name="Year of entry"
+            ),
         ),
     ]
