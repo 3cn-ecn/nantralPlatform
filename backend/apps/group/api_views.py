@@ -1,4 +1,3 @@
-import requests
 from django.conf import settings
 from django.db.models import Count, F, Q, QuerySet
 from django.http.request import QueryDict
@@ -7,6 +6,8 @@ from django.template.loader import render_to_string
 from django.utils import timezone
 from django.utils.dateparse import parse_datetime
 from django.utils.translation import gettext as _
+
+import requests
 from requests import Request
 from rest_framework import (
     decorators,
@@ -24,6 +25,7 @@ from rest_framework.settings import api_settings
 
 from apps.utils.discord import respond_admin_request, send_admin_request
 from apps.utils.parse import parse_bool
+
 from .models import Group, GroupType, Label, Membership
 from .permissions import (
     AdminRequestListPermission,
@@ -479,7 +481,7 @@ class MembershipViewSet(viewsets.ModelViewSet):
         )
         # check that memberships are from same group
         if (lower and lower.group != member.group) or self.query_params.get(
-                "group"
+            "group"
         ) != member.group.slug:
             raise exceptions.ValidationError(
                 _("All memberships objects must be from the same group."),
@@ -604,8 +606,8 @@ class MembershipViewSet(viewsets.ModelViewSet):
             )
             membership.user.email_user(
                 subject=(
-                        _("Your admin request for %(group)s has been accepted.")
-                        % {"group": membership.group.name}
+                    _("Your admin request for %(group)s has been accepted.")
+                    % {"group": membership.group.name}
                 ),
                 message=mail,
                 html_message=mail,
@@ -625,7 +627,7 @@ class MembershipViewSet(viewsets.ModelViewSet):
         return response.Response(
             {
                 "message": _("The user %(user)s is now admin!")
-                           % {"user": membership.user}
+                % {"user": membership.user}
             },
             status=status.HTTP_202_ACCEPTED,
         )
@@ -655,8 +657,8 @@ class MembershipViewSet(viewsets.ModelViewSet):
             )
             membership.user.email_user(
                 subject=(
-                        _("Your admin request for %(group)s has been denied.")
-                        % {"group": membership.group.name}
+                    _("Your admin request for %(group)s has been denied.")
+                    % {"group": membership.group.name}
                 ),
                 message=mail,
                 html_message=mail,
@@ -676,7 +678,7 @@ class MembershipViewSet(viewsets.ModelViewSet):
         return response.Response(
             {
                 "message": _("The admin request from %(user)s has been denied.")
-                           % {"user": membership.user}
+                % {"user": membership.user}
             },
             status=status.HTTP_202_ACCEPTED,
         )
