@@ -326,15 +326,6 @@ class HistoryGroupViewSet(
                 code="invalid",
             )
 
-        if (
-            group
-            and group.history.most_recent().history_id == history.history_id
-        ):
-            raise BadRequestException(
-                _("You cannot delete the most recent version of a group."),
-                code="invalid",
-            )
-
         history.delete()
         return response.Response(status=status.HTTP_204_NO_CONTENT)
 
