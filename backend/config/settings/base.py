@@ -166,8 +166,6 @@ LANGUAGES = [
 LANGUAGE_COOKIE_NAME = "language"
 TIME_ZONE = "Europe/Paris"
 USE_I18N = True
-USE_L10N = True
-USE_TZ = True
 
 # Model translation
 MODELTRANSLATION_FALLBACK_LANGUAGES = ("en", "fr")
@@ -198,8 +196,14 @@ STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 MEDIA_URL = "/media/"
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
-DEFAULT_FILE_STORAGE = "django.core.files.storage.FileSystemStorage"
-
+STORAGES = {
+    "default": {
+        "BACKEND": "django.core.files.storage.FileSystemStorage",
+    },
+    "staticfiles": {
+        "BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage",
+    },
+}
 
 # Less origin restrictive for Youtube embed videos
 SECURE_REFERRER_POLICY = "no-referrer-when-downgrade"
