@@ -92,7 +92,7 @@
     "date-fns": "^2.30.0",
     "i18next": "^23.5.1",
     "i18next-browser-languagedetector": "^8.0.0",
-    "i18next-http-backend": "^2.1.1",
+    "i18next-http-backend": "^3.0.5",
     "jest-environment-jsdom": "^29.4.3",
     "lodash-es": "^4.17.21",
     "mapbox-gl": "^3.11.0",
