@@ -66,6 +66,8 @@ export interface CategoryNode extends BaseLayout {
 export interface ControlNode extends BaseLayout {
   type: 'Control';
   inputType?: string;
+  label?: TranslatedFieldObject;
+  description?: TranslatedFieldObject;
   schema?: JsonSchema;
 }
 

@@ -6,7 +6,7 @@ import {
   UISchemaElement,
 } from '@jsonforms/core';
 import { UUID } from 'crypto';
-import { clone, set } from 'lodash';
+import { clone, get, set } from 'lodash';
 
 import { FormStateError } from '#modules/form/types/errors';
 import {
@@ -15,7 +15,6 @@ import {
   ContainerNode,
   ControlNode,
   GroupNode,
-  LayoutNode,
 } from '#modules/form/types/form.type';
 import { JsonFormSchema } from '#modules/form/types/jsonForm.type';
 import { BaseLanguage } from '#shared/i18n/config';
@@ -24,6 +23,18 @@ import { TranslatedFieldObject } from '#shared/infra/translatedFields/translated
 export interface TreeState {
   rootId: UUID;
   nodes: Record<UUID, AnyLayoutNode>;
+}
+
+interface FormNodePayload {
+  elements?: UUID[];
+  type?: string;
+  label?: TranslatedFieldObject;
+  description?: TranslatedFieldObject;
+  inputType?: string;
+  options?: UISchemaElement['options'];
+  scope?: string;
+  text?: TranslatedFieldObject;
+  schema?: JsonSchema;
 }
 
 // Type guards
@@ -53,7 +64,7 @@ export function createInitialTree(): TreeState {
 export function addNode(
   state: TreeState,
   parentId: UUID,
-  node: Omit<LayoutNode, 'id' | 'parentId'>,
+  node: FormNodePayload & { type: string },
 ): TreeState {
   const parent = state.nodes[parentId];
 
@@ -100,7 +111,7 @@ export function addNode(
 export function updateNode(
   state: TreeState,
   nodeId: string,
-  updates: Partial<Omit<LayoutNode, 'id' | 'parentId'>>,
+  updates: FormNodePayload,
 ): TreeState {
   const node = state.nodes[nodeId];
 
@@ -207,9 +218,13 @@ export function isDescendantOf(
 
 function saveTranslation(
   keys: Record<BaseLanguage, object>,
-  field: TranslatedFieldObject,
+  field: TranslatedFieldObject | undefined,
   key: string,
 ) {
+  if (!field) {
+    return;
+  }
+
   Object.entries(keys).forEach(([lang, list]) => {
     if (lang in field && field[lang]) {
       set(list, key, field[lang]);
@@ -222,6 +237,67 @@ function saveTranslation(
       Object.entries(field).find(([, val]) => val)?.[1] || '>EMPTY<',
     );
   });
+}
+
+function getTranslatedField(
+  keys: Record<BaseLanguage, object>,
+  nodeKey: string,
+  fieldKey: string,
+  fallback?: string,
+): TranslatedFieldObject {
+  return Object.fromEntries(
+    Object.entries(keys).map(([lang, list]) => {
+      const language = lang as BaseLanguage;
+      const value = get(list, `${nodeKey}.${fieldKey}`);
+      const legacyValue = get(list, nodeKey);
+      return [
+        language,
+        (typeof value === 'string' && value) ||
+          (typeof legacyValue === 'string' && legacyValue) ||
+          fallback ||
+          '',
+      ];
+    }),
+  ) as TranslatedFieldObject;
+}
+
+function stripQuestionTextFromSchema(schema?: JsonSchema) {
+  if (!schema) return schema;
+
+  const nextSchema = clone(schema) as JsonSchema & {
+    title?: string;
+    description?: string;
+  };
+
+  delete nextSchema.title;
+  delete nextSchema.description;
+
+  return nextSchema;
+}
+
+function resolveSchemaFromScope(
+  schema: JsonSchema | undefined,
+  scope?: string,
+): JsonSchema | undefined {
+  if (!schema || !scope) return schema;
+
+  const path = scope.replace(/^#\/?/, '').split('/').filter(Boolean);
+
+  let current: JsonSchema | undefined = schema;
+  for (let i = 0; i < path.length; i += 2) {
+    if (!current) return undefined;
+    const segment = path[i];
+    if (segment !== 'properties') {
+      return current;
+    }
+    const propertyName = path[i + 1];
+    if (!propertyName || !current.properties) {
+      return undefined;
+    }
+    current = current.properties[propertyName] as JsonSchema | undefined;
+  }
+
+  return current;
 }
 
 // Export to tree JSON
@@ -283,20 +359,25 @@ export function exportTree(state: TreeState): {
     }
 
     if (node.type === 'Control') {
-      const title = node.schema?.title || 'field';
+      const controlKey = nodeId;
+      const controlSchema = stripQuestionTextFromSchema(node.schema);
+      const title = node.label?.fr || node.label?.en || 'field';
       const baseName = normalizeName(title);
       const propName = ensureUnique(baseName, usedNamesAtLevel);
+      currentProperties[propName] = {
+        ...(controlSchema || { type: 'string' }),
+        i18n: controlKey,
+      } as unknown as JsonSchema;
 
-      currentProperties[propName] = node.schema
-        ? clone(node.schema)
-        : { type: 'string', title: title };
+      saveTranslation(i18nKeys, node.label, `${controlKey}.label`);
+      saveTranslation(i18nKeys, node.description, `${controlKey}.description`);
 
       const scope = '#/properties/' + [...path, propName].join('/properties/');
 
       return {
         type: 'Control',
         scope,
-        i18n: nodeId,
+        i18n: controlKey,
       } as UISchemaElement;
     }
 
@@ -354,11 +435,7 @@ export function exportTree(state: TreeState): {
         );
         elements.push(childUi);
       }
-      const out = { type: node.type, elements };
-      // if ('label' in node && node.label) {
-      //   (out as unknown as GroupNode | CategoryNode).label = node.label;
-      // }
-      return out;
+      return { type: node.type, elements };
     }
   }
 
@@ -385,6 +462,7 @@ export function importJsonForm(jsonForm: JsonFormSchema): TreeState {
   const rootId = buildNormalizedNodes(
     jsonForm.uiSchema,
     jsonForm.i18nKeys,
+    jsonForm.schema,
     nodes,
   );
 
@@ -397,17 +475,34 @@ export function importJsonForm(jsonForm: JsonFormSchema): TreeState {
 function buildNormalizedNodes(
   node: UISchemaElement,
   i18nKeys: Record<BaseLanguage, object>,
+  schemaRoot: JsonSchema | undefined,
   nodes: Record<UUID, AnyLayoutNode>,
   parentId?: UUID,
 ): UUID {
   const id = window.crypto.randomUUID();
 
   if (node.type === 'Control') {
+    const controlNode = node as UISchemaElement & {
+      scope?: string;
+      i18n?: string;
+    };
+    const schema = stripQuestionTextFromSchema(
+      resolveSchemaFromScope(schemaRoot, controlNode.scope),
+    );
+    const controlKey =
+      (schema as JsonSchema & { i18n?: string })?.i18n ??
+      controlNode.i18n ??
+      id;
+    const label = getTranslatedField(i18nKeys, controlKey, 'label');
+    const description = getTranslatedField(i18nKeys, controlKey, 'decription');
+
     nodes[id] = {
       id,
       parentId,
       type: 'Control',
-      schema: clone(node),
+      schema: schema ? clone(schema) : undefined,
+      label,
+      description,
     } as ControlNode;
   } else if (node.type === 'Label') {
     nodes[id] = {
@@ -423,7 +518,7 @@ function buildNormalizedNodes(
     };
   } else if (node.type === 'Group') {
     const elements = (node as GroupLayout).elements.map((child) =>
-      buildNormalizedNodes(child, i18nKeys, nodes, id),
+      buildNormalizedNodes(child, i18nKeys, schemaRoot, nodes, id),
     );
     const groupNode = node as GroupLayout;
 
@@ -441,7 +536,7 @@ function buildNormalizedNodes(
     };
   } else if (node.type === 'Category') {
     const elements = (node as Category).elements.map((child) =>
-      buildNormalizedNodes(child, i18nKeys, nodes, id),
+      buildNormalizedNodes(child, i18nKeys, schemaRoot, nodes, id),
     );
 
     nodes[id] = {
@@ -458,7 +553,7 @@ function buildNormalizedNodes(
     };
   } else if ('elements' in node) {
     const elements = node.elements.map((child) =>
-      buildNormalizedNodes(child, i18nKeys, nodes, id),
+      buildNormalizedNodes(child, i18nKeys, schemaRoot, nodes, id),
     );
 
     nodes[id] = {

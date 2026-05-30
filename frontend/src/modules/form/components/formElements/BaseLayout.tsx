@@ -1,12 +1,4 @@
-import React, {
-  createContext,
-  FC,
-  ReactNode,
-  useCallback,
-  useContext,
-  useMemo,
-  useState,
-} from 'react';
+import React, { FC, ReactNode, useCallback, useMemo, useState } from 'react';
 
 import { pointerIntersection } from '@dnd-kit/collision';
 import { useDroppable } from '@dnd-kit/react';
@@ -71,8 +63,6 @@ interface Layout {
   };
 }
 
-const DepthContext = createContext(0);
-
 // =========================
 // LAYOUT INPUT COMPONENT
 // =========================
@@ -89,7 +79,6 @@ export const LayoutInput = ({
   const { jsonForm, addNode, moveNode } = useJsonForm();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
-  const depth = useContext(DepthContext);
 
   // const { ref } = useDroppable({
   //   id: 'drop-' + nodeId,
@@ -139,84 +128,64 @@ export const LayoutInput = ({
   const isEmpty = !parentElements || parentElements.length === 0;
 
   return (
-    <DepthContext.Provider value={depth + 1}>
-      <ContainerElement
-        // ref={ref}
-        nodeId={nodeId}
-        m={1}
-        gap={1}
-        // sx={
-        //   isEmpty
-        //     ? {
-        //         minHeight: '120px',
-        //         border: `2px dashed ${theme.palette.divider}`,
-        //         borderRadius: `${theme.shape.borderRadius}px`,
-        //         backgroundColor: theme.palette.action.hover,
-        //         display: 'flex',
-        //         alignItems: 'center',
-        //         justifyContent: 'center',
-        //       }
-        //     : undefined
-        // }
-      >
-        {parentElements?.map((childId: UUID, i: number) => (
-          <BaseLayout
-            key={childId}
-            nodeId={childId}
-            parentId={nodeId}
-            handleMoveSibling={handleMoveSibling}
-            first={i === 0}
-            index={i}
-            last={i === parentElements.length - 1}
-          />
-        ))}
-        {isEmpty && <DropLayoutPlaceHolder parentId={nodeId} />}
-        {allowedLayoutTypes && (
-          <>
-            <Button
-              variant={'contained'}
-              color={'primary'}
-              onClick={handleClick}
-              aria-label="add"
-              id={`add-button-${nodeId}`}
-              aria-controls={open ? `add-menu-${nodeId}` : undefined}
-              aria-expanded={open ? 'true' : undefined}
-              aria-haspopup="true"
-              startIcon={<AddIcon />}
-              sx={{ justifySelf: 'center', alignSelf: 'center' }}
-            >
-              Ajouter un élement
-            </Button>
-            <Menu
-              id={`add-menu-${nodeId}`}
-              open={open}
-              anchorEl={anchorEl}
-              onClose={handleClose}
-              slotProps={{
-                list: {
-                  'aria-labelledby': `add-button-${nodeId}`,
-                },
-              }}
-            >
-              {allowedLayoutTypes.map((type) => (
-                <MenuItem
-                  key={type}
-                  onClick={() => {
-                    const input = layoutTypes.find((c) => c.title === type);
-                    if (input) {
-                      handleAddChild(clone(input.defaultUiSchema));
-                    }
-                    handleClose();
-                  }}
-                >
-                  {type}
-                </MenuItem>
-              ))}
-            </Menu>
-          </>
-        )}
-      </ContainerElement>
-    </DepthContext.Provider>
+    <ContainerElement nodeId={nodeId} gap={1}>
+      {parentElements?.map((childId: UUID, i: number) => (
+        <BaseLayout
+          key={childId}
+          nodeId={childId}
+          parentId={nodeId}
+          handleMoveSibling={handleMoveSibling}
+          first={i === 0}
+          index={i}
+          last={i === parentElements.length - 1}
+        />
+      ))}
+      {isEmpty && <DropLayoutPlaceHolder parentId={nodeId} />}
+      {allowedLayoutTypes && (
+        <>
+          <Button
+            variant={'contained'}
+            color={'primary'}
+            onClick={handleClick}
+            aria-label="add"
+            id={`add-button-${nodeId}`}
+            aria-controls={open ? `add-menu-${nodeId}` : undefined}
+            aria-expanded={open ? 'true' : undefined}
+            aria-haspopup="true"
+            startIcon={<AddIcon />}
+            sx={{ justifySelf: 'center', alignSelf: 'center' }}
+          >
+            Ajouter un élement
+          </Button>
+          <Menu
+            id={`add-menu-${nodeId}`}
+            open={open}
+            anchorEl={anchorEl}
+            onClose={handleClose}
+            slotProps={{
+              list: {
+                'aria-labelledby': `add-button-${nodeId}`,
+              },
+            }}
+          >
+            {allowedLayoutTypes.map((type) => (
+              <MenuItem
+                key={type}
+                onClick={() => {
+                  const input = layoutTypes.find((c) => c.title === type);
+                  if (input) {
+                    handleAddChild(clone(input.defaultUiSchema));
+                  }
+                  handleClose();
+                }}
+              >
+                {type}
+              </MenuItem>
+            ))}
+          </Menu>
+        </>
+      )}
+    </ContainerElement>
   );
 };
 
@@ -671,7 +640,6 @@ export function BaseLayout({
 }: BaseLayoutProps) {
   const { jsonForm, removeNode } = useJsonForm();
   const theme = useTheme();
-  const depth = useContext(DepthContext);
 
   const actualNodeId = nodeId ?? jsonForm.rootId;
 
@@ -686,13 +654,7 @@ export function BaseLayout({
     type: 'layout',
     accept: 'layout',
     group: parentId,
-    //collisionDetector: pointerIntersection,
-    //collisionPriority: depth,
   });
-  /*const { ref, isDragging } = useDraggable({
-    id: actualNodeId,
-    type: 'layout',
-  });*/
   return (
     <FlexRow
       className={'layout-element'}
@@ -718,17 +680,15 @@ export function BaseLayout({
           <DragIndicatorIcon />
         </IconButton>
       )}
-      <DepthContext.Provider value={depth + 1}>
-        <Box width={'100%'}>
-          {layout?.element && (
-            <LayoutInput
-              allowedLayoutTypes={layout.allowedChildren}
-              nodeId={actualNodeId}
-              ContainerElement={layout.element}
-            />
-          )}
-        </Box>
-      </DepthContext.Provider>
+      <Box width={'100%'}>
+        {layout?.element && (
+          <LayoutInput
+            allowedLayoutTypes={layout.allowedChildren}
+            nodeId={actualNodeId}
+            ContainerElement={layout.element}
+          />
+        )}
+      </Box>
       {handleMoveSibling && (
         <FlexCol gap={1}>
           <IconButton
