@@ -1,7 +1,7 @@
 import jsonschema
 from rest_framework import serializers
 
-from apps.form.models import FormSchema, FormAnswer
+from apps.form.models import FormAnswer, FormSchema
 
 
 def to_ajv_error(error: jsonschema.ValidationError):
@@ -59,15 +59,21 @@ class FormAnswerSerializer(serializers.ModelSerializer):
     def validate_data(self, data):
         form_schema = self.context.get("form_schema")
         if form_schema is None:
-            raise serializers.ValidationError("Form schema is required for validation.")
+            raise serializers.ValidationError(
+                "Form schema is required for validation."
+            )
 
         validator = jsonschema.Draft7Validator(form_schema.schema)
         if not validator.is_valid(data):
-            raise serializers.ValidationError(list(map(to_ajv_error, validator.iter_errors(data))))
+            raise serializers.ValidationError(
+                list(map(to_ajv_error, validator.iter_errors(data)))
+            )
 
         return data
 
     def create(self, validated_data):
         form_schema = self.context.get("form_schema")
         user = self.context.get("request").user
-        return FormAnswer.objects.create(form_schema=form_schema, user=user, **validated_data)
+        return FormAnswer.objects.create(
+            form_schema=form_schema, user=user, **validated_data
+        )

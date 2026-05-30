@@ -10,7 +10,6 @@ import {
   Typography,
 } from '@mui/material';
 
-import { FormPreview } from '#modules/form/components/FormPreview';
 import { SelectBaseComponent } from '#modules/form/components/SelectBaseComponent';
 import { JsonFormProvider } from '#modules/form/state/JsonFormContext';
 import { JsonFormSchema } from '#modules/form/types/jsonForm.type';
@@ -21,8 +20,7 @@ const INITIAL_FORM_STATE: JsonFormSchema = {
   uuid: 'none',
   name: '',
   description: '',
-  i18nKeys_en: {},
-  i18nKeys_fr: {},
+  i18nKeys: { fr: {}, en: {} },
   schema: { type: 'object', properties: {} },
   uiSchema: { type: 'VerticalLayout', elements: [] } as UISchemaElement,
 };
@@ -45,7 +43,7 @@ export default function EditFormPage() {
 
   return (
     <JsonFormProvider>
-      <Container>
+      <Container sx={{ my: 2 }}>
         <Card>
           <CardContent>
             {headerEdit ? (
@@ -74,7 +72,6 @@ export default function EditFormPage() {
           </CardActions>
         </Card>
         <SelectBaseComponent />
-        <FormPreview />
       </Container>
     </JsonFormProvider>
   );

@@ -3,6 +3,8 @@ import { FC } from 'react';
 import { JsonSchema, UISchemaElement } from '@jsonforms/core';
 import { UUID } from 'crypto';
 
+import { TranslatedFieldObject } from '#shared/infra/translatedFields/translatedField.types';
+
 export interface InputTypeElementProps {
   label?: string;
   helperText?: string;
@@ -52,13 +54,13 @@ export interface ContainerNode extends BaseLayout {
 export interface GroupNode extends BaseLayout {
   type: 'Group';
   elements: UUID[];
-  label?: string;
+  label: TranslatedFieldObject;
 }
 
 export interface CategoryNode extends BaseLayout {
   type: 'Category';
   elements: UUID[];
-  label: string;
+  label: TranslatedFieldObject;
 }
 
 export interface ControlNode extends BaseLayout {
@@ -69,7 +71,7 @@ export interface ControlNode extends BaseLayout {
 
 export interface LabelNode extends BaseLayout {
   type: 'Label';
-  text: string;
+  text: TranslatedFieldObject;
 }
 
 export type AnyLayoutNode =

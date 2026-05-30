@@ -16,8 +16,7 @@ export const adaptJsonFormSchema = (
     description: schemaDTO.description,
     schema: schemaDTO.schema,
     uiSchema: schemaDTO.ui_schema,
-    i18nKeys_en: schemaDTO.i18n_keys_en,
-    i18nKeys_fr: schemaDTO.i18n_keys_fr,
+    i18nKeys: { en: schemaDTO.i18n_keys_en, fr: schemaDTO.i18n_keys_fr },
   };
 };
 

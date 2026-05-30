@@ -51,7 +51,9 @@ export function NotificationMenu() {
     <>
       <IconButton
         size="large"
-        aria-label={t('notification.aria-label', { nb: nbNewNotifications })}
+        aria-label={t('notification.aria-label', {
+          nb: nbNewNotifications,
+        })}
         onClick={handleClick}
         id="notification-button"
       >
