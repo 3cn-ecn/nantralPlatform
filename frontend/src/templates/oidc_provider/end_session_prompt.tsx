@@ -85,7 +85,7 @@ function EndSessionPrompt() {
                   </Tooltip>
                 ) : (
                   // no tooltip nor url if it was not provided
-                  (<strong>{client.name}</strong>)
+                  <strong>{client.name}</strong>
                 ),
               ]}
             />

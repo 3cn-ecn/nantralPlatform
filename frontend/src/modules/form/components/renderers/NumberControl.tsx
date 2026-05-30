@@ -1,62 +1,76 @@
-import * as React from 'react';
-
 import { NumberField as BaseNumberField } from '@base-ui/react/number-field';
+import {
+  ControlProps,
+  isDescriptionHidden,
+  isNumberControl,
+  RankedTester,
+  rankWith,
+} from '@jsonforms/core';
+import { useFocus } from '@jsonforms/material-renderers/src/util';
+import { withJsonFormsControlProps } from '@jsonforms/react';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
+import { FormHelperText } from '@mui/material';
 import FormControl from '@mui/material/FormControl';
-import FormHelperText from '@mui/material/FormHelperText';
 import IconButton from '@mui/material/IconButton';
 import InputAdornment from '@mui/material/InputAdornment';
 import InputLabel from '@mui/material/InputLabel';
 import OutlinedInput from '@mui/material/OutlinedInput';
+import merge from 'lodash/merge';
 
-/**
- * This component is a placeholder for FormControl to correctly set the shrink label state on SSR.
- */
-function SSRInitialFilled(_: BaseNumberField.Root.Props) {
-  return null;
-}
-SSRInitialFilled.muiName = 'Input';
+export const NumberControl = (props: ControlProps) => {
+  const {
+    id,
+    description,
+    errors,
+    label,
+    uischema,
+    visible,
+    required,
+    config,
+  } = props;
+  const [focused, onFocus, onBlur] = useFocus();
+  const isValid = errors.length === 0;
+  const appliedUiSchemaOptions = merge({}, config, uischema.options);
 
-export default function NumberField({
-  id: idProp,
-  label,
-  error,
-  size = 'medium',
-  helperText,
-  ...other
-}: BaseNumberField.Root.Props & {
-  label?: React.ReactNode;
-  size?: 'small' | 'medium';
-  error?: boolean;
-  helperText?: React.ReactNode;
-}) {
-  let id = React.useId();
-  if (idProp) {
-    id = idProp;
-  }
+  const showDescription = !isDescriptionHidden(
+    visible,
+    description,
+    focused,
+    appliedUiSchemaOptions.showUnfocusedDescription,
+  );
+
+  const firstFormHelperText = showDescription
+    ? description
+    : !isValid
+      ? errors
+      : null;
+  const secondFormHelperText = showDescription && !isValid ? errors : null;
+
   return (
     <BaseNumberField.Root
-      {...other}
       render={(props, state) => (
         <FormControl
-          size={size}
+          fullWidth={!appliedUiSchemaOptions.trim}
+          onFocus={onFocus}
+          onBlur={onBlur}
+          size={'medium'}
           ref={props.ref}
           disabled={state.disabled}
           required={state.required}
-          error={error}
+          error={!isValid}
           variant="outlined"
         >
           {props.children}
         </FormControl>
       )}
     >
-      <SSRInitialFilled {...other} />
       <InputLabel htmlFor={id}>{label}</InputLabel>
       <BaseNumberField.Input
         id={id}
         render={(props, state) => (
           <OutlinedInput
+            required={required}
             label={label}
             inputRef={props.ref}
             value={state.inputValue}
@@ -86,19 +100,19 @@ export default function NumberField({
                 }}
               >
                 <BaseNumberField.Increment
-                  render={<IconButton size={size} aria-label="Increase" />}
+                  render={<IconButton size={'medium'} aria-label="Increase" />}
                 >
                   <KeyboardArrowUpIcon
-                    fontSize={size}
+                    fontSize={'medium'}
                     sx={{ transform: 'translateY(2px)' }}
                   />
                 </BaseNumberField.Increment>
 
                 <BaseNumberField.Decrement
-                  render={<IconButton size={size} aria-label="Decrease" />}
+                  render={<IconButton size={'medium'} aria-label="Decrease" />}
                 >
                   <KeyboardArrowDownIcon
-                    fontSize={size}
+                    fontSize={'medium'}
                     sx={{ transform: 'translateY(-2px)' }}
                   />
                 </BaseNumberField.Decrement>
@@ -108,9 +122,13 @@ export default function NumberField({
           />
         )}
       />
-      <FormHelperText sx={{ ml: 0, '&:empty': { mt: 0 } }}>
-        {helperText}
+      <FormHelperText error={!isValid && !showDescription}>
+        {firstFormHelperText}
       </FormHelperText>
+      <FormHelperText error={!isValid}>{secondFormHelperText}</FormHelperText>
     </BaseNumberField.Root>
   );
-}
+};
+
+export const numberControlTester: RankedTester = rankWith(100, isNumberControl);
+export default withJsonFormsControlProps(NumberControl);

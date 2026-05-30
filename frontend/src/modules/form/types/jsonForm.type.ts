@@ -18,5 +18,3 @@ export interface JsonFormAnswer {
   modifiedAt: Date;
   user: number;
 }
-
-export type JsonFormAnswerPost = Pick<JsonFormAnswer, 'data'>;

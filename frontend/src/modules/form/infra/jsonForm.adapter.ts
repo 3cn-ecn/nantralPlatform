@@ -2,7 +2,10 @@ import {
   JsonFormAnswerDTO,
   JsonFormSchemaDTO,
 } from '#modules/form/infra/jsonForm.dto';
-import { JsonFormAnswer, JsonFormSchema } from '#modules/form/jsonForm.type';
+import {
+  JsonFormAnswer,
+  JsonFormSchema,
+} from '#modules/form/types/jsonForm.type';
 
 export const adaptJsonFormSchema = (
   schemaDTO: JsonFormSchemaDTO,
