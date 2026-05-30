@@ -71,7 +71,14 @@ export function EditMembersView({ group }: EditMembersViewProps) {
       });
     },
     onSettled: () => {
-      queryClient.invalidateQueries(queryKey);
+      queryClient.invalidateQueries({
+        predicate: (query) =>
+          query.queryKey[0] === 'members' &&
+          typeof query.queryKey[1] === 'object' &&
+          query.queryKey[1] !== null &&
+          'slug' in query.queryKey[1] &&
+          query.queryKey[1].slug === group.slug,
+      });
     },
   });
 

@@ -23,9 +23,9 @@ export function GroupGrid({
             .fill(0)
             .map((_, index) => (
               // eslint-disable-next-line react/no-array-index-key
-              (<Grid key={index} size={{ xs: 6, sm: 4, md: 3, lg: 2 }}>
+              <Grid key={index} size={{ xs: 6, sm: 4, md: 3, lg: 2 }}>
                 <GroupItemSkeleton size="xl" />
-              </Grid>)
+              </Grid>
             ))
         : groups?.map((group) => (
             <Grid key={group.slug} size={{ xs: 6, sm: 4, md: 3, lg: 2 }}>
