@@ -300,18 +300,31 @@ export const INPUT_TYPES: InputType[] = [
 // =========================
 
 export function BaseQuestion({ nodeId }: { nodeId: UUID }) {
-  const { jsonForm, updateNode } = useJsonForm();
+  const { jsonForm, updateNode, lang } = useJsonForm();
   const node = jsonForm.nodes[nodeId] as ControlNode;
 
   const setTitle = useCallback(
-    (val) => updateNode(nodeId, { schema: { ...node.schema, title: val } }),
-    [node.schema, nodeId, updateNode],
+    (val) =>
+      updateNode(nodeId, {
+        label: {
+          fr: node.label?.fr ?? '',
+          en: node.label?.en ?? '',
+          [lang]: val,
+        },
+      }),
+    [lang, node.label, nodeId, updateNode],
   );
 
   const setDescription = useCallback(
     (val) =>
-      updateNode(nodeId, { schema: { ...node.schema, description: val } }),
-    [node.schema, nodeId, updateNode],
+      updateNode(nodeId, {
+        description: {
+          fr: node.description?.fr ?? '',
+          en: node.description?.en ?? '',
+          [lang]: val,
+        },
+      }),
+    [lang, node.description, nodeId, updateNode],
   );
 
   const setRequired = useCallback(
@@ -339,6 +352,8 @@ export function BaseQuestion({ nodeId }: { nodeId: UUID }) {
   const id = `select_type-${nodeId}`;
   const label = 'Select the type';
 
+  const hasType = Boolean(input?.title);
+
   return (
     <>
       <FlexAuto gap={1} mb={1}>
@@ -346,8 +361,9 @@ export function BaseQuestion({ nodeId }: { nodeId: UUID }) {
           handleChange={(val) => setTitle(val)}
           label={'Question'}
           size={'medium'}
-          value={node.schema?.title}
+          value={node.label?.[lang]}
           margin={'none'}
+          disabled={!hasType}
         />
         <FormControl fullWidth margin={'none'}>
           <InputLabel id={id}>{label}</InputLabel>
@@ -371,22 +387,24 @@ export function BaseQuestion({ nodeId }: { nodeId: UUID }) {
           handleChange={(val) => setDescription(val)}
           label={'Description'}
           size={'small'}
-          value={node.schema?.description}
+          value={node.description?.[lang]}
           margin={'none'}
+          disabled={!hasType}
         />
         <FormControl margin={'none'}>
           <FormControlLabel
             label={'Requis'}
             value={node.schema?.required}
             control={<Switch onChange={(e) => setRequired(e.target.checked)} />}
+            disabled={!hasType}
           />
         </FormControl>
       </FlexAuto>
       {input?.additionalInputs && <input.additionalInputs nodeId={nodeId} />}
       {input && (
         <input.element
-          label={node.schema?.title}
-          helperText={node.schema?.description}
+          label={node.label?.[lang] ?? node.schema?.title}
+          helperText={node.description?.[lang] ?? node.schema?.description}
           required
           fullWidth
           margin={'normal'}

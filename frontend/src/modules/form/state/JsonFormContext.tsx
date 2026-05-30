@@ -56,6 +56,7 @@ export function useJsonForm() {
         elements?: UUID[];
         type: string;
         label?: TranslatedFieldObject;
+        description?: TranslatedFieldObject;
         inputType?: string;
         options?: UISchemaElement['options'];
         scope?: string;
@@ -74,6 +75,7 @@ export function useJsonForm() {
         elements?: UUID[];
         type?: string;
         label?: TranslatedFieldObject;
+        description?: TranslatedFieldObject;
         inputType?: string;
         options?: UISchemaElement['options'];
         scope?: string;

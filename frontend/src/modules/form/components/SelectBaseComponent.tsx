@@ -28,6 +28,7 @@ import {
 import { UUID } from 'crypto';
 import { clone } from 'lodash';
 
+import { FormPreview } from '#modules/form/components/FormPreview';
 import {
   DropLayoutPlaceHolder,
   LayoutInput,
@@ -177,6 +178,7 @@ export function SelectBaseComponent() {
           </DragOverlay>
         }
       </DragDropProvider>
+      <FormPreview />
     </>
   );
 }
