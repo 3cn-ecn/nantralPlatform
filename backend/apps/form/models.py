@@ -7,9 +7,11 @@ from apps.account.models import User
 
 
 class FormSchema(models.Model):
-    uuid = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    uuid = models.UUIDField(
+        primary_key=True, default=uuid.uuid4, editable=False
+    )
     name = models.CharField(max_length=255)
-    description = models.TextField(blank=True, null=True)
+    description = models.TextField(blank=True)
     schema = models.JSONField()
     ui_schema = models.JSONField(blank=True, null=True)
 
@@ -49,7 +51,9 @@ class UserRole(models.Model):
 
 
 class FormAnswer(models.Model):
-    uuid = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    uuid = models.UUIDField(
+        primary_key=True, default=uuid.uuid4, editable=False
+    )
     form_schema = models.ForeignKey(FormSchema, on_delete=models.CASCADE)
     data = models.JSONField()
     submitted_at = models.DateTimeField(auto_now_add=True)

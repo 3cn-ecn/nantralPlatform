@@ -1,13 +1,14 @@
 import { JsonSchema, UISchemaElement } from '@jsonforms/core';
 
+import { BaseLanguage } from '#shared/i18n/config';
+
 export interface JsonFormSchema {
   uuid: string;
   name: string;
   description: string;
   schema: JsonSchema;
   uiSchema: UISchemaElement;
-  i18nKeys_en: object;
-  i18nKeys_fr: object;
+  i18nKeys: Record<BaseLanguage, Record<string, object>>;
 }
 
 export interface JsonFormAnswer {

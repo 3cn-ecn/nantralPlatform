@@ -37,9 +37,11 @@ import { useJsonForm } from '#modules/form/hooks/useJsonForm';
 import { isDescendantOf } from '#modules/form/state/JsonFormReducer';
 import { ContainerNode } from '#modules/form/types/form.type';
 import { FlexCol, FlexRow } from '#shared/components/FlexBox/FlexBox';
+import { LanguageSelector } from '#shared/components/LanguageSelector/LanguageSelector';
 
 export function SelectBaseComponent() {
-  const { jsonForm, updateNode, moveNode, setJsonForm } = useJsonForm();
+  const { jsonForm, updateNode, moveNode, setJsonForm, lang, setLang } =
+    useJsonForm();
 
   const layout = useMemo(
     () =>
@@ -62,34 +64,41 @@ export function SelectBaseComponent() {
 
   return (
     <>
-      <FormControl fullWidth margin={'normal'}>
-        <InputLabel id={id}>{label}</InputLabel>
-        <Select
-          variant={'outlined'}
-          onChange={(e) => setLayout(e.target.value)}
-          label={label}
-          labelId={id}
-          value={layout?.title ?? ''}
-        >
-          {layoutTypes
-            .filter((type) =>
-              [
-                'Categorization',
-                'Group',
-                'HorizontalLayout',
-                'VerticalLayout',
-              ].includes(type.title),
-            )
-            .map((child) => (
-              <MenuItem key={child.title} value={child.title}>
-                {child.title}
-              </MenuItem>
-            ))}
-        </Select>
-        <FormHelperText>
-          Choisissez le type d&#39;élément que vous souhaitez ajouter
-        </FormHelperText>
-      </FormControl>
+      <FlexRow gap={2}>
+        <FormControl fullWidth margin={'normal'}>
+          <InputLabel id={id}>{label}</InputLabel>
+          <Select
+            variant={'outlined'}
+            onChange={(e) => setLayout(e.target.value)}
+            label={label}
+            labelId={id}
+            value={layout?.title ?? ''}
+          >
+            {layoutTypes
+              .filter((type) =>
+                [
+                  'Categorization',
+                  'Group',
+                  'HorizontalLayout',
+                  'VerticalLayout',
+                ].includes(type.title),
+              )
+              .map((child) => (
+                <MenuItem key={child.title} value={child.title}>
+                  {child.title}
+                </MenuItem>
+              ))}
+          </Select>
+          <FormHelperText>
+            Choisissez le type d&#39;élément que vous souhaitez ajouter
+          </FormHelperText>
+        </FormControl>
+        <LanguageSelector
+          selectedLang={lang}
+          setSelectedLang={setLang}
+          sx={{ justifySelf: 'center', alignSelf: 'center' }}
+        />
+      </FlexRow>
       <DragDropProvider
         onDragStart={useCallback<DragDropEventHandlers['onDragStart']>(() => {
           snapshot.current = structuredClone(jsonForm);
@@ -158,7 +167,13 @@ export function SelectBaseComponent() {
         )}
         {
           <DragOverlay>
-            {(source) => <OverlayLayout nodeId={source.id as UUID} />}
+            {(source) =>
+              source.type === 'layout' ? (
+                <OverlayLayout nodeId={source.id as UUID} />
+              ) : (
+                source.id
+              )
+            }
           </DragOverlay>
         }
       </DragDropProvider>

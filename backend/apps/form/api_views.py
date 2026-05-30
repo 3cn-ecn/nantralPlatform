@@ -1,9 +1,13 @@
 import jsonschema
-from rest_framework import viewsets, decorators, response, status, serializers
+from rest_framework import decorators, response, serializers, status, viewsets
 from rest_framework.generics import get_object_or_404
 
-from apps.form.models import FormSchema, FormAnswer
-from apps.form.serializers import FormSchemaSerializer, FormAnswerPreviewSerializer, FormAnswerSerializer
+from apps.form.models import FormAnswer, FormSchema
+from apps.form.serializers import (
+    FormAnswerPreviewSerializer,
+    FormAnswerSerializer,
+    FormSchemaSerializer,
+)
 
 
 class FormViewSet(viewsets.GenericViewSet):

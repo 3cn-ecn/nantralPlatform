@@ -6,6 +6,10 @@ app_name = "form"
 
 router = DefaultRouter()
 router.register("schema", FormSchemaViewSet, basename="form-schema")
-router.register("schema/(?P<schema>[^/.]+)/answer", FormAnswerViewSet, basename="form-answer")
+router.register(
+    "schema/(?P<schema>[^/.]+)/answer",
+    FormAnswerViewSet,
+    basename="form-answer",
+)
 
 urlpatterns = router.urls

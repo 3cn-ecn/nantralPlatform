@@ -29,7 +29,9 @@ export default function ResetPasswordForm() {
 
   function resetPassword(form: { password: string; confirmPassword: string }) {
     if (!!form?.password && form?.password !== form?.confirmPassword) {
-      throw { fields: { confirmPassword: [t('register.passwordDontMatch')] } };
+      throw {
+        fields: { confirmPassword: [t('register.passwordDontMatch')] },
+      };
     }
     if (!token) {
       throw { globalErrors: ['Something went wrong'] };

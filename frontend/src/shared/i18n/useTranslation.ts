@@ -84,7 +84,7 @@ export function useTranslation(namespace?: string) {
       fnsEndOfWeek(date, { locale: dateFnsLocale });
 
     return {
-      t,
+      t: t,
       i18n,
       currentBaseLanguage,
       formatDate,

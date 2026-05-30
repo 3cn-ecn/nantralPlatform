@@ -53,6 +53,7 @@ import { FlexAuto, FlexCol, FlexRow } from '#shared/components/FlexBox/FlexBox';
 import { RichTextField, TextField } from '#shared/components/FormFields';
 import { ConfirmationModal } from '#shared/components/Modal/ConfirmationModal';
 import { TextModal } from '#shared/components/Modal/TextModal';
+import { TranslatedFieldObject } from '#shared/infra/translatedFields/translatedField.types';
 
 interface Layout {
   title: string;
@@ -61,11 +62,11 @@ interface Layout {
   defaultUiSchema: {
     elements?: UUID[];
     type: string;
-    label?: string;
+    label?: TranslatedFieldObject;
     inputType?: string;
     options?: UISchemaElement['options'];
     scope?: string;
-    text?: string;
+    text?: TranslatedFieldObject;
     schema?: JsonSchema;
   };
 }
@@ -108,11 +109,11 @@ export const LayoutInput = ({
     (child: {
       elements?: UUID[];
       type: string;
-      label?: string;
+      label?: TranslatedFieldObject;
       inputType?: string;
       options?: UISchemaElement['options'];
       scope?: string;
-      text?: string;
+      text?: TranslatedFieldObject;
       schema?: JsonSchema;
     }) => {
       addNode(nodeId, child);
@@ -231,7 +232,7 @@ const GroupLayoutInput = ({
   nodeId: UUID;
   children: ReactNode;
 } & BoxProps) => {
-  const { jsonForm, updateNode } = useJsonForm();
+  const { jsonForm, updateNode, lang } = useJsonForm();
 
   const label = useMemo(
     () => (jsonForm.nodes[nodeId] as GroupNode).label,
@@ -239,8 +240,8 @@ const GroupLayoutInput = ({
   );
 
   const setLabel = useCallback(
-    (val: string) => updateNode(nodeId, { label: val }),
-    [nodeId, updateNode],
+    (val: string) => updateNode(nodeId, { label: { ...label, [lang]: val } }),
+    [label, nodeId, lang, updateNode],
   );
 
   return (
@@ -248,7 +249,7 @@ const GroupLayoutInput = ({
       <CardContent>
         <TextField
           handleChange={(val) => setLabel(val)}
-          value={label}
+          value={label[lang]}
           label={'Label'}
           helperText={'Nom du groupe de questions'}
         />
@@ -263,22 +264,22 @@ const GroupLayoutInput = ({
 // =========================
 
 const LabelLayout = ({ nodeId }: { nodeId: UUID }) => {
-  const { jsonForm, updateNode } = useJsonForm();
+  const { jsonForm, updateNode, lang } = useJsonForm();
 
-  const label = useMemo(
+  const text = useMemo(
     () => (jsonForm.nodes[nodeId] as LabelNode).text,
     [jsonForm.nodes, nodeId],
   );
 
-  const setLabel = useCallback(
-    (val: string) => updateNode(nodeId, { text: val }),
-    [nodeId, updateNode],
+  const setText = useCallback(
+    (val: string) => updateNode(nodeId, { text: { ...text, [lang]: val } }),
+    [nodeId, lang, text, updateNode],
   );
 
   return (
     <RichTextField
-      handleChange={(val) => setLabel(val)}
-      value={label}
+      handleChange={(val) => setText(val)}
+      value={text[lang]}
       label={'Texte'}
       helperText={'Paragraphe intégré au questionnaire'}
     />
@@ -296,7 +297,7 @@ const CategoryTabLabel = ({
   nodeId: UUID;
   handleMoveTab: (nodeId: UUID, direction: 'left' | 'right') => void;
 }) => {
-  const { jsonForm, removeNode, updateNode } = useJsonForm();
+  const { jsonForm, removeNode, updateNode, lang } = useJsonForm();
   const [openRenameModal, setOpenRenameModal] = useState(false);
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
 
@@ -306,8 +307,8 @@ const CategoryTabLabel = ({
   );
 
   const setLabel = useCallback(
-    (val: string) => updateNode(nodeId, { label: val }),
-    [nodeId, updateNode],
+    (val: string) => updateNode(nodeId, { label: { ...label, [lang]: val } }),
+    [label, nodeId, lang, updateNode],
   );
 
   return (
@@ -328,7 +329,7 @@ const CategoryTabLabel = ({
       >
         <ArrowBackIosIcon fontSize="inherit" />
       </IconButton>
-      {label}
+      {label[lang] || '>EMPTY<'}
       <IconButton
         size="small"
         aria-label={`Rename ${label}`}
@@ -361,9 +362,9 @@ const CategoryTabLabel = ({
       </IconButton>
       {openRenameModal && (
         <TextModal
-          title={`Rename ${label}`}
+          title={`Rename ${label[lang] || 'tab'}`}
           body={'Please enter the new name for this part'}
-          oldValue={label}
+          oldValue={label[lang]}
           onCancel={() => setOpenRenameModal(false)}
           onConfirm={(newLabel) => {
             setOpenRenameModal(false);
@@ -373,7 +374,7 @@ const CategoryTabLabel = ({
       )}
       {openDeleteModal && (
         <ConfirmationModal
-          title={`Delete ${label}`}
+          title={`Delete ${label[lang] || 'tab'}`}
           body={
             'Voulez-vous supprimer cette partie ? Cette action est définitive'
           }
@@ -443,7 +444,11 @@ const CategorizationLayoutInput = ({ nodeId }: { nodeId: UUID }) => {
 
   const handleAddChild = useCallback(
     (label: string) =>
-      addNode(nodeId, { type: 'Category', elements: [], label }),
+      addNode(nodeId, {
+        type: 'Category',
+        elements: [],
+        label: { fr: label, en: label },
+      }),
     [addNode, nodeId],
   );
 
@@ -581,7 +586,11 @@ export const layoutTypes: Layout[] = [
       'Group',
       'Label',
     ],
-    defaultUiSchema: { type: 'Group', elements: [] },
+    defaultUiSchema: {
+      type: 'Group',
+      elements: [],
+      label: { fr: '', en: '' },
+    },
   },
   {
     title: 'Control',
@@ -593,7 +602,10 @@ export const layoutTypes: Layout[] = [
     title: 'Label',
     element: LabelLayout,
     allowedChildren: [],
-    defaultUiSchema: { type: 'Label' },
+    defaultUiSchema: {
+      type: 'Label',
+      text: { fr: '', en: '' },
+    },
   },
 ];
 

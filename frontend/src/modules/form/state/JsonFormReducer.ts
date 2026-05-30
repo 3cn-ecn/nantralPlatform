@@ -6,7 +6,7 @@ import {
   UISchemaElement,
 } from '@jsonforms/core';
 import { UUID } from 'crypto';
-import { clone } from 'lodash';
+import { clone, set } from 'lodash';
 
 import { FormStateError } from '#modules/form/types/errors';
 import {
@@ -17,6 +17,9 @@ import {
   GroupNode,
   LayoutNode,
 } from '#modules/form/types/form.type';
+import { JsonFormSchema } from '#modules/form/types/jsonForm.type';
+import { BaseLanguage } from '#shared/i18n/config';
+import { TranslatedFieldObject } from '#shared/infra/translatedFields/translatedField.types';
 
 export interface TreeState {
   rootId: UUID;
@@ -202,15 +205,37 @@ export function isDescendantOf(
   );
 }
 
+function saveTranslation(
+  keys: Record<BaseLanguage, object>,
+  field: TranslatedFieldObject,
+  key: string,
+) {
+  Object.entries(keys).forEach(([lang, list]) => {
+    if (lang in field && field[lang]) {
+      set(list, key, field[lang]);
+      return;
+    }
+    // Find the first non-empty string as a replacement
+    set(
+      list,
+      key,
+      Object.entries(field).find(([, val]) => val)?.[1] || '>EMPTY<',
+    );
+  });
+}
+
 // Export to tree JSON
 export function exportTree(state: TreeState): {
   uiSchema: UISchemaElement;
   schema: JsonSchema;
+  i18nKeys: Record<BaseLanguage, Record<string, object>>;
 } {
   const jsonSchema: JsonSchema = {
     type: 'object',
     properties: {},
   };
+
+  const i18nKeys = { fr: {}, en: {} };
 
   const normalizeName = (s?: string): string => {
     if (!s) return 'field';
@@ -271,25 +296,29 @@ export function exportTree(state: TreeState): {
       return {
         type: 'Control',
         scope,
+        i18n: nodeId,
       } as UISchemaElement;
     }
 
     if (node.type === 'Label') {
+      saveTranslation(i18nKeys, node.text, nodeId);
       return {
         type: 'Label',
-        text: node.text,
+        text: nodeId, // will be used as translation key
       } as UISchemaElement;
     }
 
     const createsNestedObject =
       node.type === 'Category' ||
-      (node.type === 'Group' && (node as GroupNode).label);
+      (node.type === 'Group' &&
+        node.label &&
+        Object.entries(node.label).some(([, label]) => label));
 
     const elements: UISchemaElement[] = [];
 
     if (createsNestedObject) {
-      const label = (node as CategoryNode | GroupNode).label;
-      const baseName = normalizeName(label);
+      const label = node.label;
+      const baseName = normalizeName(label?.fr || label?.en || nodeId);
       const propName = ensureUnique(baseName, usedNamesAtLevel);
 
       const nestedSchema: JsonSchema = { type: 'object', properties: {} };
@@ -307,9 +336,11 @@ export function exportTree(state: TreeState): {
         elements.push(childUi);
       }
 
+      saveTranslation(i18nKeys, node.label, nodeId);
+
       return {
         type: node.type,
-        label,
+        label: nodeId, // wil be used as translation key
         elements,
       } as UISchemaElement;
     } else {
@@ -324,9 +355,9 @@ export function exportTree(state: TreeState): {
         elements.push(childUi);
       }
       const out = { type: node.type, elements };
-      if ('label' in node && node.label) {
-        (out as unknown as GroupNode | CategoryNode).label = node.label;
-      }
+      // if ('label' in node && node.label) {
+      //   (out as unknown as GroupNode | CategoryNode).label = node.label;
+      // }
       return out;
     }
   }
@@ -344,15 +375,18 @@ export function exportTree(state: TreeState): {
   return {
     uiSchema,
     schema: jsonSchema,
+    i18nKeys,
   };
 }
 
 // Import from tree JSON
-export function importJsonForm(jsonForm: {
-  uiSchema: UISchemaElement;
-}): TreeState {
+export function importJsonForm(jsonForm: JsonFormSchema): TreeState {
   const nodes: Record<string, AnyLayoutNode> = {};
-  const rootId = buildNormalizedNodes(jsonForm.uiSchema, nodes);
+  const rootId = buildNormalizedNodes(
+    jsonForm.uiSchema,
+    jsonForm.i18nKeys,
+    nodes,
+  );
 
   return {
     rootId,
@@ -362,6 +396,7 @@ export function importJsonForm(jsonForm: {
 
 function buildNormalizedNodes(
   node: UISchemaElement,
+  i18nKeys: Record<BaseLanguage, object>,
   nodes: Record<UUID, AnyLayoutNode>,
   parentId?: UUID,
 ): UUID {
@@ -379,23 +414,34 @@ function buildNormalizedNodes(
       id,
       parentId,
       type: 'Label',
-      text: (node as LabelElement).text,
+      text: Object.fromEntries(
+        Object.entries(i18nKeys).map(([lang, val]) => [
+          lang,
+          val[(node as LabelElement).text],
+        ]),
+      ) as Record<BaseLanguage, string>,
     };
   } else if (node.type === 'Group') {
     const elements = (node as GroupLayout).elements.map((child) =>
-      buildNormalizedNodes(child, nodes, id),
+      buildNormalizedNodes(child, i18nKeys, nodes, id),
     );
+    const groupNode = node as GroupLayout;
 
     nodes[id] = {
       id,
       parentId,
       type: 'Group',
       elements,
-      label: (node as GroupLayout).label,
+      label: Object.fromEntries(
+        Object.entries(i18nKeys).map(([lang, val]) => [
+          lang,
+          val[groupNode.label as string],
+        ]),
+      ) as Record<BaseLanguage, string>,
     };
   } else if (node.type === 'Category') {
     const elements = (node as Category).elements.map((child) =>
-      buildNormalizedNodes(child, nodes, id),
+      buildNormalizedNodes(child, i18nKeys, nodes, id),
     );
 
     nodes[id] = {
@@ -403,11 +449,16 @@ function buildNormalizedNodes(
       parentId,
       type: 'Category',
       elements,
-      label: (node as Category).label,
+      label: Object.fromEntries(
+        Object.entries(i18nKeys).map(([lang, val]) => [
+          lang,
+          val[(node as { label: string }).label],
+        ]),
+      ) as Record<BaseLanguage, string>,
     };
   } else if ('elements' in node) {
     const elements = node.elements.map((child) =>
-      buildNormalizedNodes(child, nodes, id),
+      buildNormalizedNodes(child, i18nKeys, nodes, id),
     );
 
     nodes[id] = {
@@ -572,11 +623,11 @@ export type JsonFormAction =
       node: {
         elements?: UUID[];
         type: string;
-        label?: string;
+        label?: TranslatedFieldObject;
         inputType?: string;
         options?: UISchemaElement['options'];
         scope?: string;
-        text?: string;
+        text?: TranslatedFieldObject;
         schema?: JsonSchema;
       };
     }
@@ -586,11 +637,11 @@ export type JsonFormAction =
       node: {
         elements?: UUID[];
         type?: string;
-        label?: string;
+        label?: TranslatedFieldObject;
         inputType?: string;
         options?: UISchemaElement['options'];
         scope?: string;
-        text?: string;
+        text?: TranslatedFieldObject;
         schema?: JsonSchema;
       };
     }
@@ -604,7 +655,7 @@ export type JsonFormAction =
       newParentId: UUID;
       position?: number;
     }
-  | { type: 'import'; jsonForm: { uiSchema: UISchemaElement } }
+  | { type: 'import'; jsonForm: JsonFormSchema }
   | {
       type: 'set';
       jsonForm: TreeState;

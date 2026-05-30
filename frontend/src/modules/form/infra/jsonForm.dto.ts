@@ -7,8 +7,8 @@ export interface JsonFormSchemaDTO {
   schema: JsonSchema;
   ui_schema: UISchemaElement;
   // translation
-  i18n_keys_en: object;
-  i18n_keys_fr: object;
+  i18n_keys_en: Record<string, object>;
+  i18n_keys_fr: Record<string, object>;
 }
 
 export interface JsonFormAnswerDTO {

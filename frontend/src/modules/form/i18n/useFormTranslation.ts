@@ -10,7 +10,6 @@ import { useTranslation as useI18nextTranslation } from '#shared/i18n/useTransla
 export const languages = ['fr-FR', 'en-GB', 'en-US'] as const;
 
 export type Language = (typeof languages)[number];
-export type BaseLanguage = Language extends `${infer T}-${string}` ? T : never;
 
 export interface UseFormTranslationProps {
   i18nKeys_en: object;

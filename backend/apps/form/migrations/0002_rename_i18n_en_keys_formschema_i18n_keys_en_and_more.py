@@ -4,20 +4,19 @@ from django.db import migrations
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('form', '0001_initial'),
+        ("form", "0001_initial"),
     ]
 
     operations = [
         migrations.RenameField(
-            model_name='formschema',
-            old_name='i18n_en_keys',
-            new_name='i18n_keys_en',
+            model_name="formschema",
+            old_name="i18n_en_keys",
+            new_name="i18n_keys_en",
         ),
         migrations.RenameField(
-            model_name='formschema',
-            old_name='i18n_fr_keys',
-            new_name='i18n_keys_fr',
+            model_name="formschema",
+            old_name="i18n_fr_keys",
+            new_name="i18n_keys_fr",
         ),
     ]
