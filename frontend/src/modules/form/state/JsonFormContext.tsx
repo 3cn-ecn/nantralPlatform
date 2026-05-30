@@ -75,6 +75,7 @@ export function useJsonForm() {
       dispatch({ type: 'move_node', nodeId, newParentId, position }),
     importForm: (jsonForm: { uiSchema: UISchemaElement }) =>
       dispatch({ type: 'import', jsonForm }),
+    setJsonForm: (jsonForm: TreeState) => dispatch({ type: 'set', jsonForm }),
   };
 }
 

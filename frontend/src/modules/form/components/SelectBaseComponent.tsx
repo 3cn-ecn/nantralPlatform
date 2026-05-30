@@ -1,6 +1,10 @@
-import { FC, useCallback, useMemo } from 'react';
+import { FC, useCallback, useMemo, useRef } from 'react';
 
-import { DragDropProvider, DragOverlay } from '@dnd-kit/react';
+import {
+  DragDropEventHandlers,
+  DragDropProvider,
+  DragOverlay,
+} from '@dnd-kit/react';
 import { isSortable } from '@dnd-kit/react/sortable';
 import {
   Add as AddIcon,
@@ -35,7 +39,7 @@ import { ContainerNode } from '#modules/form/types/form.type';
 import { FlexCol, FlexRow } from '#shared/components/FlexBox/FlexBox';
 
 export function SelectBaseComponent() {
-  const { jsonForm, updateNode, moveNode } = useJsonForm();
+  const { jsonForm, updateNode, moveNode, setJsonForm } = useJsonForm();
 
   const layout = useMemo(
     () =>
@@ -54,6 +58,7 @@ export function SelectBaseComponent() {
 
   const id = jsonForm.rootId + '/select_type';
   const label = 'Select the type';
+  const snapshot = useRef(structuredClone(jsonForm));
 
   return (
     <>
@@ -86,9 +91,11 @@ export function SelectBaseComponent() {
         </FormHelperText>
       </FormControl>
       <DragDropProvider
+        onDragStart={useCallback<DragDropEventHandlers['onDragStart']>(() => {
+          snapshot.current = structuredClone(jsonForm);
+        }, [jsonForm])}
         onDragOver={(event) => {
           const { source, target } = event.operation;
-          console.log(target?.type, target?.id);
           if (
             event.operation.canceled ||
             !target ||
@@ -96,8 +103,6 @@ export function SelectBaseComponent() {
             source.id === target.id
           )
             return;
-
-          // Skip move if source is being moved into itself or into one of its descendants
 
           if (isSortable(target) && target.group !== source.id) {
             // target is a layout or a tab
@@ -131,13 +136,18 @@ export function SelectBaseComponent() {
               );
               return;
             }
-            console.log('Move ' + source.id + ' into ' + targetId);
             moveNode(source.id as UUID, targetId as UUID);
           }
         }}
-        onDragEnd={(event) => {
-          console.log('Drag end', event);
-        }}
+        onDragEnd={useCallback<DragDropEventHandlers['onDragEnd']>(
+          (event) => {
+            if (event.canceled) {
+              setJsonForm(snapshot.current);
+              return;
+            }
+          },
+          [setJsonForm],
+        )}
       >
         {layout?.element && (
           <LayoutInput

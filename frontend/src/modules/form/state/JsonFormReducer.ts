@@ -503,12 +503,6 @@ export function moveNode(
       position >= 0 &&
       position <= elements.length
     ) {
-      console.log(
-        'Reorder within same parent',
-        nodeId,
-        'to position',
-        position,
-      );
       // Remove from old position and insert at new position
       const newElements = [...elements];
       newElements.splice(oldIndex, 1);
@@ -610,7 +604,11 @@ export type JsonFormAction =
       newParentId: UUID;
       position?: number;
     }
-  | { type: 'import'; jsonForm: { uiSchema: UISchemaElement } };
+  | { type: 'import'; jsonForm: { uiSchema: UISchemaElement } }
+  | {
+      type: 'set';
+      jsonForm: TreeState;
+    };
 
 // Reducer
 export function jsonFormReducer(
@@ -633,6 +631,8 @@ export function jsonFormReducer(
       );
     case 'import':
       return importJsonForm(action.jsonForm);
+    case 'set':
+      return action.jsonForm;
     default:
       throw new Error(
         `Unknown action type in reducer: ${JSON.stringify(action)}`,
