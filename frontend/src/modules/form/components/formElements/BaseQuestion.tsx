@@ -1,4 +1,4 @@
-import { FC, useCallback, useEffect, useMemo } from 'react';
+import { useCallback, useMemo } from 'react';
 
 import {
   CheckBoxOutlineBlank as CheckBoxOutlineBlankIcon,
@@ -20,39 +20,45 @@ import {
   Select,
   Switch,
   TextField as MuiTextField,
-  Typography,
 } from '@mui/material';
 import FormLabel from '@mui/material/FormLabel';
-import { clone, get, toPath } from 'lodash';
+import { UUID } from 'crypto';
+import { clone } from 'lodash';
 
-import { JsonFormSchema } from '#modules/form/jsonForm.type';
-import NumberField from '#pages/Form/FormFields/NumberField';
-import SpinnerField from '#pages/Form/FormFields/SpinnerField';
-import { FlexCol, FlexRow } from '#shared/components/FlexBox/FlexBox';
+import NumberField from '#modules/form/components/fields/NumberField';
+import SpinnerField from '#modules/form/components/fields/SpinnerField';
+import { useJsonForm } from '#modules/form/hooks/useJsonForm';
+import {
+  ControlNode,
+  InputType,
+  InputTypeElementProps,
+} from '#modules/form/types/form.type';
+import { FlexAuto, FlexCol, FlexRow } from '#shared/components/FlexBox/FlexBox';
 import { DateField, DateTimeField } from '#shared/components/FormFields';
 import { TextField } from '#shared/components/FormFields/TextField';
 import { TimeField } from '#shared/components/FormFields/TimeField';
 import { useToast } from '#shared/context/Toast.context';
 
-interface AdditionnalInputProps {
-  jsonForm: JsonFormSchema;
-  setJsonForm: (path: string, val: any) => void;
-  path: string;
-}
+// =========================
+// COMPONENTS
+// =========================
 
-interface InputType {
-  title: string;
-  element: FC<any>;
-  defaultSchema: any;
-  additionalInputs?: FC<AdditionnalInputProps>;
-}
-
-const MultipleChoiceInput = ({ label, helperText, ...props }: Partial<any>) => {
+const MultipleChoiceInput = ({
+  label,
+  helperText,
+  nodeId,
+}: {
+  label: string;
+  helperText: string;
+  nodeId: UUID;
+}) => {
+  const { jsonForm } = useJsonForm();
+  const node = jsonForm.nodes[nodeId] as ControlNode;
   return (
     <FormControl>
-      <FormLabel id={'id'}>{label}</FormLabel>
-      <FormGroup aria-labelledby="demo-controlled-radio-buttons-group">
-        {props.schema.items?.enum?.map((option: string) => (
+      <FormLabel id={`label-${nodeId}`}>{label}</FormLabel>
+      <FormGroup aria-labelledby={`label-${nodeId}`}>
+        {(node.schema?.enum as string[])?.map((option: string) => (
           <FormControlLabel
             key={option}
             value={option}
@@ -66,12 +72,22 @@ const MultipleChoiceInput = ({ label, helperText, ...props }: Partial<any>) => {
   );
 };
 
-const ChoiceInput = ({ label, helperText, ...props }: Partial<any>) => {
+const ChoiceInput = ({
+  label,
+  helperText,
+  nodeId,
+}: {
+  label: string;
+  helperText: string;
+  nodeId: UUID;
+}) => {
+  const { jsonForm } = useJsonForm();
+  const node = jsonForm.nodes[nodeId] as ControlNode;
   return (
     <FormControl>
-      <FormLabel id={'id'}>{label}</FormLabel>
-      <RadioGroup aria-labelledby="demo-controlled-radio-buttons-group">
-        {props.schema.enum.map((option: string) => (
+      <FormLabel id={`label-${nodeId}`}>{label}</FormLabel>
+      <RadioGroup aria-labelledby={`label-${nodeId}`}>
+        {(node.schema?.enum as string[])?.map((option: string) => (
           <FormControlLabel
             key={option}
             value={option}
@@ -84,6 +100,10 @@ const ChoiceInput = ({ label, helperText, ...props }: Partial<any>) => {
     </FormControl>
   );
 };
+
+// =========================
+// OPTIONS REDUCER
+// =========================
 
 type OptionsActionType =
   | {
@@ -122,33 +142,40 @@ const optionsReducer = (
   }
 };
 
+// =========================
+// ADDITIONAL INPUT COMPONENT
+// =========================
+
 const MultipleChoiceAdditionalInput = ({
-  jsonForm,
-  setJsonForm,
-  path,
+  nodeId,
   multiple = false,
-}: AdditionnalInputProps & { multiple: boolean }) => {
+}: {
+  nodeId: UUID;
+  multiple?: boolean;
+}) => {
+  const { jsonForm, updateNode } = useJsonForm();
+  const node = jsonForm.nodes[nodeId] as ControlNode;
+  const showToast = useToast();
+
   const options = useMemo(
     () =>
-      get(jsonForm, `schema${path}.enum`, []).map((option, i) => ({
+      ((node.schema?.enum as string[]) || []).map((option, i) => ({
         id: i,
         value: option,
       })),
-    [jsonForm, path],
+    [node.schema?.enum],
   );
 
   const dispatch = useCallback(
     (action: OptionsActionType) => {
       const newOptions = optionsReducer(options, action);
-      setJsonForm(
-        `schema${path}.enum`,
-        newOptions.map((o) => o.value),
-      );
+      updateNode(nodeId, {
+        schema: { ...node.schema, enum: newOptions.map((o) => o.value) },
+      });
     },
-    [options, path, setJsonForm],
+    [node.schema, nodeId, options, updateNode],
   );
 
-  const showToast = useToast();
   const handleChange = useCallback(
     (val: string, i: number) => {
       dispatch({
@@ -199,17 +226,21 @@ const MultipleChoiceAdditionalInput = ({
   );
 };
 
-const inputTypes: InputType[] = [
+// =========================
+// INPUT TYPES (CONSTANT)
+// =========================
+
+export const INPUT_TYPES: InputType[] = [
   {
     title: 'ShortText',
-    element: (props) => (
+    element: (props: InputTypeElementProps) => (
       <MuiTextField placeholder={'Réponse courte'} {...props} />
     ),
     defaultSchema: { type: 'string' },
   },
   {
     title: 'LongText',
-    element: (props) => (
+    element: (props: InputTypeElementProps) => (
       <MuiTextField
         multiline
         rows={3}
@@ -227,14 +258,13 @@ const inputTypes: InputType[] = [
   {
     title: 'Spinner',
     element: SpinnerField,
-    defaultSchema: { type: 'number' },
+    defaultSchema: { type: 'integer' },
   },
   {
     title: 'Date',
     element: DateField,
     defaultSchema: { type: 'string', format: 'date' },
   },
-
   {
     title: 'Time',
     element: TimeField,
@@ -254,11 +284,7 @@ const inputTypes: InputType[] = [
       uniqueItems: true,
     },
     additionalInputs: (props) => (
-      <MultipleChoiceAdditionalInput
-        {...props}
-        multiple
-        path={props.path + '.items'}
-      />
+      <MultipleChoiceAdditionalInput {...props} multiple />
     ),
   },
   {
@@ -269,109 +295,61 @@ const inputTypes: InputType[] = [
   },
 ];
 
-interface BaseQuestionProps {
-  path: string;
-  jsonForm: JsonFormSchema;
-  setJsonForm: (path: string | string[], val: any) => void;
-}
+// =========================
+// BASE QUESTION COMPONENT
+// =========================
 
-export function BaseQuestion({
-  path,
-  jsonForm,
-  setJsonForm,
-}: BaseQuestionProps) {
-  useEffect(() => {
-    if (!get(jsonForm, `uiSchema${path}.scope`)) {
-      // Get last added id
-      const id =
-        Math.max(
-          ...(Object.keys(get(jsonForm, 'schema.properties', {})).map((key) =>
-            parseInt(key),
-          ) || 0),
-          0,
-        ) + 1;
-      setJsonForm(`uiSchema${path}.scope`, `#/properties/${id}`);
-      setJsonForm(`schema.properties.${id}`, {});
-    }
-  }, [jsonForm, path, setJsonForm]);
-  const schemaPath = useMemo(
-    () =>
-      get(jsonForm, `uiSchema${path}.scope`, '')
-        .replace('#', '')
-        .replaceAll('/', '.'),
-    [jsonForm, path],
-  );
-  const title = useMemo(
-    () => get(jsonForm, `schema${schemaPath}.title`, 'Titre'),
-    [jsonForm, schemaPath],
-  );
+export function BaseQuestion({ nodeId }: { nodeId: UUID }) {
+  const { jsonForm, updateNode } = useJsonForm();
+  const node = jsonForm.nodes[nodeId] as ControlNode;
+
   const setTitle = useCallback(
-    (val) => setJsonForm(`schema${schemaPath}.title`, val),
-    [schemaPath, setJsonForm],
+    (val) => updateNode(nodeId, { schema: { ...node.schema, title: val } }),
+    [node.schema, nodeId, updateNode],
   );
-  const description = useMemo(
-    () => get(jsonForm, `schema${schemaPath}.description`, ''),
-    [jsonForm, schemaPath],
-  );
+
   const setDescription = useCallback(
-    (val) => setJsonForm(`schema${schemaPath}.description`, val),
-    [schemaPath, setJsonForm],
+    (val) =>
+      updateNode(nodeId, { schema: { ...node.schema, description: val } }),
+    [node.schema, nodeId, updateNode],
   );
-  const required = useMemo(
-    () => get(jsonForm, `schema${schemaPath}.required`, false),
-    [jsonForm, schemaPath],
-  );
+
   const setRequired = useCallback(
-    (val) => {
-      const currentPath = toPath(schemaPath);
-      const name = currentPath.pop();
-      currentPath.pop(); // exit the property level
-      const requiredPath = `schema${currentPath.join('.')}.required`;
-      if (!name) return;
-      const requiredList: string[] = get(jsonForm, requiredPath, []);
-      if (val) {
-        if (requiredList.includes(val)) return;
-        requiredList.push(name);
-      } else {
-        requiredList.splice(requiredList.findIndex((e) => e === name) ?? -1, 1);
-      }
-      setJsonForm(requiredPath, requiredList);
-    },
-    [jsonForm, schemaPath, setJsonForm],
+    (val) => updateNode(nodeId, { schema: { ...node.schema, required: val } }),
+    [node.schema, nodeId, updateNode],
   );
+
   const input = useMemo(
-    () =>
-      inputTypes.find(
-        (c) => c.title === get(jsonForm, `schema${schemaPath}.x-type`, ''),
-      ),
-    [jsonForm, schemaPath],
+    () => INPUT_TYPES.find((c) => c.title === node.inputType),
+    [node.inputType],
   );
+
   const setInput = useCallback(
     (val) => {
-      const input = inputTypes.find((c) => c.title === val);
+      const input = INPUT_TYPES.find((c) => c.title === val);
       if (!input) return;
-      setJsonForm(`schema${schemaPath}`, clone(input.defaultSchema));
-      setJsonForm(`schema${schemaPath}.x-type`, input.title);
+      updateNode(nodeId, {
+        inputType: input.title,
+        schema: clone(input.defaultSchema),
+      });
     },
-    [schemaPath, setJsonForm],
-  );
-  const schema = useMemo(
-    () => get(jsonForm, `schema${schemaPath}`, {}),
-    [jsonForm, schemaPath],
+    [nodeId, updateNode],
   );
 
-  const id = schemaPath + '/select_type';
+  const id = `select_type-${nodeId}`;
   const label = 'Select the type';
+
   return (
     <>
-      <FlexRow gap={2}>
+      <FlexAuto gap={1} mb={1}>
         <TextField
           handleChange={(val) => setTitle(val)}
           label={'Question'}
           size={'medium'}
-          value={title}
+          value={node.schema?.title}
+          margin={'none'}
         />
-        <FormControl fullWidth margin={'normal'}>
+        <FormControl fullWidth margin={'none'}>
           <InputLabel id={id}>{label}</InputLabel>
           <Select
             variant={'outlined'}
@@ -380,54 +358,40 @@ export function BaseQuestion({
             labelId={id}
             value={input?.title ?? ''}
           >
-            {inputTypes.map((child) => (
+            {INPUT_TYPES.map((child) => (
               <MenuItem key={child.title} value={child.title}>
                 {child.title}
               </MenuItem>
             ))}
           </Select>
-          <FormHelperText>
-            Choisissez le type d&#39;élément que vous souhaitez ajouter
-          </FormHelperText>
         </FormControl>
-      </FlexRow>
-      <FlexRow gap={2}>
+      </FlexAuto>
+      <FlexAuto columnGap={2} alignItems={'center'} mb={1}>
         <TextField
           handleChange={(val) => setDescription(val)}
           label={'Description'}
           size={'small'}
-          value={description}
+          value={node.schema?.description}
+          margin={'none'}
         />
-        <FormControl margin={'normal'}>
+        <FormControl margin={'none'}>
           <FormControlLabel
             label={'Requis'}
-            value={required}
+            value={node.schema?.required}
             control={<Switch onChange={(e) => setRequired(e.target.checked)} />}
           />
-          <FormHelperText>
-            Activez cette option pour rendre ce champ obligatoire
-          </FormHelperText>
         </FormControl>
-      </FlexRow>
-      {input?.additionalInputs && (
-        <input.additionalInputs
-          jsonForm={jsonForm}
-          setJsonForm={setJsonForm}
-          path={schemaPath}
-        />
-      )}
+      </FlexAuto>
+      {input?.additionalInputs && <input.additionalInputs nodeId={nodeId} />}
       {input && (
-        <>
-          <Typography sx={{ my: 1 }}>Preview:</Typography>
-          <input.element
-            label={title}
-            helperText={description}
-            required
-            fullWidth
-            margin={'normal'}
-            schema={schema}
-          />
-        </>
+        <input.element
+          label={node.schema?.title}
+          helperText={node.schema?.description}
+          required
+          fullWidth
+          margin={'normal'}
+          nodeId={nodeId}
+        />
       )}
     </>
   );

@@ -13,7 +13,11 @@ import { ErrorObject } from 'ajv';
 import { useCurrentUserData } from '#modules/account/hooks/useCurrentUser.data';
 import { getJsonSchemaApi } from '#modules/form/api/getJsonSchema.api';
 import { postJsonFormApi } from '#modules/form/api/postJsonForm.api';
-import { JsonFormSchema } from '#modules/form/jsonForm.type';
+import { JsonFormSchema } from '#modules/form/types/jsonForm.type';
+import {
+  createFormNamespace,
+  FORM_CONFIG,
+} from '#modules/form/utils/constants';
 import { LoadingButton } from '#shared/components/LoadingButton/LoadingButton';
 import { useTranslation } from '#shared/i18n/useTranslation';
 import { ApiError } from '#shared/infra/errors';
@@ -24,7 +28,9 @@ export default function FormDetailPage() {
   const urlPathParams = useParams();
   const uuid = urlPathParams.uuid as string;
 
-  const { t, currentBaseLanguage, i18n } = useTranslation();
+  const namespace = createFormNamespace(uuid);
+
+  const { t, currentBaseLanguage, i18n } = useTranslation(namespace);
 
   const {
     data: jsonFormSchema,
@@ -37,23 +43,26 @@ export default function FormDetailPage() {
 
   const createTranslator = useCallback(
     (schema: JsonFormSchema | undefined) => {
-      if (!schema) return (key, defaultMessage) => defaultMessage;
-      // Load the form translations
+      if (!schema)
+        return (key: string, defaultMessage?: string) => defaultMessage ?? '';
+
+      const namespace = createFormNamespace(schema.uuid);
+
       i18n.addResourceBundle(
-        'en-GB',
-        `form_${schema.uuid}`,
+        FORM_CONFIG.LANGUAGES.EN,
+        namespace,
         schema.i18nKeys_en,
       );
       i18n.addResourceBundle(
-        'fr-FR',
-        `form_${schema.uuid}`,
+        FORM_CONFIG.LANGUAGES.FR,
+        namespace,
         schema.i18nKeys_fr,
       );
-      // Return a translator function that complies with the jsonforms i18n interface
-      return (key: string, defaultMessage: string | undefined) =>
-        i18n.exists(key, { ns: `form_${schema.uuid}` })
-          ? t(key, { ns: `form_${schema.uuid}` })
-          : defaultMessage;
+
+      return (key: string, defaultMessage?: string) =>
+        i18n.exists(key, { ns: namespace })
+          ? t(key, { ns: namespace })
+          : (defaultMessage ?? '');
     },
     [i18n, t],
   );
@@ -73,8 +82,9 @@ export default function FormDetailPage() {
         data,
         user: currentUserData.id,
       }),
-    onSuccess(data) {
-      console.log(data);
+    onSuccess() {
+      // Handle successful submission
+      setData({});
     },
   });
 
@@ -84,6 +94,7 @@ export default function FormDetailPage() {
         {jsonFormSchema?.name ?? t('jsonForm.form.loadingTitle')}
       </Typography>
       <Typography>{jsonFormSchema?.description}</Typography>
+
       {error
         ?.filter((e) => e.instancePath === '/')
         .map((e) => (
@@ -91,11 +102,13 @@ export default function FormDetailPage() {
             {e.message}
           </Alert>
         ))}
+
       {schemaError && (
         <Alert severity={'error'} sx={{ my: 1 }}>
           {schemaError.message}
         </Alert>
       )}
+
       {jsonFormSchema && (
         <JsonForms
           schema={jsonFormSchema.schema}
@@ -109,6 +122,7 @@ export default function FormDetailPage() {
           i18n={{ locale: currentBaseLanguage, translate }}
         />
       )}
+
       <LoadingButton
         onClick={() => mutate(data)}
         loading={isLoading || isSchemaLoading}
@@ -116,7 +130,17 @@ export default function FormDetailPage() {
       >
         {t('button.send')}
       </LoadingButton>
-      {JSON.stringify(data)}
+
+      {/* Debug view - remove in production */}
+      {process.env.NODE_ENV === 'development' && (
+        <Typography
+          component="pre"
+          variant="caption"
+          sx={{ mt: 2, p: 2, overflow: 'auto' }}
+        >
+          {JSON.stringify(data, null, 2)}
+        </Typography>
+      )}
     </Container>
   );
 }

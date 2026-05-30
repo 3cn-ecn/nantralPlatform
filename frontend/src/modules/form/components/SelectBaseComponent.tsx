@@ -1,0 +1,246 @@
+import { FC, useCallback, useMemo } from 'react';
+
+import { DragDropProvider, DragOverlay } from '@dnd-kit/react';
+import { isSortable } from '@dnd-kit/react/sortable';
+import {
+  Add as AddIcon,
+  ArrowDownward as ArrowDownwardIcon,
+  ArrowUpward as ArrowUpwardIcon,
+  Delete as DeleteIcon,
+  DragIndicator as DragIndicatorIcon,
+} from '@mui/icons-material';
+import {
+  Box,
+  BoxProps,
+  Button,
+  FormControl,
+  FormHelperText,
+  IconButton,
+  InputLabel,
+  MenuItem,
+  Select,
+  useTheme,
+} from '@mui/material';
+import { UUID } from 'crypto';
+import { clone } from 'lodash';
+
+import {
+  DropLayoutPlaceHolder,
+  LayoutInput,
+  layoutTypes,
+} from '#modules/form/components/formElements/BaseLayout';
+import { useJsonForm } from '#modules/form/hooks/useJsonForm';
+import { isDescendantOf } from '#modules/form/state/JsonFormReducer';
+import { ContainerNode } from '#modules/form/types/form.type';
+import { FlexCol, FlexRow } from '#shared/components/FlexBox/FlexBox';
+
+export function SelectBaseComponent() {
+  const { jsonForm, updateNode, moveNode } = useJsonForm();
+
+  const layout = useMemo(
+    () =>
+      layoutTypes.find((c) => c.title === jsonForm.nodes[jsonForm.rootId].type),
+    [jsonForm.nodes, jsonForm.rootId],
+  );
+
+  const setLayout = useCallback(
+    (val: string) => {
+      const input = layoutTypes.find((c) => c.title === val);
+      if (!input) return;
+      updateNode(jsonForm.rootId, clone(input.defaultUiSchema));
+    },
+    [jsonForm.rootId, updateNode],
+  );
+
+  const id = jsonForm.rootId + '/select_type';
+  const label = 'Select the type';
+
+  return (
+    <>
+      <FormControl fullWidth margin={'normal'}>
+        <InputLabel id={id}>{label}</InputLabel>
+        <Select
+          variant={'outlined'}
+          onChange={(e) => setLayout(e.target.value)}
+          label={label}
+          labelId={id}
+          value={layout?.title ?? ''}
+        >
+          {layoutTypes
+            .filter((type) =>
+              [
+                'Categorization',
+                'Group',
+                'HorizontalLayout',
+                'VerticalLayout',
+              ].includes(type.title),
+            )
+            .map((child) => (
+              <MenuItem key={child.title} value={child.title}>
+                {child.title}
+              </MenuItem>
+            ))}
+        </Select>
+        <FormHelperText>
+          Choisissez le type d&#39;élément que vous souhaitez ajouter
+        </FormHelperText>
+      </FormControl>
+      <DragDropProvider
+        onDragOver={(event) => {
+          const { source, target } = event.operation;
+          console.log(target?.type, target?.id);
+          if (
+            event.operation.canceled ||
+            !target ||
+            !isSortable(source) ||
+            source.id === target.id
+          )
+            return;
+
+          // Skip move if source is being moved into itself or into one of its descendants
+
+          if (isSortable(target) && target.group !== source.id) {
+            // target is a layout or a tab
+            if (
+              isDescendantOf(
+                jsonForm.nodes,
+                target.group as UUID,
+                source.id as UUID,
+              ) ||
+              target.group === source.id
+            ) {
+              console.warn(
+                'Invalid move: cannot move a node into itself or its descendants',
+              );
+              return;
+            }
+            moveNode(source.id as UUID, target.group as UUID, target.index);
+          } else if (target.type === 'placeholder') {
+            // get the actual id
+            const targetId = (target.id as string).substring('drop-'.length);
+            if (
+              isDescendantOf(
+                jsonForm.nodes,
+                targetId as UUID,
+                source.id as UUID,
+              ) ||
+              targetId === source.id
+            ) {
+              console.warn(
+                'Invalid move: cannot move a node into itself or its descendants',
+              );
+              return;
+            }
+            console.log('Move ' + source.id + ' into ' + targetId);
+            moveNode(source.id as UUID, targetId as UUID);
+          }
+        }}
+        onDragEnd={(event) => {
+          console.log('Drag end', event);
+        }}
+      >
+        {layout?.element && (
+          <LayoutInput
+            nodeId={jsonForm.rootId}
+            allowedLayoutTypes={layout.allowedChildren}
+            ContainerElement={layout.element}
+          />
+        )}
+        {
+          <DragOverlay>
+            {(source) => <OverlayLayout nodeId={source.id as UUID} />}
+          </DragOverlay>
+        }
+      </DragDropProvider>
+    </>
+  );
+}
+
+function OverlayLayout({ nodeId }: { nodeId: UUID }) {
+  const theme = useTheme();
+  const { jsonForm } = useJsonForm();
+
+  const layout = useMemo(
+    () => layoutTypes.find((c) => c.title === jsonForm.nodes[nodeId].type),
+    [jsonForm.nodes, nodeId],
+  );
+  return (
+    <FlexRow
+      className={'layout-element'}
+      alignItems="center"
+      width={'100%'}
+      sx={{
+        border: `1px solid ${theme.palette.divider}`,
+        backgroundColor: theme.palette.background.default,
+        transition: 'all 0.15s ease',
+        borderRadius: `${theme.shape.borderRadius}px`,
+      }}
+      p={1}
+      gap={1}
+    >
+      {
+        <IconButton>
+          <DragIndicatorIcon />
+        </IconButton>
+      }
+      <Box width={'100%'}>
+        {layout?.element && (
+          <OverlayInput
+            allowedLayoutTypes={layout.allowedChildren}
+            nodeId={nodeId}
+            ContainerElement={layout.element}
+          />
+        )}
+      </Box>
+      {
+        <FlexCol gap={1}>
+          <IconButton aria-label="move up" size="small">
+            <ArrowUpwardIcon />
+          </IconButton>
+          <IconButton aria-label={'remove element'} size={'small'}>
+            <DeleteIcon />
+          </IconButton>
+          <IconButton aria-label="move down" size="small">
+            <ArrowDownwardIcon />
+          </IconButton>
+        </FlexCol>
+      }
+    </FlexRow>
+  );
+}
+
+const OverlayInput = ({
+  allowedLayoutTypes,
+  nodeId,
+  ContainerElement,
+}: {
+  allowedLayoutTypes: string[];
+  nodeId: UUID;
+  ContainerElement: FC<BoxProps & { nodeId: UUID }>;
+}) => {
+  const { jsonForm } = useJsonForm();
+
+  const parentElements = (jsonForm.nodes[nodeId] as ContainerNode).elements;
+  const isEmpty = !parentElements || parentElements.length === 0;
+
+  return (
+    <ContainerElement nodeId={nodeId} m={1} gap={1}>
+      {parentElements?.map((childId: UUID) => (
+        <OverlayLayout key={childId} nodeId={childId} />
+      ))}
+      {isEmpty && <DropLayoutPlaceHolder parentId={nodeId} />}
+      {allowedLayoutTypes && (
+        <>
+          <Button
+            variant={'contained'}
+            color={'primary'}
+            startIcon={<AddIcon />}
+            sx={{ justifySelf: 'center', alignSelf: 'center' }}
+          >
+            Ajouter un élement
+          </Button>
+        </>
+      )}
+    </ContainerElement>
+  );
+};
