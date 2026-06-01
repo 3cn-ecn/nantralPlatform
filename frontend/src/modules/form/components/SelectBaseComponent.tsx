@@ -178,7 +178,6 @@ export function SelectBaseComponent() {
           </DragOverlay>
         }
       </DragDropProvider>
-      <FormPreview />
     </>
   );
 }

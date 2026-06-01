@@ -85,8 +85,18 @@ export const authenticatedRoutes: (queryClient: QueryClient) => RouteObject = (
         },
         {
           path: ':uuid',
-          element: <FormDetailPage />,
-          handle: { crumb: t('breadcrumbs.form.index') },
+          children: [
+            {
+              index: true,
+              element: <FormDetailPage />,
+              handle: { crumb: t('breadcrumbs.form.index') },
+            },
+            {
+              path: 'edit',
+              element: <EditFormPage />,
+              handle: { crumb: t('breadcrumbs.form.edit') },
+            },
+          ],
         },
       ],
     },

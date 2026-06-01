@@ -1,6 +1,6 @@
 import { useState } from 'react';
+import { useParams } from 'react-router-dom';
 
-import { UISchemaElement } from '@jsonforms/core';
 import {
   Button,
   Card,
@@ -10,69 +10,49 @@ import {
   Typography,
 } from '@mui/material';
 
+import { ImportForm } from '#modules/form/components/ImportForm';
+import { SaveForm } from '#modules/form/components/SaveForm';
 import { SelectBaseComponent } from '#modules/form/components/SelectBaseComponent';
 import { JsonFormProvider } from '#modules/form/state/JsonFormContext';
-import { JsonFormSchema } from '#modules/form/types/jsonForm.type';
 import { RichTextField, TextField } from '#shared/components/FormFields';
 import { RichTextRenderer } from '#shared/components/RichTextRenderer/RichTextRenderer';
 
-const INITIAL_FORM_STATE: JsonFormSchema = {
-  uuid: 'none',
-  name: '',
-  description: '',
-  i18nKeys: { fr: {}, en: {} },
-  schema: { type: 'object', properties: {} },
-  uiSchema: { type: 'VerticalLayout', elements: [] } as UISchemaElement,
-};
-
 export default function EditFormPage() {
   const [headerEdit, setHeaderEdit] = useState(true);
-  const [jsonForm, setJsonForm] = useState<JsonFormSchema>(INITIAL_FORM_STATE);
-
-  const handleNameChange = (value: string) => {
-    setJsonForm({ ...jsonForm, name: value });
-  };
-
-  const handleDescriptionChange = (value: string) => {
-    setJsonForm({ ...jsonForm, description: value });
-  };
-
-  const toggleHeaderEdit = () => {
-    setHeaderEdit(!headerEdit);
-  };
+  const [name, setname] = useState('');
+  const [description, setDescription] = useState('');
+  const params = useParams();
 
   return (
     <JsonFormProvider>
+      {params['uuid'] && <ImportForm uuid={params['uuid']} />}
       <Container sx={{ my: 2 }}>
         <Card>
           <CardContent>
             {headerEdit ? (
-              <TextField
-                label={'Titre'}
-                value={jsonForm.name}
-                handleChange={handleNameChange}
-              />
+              <TextField label={'Titre'} value={name} handleChange={setname} />
             ) : (
-              <Typography variant={'h4'}>{jsonForm.name}</Typography>
+              <Typography variant={'h4'}>{name}</Typography>
             )}
             {headerEdit ? (
               <RichTextField
-                value={jsonForm.description}
-                handleChange={handleDescriptionChange}
+                value={description}
+                handleChange={setDescription}
                 label={'Description'}
               />
             ) : (
-              <RichTextRenderer content={jsonForm.description} />
+              <RichTextRenderer content={description} />
             )}
           </CardContent>
           <CardActions>
-            <Button onClick={toggleHeaderEdit}>
+            <Button onClick={() => setHeaderEdit(!headerEdit)}>
               {headerEdit ? 'Confirmer' : 'Modifier'}
             </Button>
           </CardActions>
         </Card>
         <SelectBaseComponent />
       </Container>
+      <SaveForm name={name} description={description} uuid={params['uuid']} />
     </JsonFormProvider>
   );
 }
