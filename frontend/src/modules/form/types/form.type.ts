@@ -39,6 +39,7 @@ export interface LayoutNode {
   id: UUID;
   parentId?: UUID;
   type: string;
+  options?: UISchemaElement['options'];
 }
 
 export interface BaseLayout extends LayoutNode {
