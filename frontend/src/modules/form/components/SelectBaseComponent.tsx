@@ -130,7 +130,7 @@ export function SelectBaseComponent() {
               return;
             }
             moveNode(source.id as UUID, target.group as UUID, target.index);
-          } else if (target.type === 'placeholder') {
+          } else if (target.type === 'placeholder' || target.type === 'tabs') {
             // get the actual id
             const targetId = (target.id as string).substring('drop-'.length);
             if (

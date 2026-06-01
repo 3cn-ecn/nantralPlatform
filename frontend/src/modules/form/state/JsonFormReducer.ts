@@ -378,6 +378,7 @@ export function exportTree(state: TreeState): {
         type: 'Control',
         scope,
         i18n: controlKey,
+        options: node.options,
       } as UISchemaElement;
     }
 
@@ -386,6 +387,7 @@ export function exportTree(state: TreeState): {
       return {
         type: 'Label',
         text: nodeId, // will be used as translation key
+        options: node.options,
       } as UISchemaElement;
     }
 
@@ -423,6 +425,7 @@ export function exportTree(state: TreeState): {
         type: node.type,
         label: nodeId, // wil be used as translation key
         elements,
+        options: node.options,
       } as UISchemaElement;
     } else {
       for (const childId of (node as ContainerNode).elements) {
@@ -435,7 +438,7 @@ export function exportTree(state: TreeState): {
         );
         elements.push(childUi);
       }
-      return { type: node.type, elements };
+      return { type: node.type, elements, options: node.options };
     }
   }
 
@@ -502,6 +505,7 @@ function buildNormalizedNodes(
       type: 'Control',
       schema: schema ? clone(schema) : undefined,
       label,
+      options: node.options,
       description,
     } as ControlNode;
   } else if (node.type === 'Label') {
@@ -515,6 +519,7 @@ function buildNormalizedNodes(
           val[(node as LabelElement).text],
         ]),
       ) as Record<BaseLanguage, string>,
+      options: node.options,
     };
   } else if (node.type === 'Group') {
     const elements = (node as GroupLayout).elements.map((child) =>
@@ -533,6 +538,7 @@ function buildNormalizedNodes(
           val[groupNode.label as string],
         ]),
       ) as Record<BaseLanguage, string>,
+      options: node.options,
     };
   } else if (node.type === 'Category') {
     const elements = (node as Category).elements.map((child) =>
@@ -550,6 +556,7 @@ function buildNormalizedNodes(
           val[(node as { label: string }).label],
         ]),
       ) as Record<BaseLanguage, string>,
+      options: node.options,
     };
   } else if ('elements' in node) {
     const elements = node.elements.map((child) =>
@@ -564,6 +571,7 @@ function buildNormalizedNodes(
         | 'HorizontalLayout'
         | 'Categorization',
       elements,
+      options: node.options,
     };
   }
 

@@ -11,10 +11,9 @@ import {
   Close as CloseIcon,
   Edit as EditIcon,
   Delete as DeleteIcon,
-  ArrowBackIos as ArrowBackIosIcon,
-  ArrowForwardIos as ArrowForwardIosIcon,
   DragIndicator as DragIndicatorIcon,
   HighlightAlt as DropIcon,
+  MoreHoriz,
 } from '@mui/icons-material';
 import {
   Box,
@@ -43,6 +42,8 @@ import {
 } from '#modules/form/types/form.type';
 import { FlexAuto, FlexCol, FlexRow } from '#shared/components/FlexBox/FlexBox';
 import { RichTextField, TextField } from '#shared/components/FormFields';
+import { IconMenu } from '#shared/components/IconMenu/IconMenu';
+import { EnumMenuItem } from '#shared/components/MenuForm/EnumMenuItem';
 import { ConfirmationModal } from '#shared/components/Modal/ConfirmationModal';
 import { TextModal } from '#shared/components/Modal/TextModal';
 import { TranslatedFieldObject } from '#shared/infra/translatedFields/translatedField.types';
@@ -256,16 +257,29 @@ const LabelLayout = ({ nodeId }: { nodeId: UUID }) => {
 };
 
 // =========================
-// CATEGORY TAB LABEL COMPONENT
+// DRAGGABLE TAB COMPONENT
 // =========================
 
-const CategoryTabLabel = ({
+const DraggableCategoryTab = ({
   nodeId,
-  handleMoveTab,
+  parentId,
+  index,
+  ...props
 }: {
   nodeId: UUID;
-  handleMoveTab: (nodeId: UUID, direction: 'left' | 'right') => void;
+  value: UUID;
+  parentId: UUID;
+  index: number;
+  selected?: boolean;
 }) => {
+  const { ref, handleRef } = useSortable({
+    id: nodeId,
+    index: index,
+    group: parentId,
+    type: 'tab',
+    accept: 'tab',
+  });
+
   const { jsonForm, removeNode, updateNode, lang } = useJsonForm();
   const [openRenameModal, setOpenRenameModal] = useState(false);
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
@@ -281,118 +295,61 @@ const CategoryTabLabel = ({
   );
 
   return (
-    <Box
-      sx={{
-        display: 'flex',
-        alignItems: 'center',
-        gap: 0.5,
-      }}
-    >
-      <IconButton
-        size="small"
-        aria-label={`Move left ${label}`}
-        onClick={(e) => {
-          e.stopPropagation();
-          handleMoveTab(nodeId, 'left');
-        }}
-      >
-        <ArrowBackIosIcon fontSize="inherit" />
-      </IconButton>
-      {label[lang] || '>EMPTY<'}
-      <IconButton
-        size="small"
-        aria-label={`Rename ${label}`}
-        onClick={(e) => {
-          e.stopPropagation();
-          setOpenRenameModal(true);
-        }}
-      >
-        <EditIcon fontSize="inherit" />
-      </IconButton>
-      <IconButton
-        size="small"
-        aria-label={`Move right ${label}`}
-        onClick={(e) => {
-          e.stopPropagation();
-          handleMoveTab(nodeId, 'right');
-        }}
-      >
-        <ArrowForwardIosIcon fontSize="inherit" />
-      </IconButton>
-      <IconButton
-        size="small"
-        aria-label={'Remove this element'}
-        onClick={(e) => {
-          e.stopPropagation();
-          setOpenDeleteModal(true);
-        }}
-      >
-        <CloseIcon fontSize="inherit" />
-      </IconButton>
-      {openRenameModal && (
-        <TextModal
-          title={`Rename ${label[lang] || 'tab'}`}
-          body={'Please enter the new name for this part'}
-          oldValue={label[lang]}
-          onCancel={() => setOpenRenameModal(false)}
-          onConfirm={(newLabel) => {
-            setOpenRenameModal(false);
-            setLabel(newLabel);
-          }}
-        />
-      )}
-      {openDeleteModal && (
-        <ConfirmationModal
-          title={`Delete ${label[lang] || 'tab'}`}
-          body={
-            'Voulez-vous supprimer cette partie ? Cette action est définitive'
-          }
-          onCancel={() => setOpenDeleteModal(false)}
-          onConfirm={() => {
-            setOpenDeleteModal(false);
-            removeNode(nodeId);
-          }}
-        />
-      )}
-    </Box>
-  );
-};
-
-// =========================
-// DRAGGABLE TAB COMPONENT
-// =========================
-
-const DraggableCategoryTab = ({
-  nodeId,
-  parentId,
-  index,
-  handleMoveTab,
-  ...props
-}: {
-  nodeId: UUID;
-  value: UUID;
-  parentId: UUID;
-  index: number;
-  handleMoveTab: (nodeId: UUID, direction: 'left' | 'right') => void;
-  selected?: boolean;
-}) => {
-  const { ref } = useSortable({
-    id: nodeId,
-    index: index,
-    group: parentId,
-    type: 'tab',
-    accept: 'tab',
-  });
-
-  return (
     <Tab
       component={'span'}
       ref={ref}
       label={
-        <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
-          <DragIndicatorIcon fontSize="small" sx={{ cursor: 'grab' }} />
-          <CategoryTabLabel nodeId={nodeId} handleMoveTab={handleMoveTab} />
-        </Box>
+        <FlexRow gap={0.5} alignItems={'center'}>
+          <IconButton ref={handleRef} size={'small'}>
+            <DragIndicatorIcon fontSize="inherit" />
+          </IconButton>
+          {label[lang] || '>EMPTY<'}
+          <IconButton
+            size="small"
+            aria-label={`Rename ${label}`}
+            onClick={(e) => {
+              e.stopPropagation();
+              setOpenRenameModal(true);
+            }}
+          >
+            <EditIcon fontSize="inherit" />
+          </IconButton>
+          <IconButton
+            size="small"
+            aria-label={'Remove this element'}
+            onClick={(e) => {
+              e.stopPropagation();
+              setOpenDeleteModal(true);
+            }}
+          >
+            <CloseIcon fontSize="inherit" />
+          </IconButton>
+          {openRenameModal && (
+            <TextModal
+              title={`Rename ${label[lang] || 'tab'}`}
+              body={'Please enter the new name for this part'}
+              oldValue={label[lang]}
+              onCancel={() => setOpenRenameModal(false)}
+              onConfirm={(newLabel) => {
+                setOpenRenameModal(false);
+                setLabel(newLabel);
+              }}
+            />
+          )}
+          {openDeleteModal && (
+            <ConfirmationModal
+              title={`Delete ${label[lang] || 'tab'}`}
+              body={
+                'Voulez-vous supprimer cette partie ? Cette action est définitive'
+              }
+              onCancel={() => setOpenDeleteModal(false)}
+              onConfirm={() => {
+                setOpenDeleteModal(false);
+                removeNode(nodeId);
+              }}
+            />
+          )}
+        </FlexRow>
       }
       {...props}
     />
@@ -404,10 +361,16 @@ const DraggableCategoryTab = ({
 // =========================
 
 const CategorizationLayoutInput = ({ nodeId }: { nodeId: UUID }) => {
-  const { jsonForm, addNode, moveNode } = useJsonForm();
+  const { jsonForm, addNode, updateNode } = useJsonForm();
   const [activeTab, setActiveTab] = useState<UUID | undefined>(undefined);
   const [openAddModal, setOpenAddModal] = useState(false);
-  const { ref } = useDroppable({ id: nodeId, type: 'tabs', accept: 'tab' });
+  const { ref } = useDroppable({
+    id: 'drop-' + nodeId,
+    type: 'tabs',
+    accept: 'tab',
+    collisionDetector: pointerIntersection,
+  });
+  const theme = useTheme();
 
   const node = useMemo(() => jsonForm.nodes[nodeId], [jsonForm.nodes, nodeId]);
 
@@ -421,33 +384,15 @@ const CategorizationLayoutInput = ({ nodeId }: { nodeId: UUID }) => {
     [addNode, nodeId],
   );
 
-  const handleMoveTab = useCallback(
-    (tabId: UUID, direction: 'left' | 'right') => {
-      const node = jsonForm.nodes[nodeId];
-      if (!node || !('elements' in node)) return;
-      const tabs = node.elements;
-      const idx = tabs.indexOf(tabId);
-      if (idx === -1) return;
-      const newIdx = direction === 'left' ? idx - 1 : idx + 1;
-      if (newIdx < 0 || newIdx >= tabs.length) return;
-      moveNode(tabId, nodeId, newIdx);
-    },
-    [jsonForm.nodes, nodeId, moveNode],
-  );
-
   if (node.type !== 'Categorization') {
     return null;
   }
 
+  const isEmpty = !node.elements || node.elements.length === 0;
+
   return (
-    <FlexCol>
-      <Box
-        sx={{
-          display: 'flex',
-          alignItems: 'center',
-          gap: 1,
-        }}
-      >
+    <FlexCol gap={1}>
+      <FlexRow gap={1} alignItems={'center'}>
         <Tabs
           ref={ref}
           value={activeTab}
@@ -455,19 +400,38 @@ const CategorizationLayoutInput = ({ nodeId }: { nodeId: UUID }) => {
           variant="scrollable"
           scrollButtons="auto"
         >
+          {isEmpty && (
+            <FlexRow
+              border={`2px dashed ${theme.palette.divider}`}
+              borderRadius={`${theme.shape.borderRadius}px`}
+              sx={{
+                backgroundColor: theme.palette.action.hover,
+              }}
+              width="100%"
+              gap={2}
+              alignItems={'center'}
+              justifyContent={'center'}
+              py={1}
+              px={2}
+            >
+              <DropIcon />
+              <Typography variant="subtitle1" textAlign="center">
+                Déplacez un élément ici
+              </Typography>
+            </FlexRow>
+          )}
           {node.elements.map((childId, i) => (
             <DraggableCategoryTab
               key={childId}
               nodeId={childId}
               parentId={nodeId}
               index={i}
-              handleMoveTab={handleMoveTab}
               value={childId}
             />
           ))}
         </Tabs>
         <Button startIcon={<AddIcon />} onClick={() => setOpenAddModal(true)}>
-          Add Tab
+          Add Section
         </Button>
         {openAddModal && (
           <TextModal
@@ -480,8 +444,57 @@ const CategorizationLayoutInput = ({ nodeId }: { nodeId: UUID }) => {
             }}
           />
         )}
-      </Box>
-      {activeTab && (
+        <Box flexGrow={1} />
+        <IconMenu Icon={MoreHoriz} size={'medium'}>
+          <EnumMenuItem
+            label={'Type de sections'}
+            handleChange={(val) => {
+              switch (val) {
+                case 'Tabs':
+                  updateNode(nodeId, {
+                    options: {
+                      ...node.options,
+                      variant: undefined,
+                      showNavButtons: undefined,
+                    },
+                  });
+                  break;
+                case 'Steps':
+                  updateNode(nodeId, {
+                    options: {
+                      ...node.options,
+                      variant: 'stepper',
+                      showNavButtons: undefined,
+                    },
+                  });
+                  break;
+                case 'Steps with navigation':
+                  updateNode(nodeId, {
+                    options: {
+                      ...node.options,
+                      variant: 'stepper',
+                      showNavButtons: true,
+                    },
+                  });
+                  break;
+                default:
+                  console.error(
+                    `Unknown option for Categorization Layout: ${val}`,
+                  );
+              }
+            }}
+            items={['Tabs', 'Steps', 'Steps with navigation']}
+            value={
+              node.options?.variant !== 'stepper'
+                ? 'Tabs'
+                : node.options.showNavButtons
+                  ? 'Steps with navigation'
+                  : 'Steps'
+            }
+          />
+        </IconMenu>
+      </FlexRow>
+      {activeTab && jsonForm.nodes[activeTab] && (
         <LayoutInput
           allowedLayoutTypes={[
             'Control',
@@ -676,7 +689,7 @@ export function BaseLayout({
       gap={1}
     >
       {handleMoveSibling && (
-        <IconButton ref={handleRef}>
+        <IconButton ref={handleRef} size={'small'}>
           <DragIndicatorIcon />
         </IconButton>
       )}
