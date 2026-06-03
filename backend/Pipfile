@@ -46,7 +46,7 @@ psycopg2-binary = "~=2.9"
 pymemcache = "~=4.0"
 pywebpush = "~=1.14"
 redis = "~=5.0"
-requests = "~=2.32"
+requests = "~=2.33"
 six = "~=1.16"
 # force update of a sub-package
 pyjwt = ">=2.4"
