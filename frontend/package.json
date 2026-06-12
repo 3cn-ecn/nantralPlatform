@@ -84,7 +84,7 @@
     "@tanstack/react-query": "^4.35.7",
     "@turf/helpers": "^6.3.0",
     "@types/mapbox-gl": "^3.4.1",
-    "@vitejs/plugin-react": "^4.0.0",
+    "@vitejs/plugin-react": "^6.0.2",
     "array-move": "^4.0.0",
     "axios": "^1.7.4",
     "ckeditor5": "^43.1.0",
@@ -110,7 +110,7 @@
     "rollup-plugin-visualizer": "latest",
     "sass": "^1.55.0",
     "supercluster": "^7.1.3",
-    "vite": "^5.4.7",
+    "vite": "^8.0.16",
     "vite-plugin-svgr": "^4.1.0"
   },
   "browserslist": {
