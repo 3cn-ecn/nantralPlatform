@@ -19,7 +19,7 @@ interface HistoryButtonProps {
   group: Group;
 }
 
-export default function HistoryButton(props: HistoryButtonProps) {
+export function HistoryButton(props: HistoryButtonProps) {
   const { group } = props;
   const { t } = useTranslation();
   const [searchParams, setSearchParams] = useSearchParams();
