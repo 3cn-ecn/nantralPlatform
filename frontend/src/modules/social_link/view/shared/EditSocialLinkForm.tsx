@@ -34,8 +34,7 @@ import { ApiFormError } from '#shared/infra/errors';
 import { SocialLinkItem } from './SocialLinkItem';
 
 type GroupOrUser =
-  | { userId: number; groupSlug?: never }
-  | { userId?: never; groupSlug: string };
+  { userId: number; groupSlug?: never } | { userId?: never; groupSlug: string };
 
 type EditSocialLinkFormProps = GroupOrUser & {
   socialLinks: SocialLink[];

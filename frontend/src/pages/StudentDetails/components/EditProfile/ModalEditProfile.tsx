@@ -25,10 +25,10 @@ import { ChangePasswordTab } from './ChangePassword.tab';
 import { EditProfileTab } from './EditProfile.tab';
 
 export enum TabType {
-  'profile',
-  'emails',
-  'links',
-  'password',
+  profile,
+  emails,
+  links,
+  password,
 }
 
 export function ModalEditProfile({

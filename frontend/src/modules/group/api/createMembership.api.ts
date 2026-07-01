@@ -9,10 +9,10 @@ import { MembershipForm } from '../types/membership.types';
 
 export async function createMembershipApi(formData: MembershipForm) {
   const { data } = await axios
-    .post<
-      MembershipFormDTO,
-      AxiosResponse<MembershipDTO>
-    >('/api/group/membership/', convertMembershipForm(formData))
+    .post<MembershipFormDTO, AxiosResponse<MembershipDTO>>(
+      '/api/group/membership/',
+      convertMembershipForm(formData),
+    )
     .catch((err: ApiFormErrorDTO<MembershipFormDTO>) => {
       throw adaptApiFormErrors(err);
     });

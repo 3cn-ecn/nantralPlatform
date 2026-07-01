@@ -15,10 +15,10 @@ export async function updateGroupHistoryApi(
   formData: GroupHistoryForm,
 ) {
   const { data } = await axios
-    .put<
-      GroupHistoryFormDTO,
-      AxiosResponse<GroupHistoryDTO>
-    >(`/api/group/group/${slug}/history/${pk}/`, convertGroupHistoryForm(formData))
+    .put<GroupHistoryFormDTO, AxiosResponse<GroupHistoryDTO>>(
+      `/api/group/group/${slug}/history/${pk}/`,
+      convertGroupHistoryForm(formData),
+    )
     .catch((err: ApiFormErrorDTO<GroupHistoryFormDTO>) => {
       throw adaptApiFormErrors(err);
     });

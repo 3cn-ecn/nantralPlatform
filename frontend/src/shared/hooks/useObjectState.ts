@@ -3,8 +3,7 @@ import { Dispatch, useReducer } from 'react';
 import { isFunction } from 'lodash-es';
 
 export type SetObjectStateAction<T> =
-  | Partial<T>
-  | ((prevState: T) => Partial<T>);
+  Partial<T> | ((prevState: T) => Partial<T>);
 
 function reducer<T>(prevState: T, action: SetObjectStateAction<T>): T {
   // if called with a function, returns the result of the function
