@@ -125,7 +125,7 @@ class AuthViewSet(GenericViewSet):
                 data["emails_ecn"] = [
                     email.email
                     for email in user.emails.filter(is_valid=False)
-                    if email.is_ecn_email()
+                    if email.is_authorized_organization_email()
                 ]
                 response_status = status.HTTP_401_UNAUTHORIZED
             else:

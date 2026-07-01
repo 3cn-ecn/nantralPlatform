@@ -25,7 +25,6 @@ export function EmailRow({
   setAnchorEl: (anchorEl: null | HTMLElement) => void;
 }) {
   const { t } = useTranslation();
-  console.log(email);
   return (
     <TableRow sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
       <TableCell colSpan={email.isMain && email.isValid ? 2 : 1}>

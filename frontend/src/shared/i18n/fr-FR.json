@@ -62,7 +62,7 @@
     },
     "chip": {
       "organisation": "Email institutionnelle",
-      "organisationTooltip": "Cette adresse email provient d'une organisation authorisée à utiliser Nantral Platform. Si elle est vérifiée, elle permet de vérifier votre compte.",
+      "organisationTooltip": "Cette adresse email provient d'une organisation autorisée à utiliser Nantral Platform. Si elle est vérifiée, elle permet de vérifier votre compte.",
       "error": "Erreur",
       "hidden": "Cachée",
       "main": "Principal",

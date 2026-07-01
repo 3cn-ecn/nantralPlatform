@@ -3,22 +3,35 @@
 {% load django_vite %}
 
 {% block asset %}
+    {{ client.name|json_script:"oidc-authorize-client-name" }}
+    {{ client.client_type|json_script:"oidc-authorize-client-type" }}
+    {{ client.client_id|json_script:"oidc-authorize-client-id" }}
+    {{ client.website_url|json_script:"oidc-authorize-client-website-url" }}
+    {{ client.terms_url|json_script:"oidc-authorize-client-terms-url" }}
+    {{ client.contact_email|json_script:"oidc-authorize-client-contact-email" }}
+    {% if client.logo %}
+    {{ client.logo.url|json_script:"oidc-authorize-client-logo" }}
+    {% endif %}
+    {{ hidden_inputs|json_script:"oidc-authorize-hidden-inputs" }}
+    {{ scopes|json_script:"oidc-authorize-scopes" }}
+    {{ post_url|json_script:"oidc-authorize-post-url" }}
+    {{ csrf_token|json_script:"oidc-authorize-csrf-token" }}
     <script>
       const client = {
-        name: '{{ client.name }}',
-        client_type: '{{ client.client_type }}',
-        client_id: '{{ client.client_id }}',
-        website_url: '{{ client.website_url }}',
-        terms_url: '{{ client.terms_url }}',
-        contact_email: '{{ client.contact_email }}',
+        name: JSON.parse(document.getElementById('oidc-authorize-client-name').textContent),
+        client_type: JSON.parse(document.getElementById('oidc-authorize-client-type').textContent),
+        client_id: JSON.parse(document.getElementById('oidc-authorize-client-id').textContent),
+        website_url: JSON.parse(document.getElementById('oidc-authorize-client-website-url').textContent),
+        terms_url: JSON.parse(document.getElementById('oidc-authorize-client-terms-url').textContent),
+        contact_email: JSON.parse(document.getElementById('oidc-authorize-client-contact-email').textContent),
         {% if client.logo %}
-          logo: '{{ client.logo.url }}',
+        logo: JSON.parse(document.getElementById('oidc-authorize-client-logo').textContent),
         {% endif %}
       };
-      const hidden_inputs = `{{ hidden_inputs }}`;
-      const scopes = {{ scopes }};
-      const post_url = '{% url "oidc_provider:authorize" %}';
-      const csrf_token = '{% csrf_token %}';
+      const hidden_inputs = JSON.parse(document.getElementById('oidc-authorize-hidden-inputs').textContent);
+      const scopes = JSON.parse(document.getElementById('oidc-authorize-scopes').textContent);
+      const post_url = JSON.parse(document.getElementById('oidc-authorize-post-url').textContent);
+      const csrf_token = JSON.parse(document.getElementById('oidc-authorize-csrf-token').textContent);
     </script>
   {% vite_asset "src/templates/oidc_provider/authorize.tsx" %}
 {% endblock %}

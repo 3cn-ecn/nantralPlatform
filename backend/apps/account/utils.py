@@ -74,7 +74,7 @@ def send_email_confirmation(email, request: HttpRequest) -> None:
         return
 
     if request:
-        if not email.is_authorized_organisation_email:
+        if not email.is_authorized_organisation_email():
             messages.success(
                 request,
                 (

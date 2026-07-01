@@ -55,8 +55,14 @@ AUTHORIZED_ORGANIZATIONS = [
         account_organization_priority=11,
     ),
     AuthorizedOrganization(
-        r"supmaritime\.fr$",
-        "ENSM Email",
+        r"@supmaritime\.fr$",
+        "ENSM Staff",
+        email_validation_priority=5,
+        account_organization_priority=9,
+    ),
+    AuthorizedOrganization(
+        r"@supmaritime\.fr$", # Student and staff share the same domain, so we use the same regex for both
+        "ENSM Student & Staff",
         email_validation_priority=5,
         account_organization_priority=9,
     )
