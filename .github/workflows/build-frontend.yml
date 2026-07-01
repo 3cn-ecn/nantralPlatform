@@ -16,19 +16,23 @@ jobs:
 
     steps:
       - name: Clone the repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Setup Node
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version-file: frontend/.nvmrc
           cache: npm
           cache-dependency-path: frontend/package-lock.json
 
       - name: Install dependencies
-        run: npm ci --omit=dev
+        working-directory: frontend
+        run: npm ci
+        env: 
+          NODE_ENV: development
 
       - name: Build React
+        working-directory: frontend
         run: npm run build
 
       - name: Upload files to the VPS
