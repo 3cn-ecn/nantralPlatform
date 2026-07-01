@@ -56,7 +56,7 @@ AUTHORIZED_ORGANIZATIONS = [
     ),
     AuthorizedOrganization(
         r"supmaritime\.fr$",
-        "EC-Nantes Fake Email",
+        "ENSM Email",
         email_validation_priority=5,
         account_organization_priority=9,
     )
