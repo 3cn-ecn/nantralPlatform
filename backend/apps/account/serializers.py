@@ -159,11 +159,12 @@ class InvitationRegisterSerializer(RegisterSerializer):
         ],
         required=True,
     )
+
     invitation_uuid = serializers.SlugRelatedField(
-        slug_field="id",
-        required=True,
-        queryset=InvitationLink.objects.filter(expires_at__gt=timezone.now()),
-    )
+            slug_field="id",
+            required=True,
+            queryset=InvitationLink.objects.filter(expires_at__gt=timezone.now()),
+        )
 
     def create(self, validated_data: dict):
         invitation_uuid = self.validated_data.pop("invitation_uuid")

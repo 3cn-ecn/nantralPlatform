@@ -10,7 +10,7 @@ name = "pypi"
 "migrate" = "python manage.py migrate"
 "django" = "python manage.py"
 "lint" = "ruff check"
-"lint:fix" = "sh -c 'ruff check --fix . && ruff format'"
+"lint:fix" = "ruff check --fix . && ruff format"
 "test:coverage" = "coverage run --source='.' manage.py test"
 "fakedata" = "python manage.py fakedata"
 
@@ -18,7 +18,7 @@ name = "pypi"
 celery = "~=5.2"
 crispy-bootstrap5 = "~=0.6"
 discord-webhook = "~=1.0"
-django = "~=4.2"
+django = "~=5.1"
 django-celery-beat = "~=2.4"
 django-ckeditor-5 = "~=0.2"
 django-crispy-forms = "~=1.14"
@@ -48,12 +48,11 @@ pywebpush = "~=1.14"
 redis = "~=5.0"
 requests = "~=2.32"
 six = "~=1.16"
-# force update of a sub-package
 pyjwt = ">=2.4"
 
 [dev-packages]
 coverage = "~=7.3"
-ruff = "~=0.15"
+ruff = "*"
 
 [requires]
 python_version = "3.13"

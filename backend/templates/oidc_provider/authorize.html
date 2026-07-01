@@ -16,7 +16,7 @@
         {% endif %}
       };
       const hidden_inputs = `{{ hidden_inputs }}`;
-      const scopes = {{ scopes|safe }};
+      const scopes = {{ scopes }};
       const post_url = '{% url "oidc_provider:authorize" %}';
       const csrf_token = '{% csrf_token %}';
     </script>

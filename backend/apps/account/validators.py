@@ -53,6 +53,12 @@ AUTHORIZED_ORGANIZATIONS = [
         "EC-Nantes Fake Email",
         email_validation_priority=4,
         account_organization_priority=11,
+    ),
+    AuthorizedOrganization(
+        r"supmaritime\.fr$",
+        "EC-Nantes Fake Email",
+        email_validation_priority=5,
+        account_organization_priority=9,
     )
 ]
 AUTHORIZED_ORGANIZATIONS.sort(key=lambda org: org.email_validation_priority)
