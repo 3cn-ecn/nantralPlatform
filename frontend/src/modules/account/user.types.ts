@@ -20,14 +20,7 @@ export type UserPreview = Pick<User, 'id' | 'name' | 'url' | 'picture'>;
 
 export type FacultyOptions = 'Gen' | 'Iti' | 'Mas' | 'Doc' | 'Bac' | 'Msp';
 export type PathOptions =
-  | 'Cla'
-  | 'Alt'
-  | 'I-A'
-  | 'A-I'
-  | 'I-M'
-  | 'M-I'
-  | 'I-O'
-  | 'O-I';
+  'Cla' | 'Alt' | 'I-A' | 'A-I' | 'I-M' | 'M-I' | 'I-O' | 'O-I';
 
 export enum Faculties {
   Gen = 'login.formationFollowed.generalEngineer',

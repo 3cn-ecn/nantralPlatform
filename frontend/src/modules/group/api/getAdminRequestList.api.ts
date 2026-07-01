@@ -17,9 +17,9 @@ export async function getAdminRequestListApi(
   options: GetAdminRequestListOptions,
 ): Promise<Page<AdminRequest>> {
   const { data } = await axios
-    .get<
-      PageDTO<AdminRequestDTO>
-    >('/api/group/membership/admin_requests/', { params: { page: options.page, page_size: options.pageSize, group: slug } })
+    .get<PageDTO<AdminRequestDTO>>('/api/group/membership/admin_requests/', {
+      params: { page: options.page, page_size: options.pageSize, group: slug },
+    })
     .catch((err: ApiErrorDTO) => {
       throw adaptApiErrors(err);
     });

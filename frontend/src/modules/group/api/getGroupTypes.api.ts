@@ -11,9 +11,9 @@ export async function getGroupTypesApi(
   isMap: boolean | null = null,
 ): Promise<Page<GroupTypePreview>> {
   const { data } = await axios
-    .get<
-      PageDTO<GroupTypePreviewDTO>
-    >('/api/group/grouptype/', { params: { is_map: isMap } })
+    .get<PageDTO<GroupTypePreviewDTO>>('/api/group/grouptype/', {
+      params: { is_map: isMap },
+    })
     .catch((err: ApiErrorDTO) => {
       throw adaptApiErrors(err);
     });

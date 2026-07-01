@@ -11,10 +11,10 @@ import { RegisterCreatedDTO, RegisterDTO } from '../infra/account.dto';
 
 export async function registerApi(form: RegisterForm) {
   const { data } = await axios
-    .post<
-      RegisterDTO,
-      AxiosResponse<RegisterCreatedDTO>
-    >('/api/account/register/', adaptRegisterForm(form))
+    .post<RegisterDTO, AxiosResponse<RegisterCreatedDTO>>(
+      '/api/account/register/',
+      adaptRegisterForm(form),
+    )
     .catch((err: ApiErrorDTO) => {
       throw adaptApiErrors(err);
     });

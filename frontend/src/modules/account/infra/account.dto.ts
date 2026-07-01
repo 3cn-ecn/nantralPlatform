@@ -23,11 +23,4 @@ export interface RegisterCreatedDTO {
 export type FacultyOptions = 'Gen' | 'Iti' | 'Mas' | 'Doc' | 'Bac' | 'MSp';
 
 export type PathOptions =
-  | 'Cla'
-  | 'Alt'
-  | 'I-A'
-  | 'A-I'
-  | 'I-M'
-  | 'M-I'
-  | 'I-O'
-  | 'O-I';
+  'Cla' | 'Alt' | 'I-A' | 'A-I' | 'I-M' | 'M-I' | 'I-O' | 'O-I';

@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { Button } from 'react-bootstrap';
+import { useEffect, useState } from 'react';
+import { Button, Typography } from '@mui/material';
 
 import { useTranslation } from '#shared/i18n/useTranslation';
 
@@ -7,38 +7,59 @@ import { wrapAndRenderLegacyCode } from '../utils/wrapAndRenderLegacyCode';
 
 /**
  * Load the Subscribe Button and update it when clicked
- * @param props Properties of the XML element
- * @returns HTML Button element
  */
 function DeviceSubscribeButton() {
-  const [notificationState, setNotificationState] = useState('unsupported');
+  const [notificationState, setNotificationState] = useState<'unsupported' | NotificationPermission>(
+    'unsupported',
+  );
   const { t } = useTranslation();
 
-  async function askForNotifications() {
-    Notification.requestPermission().then(() => {
+  useEffect(() => {
+    if ('Notification' in window) {
       setNotificationState(Notification.permission);
-    });
+    }
+  }, []);
+
+  async function askForNotifications() {
+    const permission = await Notification.requestPermission();
+    setNotificationState(permission);
   }
 
-  if (notificationState === 'unsupported' && 'Notification' in window) {
-    setNotificationState(Notification.permission);
-  }
+  switch (notificationState) {
+    case 'granted':
+      return (
+        <Typography>
+          {t('notification.settingsPage.enabled')}
+        </Typography>
+      );
 
-  if (notificationState === 'granted') {
-    return <p>{t('notification.settingsPage.enabled')}</p>;
-  } else if (notificationState === 'default') {
-    return (
-      <p>
-        <span>{t('notification.settingsPage.disabled')}</span>
-        <Button size="sm" onClick={askForNotifications}>
-          {t('notification.settingsPage.disabledButtonLabel')}
-        </Button>
-      </p>
-    );
-  } else if (notificationState === 'denied') {
-    return <p>{t('notification.settingsPage.blocked')}</p>;
-  } else {
-    return <p>{t('notification.settingsPage.unavailable')}</p>;
+    case 'default':
+      return (
+        <Typography component="div">
+          <span>{t('notification.settingsPage.disabled')} </span>
+          <Button
+            size="small"
+            variant="contained"
+            onClick={askForNotifications}
+          >
+            {t('notification.settingsPage.disabledButtonLabel')}
+          </Button>
+        </Typography>
+      );
+
+    case 'denied':
+      return (
+        <Typography>
+          {t('notification.settingsPage.blocked')}
+        </Typography>
+      );
+
+    default:
+      return (
+        <Typography>
+          {t('notification.settingsPage.unavailable')}
+        </Typography>
+      );
   }
 }
 
