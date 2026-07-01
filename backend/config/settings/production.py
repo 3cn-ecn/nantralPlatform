@@ -65,6 +65,15 @@ LOGGING = {
 
 # OVH MEDIA STORAGE SETTINGS
 
+STORAGES = {
+    "default": {
+        "BACKEND": "storages.backends.s3boto3.S3Boto3Storage",
+    },
+    "staticfiles": {
+        "BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage",
+    },
+}
+
 AWS_ACCESS_KEY_ID = env("OVH_ACCESS_KEY_ID")
 AWS_SECRET_ACCESS_KEY = env("OVH_SECRET_ACCESS_KEY")
 
