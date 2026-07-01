@@ -319,6 +319,7 @@ class UserSerializer(serializers.ModelSerializer):
             "emails",
             "username",
             "expires_at",
+            "organization",
         ]
         read_only_fields = (
             "id",
@@ -327,6 +328,7 @@ class UserSerializer(serializers.ModelSerializer):
             "is_superuser",
             "username",
             "expires_at",
+            "organization",
         )
 
     def get_url(self, obj: User) -> str:

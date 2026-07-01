@@ -141,6 +141,7 @@ class CustomUserAdmin(UserAdmin):
                     "is_email_valid",
                     "has_valid_authorized_organisation_email",
                     "invitation",
+                    "organization"
                 ),
             },
         ),
@@ -161,6 +162,7 @@ class CustomUserAdmin(UserAdmin):
         "last_login",
         "is_email_valid",
         "has_valid_authorized_organisation_email",
+        "organization",
     )
     inlines = (EmailInline,)
     search_fields = ("username", "first_name", "last_name", "emails__email")

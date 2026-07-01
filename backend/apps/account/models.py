@@ -14,7 +14,11 @@ from apps.utils.fields.image_field import CustomImageField
 
 from .manager import UserManager
 from .utils import send_email_confirmation
-from .validators import organisation_email_validator, validate_matrix_username
+from .validators import (
+    get_user_organization,
+    organisation_email_validator,
+    validate_matrix_username,
+)
 
 FACULTIES = [
     ("Gen", "Ingénieur Généraliste"),
@@ -178,6 +182,10 @@ class User(AbstractUser):
         return any(
             email.is_authorized_organisation_email() for email in self.emails.filter(is_valid=True)
         )
+    @property
+    def organization(self):
+        """Get the organization of the user based on their email addresses."""
+        return get_user_organization(self.emails.filter(is_valid=True))
 
     @admin.display(boolean=True)
     def has_valid_email(self):

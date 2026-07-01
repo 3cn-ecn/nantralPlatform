@@ -44,32 +44,20 @@ install:
 .PHONY: update
 update:
 	cd frontend && \
-		npm update && \
-		npm run build
+		npm i
 	cd email-templates-generator && \
-		npm update && \
+		npm i && \
 		npm run build
 	cd backend && \
-		$(call EXPORT,PIPENV_VENV_IN_PROJECT,1) && \
-		$(PIPENV) update && \
+		$(PIPENV) sync --dev && \
 		$(PIPENV) run migrate
-
-
-# Check outdated dependencies
-.PHONY: outdated
-outdated:
-	@echo "=== Frontend outdated packages ==="
-	@cd frontend && npm outdated || true
-	@echo "\n=== Email templates generator outdated packages ==="
-	@cd email-templates-generator && npm outdated || true
-	@echo "\n=== Backend outdated packages ==="
-	@cd backend && $(call EXPORT,PIPENV_VENV_IN_PROJECT,1) && $(PIPENV) check --outdated || true
 
 
 # Run the tests
 .PHONY: test
 test:
 	cd backend && \
+		$(call EXPORT,PIPENV_IGNORE_VIRTUALENVS,1) && \
 		$(PIPENV) run lint && \
 		$(PIPENV) run test
 	cd frontend && \
@@ -82,7 +70,9 @@ test:
 .PHONY: start
 start:
 	cd frontend && npm run start &
-	cd backend && $(PIPENV) run start
+	cd backend && \
+		$(call EXPORT,PIPENV_IGNORE_VIRTUALENVS,1) && \
+		$(PIPENV) run start
 
 
 # Test the quality of code
