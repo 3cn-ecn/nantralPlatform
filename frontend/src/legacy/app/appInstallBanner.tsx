@@ -1,58 +1,108 @@
-import { useState } from 'react';
-import { Button, CloseButton } from 'react-bootstrap';
+import { useEffect, useState } from 'react';
+import {
+  Button,
+  IconButton,
+  Stack,
+  Typography,
+} from '@mui/material';
+import CloseIcon from '@mui/icons-material/Close';
 import { useCookies } from 'react-cookie';
+
+interface BeforeInstallPromptEvent extends Event {
+  prompt: () => Promise<void>;
+  userChoice: Promise<{
+    outcome: 'accepted' | 'dismissed';
+    platform: string;
+  }>;
+}
 
 /**
  * A function to decide if we must load the banner or not
  * for installing the application
  */
 export function AppInstallBanner(): JSX.Element {
-  // declare constants
-  const [defferredPrompt, setDefferredPrompt] = useState(null);
+  const [deferredPrompt, setDeferredPrompt] =
+    useState<BeforeInstallPromptEvent | null>(null);
+
   const [cookies, setCookie] = useCookies(['app-install-closed']);
-  // declare conditions
-  const visitInApp: boolean = window.matchMedia(
+
+  useEffect(() => {
+    function handleBeforeInstallPrompt(event: Event) {
+      const promptEvent = event as BeforeInstallPromptEvent;
+      promptEvent.preventDefault();
+      setDeferredPrompt(promptEvent);
+    }
+
+    window.addEventListener(
+      'beforeinstallprompt',
+      handleBeforeInstallPrompt,
+    );
+
+    return () => {
+      window.removeEventListener(
+        'beforeinstallprompt',
+        handleBeforeInstallPrompt,
+      );
+    };
+  }, []);
+
+  const visitInApp = window.matchMedia(
     '(display-mode: standalone)',
   ).matches;
-  const appUnsupportedOrInstalled: boolean = defferredPrompt == null;
-  const bannerClosed: boolean = cookies['app-install-closed'] || false;
 
-  // initiate the event listener
-  window.addEventListener('beforeinstallprompt', (e) => {
-    setDefferredPrompt(e);
-    e.preventDefault();
-  });
+  const appUnsupportedOrInstalled = deferredPrompt === null;
+  const bannerClosed = cookies['app-install-closed'] ?? false;
 
-  // test if we must not show the banner
   if (visitInApp || appUnsupportedOrInstalled || bannerClosed) {
     return <></>;
   }
 
-  /**
-   * Function to install the app as a PWA
-   */
-  function askToInstallApp() {
-    defferredPrompt.prompt();
-    defferredPrompt.userChoice.then((result) => {
-      if (result.outcome === 'accepted') {
-        console.log('User accepted the A2HS prompt');
-      } else {
-        console.log('User dismissed the A2HS prompt');
-      }
-      setDefferredPrompt(null);
+  async function askToInstallApp() {
+    if (!deferredPrompt) {
+      return;
+    }
+
+    await deferredPrompt.prompt();
+
+    const result = await deferredPrompt.userChoice;
+
+    if (result.outcome === 'accepted') {
+      console.log('User accepted the A2HS prompt');
+    } else {
+      console.log('User dismissed the A2HS prompt');
+    }
+
+    setDeferredPrompt(null);
+  }
+
+  function closeBanner() {
+    window.localStorage.setItem('app-banner-closed', 'true');
+
+    setDeferredPrompt(null);
+
+    setCookie('app-install-closed', true, {
+      path: '/',
+      maxAge: 60 * 60 * 24 * 10,
     });
   }
 
-  // finally show the banner
   const isAndroid = /Android/i.test(navigator.userAgent);
+
   return (
-    <div className="app-install">
-      <span className="me-4">
-        L'appli Nantral Platform est disponible&nbsp;!&nbsp;🥳
-      </span>
+    <Stack
+      direction="row"
+      spacing={2}
+      alignItems="center"
+      className="app-install"
+    >
+      <Typography>
+        L'appli Nantral Platform est disponible&nbsp;! 🥳
+      </Typography>
+
       {isAndroid ? (
         <Button
-          variant="danger"
+          variant="contained"
+          color="error"
           onClick={() =>
             window.open(
               'https://play.google.com/store/apps/details?id=org.ecn_3cn.nantral_platform',
@@ -63,23 +113,22 @@ export function AppInstallBanner(): JSX.Element {
           Télécharger
         </Button>
       ) : (
-        <Button variant="danger" onClick={askToInstallApp}>
+        <Button
+          variant="contained"
+          color="error"
+          onClick={askToInstallApp}
+        >
           Installer
         </Button>
       )}
-      <CloseButton
-        className="ms-3"
-        title="Fermer"
-        style={{ verticalAlign: 'middle' }}
-        onClick={() => {
-          window.localStorage.setItem('app-banner-closed', 'true');
-          setDefferredPrompt(null);
-          setCookie('app-install-closed', true, {
-            path: '/',
-            maxAge: 60 * 60 * 24 * 10, // cookie expires in 10 days
-          });
-        }}
-      />
-    </div>
+
+      <IconButton
+        aria-label="Fermer"
+        onClick={closeBanner}
+        size="small"
+      >
+        <CloseIcon fontSize="small" />
+      </IconButton>
+    </Stack>
   );
 }
