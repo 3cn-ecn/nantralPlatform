@@ -25,7 +25,6 @@ export function EmailRow({
   setAnchorEl: (anchorEl: null | HTMLElement) => void;
 }) {
   const { t } = useTranslation();
-
   return (
     <TableRow sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
       <TableCell colSpan={email.isMain && email.isValid ? 2 : 1}>
@@ -41,11 +40,11 @@ export function EmailRow({
           ) : (
             <InvalidChip email={email} />
           )}
-          {email.isECNEmail && (
-            <Tooltip title={t('email.chip.ecnTooltip')}>
+          {email.isAuthorizedOrganisationEmail && (
+            <Tooltip title={t('email.chip.organisationTooltip')}>
               <Chip
                 icon={<School />}
-                label={t('email.chip.ecn')}
+                label={`${t('email.chip.organisation')} (${email.authorizedOrganisation})`}
                 color={'secondary'}
                 size={'small'}
               />

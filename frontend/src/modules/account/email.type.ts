@@ -2,7 +2,8 @@ export interface Email {
   uuid: string;
   email: string;
   isValid: boolean;
-  isECNEmail: boolean;
+  isAuthorizedOrganisationEmail: boolean;
+  authorizedOrganisation: string | null;
   isMain: boolean;
   isVisible: boolean;
 }

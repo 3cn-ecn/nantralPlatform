@@ -10,6 +10,25 @@ from apps.utils.send_email import send_email
 from .tokens import email_confirmation_token
 
 
+class AuthorizedOrganization:
+    """Class representing an authorized organization."""
+    def __init__(self, pattern: str, organization: str, email_validation_priority: int, account_organization_priority: int):
+        """Initialize the object
+
+        Args:
+            pattern (str): Regex associated with the organization email pattern
+            organization (str): Name of the organization
+            email_validation_priority (int): Determines the order of validation of email patterns. The lower the number, the higher the priority.
+            account_organization_priority (int): Determines the order of organization assignment when multiple patterns match an email. The lower the number, the higher the priority.
+        """
+        self.pattern = re.compile(pattern)
+        self.organization = organization
+        self.email_validation_priority = email_validation_priority
+        self.account_organization_priority = account_organization_priority
+
+    def validate(self, email: str) -> bool:
+        return self.pattern.search(email) is not None
+
 def clean_username(username: str):
     normalized = unicodedata.normalize(
         "NFKD", username
@@ -55,7 +74,7 @@ def send_email_confirmation(email, request: HttpRequest) -> None:
         return
 
     if request:
-        if not email.is_ecn_email():
+        if not email.is_authorized_organisation_email():
             messages.success(
                 request,
                 (
@@ -68,7 +87,7 @@ def send_email_confirmation(email, request: HttpRequest) -> None:
                 request,
                 (
                     "Un mail vous a été envoyé pour confirmer votre adresse mail "
-                    "Centrale Nantes.\nVous pouvez accéder à votre boîte mail "
+                    "institutionnelle.\nVous pouvez accéder à votre boîte mail "
                     'école <a href="https://webmail.ec-nantes.fr">ici</a>.'
                 ),
             )

@@ -7,6 +7,8 @@ from django.utils.translation import gettext_lazy as _
 
 from rest_framework.exceptions import ValidationError
 
+from .utils import AuthorizedOrganization
+
 MXID_LOCALPART_ALLOWED_CHARACTERS = set(
     "_-.+" + string.ascii_lowercase + string.digits
 )
@@ -27,6 +29,39 @@ RESERVED_USERNAMES = (
     "bridge",
 )
 
+AUTHORIZED_ORGANIZATIONS = [
+    AuthorizedOrganization(
+        r"@eleves\.ec-nantes\.fr$",
+        "EC-Nantes Student",
+        email_validation_priority=5,
+        account_organization_priority=9,
+    ),
+    AuthorizedOrganization(
+        r"@ec-nantes\.fr$",
+        "EC-Nantes Staff",
+        email_validation_priority=3,
+        account_organization_priority=10,
+    ),
+    AuthorizedOrganization(
+        r"@centraliens-nantes\.org$",
+        "EC-Nantes Alumni",
+        email_validation_priority=3,
+        account_organization_priority=8,
+    ),
+    AuthorizedOrganization(
+        r"@fake\.ec-nantes\.fr$",
+        "EC-Nantes Fake Email",
+        email_validation_priority=4,
+        account_organization_priority=11,
+    ),
+    AuthorizedOrganization(
+        r"@supmaritime\.fr$", # Student and staff share the same domain, so we use the same regex for both
+        "ENSM Student & Staff",
+        email_validation_priority=5,
+        account_organization_priority=9,
+    )
+]
+AUTHORIZED_ORGANIZATIONS.sort(key=lambda org: org.email_validation_priority)
 
 def validate_matrix_username(value):
     if any(c not in MXID_LOCALPART_ALLOWED_CHARACTERS for c in value):
@@ -63,6 +98,32 @@ def django_validate_password(password):
         # raise a validation error for the serializer
         raise ValidationError(e.messages)
 
+
+def organisation_email_validator(mail: str):
+    for org in AUTHORIZED_ORGANIZATIONS:
+        if org.validate(mail):
+            return org.organization
+    raise ValidationError(
+        _(
+            "You must use a valid email address from an authorized organization."
+        ),
+    )
+
+def get_user_organization(emails):
+    """Get the organization of a user based on their email addresses.
+
+    If multiple email addresses are valid, the one with the highest priority is chosen.
+    """
+    valid_orgs = []
+    for email in emails:
+        for org in AUTHORIZED_ORGANIZATIONS:
+            if org.validate(email.email):
+                valid_orgs.append(org)
+                break
+    if not valid_orgs:
+        return None
+    valid_orgs.sort(key=lambda org: org.account_organization_priority)
+    return valid_orgs[0].organization
 
 def ecn_email_validator(mail: str):
     if (

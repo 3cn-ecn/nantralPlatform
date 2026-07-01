@@ -57,6 +57,7 @@ update:
 .PHONY: test
 test:
 	cd backend && \
+		$(call EXPORT,PIPENV_IGNORE_VIRTUALENVS,1) && \
 		$(PIPENV) run lint && \
 		$(PIPENV) run test
 	cd frontend && \
@@ -69,7 +70,9 @@ test:
 .PHONY: start
 start:
 	cd frontend && npm run start &
-	cd backend && $(PIPENV) run start
+	cd backend && \
+		$(call EXPORT,PIPENV_IGNORE_VIRTUALENVS,1) && \
+		$(PIPENV) run start
 
 
 # Test the quality of code

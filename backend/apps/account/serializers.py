@@ -159,17 +159,18 @@ class InvitationRegisterSerializer(RegisterSerializer):
         ],
         required=True,
     )
+
     invitation_uuid = serializers.SlugRelatedField(
-        slug_field="id",
-        required=True,
-        queryset=InvitationLink.objects.filter(expires_at__gt=timezone.now()),
-    )
+            slug_field="id",
+            required=True,
+            queryset=InvitationLink.objects.filter(expires_at__gt=timezone.now()),
+        )
 
     def create(self, validated_data: dict):
         invitation_uuid = self.validated_data.pop("invitation_uuid")
         user = super().create(validated_data)
         # update invitation
-        if not user.has_ecn_email():
+        if not user.has_authorized_organisation_email():
             user.invitation = invitation_uuid
             user.save()
         return user
@@ -180,13 +181,15 @@ class EmailSerializer(serializers.ModelSerializer):
         style={"input_type": "password"}, required=False, write_only=True
     )
     is_main = serializers.BooleanField(required=False)
-    is_ecn_email = serializers.BooleanField(read_only=True)
+    is_authorized_organisation_email = serializers.BooleanField(read_only=True)
+    authorized_organisation = serializers.CharField(read_only=True)
 
     class Meta:
         model = Email
         fields = (
             "email",
-            "is_ecn_email",
+            "is_authorized_organisation_email",
+            "authorized_organisation",
             "is_valid",
             "is_visible",
             "is_main",
@@ -195,7 +198,8 @@ class EmailSerializer(serializers.ModelSerializer):
         )
         read_only_fields = (
             "email",
-            "is_ecn_email",
+            "is_authorized_organisation_email",
+            "authorized_organisation",
             "is_valid",
             "uuid",
         )
@@ -316,6 +320,7 @@ class UserSerializer(serializers.ModelSerializer):
             "emails",
             "username",
             "expires_at",
+            "organization",
         ]
         read_only_fields = (
             "id",
@@ -324,6 +329,7 @@ class UserSerializer(serializers.ModelSerializer):
             "is_superuser",
             "username",
             "expires_at",
+            "organization",
         )
 
     def get_url(self, obj: User) -> str:

@@ -15,7 +15,8 @@ from apps.utils.fields.image_field import CustomImageField
 from .manager import UserManager
 from .utils import send_email_confirmation
 from .validators import (
-    ecn_email_validator,
+    get_user_organization,
+    organisation_email_validator,
     validate_matrix_username,
 )
 
@@ -171,14 +172,20 @@ class User(AbstractUser):
         super().save(*args, **kwargs)
 
     @admin.display(boolean=True)
-    def has_valid_ecn_email(self):
+    def has_authorized_organisation_email(self):
         return any(
-            email.is_ecn_email() for email in self.emails.filter(is_valid=True)
+            email.is_authorized_organisation_email() for email in self.emails.all()
         )
 
     @admin.display(boolean=True)
-    def has_ecn_email(self):
-        return any(email.is_ecn_email() for email in self.emails.all())
+    def has_valid_authorized_organisation_email(self):
+        return any(
+            email.is_authorized_organisation_email() for email in self.emails.filter(is_valid=True)
+        )
+    @property
+    def organization(self):
+        """Get the organization of the user based on their email addresses."""
+        return get_user_organization(self.emails.filter(is_valid=True))
 
     @admin.display(boolean=True)
     def has_valid_email(self):
@@ -243,12 +250,15 @@ class Email(models.Model):
         super().save(*args, **kwargs)
 
     @admin.display(boolean=True)
-    def is_ecn_email(self):
+    def is_authorized_organisation_email(self):
+        return self.authorized_organisation() is not None
+
+    @admin.display(description=_("Authorized Organisation"))
+    def authorized_organisation(self):
         try:
-            ecn_email_validator(self.email)
-            return True
+            return organisation_email_validator(self.email)
         except exceptions.ValidationError:
-            return False
+            return None
 
     @admin.display(boolean=True)
     def is_main(self):

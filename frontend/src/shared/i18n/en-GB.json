@@ -61,8 +61,8 @@
       "title": "Change Main Email"
     },
     "chip": {
-      "ecn": "ECN email",
-      "ecnTooltip": "This email address is provided by Centrale Nantes. If it is verified, it can be use to verify your account.",
+      "organisation": "Institutional email",
+      "organisationTooltip": "This email address is provided by an authorized organization. If it is verified, it can be used to verify your account.",
       "error": "Error",
       "hidden": "Hidden",
       "main": "Main",

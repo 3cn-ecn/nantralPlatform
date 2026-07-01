@@ -12,6 +12,7 @@ from django.utils import timezone
 from django_rest_passwordreset.models import ResetPasswordToken
 from freezegun import freeze_time
 from rest_framework import status
+from rest_framework.exceptions import ValidationError
 
 from apps.account.models import InvitationLink
 
@@ -23,6 +24,7 @@ from .api_views import (
     TEMPORARY_ACCOUNT_EXPIRED,
 )
 from .models import User
+from .validators import get_user_organization, organisation_email_validator
 
 
 class TestLogin(TestCase):
@@ -305,6 +307,8 @@ class TestChangeEmail(TestCase):
             content_type="application/json",
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertTrue(response.json()["is_authorized_organisation_email"])
+        self.assertEqual(response.json()["authorized_organisation"], "EC-Nantes Staff")
 
         self.assertEqual(len(mail.outbox), 0)
         self.user.refresh_from_db()
@@ -443,13 +447,15 @@ class TestEditProfile(TestCase):
     def setUp(self) -> None:
         self.user = User.objects.create_user(
             username="test",
-            email="test@test.ec-nantes.fr",
+            email="test@ec-nantes.fr",
             password="test",
             first_name="first name",
             last_name="last name",
             promo=2020,
             faculty="Gen",
         )
+        self.user.email.is_valid = True
+        self.user.email.save()
         self.url = reverse("account_api:user-detail", args=[self.user.pk])
 
     def test_edit_profile(self):
@@ -472,3 +478,47 @@ class TestEditProfile(TestCase):
         self.assertEqual(self.user.faculty, payload["faculty"])
         # username should not be updated
         self.assertNotEqual(self.user.username, payload["username"])
+
+    def test_edit_profile_returns_organization(self):
+        self.client.force_login(self.user)
+        response = self.client.get(self.url)
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.json()["organization"], "EC-Nantes Staff")
+
+
+class TestAccountValidators(TestCase):
+    def test_organisation_email_validator(self):
+        self.assertEqual(
+            organisation_email_validator("test@ec-nantes.fr"),
+            "EC-Nantes Staff",
+        )
+
+    def test_organisation_email_validator_invalid(self):
+        with self.assertRaises(ValidationError):
+            organisation_email_validator("test@example.com")
+
+    def test_get_user_organization(self):
+        user = User.objects.create_user(
+            username="test",
+            email="test@ec-nantes.fr",
+            password="test",
+        )
+        user.email.is_valid = True
+        user.email.save()
+        secondary_email = user.add_email("secondary@centraliens-nantes.org")
+        secondary_email.is_valid = True
+        secondary_email.save()
+
+        self.assertEqual(
+            get_user_organization(user.emails.filter(is_valid=True)),
+            "EC-Nantes Alumni",
+        )
+
+    def test_get_user_organization_returns_none_when_no_matching_email(self):
+        user = User.objects.create_user(
+            username="test",
+            email="test@example.com",
+            password="test",
+        )
+        self.assertIsNone(get_user_organization(user.emails.filter(is_valid=True)))

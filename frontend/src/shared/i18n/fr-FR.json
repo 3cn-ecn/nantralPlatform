@@ -61,8 +61,8 @@
       "title": "Modification de l'email principal"
     },
     "chip": {
-      "ecn": "Email Centrale",
-      "ecnTooltip": "Cette adresse email provient de Centrale Nantes. Si elle est vérifiée, elle permet de vérifier votre compte.",
+      "organisation": "Email institutionnelle",
+      "organisationTooltip": "Cette adresse email provient d'une organisation autorisée à utiliser Nantral Platform. Si elle est vérifiée, elle permet de vérifier votre compte.",
       "error": "Erreur",
       "hidden": "Cachée",
       "main": "Principal",

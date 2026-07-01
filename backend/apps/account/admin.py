@@ -96,11 +96,11 @@ class IdRegistrationAdmin(admin.ModelAdmin):
 
 @admin.register(Email)
 class EmailAdmin(admin.ModelAdmin):
-    list_display = ["email", "user", "is_valid", "is_ecn_email", "is_visible"]
+    list_display = ["email", "user", "is_valid", "is_authorized_organisation_email", "is_visible"]
     list_filter = ["is_valid", UppercaseEmailFilter, ECNantesDomainFilter]
     list_editable = ["is_valid", "is_visible"]
-    fields = ["email", "user", "is_valid", "is_ecn_email", "is_visible"]
-    readonly_fields = ["is_ecn_email"]
+    fields = ["email", "user", "is_valid", "is_authorized_organisation_email", "authorized_organisation", "is_visible"]
+    readonly_fields = ["is_authorized_organisation_email", "authorized_organisation"]
     search_fields = ["email", "user__first_name", "user__last_name"]
     ordering = ["email"]
 
@@ -108,8 +108,8 @@ class EmailAdmin(admin.ModelAdmin):
 class EmailInline(admin.TabularInline):
     model = Email
     extra = 1
-    fields = ["email", "is_valid", "is_ecn_email", "is_visible"]
-    readonly_fields = ["is_ecn_email"]
+    fields = ["email", "is_valid", "is_authorized_organisation_email", "is_visible"]
+    readonly_fields = ["is_authorized_organisation_email"]
     min_num = 1
 
 
@@ -139,7 +139,9 @@ class CustomUserAdmin(UserAdmin):
             {
                 "fields": (
                     "is_email_valid",
+                    "has_valid_authorized_organisation_email",
                     "invitation",
+                    "organization"
                 ),
             },
         ),
@@ -159,6 +161,8 @@ class CustomUserAdmin(UserAdmin):
         "date_joined",
         "last_login",
         "is_email_valid",
+        "has_valid_authorized_organisation_email",
+        "organization",
     )
     inlines = (EmailInline,)
     search_fields = ("username", "first_name", "last_name", "emails__email")
@@ -229,6 +233,6 @@ class CustomUserAdmin(UserAdmin):
                 user.email.email
                 for user in queryset
                 if user.invitation is not None
-                and not user.has_valid_ecn_email()
+                and not user.has_valid_authorized_organisation_email()
             ],
         )

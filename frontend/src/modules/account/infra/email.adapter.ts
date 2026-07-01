@@ -6,7 +6,8 @@ export function adaptEmail(emailDto: EmailDTO): Email {
     uuid: emailDto.uuid,
     email: emailDto.email,
     isValid: emailDto.is_valid,
-    isECNEmail: emailDto.is_ecn_email,
+    isAuthorizedOrganisationEmail: emailDto.is_authorized_organisation_email,
+    authorizedOrganisation: emailDto.authorized_organisation,
     isMain: emailDto.is_main,
     isVisible: emailDto.is_visible,
   };
