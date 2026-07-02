@@ -8,8 +8,6 @@ import { Group } from '#modules/group/types/group.types';
 const ReactPlayerItem = (ReactPlayer as any).default ?? ReactPlayer;
 
 export function GroupVideos({ group }: Readonly<{ group?: Group }>) {
-  console.log(typeof group?.video1);
-  console.log('ReactPlayer =', ReactPlayer);
   return (
     <Grid container spacing={1} mt={1}>
       {group?.video1 && (
