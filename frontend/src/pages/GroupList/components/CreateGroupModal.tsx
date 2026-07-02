@@ -51,7 +51,7 @@ export function CreateGroupModal({
   const isLoading = false;
 
   function updateFormValues(val: Partial<CreateGroupForm>) {
-    setFormValues({ ...formValues, ...val });
+    setFormValues((prev) => ({ ...prev, ...val }));
   }
   function onSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();

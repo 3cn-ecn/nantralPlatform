@@ -63,14 +63,14 @@ export function GroupFormFields({
   prevData,
   groupType,
   edit = false,
-}: GroupFormFieldsProps) {
+}: Readonly<GroupFormFieldsProps>) {
   const { t } = useTranslation();
   const { data, isSuccess } = useQuery({
     queryFn: () => getGroupLabelApi({ groupType: groupType.slug }),
     queryKey: ['getGroupLabels', groupType],
   });
   const parentCallback = useCallback(
-    (val: number) => updateFormValues({ parent: val }),
+    (val: number | null) => updateFormValues({ parent: val ?? undefined }),
     [updateFormValues],
   );
   const fetchInitialOptions = useCallback(
@@ -81,20 +81,26 @@ export function GroupFormFields({
     [groupType.slug],
   );
   const addressCallback = useCallback(
-    (val: string, objectValue: Geocode) =>
+    (val: string | null, objectValue: Geocode | null) =>
       updateFormValues({
-        address: val,
-        latitude: objectValue.latitude,
-        longitude: objectValue.longitude,
+        address: val ?? undefined,
+        latitude: objectValue?.latitude,
+        longitude: objectValue?.longitude,
       }),
     [updateFormValues],
   );
   const latitudeCallback = useCallback(
-    (val) => updateFormValues({ latitude: val }),
+    (val: string) =>
+      updateFormValues({
+        latitude: val === '' ? undefined : Number.parseFloat(val),
+      }),
     [updateFormValues],
   );
   const longitudeCallback = useCallback(
-    (val) => updateFormValues({ longitude: val }),
+    (val: string) =>
+      updateFormValues({
+        longitude: val === '' ? undefined : Number.parseFloat(val),
+      }),
     [updateFormValues],
   );
   const meetingPlaceCallback = useCallback(
@@ -110,7 +116,7 @@ export function GroupFormFields({
   const oneYear = new Date();
   oneYear.setFullYear(today.getFullYear() + 1);
   const updateMembership = (val: Partial<ShortMembershipForm> | undefined) => {
-    if (typeof val === 'undefined') {
+    if (val === undefined) {
       updateFormValues({ membership: undefined });
     } else if (formValues.membership) {
       updateFormValues({ membership: { ...formValues.membership, ...val } });
@@ -139,24 +145,18 @@ export function GroupFormFields({
           key={'title'}
           label={t('group.form.name.label')}
           value={formValues.name}
-          handleChange={useCallback(
-            (val) => {
-              updateFormValues({ name: val });
-            },
-            [updateFormValues],
-          )}
+          handleChange={(val) => {
+            updateFormValues({ name: val });
+          }}
           errors={error?.fields?.name}
           required
         />
         <TextField
           label={t('group.form.shortName.label')}
           value={formValues.shortName}
-          handleChange={useCallback(
-            (val) => {
-              updateFormValues({ shortName: val });
-            },
-            [updateFormValues],
-          )}
+          handleChange={(val) => {
+            updateFormValues({ shortName: val });
+          }}
           helperText={t('group.form.shortName.helperText')}
           errors={error?.fields?.short_name}
         />
@@ -270,12 +270,9 @@ export function GroupFormFields({
       <TextField
         label={t('group.form.changeReason.label')}
         value={formValues.changeReason}
-        handleChange={useCallback(
-          (val) => {
-            updateFormValues({ changeReason: val });
-          },
-          [updateFormValues],
-        )}
+        handleChange={(val) => {
+          updateFormValues({ changeReason: val });
+        }}
         helperText={t('group.form.changeReason.helperText')}
         errors={error?.fields?._change_reason}
         disabled={edit && !formValues.saveHistoryRecord}
@@ -286,10 +283,7 @@ export function GroupFormFields({
           name="icon"
           label={t('group.form.icon.label')}
           value={formValues.icon}
-          handleChange={useCallback(
-            (val) => updateFormValues({ icon: val }),
-            [updateFormValues],
-          )}
+          handleChange={(val) => updateFormValues({ icon: val })}
           helperText={t('group.form.icon.helperText')}
           prevFileName={prevData?.icon}
           errors={error?.fields?.icon}
@@ -300,10 +294,7 @@ export function GroupFormFields({
           label={t('group.form.banner.label')}
           helperText={t('group.form.banner.helperText')}
           value={formValues.banner}
-          handleChange={useCallback(
-            (val) => updateFormValues({ banner: val }),
-            [updateFormValues],
-          )}
+          handleChange={(val) => updateFormValues({ banner: val })}
           prevFileName={prevData?.banner}
           errors={error?.fields?.banner}
           accept="image/*"
@@ -337,12 +328,9 @@ export function GroupFormFields({
             : t('group.form.summary.label')
         }
         value={formValues.summary}
-        handleChange={useCallback(
-          (val) => {
-            updateFormValues({ summary: val });
-          },
-          [updateFormValues],
-        )}
+        handleChange={(val) => {
+          updateFormValues({ summary: val });
+        }}
         errors={error?.fields?.summary}
         placeholder={
           groupType.isMap ? t('group.form.summary.mapPlaceholder') : undefined
@@ -408,12 +396,9 @@ export function GroupFormFields({
             ),
           }}
           value={formValues.video1}
-          handleChange={useCallback(
-            (val) => {
-              updateFormValues({ video1: val });
-            },
-            [updateFormValues],
-          )}
+          handleChange={(val) => {
+            updateFormValues({ video1: val });
+          }}
           errors={error?.fields?.video1}
         />
         <TextField
@@ -427,12 +412,9 @@ export function GroupFormFields({
           }}
           type="url"
           value={formValues.video2}
-          handleChange={useCallback(
-            (val) => {
-              updateFormValues({ video2: val });
-            },
-            [updateFormValues],
-          )}
+          handleChange={(val) => {
+            updateFormValues({ video2: val });
+          }}
           errors={error?.fields?.video2}
         />
       </FlexAuto>
@@ -440,12 +422,9 @@ export function GroupFormFields({
       <RichTextField
         label={t('group.form.description.label')}
         value={formValues.description}
-        handleChange={useCallback(
-          (val) => {
-            updateFormValues({ description: val });
-          },
-          [updateFormValues],
-        )}
+        handleChange={(val) => {
+          updateFormValues({ description: val });
+        }}
         errors={error?.fields?.description}
       />
 
@@ -481,10 +460,9 @@ export function GroupFormFields({
                 value={formValues.lockMemberships}
                 label={t('group.form.lockMemberships.label')}
                 helperText={t('group.form.lockMemberships.helperText')}
-                handleChange={useCallback(
-                  (val) => updateFormValues({ lockMemberships: val }),
-                  [updateFormValues],
-                )}
+                handleChange={(val) =>
+                  updateFormValues({ lockMemberships: val })
+                }
               />
 
               <CheckboxField
@@ -492,30 +470,27 @@ export function GroupFormFields({
                 value={formValues?.public}
                 helperText={t('group.form.public.helperText')}
                 errors={error?.fields?.public}
-                handleChange={useCallback(
-                  (val: boolean) => updateFormValues({ public: val }),
-                  [updateFormValues],
-                )}
+                handleChange={(val: boolean) =>
+                  updateFormValues({ public: val })
+                }
               />
               <CheckboxField
                 label={t('group.form.private.label')}
                 value={formValues?.private}
                 helperText={t('group.form.private.helperText')}
                 errors={error?.fields?.private}
-                handleChange={useCallback(
-                  (val: boolean) => updateFormValues({ private: val }),
-                  [updateFormValues],
-                )}
+                handleChange={(val: boolean) =>
+                  updateFormValues({ private: val })
+                }
               />
               <CheckboxField
                 label={t('group.form.archive.label')}
                 value={formValues?.archived}
                 helperText={t('group.form.archive.helperText')}
                 errors={error?.fields?.archived}
-                handleChange={useCallback(
-                  (val: boolean) => updateFormValues({ archived: val }),
-                  [updateFormValues],
-                )}
+                handleChange={(val: boolean) =>
+                  updateFormValues({ archived: val })
+                }
               />
             </FlexCol>
           </AccordionDetails>

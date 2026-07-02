@@ -66,7 +66,7 @@ export function ModalJoinGroup({
   });
 
   function updateFormValues(val: Partial<CreateGroupForm>) {
-    setFormValues({ ...formValues, ...val });
+    setFormValues((prev) => ({ ...prev, ...val }));
   }
   function onSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();

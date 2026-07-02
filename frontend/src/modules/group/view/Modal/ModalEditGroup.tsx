@@ -35,6 +35,7 @@ import { EditChildrenView } from '../EditChildrenView/EditChildrenView';
 import { EditMembersView } from '../EditMembersView/EditMembersView';
 
 type TabValue = 'general' | 'members' | 'links' | 'history' | 'subgroups';
+type SetObjectStateAction<T> = T | Partial<T> | ((prev: T) => T | Partial<T>);
 
 export function ModalEditGroup({
   onClose,
@@ -54,22 +55,32 @@ export function ModalEditGroup({
   const queryClient = useQueryClient();
   const { palette } = useTheme();
   const [, setSerachParams] = useSearchParams();
-  const { error, isError, mutate, isLoading } = useMutation<
+  const { error, isError, mutate, isPending } = useMutation<
     Group,
     ApiFormError<CreateGroupFormDTO>,
     CreateGroupForm
   >(() => updateGroupApi(group.slug, formValues), {
     onSuccess: () => {
-      queryClient.invalidateQueries(['group', { slug: group.slug }]);
-      queryClient.invalidateQueries(['history', { slug: group.slug }]);
+      queryClient.invalidateQueries({
+        queryKey: ['group', { slug: group.slug }],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ['history', { slug: group.slug }],
+      });
       setSerachParams({}, { preventScrollReset: true });
       setHasModifications(false);
     },
   });
 
-  function updateFormValues(val: Partial<CreateGroupForm>) {
-    setFormValues({ ...formValues, ...val });
-  }
+  const updateFormValues: React.Dispatch<
+    SetObjectStateAction<CreateGroupForm>
+  > = (value) =>
+    setFormValues(
+      (prev) =>
+        (typeof value === 'function'
+          ? { ...prev, ...(value(prev) as Partial<CreateGroupForm>) }
+          : { ...prev, ...value }) as CreateGroupForm,
+    );
 
   function onSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -173,7 +184,7 @@ export function ModalEditGroup({
               <LoadingButton
                 form="edit-group-form"
                 type="submit"
-                loading={isLoading}
+                loading={isPending}
                 variant="contained"
                 disabled={!hasModifications}
                 startIcon={hasModifications && <Save />}

@@ -44,6 +44,7 @@ CustomEditor.builtinPlugins = [
 
 // CustomEditor configuration.
 CustomEditor.defaultConfig = {
+  licenseKey: 'GPL',
   toolbar: {
     items: [
       'heading',

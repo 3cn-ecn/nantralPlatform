@@ -37,15 +37,11 @@ interface CKEditorComponentProps {
   placeholder?: string;
 }
 
-export default function CKEditorComponent({
-  value,
-  handleChange,
-  name,
-  label,
-  errors,
-  helperText,
-  placeholder,
-}: CKEditorComponentProps) {
+export default function CKEditorComponent(
+  props: Readonly<CKEditorComponentProps>,
+) {
+  const { value, handleChange, name, label, errors, helperText, placeholder } =
+    props;
   const { i18n } = useTranslation();
 
   const isError = errors !== undefined;

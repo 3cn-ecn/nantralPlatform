@@ -21,6 +21,8 @@ const defaultGroupFormValues: CreateGroupForm = {
   address: '',
   latitude: 0,
   longitude: 0,
+  changeReason: '',
+  saveHistoryRecord: false,
 };
 
 function convertToForm(group: Group): CreateGroupForm {
@@ -28,6 +30,7 @@ function convertToForm(group: Group): CreateGroupForm {
     archived: group.archived,
     description: group.description,
     label: -1,
+    changeReason: '',
     meetingHour: group.meetingHour,
     meetingPlace: group.meetingPlace,
     name: group.name,
