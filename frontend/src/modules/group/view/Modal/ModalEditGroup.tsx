@@ -72,13 +72,14 @@ export function ModalEditGroup({
     },
   });
 
-  const updateFormValues: React.Dispatch<SetObjectStateAction<CreateGroupForm>> = (
-    value,
-  ) =>
-    setFormValues((prev) =>
-      (typeof value === 'function'
-        ? { ...prev, ...(value(prev) as Partial<CreateGroupForm>) }
-        : { ...prev, ...value }) as CreateGroupForm,
+  const updateFormValues: React.Dispatch<
+    SetObjectStateAction<CreateGroupForm>
+  > = (value) =>
+    setFormValues(
+      (prev) =>
+        (typeof value === 'function'
+          ? { ...prev, ...(value(prev) as Partial<CreateGroupForm>) }
+          : { ...prev, ...value }) as CreateGroupForm,
     );
 
   function onSubmit(e: FormEvent<HTMLFormElement>) {

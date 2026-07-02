@@ -9,7 +9,7 @@
     "build": "vite build",
     "preview": "vite preview",
     "types": "tsc",
-    "lint": "eslint src --ignore-pattern \"src/legacy/**\"",
+    "lint": "eslint src --ignore-pattern \"src/legacy/**\" --fix",
     "lint:fix": "eslint src --ignore-pattern \"src/legacy/**\" --fix",
     "jest": "TZ=Europe/Paris jest",
     "jest:u": "npm run jest -- -u",

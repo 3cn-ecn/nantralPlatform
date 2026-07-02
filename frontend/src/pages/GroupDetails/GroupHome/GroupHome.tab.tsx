@@ -18,7 +18,7 @@ interface GroupHomeProps {
   group?: Group;
 }
 
-export function GroupHome({ group }: GroupHomeProps) {
+export function GroupHome({ group }: Readonly<GroupHomeProps>) {
   const childrenQuery = useGroupChildren({
     slug: group?.slug || '',
   });

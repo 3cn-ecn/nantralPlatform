@@ -460,7 +460,9 @@ export function GroupFormFields({
                 value={formValues.lockMemberships}
                 label={t('group.form.lockMemberships.label')}
                 helperText={t('group.form.lockMemberships.helperText')}
-                handleChange={(val) => updateFormValues({ lockMemberships: val })}
+                handleChange={(val) =>
+                  updateFormValues({ lockMemberships: val })
+                }
               />
 
               <CheckboxField
@@ -468,21 +470,27 @@ export function GroupFormFields({
                 value={formValues?.public}
                 helperText={t('group.form.public.helperText')}
                 errors={error?.fields?.public}
-                handleChange={(val: boolean) => updateFormValues({ public: val })}
+                handleChange={(val: boolean) =>
+                  updateFormValues({ public: val })
+                }
               />
               <CheckboxField
                 label={t('group.form.private.label')}
                 value={formValues?.private}
                 helperText={t('group.form.private.helperText')}
                 errors={error?.fields?.private}
-                handleChange={(val: boolean) => updateFormValues({ private: val })}
+                handleChange={(val: boolean) =>
+                  updateFormValues({ private: val })
+                }
               />
               <CheckboxField
                 label={t('group.form.archive.label')}
                 value={formValues?.archived}
                 helperText={t('group.form.archive.helperText')}
                 errors={error?.fields?.archived}
-                handleChange={(val: boolean) => updateFormValues({ archived: val })}
+                handleChange={(val: boolean) =>
+                  updateFormValues({ archived: val })
+                }
               />
             </FlexCol>
           </AccordionDetails>
