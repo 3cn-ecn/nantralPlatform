@@ -4,7 +4,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("group", "0023_rename_subscribers_users_group_subscribers"),
     ]
@@ -13,6 +12,8 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name="grouptype",
             name="is_map",
-            field=models.BooleanField(default=False, verbose_name="Is a location"),
+            field=models.BooleanField(
+                default=False, verbose_name="Is a location"
+            ),
         ),
     ]

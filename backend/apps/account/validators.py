@@ -55,13 +55,14 @@ AUTHORIZED_ORGANIZATIONS = [
         account_organization_priority=11,
     ),
     AuthorizedOrganization(
-        r"@supmaritime\.fr$", # Student and staff share the same domain, so we use the same regex for both
+        r"@supmaritime\.fr$",  # Student and staff share the same domain, so we use the same regex for both
         "ENSM Student & Staff",
         email_validation_priority=5,
         account_organization_priority=9,
-    )
+    ),
 ]
 AUTHORIZED_ORGANIZATIONS.sort(key=lambda org: org.email_validation_priority)
+
 
 def validate_matrix_username(value):
     if any(c not in MXID_LOCALPART_ALLOWED_CHARACTERS for c in value):
@@ -109,6 +110,7 @@ def organisation_email_validator(mail: str):
         ),
     )
 
+
 def get_user_organization(emails):
     """Get the organization of a user based on their email addresses.
 
@@ -124,6 +126,7 @@ def get_user_organization(emails):
         return None
     valid_orgs.sort(key=lambda org: org.account_organization_priority)
     return valid_orgs[0].organization
+
 
 def ecn_email_validator(mail: str):
     if (

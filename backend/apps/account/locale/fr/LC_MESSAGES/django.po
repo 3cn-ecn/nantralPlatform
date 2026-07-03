@@ -175,8 +175,8 @@ msgstr "Identifiant unique"
 msgid "An account has already been created with this email address"
 msgstr "Un compte à déjà été créé avec cette adresse email"
 
-#: serializers.py:142 serializers.py:207
-msgid "Invalid passsword"
+#: serializers.py:135 serializers.py:204
+msgid "Invalid password"
 msgstr "Mot de passe invalide"
 
 #: serializers.py:212

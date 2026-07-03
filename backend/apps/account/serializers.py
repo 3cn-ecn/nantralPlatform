@@ -1,5 +1,6 @@
 from datetime import datetime
 
+from django.db import transaction
 from django.db.models import F
 from django.utils import timezone
 from django.utils.translation import gettext as _
@@ -11,7 +12,6 @@ from rest_framework.validators import UniqueValidator
 from apps.sociallink.serializers import SocialLinkSerializer
 
 from .models import FACULTIES, PATHS, Email, InvitationLink, User
-from .utils import clean_username
 from .validators import (
     django_validate_password,
     ecn_email_validator,
@@ -77,7 +77,7 @@ class RegisterSerializer(serializers.Serializer):
             ),
             validate_matrix_username,
         ],
-        required=False,
+        required=True,
     )
     promo = serializers.IntegerField(
         min_value=1919,
@@ -93,37 +93,29 @@ class RegisterSerializer(serializers.Serializer):
         return val.lower().replace("+", "")
 
     def create(self, validated_data: dict):
-        user = User(
-            first_name=validated_data["first_name"],
-            last_name=validated_data["last_name"],
-            promo=validated_data["promo"],
-            faculty=validated_data["faculty"],
-        )
-        if "path" in validated_data:
-            user.path = validated_data["path"]
-
-        # IMPORTANT: hash password and remove password from validated_data
-        user.set_password(self.validated_data.pop("password"))
-
-        # assign to something unique in the first place
-        user.username = validated_data.get("email")
-        # save to generate the primary key for default username and main email
-        user.save()
-
-        user.email = user.add_email(
-            validated_data["email"], request=self.context.get("request")
-        )
-
-        user.username = validated_data.get("username")
-
-        if user.username is None:
-            # create a unique username
-            promo = validated_data.get("promo")
-            user.username = clean_username(
-                f"{user.first_name}.{user.last_name}.{promo}.{user.pk}"
+        # Don't create the user if an error happen during email creation
+        with transaction.atomic():
+            user = User(
+                first_name=validated_data["first_name"],
+                last_name=validated_data["last_name"],
+                promo=validated_data["promo"],
+                faculty=validated_data["faculty"],
             )
-        # save again
-        user.save()
+            if "path" in validated_data:
+                user.path = validated_data["path"]
+
+            # IMPORTANT: hash password and remove password from validated_data
+            user.set_password(self.validated_data.pop("password"))
+
+            user.username = validated_data.get("username")
+            # save to create the instance and be able to add email
+            user.save()
+
+            user.email = user.add_email(
+                validated_data["email"], request=self.context.get("request")
+            )
+            # save again
+            user.save()
 
         return user
 
@@ -139,7 +131,7 @@ class ChangePasswordSerializer(serializers.Serializer):
         """Validate that provided password is correct"""
         user: User = self.context.get("request").user
         if not user.check_password(val):
-            raise ValidationError(_("Invalid passsword"))
+            raise ValidationError(_("Invalid password"))
 
         return val
 
@@ -161,10 +153,10 @@ class InvitationRegisterSerializer(RegisterSerializer):
     )
 
     invitation_uuid = serializers.SlugRelatedField(
-            slug_field="id",
-            required=True,
-            queryset=InvitationLink.objects.filter(expires_at__gt=timezone.now()),
-        )
+        slug_field="id",
+        required=True,
+        queryset=InvitationLink.objects.filter(expires_at__gt=timezone.now()),
+    )
 
     def create(self, validated_data: dict):
         invitation_uuid = self.validated_data.pop("invitation_uuid")
@@ -208,7 +200,7 @@ class EmailSerializer(serializers.ModelSerializer):
     def validate_password(self, val):
         user: User = self.context.get("request").user
         if not user.check_password(val):
-            raise ValidationError(_("Invalid passsword"))
+            raise ValidationError(_("Invalid password"))
         return val
 
     def validate_is_main(self, val: bool):
