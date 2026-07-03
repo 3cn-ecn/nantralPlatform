@@ -6,7 +6,6 @@ import apps.utils.fields.image_field
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("account", "0019_remove_user_has_opened_matrix_and_more"),
     ]

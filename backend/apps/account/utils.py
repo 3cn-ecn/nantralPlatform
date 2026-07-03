@@ -12,7 +12,14 @@ from .tokens import email_confirmation_token
 
 class AuthorizedOrganization:
     """Class representing an authorized organization."""
-    def __init__(self, pattern: str, organization: str, email_validation_priority: int, account_organization_priority: int):
+
+    def __init__(
+        self,
+        pattern: str,
+        organization: str,
+        email_validation_priority: int,
+        account_organization_priority: int,
+    ):
         """Initialize the object
 
         Args:
@@ -29,6 +36,7 @@ class AuthorizedOrganization:
     def validate(self, email: str) -> bool:
         return self.pattern.search(email) is not None
 
+
 def clean_username(username: str):
     normalized = unicodedata.normalize(
         "NFKD", username
@@ -40,6 +48,9 @@ def clean_username(username: str):
     cleaned.strip(
         "_"
     )  # just to be sure, remove leading underscores (and trailing, but we don't care)
+    if cleaned.isdigit():
+        # add an underscore at the end since usernames can't be only digits
+        cleaned += "_"
     return cleaned
 
 

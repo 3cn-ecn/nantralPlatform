@@ -124,6 +124,7 @@ class TestRegister(TestCase):
 
     def setUp(self) -> None:
         self.payload = {
+            "username": "test01",
             "first_name": "test",
             "last_name": "test",
             "email": "test@ec-nantes.fr",
@@ -308,7 +309,9 @@ class TestChangeEmail(TestCase):
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertTrue(response.json()["is_authorized_organisation_email"])
-        self.assertEqual(response.json()["authorized_organisation"], "EC-Nantes Staff")
+        self.assertEqual(
+            response.json()["authorized_organisation"], "EC-Nantes Staff"
+        )
 
         self.assertEqual(len(mail.outbox), 0)
         self.user.refresh_from_db()
@@ -521,4 +524,6 @@ class TestAccountValidators(TestCase):
             email="test@example.com",
             password="test",
         )
-        self.assertIsNone(get_user_organization(user.emails.filter(is_valid=True)))
+        self.assertIsNone(
+            get_user_organization(user.emails.filter(is_valid=True))
+        )

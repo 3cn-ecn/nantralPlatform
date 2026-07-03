@@ -174,14 +174,17 @@ class User(AbstractUser):
     @admin.display(boolean=True)
     def has_authorized_organisation_email(self):
         return any(
-            email.is_authorized_organisation_email() for email in self.emails.all()
+            email.is_authorized_organisation_email()
+            for email in self.emails.all()
         )
 
     @admin.display(boolean=True)
     def has_valid_authorized_organisation_email(self):
         return any(
-            email.is_authorized_organisation_email() for email in self.emails.filter(is_valid=True)
+            email.is_authorized_organisation_email()
+            for email in self.emails.filter(is_valid=True)
         )
+
     @property
     def organization(self):
         """Get the organization of the user based on their email addresses."""
