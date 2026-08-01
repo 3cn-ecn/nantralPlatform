@@ -1,4 +1,4 @@
-import { AppBar, IconButton, Toolbar, useMediaQuery, useTheme } from '@mui/material';
+import { AppBar, Toolbar, useTheme } from '@mui/material';
 
 import { NotificationMenu } from '#modules/notification/view/NotificationMenu/NotificationMenu';
 import { Spacer } from '#shared/components/Spacer/Spacer';
@@ -27,9 +27,13 @@ export function NavBar({
   const { isAuthenticated } = useAuth();
   const theme = useTheme();
   return (
-    <AppBar position="fixed" color="neutral" sx={{
-      borderBottom: `1px solid ${theme.palette.appShell.sidebarBorder}`,
-    }}>
+    <AppBar
+      position="fixed"
+      color="neutral"
+      sx={{
+        borderBottom: `1px solid ${theme.palette.appShell.sidebarBorder}`,
+      }}
+    >
       <Toolbar>
         <SidebarTrigger
           open={open}

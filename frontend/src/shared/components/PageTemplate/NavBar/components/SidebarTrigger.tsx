@@ -1,5 +1,5 @@
-import { IconButton } from '@mui/material';
 import { Menu as MenuIcon, Close as CloseIcon } from '@mui/icons-material';
+import { IconButton } from '@mui/material';
 
 export function SidebarTrigger({
   open,

@@ -23,7 +23,7 @@ export function BreadcrumbsNav() {
     .filter(
       (match) => (match.handle as { crumb?: string })?.crumb || match.data,
     )
-    .map((match) => {
+    .flatMap((match) => {
       let allCrumbs: Crumb[] = [];
       if (match.handle) {
         allCrumbs.push({
@@ -38,8 +38,7 @@ export function BreadcrumbsNav() {
         allCrumbs = allCrumbs.concat(extraCrumb);
       }
       return allCrumbs;
-    })
-    .flat();
+    });
 
   // select which crumbs to display: the last 3 for larger screens,
   // or the penultimate one for smaller screens (or the last one if 1 item only)

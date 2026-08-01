@@ -113,12 +113,12 @@ function getTheme(mode: PaletteMode, language: string) {
           textTransform: 'uppercase',
           fontWeight: 700,
           fontSize: 11,
-          letterSpacing: '0.08em'
+          letterSpacing: '0.08em',
         },
         body2: {
           fontWeight: 400,
           fontSize: 13,
-          lineHeight: 1.6
+          lineHeight: 1.6,
         },
         button: {
           fontWeight: 500,
@@ -137,7 +137,6 @@ function getTheme(mode: PaletteMode, language: string) {
           defaultProps: {
             color: 'transparent',
             elevation: 0,
-            opacity: 0.2,
           },
           styleOverrides: {
             root: {
