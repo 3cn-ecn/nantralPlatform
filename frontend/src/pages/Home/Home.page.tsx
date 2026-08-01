@@ -1,44 +1,41 @@
-import { Container } from '@mui/material';
+import { GroupPreview } from '#modules/group/types/group.types';
 
-import { usePostQueryParamState } from '#modules/post/hooks/usePostQueryParamState';
-import { PostModal } from '#modules/post/view/PostModal/PostModal';
-import { Spacer } from '#shared/components/Spacer/Spacer';
+import { GroupImage } from './components/GroupImage';
+import { useGroupList } from './hooks/useGroupList';
 
-import { CreateNewButton } from './views/CreateNewButton';
-import { HomeHeader } from './views/HomeHeader';
-import Shortcuts from './views/Shortcuts';
-import { HelpUsSection } from './views/section/HelpUsSection';
-import { LastPostsSection } from './views/section/LastPostsSection';
-import { MyGroupsSection } from './views/section/MyGroupsSection';
-import { PinnedPostsSection } from './views/section/PinnnedPostsSection';
-import { UpcomingEventsSection } from './views/section/UpcomingEventsSection';
-
-/**
- * Home Page, with Welcome message, next events, etc...
- * @returns Home page component
- */
 export default function HomePage() {
-  const { postId, closePost } = usePostQueryParamState();
-  // Dates
-  const today = new Date();
-  const nextWeek = new Date();
-  nextWeek.setDate(today.getDate() + 7);
+  const groups = useGroupList();
+  console.log('groups', groups);
+  const myGroupsIconSize = 72; // Adjust the size as needed
 
   return (
-    <>
-      <HomeHeader />
-      <Container sx={{ my: 4 }}>
-        <Shortcuts />
-        <CreateNewButton />
-        <PinnedPostsSection enabled={!postId} />
-        <UpcomingEventsSection enabled={!postId} />
-        <LastPostsSection enabled={!postId} />
-        <MyGroupsSection />
-        <Spacer vertical={3} />
-        <HelpUsSection />
-        <Spacer vertical={6} />
-      </Container>
-      {!!postId && <PostModal postId={postId} onClose={closePost} />}
-    </>
+    <div className="min-h-screen bg-gray-100 p-4">
+      <div className="m-4">
+        <h2 className="text-xl font-bold text-gray-800">Mes groupes</h2>
+        <div className="bg-gray-100 flex flex-row">
+          {groups?.map((group: GroupPreview) => (
+            <div key={group.id} className="items-center mt-4 ml-2">
+              <GroupImage group={group} size={myGroupsIconSize} />
+              <p
+                style={{ maxWidth: `${myGroupsIconSize * 1.2}px` }}
+                className={
+                  'text-center text-small text-secondary mt-2 line-clamp-1 break-all'
+                }
+              >
+                {group.shortName || group.name}
+              </p>
+            </div>
+          ))}
+        </div>
+      </div>
+      <div className="flex flex-col items-center justify-center ">
+        <h1 className="text-4xl font-bold text-gray-800 mb-4">
+          Welcome to the Home Page
+        </h1>
+        <p className="text-lg text-gray-600">
+          This is a simple home page built with React and Tailwind CSS.
+        </p>
+      </div>
+    </div>
   );
 }

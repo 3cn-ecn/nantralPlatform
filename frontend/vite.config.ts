@@ -4,6 +4,7 @@ import { visualizer } from 'rollup-plugin-visualizer';
 import { fileURLToPath } from 'url';
 import { defineConfig } from 'vite';
 import svgr from 'vite-plugin-svgr';
+import tailwindcss from '@tailwindcss/vite';
 
 // eslint-disable-next-line no-underscore-dangle
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -25,7 +26,7 @@ const templatesEntryPoints = [
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [svgr(), react(), visualizer({ template: 'sunburst' })],
+  plugins: [svgr(), react(), tailwindcss()],
   base: '/static/',
   resolve: {
     alias: {
@@ -52,13 +53,6 @@ export default defineConfig({
           path.join(__dirname, '/src/templates', p),
         ),
       ],
-    },
-  },
-  css: {
-    preprocessorOptions: {
-      scss: {
-        api: 'modern',
-      },
     },
   },
 });

@@ -51,7 +51,7 @@ export function BreadcrumbsItem({
       )}
       {!minimized && (
         <Typography
-          variant="h6"
+          variant="h3"
           component="span"
           fontWeight={fontWeight}
           noWrap

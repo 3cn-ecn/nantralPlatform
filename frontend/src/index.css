@@ -1,0 +1,14 @@
+@import "tailwindcss";
+
+@theme {
+  --color-light-gray: #667085; 
+  --color-dark-gray: #364152; 
+  --color-glass-background: rgba(255, 255, 255, 0.55);
+  --color-glass-border: rgba(255, 255, 255, 0.36);
+  --color-card-glass: rgba(255, 255, 255, 0.55);
+  --color-card-glass-border: rgba(255, 255, 255, 0.36);
+  --color-primary: #4F46E5;
+  --color-primary-border: #5347FF;
+  --text-small: 13px;
+  --text-secondary: #6e6e73;
+}
