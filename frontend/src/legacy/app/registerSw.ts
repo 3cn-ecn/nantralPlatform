@@ -46,10 +46,13 @@ function subscribePushNotifications(reg) {
       const data = {
         browser: browser.name.toUpperCase(),
         p256dh: btoa(
-          String.fromCharCode.apply(null, new Uint8Array(sub.getKey('p256dh'))),
+          String.fromCodePoint.apply(
+            null,
+            new Uint8Array(sub.getKey('p256dh')),
+          ),
         ),
         auth: btoa(
-          String.fromCharCode.apply(null, new Uint8Array(sub.getKey('auth'))),
+          String.fromCodePoint.apply(null, new Uint8Array(sub.getKey('auth'))),
         ),
         registration_id: registration_id,
       };

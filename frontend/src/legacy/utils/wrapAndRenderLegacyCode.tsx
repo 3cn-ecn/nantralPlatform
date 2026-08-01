@@ -15,7 +15,7 @@ import { AuthProvider } from '#shared/context/Auth.context';
 import { CustomThemeProvider } from '#shared/context/CustomTheme.context';
 import { ToastProvider } from '#shared/context/Toast.context';
 
-import '../../index.scss';
+import '../../index.css';
 import '../../shared/i18n/config';
 import getTheme from '../../theme';
 import './styles.scss';
