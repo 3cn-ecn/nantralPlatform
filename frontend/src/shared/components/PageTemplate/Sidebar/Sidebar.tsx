@@ -1,4 +1,4 @@
-import { ReactNode } from 'react';
+import { ReactNode, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 
 import {
@@ -76,27 +76,52 @@ export function Sidebar({
   const { pathname } = useLocation();
   const { isAuthenticated } = useAuth();
 
+  useEffect(() => {
+    const logBreakpoint = () => {
+      const width = window.innerWidth;
+      let breakpoint = 'sm';
+
+      if (width >= 1536) {
+        breakpoint = '2xl';
+      } else if (width >= 1280) {
+        breakpoint = 'xl';
+      } else if (width >= 1024) {
+        breakpoint = 'lg';
+      } else if (width >= 768) {
+        breakpoint = 'md';
+      }
+
+      console.log('[Sidebar] breakpoint:', breakpoint, `(${width}px)`);
+    };
+
+    logBreakpoint();
+    window.addEventListener('resize', logBreakpoint);
+
+    return () => window.removeEventListener('resize', logBreakpoint);
+  }, []);
+
+  const sidebarWidth = open ? `${defaultWidth}px` : '0px';
+
   return (
     <aside
-      style={{ width: open ? `${defaultWidth}px` : '0px' }}
       className={`
-        absolute lg:relative lg:z-auto z-10 bottom-0 h-full overflow-hidden
-        border-r border-solid border-r-[rgba(255,255,255,0.65)]
-        bg-gradient-to-b from-(--sidebar-background) to-(--app-background)
-        shadow-[inset_-1px_0_0_rgba(255,255,255,0.35)]
+        absolute inset-y-0 left-0 z-30 overflow-hidden border-r
+        border-slate-200/70 bg-[#eef2f7] text-slate-700
+        shadow-[inset_-1px_0_0_rgba(255,255,255,0.62)]
         transition-[width] duration-300 ease-in-out
+        lg:relative lg:z-auto lg:shrink-0
       `}
+      style={{ width: sidebarWidth }}
     >
       <div
         className={`
-          w-[279px] h-full min-h-0 flex flex-col overflow-y-auto
-          transition-opacity duration-200 ease-in-out
-          ${open ? 'opacity-100' : 'opacity-0'}
+          flex h-full min-h-0 w-[280px] flex-col overflow-y-auto
+          bg-[#eef2f7] transition-opacity duration-200 ease-in-out
+          ${open ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}
         `}
       >
-        {/* Navigation items */}
-        <div className="flex-1 mt-4 px-3 relative">
-          <ul className="flex flex-col gap-3 p-0 m-0 list-none">
+        <div className="flex-1 px-3 pt-4">
+          <ul className="m-0 flex list-none flex-col gap-3 p-0">
             {sidebarItems.map((item) => {
               const selected = item.matches(pathname);
 
@@ -113,7 +138,6 @@ export function Sidebar({
           </ul>
         </div>
 
-        {/* Sidebar footer */}
         <div className="pb-10">
           {!isAuthenticated && <OfflineFooter />}
           <LegalFooter />

@@ -16,7 +16,7 @@ export function BreadcrumbsItem({
   icon,
   fontWeight = 'normal',
   minimized = false,
-}: BreadcrumbsItemProps) {
+}: Readonly<BreadcrumbsItemProps>) {
   const { pathname } = useLocation();
   const isCurrentPage = path.replace(/\/$/, '') === pathname.replace(/\/$/, '');
 

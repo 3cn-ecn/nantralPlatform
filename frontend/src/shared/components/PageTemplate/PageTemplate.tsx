@@ -1,24 +1,47 @@
 import { Suspense, useEffect, useState } from 'react';
 import { Outlet, ScrollRestoration } from 'react-router-dom';
 
-import {
-  Box,
-  CircularProgress,
-  CssBaseline,
-  Toolbar,
-  useMediaQuery,
-  useTheme,
-} from '@mui/material';
+import { CircularProgress } from '@mui/material';
 
 import { FlexCol, FlexRow } from '../FlexBox/FlexBox';
 import { NavBar } from './NavBar/NavBar';
 import { Sidebar } from './Sidebar/Sidebar';
 
+const desktopBreakpointQuery = '(min-width: 1024px)';
+
+function useIsDesktop() {
+  const [isDesktop, setIsDesktop] = useState(() => {
+    if (typeof window === 'undefined') {
+      return true;
+    }
+
+    return window.matchMedia(desktopBreakpointQuery).matches;
+  });
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia(desktopBreakpointQuery);
+    const handleChange = () => setIsDesktop(mediaQuery.matches);
+
+    handleChange();
+    mediaQuery.addEventListener('change', handleChange);
+
+    return () => mediaQuery.removeEventListener('change', handleChange);
+  }, []);
+
+  return isDesktop;
+}
+
 export function PageTemplate() {
-  const theme = useTheme();
   const [sidebarOpen, setSidebarOpen] = useState(true);
-  const isDesktop = useMediaQuery(theme.breakpoints.up('lg'));
+  const isDesktop = useIsDesktop();
   const defaultSidebarWidth = 280;
+  let gridTemplateColumns = '1fr';
+
+  if (isDesktop) {
+    gridTemplateColumns = sidebarOpen
+      ? `${defaultSidebarWidth}px 1fr`
+      : '0 1fr';
+  }
 
   useEffect(() => {
     setSidebarOpen(isDesktop);
@@ -31,40 +54,17 @@ export function PageTemplate() {
   //   defined in the router.tsx
 
   return (
-    <Box
-      className={`global-${theme.palette.mode}-theme`}
-      sx={{
-        display: 'flex',
-        flexDirection: 'column',
-        height: '100dvh',
-        overflow: 'hidden',
-        backgroundColor: '#f5f5f7',
-      }}
-    >
-      <CssBaseline />
+    <div className="flex h-dvh flex-col overflow-hidden bg-[#f5f5f7]">
       <ScrollRestoration />
       <NavBar
         open={sidebarOpen}
         setSidebarOpen={setSidebarOpen}
         isDesktop={isDesktop}
       />
-      <Toolbar />
-      <Box
-        sx={{
-          position: 'relative',
-          display: 'grid',
-          gridTemplateColumns: {
-            xs: '1fr',
-            lg: sidebarOpen ? `${defaultSidebarWidth}px 1fr` : '0 1fr',
-          },
-          transition: theme.transitions.create('grid-template-columns', {
-            duration: theme.transitions.duration.standard,
-            easing: theme.transitions.easing.easeInOut,
-          }),
-          flex: 1,
-          minHeight: 0,
-          overflow: 'hidden',
-        }}
+      <div className="h-14 md:h-16" />
+      <div
+        className="relative grid flex-1 overflow-hidden transition-[grid-template-columns] duration-300 ease-in-out"
+        style={{ gridTemplateColumns }}
       >
         <Sidebar open={sidebarOpen} defaultWidth={defaultSidebarWidth} />
         <FlexCol
@@ -86,7 +86,7 @@ export function PageTemplate() {
             <Outlet />
           </Suspense>
         </FlexCol>
-      </Box>
-    </Box>
+      </div>
+    </div>
   );
 }

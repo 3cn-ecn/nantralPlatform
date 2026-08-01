@@ -1,11 +1,14 @@
 import { GroupPreview } from '#modules/group/types/group.types';
+import { Post } from '#modules/post/post.types';
+import { FeedPostCard } from '#shared/components/FeedCard/FeedPostCard';
+import { GroupImage } from '#shared/components/GroupImage/GroupImage';
 
-import { GroupImage } from './components/GroupImage';
 import { useGroupList } from './hooks/useGroupList';
+import { useLastPosts } from './hooks/useLastPosts';
 
 export default function HomePage() {
   const groups = useGroupList();
-  console.log('groups', groups);
+  const { data: lastPosts } = useLastPosts(100);
   const myGroupsIconSize = 72; // Adjust the size as needed
 
   return (
@@ -28,13 +31,10 @@ export default function HomePage() {
           ))}
         </div>
       </div>
-      <div className="flex flex-col items-center justify-center ">
-        <h1 className="text-4xl font-bold text-gray-800 mb-4">
-          Welcome to the Home Page
-        </h1>
-        <p className="text-lg text-gray-600">
-          This is a simple home page built with React and Tailwind CSS.
-        </p>
+      <div className="mt-2">
+        {lastPosts?.results.map((post) => (
+          <FeedPostCard key={post.id} content={post} />
+        ))}
       </div>
     </div>
   );
