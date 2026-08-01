@@ -37,7 +37,6 @@ FAILED = 4
 EMAIL_CHANGED = 5
 ECN_EMAIL_NOT_VALIDATED = 6
 
-
 class AuthViewSet(GenericViewSet):
     authentication_classes = [SessionAuthentication]
 
