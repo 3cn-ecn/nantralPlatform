@@ -3,7 +3,8 @@ import { GroupPreview } from '#modules/group/types/group.types';
 export function GroupImage({
   group,
   size,
-}: Readonly<{ group: GroupPreview; size: number }>) {
+  border = false,
+}: Readonly<{ group: GroupPreview; size: number; border?: boolean }>) {
   const imageUrl = group.icon || 'static/img/icons/scalable/club.svg';
   console.log(imageUrl);
 
@@ -16,7 +17,8 @@ export function GroupImage({
           src={imageUrl}
           alt={group.name}
           className={
-            'object-cover rounded-full border-2 bg-gray-100 border-white'
+            'object-cover rounded-full bg-gray-100' +
+            (border ? ' border-2 border-white' : '')
           }
         />
       </a>

@@ -1,8 +1,7 @@
 import { PostPreview } from '#modules/post/post.types';
-
-import { Card } from '../Card';
-import { GroupImage } from '../GroupImage/GroupImage';
-import { RichTextRenderer } from '../RichTextRenderer/RichTextRenderer';
+import { Card } from '#shared/components/Card';
+import { GroupImage } from '#shared/components/GroupImage/GroupImage';
+import { RichTextRenderer } from '#shared/components/RichTextRenderer/RichTextRenderer';
 
 interface FeedCardProps {
   content: PostPreview;

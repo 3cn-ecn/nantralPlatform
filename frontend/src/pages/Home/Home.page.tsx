@@ -22,7 +22,7 @@ export default function HomePage() {
         <div className="bg-gray-100 flex flex-row overflow-x-auto gap-2 ml-2">
           {groups?.map((group: GroupPreview) => (
             <div key={group.id} className="items-center">
-              <GroupImage group={group} size={myGroupsIconSize} />
+              <GroupImage border={true} group={group} size={myGroupsIconSize} />
               <p
                 style={{ maxWidth: `${myGroupsIconSize * 1.2}px` }}
                 className={
