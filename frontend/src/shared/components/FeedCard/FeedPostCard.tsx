@@ -31,9 +31,10 @@ export function FeedPostCard({ content }: Readonly<FeedCardProps>) {
       {/* Card content */}
       <div className="mt-2 px-4 pb-4">
         <h3 className="text-lg font-medium text-gray-800">{content.title}</h3>
-        <p className="text-sm font-normal text-gray-500">
-          {content.description}
-        </p>
+        <div
+          className="text-sm font-normal text-gray-500"
+          dangerouslySetInnerHTML={{ __html: content.description }}
+        />
         <div className="mt-8">
           {content.image && (
             <img
