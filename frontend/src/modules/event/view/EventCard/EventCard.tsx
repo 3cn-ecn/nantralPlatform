@@ -27,9 +27,10 @@ const DEFAULT_EVENT_IMAGE = '/static/img/default-banner.png';
 
 interface EventCardProps {
   event: EventPreview;
+  className?: string;
 }
 
-export function EventCard({ event }: EventCardProps) {
+export function EventCard({ event, className }: EventCardProps) {
   const { formatDate, formatTime, formatDateTimeRange } = useTranslation();
   const formatDateOptions: Intl.DateTimeFormatOptions =
     Math.abs(differenceInMonths(event.startDate, Date.now())) > 2
@@ -39,7 +40,7 @@ export function EventCard({ event }: EventCardProps) {
     Math.abs(differenceInHours(event.startDate, event.endDate)) > 24;
 
   return (
-    <Card>
+    <Card className={className}>
       <CardActionArea component={Link} to={`/event/${event.id}`}>
         <CardMedia
           component="img"

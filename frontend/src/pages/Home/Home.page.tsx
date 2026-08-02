@@ -1,7 +1,7 @@
 import { EventPreview } from '#modules/event/event.type';
+import { EventCard } from '#modules/event/view/EventCard/EventCard';
 import { GroupPreview } from '#modules/group/types/group.types';
-import { FeedEventCard } from '#shared/components/FeedCard/FeedEventCard';
-import { FeedPostCard } from '#shared/components/FeedCard/FeedPostCard';
+import { FeedPostCard } from '#modules/post/view/PostCard/FeedPostCard';
 import { GroupImage } from '#shared/components/GroupImage/GroupImage';
 
 import { useGroupList } from './hooks/useGroupList';
@@ -10,17 +10,18 @@ import { useUpcomingEvents } from './hooks/useUpcomingEvents';
 
 export default function HomePage() {
   const groups = useGroupList();
-  const { data: lastPosts } = useLastPosts(100);
-  const { data: upcomingEvents } = useUpcomingEvents(100);
+  const { data: lastPosts } = useLastPosts(100); // Fetch last posts with a limit of 100
+  const { data: upcomingEvents } = useUpcomingEvents(100); // Fetch upcoming events with a limit of 100
   const myGroupsIconSize = 72; // Adjust the size as needed
 
   return (
     <div className="min-h-screen bg-gray-100 p-4">
+      {/* My Groups Section */}
       <div className="m-4">
-        <h2 className="text-xl font-bold text-gray-800">Mes groupes</h2>
-        <div className="bg-gray-100 flex flex-row">
+        <h2 className="text-xl font-bold text-gray-800 mb-4">Mes groupes</h2>
+        <div className="bg-gray-100 flex flex-row overflow-x-auto gap-2 ml-2">
           {groups?.map((group: GroupPreview) => (
-            <div key={group.id} className="items-center mt-4 ml-2">
+            <div key={group.id} className="items-center">
               <GroupImage group={group} size={myGroupsIconSize} />
               <p
                 style={{ maxWidth: `${myGroupsIconSize * 1.2}px` }}
@@ -34,12 +35,21 @@ export default function HomePage() {
           ))}
         </div>
       </div>
+      {/* Upcoming Events Section */}
+      <div className="m-4">
+        <h2 className="text-xl font-bold text-gray-800">Événements à venir</h2>
+        <div className="flex flex-row gap-2 overflow-x-auto mt-4 ml-2">
+          {upcomingEvents?.results.map((event: EventPreview) => (
+            <div key={event.id} className="min-w-[300px] min-h-[350px]">
+              <EventCard event={event} className="" />
+            </div>
+          ))}
+        </div>
+      </div>
+      {/* Last Posts Section */}
       <div className="mt-2">
         {lastPosts?.results.map((post) => (
           <FeedPostCard key={post.id} content={post} />
-        ))}
-        {upcomingEvents?.results.map((event: EventPreview) => (
-          <FeedEventCard key={event.id} content={event} />
         ))}
       </div>
     </div>
