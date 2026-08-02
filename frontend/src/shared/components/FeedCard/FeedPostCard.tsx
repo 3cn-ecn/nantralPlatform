@@ -35,7 +35,13 @@ export function FeedPostCard({ content }: Readonly<FeedCardProps>) {
           {content.description}
         </p>
         <div className="mt-8">
-          <img src={content.image} alt={content.title} className="rounded-lg" />
+          {content.image && (
+            <img
+              src={content.image}
+              alt={content.title}
+              className="rounded-lg"
+            />
+          )}
         </div>
       </div>
     </Card>

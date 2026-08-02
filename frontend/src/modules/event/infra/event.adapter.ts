@@ -49,6 +49,7 @@ export function adaptEventPreview(eventDto: EventPreviewDTO): EventPreview {
       isAdmin: eventDto.is_group_admin,
     },
     isParticipating: eventDto.is_participating,
+    description: eventDto.description,
     isBookmarked: eventDto.is_bookmarked,
     url: eventDto.url,
     numberOfParticipants: eventDto.number_of_participants,

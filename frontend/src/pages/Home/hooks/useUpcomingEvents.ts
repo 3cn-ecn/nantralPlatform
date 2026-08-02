@@ -5,7 +5,7 @@ import { EventPreview } from '#modules/event/event.type';
 import { ApiError } from '#shared/infra/errors';
 import { Page } from '#shared/infra/pagination';
 
-export function useUpcomingEventsQuery(
+export function useUpcomingEvents(
   numberOfEvents: number,
   options?: UseQueryOptions<Page<EventPreview>>,
 ) {

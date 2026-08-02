@@ -105,8 +105,8 @@ export function Sidebar({
   return (
     <aside
       className={`
-        absolute inset-y-0 left-0 z-30 overflow-hidden border-r
-        border-slate-200/70 bg-[#eef2f7] text-slate-700
+        absolute inset-y-0 left-0 z-30 overflow-hidden border-r-2
+        border-white bg-[#eef2f7] text-slate-700
         shadow-[inset_-1px_0_0_rgba(255,255,255,0.62)]
         transition-[width] duration-300 ease-in-out
         lg:relative lg:z-auto lg:shrink-0

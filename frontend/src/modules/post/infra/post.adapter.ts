@@ -11,6 +11,7 @@ export function adaptPostPreview(postDTO: PostPreviewDTO): PostPreview {
     createdAt: new Date(postDTO.created_at),
     updatedAt: new Date(postDTO.updated_at),
     image: postDTO.image,
+    description: postDTO.description,
     group: {
       ...adaptGroupPreview(postDTO.group),
       canPin: postDTO.can_pin,

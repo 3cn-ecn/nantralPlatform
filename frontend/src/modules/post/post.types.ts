@@ -21,6 +21,7 @@ export type PostPreview = Pick<
   Post,
   | 'id'
   | 'title'
+  | 'description'
   | 'group'
   | 'createdAt'
   | 'updatedAt'

@@ -10,6 +10,7 @@ export function getMockEventPreview(
     id: id,
     title: event.title || `Event ${id}`,
     image: event.image || '',
+    description: event.description || `Description for event ${id}`,
     isParticipating: event.isParticipating || false,
     isBookmarked: event.isBookmarked || false,
     numberOfParticipants: event.numberOfParticipants || 0,

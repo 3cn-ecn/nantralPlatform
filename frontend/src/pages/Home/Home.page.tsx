@@ -1,14 +1,17 @@
+import { EventPreview } from '#modules/event/event.type';
 import { GroupPreview } from '#modules/group/types/group.types';
-import { Post } from '#modules/post/post.types';
+import { FeedEventCard } from '#shared/components/FeedCard/FeedEventCard';
 import { FeedPostCard } from '#shared/components/FeedCard/FeedPostCard';
 import { GroupImage } from '#shared/components/GroupImage/GroupImage';
 
 import { useGroupList } from './hooks/useGroupList';
 import { useLastPosts } from './hooks/useLastPosts';
+import { useUpcomingEvents } from './hooks/useUpcomingEvents';
 
 export default function HomePage() {
   const groups = useGroupList();
   const { data: lastPosts } = useLastPosts(100);
+  const { data: upcomingEvents } = useUpcomingEvents(100);
   const myGroupsIconSize = 72; // Adjust the size as needed
 
   return (
@@ -34,6 +37,9 @@ export default function HomePage() {
       <div className="mt-2">
         {lastPosts?.results.map((post) => (
           <FeedPostCard key={post.id} content={post} />
+        ))}
+        {upcomingEvents?.results.map((event: EventPreview) => (
+          <FeedEventCard key={event.id} content={event} />
         ))}
       </div>
     </div>

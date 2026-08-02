@@ -21,6 +21,7 @@ export type PostPreviewDTO = Pick<
   | 'id'
   | 'title'
   | 'group'
+  | 'description'
   | 'created_at'
   | 'updated_at'
   | 'image'

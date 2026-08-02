@@ -1,13 +1,14 @@
-import { Event } from '#modules/event/event.type';
+import { EventPreview } from '#modules/event/event.type';
 import { BookmarkedButton } from '#modules/event/view/shared/BookmarkedButton';
 import { MoreEventActionsButton } from '#modules/event/view/shared/MoreEventActionsButton';
 import { ParticipateButton } from '#modules/event/view/shared/ParticipateButton';
 
+import { GlassButton } from '../Button';
 import { Card } from '../Card';
 import { GroupImage } from '../GroupImage/GroupImage';
 
 interface FeedCardProps {
-  content: Event;
+  content: EventPreview;
 }
 
 export function FeedEventCard({ content }: Readonly<FeedCardProps>) {
@@ -26,7 +27,7 @@ export function FeedEventCard({ content }: Readonly<FeedCardProps>) {
             {fromDate &&
             toDate &&
             fromDate.toLocaleDateString() !== toDate.toLocaleDateString() // If it's the same day, we don't need to show the date twice
-              ? `Du ${fromDate?.toLocaleDateString()} à ${fromDate?.toLocaleTimeString()} au ${toDate?.toLocaleDateTimeString()} à ${toDate?.toLocaleTimeString()}`
+              ? `Du ${fromDate?.toLocaleDateString()} à ${fromDate?.toLocaleTimeString()} au ${toDate?.toLocaleDateString()} à ${toDate?.toLocaleTimeString()}`
               : `Le ${fromDate?.toLocaleDateString()} de ${fromDate?.toLocaleTimeString()} à ${toDate?.toLocaleTimeString()}`}
           </p>
         </div>
@@ -38,11 +39,24 @@ export function FeedEventCard({ content }: Readonly<FeedCardProps>) {
           {content.description}
         </p>
         <div className="mt-8">
-          <img src={content.image} alt={content.title} className="rounded-lg" />
+          {content.image && (
+            <img
+              src={content.image}
+              alt={content.title}
+              className="rounded-lg"
+            />
+          )}
         </div>
       </div>
       {/* Card footer with like and participate buttons */}
-      <div>
+      <div className="flex flex-row gap-2">
+        <GlassButton
+          className="min-h-[40px] w-full justify-center"
+          selected={true}
+          to={content.url}
+        >
+          Voir plus
+        </GlassButton>
         <ParticipateButton event={content} sx={{ width: '100%', mr: 1 }} />
         <BookmarkedButton
           eventId={content.id}

@@ -95,6 +95,7 @@ class EventPreviewSerializer(EventSerializer):
             "end_date",
             "group",
             "image",
+            "description",
             "is_group_admin",
             "is_participating",
             "is_bookmarked",

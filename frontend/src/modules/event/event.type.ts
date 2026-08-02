@@ -31,6 +31,7 @@ export type EventPreview = Pick<
   | 'startDate'
   | 'endDate'
   | 'image'
+  | 'description'
   | 'isParticipating'
   | 'isBookmarked'
   | 'numberOfParticipants'
