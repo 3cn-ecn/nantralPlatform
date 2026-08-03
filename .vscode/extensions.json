@@ -13,6 +13,7 @@
     "ms-python.vscode-pylance",
     "charliermarsh.ruff",
     "njpwerner.autodocstring",
+    "tamasfe.even-better-toml",
     // django
     "batisteo.vscode-django",
     "mrorz.language-gettext",
