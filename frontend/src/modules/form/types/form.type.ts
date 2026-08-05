@@ -1,85 +1,52 @@
-import { FC } from 'react';
+import { FC, ReactNode } from 'react';
 
-import { JsonSchema, UISchemaElement } from '@jsonforms/core';
+import { JsonSchema, JsonSchema7, UISchemaElement } from '@jsonforms/core';
 import { UUID } from 'crypto';
 
-import { TranslatedFieldObject } from '#shared/infra/translatedFields/translatedField.types';
+import { BaseLanguage } from '#shared/i18n/config';
 
-export interface InputTypeElementProps {
-  label?: string;
-  helperText?: string;
-  nodeId?: UUID;
+export interface Payload {
+  translation: Record<
+    BaseLanguage,
+    {
+      label?: string;
+      description?: string;
+    } & Record<
+      string,
+      | string
+      | {
+          label?: string;
+          description?: string;
+        }
+    >
+  >;
+  type: string;
+  options: UISchemaElement['options'];
+  schema: JsonSchema & { 'x-type'?: string };
   required?: boolean;
-  fullWidth?: boolean;
-  margin?: 'normal' | 'dense' | 'none';
-  schema?: JsonSchema;
-  error?: boolean;
-  size?: 'small' | 'medium';
-  [key: string]: unknown;
+}
+
+export interface Node {
+  parent?: UUID;
+  children: UUID[];
+  payload: Payload;
+}
+
+export interface FormState {
+  root: UUID;
+  nodes: Record<UUID, Node>;
 }
 
 export interface InputType {
-  title: string;
-  element: FC<InputTypeElementProps>;
-  defaultSchema: JsonSchema;
-  additionalInputs?: FC<{ nodeId: UUID; [key: string]: unknown }>;
+  getOptions?: (id: UUID) => ReactNode[]; /// MenuItems used as options
+  defaultOptions?: UISchemaElement['options'];
+  defaultSchema?: JsonSchema7;
+  additionalInputs?: FC<{ nodeId: UUID; [key: string]: unknown }>; /// other inputs to be rendered with the component
 }
 
-export interface ElementType {
-  title: string;
-  element: FC<{ nodeId: UUID; allowedLayoutTypes?: string[] }>;
-  defaultUiSchema: UISchemaElement;
-}
-
-export interface AdditionalInputProps {
-  nodeId: UUID;
-}
-
-export interface LayoutNode {
-  id: UUID;
-  parentId?: UUID;
+export interface LayoutType {
   type: string;
-  options?: UISchemaElement['options'];
+  element: FC<{ children: ReactNode; nodeId: UUID; canAccept?: boolean }>;
+  allowedChildren: string[];
+  defaultPayload: Partial<Payload>;
 }
-
-export interface BaseLayout extends LayoutNode {
-  id: UUID;
-  parentId?: UUID;
-}
-
-export interface ContainerNode extends BaseLayout {
-  type: 'VerticalLayout' | 'HorizontalLayout' | 'Categorization';
-  elements: UUID[];
-}
-
-export interface GroupNode extends BaseLayout {
-  type: 'Group';
-  elements: UUID[];
-  label: TranslatedFieldObject;
-}
-
-export interface CategoryNode extends BaseLayout {
-  type: 'Category';
-  elements: UUID[];
-  label: TranslatedFieldObject;
-}
-
-export interface ControlNode extends BaseLayout {
-  type: 'Control';
-  inputType?: string;
-  label?: TranslatedFieldObject;
-  description?: TranslatedFieldObject;
-  schema?: JsonSchema;
-}
-
-export interface LabelNode extends BaseLayout {
-  type: 'Label';
-  text: TranslatedFieldObject;
-}
-
-export type AnyLayoutNode =
-  | ContainerNode
-  | GroupNode
-  | CategoryNode
-  | ControlNode
-  | LabelNode;

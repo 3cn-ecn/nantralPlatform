@@ -6,23 +6,26 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 
-import { TextField, TextFieldProps } from '#shared/components/FormFields';
+import {
+  NumberField,
+  NumberFieldProps,
+} from '#shared/components/FormFields/NumberField';
 import { useTranslation } from '#shared/i18n/useTranslation';
 
 import { LoadingButton } from '../LoadingButton/LoadingButton';
 
-interface TextModalProps extends Omit<
-  TextFieldProps,
+interface NumberModalProps extends Omit<
+  NumberFieldProps,
   'handleChange' | 'value'
 > {
   title?: string;
-  oldValue?: string;
+  oldValue?: number | null;
   onCancel: () => void;
-  onConfirm: (newValue: string) => void;
+  onConfirm: (newValue: number | null) => void;
   loading?: boolean;
 }
 
-export function TextModal({
+export function NumberModal({
   title,
   label,
   oldValue,
@@ -30,9 +33,9 @@ export function TextModal({
   onConfirm,
   loading = false,
   ...props
-}: TextModalProps) {
+}: NumberModalProps) {
   const { t } = useTranslation();
-  const [value, setValue] = useState(oldValue || '');
+  const [value, setValue] = useState(oldValue ?? null);
 
   return (
     <Dialog
@@ -50,7 +53,7 @@ export function TextModal({
           {title || t('modal.textEdit.title', { label })}
         </DialogTitle>
         <DialogContent>
-          <TextField
+          <NumberField
             {...props}
             value={value}
             handleChange={(val) => setValue(val)}

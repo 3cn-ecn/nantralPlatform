@@ -345,6 +345,15 @@
     },
     "number": {
       "wrongFormat": "Invalid format"
+    },
+    "weighted": {
+      "weight": {
+        "high": "High",
+        "label": "Weight",
+        "low": "Low",
+        "medium": "Medium",
+        "unsignificant": "Unsignificant"
+      }
     }
   },
   "group": {

@@ -1,15 +1,15 @@
 import { ChangeEvent, memo } from 'react';
 
 import {
-  Checkbox,
-  CheckboxProps,
   FormControlLabel,
   FormControlLabelProps,
   FormHelperText,
+  Switch,
+  SwitchProps,
   Typography,
 } from '@mui/material';
 
-type CheckboxFieldProps = Omit<
+type SwitchFieldProps = Omit<
   FormControlLabelProps,
   'error' | 'onChange' | 'control' | 'label' | 'checked'
 > & {
@@ -18,18 +18,18 @@ type CheckboxFieldProps = Omit<
   errors?: string[];
   helperText?: string;
   handleChange: (value: boolean) => void;
-  checkboxProps?: CheckboxProps;
+  switchProps?: SwitchProps;
 };
 
-function CheckboxFieldComponent({
+function SwitchFieldComponent({
   label,
   value = false,
   handleChange,
   errors,
   helperText,
-  checkboxProps = {},
+  switchProps = {},
   ...props
-}: CheckboxFieldProps) {
+}: SwitchFieldProps) {
   const isError = errors !== undefined;
 
   return (
@@ -47,11 +47,11 @@ function CheckboxFieldComponent({
         handleChange(e.target.checked)
       }
       value={value}
-      control={<Checkbox {...checkboxProps} />}
+      control={<Switch {...switchProps} />}
       sx={{ ml: 0, ...props.sx }}
       {...props}
     />
   );
 }
 
-export const CheckboxField = memo(CheckboxFieldComponent);
+export const SwitchField = memo(SwitchFieldComponent);
