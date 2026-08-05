@@ -1,4 +1,4 @@
-import { useMatches } from 'react-router-dom';
+import { useMatches } from 'react-router';
 
 import { NavigateNext as NavigateNextIcon } from '@mui/icons-material';
 import { Breadcrumbs } from '@mui/material';
@@ -21,7 +21,8 @@ export function BreadcrumbsNav() {
   // generate the list of all crumbs
   const crumbs = matches
     .filter(
-      (match) => (match.handle as { crumb?: string })?.crumb || match.data,
+      (match) =>
+        (match.handle as { crumb?: string })?.crumb || match.loaderData,
     )
     .map((match) => {
       let allCrumbs: Crumb[] = [];
@@ -32,7 +33,8 @@ export function BreadcrumbsNav() {
           path: match.pathname,
         });
       }
-      const extraCrumb = (match.data as { extraCrumb?: Crumb })?.extraCrumb;
+      const extraCrumb = (match.loaderData as { extraCrumb?: Crumb })
+        ?.extraCrumb;
 
       if (extraCrumb) {
         allCrumbs = allCrumbs.concat(extraCrumb);

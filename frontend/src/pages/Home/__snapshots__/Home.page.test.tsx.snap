@@ -1,6 +1,6 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`Home page should render correctly without data 1`] = `
+exports[`Home page > should render correctly without data 1`] = `
 <DocumentFragment>
   <div
     class="MuiBox-root css-l6ct9h"
@@ -47,6 +47,7 @@ exports[`Home page should render correctly without data 1`] = `
           <a
             aria-label="Events"
             class="MuiButtonBase-root MuiCardActionArea-root css-coyn9m-MuiButtonBase-root-MuiCardActionArea-root"
+            data-discover="true"
             href="/event/"
             tabindex="0"
           >
@@ -82,6 +83,7 @@ exports[`Home page should render correctly without data 1`] = `
           <a
             aria-label="Groups"
             class="MuiButtonBase-root MuiCardActionArea-root css-coyn9m-MuiButtonBase-root-MuiCardActionArea-root"
+            data-discover="true"
             href="/group/"
             tabindex="0"
           >
@@ -117,6 +119,7 @@ exports[`Home page should render correctly without data 1`] = `
           <a
             aria-label="Map"
             class="MuiButtonBase-root MuiCardActionArea-root css-coyn9m-MuiButtonBase-root-MuiCardActionArea-root"
+            data-discover="true"
             href="/map/?type=colocs"
             tabindex="0"
           >
@@ -152,6 +155,7 @@ exports[`Home page should render correctly without data 1`] = `
           <a
             aria-label="Family"
             class="MuiButtonBase-root MuiCardActionArea-root css-coyn9m-MuiButtonBase-root-MuiCardActionArea-root"
+            data-discover="true"
             href="/parrainage/"
             tabindex="0"
           >
@@ -187,6 +191,7 @@ exports[`Home page should render correctly without data 1`] = `
           <a
             aria-label="Student List"
             class="MuiButtonBase-root MuiCardActionArea-root css-coyn9m-MuiButtonBase-root-MuiCardActionArea-root"
+            data-discover="true"
             href="/student/"
             tabindex="0"
           >
@@ -222,6 +227,7 @@ exports[`Home page should render correctly without data 1`] = `
           <a
             aria-label="Signature"
             class="MuiButtonBase-root MuiCardActionArea-root css-coyn9m-MuiButtonBase-root-MuiCardActionArea-root"
+            data-discover="true"
             href="/signature/"
             tabindex="0"
           >
@@ -257,8 +263,8 @@ exports[`Home page should render correctly without data 1`] = `
         aria-expanded="false"
         aria-haspopup="true"
         aria-label="SpeedDial"
-        class="MuiButtonBase-root MuiFab-root MuiFab-circular MuiFab-sizeLarge MuiFab-primary MuiFab-root MuiFab-circular MuiFab-sizeLarge MuiFab-primary MuiSpeedDial-fab css-t5zvu8-MuiButtonBase-root-MuiFab-root-MuiSpeedDial-fab"
-        style="transform: none; webkit-transition: transform 225ms cubic-bezier(0.4, 0, 0.2, 1) 0ms; transition: transform 225ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;"
+        class="MuiButtonBase-root MuiFab-root MuiFab-circular MuiFab-sizeLarge MuiFab-primary MuiSpeedDial-fab css-t5zvu8-MuiButtonBase-root-MuiFab-root-MuiSpeedDial-fab"
+        style="transform: none; transition: transform 225ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;"
         tabindex="0"
         type="button"
       >
@@ -297,7 +303,7 @@ exports[`Home page should render correctly without data 1`] = `
           </span>
           <button
             aria-labelledby="SpeedDial-action-0-label"
-            class="MuiButtonBase-root MuiFab-root MuiFab-circular MuiFab-sizeSmall MuiFab-default MuiFab-root MuiFab-circular MuiFab-sizeSmall MuiFab-default MuiSpeedDialAction-fab MuiSpeedDialAction-fabClosed css-1j4q6yc-MuiButtonBase-root-MuiFab-root-MuiSpeedDialAction-fab"
+            class="MuiButtonBase-root MuiFab-root MuiFab-circular MuiFab-sizeSmall MuiFab-default MuiSpeedDialAction-fab MuiSpeedDialAction-fabClosed css-1j4q6yc-MuiButtonBase-root-MuiFab-root-MuiSpeedDialAction-fab"
             role="menuitem"
             style="transition-delay: 60ms;"
             tabindex="-1"
@@ -329,7 +335,7 @@ exports[`Home page should render correctly without data 1`] = `
           </span>
           <button
             aria-labelledby="SpeedDial-action-1-label"
-            class="MuiButtonBase-root MuiFab-root MuiFab-circular MuiFab-sizeSmall MuiFab-default MuiFab-root MuiFab-circular MuiFab-sizeSmall MuiFab-default MuiSpeedDialAction-fab MuiSpeedDialAction-fabClosed css-1j4q6yc-MuiButtonBase-root-MuiFab-root-MuiSpeedDialAction-fab"
+            class="MuiButtonBase-root MuiFab-root MuiFab-circular MuiFab-sizeSmall MuiFab-default MuiSpeedDialAction-fab MuiSpeedDialAction-fabClosed css-1j4q6yc-MuiButtonBase-root-MuiFab-root-MuiSpeedDialAction-fab"
             role="menuitem"
             style="transition-delay: 30ms;"
             tabindex="-1"
@@ -365,7 +371,8 @@ exports[`Home page should render correctly without data 1`] = `
           Upcoming events
         </h2>
         <a
-          class="MuiButtonBase-root MuiButton-root MuiButton-outlined MuiButton-outlinedSecondary MuiButton-sizeMedium MuiButton-outlinedSizeMedium MuiButton-colorSecondary MuiButton-disableElevation MuiButton-root MuiButton-outlined MuiButton-outlinedSecondary MuiButton-sizeMedium MuiButton-outlinedSizeMedium MuiButton-colorSecondary MuiButton-disableElevation css-1dzm52w-MuiButtonBase-root-MuiButton-root"
+          class="MuiButtonBase-root MuiButton-root MuiButton-outlined MuiButton-outlinedSecondary MuiButton-sizeMedium MuiButton-outlinedSizeMedium MuiButton-colorSecondary MuiButton-disableElevation css-1dzm52w-MuiButtonBase-root-MuiButton-root"
+          data-discover="true"
           href="/event"
           tabindex="0"
         >
@@ -423,7 +430,8 @@ exports[`Home page should render correctly without data 1`] = `
           My groups
         </h2>
         <a
-          class="MuiButtonBase-root MuiButton-root MuiButton-outlined MuiButton-outlinedSecondary MuiButton-sizeMedium MuiButton-outlinedSizeMedium MuiButton-colorSecondary MuiButton-disableElevation MuiButton-root MuiButton-outlined MuiButton-outlinedSecondary MuiButton-sizeMedium MuiButton-outlinedSizeMedium MuiButton-colorSecondary MuiButton-disableElevation css-1dzm52w-MuiButtonBase-root-MuiButton-root"
+          class="MuiButtonBase-root MuiButton-root MuiButton-outlined MuiButton-outlinedSecondary MuiButton-sizeMedium MuiButton-outlinedSizeMedium MuiButton-colorSecondary MuiButton-disableElevation css-1dzm52w-MuiButtonBase-root-MuiButton-root"
+          data-discover="true"
           href="/group"
           tabindex="0"
         >
@@ -489,6 +497,7 @@ exports[`Home page should render correctly without data 1`] = `
           Level 3 😍: 
           <a
             class="MuiTypography-root MuiTypography-inherit MuiLink-root MuiLink-underlineAlways css-1ptg00b-MuiTypography-root-MuiLink-root"
+            data-discover="true"
             href="/feedback"
           >
             Suggest improvements

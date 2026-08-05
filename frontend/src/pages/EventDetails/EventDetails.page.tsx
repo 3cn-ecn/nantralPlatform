@@ -1,4 +1,4 @@
-import { useParams } from 'react-router-dom';
+import { useParams } from 'react-router';
 
 import { AdminPanelSettings as AdminPanelSettingsIcon } from '@mui/icons-material';
 import {

@@ -1,4 +1,4 @@
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams } from 'react-router';
 
 import GroupListPage from '#pages/GroupList/GroupList.page';
 

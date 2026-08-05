@@ -1,5 +1,5 @@
 import { MouseEvent, useMemo, useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams } from 'react-router';
 
 import { ArrowDropDown, ArrowDropUp } from '@mui/icons-material';
 import { Menu, MenuItem, Skeleton } from '@mui/material';

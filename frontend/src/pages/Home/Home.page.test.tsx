@@ -1,5 +1,6 @@
 import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { vi, describe, it, expect } from 'vitest';
 
 import { EventDTO } from '#modules/event/infra/event.dto';
 import { GroupPreviewDTO } from '#modules/group/infra/group.dto';
@@ -10,7 +11,7 @@ import { renderWithProviders } from '#shared/testing/renderWithProviders';
 import HomePage from './Home.page';
 
 // mock ckeditor: replaced by #shared/ckeditor/__mocks__/CustomEditor.ts
-jest.mock('#shared/ckeditor/CustomEditor.ts');
+vi.mock('#shared/ckeditor/CustomEditor.ts');
 
 function mockPostApiCall(
   params: { pinned?: boolean; page?: number; page_size?: number },
@@ -94,7 +95,7 @@ describe('Home page', () => {
 
     // click the 'See all' button
     const seeAllLink = screen.getAllByText('See all')[0]; // NB: we use get because we are not in an expect
-    userEvent.click(seeAllLink);
+    await userEvent.click(seeAllLink);
 
     // check that we are on the event page
     expect(await screen.findByText('Events')).toBeInTheDocument();

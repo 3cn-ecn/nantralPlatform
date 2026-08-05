@@ -1,5 +1,5 @@
 import { FC, ReactNode } from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 
 import { Close as CloseIcon, OpenInNew } from '@mui/icons-material';
 import {

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Trans } from 'react-i18next';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router';
 
 import { ChevronLeft, Info } from '@mui/icons-material';
 import { Button, Divider, Paper, Typography } from '@mui/material';

@@ -1,5 +1,5 @@
 import { MouseEvent, useState } from 'react';
-import { useLocation, Link } from 'react-router-dom';
+import { useLocation, Link } from 'react-router';
 
 import {
   DarkMode as DarkModeIcon,

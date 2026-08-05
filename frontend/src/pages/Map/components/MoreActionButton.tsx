@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react';
-import { Link, useSearchParams } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router';
 
 import { MoreHoriz } from '@mui/icons-material';
 import { MenuItem } from '@mui/material';

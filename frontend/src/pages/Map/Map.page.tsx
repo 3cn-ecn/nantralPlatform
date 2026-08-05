@@ -6,7 +6,7 @@ import Map, {
   ScaleControl,
   Source,
 } from 'react-map-gl/mapbox';
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams } from 'react-router';
 
 import { Box } from '@mui/material';
 import { useInfiniteQuery } from '@tanstack/react-query';

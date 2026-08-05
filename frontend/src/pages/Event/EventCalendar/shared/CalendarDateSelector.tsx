@@ -7,7 +7,7 @@ import {
 } from '@mui/icons-material';
 import { Button, Dialog, IconButton, Tooltip, Typography } from '@mui/material';
 import { LocalizationProvider } from '@mui/x-date-pickers';
-import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFnsV2';
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import {
   addDays,
   addMonths,

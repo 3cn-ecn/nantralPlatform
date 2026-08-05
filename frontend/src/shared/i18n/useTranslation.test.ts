@@ -5,6 +5,7 @@
  * (the ISO format is 'yyyy-MM-ddThh:mm:ssZ').
  */
 import { act, renderHook } from '@testing-library/react';
+import { describe, expect, it, vi } from 'vitest';
 
 import './config';
 import { useTranslation } from './useTranslation';
@@ -86,14 +87,14 @@ describe('useTranslation hook to format dates and numbers', () => {
     const { formatRelativeTime } = await testUseTranslation();
 
     // fake date for today
-    jest.useFakeTimers();
-    jest.setSystemTime(new Date('2023-05-01T08:00'));
+    vi.useFakeTimers();
+    vi.setSystemTime(new Date('2023-05-01T08:00'));
 
     expect(formatRelativeTime(new Date('2023-01-27T15:34'))).toBe('27/01/2023');
     expect(formatRelativeTime(new Date('2023-05-01T15:34'))).toBe(
       'aujourd’hui à 15:34',
     );
 
-    jest.useRealTimers();
+    vi.useRealTimers();
   });
 });

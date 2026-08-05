@@ -1,4 +1,4 @@
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams } from 'react-router';
 
 import { Edit } from '@mui/icons-material';
 import { Fab } from '@mui/material';

@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 
 import { ChevronRight } from '@mui/icons-material';
 import { Button, Typography } from '@mui/material';

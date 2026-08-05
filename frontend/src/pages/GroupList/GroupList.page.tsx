@@ -1,4 +1,4 @@
-import { Link, useSearchParams } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router';
 
 import { AdminPanelSettings as AdminPanelSettingsIcon } from '@mui/icons-material';
 import {

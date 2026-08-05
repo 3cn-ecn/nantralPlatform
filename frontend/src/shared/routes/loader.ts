@@ -1,4 +1,4 @@
-import { LoaderFunctionArgs, redirect } from 'react-router-dom';
+import { LoaderFunctionArgs, redirect } from 'react-router';
 
 import { QueryClient } from '@tanstack/react-query';
 

@@ -1,4 +1,4 @@
-import { useParams } from 'react-router-dom';
+import { useParams } from 'react-router';
 
 import { Alert, Container } from '@mui/material';
 import { useQuery } from '@tanstack/react-query';

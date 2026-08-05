@@ -1,5 +1,5 @@
 import { FormEvent, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 
 import { Add } from '@mui/icons-material';
 import { Avatar, Button, useTheme } from '@mui/material';

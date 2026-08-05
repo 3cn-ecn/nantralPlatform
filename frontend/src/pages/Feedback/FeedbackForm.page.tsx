@@ -1,5 +1,5 @@
 import { FormEvent } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 
 import { Send as SendIcon } from '@mui/icons-material';
 import { Container, Alert, Typography, Button } from '@mui/material';

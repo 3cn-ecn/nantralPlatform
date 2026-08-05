@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams } from 'react-router';
 
 import { AdminPanelSettings as AdminPanelSettingsIcon } from '@mui/icons-material';
 import { Container, IconButton, Tooltip, Typography } from '@mui/material';

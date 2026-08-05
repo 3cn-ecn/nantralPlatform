@@ -1,4 +1,5 @@
 import react from '@vitejs/plugin-react';
+import { resolve } from 'node:path';
 import path from 'path';
 import { visualizer } from 'rollup-plugin-visualizer';
 import { fileURLToPath } from 'url';
@@ -65,6 +66,16 @@ export default defineConfig({
       scss: {
         api: 'modern',
       },
+    },
+  },
+  test: {
+    environment: 'jsdom',
+    setupFiles: [resolve(__dirname, 'src/shared/testing/setupTests.ts')],
+    globals: true,
+    css: true,
+    coverage: {
+      provider: 'v8',
+      reporter: ['text', 'lcov'],
     },
   },
 });

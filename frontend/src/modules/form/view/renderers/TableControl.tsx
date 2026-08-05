@@ -65,8 +65,7 @@ export const TableControl = ({
 
   // Extract column headers from value schema's properties
   const valueColumns = valueSchema?.properties?.value?.oneOf as
-    | JsonSchema[]
-    | undefined;
+    JsonSchema[] | undefined;
 
   return (
     <TableContainer component={Paper} sx={{ my: 1 }}>

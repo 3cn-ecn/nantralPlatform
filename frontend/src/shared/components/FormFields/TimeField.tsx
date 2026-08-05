@@ -5,7 +5,7 @@ import {
   TimePicker,
   TimePickerProps,
 } from '@mui/x-date-pickers';
-import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFnsV2';
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 
 import { useTranslation } from '#shared/i18n/useTranslation';
 
