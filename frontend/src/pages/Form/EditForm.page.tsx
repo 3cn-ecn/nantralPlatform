@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
 import {
@@ -10,10 +10,10 @@ import {
   Typography,
 } from '@mui/material';
 
-import { ImportForm } from '#modules/form/components/ImportForm';
-import { SaveForm } from '#modules/form/components/SaveForm';
-import { SelectBaseComponent } from '#modules/form/components/SelectBaseComponent';
-import { JsonFormProvider } from '#modules/form/state/JsonFormContext';
+import { FormProvider } from '#modules/form/state/form.context';
+import { FormEditRoot } from '#modules/form/view/shared/FormEditRoot';
+import { ImportForm } from '#modules/form/view/shared/ImportForm';
+import { SaveForm } from '#modules/form/view/shared/SaveForm';
 import { RichTextField, TextField } from '#shared/components/FormFields';
 import { RichTextRenderer } from '#shared/components/RichTextRenderer/RichTextRenderer';
 
@@ -22,11 +22,27 @@ export default function EditFormPage() {
   const [name, setname] = useState('');
   const [description, setDescription] = useState('');
   const params = useParams();
+  const rootId = useMemo(() => crypto.randomUUID(), []);
 
   return (
-    <JsonFormProvider>
-      {params['uuid'] && <ImportForm uuid={params['uuid']} />}
-      <Container sx={{ my: 2 }}>
+    <Container sx={{ my: 2 }}>
+      <FormProvider
+        initialForm={{
+          root: rootId,
+          nodes: {
+            [rootId]: {
+              payload: {
+                translation: { en: {}, fr: {} },
+                type: 'VerticalLayout',
+                options: {},
+                schema: {},
+              },
+              children: [],
+            },
+          },
+        }}
+      >
+        {params['uuid'] && <ImportForm uuid={params['uuid']} />}
         <Card>
           <CardContent>
             {headerEdit ? (
@@ -50,9 +66,9 @@ export default function EditFormPage() {
             </Button>
           </CardActions>
         </Card>
-        <SelectBaseComponent />
-      </Container>
-      <SaveForm name={name} description={description} uuid={params['uuid']} />
-    </JsonFormProvider>
+        <FormEditRoot />
+        <SaveForm name={name} description={description} uuid={params['uuid']} />
+      </FormProvider>
+    </Container>
   );
 }

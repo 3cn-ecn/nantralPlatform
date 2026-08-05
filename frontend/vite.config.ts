@@ -3,6 +3,7 @@ import path from 'path';
 import { visualizer } from 'rollup-plugin-visualizer';
 import { fileURLToPath } from 'url';
 import { defineConfig } from 'vite';
+import { nodePolyfills } from 'vite-plugin-node-polyfills';
 import svgr from 'vite-plugin-svgr';
 
 // eslint-disable-next-line no-underscore-dangle
@@ -25,7 +26,12 @@ const templatesEntryPoints = [
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [svgr(), react(), visualizer({ template: 'sunburst' })],
+  plugins: [
+    nodePolyfills(),
+    svgr(),
+    react(),
+    visualizer({ template: 'sunburst' }),
+  ],
   base: '/static/',
   resolve: {
     alias: {

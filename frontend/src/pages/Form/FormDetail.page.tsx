@@ -4,8 +4,8 @@ import { Alert, Container } from '@mui/material';
 import { useQuery } from '@tanstack/react-query';
 
 import { getJsonSchemaApi } from '#modules/form/api/getJsonSchema.api';
-import { ShowForm } from '#modules/form/components/ShowForm';
 import { JsonFormSchema } from '#modules/form/types/jsonForm.type';
+import { ShowForm } from '#modules/form/view/shared/ShowForm';
 import { ApiError } from '#shared/infra/errors';
 
 export default function FormDetailPage() {
