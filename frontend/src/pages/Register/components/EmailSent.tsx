@@ -7,6 +7,7 @@ import { useMutation } from '@tanstack/react-query';
 
 import { resendVerificationEmailApi } from '#modules/account/api/resendVerificationEmail.api';
 import { FlexCol, FlexRow } from '#shared/components/FlexBox/FlexBox';
+import { LoadingButton } from '#shared/components/LoadingButton/LoadingButton';
 import { useTranslation } from '#shared/i18n/useTranslation';
 
 export default function EmailSent() {
@@ -14,11 +15,11 @@ export default function EmailSent() {
   const { state } = useLocation();
   const { t } = useTranslation();
   const { email = undefined, firstName = undefined } = state || {};
-  const { isSuccess, mutate, isLoading } = useMutation(
-    resendVerificationEmailApi,
-  );
+  const { isSuccess, mutate, isPending } = useMutation({
+    mutationFn: resendVerificationEmailApi,
+  });
   if (!state) {
-    return <Navigate to="/register" replace />;
+    return <Navigate to="/register/" replace />;
   }
   return (
     <Box>
@@ -71,15 +72,15 @@ export default function EmailSent() {
               <Check color="success" />
             </>
           ) : (
-            <Button
-              disabled={isLoading}
+            <LoadingButton
+              loading={isPending}
               sx={{ textTransform: 'none' }}
               onClick={() => {
                 mutate(email);
               }}
             >
               {t('register.sendAgain')}
-            </Button>
+            </LoadingButton>
           )}
         </FlexRow>
       </FlexCol>

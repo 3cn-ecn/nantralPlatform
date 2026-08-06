@@ -25,7 +25,7 @@ export default function FeedbackFormPage({ kind }: FeedbackHomePageProps) {
   const navigate = useNavigate();
   const showToast = useToast();
 
-  const { error, isLoading, isError, mutate } = useMutation<
+  const { error, isPending, isError, mutate } = useMutation<
     number,
     ApiFormError<FeedbackForm>,
     FeedbackForm
@@ -84,10 +84,9 @@ export default function FeedbackFormPage({ kind }: FeedbackHomePageProps) {
         />
         <LoadingButton
           type="submit"
-          loading={isLoading}
+          loading={isPending}
           variant="contained"
           startIcon={<SendIcon />}
-          disabled={isLoading}
           sx={{ ms: 'auto' }}
         >
           {t('feedback.form.submitButton.label')}

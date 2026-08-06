@@ -53,7 +53,7 @@ export function SearchBar({
           {!isSmaller && (
             <Button
               component={Link}
-              to={`/group?type=${type}`}
+              to={`/group/?type=${type}`}
               variant="contained"
               color="secondary"
             >

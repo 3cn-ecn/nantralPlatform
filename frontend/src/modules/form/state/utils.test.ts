@@ -27,6 +27,9 @@ describe('nodeToJsonForm and jsonFormToNode inverse operations', () => {
   describe('Simple form with single control element', () => {
     it('should convert a simple control to JsonForm and back to FormState', () => {
       const formState: FormState = {
+        uuid: '00000000-0000-0000-0000-000000000000',
+        name: 'Test',
+        description: '',
         root: rootId,
         nodes: {
           [rootId]: {
@@ -76,6 +79,9 @@ describe('nodeToJsonForm and jsonFormToNode inverse operations', () => {
   describe('Form with multiple child elements', () => {
     it('should convert a form with multiple children to JsonForm and back', () => {
       const formState: FormState = {
+        uuid: '00000000-0000-0000-0000-000000000000',
+        name: 'Test',
+        description: '',
         root: rootId,
         nodes: {
           [rootId]: {
@@ -154,6 +160,9 @@ describe('nodeToJsonForm and jsonFormToNode inverse operations', () => {
   describe('Nested form with multiple levels', () => {
     it('should convert deeply nested forms to JsonForm and back', () => {
       const formState: FormState = {
+        uuid: '00000000-0000-0000-0000-000000000000',
+        name: 'Test',
+        description: '',
         root: rootId,
         nodes: {
           [rootId]: {
@@ -231,6 +240,9 @@ describe('nodeToJsonForm and jsonFormToNode inverse operations', () => {
   describe('Form with i18n translations', () => {
     it('should preserve all i18n keys through round-trip conversion', () => {
       const formState: FormState = {
+        uuid: '00000000-0000-0000-0000-000000000000',
+        name: 'Test',
+        description: '',
         root: rootId,
         nodes: {
           [rootId]: {
@@ -299,6 +311,9 @@ describe('nodeToJsonForm and jsonFormToNode inverse operations', () => {
       };
 
       const formState: FormState = {
+        uuid: '00000000-0000-0000-0000-000000000000',
+        name: 'Test',
+        description: '',
         root: rootId,
         nodes: {
           [rootId]: {
@@ -336,6 +351,9 @@ describe('nodeToJsonForm and jsonFormToNode inverse operations', () => {
   describe('Form with complex schema properties', () => {
     it('should preserve JSON schema properties through round-trip', () => {
       const formState: FormState = {
+        uuid: '00000000-0000-0000-0000-000000000000',
+        name: 'Test',
+        description: '',
         root: rootId,
         nodes: {
           [rootId]: {
@@ -397,6 +415,9 @@ describe('nodeToJsonForm and jsonFormToNode inverse operations', () => {
       };
 
       const formState: FormState = {
+        uuid: '00000000-0000-0000-0000-000000000000',
+        name: 'Test',
+        description: '',
         root: rootId,
         nodes: {
           [rootId]: {
@@ -426,6 +447,9 @@ describe('nodeToJsonForm and jsonFormToNode inverse operations', () => {
   describe('Schema scope handling', () => {
     it('should correctly reconstruct schema from scope path', () => {
       const formState: FormState = {
+        uuid: '00000000-0000-0000-0000-000000000000',
+        name: 'Test',
+        description: '',
         root: rootId,
         nodes: {
           [rootId]: {
@@ -482,6 +506,9 @@ describe('nodeToJsonForm and jsonFormToNode inverse operations', () => {
   describe('Edge cases', () => {
     it('should handle form with empty children array', () => {
       const formState: FormState = {
+        uuid: '00000000-0000-0000-0000-000000000000',
+        name: 'Test',
+        description: '',
         root: rootId,
         nodes: {
           [rootId]: {
@@ -507,6 +534,9 @@ describe('nodeToJsonForm and jsonFormToNode inverse operations', () => {
 
     it('should handle forms with only required field metadata', () => {
       const formState: FormState = {
+        uuid: '00000000-0000-0000-0000-000000000000',
+        name: 'Test',
+        description: '',
         root: rootId,
         nodes: {
           [rootId]: {
@@ -561,6 +591,9 @@ describe('nodeToJsonForm and jsonFormToNode inverse operations', () => {
 
     it('should handle minimal payload with no translation data', () => {
       const formState: FormState = {
+        uuid: '00000000-0000-0000-0000-000000000000',
+        name: 'Test',
+        description: '',
         root: rootId,
         nodes: {
           [rootId]: {
@@ -591,6 +624,9 @@ describe('nodeToJsonForm and jsonFormToNode inverse operations', () => {
   describe('Multiple round-trip conversions', () => {
     it('should remain stable through multiple conversions', () => {
       const formState: FormState = {
+        uuid: '00000000-0000-0000-0000-000000000000',
+        name: 'Test',
+        description: '',
         root: rootId,
         nodes: {
           [rootId]: {
@@ -642,6 +678,9 @@ describe('nodeToJsonForm and jsonFormToNode inverse operations', () => {
   describe('Data integrity verification', () => {
     it('should not lose any data during conversion', () => {
       const formState: FormState = {
+        uuid: '00000000-0000-0000-0000-000000000000',
+        name: 'Test',
+        description: '',
         root: rootId,
         nodes: {
           [rootId]: {
@@ -741,6 +780,9 @@ describe('nodeToJsonForm and jsonFormToNode inverse operations', () => {
   describe('Structural consistency', () => {
     it('should maintain parent-child relationships', () => {
       const formState: FormState = {
+        uuid: '00000000-0000-0000-0000-000000000000',
+        name: 'Test',
+        description: '',
         root: rootId,
         nodes: {
           [rootId]: {
@@ -806,6 +848,9 @@ describe('nodeToJsonForm and jsonFormToNode inverse operations', () => {
 
       for (const type of types) {
         const formState: FormState = {
+          uuid: '00000000-0000-0000-0000-000000000000',
+          name: 'Test',
+          description: '',
           root: rootId,
           nodes: {
             [rootId]: {
@@ -843,6 +888,9 @@ describe('nodeToJsonForm and jsonFormToNode inverse operations', () => {
 
       for (const schemaType of schemaTypes) {
         const formState: FormState = {
+          uuid: '00000000-0000-0000-0000-000000000000',
+          name: 'Test',
+          description: '',
           root: rootId,
           nodes: {
             [rootId]: {

@@ -33,6 +33,9 @@ export interface Node {
 }
 
 export interface FormState {
+  uuid: UUID;
+  name: string;
+  description: string;
   root: UUID;
   nodes: Record<UUID, Node>;
 }

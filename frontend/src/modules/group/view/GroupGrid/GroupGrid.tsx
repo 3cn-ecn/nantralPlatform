@@ -7,18 +7,18 @@ import { GroupItemSkeleton } from '../GroupItemSkeleton/GroupItemSkeleton';
 
 export function GroupGrid({
   groups,
-  isLoading = false,
+  isPending = false,
   estimatedSize = 10,
   extraComponent,
 }: {
   groups?: GroupPreview[];
-  isLoading?: boolean;
+  isPending?: boolean;
   estimatedSize?: number;
   extraComponent?: JSX.Element;
 }) {
   return (
     <Grid spacing={1} container>
-      {isLoading
+      {isPending
         ? Array(estimatedSize)
             .fill(0)
             .map((_, index) => (
@@ -32,7 +32,7 @@ export function GroupGrid({
               <GroupItem size="xl" group={group} />
             </Grid>
           ))}
-      {!isLoading && extraComponent && (
+      {!isPending && extraComponent && (
         <Grid key={'extra'} size={{ xs: 6, sm: 4, md: 3, lg: 2 }}>
           {extraComponent}
         </Grid>

@@ -5,13 +5,17 @@ import { useFormContext } from '#modules/form/hooks/useFormContext';
 import { jsonFormToNode } from '#modules/form/state/utils';
 
 export function ImportForm({ uuid }: { uuid: string }) {
-  const { setForm } = useFormContext();
+  const { form, setForm } = useFormContext();
   useQuery({
     queryKey: ['formSchema', uuid],
-    queryFn: () =>
+    queryFn: () => {
+      if (uuid === form.uuid) {
+        return;
+      }
       getJsonSchemaApi(uuid).then((formSchema) =>
         setForm(jsonFormToNode(formSchema)),
-      ),
+      );
+    },
   });
   return null;
 }

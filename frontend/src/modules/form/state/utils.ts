@@ -173,21 +173,19 @@ export function isDescendent(
   );
 }
 
-type NodeTransformResult = Pick<
-  JsonFormSchema,
-  'schema' | 'uiSchema' | 'i18nKeys'
->;
-
 export function nodeToJsonForm(
   state: FormState,
   path?: string[],
-): NodeTransformResult {
+): JsonFormSchema {
   const nodeId = path?.at(-1);
   if (!path) {
     path = [];
   }
   const node = state.nodes[nodeId ?? state.root];
-  const result: NodeTransformResult = {
+  const result: JsonFormSchema = {
+    uuid: state.uuid,
+    name: state.name,
+    description: state.description,
     schema: cloneDeep(node.payload.schema),
     uiSchema: {
       type: node.payload.type,
@@ -246,6 +244,9 @@ export function jsonFormToNode(jsonForm: JsonFormSchema): FormState {
   );
 
   return {
+    uuid: jsonForm.uuid as UUID,
+    name: jsonForm.name,
+    description: jsonForm.description,
     root: rootId,
     nodes,
   };

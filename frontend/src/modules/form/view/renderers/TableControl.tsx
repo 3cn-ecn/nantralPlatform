@@ -98,6 +98,7 @@ export const TableControl = ({
               visible={visible}
               uischema={{
                 type: 'Control',
+                i18n: i18nKeyPrefix + '.' + name,
                 scope: '#/',
                 options: {
                   row: true,

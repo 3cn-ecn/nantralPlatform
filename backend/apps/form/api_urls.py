@@ -1,6 +1,6 @@
 from rest_framework.routers import DefaultRouter
 
-from .api_views import FormAnswerViewSet, FormSchemaViewSet
+from .api_views import FormAnswerViewSet, FormSchemaViewSet, SchemaRolesViewSet
 
 app_name = "form"
 
@@ -10,6 +10,12 @@ router.register(
     "schema/(?P<schema>[^/.]+)/answer",
     FormAnswerViewSet,
     basename="form-answer",
+)
+
+router.register(
+    "schema/(?P<schema>[^/.]+)/roles",
+    SchemaRolesViewSet,
+    basename="form-roles",
 )
 
 urlpatterns = router.urls

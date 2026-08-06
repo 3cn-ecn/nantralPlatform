@@ -1,7 +1,8 @@
 import jsonschema
 from rest_framework import serializers
 
-from apps.form.models import FormAnswer, FormSchema
+from apps.account.models import User
+from apps.form.models import FormAnswer, FormSchema, UserRole
 
 
 def to_ajv_error(error: jsonschema.ValidationError):
@@ -26,17 +27,69 @@ def to_ajv_error(error: jsonschema.ValidationError):
 
 class RoleSerializer(serializers.ModelSerializer):
     class Meta:
-        model = FormSchema.users.through
-        fields = ["user", "role"]
+        model = UserRole
+        fields = "__all__"
+        read_only_fields = ["user", "form_schema"]
+
+
+class CreateRoleSerializer(serializers.ModelSerializer):
+    users = serializers.PrimaryKeyRelatedField(
+        many=True, queryset=User.objects.all()
+    )
+
+    class Meta:
+        model = UserRole
+        fields = ["role", "users"]
+
+    def validate_users(self, users):
+        errors = [
+            f"User {user.name} has already been added"
+            for user in users
+            if self.context.get("form_schema").users.filter(pk=user.pk).exists()
+        ]
+        if len(users) == 0:
+            raise serializers.ValidationError("You have not added any users")
+        if len(errors) > 0:
+            raise serializers.ValidationError(errors)
+        return users
+
+    def validate(self, data):
+        form_schema = self.context.get("form_schema")
+        if form_schema is None:
+            raise serializers.ValidationError(
+                "Form schema is required for validation."
+            )
+        return data
+
+    def create(self, validated_data):
+        users = validated_data.pop("users")
+        roles = [
+            UserRole.objects.create(
+                user=user, form_schema=self.get_form_schema(), **validated_data
+            )
+            for user in users
+        ]
+        return roles
+
+    def get_form_schema(self):
+        return self.context.get("form_schema")
 
 
 class FormSchemaSerializer(serializers.ModelSerializer):
-    users = RoleSerializer(many=True, read_only=True)
+    userrole_set = RoleSerializer(many=True, read_only=True)
 
     class Meta:
         model = FormSchema
-        fields = "__all__"
-        read_only_fields = ["users", "uuid"]
+        exclude = ["users"]
+        read_only_fields = ["userrole_set", "uuid"]
+
+    def create(self, validated_data):
+        form: FormSchema = super().create(validated_data)
+        form.users.add(
+            self.context["request"].user,
+            through_defaults={"role": "owner"},
+        )
+        return form
 
 
 class FormAnswerPreviewSerializer(serializers.ModelSerializer):

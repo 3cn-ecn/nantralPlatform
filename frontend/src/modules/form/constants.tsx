@@ -146,9 +146,7 @@ export const LAYOUT_TYPES: Record<string, LayoutType> = {
     allowedChildren: ['Category'],
     defaultPayload: {
       type: 'Categorization',
-      options: {
-        showNavButton: true,
-      },
+      options: { variant: 'stepper', showNavButtons: true },
     },
   },
   Category: {

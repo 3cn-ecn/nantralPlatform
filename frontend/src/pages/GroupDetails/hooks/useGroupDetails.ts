@@ -34,9 +34,9 @@ export function useGroupDetails(slug: string, version?: number) {
     groupDetails: groupQuery.data,
     events: eventsQuery.data,
     members: membersQuery.data,
-    isLoading:
-      groupQuery.isLoading ||
-      (isAuthenticated && (eventsQuery.isLoading || membersQuery.isLoading)),
+    isPending:
+      groupQuery.isPending ||
+      (isAuthenticated && (eventsQuery.isPending || membersQuery.isPending)),
     isError: groupQuery.isError || eventsQuery.isError || membersQuery.isError,
     refetch: () => {
       groupQuery.refetch();

@@ -32,7 +32,7 @@ export function HistoryButton(props: HistoryButtonProps) {
   const handleClose = () => {
     setAnchorEl(null);
   };
-  const { data, isLoading, isError } = useQuery({
+  const { data, isPending, isError } = useQuery({
     queryFn: () => getGroupHistoryListApi(group.slug),
     queryKey: ['history', { slug: group.slug }],
   });
@@ -52,8 +52,8 @@ export function HistoryButton(props: HistoryButtonProps) {
         startIcon={<History />}
         color={'secondary'}
         variant={'contained'}
-        loading={isLoading}
-        disabled={isLoading || isError}
+        loading={isPending}
+        disabled={isError}
         aria-controls={open ? 'type-menu' : undefined}
         aria-haspopup="true"
         aria-expanded={open ? 'true' : undefined}

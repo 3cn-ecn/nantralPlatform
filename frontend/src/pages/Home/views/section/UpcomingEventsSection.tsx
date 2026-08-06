@@ -16,7 +16,7 @@ function SeeAllEventsButton({ label }: { label: string }) {
   return (
     <Button
       component={Link}
-      to="/event"
+      to="/event/"
       variant="outlined"
       color="secondary"
       endIcon={<ChevronRightIcon />}
@@ -38,7 +38,7 @@ export function UpcomingEventsSection({ enabled }: UpcomingEventsSectionProps) {
 
   const eventsQuery = useUpcomingEventsQuery(numberOfEvents, { enabled });
 
-  if (eventsQuery.isLoading) {
+  if (eventsQuery.isPending) {
     return (
       <Section
         title={t('home.eventSection.title')}

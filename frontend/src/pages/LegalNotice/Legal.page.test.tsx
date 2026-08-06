@@ -1,4 +1,4 @@
-import { screen } from '@testing-library/react';
+import { screen, waitFor } from '@testing-library/react';
 import { vi, describe, it, expect } from 'vitest';
 
 import { renderWithProviders } from '#shared/testing/renderWithProviders';
@@ -10,9 +10,14 @@ vi.mock('#shared/ckeditor/CustomEditor.ts');
 
 describe('Home page', () => {
   it('should render correctly', async () => {
-    const component = renderWithProviders(<LegalNoticePage />);
+    const [component, queryClient] = renderWithProviders(<LegalNoticePage />);
 
     await screen.findByText('Legal Notice');
+
+    await waitFor(() => {
+      expect(queryClient.isFetching()).toBe(0);
+    });
+
     expect(component.asFragment()).toMatchSnapshot();
   });
 });

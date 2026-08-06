@@ -19,6 +19,7 @@ const EventDetailsPage = lazy(
 );
 const EditFormPage = lazy(() => import('#pages/Form/EditForm.page'));
 const FormDetailPage = lazy(() => import('#pages/Form/FormDetail.page'));
+const FormListPage = lazy(() => import('#pages/Form/FormList.page'));
 const MapPage = lazy(() => import('#pages/Map/Map.page'));
 const HomePage = lazy(() => import('#pages/Home/Home.page'));
 const NotFoundPage = lazy(() => import('#pages/NotFound/NotFound.page'));
@@ -78,6 +79,11 @@ export const authenticatedRoutes: (queryClient: QueryClient) => RouteObject = (
     {
       path: '/form',
       children: [
+        {
+          index: true,
+          element: <FormListPage />,
+          handle: { crumb: t('breadcrumbs.form.index') },
+        },
         {
           path: 'new',
           element: <EditFormPage />,

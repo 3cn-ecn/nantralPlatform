@@ -109,7 +109,7 @@ export function MoreEventActionsButton({
         <ConfirmationModal
           title={t('event.participateButton.unregisterModal.title')}
           body={t('event.participateButton.unregisterModal.message')}
-          loading={registrationMutation.isLoading}
+          loading={registrationMutation.isPending}
           onCancel={() => setIsOpenUnregisterConfirmationModal(false)}
           onConfirm={() =>
             registrationMutation.unregister({

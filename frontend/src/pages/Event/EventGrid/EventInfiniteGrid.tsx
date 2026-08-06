@@ -29,7 +29,7 @@ export function EventInfiniteGrid({
     { enabled: !disableLoading },
   );
 
-  if (eventsQuery.isLoading) {
+  if (eventsQuery.isPending) {
     return (
       <Grid container spacing={1}>
         {repeat(

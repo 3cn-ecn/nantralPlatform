@@ -26,16 +26,22 @@ export function ModalDeleteMember({
 }) {
   const { t } = useTranslation();
   const queryClient = useQueryClient();
-  const { mutate, isLoading, error } = useMutation({
+  const { mutate, isPending, error } = useMutation({
     mutationFn: deleteMembershipApi,
     mutationKey: ['members', 'delete'],
     onSuccess: () => {
-      queryClient.invalidateQueries(['members', { slug: member.group.slug }]);
-      queryClient.invalidateQueries([
-        'membership',
-        { group: member.group.slug, user: member.user.id },
-      ]);
-      queryClient.invalidateQueries(['group', { slug: member.group.slug }]);
+      queryClient.invalidateQueries({
+        queryKey: ['members', { slug: member.group.slug }],
+      });
+      queryClient.invalidateQueries({
+        queryKey: [
+          'membership',
+          { group: member.group.slug, user: member.user.id },
+        ],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ['group', { slug: member.group.slug }],
+      });
       onClose(true);
     },
   });
@@ -50,7 +56,7 @@ export function ModalDeleteMember({
       <DialogContent>
         {!!error && (
           <Alert severity="error" sx={{ mb: 1 }}>
-            {error as string}
+            {error.message}
           </Alert>
         )}
         <DialogContentText>
@@ -64,14 +70,14 @@ export function ModalDeleteMember({
         <Button
           onClick={() => onClose(false)}
           variant="text"
-          disabled={isLoading}
+          disabled={isPending}
         >
           {t('button.cancel')}
         </Button>
         <LoadingButton
           onClick={() => mutate(member.id)}
           variant="contained"
-          loading={isLoading}
+          loading={isPending}
         >
           {t('button.delete')}
         </LoadingButton>

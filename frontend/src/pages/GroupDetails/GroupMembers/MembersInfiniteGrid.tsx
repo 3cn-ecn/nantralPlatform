@@ -2,7 +2,11 @@ import { useMemo } from 'react';
 import { useSearchParams } from 'react-router';
 
 import { Divider, Typography } from '@mui/material';
-import { UseInfiniteQueryResult, useQuery } from '@tanstack/react-query';
+import {
+  InfiniteData,
+  UseInfiniteQueryResult,
+  useQuery,
+} from '@tanstack/react-query';
 import { groupBy } from 'lodash-es';
 
 import { User } from '#modules/account/user.types';
@@ -112,13 +116,13 @@ export function MembersInfiniteGrid({
 }
 
 function getDataList(
-  query: UseInfiniteQueryResult<Page<Membership>>,
+  query: UseInfiniteQueryResult<InfiniteData<Page<Membership>>>,
 ): Membership[] {
   return query.data?.pages.flatMap((page) => page.results) ?? [];
 }
 
 function getShowSkeleton(
-  query: UseInfiniteQueryResult<Page<Membership>>,
+  query: UseInfiniteQueryResult<InfiniteData<Page<Membership>>>,
 ): boolean {
-  return query.isLoading || query.isFetchingNextPage;
+  return query.isPending || query.isFetchingNextPage;
 }

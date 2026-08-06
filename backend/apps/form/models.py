@@ -34,16 +34,18 @@ class FormSchema(models.Model):
 
 
 class UserRole(models.Model):
+    ROLE_CHOICE = [
+        ("owner", _("Owner")),
+        ("editor", _("Editor")),
+        ("answer_viewer", _("Answer Viewer")),
+        ("form_viewer", _("Form Viewer")),
+    ]
+
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     form_schema = models.ForeignKey(FormSchema, on_delete=models.CASCADE)
     role = models.CharField(
         max_length=50,
-        choices=[
-            ("owner", _("Owner")),
-            ("editor", _("Editor")),
-            ("answer_viewer", _("Answer Viewer")),
-            ("form_viewer", _("Form Viewer")),
-        ],
+        choices=ROLE_CHOICE,
     )
 
     class Meta:

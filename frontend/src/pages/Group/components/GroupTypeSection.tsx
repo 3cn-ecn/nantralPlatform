@@ -15,13 +15,13 @@ import { MoreGroupButton } from './MoreGroupButton';
 interface GroupTypeSectionProps {
   type: GroupTypePreview;
   groups?: Page<GroupPreview>;
-  isLoading: boolean;
+  isPending: boolean;
   pageSize: number;
 }
 
 export function GroupTypeSection({
   type,
-  isLoading,
+  isPending,
   groups,
   pageSize,
 }: GroupTypeSectionProps) {
@@ -44,7 +44,7 @@ export function GroupTypeSection({
       {count === 0 && <Typography mb={3}>{t('group.list.noGroup')}</Typography>}
       <GroupGrid
         estimatedSize={6}
-        isLoading={isLoading}
+        isPending={isPending}
         groups={groups?.results?.slice(
           0,
           count > pageSize ? pageSize - 1 : pageSize,

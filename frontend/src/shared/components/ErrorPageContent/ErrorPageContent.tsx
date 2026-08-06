@@ -61,7 +61,7 @@ export function ErrorPageContent({
           </Button>
           <Button
             component={Link}
-            to="/feedback"
+            to="/feedback/"
             startIcon={<BugReportIcon />}
             color="secondary"
             reloadDocument={reloadDocument}

@@ -35,7 +35,7 @@ export function MoreActionButton({
         disablePortal // show menu when map is fullscreen
       >
         {isSmaller && (
-          <MenuItem component={Link} to={`/group?type=${type}`}>
+          <MenuItem component={Link} to={`/group/?type=${type}`}>
             {t('map.viewList')}
           </MenuItem>
         )}

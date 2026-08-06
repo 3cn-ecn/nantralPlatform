@@ -1,33 +1,29 @@
-import { useMemo, useState } from 'react';
+import { useState } from 'react';
 import { useParams } from 'react-router';
 
-import {
-  Button,
-  Card,
-  CardActions,
-  CardContent,
-  Container,
-  Typography,
-} from '@mui/material';
+import { Button, Container } from '@mui/material';
 
 import { FormProvider } from '#modules/form/state/form.context';
 import { FormEditRoot } from '#modules/form/view/shared/FormEditRoot';
+import { FormHeaderFields } from '#modules/form/view/shared/FormHeaderFields';
+import { FormPreview } from '#modules/form/view/shared/FormPreview';
 import { ImportForm } from '#modules/form/view/shared/ImportForm';
 import { SaveForm } from '#modules/form/view/shared/SaveForm';
-import { RichTextField, TextField } from '#shared/components/FormFields';
-import { RichTextRenderer } from '#shared/components/RichTextRenderer/RichTextRenderer';
+import { SelectBaseComponent } from '#modules/form/view/shared/SelectBaseComponent';
+import { FlexCol } from '#shared/components/FlexBox/FlexBox';
 
 export default function EditFormPage() {
-  const [headerEdit, setHeaderEdit] = useState(true);
-  const [name, setname] = useState('');
-  const [description, setDescription] = useState('');
   const params = useParams();
-  const rootId = useMemo(() => crypto.randomUUID(), []);
+  const rootId = crypto.randomUUID();
+  const [showForm, setShowForm] = useState(false);
 
   return (
     <Container sx={{ my: 2 }}>
       <FormProvider
         initialForm={{
+          uuid: crypto.randomUUID(),
+          name: '',
+          description: '',
           root: rootId,
           nodes: {
             [rootId]: {
@@ -42,32 +38,16 @@ export default function EditFormPage() {
           },
         }}
       >
-        {params['uuid'] && <ImportForm uuid={params['uuid']} />}
-        <Card>
-          <CardContent>
-            {headerEdit ? (
-              <TextField label={'Titre'} value={name} handleChange={setname} />
-            ) : (
-              <Typography variant={'h4'}>{name}</Typography>
-            )}
-            {headerEdit ? (
-              <RichTextField
-                value={description}
-                handleChange={setDescription}
-                label={'Description'}
-              />
-            ) : (
-              <RichTextRenderer content={description} />
-            )}
-          </CardContent>
-          <CardActions>
-            <Button onClick={() => setHeaderEdit(!headerEdit)}>
-              {headerEdit ? 'Confirmer' : 'Modifier'}
-            </Button>
-          </CardActions>
-        </Card>
-        <FormEditRoot />
-        <SaveForm name={name} description={description} uuid={params['uuid']} />
+        <FlexCol gap={3}>
+          {params['uuid'] && <ImportForm uuid={params['uuid']} />}
+          <FormHeaderFields />
+          <SelectBaseComponent />
+          <FormEditRoot />
+
+          <Button onClick={() => setShowForm(!showForm)}>Show form</Button>
+          {showForm && <FormPreview />}
+          <SaveForm />
+        </FlexCol>
       </FormProvider>
     </Container>
   );

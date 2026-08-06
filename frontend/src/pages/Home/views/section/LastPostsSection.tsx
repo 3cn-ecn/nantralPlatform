@@ -17,7 +17,7 @@ export function LastPostsSection({ enabled }: LastPostsSectionProps) {
   const { t } = useTranslation();
   const postsQuery = useLastPostsQuery(NUMBER_OF_POSTS, { enabled });
 
-  if (postsQuery.isLoading) {
+  if (postsQuery.isPending) {
     return (
       <Section title={t('home.postSection.title')}>
         <Grid container spacing={1}>

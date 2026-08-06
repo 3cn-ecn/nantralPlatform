@@ -1,5 +1,12 @@
 import { JsonSchema, UISchemaElement } from '@jsonforms/core';
 
+export interface UserRoleDTO {
+  id: number;
+  user: number;
+  form_schema: string;
+  role: string;
+}
+
 export interface JsonFormSchemaDTO {
   uuid: string;
   name: string;
@@ -19,3 +26,10 @@ export interface JsonFormAnswerDTO {
   modified_at: string;
   user: number;
 }
+
+export type JsonFormPreviewDTO = Pick<
+  JsonFormSchemaDTO,
+  'uuid' | 'name' | 'description'
+> & {
+  userrole_set: UserRoleDTO[];
+};

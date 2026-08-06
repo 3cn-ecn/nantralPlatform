@@ -94,7 +94,7 @@
     "@react-email/markdown": "^0.0.12",
     "@react-email/render": "^1.0.1",
     "@react-email/row": "^0.0.10",
-    "@tanstack/react-query": "^4.35.7",
+    "@tanstack/react-query": "^5.101.4",
     "@turf/helpers": "^6.3.0",
     "array-move": "^4.0.0",
     "axios": "^1.7.4",

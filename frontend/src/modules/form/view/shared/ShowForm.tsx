@@ -74,7 +74,7 @@ export function ShowForm({
     [createTranslator, jsonFormSchema],
   );
 
-  const { mutate, isLoading, error } = useMutation<
+  const { mutate, isPending, error } = useMutation<
     number,
     ErrorObject[],
     object
@@ -124,7 +124,7 @@ export function ShowForm({
           translate,
         }}
       />
-      <LoadingButton onClick={() => mutate(data)} loading={isLoading}>
+      <LoadingButton onClick={() => mutate(data)} loading={isPending}>
         {t('button.send')}
       </LoadingButton>
     </>

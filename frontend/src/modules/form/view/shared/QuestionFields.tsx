@@ -11,8 +11,7 @@ import {
   Switch,
 } from '@mui/material';
 import { UUID } from 'crypto';
-import { remove, set } from 'lodash';
-import { union } from 'lodash-es';
+import { set } from 'lodash';
 
 import { INPUT_TYPES } from '#modules/form/constants';
 import { useFormContext } from '#modules/form/hooks/useFormContext';
@@ -86,28 +85,15 @@ export function QuestionFields({ nodeId }: { nodeId: UUID }) {
       ),
     [setForm, form, nodeId, lang],
   );
-  const required = useMemo(() => {
-    if (node.parent === undefined) return true;
-    const parent = form.nodes[node.parent];
-    return parent.payload.options?.required?.includes(nodeId);
-  }, [node.parent, form.nodes, nodeId]);
+  const required = useMemo(
+    () => node.payload.required,
+    [node.payload.required],
+  );
   const setRequired = useCallback(
     (val: boolean) => {
-      if (node.parent === undefined) return;
-      const parent = form.nodes[node.parent];
-      let reqList: string[];
-      if (val) {
-        reqList = union(parent.payload.options?.required, [nodeId]);
-      } else {
-        reqList = remove(parent.payload.options?.required, nodeId);
-      }
-      return set(
-        form,
-        `nodes.${node.parent}.payload.options.required`,
-        reqList,
-      );
+      return setPayload(nodeId, { ...node.payload, required: val });
     },
-    [form, nodeId, node.parent],
+    [setPayload, nodeId, node.payload],
   );
   const input = useMemo(() => INPUT_TYPES[type], [type]);
 

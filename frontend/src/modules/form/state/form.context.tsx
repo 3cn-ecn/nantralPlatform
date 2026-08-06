@@ -20,7 +20,13 @@ export const FormContext = createContext<{
   draggedItem: string | null;
   setDraggedItem: Dispatch<SetStateAction<string | null>>;
 }>({
-  form: { root: crypto.randomUUID(), nodes: {} },
+  form: {
+    uuid: crypto.randomUUID(),
+    name: 'Form',
+    description: '',
+    root: crypto.randomUUID(),
+    nodes: {},
+  },
   dispatch: () => undefined,
   lang: 'fr',
   setLang: () => undefined,
