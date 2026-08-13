@@ -21,7 +21,7 @@
                     <a class='btn btn-dark' href="{% url 'family:family-list-join' %}">Rejoindre une famille existante</a>
                     <br><br><hr><br>
                     <p>Vous n'êtes pas un parrain ou une marraine ? Merci de vérifiez votre année d'entrée à Centrale 
-                    Nantes dans les <a href="{% url 'student:update' request.user.student.pk %}">paramètres</a> de
+                    Nantes dans les <a href="{{ request.user.get_absolute_url }}?tab=profile">paramètres</a> de
                     votre compte.</p>
                 {% else %}
                     <p>Désolé, la procédure de parrainage est terminée !</p>
@@ -93,7 +93,7 @@
                     <a href="{% url 'family:questionnary' 1 %}" class="btn btn-dark">Remplir le questionnaire 1ère année</a>
                     <br><br><hr><br>
                     <p>Ce n'est pas votre première année à Centrale ? Merci de vérifiez votre année de promotion
-                        dans les <a href="{% url 'student:update' request.user.student.pk %}">paramètres</a> de
+                        dans les <a href="{{ request.user.get_absolute_url }}?tab=profile">paramètres</a> de
                         votre compte.
                     </p>
                 {% else %}
