@@ -286,6 +286,3 @@ class CustomUserAdmin(UserAdmin):
             ],
             recipient_list=[user.email.email for user in queryset],
         )
-        for user in queryset:
-            if not user.email.is_valid:
-                send_email_confirmation(user.email, request)
