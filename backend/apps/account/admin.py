@@ -283,5 +283,5 @@ class CustomUserAdmin(UserAdmin):
                 }
                 for user in users
             ],
-            recipient_list=[user.email.email for user in queryset],
+            recipient_list=[user.email.email for user in users],
         )
