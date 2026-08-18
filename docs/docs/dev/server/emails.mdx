@@ -10,35 +10,23 @@ Platform website.
 
 ## Accessing the webmail
 
-The webmail is available at [`https://webmail.nantral-platform.fr/`](https://webmail.nantral-platform.fr/). There are currently 3 email accounts:
-
-- contact@nantral-platform.fr
-- group-manager@nantral-platform.fr
-- admin@nantral-platform.fr
-
-## Accessing the webmail administration page
-
-The webmail administration page is available at [`https://webmail.nantral-platform.fr/admin`](https://webmail.nantral-platform.fr/admin) with the `admin@nantral-platform.fr` email.
-
-To manage the accounts, you can login into this interface and go to `domains -> users (mail icon)`.
-
-Detailed administration on this interface is available [on the Mailu website](https://mailu.io/1.9/webadministration.html).
+There is no webmail configured currently. Use any mail client you wish to access emails.
 
 ## Architecture details
 
-We use [Mailu 1.9](https://mailu.io/) with Docker to handle our emails. This includes the following Docker containers:
+We use [Stalwart v0.15](https://stalw.art/) with Docker to handle our emails. The related
+docker container is `mailserver`.
 
-- front
-- resolver
-- admin
-- imap
-- smtp
-- antispam
-- fetchmail
-- webmail
-
-The SSL certificates are the ones used by our entire platform. We pass them to the container [when they are updated with Certbot](https://github.com/3cn-ecn/nantralPlatform/blob/da9649ad35d4379293d7ee0dbc6e921c490596dd/deployment/certbot-renew.sh#L27-L28) and [during deployment](https://github.com/3cn-ecn/nantralPlatform/blob/da9649ad35d4379293d7ee0dbc6e921c490596dd/.github/workflows/deploy.yml#L139-L140).
+One particular thing about this service is that it stores its logs in the
+`deployment/appdata/stalwart/data/logs/` instead of using docker logging system, so using
+`docker compose logs mailserver` will not show anything.
 
 The emails and accounts are stored on our Postgresql database.
 
 There is no authentification between Django and the SMTP server as they both operate on the same host. This means that any email adress ending in `@nantral-platform.fr` is valid (`foo@nantral-platform.fr`, `bar@nantral-platform.fr`, etc). You do not need to create it in order to use it.
+
+## Troubleshooting
+
+Errors may occur if docker network configuration change. Restarting the server is not enough,
+you may need to remove any existing networks (e.g. using `docker compose down`) and
+recreate them properly with `docker compose up`
