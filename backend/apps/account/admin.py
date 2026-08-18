@@ -13,7 +13,6 @@ from apps.utils.send_email import send_mass_email
 
 from .models import Email, InvitationLink, User
 from .tokens import email_confirmation_token
-from .utils import send_email_confirmation
 
 
 class UppercaseEmailFilter(admin.SimpleListFilter):
