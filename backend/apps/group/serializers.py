@@ -108,6 +108,9 @@ class GroupSerializer(serializers.ModelSerializer):
     category = serializers.SerializerMethodField()
     sub_category = serializers.SerializerMethodField()
     social_links = SocialLinkSerializer(many=True)
+    can_create_sport_event = serializers.BooleanField(
+        read_only=True, source="check_can_create_sport_event"
+    )
 
     class Meta:
         model = Group

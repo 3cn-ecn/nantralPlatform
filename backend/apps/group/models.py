@@ -1,3 +1,4 @@
+from django.contrib import admin
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.utils.translation import gettext_lazy as _
@@ -228,6 +229,13 @@ class Group(models.Model, SlugModel):
         default=False,
         help_text=_("Admin members of this group can pin their posts"),
     )
+    can_create_sport_event = models.BooleanField(
+        verbose_name=_("Can create sport events"),
+        blank=True,
+        null=True,
+        default=None,
+        help_text=_("Admin members of this group can create sport events"),
+    )
 
     # Profile
     summary = models.CharField(
@@ -322,6 +330,7 @@ class Group(models.Model, SlugModel):
             "address",
             "latitude",
             "longitude",
+            "can_create_sport_event",
         ),
         related_name="versions",
     )
@@ -366,6 +375,24 @@ class Group(models.Model, SlugModel):
                     "'private' properties to True.",
                 ),
             )
+
+    @property
+    @admin.display(description="Can create sport event (effectively)")
+    def check_can_create_sport_event(self) -> bool:
+        """Check if the group can create sport events.
+
+        Returns
+        -------
+        bool
+            True if the group can create sport events, False otherwise.
+
+        """
+        if self.can_create_sport_event is not None:
+            return self.can_create_sport_event
+        elif self.parent is not None:
+            return self.parent.check_can_create_sport_event
+        else:
+            return False
 
     @property
     def created_at(self):

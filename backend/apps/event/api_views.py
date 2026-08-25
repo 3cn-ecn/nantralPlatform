@@ -10,11 +10,12 @@ from rest_framework.response import Response
 from apps.account.serializers import UserPreviewSerializer
 from apps.utils.parse import parse_bool
 
-from .models import Event
+from .models import Event, SportEvent
 from .serializers import (
     EventPreviewSerializer,
     EventSerializer,
     EventWriteSerializer,
+    SportEventSerializer,
 )
 
 
@@ -30,6 +31,170 @@ class EventPermission(permissions.BasePermission):
                 return obj.can_view(request.user)
             return obj.group.is_admin(request.user)
         return obj.can_view(request.user)
+
+
+class SportEventViewSet(viewsets.ModelViewSet):
+    """An API endpoint for sport event.
+
+    Query Parameters
+    ----------------
+    - ordering: str = "date"
+        List of fields to order by, separated by ','. Prefix a field by '-' to
+        use descending order.
+    - search: str
+        search through all events
+    - group: str (accepted multiple times)
+        Filter by an organizing group slug
+    - from_date: ISO or UTC date string = None
+        filter event whose date is greater or equal to from_date
+    - to_date: ISO or UTC date string = None
+        filter event whose date is less or equal to to_date
+    - is_member: bool = None
+        whether user is member of the organizer group
+    - is_participating: bool = None
+        filter events current user is participating
+    - is_not_participating: bool = None
+        filter events current user is not participating
+    - is_registration_open: bool = None
+        whether registration is open or closed
+    - page: int
+        the index of the page
+    - page_size: int
+        the number of events per page
+
+    Actions
+    -------
+    - GET .../sport/ : get the list of sport event
+    - POST .../sport/ : create a new sport event
+    - GET .../sport/<id>/ : get a sport event
+    - PUT .../sport/<id>/ : update a sport event
+    - DELETE .../sport/<id>/ : delete a sport event
+    """
+
+    permission_classes = [permissions.IsAuthenticated]
+    filter_backends = [filters.SearchFilter, filters.OrderingFilter]
+    search_fields = ["description", "owner__name", "owner__short_name"]
+    ordering_fields = [
+        "date",
+        "owner__name",
+        "owner__short_name",
+        "location",
+        "type",
+        "description",
+    ]
+    ordering = ["date"]
+    serializer_class = SportEventSerializer
+
+    @property
+    def query_params(self) -> QueryDict:
+        return self.request.query_params
+
+    def get_queryset(self) -> QuerySet[Event]:
+        now = timezone.now()
+        user = self.request.user
+
+        # query params
+        group_params = self.query_params.getlist("group", [])
+        groups = ",".join(group_params).split(",") if group_params else []
+        is_member = parse_bool(self.query_params.get("is_member"))
+        is_not_participating = parse_bool(
+            self.query_params.get("is_not_participating")
+        )
+        is_participating = parse_bool(self.query_params.get("is_participating"))
+        from_date = self.query_params.get("from_date")
+        to_date = self.query_params.get("to_date")
+
+        # filtering
+        qs = SportEvent.objects.all()
+        if len(groups) > 0:
+            qs = qs.filter(owner__slug__in=groups)
+        if from_date:
+            qs = qs.filter(date__gte=from_date)
+        else:
+            qs = qs.filter(date__gte=now)
+        if to_date:
+            qs = qs.filter(date__lte=to_date)
+        if is_member is True:
+            qs = qs.filter(owner__members=user)
+        if is_member is False:
+            qs = qs.exclude(owner__members=user)
+        if is_participating is True:
+            qs = qs.filter(participants=user)
+        if is_participating is False:
+            qs = qs.exclude(participants=user)
+        if is_not_participating is True:
+            qs = qs.filter(non_participants=user)
+        if is_not_participating is False:
+            qs = qs.exclude(non_participants=user)
+
+        return qs.select_related("owner").distinct()
+
+    @action(detail=True, filter_backends=[])
+    def participants(self, request, pk=None):
+        event: SportEvent = self.get_object()
+        page = self.paginate_queryset(event.participants.all())
+        serializer = UserPreviewSerializer(page, many=True)
+        return self.get_paginated_response(serializer.data)
+
+    @action(detail=True, methods=["POST", "DELETE"])
+    def participate(self, request, pk=None):
+        """Add or remove a user from the participants."""
+        event: SportEvent = self.get_object()
+        # user asks to remove himself from participants
+        if request.method == "DELETE":
+            event.participants.remove(request.user)
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        # user asks to add himself to participants
+        now = timezone.now()
+        if event.date < now:
+            raise exceptions.PermissionDenied(
+                _("Too late! The event starts at %(datetime)s.")
+                % {"datetime": format_date(event.date)},
+            )
+        if not event.owner.is_member(request.user):
+            raise exceptions.PermissionDenied(
+                _("You are not a member of the group %(group)s.")
+                % {"group": event.owner.name},
+            )
+
+        # if we pass all criteria, add the user
+        event.non_participants.remove(request.user)
+        event.participants.add(request.user)
+        return Response(status=status.HTTP_201_CREATED)
+
+    @action(detail=True, methods=["POST", "DELETE"])
+    def not_participate(self, request, pk=None):
+        """Add or remove a user from the participants."""
+        event: SportEvent = self.get_object()
+        # user asks to remove himself from participants
+        if request.method == "DELETE":
+            event.not_participants.remove(request.user)
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        # user asks to add himself to participants
+        now = timezone.now()
+        if event.date < now:
+            raise exceptions.PermissionDenied(
+                _("Too late! The event starts at %(datetime)s.")
+                % {"datetime": format_date(event.date)},
+            )
+        if not event.owner.is_member(request.user):
+            raise exceptions.PermissionDenied(
+                _("You are not a member of the group %(group)s.")
+                % {"group": event.owner.name},
+            )
+
+        # if we pass all criteria, add the user
+        event.participants.remove(request.user)
+        event.non_participants.add(request.user)
+        return Response(status=status.HTTP_201_CREATED)
+
+    def perform_destroy(self, instance: SportEvent) -> None:
+        if not instance.owner.is_admin(self.request.user):
+            raise exceptions.PermissionDenied(
+                _("You have to be an admin of the group %(group)s.")
+                % {"group": instance.owner.name},
+            )
+        super().perform_destroy(instance)
 
 
 class EventViewSet(viewsets.ModelViewSet):

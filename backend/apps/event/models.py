@@ -1,9 +1,23 @@
+from enum import IntEnum
+
 from django.db import models
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
 from apps.account.models import User
+from apps.group.models import Group
 from apps.post.models import AbstractPublication
+
+
+class SportEventType(IntEnum):
+    """Enumeration for sport event types."""
+
+    TRAINING = 1
+    COMPETITION = 2
+
+    @classmethod
+    def choices(cls):
+        return [(key.value, key.name) for key in cls]
 
 
 class Event(AbstractPublication):
@@ -70,3 +84,45 @@ class Event(AbstractPublication):
         if self.end_date is None:
             self.end_date = self.start_date + timezone.timedelta(hours=1)
         super().save(*args, notification_body=f"Event : {self.title}", **kwargs)
+
+
+class SportEvent(models.Model):
+    """A model representing a sport event."""
+
+    description = models.TextField(
+        verbose_name=_("Description"),
+        blank=True,
+    )
+    owner = models.ForeignKey(
+        to=Group,
+        on_delete=models.CASCADE,
+        verbose_name=_("Groupe"),
+    )
+    date = models.DateTimeField(
+        verbose_name=_("Date"),
+    )
+    location = models.CharField(
+        verbose_name=_("Location"),
+        max_length=200,
+        blank=True,
+    )
+    type = models.PositiveSmallIntegerField(
+        verbose_name=_("Type"),
+        choices=SportEventType.choices(),
+        default=SportEventType.TRAINING,
+    )
+    participants = models.ManyToManyField(
+        to=User,
+        verbose_name=_("Participants"),
+        blank=True,
+        related_name="participating_sport_events",
+    )
+    non_participants = models.ManyToManyField(
+        to=User,
+        verbose_name=_("Non-participants"),
+        blank=True,
+        related_name="non_participating_sport_events",
+    )
+
+    def __str__(self) -> str:
+        return self.name

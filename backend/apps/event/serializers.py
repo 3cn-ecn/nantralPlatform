@@ -7,7 +7,77 @@ from apps.group.models import Group
 from apps.group.serializers import GroupPreviewSerializer
 from apps.utils.translation_model_serializer import TranslationModelSerializer
 
-from .models import Event
+from .models import Event, SportEvent
+
+
+class SportEventSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = SportEvent
+        read_only_fields = ["id"]
+        fields = [
+            "id",
+            "type",
+            "description",
+            "date",
+            "location",
+            "participants",
+            "non_participants",
+            "owner",
+        ]
+        translations_fields = ["description"]
+
+    def validate_date(self, value):
+        if value < timezone.now():
+            raise serializers.ValidationError(
+                _("The date cannot be in the past."),
+            )
+        return value
+
+    def validate_owner(self, value: Group) -> Group:
+        user = self.context["request"].user
+        if not value.is_admin(user):
+            raise serializers.ValidationError(
+                _("You have to be an admin of the organizer group."),
+            )
+        return value
+
+    def validate(self, data: dict) -> dict:
+        data = super().validate(data)
+        user = self.context["request"].user
+        owner = data.get("owner", getattr(self.instance, "owner", None))
+        date = data.get("date", getattr(self.instance, "date", None))
+        participants = data.get(
+            "participants",
+            list(self.instance.participants.all()) if self.instance else [],
+        )
+        non_participants = data.get(
+            "non_participants",
+            list(self.instance.non_participants.all()) if self.instance else [],
+        )
+
+        if date is not None and date < timezone.now():
+            raise serializers.ValidationError(
+                {"date": _("The date cannot be in the past.")},
+            )
+        if owner is not None and not owner.is_admin(user):
+            raise serializers.ValidationError(
+                {"owner": _("You have to be an admin of the organizer group.")}
+            )
+        participant_ids = {participant.id for participant in participants}
+        non_participant_ids = {user.id for user in non_participants}
+        overlap = participant_ids & non_participant_ids
+        if overlap:
+            raise serializers.ValidationError(
+                {
+                    "participants": _(
+                        "A user cannot be both a participant and a non-participant.",
+                    ),
+                    "non_participants": _(
+                        "A user cannot be both a participant and a non-participant.",
+                    ),
+                },
+            )
+        return data
 
 
 class EventSerializer(TranslationModelSerializer):
