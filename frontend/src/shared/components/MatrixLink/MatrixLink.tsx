@@ -37,18 +37,18 @@ function getElementWebUrl(matrix?: string): string {
 
 function getElementXUri(matrix: string): string {
   if (matrix.startsWith('@')) {
-    return `element-x://user/${encodeURIComponent(matrix)}`;
+    return `element://user/${encodeURIComponent(matrix)}`;
   }
 
   if (matrix.startsWith('#')) {
-    return `element-x://room/${encodeURIComponent(matrix)}`;
+    return `element://room/${encodeURIComponent(matrix)}`;
   }
 
   if (matrix.startsWith('!')) {
-    return `element-x://room/${encodeURIComponent(matrix)}`;
+    return `element://room/${encodeURIComponent(matrix)}`;
   }
 
-  return 'element-x://';
+  return 'element://';
 }
 
 function getAppStoreUrl(): string {
