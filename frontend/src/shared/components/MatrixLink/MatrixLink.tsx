@@ -1,4 +1,4 @@
-import { AnchorHTMLAttributes, forwardRef, MouseEvent } from 'react';
+import { AnchorHTMLAttributes, forwardRef } from 'react';
 
 const ELEMENT_WEB_URL = 'https://element.nantral-platform.fr';
 
@@ -17,11 +17,11 @@ export interface MatrixLinkProps extends AnchorHTMLAttributes<HTMLAnchorElement>
    *   #general:nantral-platform.fr
    *   !roomid:nantral-platform.fr
    *   !roomid
-   *
-   * Omit to open the Matrix home page.
    */
-  to?: string;
+  to: string;
 }
+
+export type MatrixHomeLinkProps = AnchorHTMLAttributes<HTMLAnchorElement>;
 
 function getElementWebUrl(matrix?: string): string {
   if (!matrix) {
@@ -74,58 +74,18 @@ function isMobile(): boolean {
 }
 
 export const MatrixLink = forwardRef<HTMLAnchorElement, MatrixLinkProps>(
-  function MatrixAction({ to, onClick, ...props }, ref) {
-    const href = getElementWebUrl(to);
+  function MatrixLink({ to, ...props }, ref) {
+    const href = isMobile() ? getElementXUri(to) : getElementWebUrl(to);
 
-    const handleClick = (event: MouseEvent<HTMLAnchorElement>) => {
-      onClick?.(event);
-
-      if (
-        event.defaultPrevented ||
-        event.metaKey ||
-        event.ctrlKey ||
-        event.shiftKey ||
-        event.altKey ||
-        event.button !== 0
-      ) {
-        return;
-      }
-
-      // Desktop: navigate normally to Element Web.
-      if (!isMobile()) {
-        return;
-      }
-
-      event.preventDefault();
-
-      const elementXUri = getElementXUri(to ?? '');
-
-      let appOpened = false;
-
-      const handleVisibilityChange = () => {
-        if (document.visibilityState === 'hidden') {
-          appOpened = true;
-        }
-      };
-
-      document.addEventListener('visibilitychange', handleVisibilityChange);
-
-      // Try to launch Element X.
-      window.location.href = elementXUri;
-
-      // If the app didn't open, send the user to the store.
-      window.setTimeout(() => {
-        document.removeEventListener(
-          'visibilitychange',
-          handleVisibilityChange,
-        );
-
-        if (!appOpened && document.visibilityState === 'visible') {
-          window.location.href = getAppStoreUrl();
-        }
-      }, 1500);
-    };
-
-    return <a {...props} ref={ref} href={href} onClick={handleClick} />;
+    return <a {...props} ref={ref} href={href} />;
   },
 );
+
+export const MatrixHomeLink = forwardRef<
+  HTMLAnchorElement,
+  MatrixHomeLinkProps
+>(function MatrixHomeLink({ ...props }, ref) {
+  const href = isMobile() ? getAppStoreUrl() : ELEMENT_WEB_URL;
+
+  return <a {...props} ref={ref} href={href} />;
+});

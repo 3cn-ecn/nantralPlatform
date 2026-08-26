@@ -10,7 +10,7 @@ import {
   Toolbar,
 } from '@mui/material';
 
-import { MatrixLink } from '#shared/components/MatrixLink/MatrixLink';
+import { MatrixHomeLink } from '#shared/components/MatrixLink/MatrixLink';
 import { useTranslation } from '#shared/i18n/useTranslation';
 
 import { AppMenuItem } from './AppMenuItem';
@@ -82,7 +82,7 @@ export function AppMenuPanel({ menuOpen, onClose }: AppMenuPanelProps) {
         <Divider />
         <ListItem disablePadding>
           <ListItemButton
-            component={MatrixLink}
+            component={MatrixHomeLink}
             sx={{
               color: 'success.main',
               '& span': { fontWeight: 500 },

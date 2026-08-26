@@ -19,7 +19,7 @@ import {
   styled,
 } from '@mui/material';
 
-import { MatrixLink } from '#shared/components/MatrixLink/MatrixLink';
+import { MatrixHomeLink } from '#shared/components/MatrixLink/MatrixLink';
 import { useBreakpoint } from '#shared/hooks/useBreakpoint';
 import { useTranslation } from '#shared/i18n/useTranslation';
 
@@ -172,7 +172,7 @@ export function HomeHeader() {
                 </Tooltip>
               </Stack>
               <Button
-                component={MatrixLink}
+                component={MatrixHomeLink}
                 variant="contained"
                 color={'success'}
                 size={'large'}
