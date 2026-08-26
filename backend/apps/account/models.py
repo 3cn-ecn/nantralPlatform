@@ -244,6 +244,15 @@ class Email(models.Model):
     )
     # Utilisé pour la vérification
     uuid = models.UUIDField(_("Unique ID"), unique=True, default=uuid.uuid4)
+    created_at = models.DateTimeField(
+        verbose_name=_("Created at"), auto_now_add=True
+    )
+    last_reminder_sent = models.DateTimeField(
+        verbose_name=_("Last reminder sent"),
+        null=True,
+        blank=True,
+        help_text=_("Tracks when the last verification reminder was sent"),
+    )
 
     def __str__(self):
         return self.email
