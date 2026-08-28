@@ -2,6 +2,7 @@ import { useState } from 'react';
 
 import {
   CalendarMonth,
+  QueryBuilder,
   Edit,
   Groups,
   LocationOn,
@@ -17,19 +18,18 @@ import {
   Chip,
   Divider,
   IconButton,
-  Stack,
   Tooltip,
   Typography,
   useTheme,
 } from '@mui/material';
 
-import { SportEvent } from '#modules/event/sportevent.type';
+import { SportEvent, SportEventType } from '#modules/event/sportevent.type';
 import { EditSportEventModal } from '#modules/event/view/Modals/EditSportEventModal';
 import { SportEventPeopleModal } from '#modules/event/view/SportEventPeopleModal';
 import { useGroupDetailsQuery } from '#modules/group/hooks/useGroupDetails.query';
 import { useSportEventParticipationMutation } from '#pages/Sport/hooks/useSportEventParticipationMutation';
 import { Avatar as GroupAvatar } from '#shared/components/Avatar/Avatar';
-import { FlexRow } from '#shared/components/FlexBox/FlexBox';
+import { FlexCol, FlexRow } from '#shared/components/FlexBox/FlexBox';
 import { LoadingButton } from '#shared/components/LoadingButton/LoadingButton';
 import { useTranslation } from '#shared/i18n/useTranslation';
 
@@ -74,8 +74,9 @@ export function SportEventCard({ sportEvent }: Readonly<SportEventCardProps>) {
         variant="outlined"
         sx={{
           width: '100%',
-          minWidth: 250,
-          maxWidth: 250,
+          height: '100%',
+          maxWidth: '250px',
+          maxHeight: '250px',
           display: 'flex',
           flexDirection: 'column',
           position: 'relative',
@@ -97,9 +98,17 @@ export function SportEventCard({ sportEvent }: Readonly<SportEventCardProps>) {
                 src={sportEvent.group.icon}
                 size="m"
               />
-              <Typography variant="subtitle1" fontWeight={800} noWrap>
-                {sportEvent.group.name}
-              </Typography>
+              <FlexCol>
+                <Typography variant="subtitle1" fontWeight={800} noWrap>
+                  {sportEvent.group.name}
+                </Typography>
+                <Chip
+                  label={SportEventType.toString(sportEvent.type)}
+                  variant="outlined"
+                  color="info"
+                  size="small"
+                />
+              </FlexCol>
             </FlexRow>
 
             {isAdmin && (
@@ -128,7 +137,7 @@ export function SportEventCard({ sportEvent }: Readonly<SportEventCardProps>) {
             <Typography>{eventDate}</Typography>
           </FlexRow>
           <FlexRow gap={0.5} alignItems="center">
-            <CalendarMonth sx={{ fontSize: 16 }} />
+            <QueryBuilder sx={{ fontSize: 16 }} />
             <Typography>{sportEvent.date.toLocaleTimeString()}</Typography>
           </FlexRow>
           <FlexRow gap={0.5} alignItems="center">

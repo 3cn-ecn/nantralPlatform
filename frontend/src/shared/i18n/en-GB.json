@@ -1053,6 +1053,10 @@
   },
   "sport": {
     "pageTitle": "Sports schedule",
+    "eventType": {
+      "training": "Training",
+      "competition": "Competition"
+    },
     "dayDisplay": {
       "completed": "Finished",
       "later": "Later"

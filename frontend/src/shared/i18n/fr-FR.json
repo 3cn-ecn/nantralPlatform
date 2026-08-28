@@ -1050,6 +1050,10 @@
   },
   "sport": {
     "pageTitle": "Planning des sports",
+    "eventType": {
+      "training": "Entraînement",
+      "competition": "Compétition"
+    },
     "dayDisplay": {
       "completed": "Terminé",
       "later": "Plus tard"
