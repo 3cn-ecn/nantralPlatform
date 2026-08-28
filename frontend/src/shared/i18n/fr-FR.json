@@ -1047,5 +1047,12 @@
       "failure": "Le lien n'a pas pu être copié",
       "success": "Lien copié !"
     }
+  },
+  "sport": {
+    "pageTitle": "Planning des sports",
+    "dayDisplay": {
+      "completed": "Terminé",
+      "later": "Plus tard"
+    }
   }
 }

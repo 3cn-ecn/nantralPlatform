@@ -16,6 +16,7 @@ from .serializers import (
     EventSerializer,
     EventWriteSerializer,
     SportEventSerializer,
+    SportEventWriteSerializer,
 )
 
 
@@ -55,8 +56,6 @@ class SportEventViewSet(viewsets.ModelViewSet):
         filter events current user is participating
     - is_not_participating: bool = None
         filter events current user is not participating
-    - is_registration_open: bool = None
-        whether registration is open or closed
     - page: int
         the index of the page
     - page_size: int
@@ -88,6 +87,11 @@ class SportEventViewSet(viewsets.ModelViewSet):
     @property
     def query_params(self) -> QueryDict:
         return self.request.query_params
+
+    def get_serializer_class(self):
+        if self.request.method in ["POST", "PUT", "PATCH"]:
+            return SportEventWriteSerializer
+        return SportEventSerializer
 
     def get_queryset(self) -> QuerySet[Event]:
         now = timezone.now()
@@ -133,6 +137,13 @@ class SportEventViewSet(viewsets.ModelViewSet):
     def participants(self, request, pk=None):
         event: SportEvent = self.get_object()
         page = self.paginate_queryset(event.participants.all())
+        serializer = UserPreviewSerializer(page, many=True)
+        return self.get_paginated_response(serializer.data)
+
+    @action(detail=True, filter_backends=[])
+    def non_participants(self, request, pk=None):
+        event: SportEvent = self.get_object()
+        page = self.paginate_queryset(event.non_participants.all())
         serializer = UserPreviewSerializer(page, many=True)
         return self.get_paginated_response(serializer.data)
 

@@ -1050,5 +1050,12 @@
       "failure": "The link could not be copied",
       "success": "Link copied!"
     }
+  },
+  "sport": {
+    "pageTitle": "Sports schedule",
+    "dayDisplay": {
+      "completed": "Finished",
+      "later": "Later"
+    }
   }
 }

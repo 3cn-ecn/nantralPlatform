@@ -49,7 +49,9 @@ class SportEventAPITestCase(APITestCase):
             password="",
         )
         self.group_type = GroupType.objects.create(name="T1", slug="t1")
-        self.group = Group.objects.create(name="SportClub", group_type=self.group_type)
+        self.group = Group.objects.create(
+            name="SportClub", group_type=self.group_type
+        )
         self.group.members.add(self.admin, through_defaults={"admin": True})
         self.group.members.add(self.member)
         self.event = SportEvent.objects.create(
@@ -202,20 +204,32 @@ class SportEventAPITestCase(APITestCase):
         )
         self.assertEqual(update_response.status_code, status.HTTP_200_OK)
 
-        delete_response = self.client.delete(f"/api/event/sport/{sport_event_id}/")
-        self.assertEqual(delete_response.status_code, status.HTTP_204_NO_CONTENT)
+        delete_response = self.client.delete(
+            f"/api/event/sport/{sport_event_id}/"
+        )
+        self.assertEqual(
+            delete_response.status_code, status.HTTP_204_NO_CONTENT
+        )
 
     def test_member_can_join(self):
         self.client.force_login(self.member)
         self.event.non_participants.add(self.member)
-        response = self.client.post(f"/api/event/sport/{self.event.id}/participate/")
+        response = self.client.post(
+            f"/api/event/sport/{self.event.id}/participate/"
+        )
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-        self.assertTrue(self.event.participants.filter(id=self.member.id).exists())
-        self.assertFalse(self.event.non_participants.filter(id=self.member.id).exists())
+        self.assertTrue(
+            self.event.participants.filter(id=self.member.id).exists()
+        )
+        self.assertFalse(
+            self.event.non_participants.filter(id=self.member.id).exists()
+        )
 
     def test_outsider_cannot_join(self):
         self.client.force_login(self.outsider)
-        response = self.client.post(f"/api/event/sport/{self.event.id}/participate/")
+        response = self.client.post(
+            f"/api/event/sport/{self.event.id}/participate/"
+        )
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_member_can_switch_to_non_participant(self):
@@ -225,7 +239,9 @@ class SportEventAPITestCase(APITestCase):
             f"/api/event/sport/{self.event.id}/not_participate/"
         )
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-        self.assertFalse(self.event.participants.filter(id=self.member.id).exists())
+        self.assertFalse(
+            self.event.participants.filter(id=self.member.id).exists()
+        )
         self.assertTrue(
             self.event.non_participants.filter(id=self.member.id).exists()
         )

@@ -11,20 +11,59 @@ from .models import Event, SportEvent
 
 
 class SportEventSerializer(serializers.ModelSerializer):
+    is_participating = serializers.SerializerMethodField()
+    participants = serializers.SerializerMethodField()
+    non_participants = serializers.SerializerMethodField()
+    owner = GroupPreviewSerializer(read_only=True)
+
     class Meta:
         model = SportEvent
-        read_only_fields = ["id"]
+        read_only_fields = ["id", "participants", "non_participants", "owner"]
         fields = [
             "id",
             "type",
             "description",
             "date",
             "location",
+            "is_participating",
             "participants",
             "non_participants",
             "owner",
         ]
         translations_fields = ["description"]
+
+    def get_is_participating(self, obj: SportEvent):
+        is_participating = None
+        user = self.context["request"].user
+        if obj.participants.filter(id=user.id).exists():
+            is_participating = True
+        elif obj.non_participants.filter(id=user.id).exists():
+            is_participating = False
+        return is_participating
+
+    def get_participants(self, obj: SportEvent):
+        return obj.participants.count()
+
+    def get_non_participants(self, obj: SportEvent):
+        return obj.non_participants.count()
+
+
+class SportEventWriteSerializer(serializers.ModelSerializer):
+    owner = serializers.PrimaryKeyRelatedField(queryset=Group.objects.all())
+
+    class Meta:
+        model = SportEvent
+        fields = [
+            "id",
+            "type",
+            "description",
+            "date",
+            "location",
+            "owner",
+            "participants",
+            "non_participants",
+        ]
+        read_only_fields = ["id"]
 
     def validate_date(self, value):
         if value < timezone.now():
@@ -43,9 +82,6 @@ class SportEventSerializer(serializers.ModelSerializer):
 
     def validate(self, data: dict) -> dict:
         data = super().validate(data)
-        user = self.context["request"].user
-        owner = data.get("owner", getattr(self.instance, "owner", None))
-        date = data.get("date", getattr(self.instance, "date", None))
         participants = data.get(
             "participants",
             list(self.instance.participants.all()) if self.instance else [],
@@ -54,15 +90,6 @@ class SportEventSerializer(serializers.ModelSerializer):
             "non_participants",
             list(self.instance.non_participants.all()) if self.instance else [],
         )
-
-        if date is not None and date < timezone.now():
-            raise serializers.ValidationError(
-                {"date": _("The date cannot be in the past.")},
-            )
-        if owner is not None and not owner.is_admin(user):
-            raise serializers.ValidationError(
-                {"owner": _("You have to be an admin of the organizer group.")}
-            )
         participant_ids = {participant.id for participant in participants}
         non_participant_ids = {user.id for user in non_participants}
         overlap = participant_ids & non_participant_ids
