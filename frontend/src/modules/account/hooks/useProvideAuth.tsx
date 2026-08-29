@@ -64,7 +64,7 @@ export function useProvideAuth(): ProvideAuthValues {
 
   return {
     isPending: isPending || isLogoutPending || isLoginPending,
-    isAuthenticated: !!isAuthenticated,
+    isAuthenticated,
     logout,
     login,
     error,

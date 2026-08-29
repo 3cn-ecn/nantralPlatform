@@ -4,6 +4,7 @@ import { QueryClient } from '@tanstack/react-query';
 
 import { getCurrentUserApi } from '#modules/account/api/getCurrentUser.api';
 import { getUserDetailsApi } from '#modules/account/api/getUserDetails.api';
+import { emptyUser } from '#modules/account/hooks/useCurrentUser.data';
 import { User } from '#modules/account/user.types';
 import { getGroupDetailsApi } from '#modules/group/api/getGroupDetails.api';
 import { getGroupTypeDetailsApi } from '#modules/group/api/getGroupTypeDetails.api';
@@ -17,13 +18,15 @@ export async function userDetailsLoader(
   const { id } = params;
   const currentUser =
     (queryClient.getQueryData(['user', 'current']) as User) ??
-    (await queryClient.fetchQuery({
-      queryFn: ({ signal }) => getCurrentUserApi({ signal }),
-      queryKey: ['user', 'current'],
-    }));
+    (await queryClient
+      .fetchQuery({
+        queryFn: ({ signal }) => getCurrentUserApi({ signal }),
+        queryKey: ['user', 'current'],
+      })
+      .catch(() => emptyUser));
 
   if (id === 'me') {
-    return redirect(`/student/${currentUser.id}`);
+    return redirect(currentUser.url);
   }
 
   if (id === currentUser.id.toString()) {
@@ -31,7 +34,7 @@ export async function userDetailsLoader(
       extraCrumb: {
         id: 'user me',
         label: currentUser.name,
-        path: `/student/${currentUser.id}`,
+        path: currentUser.url,
       },
     };
   }
@@ -39,7 +42,7 @@ export async function userDetailsLoader(
   const parsedId = id ? Number.parseInt(id) : undefined;
 
   if (!parsedId) {
-    return redirect('/404');
+    return redirect('/404/');
   }
 
   const user =
@@ -56,7 +59,7 @@ export async function userDetailsLoader(
     }));
 
   if (user.id === -1) {
-    return redirect('/404');
+    return redirect('/404/');
   }
 
   return {
@@ -97,7 +100,7 @@ export async function groupListLoader(
       ],
     };
   } catch {
-    return redirect('/group');
+    return redirect('/group/');
   }
 }
 

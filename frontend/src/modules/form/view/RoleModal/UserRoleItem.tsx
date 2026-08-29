@@ -25,7 +25,7 @@ export function UserRoleItem({
   handleUpdate: (id: number, role: UserRole['role']) => void;
   isPending?: boolean;
 }) {
-  const { data: user, isSuccess } = useUserDetails(role.user.toString());
+  const { data: user, isSuccess } = useUserDetails(role.user);
 
   if (!isSuccess) {
     return (

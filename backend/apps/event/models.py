@@ -63,7 +63,7 @@ class Event(AbstractPublication):
         return self.participants.all().count()
 
     def get_absolute_url(self) -> str:
-        return f"/event/{self.id}"
+        return f"/event/{self.id}/"
 
     def save(self, *args, **kwargs) -> None:
         # set end date to 1 hour after begin date if not set

@@ -54,7 +54,7 @@ class InvitationLink(models.Model):
          {self.expires_at.strftime("%d/%m/%Y, %H:%M:%S")})"""
 
     def get_absolute_url(self):
-        return f"/register?uuid={self.id}/"
+        return f"/register/?uuid={self.id}"
 
     def is_valid(self) -> bool:
         """Return True if invitation is not expired."""
@@ -126,7 +126,7 @@ class User(AbstractUser):
     )
 
     def get_absolute_url(self) -> str:
-        return f"/student/{self.pk}"
+        return f"/student/{self.pk}/"
 
     @property
     def name(self):

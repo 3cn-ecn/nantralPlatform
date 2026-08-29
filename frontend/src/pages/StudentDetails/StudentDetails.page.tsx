@@ -14,7 +14,9 @@ import { useUserDetails } from './hooks/useUserDetails';
 
 export default function StudentDetailsPage() {
   const { id } = useParams();
-  const { isPending, data: user } = useUserDetails(id);
+  const { isPending, data: user } = useUserDetails(
+    id === undefined || id === 'me' ? id : Number.parseInt(id),
+  );
 
   const currentUser = useCurrentUserData();
 
