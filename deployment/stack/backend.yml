@@ -40,7 +40,7 @@ services:
     depends_on:
       - database
       - redis
-    env_file: ../backend.env
+    env_file: ../backend-staging.env
     environment:
       - STAGING=True
       - "TZ=Europe/Paris"
