@@ -1,5 +1,16 @@
-import { Drawer, List, Toolbar } from '@mui/material';
+import {
+  Divider,
+  Drawer,
+  Icon,
+  List,
+  ListItem,
+  ListItemButton,
+  ListItemIcon,
+  ListItemText,
+  Toolbar,
+} from '@mui/material';
 
+import { MatrixHomeLink } from '#shared/components/MatrixLink/MatrixLink';
 import { useTranslation } from '#shared/i18n/useTranslation';
 
 import { AppMenuItem } from './AppMenuItem';
@@ -68,6 +79,26 @@ export function AppMenuPanel({ menuOpen, onClose }: AppMenuPanelProps) {
           iconPath="/static/img/icons/cropped/sign.svg"
           closeMenu={onClose}
         />
+        <Divider />
+        <ListItem disablePadding>
+          <ListItemButton
+            component={MatrixHomeLink}
+            sx={{
+              color: 'success.main',
+              '& span': { fontWeight: 500 },
+            }}
+          >
+            <ListItemIcon>
+              <Icon
+                component={'img'}
+                src={'/static/img/element.webp'}
+                alt=""
+                sx={{ scale: 2.5 }}
+              />
+            </ListItemIcon>
+            <ListItemText>Element</ListItemText>
+          </ListItemButton>
+        </ListItem>
       </List>
     </Drawer>
   );
