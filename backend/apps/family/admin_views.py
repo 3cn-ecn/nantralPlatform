@@ -1,5 +1,6 @@
 # ruff: noqa: N806
 import sys
+import traceback
 
 from django.contrib import messages
 from django.db.models import Q
@@ -128,12 +129,10 @@ class ResultsView(UserIsInGroup, TemplateView):
                         },
                     )
         except Exception:
-            exc_type, exc_value, exc_traceback = sys.exc_info()
+            exc = sys.exc_info()
             message = format_html(
-                "An error occurred while creating the families: {}: {}<br/><pre><code>{}</code></pre>",
-                exc_type,
-                exc_value,
-                exc_traceback,
+                "An error occurred while creating the families:<br/><pre><code>{}</code></pre>",
+                "\n".join(traceback.format_exception(*exc)),
             )
             messages.error(self.request, message)
         context["families"] = families
