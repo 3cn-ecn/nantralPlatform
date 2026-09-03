@@ -1,4 +1,3 @@
-# ruff: noqa: ERA001
 
 import logging
 import os
@@ -6,6 +5,7 @@ import os
 from django.conf import settings
 
 from celery import Celery
+from celery.schedules import crontab
 
 logger = logging.getLogger(__name__)
 
@@ -27,12 +27,19 @@ app.autodiscover_tasks(settings.COMMON_APPS)
 
 @app.on_after_finalize.connect
 def setup_periodic_tasks(sender: Celery, **kwargs):
-    pass
-    # set schedule for non shared tasks here.
-    # sender.add_periodic_task(
-    #     crontab(minute="*/1"),
-    #     debug_task.s()
-    # )
+    # Schedule email verification reminders to run daily at 9 AM
+    sender.add_periodic_task(
+        crontab(hour=9, minute=0),
+        "apps.account.tasks.send_email_verification_reminders",
+        name="send-email-verification-reminders",
+    )
+    
+    # Schedule deletion of unverified emails to run daily at 10 AM
+    sender.add_periodic_task(
+        crontab(hour=10, minute=0),
+        "apps.account.tasks.delete_unverified_emails",
+        name="delete-unverified-emails",
+    )
 
 
 @app.task(bind=True)
