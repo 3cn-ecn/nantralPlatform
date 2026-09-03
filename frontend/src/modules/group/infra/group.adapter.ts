@@ -28,6 +28,7 @@ export function adaptGroupPreview(groupDTO: GroupPreviewDTO): GroupPreview {
     icon: groupDTO.icon,
     category: groupDTO.category,
     subCategory: groupDTO?.sub_category,
+    canCreateSportEvent: groupDTO?.can_create_sport_event,
   };
 }
 
@@ -49,6 +50,7 @@ export function adaptMapGroupPreview(
     summary: groupDTO.summary,
     banner: groupDTO.banner,
     members: groupDTO.members.map((userDTO) => adaptUserPreview(userDTO)),
+    canCreateSportEvent: groupDTO?.can_create_sport_event,
   };
 }
 
@@ -85,6 +87,7 @@ export function adaptGroup(groupDTO: GroupDTO): Group {
     address: groupDTO.address,
     latitude: groupDTO.latitude,
     longitude: groupDTO.longitude,
+    canCreateSportEvent: groupDTO?.can_create_sport_event,
   };
 }
 

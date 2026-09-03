@@ -6,7 +6,7 @@ import { SportEventFormDTO } from './sportevent.dto';
 export function convertSportEventForm(form: SportEventForm): SportEventFormDTO {
   return {
     ...convertTranslatedField(form.descriptionTranslated, 'description'),
-    group: form.group,
+    owner: form.group,
     location: form.location,
     date: form.date.toISOString(),
     type: form.type,

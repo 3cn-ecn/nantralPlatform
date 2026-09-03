@@ -10,7 +10,7 @@ from apps.utils.translation_model_serializer import TranslationModelSerializer
 from .models import Event, SportEvent
 
 
-class SportEventSerializer(serializers.ModelSerializer):
+class SportEventSerializer(TranslationModelSerializer):
     is_participating = serializers.SerializerMethodField()
     participants = serializers.SerializerMethodField()
     non_participants = serializers.SerializerMethodField()
@@ -31,6 +31,7 @@ class SportEventSerializer(serializers.ModelSerializer):
             "owner",
         ]
         translations_fields = ["description"]
+        translations_only = False
 
     def get_is_participating(self, obj: SportEvent):
         is_participating = None
@@ -48,7 +49,7 @@ class SportEventSerializer(serializers.ModelSerializer):
         return obj.non_participants.count()
 
 
-class SportEventWriteSerializer(serializers.ModelSerializer):
+class SportEventWriteSerializer(TranslationModelSerializer):
     owner = serializers.PrimaryKeyRelatedField(queryset=Group.objects.all())
 
     class Meta:
@@ -63,7 +64,9 @@ class SportEventWriteSerializer(serializers.ModelSerializer):
             "participants",
             "non_participants",
         ]
-        read_only_fields = ["id"]
+        read_only_fields = ["id", "participants", "non_participants"]
+        translations_fields = ["description"]
+        translations_only = False
 
     def validate_date(self, value):
         if value < timezone.now():

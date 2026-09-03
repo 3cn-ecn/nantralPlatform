@@ -41,14 +41,14 @@ export function SportEventFormFields({
   const fetchInitialGroupOptions = useCallback(
     () =>
       getGroupListApi({ pageSize: 7, isAdmin: true }).then(
-        (data) => data.results,
+        (data) => data.results.filter((e) => e.canCreateSportEvent),
       ),
     [],
   );
   const fetchGroupOptions = useCallback(
     (searchText: string) =>
-      getGroupListApi({ search: searchText, pageSize: 10 }).then(
-        (data) => data.results,
+      getGroupListApi({ search: searchText, pageSize: 10, isAdmin: true }).then(
+        (data) => data.results.filter((e) => e.canCreateSportEvent),
       ),
     [],
   );

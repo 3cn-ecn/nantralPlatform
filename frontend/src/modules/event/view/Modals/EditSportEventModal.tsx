@@ -19,7 +19,7 @@ interface EditSportEventModalProps {
 export function EditSportEventModal({
   sportEventId,
   onClose,
-}: EditSportEventModalProps) {
+}: Readonly<EditSportEventModalProps>) {
   const sportEventQuery = useSportEventDetailsQuery(sportEventId);
 
   if (sportEventQuery.isLoading) {

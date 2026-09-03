@@ -1050,6 +1050,26 @@
   },
   "sport": {
     "pageTitle": "Planning des sports",
+    "filters": {
+      "allClubs": "Tous les clubs",
+      "myClubsOnly": "Mes clubs seulement"
+    },
+    "noEvents": "Aucun événement sportif prévu",
+    "noDescription": "Aucune description",
+    "participants_one": "{{count}} participant",
+    "participants_other": "{{count}} participants",
+    "participants_zero": "{{count}} participant",
+    "participation": {
+      "participating": "Tu participes",
+      "notParticipating": "Tu ne participes pas"
+    },
+    "actions": {
+      "question": "Je participe ?",
+      "yes": "Oui",
+      "no": "Non",
+      "participate": "Participer",
+      "nonParticipant": "Non-participant"
+    },
     "eventType": {
       "training": "Entraînement",
       "competition": "Compétition"

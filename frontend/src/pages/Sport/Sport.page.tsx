@@ -52,12 +52,12 @@ export default function SportPage() {
           >
             <ToggleButton value={false} sx={{ gap: 1, pl: 2, pr: 1.5 }}>
               <GroupsIcon fontSize="small" />
-              {bk.isLarger && t('event.grid.label')}
+              {bk.isLarger && t('sport.filters.allClubs')}
             </ToggleButton>
 
             <ToggleButton value={true} sx={{ gap: 1, pl: 2, pr: 1.5 }}>
               <PersonIcon fontSize="small" />
-              {bk.isLarger && t('event.grid.label')}
+              {bk.isLarger && t('sport.filters.myClubsOnly')}
             </ToggleButton>
           </ToggleButtonGroup>
         </FlexCol>
@@ -65,19 +65,21 @@ export default function SportPage() {
       <Spacer vertical={2} />
       {(() => {
         if (count === 0) {
-          return <Typography>{t('group.list.noGroup')}</Typography>;
+          return <Typography>{t('sport.noEvents')}</Typography>;
         } else {
           return (
             <InfiniteList query={query}>
               {Array.from(groupByDay.entries()).map(([date, sportEvents]) => (
                 <div key={date}>
                   <Typography variant="h2">{dayDisplay(date)}</Typography>
+                  <Spacer vertical={1} />
                   {sportEvents.map((sportEvent: SportEvent) => (
                     <SportEventCard
                       key={sportEvent.id}
                       sportEvent={sportEvent}
                     />
                   ))}
+                  <Spacer vertical={2} />
                 </div>
               ))}
             </InfiniteList>

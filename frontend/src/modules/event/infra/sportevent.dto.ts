@@ -19,5 +19,5 @@ export type SportEventFormDTO = Pick<
 > & {
   // keep unused fields for typing errors
   description: undefined;
-  group: number; // id of group
+  owner: number; // id of group
 } & TranslatedFieldsDTO<'description'>;

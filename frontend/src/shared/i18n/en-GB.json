@@ -1053,6 +1053,26 @@
   },
   "sport": {
     "pageTitle": "Sports schedule",
+    "filters": {
+      "allClubs": "All clubs",
+      "myClubsOnly": "My clubs only"
+    },
+    "noEvents": "No sport events planned",
+    "noDescription": "No description",
+    "participants_one": "{{count}} participant",
+    "participants_other": "{{count}} participants",
+    "participants_zero": "{{count}} participant",
+    "participation": {
+      "participating": "You are participating",
+      "notParticipating": "You are not participating"
+    },
+    "actions": {
+      "question": "Participating?",
+      "yes": "Yes",
+      "no": "No",
+      "participate": "Participate",
+      "nonParticipant": "Non-participant"
+    },
     "eventType": {
       "training": "Training",
       "competition": "Competition"

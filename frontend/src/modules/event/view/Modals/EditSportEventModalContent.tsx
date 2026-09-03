@@ -50,6 +50,7 @@ export function EditSportEventModalContent({
 
   const onSubmit = (e: FormEvent, values: SportEventForm) => {
     e.preventDefault();
+    console.log(values);
     mutate(
       { id: sportEvent.id, data: values },
       {

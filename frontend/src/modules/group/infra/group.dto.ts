@@ -34,6 +34,7 @@ export interface GroupDTO {
   address: string;
   latitude: number;
   longitude: number;
+  can_create_sport_event: boolean;
 }
 
 export type GroupPreviewDTO = Pick<
@@ -46,6 +47,7 @@ export type GroupPreviewDTO = Pick<
   | 'icon'
   | 'category'
   | 'sub_category'
+  | 'can_create_sport_event'
 >;
 
 export type MapGroupPreviewDTO = GroupPreviewDTO &

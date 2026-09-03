@@ -6,8 +6,6 @@ import {
   Edit,
   Groups,
   LocationOn,
-  People,
-  PersonOff,
 } from '@mui/icons-material';
 import {
   alpha,
@@ -31,6 +29,7 @@ import { useSportEventParticipationMutation } from '#pages/Sport/hooks/useSportE
 import { Avatar as GroupAvatar } from '#shared/components/Avatar/Avatar';
 import { FlexCol, FlexRow } from '#shared/components/FlexBox/FlexBox';
 import { LoadingButton } from '#shared/components/LoadingButton/LoadingButton';
+import { RichTextRenderer } from '#shared/components/RichTextRenderer/RichTextRenderer';
 import { useTranslation } from '#shared/i18n/useTranslation';
 
 interface SportEventCardProps {
@@ -38,7 +37,7 @@ interface SportEventCardProps {
 }
 
 export function SportEventCard({ sportEvent }: Readonly<SportEventCardProps>) {
-  const { formatDate } = useTranslation();
+  const { t, formatDate, formatTime } = useTranslation();
   const theme = useTheme();
   const [isOpenEditModal, setIsOpenEditModal] = useState(false);
   const [isOpenPeopleModal, setIsOpenPeopleModal] = useState(false);
@@ -59,12 +58,12 @@ export function SportEventCard({ sportEvent }: Readonly<SportEventCardProps>) {
     year: 'numeric',
   });
 
-  const participationLabel =
-    sportEvent.isParticipating === true
-      ? 'Tu participes'
-      : sportEvent.isParticipating === false
-        ? 'Tu ne participes pas'
-        : null;
+  let participationLabel = null;
+  if (sportEvent.isParticipating === true) {
+    participationLabel = t('sport.participation.participating');
+  } else if (sportEvent.isParticipating === false) {
+    participationLabel = t('sport.participation.notParticipating');
+  }
 
   const hasDescription = Boolean(sportEvent.description?.trim());
 
@@ -82,17 +81,24 @@ export function SportEventCard({ sportEvent }: Readonly<SportEventCardProps>) {
           position: 'relative',
         }}
       >
-        <CardContent sx={{ pt: 2.25, pb: 1.75 }}>
+        <CardContent
+          sx={{
+            pt: 2.25,
+            pb: 1.75,
+            flex: 1,
+            minHeight: 0,
+            display: 'flex',
+            flexDirection: 'column',
+            overflowY: 'auto',
+            overflowX: 'hidden',
+          }}
+        >
           <FlexRow
             alignItems="flex-start"
             justifyContent="space-between"
             gap={1}
           >
-            <FlexRow
-              alignItems="center"
-              justifyContent="space-between"
-              gap={1}
-            >
+            <FlexRow alignItems="center" justifyContent="space-between" gap={1}>
               <GroupAvatar
                 alt={sportEvent.group.name}
                 src={sportEvent.group.icon}
@@ -112,7 +118,7 @@ export function SportEventCard({ sportEvent }: Readonly<SportEventCardProps>) {
             </FlexRow>
 
             {isAdmin && (
-              <Tooltip title="Modifier">
+              <Tooltip title={t('button.edit')}>
                 <IconButton
                   size="small"
                   onClick={() => setIsOpenEditModal(true)}
@@ -138,7 +144,7 @@ export function SportEventCard({ sportEvent }: Readonly<SportEventCardProps>) {
           </FlexRow>
           <FlexRow gap={0.5} alignItems="center">
             <QueryBuilder sx={{ fontSize: 16 }} />
-            <Typography>{sportEvent.date.toLocaleTimeString()}</Typography>
+            <Typography>{formatTime(sportEvent.date)}</Typography>
           </FlexRow>
           <FlexRow gap={0.5} alignItems="center">
             <LocationOn sx={{ fontSize: 16 }} />
@@ -147,17 +153,16 @@ export function SportEventCard({ sportEvent }: Readonly<SportEventCardProps>) {
           <Typography
             variant="body2"
             sx={{
-              mt: 1.75,
-              display: '-webkit-box',
-              WebkitBoxOrient: 'vertical',
-              WebkitLineClamp: 4,
-              overflow: 'hidden',
+              mt: 0,
+              pt: 0,
               color: hasDescription ? 'text.secondary' : 'text.disabled',
               fontStyle: hasDescription ? 'normal' : 'italic',
               lineHeight: 1.5,
             }}
           >
-            {hasDescription ? sportEvent.description : 'Aucune description'}
+            <RichTextRenderer
+              content={sportEvent.description || t('sport.noDescription')}
+            />
           </Typography>
         </CardContent>
 
@@ -169,12 +174,13 @@ export function SportEventCard({ sportEvent }: Readonly<SportEventCardProps>) {
             py: 1.25,
             gap: 1,
             display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            flexWrap: 'wrap',
+            flexShrink: 0,
+            flexDirection: 'column',
+            alignItems: 'stretch',
+            flexWrap: 'nowrap',
           }}
         >
-          <FlexRow gap={1} alignItems="center" flexWrap="wrap">
+          <FlexRow gap={1} alignItems="center" flexWrap="wrap" width="100%">
             <Button
               size="small"
               variant="text"
@@ -182,37 +188,22 @@ export function SportEventCard({ sportEvent }: Readonly<SportEventCardProps>) {
               onClick={() => setIsOpenPeopleModal(true)}
               sx={{ fontWeight: 700, px: 1 }}
             >
-              {sportEvent.participantsCount} participant
-              {sportEvent.participantsCount > 1 ? 's' : ''}
+              {t('sport.participants', {
+                count: sportEvent.participantsCount,
+              })}
             </Button>
-
-            {participationLabel && (
-              <Chip
-                size="small"
-                icon={
-                  sportEvent.isParticipating ? (
-                    <People sx={{ fontSize: 16 }} />
-                  ) : (
-                    <PersonOff sx={{ fontSize: 16 }} />
-                  )
-                }
-                label={participationLabel}
-                color={sportEvent.isParticipating ? 'success' : 'default'}
-                variant={sportEvent.isParticipating ? 'filled' : 'outlined'}
-                sx={{
-                  borderRadius: 999,
-                  fontWeight: 600,
-                  ...(sportEvent.isParticipating && {
-                    bgcolor: alpha(theme.palette.success.main, 0.16),
-                    color: theme.palette.success.main,
-                  }),
-                }}
-              />
-            )}
           </FlexRow>
 
           {isMember && (
-            <FlexRow gap={0.75} flexWrap="wrap" justifyContent="flex-end">
+            <FlexRow
+              gap={0.75}
+              alignItems="center"
+              justifyContent="space-between"
+              width="100%"
+            >
+              <Typography variant="body2" noWrap>
+                {t('sport.actions.question')}
+              </Typography>
               <LoadingButton
                 size="small"
                 variant={
@@ -224,7 +215,7 @@ export function SportEventCard({ sportEvent }: Readonly<SportEventCardProps>) {
                 }
                 onClick={() => participationMutation.mutate('participant')}
               >
-                Participer
+                {t('sport.actions.yes')}
               </LoadingButton>
               <LoadingButton
                 size="small"
@@ -239,7 +230,7 @@ export function SportEventCard({ sportEvent }: Readonly<SportEventCardProps>) {
                 }
                 onClick={() => participationMutation.mutate('nonParticipant')}
               >
-                Non-participant
+                {t('sport.actions.no')}
               </LoadingButton>
             </FlexRow>
           )}

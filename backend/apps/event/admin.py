@@ -31,7 +31,6 @@ class SportEventAdmin(admin.ModelAdmin):
         "non_participants",
         "owner",
     ]
-    readonly_fields = ["owner"]
 
     def save_model(
         self,
