@@ -6,12 +6,13 @@ from django.db.models import Count, F
 from django.db.models.query import QuerySet
 from django.http.request import HttpRequest
 from django.template.response import TemplateResponse
-from django.urls import URLPattern, path
+from django.urls import URLPattern, path, reverse
 from django.utils.translation import gettext_lazy as _
 
 from apps.utils.send_email import send_mass_email
 
 from .models import Email, InvitationLink, User
+from .tokens import email_confirmation_token
 
 
 class UppercaseEmailFilter(admin.SimpleListFilter):
@@ -136,7 +137,7 @@ class EmailInline(admin.TabularInline):
 
 @admin.register(User)
 class CustomUserAdmin(UserAdmin):
-    actions = ["send_reminder"]
+    actions = ["send_reminder", "resend_verify"]
     fieldsets = (
         (None, {"fields": ("username", "password")}),
         (
@@ -249,6 +250,7 @@ class CustomUserAdmin(UserAdmin):
                 }
                 for user in queryset
                 if user.invitation is not None
+                and not user.has_valid_authorized_organisation_email()
             ],
             recipient_list=[
                 user.email.email
@@ -256,4 +258,30 @@ class CustomUserAdmin(UserAdmin):
                 if user.invitation is not None
                 and not user.has_valid_authorized_organisation_email()
             ],
+        )
+
+    @admin.action(description="Resend email verification link")
+    def resend_verify(self, request, queryset: QuerySet[User]):
+        users = queryset.filter(email__is_valid=False)
+        send_mass_email(
+            subject="Activation de votre compte Nantral Platform",
+            template_name="email-confirmation",
+            context_list=[
+                {
+                    "first_name": user.first_name,
+                    "validation_link": request.build_absolute_uri(
+                        reverse(
+                            "account:confirm",
+                            kwargs={
+                                "email_uuid": user.email.uuid,
+                                "token": email_confirmation_token.make_token(
+                                    user.email
+                                ),
+                            },
+                        )
+                    ),
+                }
+                for user in users
+            ],
+            recipient_list=[user.email.email for user in users],
         )

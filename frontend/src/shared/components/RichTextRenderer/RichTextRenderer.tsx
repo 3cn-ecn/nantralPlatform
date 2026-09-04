@@ -7,7 +7,7 @@ interface RichTextRendererProps {
   content: string;
 }
 
-export function RichTextRenderer({ content }: RichTextRendererProps) {
+export function RichTextRenderer({ content }: Readonly<RichTextRendererProps>) {
   return (
     <Typography
       // default classes included in the CKEditor component

@@ -23,8 +23,41 @@ class MemberFamilyInline(admin.TabularInline):
     extra = 0
 
 
+class MembershipFamilyRoleInline(admin.TabularInline):
+    model = MembershipFamily
+    extra = 0
+    can_add = False
+    can_delete = False
+    can_change = False
+    fields = ["user", "role"]
+    readonly_fields = ["user", "role"]
+    role_filter = None
+
+    def get_queryset(self, request):
+        qs = super().get_queryset(request)
+        if self.role_filter is None:
+            return qs
+        return qs.filter(role=self.role_filter)
+
+
+class MembershipFamily1AInline(MembershipFamilyRoleInline):
+    role_filter = "1A"
+    verbose_name = "Membre 1A"
+    verbose_name_plural = "Membres 1A"
+
+
+class MembershipFamily2APlusInline(MembershipFamilyRoleInline):
+    role_filter = "2A+"
+    verbose_name = "Membre 2A+"
+    verbose_name_plural = "Membres 2A+"
+
+
 class FamilyAdmin(admin.ModelAdmin):
-    inlines = [AnswerFamilyInline]
+    inlines = [
+        AnswerFamilyInline,
+        MembershipFamily1AInline,
+        MembershipFamily2APlusInline,
+    ]
 
 
 admin.site.register(Family, FamilyAdmin)
@@ -36,8 +69,61 @@ class AnswerMemberInline(admin.TabularInline):
     extra = 0
 
 
+class MembershipFamilyGroupFilter(admin.SimpleListFilter):
+    title = "Association à une famille"
+    parameter_name = "group_status"
+
+    def lookups(self, request, model_admin):
+        return [
+            ("with_group", "Avec une famille"),
+            ("without_group", "Sans famille"),
+        ]
+
+    def queryset(self, request, queryset):
+        value = self.value()
+        if value == "with_group":
+            return queryset.filter(group__isnull=False)
+        if value == "without_group":
+            return queryset.filter(group__isnull=True)
+        return queryset
+
+
+class MembershipFamilyPromoFilter(admin.SimpleListFilter):
+    title = "Promo"
+    parameter_name = "promo"
+
+    def lookups(self, request, model_admin):
+        promos = (
+            MembershipFamily.objects.exclude(user__promo__isnull=True)
+            .values_list("user__promo", flat=True)
+            .distinct()
+            .order_by("user__promo")
+        )
+        return [(str(promo), str(promo)) for promo in promos]
+
+    def queryset(self, request, queryset):
+        value = self.value()
+        if value:
+            return queryset.filter(user__promo=value)
+        return queryset
+
+
 class MembershipFamilyAdmin(admin.ModelAdmin):
-    list_display = ["__str__", "role"]
+    list_display = ["user", "group", "role"]
+    list_filter = [
+        "role",
+        "group",
+        MembershipFamilyGroupFilter,
+        MembershipFamilyPromoFilter,
+    ]
+    search_fields = [
+        "user__username",
+        "user__first_name",
+        "user__last_name",
+        "group__name",
+        "group__alt_name",
+    ]
+    ordering = ["user__last_name", "user__first_name", "user__username"]
     inlines = [AnswerMemberInline]
 
 

@@ -21,9 +21,11 @@ function getTheme(mode: PaletteMode, language: string) {
         },
         secondary: {
           main: mode === 'light' ? '#536873' : '#99AEB8',
+          contrastText: mode === 'light' ? '#FFFFFF' : '#000000',
         },
         neutral: {
           main: '#efefef',
+          contrastText: mode === 'light' ? '#000000' : '#FFFFFF',
         },
         warning: {
           main: '#ffc107',

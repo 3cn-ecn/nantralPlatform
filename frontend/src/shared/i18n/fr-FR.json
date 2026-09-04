@@ -61,12 +61,12 @@
       "title": "Modification de l'email principal"
     },
     "chip": {
-      "organisation": "Email institutionnelle",
-      "organisationTooltip": "Cette adresse email provient d'une organisation autorisée à utiliser Nantral Platform. Si elle est vérifiée, elle permet de vérifier votre compte.",
       "error": "Erreur",
       "hidden": "Cachée",
       "main": "Principal",
       "mainTooltip": "Email principal utilisé pour se connecter et envoyer les notifications",
+      "organisation": "Email institutionnelle",
+      "organisationTooltip": "Cette adresse email provient d'une organisation autorisée à utiliser Nantral Platform. Si elle est vérifiée, elle permet de vérifier votre compte.",
       "sendError": "Une erreur est survenue. Cliquez pour réessayer",
       "sendMessage": "Cliquez pour renvoyer un email de confirmation",
       "sendSuccess": "L'email de confirmation a bien été envoyé",
@@ -588,6 +588,24 @@
     }
   },
   "home": {
+    "element": {
+      "goTo": "Aller sur Element",
+      "helperText": "Lors de votre première connexion, choisissez <code>nantral-platform.fr</code> comme fournisseur de compte",
+      "independent": {
+        "label": "Indépendent",
+        "tooltip": "Indépendant des entreprises privées de réseaux sociaux"
+      },
+      "secure": {
+        "label": "Sécurisé",
+        "tooltip": "Messages chiffrés et authentifiés"
+      },
+      "selfHosted": {
+        "label": "Hébergé en france",
+        "tooltip": "Hébergés par nos soins sur nos seveurs en France"
+      },
+      "subtitle": "La messagerie des étudiants de Centrale Nantes",
+      "title": "Téléchargez <name>Element X</name>"
+    },
     "eventSection": {
       "error": "Erreur : les évènements n'ont pas pu être chargés 😢",
       "isEmpty": "Aucun évènement à venir... 🥺 Créez-en un !",
@@ -618,6 +636,10 @@
   },
   "legalNotice": {
     "paragraphs": {
+      "cookies": {
+        "text": "Nantral Platform utilise uniquement des cookies strictement nécessaires au fonctionnement du site et à l’authentification des utilisateurs. Ces cookies permettent notamment de maintenir votre session active après connexion, d’accéder aux groupes et évènements, ainsi que de personnaliser votre profil. Ces cookies ne sont pas utilisés à des fins publicitaires ou de suivi et ne nécessitent pas de consentement préalable conformément à la réglementation applicable. Les cookies d’authentification sont conservés pour la durée strictement nécessaire à la gestion de la session ou conformément aux obligations légales applicables. Vous pouvez configurer votre navigateur afin de bloquer les cookies ; toutefois, certaines fonctionnalités du site pourraient ne plus fonctionner correctement.",
+        "title": "Utilisation des cookies"
+      },
       "copyright": {
         "text1": "Le code source de ce site web est la propriété du club 3CN, affilié à l’AECN. Sauf mention contraire, l’ensemble des éléments accessibles sur le site (textes, images, logos, icônes, sons, logiciels, etc.) demeure la propriété exclusive de leurs auteurs, en ce qui concerne les droits de propriété intellectuelle ou les droits d’usage.",
         "text2": "Toute reproduction, représentation, modification, publication ou adaptation de tout ou partie des éléments du site, quel que soit le moyen ou le procédé utilisé, est interdite, sauf autorisation préalable de l’auteur. Toute exploitation non autorisée du site ou de l’un quelconque des éléments qu’il contient est susceptible de constituer une contrefaçon et d’entraîner des poursuites. ",
@@ -652,10 +674,6 @@
         "contact_text": "Pour toute question ou demande relative aux données personnelles, vous pouvez nous contacter à l’adresse électronique suivante : ",
         "text": "Les données personnelles collectées sont utilisées uniquement dans le cadre du bon fonctionnement de Nantral Platform. Leur accès est strictement limité à leur propriétaire ainsi qu’aux personnes expressément autorisées par le conseil d’administration de l’AECN.",
         "title": "Données personnelles"
-      },
-      "cookies": {
-        "title": "Utilisation des cookies",
-        "text": "Nantral Platform utilise uniquement des cookies strictement nécessaires au fonctionnement du site et à l’authentification des utilisateurs. Ces cookies permettent notamment de maintenir votre session active après connexion, d’accéder aux groupes et évènements, ainsi que de personnaliser votre profil. Ces cookies ne sont pas utilisés à des fins publicitaires ou de suivi et ne nécessitent pas de consentement préalable conformément à la réglementation applicable. Les cookies d’authentification sont conservés pour la durée strictement nécessaire à la gestion de la session ou conformément aux obligations légales applicables. Vous pouvez configurer votre navigateur afin de bloquer les cookies ; toutefois, certaines fonctionnalités du site pourraient ne plus fonctionner correctement."
       }
     },
     "title": "Mentions Légales"
