@@ -39,14 +39,16 @@ export function ModalEditChangeReason({
   const showToast = useToast();
   const { t } = useTranslation();
   const [formValues, setFormValues] = useState<GroupHistoryForm>(item);
-  const { isLoading, mutate } = useMutation<
+  const { isPending, mutate } = useMutation<
     GroupHistory,
     ApiFormError<GroupHistoryFormDTO>,
     number
   >({
     mutationFn: (pk) => updateGroupHistoryApi(group.slug, pk, formValues),
     onSuccess: () => {
-      queryClient.invalidateQueries(queryKey);
+      queryClient.invalidateQueries({
+        queryKey: queryKey,
+      });
       showToast({
         message: t('group.details.modal.editGroup.editHistorySuccess'),
         variant: 'success',
@@ -92,7 +94,7 @@ export function ModalEditChangeReason({
         <LoadingButton
           form="edit-history-form"
           type="submit"
-          loading={isLoading}
+          loading={isPending}
           variant="contained"
         >
           {t('button.confirm')}

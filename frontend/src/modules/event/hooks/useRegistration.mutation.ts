@@ -1,7 +1,7 @@
 import {
   InfiniteData,
-  UseMutationOptions,
   useMutation,
+  UseMutationOptions,
   useQueryClient,
 } from '@tanstack/react-query';
 
@@ -21,17 +21,17 @@ export function useRegistrationMutation(eventId: number) {
   const { t } = useTranslation();
   const showToast = useToast();
 
-  const registerMutation = useMutation<number, ApiError, number>(
-    registerAsParticipantApi,
-  );
-  const unregisterMutation = useMutation<number, ApiError, number>(
-    unregisterAsParticipantApi,
-  );
+  const registerMutation = useMutation<number, ApiError, number>({
+    mutationFn: registerAsParticipantApi,
+  });
+  const unregisterMutation = useMutation<number, ApiError, number>({
+    mutationFn: unregisterAsParticipantApi,
+  });
 
   const updateCachedQueries = (newData: Partial<Event>) => {
     // update data NOW so that it is displayed to the user
     queryClient.setQueriesData(
-      ['events', 'infiniteList'],
+      { queryKey: ['events', 'infiniteList'] },
       (data?: InfiniteData<Page<Event>>) =>
         data && {
           ...data,
@@ -57,7 +57,7 @@ export function useRegistrationMutation(eventId: number) {
         },
     );
     queryClient.setQueriesData(
-      ['event', { id: eventId }],
+      { queryKey: ['event', { id: eventId }] },
       (data?: Event) =>
         data && {
           ...data,
@@ -65,8 +65,12 @@ export function useRegistrationMutation(eventId: number) {
         },
     );
     // invalidate queries to force reload the queries we have modified
-    queryClient.invalidateQueries(['events']);
-    queryClient.invalidateQueries(['event', { id: eventId }]);
+    queryClient.invalidateQueries({
+      queryKey: ['events'],
+    });
+    queryClient.invalidateQueries({
+      queryKey: ['event', { id: eventId }],
+    });
   };
 
   const register = ({ onSuccess, onError, ...options }: OptionsType) => {
@@ -79,13 +83,13 @@ export function useRegistrationMutation(eventId: number) {
         updateCachedQueries({ isParticipating: true });
         return onSuccess?.(...args);
       },
-      onError: (error, variables, context) => {
+      onError: (error, variables, onMutateResult, context) => {
         showToast({
           message: error.message,
           variant: 'error',
         });
         updateCachedQueries({});
-        if (onError) return onError(error, variables, context);
+        if (onError) return onError(error, variables, onMutateResult, context);
       },
       ...options,
     });
@@ -102,13 +106,13 @@ export function useRegistrationMutation(eventId: number) {
         updateCachedQueries({ isParticipating: false });
         return onSuccess?.(...args);
       },
-      onError: (error, variables, context) => {
+      onError: (error, variables, onMutateResult, context) => {
         showToast({
           message: error.message,
           variant: 'error',
         });
         updateCachedQueries({});
-        if (onError) return onError(error, variables, context);
+        if (onError) return onError(error, variables, onMutateResult, context);
       },
       ...options,
     });
@@ -117,7 +121,7 @@ export function useRegistrationMutation(eventId: number) {
   return {
     register,
     unregister,
-    isLoading: registerMutation.isLoading || unregisterMutation.isLoading,
+    isPending: registerMutation.isPending || unregisterMutation.isPending,
     isError: registerMutation.isError || unregisterMutation.isError,
     error: registerMutation.error || unregisterMutation.error,
   };

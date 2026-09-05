@@ -26,7 +26,7 @@ export function EmailList({ userId }: EmailListProps) {
   const { t } = useTranslation();
   const queryClient = useQueryClient();
   const query = useInfiniteQuery({
-    queryFn: ({ pageParam = 1 }) =>
+    queryFn: ({ pageParam }) =>
       getEmailListApi(
         {
           page: pageParam,
@@ -34,6 +34,7 @@ export function EmailList({ userId }: EmailListProps) {
         },
         userId,
       ),
+    initialPageParam: 1,
     getNextPageParam: (lastPage, allPages) =>
       lastPage.next ? allPages.length + 1 : undefined,
     queryKey: ['emails', { userId: userId.toString() }],
@@ -49,12 +50,15 @@ export function EmailList({ userId }: EmailListProps) {
     mutationFn: ({ emailUuid, isVisible }) =>
       changeEmailVisibilityApi(emailUuid, isVisible),
     onSuccess: async (email) => {
-      await queryClient.invalidateQueries([
-        'emails',
-        { userId: userId.toString() },
-      ]);
-      await queryClient.invalidateQueries(['user', { id: userId.toString() }]);
-      await queryClient.invalidateQueries(['user', 'current']);
+      await queryClient.invalidateQueries({
+        queryKey: ['emails', { userId: userId.toString() }],
+      });
+      await queryClient.invalidateQueries({
+        queryKey: ['user', { id: userId.toString() }],
+      });
+      await queryClient.invalidateQueries({
+        queryKey: ['user', 'current'],
+      });
       showToast({
         message: t(
           `email.visibility.${email.is_visible ? 'setVisible' : 'setHidden'}`,
@@ -74,7 +78,7 @@ export function EmailList({ userId }: EmailListProps) {
     <>
       <InfiniteList query={query}>
         <EmailTable
-          isLoading={query.isLoading}
+          isPending={query.isPending}
           emails={query.data?.pages.flatMap((page) => page.results)}
           setSelectedEmail={setSelectedEmail}
           changeVisibility={(emailUuid, isVisible) =>

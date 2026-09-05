@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { useParams, useSearchParams } from 'react-router-dom';
+import { useParams, useSearchParams } from 'react-router';
 
 import { Container } from '@mui/material';
 
@@ -40,7 +40,7 @@ export default function GroupDetailsPage() {
     groupDetails,
     events,
     members,
-    isLoading,
+    isPending,
     isError,
     error,
     refetch,
@@ -70,7 +70,7 @@ export default function GroupDetailsPage() {
           eventCount={events?.count}
           memberCount={members?.count}
           group={groupDetails}
-          isLoading={isLoading}
+          isPending={isPending}
         />
         {isSuccess && groupDetails && (
           <GroupTabBar

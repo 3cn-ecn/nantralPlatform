@@ -1,6 +1,6 @@
 import React, { ReactNode } from 'react';
 import ReactDOM from 'react-dom/client';
-import { BrowserRouter, Link, NavLink } from 'react-router-dom';
+import { BrowserRouter, Link, NavLink } from 'react-router';
 
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import axios from 'axios';
@@ -20,7 +20,7 @@ const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
       staleTime: 1000 * 60, // time before refetching the server: 1min
-      cacheTime: 1000 * 60 * 60 * 24 * 7, // time before erasing the cached data: 1 week
+      gcTime: 1000 * 60 * 60 * 24 * 7, // time before erasing the cached data: 1 week
       retry: 1,
       retryDelay: 1000,
     },

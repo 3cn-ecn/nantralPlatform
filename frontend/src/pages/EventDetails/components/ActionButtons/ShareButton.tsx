@@ -3,6 +3,7 @@ import { Button } from '@mui/material';
 
 import { useShareLink } from '#shared/hooks/useShareLink';
 import { useTranslation } from '#shared/i18n/useTranslation';
+import { buildAbsoluteUrl } from '#shared/utils/urls';
 
 interface ShareButtonProps {
   eventId: number;
@@ -17,7 +18,7 @@ export function ShareButton({ eventId }: ShareButtonProps) {
       startIcon={<ShareIcon />}
       variant="outlined"
       color="secondary"
-      onClick={() => shareLink(`${window.location.origin}/event/${eventId}`)}
+      onClick={() => shareLink(buildAbsoluteUrl(`/event/${eventId}/`))}
     >
       {t('event.action_menu.share')}
     </Button>

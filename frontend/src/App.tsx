@@ -1,4 +1,4 @@
-import { RouterProvider } from 'react-router-dom';
+import { RouterProvider } from 'react-router';
 
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
@@ -12,7 +12,7 @@ const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
       staleTime: 1000 * 60, // time before refetching the server: 1min
-      cacheTime: 1000 * 60 * 60 * 24 * 7, // time before erasing the cached data: 1 week
+      gcTime: 1000 * 60 * 60 * 24 * 7, // time before erasing the cached data: 1 week
       retry: 1,
       retryDelay: 1000,
     },

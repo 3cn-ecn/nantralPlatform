@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 
 import {
   BugReport as BugReportIcon,
@@ -61,7 +61,7 @@ export function ErrorPageContent({
           </Button>
           <Button
             component={Link}
-            to="/feedback"
+            to="/feedback/"
             startIcon={<BugReportIcon />}
             color="secondary"
             reloadDocument={reloadDocument}

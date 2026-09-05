@@ -1,0 +1,407 @@
+{
+  "$ref": "#/definitions/UISchemaElement",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "definitions": {
+    "AndCondition": {
+      "description": "An and condition.",
+      "properties": {
+        "conditions": {
+          "items": {
+            "$ref": "#/definitions/Condition"
+          },
+          "type": "array"
+        },
+        "type": {
+          "const": "AND",
+          "description": "The type of condition.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "BaseCondition": {
+      "description": "Represents a condition to be evaluated.",
+      "properties": {
+        "type": {
+          "description": "The type of condition.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "Categorization": {
+      "description": "The categorization element, which may have children elements.\nA child element may either be itself a Categorization or a Category, hence\nthe categorization element can be used to represent recursive structures like trees.",
+      "properties": {
+        "elements": {
+          "description": "The child elements of this categorization which are either of type\n{@link Category} or {@link Categorization}.",
+          "items": {
+            "$ref": "#/definitions/Category"
+          },
+          "type": "array"
+        },
+        "i18n": {
+          "type": "string"
+        },
+        "label": {
+          "description": "Label for UI schema element.",
+          "type": "string"
+        },
+        "options": {
+          "additionalProperties": {},
+          "description": "Any additional options.",
+          "type": "object"
+        },
+        "rule": {
+          "$ref": "#/definitions/Rule",
+          "description": "An optional rule."
+        },
+        "type": {
+          "const": "Categorization",
+          "description": "The type of this UI schema element.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "Category": {
+      "description": "The category layout.",
+      "properties": {
+        "elements": {
+          "description": "The child elements of this layout.",
+          "items": {
+            "$ref": "#/definitions/UISchemaElement"
+          },
+          "type": "array"
+        },
+        "i18n": {
+          "type": "string"
+        },
+        "label": {
+          "description": "Label for UI schema element.",
+          "type": "string"
+        },
+        "options": {
+          "additionalProperties": {},
+          "description": "Any additional options.",
+          "type": "object"
+        },
+        "rule": {
+          "$ref": "#/definitions/Rule",
+          "description": "An optional rule."
+        },
+        "type": {
+          "const": "Category",
+          "description": "The type of this UI schema element.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "Condition": {
+      "anyOf": [
+        {
+          "$ref": "#/definitions/BaseCondition"
+        },
+        {
+          "$ref": "#/definitions/LeafCondition"
+        },
+        {
+          "$ref": "#/definitions/ValidateFunctionCondition"
+        },
+        {
+          "$ref": "#/definitions/OrCondition"
+        },
+        {
+          "$ref": "#/definitions/AndCondition"
+        }
+      ],
+      "description": "A union of all available conditions."
+    },
+    "ControlElement": {
+      "description": "A control element. The scope property of the control determines\nto which part of the schema the control should be bound.",
+      "properties": {
+        "i18n": {
+          "type": "string"
+        },
+        "label": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/LabelDescription"
+            },
+            {
+              "type": ["string", "boolean"]
+            }
+          ],
+          "description": "Label for UI schema element."
+        },
+        "options": {
+          "additionalProperties": {},
+          "description": "Any additional options.",
+          "type": "object"
+        },
+        "rule": {
+          "$ref": "#/definitions/Rule",
+          "description": "An optional rule."
+        },
+        "scope": {
+          "description": "The scope that determines to which part this element should be bound to.",
+          "type": "string"
+        },
+        "type": {
+          "const": "Control",
+          "description": "The type of this UI schema element.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "GroupLayout": {
+      "description": "A group resembles a vertical layout, but additionally might have a label.\nThis layout is useful when grouping different elements by a certain criteria.",
+      "properties": {
+        "elements": {
+          "description": "The child elements of this layout.",
+          "items": {
+            "$ref": "#/definitions/UISchemaElementGroup"
+          },
+          "type": "array"
+        },
+        "i18n": {
+          "type": "string"
+        },
+        "label": {
+          "description": "Label for UI schema element.",
+          "type": "string"
+        },
+        "options": {
+          "additionalProperties": {},
+          "description": "Any additional options.",
+          "type": "object"
+        },
+        "rule": {
+          "$ref": "#/definitions/Rule",
+          "description": "An optional rule."
+        },
+        "type": {
+          "const": "Group",
+          "description": "The type of this UI schema element.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "HorizontalLayout": {
+      "description": "A layout which orders its children horizontally (i.e. from left to right).",
+      "properties": {
+        "elements": {
+          "description": "The child elements of this layout.",
+          "items": {
+            "$ref": "#/definitions/UISchemaElement"
+          },
+          "type": "array"
+        },
+        "options": {
+          "additionalProperties": {},
+          "description": "Any additional options.",
+          "type": "object"
+        },
+        "rule": {
+          "$ref": "#/definitions/Rule",
+          "description": "An optional rule."
+        },
+        "type": {
+          "const": "HorizontalLayout",
+          "description": "The type of this UI schema element.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "LabelDescription": {
+      "description": "Represents an object that can be used to configure a label.",
+      "properties": {
+        "show": {
+          "description": "Optional property that determines whether to show this label.",
+          "type": "boolean"
+        },
+        "text": {
+          "description": "An optional text to be displayed.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "LabelElement": {
+      "description": "A label element.",
+      "properties": {
+        "i18n": {
+          "type": "string"
+        },
+        "options": {
+          "additionalProperties": {},
+          "description": "Any additional options.",
+          "type": "object"
+        },
+        "rule": {
+          "$ref": "#/definitions/Rule",
+          "description": "An optional rule."
+        },
+        "text": {
+          "description": "The text of label.",
+          "type": "string"
+        },
+        "type": {
+          "const": "Label",
+          "description": "The type of this UI schema element.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "LeafCondition": {
+      "description": "A leaf condition.",
+      "properties": {
+        "expectedValue": {
+          "description": "The expected value when evaluating the condition"
+        },
+        "scope": {
+          "description": "The scope that determines to which part this element should be bound to.",
+          "type": "string"
+        },
+        "type": {
+          "const": "LEAF",
+          "description": "The type of condition.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "OrCondition": {
+      "description": "An or condition.",
+      "properties": {
+        "conditions": {
+          "items": {
+            "$ref": "#/definitions/Condition"
+          },
+          "type": "array"
+        },
+        "type": {
+          "const": "OR",
+          "description": "The type of condition.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "Rule": {
+      "description": "A rule that may be attached to any UI schema element.",
+      "properties": {
+        "condition": {
+          "$ref": "#/definitions/Condition",
+          "description": "The condition of the rule that must evaluate to true in order\nto trigger the effect."
+        },
+        "effect": {
+          "$ref": "#/definitions/RuleEffect",
+          "description": "The effect of the rule"
+        }
+      },
+      "type": "object"
+    },
+    "RuleEffect": {
+      "description": "The different rule effects.",
+      "enum": ["HIDE", "SHOW", "ENABLE", "DISABLE"],
+      "type": "string"
+    },
+    "UISchemaElement": {
+      "anyOf": [
+        {
+          "$ref": "#/definitions/ControlElement"
+        },
+        {
+          "$ref": "#/definitions/LabelElement"
+        },
+        {
+          "$ref": "#/definitions/GroupLayout"
+        },
+        {
+          "$ref": "#/definitions/VerticalLayout"
+        }
+      ],
+      "description": "A union of all available UI schema elements.\nThis includes all layout elements, control elements, label elements,\ngroup elements, category elements and categorization elements."
+    },
+    "UISchemaElementVertical": {
+      "anyOf": [
+        {
+          "$ref": "#/definitions/ControlElement"
+        },
+        {
+          "$ref": "#/definitions/LabelElement"
+        },
+        {
+          "$ref": "#/definitions/GroupLayout"
+        }
+      ],
+      "description": "A union of all available UI schema elements.\nThis includes all layout elements, control elements, label elements,\ngroup elements, category elements and categorization elements."
+    },
+    "UISchemaElementGroup": {
+      "anyOf": [
+        {
+          "$ref": "#/definitions/ControlElement"
+        },
+        {
+          "$ref": "#/definitions/LabelElement"
+        },
+        {
+          "$ref": "#/definitions/VerticalLayout"
+        }
+      ],
+      "description": "A union of all available UI schema elements.\nThis includes all layout elements, control elements, label elements,\ngroup elements, category elements and categorization elements."
+    },
+    "ValidateFunctionCondition": {
+      "description": "A condition using a validation function to determine its fulfillment.",
+      "properties": {
+        "scope": {
+          "description": "The scope that determines to which part this element should be bound to.",
+          "type": "string"
+        },
+        "type": {
+          "description": "The type of condition.",
+          "type": "string"
+        },
+        "validate": {
+          "description": "Validates whether the condition is fulfilled.",
+          "type": "object"
+        }
+      },
+      "type": "object"
+    },
+    "VerticalLayout": {
+      "description": "A layout which orders its child elements vertically (i.e. from top to bottom).",
+      "properties": {
+        "elements": {
+          "description": "The child elements of this layout.",
+          "items": {
+            "$ref": "#/definitions/UISchemaElementVertical"
+          },
+          "type": "array"
+        },
+        "options": {
+          "additionalProperties": {},
+          "description": "Any additional options.",
+          "type": "object"
+        },
+        "rule": {
+          "$ref": "#/definitions/Rule",
+          "description": "An optional rule."
+        },
+        "type": {
+          "const": "VerticalLayout",
+          "description": "The type of this UI schema element.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    }
+  },
+  "description": "A union of all available UI schema elements.\nThis includes all layout elements, control elements, label elements,\ngroup elements, category elements and categorization elements.",
+
+}

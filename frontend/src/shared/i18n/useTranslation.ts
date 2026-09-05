@@ -3,10 +3,10 @@ import { useMemo } from 'react';
 import { useTranslation as useI18nextTranslation } from 'react-i18next';
 
 import {
-  Locale,
   endOfWeek as fnsEndOfWeek,
-  startOfWeek as fnsStartOfWeek,
   formatRelative,
+  Locale,
+  startOfWeek as fnsStartOfWeek,
 } from 'date-fns';
 import { enGB, enUS, fr } from 'date-fns/locale';
 
@@ -18,8 +18,8 @@ const mapLocales: Record<(typeof languages)[number], Locale> = {
   'en-US': enUS,
 };
 
-export function useTranslation() {
-  const { t, i18n } = useI18nextTranslation('translation');
+export function useTranslation(namespace?: string) {
+  const { t, i18n } = useI18nextTranslation(namespace || 'translation');
 
   return useMemo(() => {
     const dateFnsLocale: Locale = mapLocales[i18n.language] || enGB;
@@ -84,7 +84,7 @@ export function useTranslation() {
       fnsEndOfWeek(date, { locale: dateFnsLocale });
 
     return {
-      t,
+      t: t,
       i18n,
       currentBaseLanguage,
       formatDate,

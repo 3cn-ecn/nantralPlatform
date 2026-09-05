@@ -1,12 +1,8 @@
 import React from 'react';
-import {
-  RouteObject,
-  RouterProvider,
-  createMemoryRouter,
-} from 'react-router-dom';
+import { RouteObject, RouterProvider, createMemoryRouter } from 'react-router';
 
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { render } from '@testing-library/react';
+import { render, RenderResult } from '@testing-library/react';
 import axios from 'axios';
 
 import { CustomThemeProvider } from '#shared/context/CustomTheme.context';
@@ -22,9 +18,8 @@ const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
       retry: false,
-      cacheTime: 0,
-      suspense: true,
-      useErrorBoundary: false,
+      gcTime: 0,
+      throwOnError: false,
     },
   },
 });
@@ -42,18 +37,21 @@ export function renderWithProviders(
   element: React.ReactElement,
   otherRoutes: RouteObject[] = [],
   path = '/',
-) {
+): [RenderResult, QueryClient] {
   const router = createMemoryRouter([{ path, element }, ...otherRoutes], {
     initialEntries: [path],
   });
 
-  return render(
-    <CustomThemeProvider>
-      <QueryClientProvider client={queryClient}>
-        <ToastProvider>
-          <RouterProvider router={router} />
-        </ToastProvider>
-      </QueryClientProvider>
-    </CustomThemeProvider>,
-  );
+  return [
+    render(
+      <CustomThemeProvider>
+        <QueryClientProvider client={queryClient}>
+          <ToastProvider>
+            <RouterProvider router={router} />
+          </ToastProvider>
+        </QueryClientProvider>
+      </CustomThemeProvider>,
+    ),
+    queryClient,
+  ];
 }

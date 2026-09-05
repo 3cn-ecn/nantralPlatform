@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 
 import { Check, Close } from '@mui/icons-material';
 import {
@@ -34,7 +34,9 @@ export function AdminRequestRow({
     try {
       await acceptAdminRequestApi(adminRequest.id);
       setTimeout(() => {
-        queryClient.invalidateQueries(['adminRequest', { slug: groupSlug }]);
+        queryClient.invalidateQueries({
+          queryKey: ['adminRequest', { slug: groupSlug }],
+        });
       }, 2000);
     } catch {
       setVariant(undefined);
@@ -46,7 +48,9 @@ export function AdminRequestRow({
     try {
       await denyAdminRequestApi(adminRequest.id);
       setTimeout(() => {
-        queryClient.invalidateQueries(['adminRequest']);
+        queryClient.invalidateQueries({
+          queryKey: ['adminRequest'],
+        });
       }, 2000);
     } catch {
       setVariant(undefined);

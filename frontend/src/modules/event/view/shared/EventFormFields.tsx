@@ -226,6 +226,7 @@ export function EventFormFields({
           )}
           errors={error?.fields?.max_participant}
           disabled={!!formValues.formUrl}
+          minimum={1}
         />
       </Paper>
       <SelectField

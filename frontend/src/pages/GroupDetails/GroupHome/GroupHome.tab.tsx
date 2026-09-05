@@ -1,4 +1,4 @@
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 
 import { Card, CardActionArea, Paper, Typography } from '@mui/material';
 
@@ -52,7 +52,7 @@ export function GroupHome({ group }: Readonly<GroupHomeProps>) {
               groups={childrenQuery.data?.pages.flatMap((page) => page.results)}
             />
             {childrenQuery.isFetchingNextPage && (
-              <GroupGrid isLoading estimatedSize={50} />
+              <GroupGrid isPending estimatedSize={50} />
             )}
           </InfiniteList>
         </Paper>

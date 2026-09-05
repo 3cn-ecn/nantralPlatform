@@ -1,6 +1,5 @@
 import { useState } from 'react';
-import { Trans } from 'react-i18next';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router';
 
 import { ChevronLeft, Info } from '@mui/icons-material';
 import { Button, Divider, Paper, Typography } from '@mui/material';
@@ -34,7 +33,7 @@ export default function RegisterFormPanel() {
   });
   const navigate = useNavigate();
   const {
-    isLoading: loading,
+    isPending: loading,
     error,
     mutate,
   } = useMutation<
@@ -43,7 +42,8 @@ export default function RegisterFormPanel() {
       fields: Partial<Record<keyof RegisterForm, string[]>>;
     },
     RegisterForm
-  >(register, {
+  >({
+    mutationFn: register,
     onSuccess: (data) =>
       navigate('/register/validation', {
         state: { email: data?.email, firstName: data?.firstName },
@@ -64,11 +64,9 @@ export default function RegisterFormPanel() {
       <Paper sx={{ p: 2, justifyContent: 'center', display: 'flex' }}>
         <Info sx={{ m: 0 }} />
         <Typography component={'span'} textAlign={'center'}>
-          {uuid ? (
-            <Trans i18nKey="register.createdAccountIsTemporary" />
-          ) : (
-            <Trans i18nKey="register.signUpEmailRequirement" />
-          )}
+          {uuid
+            ? t('register.createdAccountIsTemporary')
+            : t('register.signUpEmailRequirement')}
         </Typography>
       </Paper>
 

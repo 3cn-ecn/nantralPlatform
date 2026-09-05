@@ -1,7 +1,12 @@
 import { useState } from 'react';
 
 import { Alert, CircularProgress, Paper, Typography } from '@mui/material';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import {
+  keepPreviousData,
+  useMutation,
+  useQuery,
+  useQueryClient,
+} from '@tanstack/react-query';
 import { roundToNearestMinutes } from 'date-fns';
 
 import { getMembershipListApi } from '#modules/group/api/getMembershipList.api';
@@ -42,7 +47,8 @@ export function EditMembersView({ group }: EditMembersViewProps) {
   }
   const today = roundToNearestMinutes(new Date());
   const queryKey = ['members', { slug: group.slug, from: today }];
-  const { mutate } = useMutation(reorderMembership, {
+  const { mutate } = useMutation({
+    mutationFn: reorderMembership,
     onMutate: async ({ updatedMemberships }) => {
       // snapshot previous value
       const previousMemberships = queryClient.getQueryData(queryKey);
@@ -52,7 +58,9 @@ export function EditMembersView({ group }: EditMembersViewProps) {
         results: updatedMemberships,
       });
       // cancel any outgoing query
-      await queryClient.cancelQueries(queryKey);
+      await queryClient.cancelQueries({
+        queryKey: queryKey,
+      });
 
       return { previousMemberships };
     },
@@ -71,14 +79,21 @@ export function EditMembersView({ group }: EditMembersViewProps) {
       });
     },
     onSettled: () => {
-      queryClient.invalidateQueries(queryKey);
+      queryClient.invalidateQueries({
+        predicate: (query) =>
+          query.queryKey[0] === 'members' &&
+          typeof query.queryKey[1] === 'object' &&
+          query.queryKey[1] !== null &&
+          'slug' in query.queryKey[1] &&
+          query.queryKey[1].slug === group.slug,
+      });
     },
   });
 
   const {
     data: memberships,
     isSuccess,
-    isLoading,
+    isPending,
     isError,
   } = useQuery({
     queryKey: queryKey,
@@ -88,7 +103,7 @@ export function EditMembersView({ group }: EditMembersViewProps) {
         pageSize: 200,
         from: today,
       }),
-    keepPreviousData: true,
+    placeholderData: keepPreviousData,
   });
 
   if (!memberships) {
@@ -103,7 +118,7 @@ export function EditMembersView({ group }: EditMembersViewProps) {
         </Typography>
         <AddMemberButton group={group} />
       </FlexAuto>
-      {isLoading && <CircularProgress />}
+      {isPending && <CircularProgress />}
       {isError && (
         <Alert severity="error">
           {t('group.details.modal.editGroup.error')}

@@ -1,5 +1,5 @@
 import { MouseEvent, useMemo, useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams } from 'react-router';
 
 import { ArrowDropDown, ArrowDropUp } from '@mui/icons-material';
 import { Menu, MenuItem, Skeleton } from '@mui/material';
@@ -41,11 +41,11 @@ export function SelectTypeButton({
         aria-haspopup="true"
         aria-expanded={open ? 'true' : undefined}
         onClick={handleClick}
-        loading={groupTypeQuery.isLoading}
+        loading={groupTypeQuery.isPending}
         endIcon={open ? <ArrowDropUp /> : <ArrowDropDown />}
       >
         {type ? (
-          groupTypeQuery.isLoading ? (
+          groupTypeQuery.isPending ? (
             <Skeleton variant="text" width={100} />
           ) : (
             groupTypeQuery.data?.name

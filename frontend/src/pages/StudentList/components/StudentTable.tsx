@@ -7,8 +7,8 @@ import {
   TablePagination,
   TableRow,
 } from '@mui/material';
-import TablePaginationActions from '@mui/material/TablePagination/TablePaginationActions';
-import { useQuery } from '@tanstack/react-query';
+import TablePaginationActions from '@mui/material/TablePaginationActions';
+import { keepPreviousData, useQuery } from '@tanstack/react-query';
 
 import { getUserListApi } from '#modules/account/api/getUserList.api';
 import { FlexRow } from '#shared/components/FlexBox/FlexBox';
@@ -25,10 +25,10 @@ interface StudentTableProps {
 
 export function StudentTable({ filters, updateFilters }: StudentTableProps) {
   const { t } = useTranslation();
-  const { data, isSuccess, isFetching, isLoading } = useQuery({
+  const { data, isSuccess, isFetching, isPending } = useQuery({
     queryFn: () => getUserListApi(filters),
     queryKey: ['user', filters],
-    keepPreviousData: true,
+    placeholderData: keepPreviousData,
   });
 
   return (
@@ -44,7 +44,7 @@ export function StudentTable({ filters, updateFilters }: StudentTableProps) {
           </TableRow>
         </TableHead>
         <TableBody>
-          {(isLoading || isFetching) &&
+          {(isPending || isFetching) &&
             Array(filters.pageSize)
               .fill(0)
               .map((_, i) => (
@@ -52,7 +52,7 @@ export function StudentTable({ filters, updateFilters }: StudentTableProps) {
                 <StudentRowSkeleton key={i.toString()} />
               ))}
           {isSuccess &&
-            !isLoading &&
+            !isPending &&
             !isFetching &&
             data.results.map((user) => (
               <StudentRow key={user.id} user={user} />

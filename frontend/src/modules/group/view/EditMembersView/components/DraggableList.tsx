@@ -1,5 +1,8 @@
-import { DragDropContext, Droppable } from '@hello-pangea/dnd';
-import { DropResult } from '@hello-pangea/dnd';
+import { useState } from 'react';
+
+import { DragEndEvent, DragOverEvent } from '@dnd-kit/react';
+import { DragDropProvider } from '@dnd-kit/react';
+import { isSortable } from '@dnd-kit/react/sortable';
 import { List } from '@mui/material';
 
 import { Membership } from '#modules/group/types/membership.types';
@@ -36,41 +39,57 @@ export function DraggableList({
   reorderMemberships,
   onClick,
 }: DraggableListProps) {
+  const [reorderedItems, setReorderedItems] = useState(items);
+
   /**
    * Callback after dropping for the drag-and-drop.
    * Send a request to the server to save the new order.
    */
-  async function onDragEnd(result: DropResult) {
-    // dropped outside the list
-    if (!result.destination || result.destination.index === result.source.index)
+  async function onDragEnd(event: DragEndEvent) {
+    const { source, target } = event.operation;
+    if (event.canceled) {
+      setReorderedItems(items);
       return;
-    const source = result.source.index;
-    const dest = result.destination.index;
-    const reorderedMembers = reorder(items, source, dest);
+    }
+    if (!isSortable(source) || !isSortable(target)) {
+      return;
+    }
     reorderMemberships(
-      reorderedMembers,
-      items[source],
-      dest + 1 < items.length ? reorderedMembers[dest + 1] : undefined,
+      reorderedItems,
+      reorderedItems[source.index],
+      source.index + 1 < items.length
+        ? reorderedItems[source.index + 1]
+        : undefined,
     );
   }
 
   return (
-    <DragDropContext onDragEnd={onDragEnd}>
-      <Droppable droppableId="droppable">
-        {(provided) => (
-          <List ref={provided.innerRef} {...provided.droppableProps}>
-            {items.map((item: Membership, index: number) => (
-              <MemberDraggableListItem
-                item={item}
-                index={index}
-                key={item.id}
-                onClickEdit={() => onClick(item)}
-              />
-            ))}
-            {provided.placeholder}
-          </List>
-        )}
-      </Droppable>
-    </DragDropContext>
+    <DragDropProvider
+      onDragEnd={onDragEnd}
+      onDragOver={(event: DragOverEvent) => {
+        const { source, target } = event.operation;
+
+        if (
+          !isSortable(source) ||
+          !isSortable(target) ||
+          target.index === source.index
+        ) {
+          return;
+        }
+
+        setReorderedItems(reorder(reorderedItems, source.index, target.index));
+      }}
+    >
+      <List>
+        {reorderedItems.map((item: Membership, index: number) => (
+          <MemberDraggableListItem
+            item={item}
+            index={index}
+            key={item.id}
+            onClickEdit={() => onClick(item)}
+          />
+        ))}
+      </List>
+    </DragDropProvider>
   );
 }

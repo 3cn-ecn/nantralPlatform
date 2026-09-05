@@ -1,5 +1,5 @@
 import { FormEvent, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 
 import { Add } from '@mui/icons-material';
 import { Avatar, Button, useTheme } from '@mui/material';
@@ -7,7 +7,6 @@ import { useMutation } from '@tanstack/react-query';
 
 import { createGroupApi } from '#modules/group/api/createGroup.api';
 import { useGroupFormValues } from '#modules/group/hooks/useGroupFormValues';
-import { CreateGroupFormDTO } from '#modules/group/infra/group.dto';
 import { CreateGroupForm, Group } from '#modules/group/types/group.types';
 import { GroupTypePreview } from '#modules/group/types/groupType.types';
 import { GroupFormFields } from '#modules/group/view/shared/GroupFormFields';
@@ -38,17 +37,18 @@ export function CreateGroupModal({
   const navigate = useNavigate();
   const { palette } = useTheme();
   const [formValues, setFormValues] = useState<CreateGroupForm>(value);
-  const { error, isError, mutate } = useMutation<
+  const { error, isError, mutate, isPending } = useMutation<
     Group,
-    ApiFormError<CreateGroupFormDTO>,
+    ApiFormError<CreateGroupForm>,
     CreateGroupForm
-  >(() => createGroupApi(groupType.slug, formValues), {
+  >({
+    mutationFn: () => createGroupApi(groupType.slug, formValues),
+
     onSuccess: (group) => {
       onClose();
       navigate(group.url);
     },
   });
-  const isLoading = false;
 
   function updateFormValues(val: Partial<CreateGroupForm>) {
     setFormValues((prev) => ({ ...prev, ...val }));
@@ -93,7 +93,7 @@ export function CreateGroupModal({
         <LoadingButton
           form="create-group-form"
           type="submit"
-          loading={isLoading}
+          loading={isPending}
           variant="contained"
         >
           {t('button.confirm')}

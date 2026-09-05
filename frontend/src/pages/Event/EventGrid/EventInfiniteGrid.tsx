@@ -29,12 +29,12 @@ export function EventInfiniteGrid({
     { enabled: !disableLoading },
   );
 
-  if (eventsQuery.isLoading) {
+  if (eventsQuery.isPending) {
     return (
       <Grid container spacing={1}>
         {repeat(
           eventsPerPage,
-          <Grid xs={12} sm={6} md={4} lg={3} item>
+          <Grid size={{ xs: 12, sm: 6, md: 4, lg: 3 }}>
             <EventCardSkeleton />
           </Grid>,
         )}
@@ -66,7 +66,7 @@ export function EventInfiniteGrid({
         <Grid spacing={1} container>
           {eventsQuery.data.pages.map((page) =>
             page.results.map((event) => (
-              <Grid key={event.id} xs={12} sm={6} md={4} lg={3} item>
+              <Grid key={event.id} size={{ xs: 12, sm: 6, md: 4, lg: 3 }}>
                 <EventCard event={event} />
               </Grid>
             )),
@@ -74,7 +74,7 @@ export function EventInfiniteGrid({
           {eventsQuery.isFetchingNextPage &&
             repeat(
               eventsPerPage,
-              <Grid xs={12} sm={6} md={4} lg={3} item>
+              <Grid size={{ xs: 12, sm: 6, md: 4, lg: 3 }}>
                 <EventCardSkeleton />
               </Grid>,
             )}

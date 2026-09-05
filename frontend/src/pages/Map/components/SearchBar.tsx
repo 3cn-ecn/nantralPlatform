@@ -1,5 +1,5 @@
 import { useCallback, useMemo } from 'react';
-import { Link, useSearchParams } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router';
 
 import { Button, Paper } from '@mui/material';
 
@@ -53,7 +53,7 @@ export function SearchBar({
           {!isSmaller && (
             <Button
               component={Link}
-              to={`/group?type=${type}`}
+              to={`/group/?type=${type}`}
               variant="contained"
               color="secondary"
             >

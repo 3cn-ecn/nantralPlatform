@@ -346,7 +346,7 @@ class Group(models.Model, SlugModel):
 
     def get_absolute_url(self) -> str:
         """Get the url of the object."""
-        return f"/group/@{self.slug}"
+        return f"/group/@{self.slug}/"
 
     def clean(self) -> None:
         """Test if the object is valid (no incompatibility between fields)."""

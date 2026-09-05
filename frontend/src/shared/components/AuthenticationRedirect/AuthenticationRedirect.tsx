@@ -1,9 +1,4 @@
-import {
-  Navigate,
-  Outlet,
-  useLocation,
-  useSearchParams,
-} from 'react-router-dom';
+import { Navigate, Outlet, useLocation, useSearchParams } from 'react-router';
 
 import { useAuth } from '#shared/context/Auth.context';
 

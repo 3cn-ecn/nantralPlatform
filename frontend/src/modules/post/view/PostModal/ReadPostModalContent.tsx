@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 
 import {
   AdminPanelSettings as AdminPanelSettingsIcon,
@@ -43,11 +43,13 @@ export function ReadPostModalContent({
   const { staff } = useCurrentUserData();
   const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
   const queryClient = useQueryClient();
-  const { isLoading, mutate: deletePost } = useMutation({
+  const { isPending, mutate: deletePost } = useMutation({
     mutationFn: deletePostApi,
     onSuccess: () => {
       setIsConfirmModalOpen(false);
-      queryClient.invalidateQueries(['posts']);
+      queryClient.invalidateQueries({
+        queryKey: ['posts'],
+      });
       onClose();
     },
   });
@@ -128,7 +130,7 @@ export function ReadPostModalContent({
                 body={t('post.deleteModal.body', { title: post.title })}
                 onCancel={() => setIsConfirmModalOpen(false)}
                 onConfirm={() => deletePost(post.id)}
-                loading={isLoading}
+                loading={isPending}
               />
             )}
           </>

@@ -1,5 +1,4 @@
-import { Trans } from 'react-i18next';
-import { Navigate, useLocation, useNavigate } from 'react-router-dom';
+import { Navigate, useLocation, useNavigate } from 'react-router';
 
 import { Check, MarkEmailReadRounded } from '@mui/icons-material';
 import { Box, Button, CardContent, Paper, Typography } from '@mui/material';
@@ -7,6 +6,7 @@ import { useMutation } from '@tanstack/react-query';
 
 import { resendVerificationEmailApi } from '#modules/account/api/resendVerificationEmail.api';
 import { FlexCol, FlexRow } from '#shared/components/FlexBox/FlexBox';
+import { LoadingButton } from '#shared/components/LoadingButton/LoadingButton';
 import { useTranslation } from '#shared/i18n/useTranslation';
 
 export default function EmailSent() {
@@ -14,11 +14,11 @@ export default function EmailSent() {
   const { state } = useLocation();
   const { t } = useTranslation();
   const { email = undefined, firstName = undefined } = state || {};
-  const { isSuccess, mutate, isLoading } = useMutation(
-    resendVerificationEmailApi,
-  );
+  const { isSuccess, mutate, isPending } = useMutation({
+    mutationFn: resendVerificationEmailApi,
+  });
   if (!state) {
-    return <Navigate to="/register" replace />;
+    return <Navigate to="/register/" replace />;
   }
   return (
     <Box>
@@ -31,10 +31,9 @@ export default function EmailSent() {
             <MarkEmailReadRounded sx={{ fontSize: 200 }} color="secondary" />
           </FlexRow>
           <Typography variant="body1" color="secondary" textAlign="center">
-            <Trans
-              i18nKey="register.confirmationEmailSent"
-              values={{ email: email.replace('-', '-\u2060') }}
-            />
+            {t('register.confirmationEmailSent', {
+              email: email.replace('-', '-\u2060'),
+            })}
           </Typography>
           <Typography
             variant="body1"
@@ -71,15 +70,15 @@ export default function EmailSent() {
               <Check color="success" />
             </>
           ) : (
-            <Button
-              disabled={isLoading}
+            <LoadingButton
+              loading={isPending}
               sx={{ textTransform: 'none' }}
               onClick={() => {
                 mutate(email);
               }}
             >
               {t('register.sendAgain')}
-            </Button>
+            </LoadingButton>
           )}
         </FlexRow>
       </FlexCol>

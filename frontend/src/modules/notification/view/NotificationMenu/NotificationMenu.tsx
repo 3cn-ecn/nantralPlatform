@@ -1,5 +1,5 @@
 import { MouseEvent, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 
 import {
   DoneAll as DoneAllIcon,
@@ -43,7 +43,7 @@ export function NotificationMenu() {
   const newNotificationCountQuery = useNotificationCountQuery({
     seen: false,
   });
-  const { markAllAsSeen, isLoading } = useMarkAllAsSeenMutation();
+  const { markAllAsSeen, isPending } = useMarkAllAsSeenMutation();
 
   const nbNewNotifications = newNotificationCountQuery.data || 0;
 
@@ -51,7 +51,9 @@ export function NotificationMenu() {
     <>
       <IconButton
         size="large"
-        aria-label={t('notification.aria-label', { nb: nbNewNotifications })}
+        aria-label={t('notification.aria-label', {
+          nb: nbNewNotifications,
+        })}
         onClick={handleClick}
         id="notification-button"
       >
@@ -90,9 +92,9 @@ export function NotificationMenu() {
               <IconButton
                 color="secondary"
                 onClick={() => markAllAsSeen()}
-                disabled={isLoading}
+                disabled={isPending}
               >
-                {isLoading ? (
+                {isPending ? (
                   <CircularProgress
                     color="secondary"
                     size="0.9em"

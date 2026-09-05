@@ -1,24 +1,34 @@
-import { UseQueryOptions, useQuery } from '@tanstack/react-query';
+import {
+  useQuery,
+  UseQueryOptions,
+  useSuspenseQuery,
+  UseSuspenseQueryOptions,
+} from '@tanstack/react-query';
 
 import { getEventDetailsApi } from '#modules/event/api/getEventDetails.api';
 import { Event } from '#modules/event/event.type';
-import { useMarkAsSeenMutation } from '#modules/notification/hooks/useMarkAsSeen.mutation';
 import { ApiError } from '#shared/infra/errors';
 
 export function useEventDetailsQuery(
   eventId: number,
-  { onSuccess, ...options }: UseQueryOptions<Event> = {},
+  { ...options }: Partial<UseQueryOptions<Event>> = {},
 ) {
-  const { markAsSeen } = useMarkAsSeenMutation();
-
   const query = useQuery<Event, ApiError>({
     queryKey: ['event', { id: eventId }],
     queryFn: () => getEventDetailsApi(eventId),
-    onSuccess: (data) => {
-      if (data.notificationId)
-        markAsSeen({ notificationId: data.notificationId });
-      return onSuccess?.(data);
-    },
+    ...options,
+  });
+
+  return query;
+}
+
+export function useSuspenseEventDetailQuery(
+  eventId,
+  { ...options }: Partial<UseSuspenseQueryOptions<Event>> = {},
+) {
+  const query = useSuspenseQuery<Event, ApiError>({
+    queryKey: ['event', { id: eventId }],
+    queryFn: () => getEventDetailsApi(eventId),
     ...options,
   });
 

@@ -52,7 +52,7 @@ function FamilyMembersForm() {
         .fill(0)
         .map((_, i) => (
           // eslint-disable-next-line react/no-array-index-key
-          <div key={i}>
+          (<div key={i}>
             <AutocompleteSearchField
               name={`memberships-${i}`}
               label={'Membre'}
@@ -70,7 +70,7 @@ function FamilyMembersForm() {
               value={formValues[i] ?? ''}
               readOnly
             />
-          </div>
+          </div>)
         ))}
     </>
   );

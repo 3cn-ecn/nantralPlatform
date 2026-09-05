@@ -1,8 +1,4 @@
-import {
-  createSearchParams,
-  useNavigate,
-  useSearchParams,
-} from 'react-router-dom';
+import { createSearchParams, useNavigate, useSearchParams } from 'react-router';
 
 import { CheckCircle, CloseRounded } from '@mui/icons-material';
 import {

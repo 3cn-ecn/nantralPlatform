@@ -155,7 +155,7 @@ export function FilterDrawer({
             label={t('event.filters.organizer')}
             value={selectedGroupsId}
             handleChange={handleGroupChange}
-            loading={selectedGroupsQuery.isLoading}
+            loading={selectedGroupsQuery.isPending}
             defaultObjectValue={
               filters.group?.length && selectedGroupsQuery.isSuccess
                 ? selectedGroupsQuery.data.results

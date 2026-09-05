@@ -1,5 +1,5 @@
 import { lazy } from 'react';
-import { RouteObject } from 'react-router-dom';
+import { RouteObject } from 'react-router';
 
 import { QueryClient } from '@tanstack/react-query';
 
@@ -17,6 +17,9 @@ const EventGridViewPage = lazy(
 const EventDetailsPage = lazy(
   () => import('#pages/EventDetails/EventDetails.page'),
 );
+const EditFormPage = lazy(() => import('#pages/Form/EditForm.page'));
+const FormDetailPage = lazy(() => import('#pages/Form/FormDetail.page'));
+const FormListPage = lazy(() => import('#pages/Form/FormList.page'));
 const MapPage = lazy(() => import('#pages/Map/Map.page'));
 const HomePage = lazy(() => import('#pages/Home/Home.page'));
 const NotFoundPage = lazy(() => import('#pages/NotFound/NotFound.page'));
@@ -70,6 +73,36 @@ export const authenticatedRoutes: (queryClient: QueryClient) => RouteObject = (
           path: ':id',
           element: <EventDetailsPage />,
           handle: { crumb: t('breadcrumbs.events.details.index') },
+        },
+      ],
+    },
+    {
+      path: '/form',
+      children: [
+        {
+          index: true,
+          element: <FormListPage />,
+          handle: { crumb: t('breadcrumbs.form.index') },
+        },
+        {
+          path: 'new',
+          element: <EditFormPage />,
+          handle: { crumb: t('breadcrumbs.form.new') },
+        },
+        {
+          path: ':uuid',
+          children: [
+            {
+              index: true,
+              element: <FormDetailPage />,
+              handle: { crumb: t('breadcrumbs.form.index') },
+            },
+            {
+              path: 'edit',
+              element: <EditFormPage />,
+              handle: { crumb: t('breadcrumbs.form.edit') },
+            },
+          ],
         },
       ],
     },
