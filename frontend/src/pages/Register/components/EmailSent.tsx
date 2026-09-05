@@ -1,4 +1,3 @@
-import { Trans } from 'react-i18next';
 import { Navigate, useLocation, useNavigate } from 'react-router';
 
 import { Check, MarkEmailReadRounded } from '@mui/icons-material';
@@ -32,10 +31,9 @@ export default function EmailSent() {
             <MarkEmailReadRounded sx={{ fontSize: 200 }} color="secondary" />
           </FlexRow>
           <Typography variant="body1" color="secondary" textAlign="center">
-            <Trans
-              i18nKey="register.confirmationEmailSent"
-              values={{ email: email.replace('-', '-\u2060') }}
-            />
+            {t('register.confirmationEmailSent', {
+              email: email.replace('-', '-\u2060'),
+            })}
           </Typography>
           <Typography
             variant="body1"

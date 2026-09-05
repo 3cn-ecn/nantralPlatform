@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { Trans } from 'react-i18next';
 import { useNavigate, useSearchParams } from 'react-router';
 
 import { ChevronLeft, Info } from '@mui/icons-material';
@@ -65,11 +64,9 @@ export default function RegisterFormPanel() {
       <Paper sx={{ p: 2, justifyContent: 'center', display: 'flex' }}>
         <Info sx={{ m: 0 }} />
         <Typography component={'span'} textAlign={'center'}>
-          {uuid ? (
-            <Trans i18nKey="register.createdAccountIsTemporary" />
-          ) : (
-            <Trans i18nKey="register.signUpEmailRequirement" />
-          )}
+          {uuid
+            ? t('register.createdAccountIsTemporary')
+            : t('register.signUpEmailRequirement')}
         </Typography>
       </Paper>
 

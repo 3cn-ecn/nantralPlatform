@@ -111,6 +111,7 @@ export function HistoryListItem({
         secondary={
           item.historyUser ? (
             <Trans
+              t={t}
               i18nKey="group.details.modal.editHistory.timeAndUser"
               values={{
                 user: item.historyUser.name,
