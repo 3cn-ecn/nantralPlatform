@@ -377,6 +377,42 @@ exports[`Home page should render correctly without data 1`] = `
           Signature
         </p>
       </div>
+      <div
+        class="MuiBox-root css-1o6pa4a"
+      >
+        <div
+          class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation1 MuiCard-root css-15m64r9-MuiPaper-root-MuiCard-root"
+        >
+          <a
+            aria-label="Sport Calendar"
+            class="MuiButtonBase-root MuiCardActionArea-root css-1oitmrd-MuiButtonBase-root-MuiCardActionArea-root"
+            href="/sport"
+            tabindex="0"
+          >
+            <div
+              class="MuiCardContent-root css-46bh2p-MuiCardContent-root"
+            >
+              <img
+                aria-hidden="true"
+                class="material-icons notranslate MuiIcon-root MuiIcon-fontSizeLarge css-1gb9piy-MuiIcon-root"
+                src="/static/img/icons/cropped/sport.svg"
+              />
+            </div>
+            <span
+              class="MuiCardActionArea-focusHighlight css-1v2exvi-MuiCardActionArea-focusHighlight"
+            />
+            <span
+              class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
+            />
+          </a>
+        </div>
+        <p
+          aria-hidden="true"
+          class="MuiTypography-root MuiTypography-body2 MuiTypography-alignCenter css-b7etmd-MuiTypography-root"
+        >
+          Sport Calendar
+        </p>
+      </div>
     </div>
     <div
       class="MuiSpeedDial-root MuiSpeedDial-directionUp css-1mv8y2l-MuiSpeedDial-root"

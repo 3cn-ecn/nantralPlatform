@@ -7,7 +7,107 @@ from apps.group.models import Group
 from apps.group.serializers import GroupPreviewSerializer
 from apps.utils.translation_model_serializer import TranslationModelSerializer
 
-from .models import Event
+from .models import Event, SportEvent
+
+
+class SportEventSerializer(TranslationModelSerializer):
+    is_participating = serializers.SerializerMethodField()
+    participants = serializers.SerializerMethodField()
+    non_participants = serializers.SerializerMethodField()
+    owner = GroupPreviewSerializer(read_only=True)
+
+    class Meta:
+        model = SportEvent
+        read_only_fields = ["id", "participants", "non_participants", "owner"]
+        fields = [
+            "id",
+            "type",
+            "description",
+            "date",
+            "location",
+            "is_participating",
+            "participants",
+            "non_participants",
+            "owner",
+        ]
+        translations_fields = ["description"]
+        translations_only = False
+
+    def get_is_participating(self, obj: SportEvent):
+        is_participating = None
+        user = self.context["request"].user
+        if obj.participants.filter(id=user.id).exists():
+            is_participating = True
+        elif obj.non_participants.filter(id=user.id).exists():
+            is_participating = False
+        return is_participating
+
+    def get_participants(self, obj: SportEvent):
+        return obj.participants.count()
+
+    def get_non_participants(self, obj: SportEvent):
+        return obj.non_participants.count()
+
+
+class SportEventWriteSerializer(TranslationModelSerializer):
+    owner = serializers.PrimaryKeyRelatedField(queryset=Group.objects.all())
+
+    class Meta:
+        model = SportEvent
+        fields = [
+            "id",
+            "type",
+            "description",
+            "date",
+            "location",
+            "owner",
+            "participants",
+            "non_participants",
+        ]
+        read_only_fields = ["id", "participants", "non_participants"]
+        translations_fields = ["description"]
+        translations_only = False
+
+    def validate_date(self, value):
+        if self.instance is None and value < timezone.now():
+            raise serializers.ValidationError(
+                _("The date cannot be in the past."),
+            )
+        return value
+
+    def validate_owner(self, value: Group) -> Group:
+        user = self.context["request"].user
+        if not value.is_admin(user):
+            raise serializers.ValidationError(
+                _("You have to be an admin of the organizer group."),
+            )
+        if not value.check_can_create_sport_event:
+            raise serializers.ValidationError(
+                _("This group is not allowed to create sport events."),
+            )
+        return value
+
+    def validate(self, data: dict) -> dict:
+        data = super().validate(data)
+        # "participants"/"non_participants" are read-only, so DRF already
+        # strips them from `data`; read the raw submitted ids instead.
+        participant_ids = set(self.initial_data.get("participants") or [])
+        non_participant_ids = set(
+            self.initial_data.get("non_participants") or [],
+        )
+        overlap = participant_ids & non_participant_ids
+        if overlap:
+            raise serializers.ValidationError(
+                {
+                    "participants": _(
+                        "A user cannot be both a participant and a non-participant.",
+                    ),
+                    "non_participants": _(
+                        "A user cannot be both a participant and a non-participant.",
+                    ),
+                },
+            )
+        return data
 
 
 class EventSerializer(TranslationModelSerializer):
