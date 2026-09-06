@@ -28,8 +28,7 @@ export function StudentDetailsInfo({ user }: { user: Partial<User> }) {
       <FlexRow my={1} flexWrap={'wrap'}>
         <SocialLinkItem
           socialLink={{
-            uri:
-              'https://matrix.to/#/@' + user.username + ':nantral-platform.fr',
+            uri: `@${user.username}:nantral-platform.fr`,
             label: t('student.details.matrix', { username: user.username }),
           }}
         />

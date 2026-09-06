@@ -14,7 +14,7 @@ from apps.sociallink.serializers import SocialLinkSerializer
 from .models import FACULTIES, PATHS, Email, InvitationLink, User
 from .validators import (
     django_validate_password,
-    ecn_email_validator,
+    organisation_email_validator,
     validate_email,
     validate_matrix_username,
 )
@@ -30,7 +30,7 @@ class LoginSerializer(serializers.Serializer):
         max_length=200,
         validators=[
             validate_email,
-            ecn_email_validator,
+            organisation_email_validator,
             UniqueValidator(
                 Email.objects.all().annotate(email_ecn=F("email")),
                 message=_(
@@ -50,7 +50,7 @@ class RegisterSerializer(serializers.Serializer):
         max_length=200,
         validators=[
             validate_email,
-            ecn_email_validator,
+            organisation_email_validator,
             UniqueValidator(
                 Email.objects.all(),
                 message=_(

@@ -3,33 +3,157 @@
 exports[`Home page should render correctly without data 1`] = `
 <DocumentFragment>
   <div
-    class="MuiBox-root css-l6ct9h"
+    class="MuiBox-root css-pg1185"
   >
     <div
-      class="mui-image-wrapper "
-      style="width: 100%; height: 100%; display: flex; justify-content: center; align-items: center; background-color: inherit; position: absolute; z-index: -1;"
+      class="MuiBox-root css-1qv6tgt"
     >
-      <img
-        alt=""
-        class="mui-image-img css-jlmoib"
-        src="/static/img/header.png"
-        style="position: relative; width: 100%; height: 100%; object-fit: cover; transition-property: top, opacity; transition-duration: 120ms, 200ms; transition-timing-function: ease-in; opacity: 0; top: 100px;"
-      />
+      <div
+        class="MuiStack-root css-qnrv5s-MuiStack-root"
+      >
+        <div
+          class="MuiStack-root css-nen11g-MuiStack-root"
+        >
+          <h4
+            class="MuiTypography-root MuiTypography-h4 css-vryuu9-MuiTypography-root"
+          >
+            Welcome to
+          </h4>
+          <h1
+            class="MuiTypography-root MuiTypography-poster css-gvknn1-MuiTypography-root"
+          >
+            Nantral Platform
+          </h1>
+        </div>
+        <div
+          class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation5 MuiCard-root css-mxzk2c-MuiPaper-root-MuiCard-root"
+        >
+          <div
+            class="MuiStack-root MuiCardContent-root css-6n2rew-MuiStack-root-MuiCardContent-root"
+          >
+            <h2
+              class="MuiTypography-root MuiTypography-h2 css-2raco3-MuiTypography-root"
+            >
+              Download 
+              <span
+                class="MuiBox-root css-13f3esm"
+              >
+                Element X
+              </span>
+            </h2>
+            <p
+              class="MuiTypography-root MuiTypography-body1 css-17s6y1p-MuiTypography-root"
+            >
+              The Centrale Nantes students messaging platform
+            </p>
+            <div
+              class="MuiStack-root css-pex525-MuiStack-root"
+            >
+              <div
+                aria-label="Self hosted on our own servers in France"
+                class="MuiChip-root MuiChip-filled MuiChip-sizeMedium MuiChip-colorDefault MuiChip-filledDefault css-2f03pv-MuiChip-root"
+                data-mui-internal-clone-element="true"
+              >
+                <div
+                  class="MuiChip-icon MuiChip-iconMedium MuiChip-iconColorDefault MuiBox-root css-0"
+                >
+                  🇫🇷
+                </div>
+                <span
+                  class="MuiChip-label MuiChip-labelMedium css-6od3lo-MuiChip-label"
+                >
+                  Self-hosted
+                </span>
+              </div>
+              <div
+                aria-label="End to end encrypted and verified"
+                class="MuiChip-root MuiChip-filled MuiChip-sizeMedium MuiChip-colorDefault MuiChip-filledDefault css-2f03pv-MuiChip-root"
+                data-mui-internal-clone-element="true"
+              >
+                <svg
+                  aria-hidden="true"
+                  class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiChip-icon MuiChip-iconMedium MuiChip-iconColorDefault css-i4bv87-MuiSvgIcon-root"
+                  data-testid="LockIcon"
+                  focusable="false"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2m-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2m3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1z"
+                  />
+                </svg>
+                <span
+                  class="MuiChip-label MuiChip-labelMedium css-6od3lo-MuiChip-label"
+                >
+                  Secure
+                </span>
+              </div>
+              <div
+                aria-label="Independent from private social media companies"
+                class="MuiChip-root MuiChip-filled MuiChip-sizeMedium MuiChip-colorDefault MuiChip-filledDefault css-2f03pv-MuiChip-root"
+                data-mui-internal-clone-element="true"
+              >
+                <svg
+                  aria-hidden="true"
+                  class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiChip-icon MuiChip-iconMedium MuiChip-iconColorDefault css-i4bv87-MuiSvgIcon-root"
+                  data-testid="PublicIcon"
+                  focusable="false"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2m-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39"
+                  />
+                </svg>
+                <span
+                  class="MuiChip-label MuiChip-labelMedium css-6od3lo-MuiChip-label"
+                >
+                  Independent
+                </span>
+              </div>
+            </div>
+            <a
+              class="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedSuccess MuiButton-sizeLarge MuiButton-containedSizeLarge MuiButton-colorSuccess MuiButton-disableElevation MuiButton-root MuiButton-contained MuiButton-containedSuccess MuiButton-sizeLarge MuiButton-containedSizeLarge MuiButton-colorSuccess MuiButton-disableElevation css-1njb3ls-MuiButtonBase-root-MuiButton-root"
+              href="https://element.nantral-platform.fr"
+              role="button"
+              tabindex="0"
+            >
+              Go to Element
+              <span
+                class="MuiButton-icon MuiButton-endIcon MuiButton-iconSizeLarge css-z4rqyd-MuiButton-endIcon"
+              >
+                <svg
+                  aria-hidden="true"
+                  class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root"
+                  data-testid="OpenInNewIcon"
+                  focusable="false"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    d="M19 19H5V5h7V3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2v-7h-2zM14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3z"
+                  />
+                </svg>
+              </span>
+              <span
+                class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
+              />
+            </a>
+            <p
+              class="MuiTypography-root MuiTypography-body2 css-rf6ln3-MuiTypography-root"
+            >
+              For your first login, please choose 
+              <code
+                class="MuiBox-root css-1g7kd96"
+              >
+                nantral-platform.fr
+              </code>
+               as account provider
+            </p>
+          </div>
+        </div>
+      </div>
     </div>
     <div
-      class="MuiContainer-root MuiContainer-maxWidthLg css-1csjap5-MuiContainer-root"
-    >
-      <h4
-        class="MuiTypography-root MuiTypography-h4 css-1pfj0oh-MuiTypography-root"
-      >
-        Welcome to
-      </h4>
-      <h1
-        class="MuiTypography-root MuiTypography-poster css-1be4yq0-MuiTypography-root"
-      >
-        Nantral Platform
-      </h1>
-    </div>
+      class="MuiBox-root css-4ztqhk"
+    />
   </div>
   <div
     class="MuiContainer-root MuiContainer-maxWidthLg css-1f2kw6w-MuiContainer-root"

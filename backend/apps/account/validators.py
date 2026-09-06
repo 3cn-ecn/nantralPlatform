@@ -126,17 +126,3 @@ def get_user_organization(emails):
         return None
     valid_orgs.sort(key=lambda org: org.account_organization_priority)
     return valid_orgs[0].organization
-
-
-def ecn_email_validator(mail: str):
-    if (
-        re.search(
-            r"@([\w\-.]+\.)?(ec-nantes\.fr|centraliens-nantes\.org)$", mail
-        )
-        is None
-    ):
-        raise ValidationError(
-            _(
-                "You must use a valid ECN email address (ending in ec-nantes.fr or centraliens-nantes.org)"
-            ),
-        )
