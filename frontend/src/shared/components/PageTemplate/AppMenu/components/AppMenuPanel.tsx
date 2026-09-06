@@ -68,6 +68,12 @@ export function AppMenuPanel({ menuOpen, onClose }: AppMenuPanelProps) {
           iconPath="/static/img/icons/cropped/sign.svg"
           closeMenu={onClose}
         />
+        <AppMenuItem
+          label={t('navbar.sport')}
+          path="/sport"
+          iconPath="/static/img/icons/cropped/sport.svg"
+          closeMenu={onClose}
+        />
       </List>
     </Drawer>
   );

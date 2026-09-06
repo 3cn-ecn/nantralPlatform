@@ -4,6 +4,7 @@ import { Edit as EditIcon } from '@mui/icons-material';
 import { Avatar, Button, useTheme } from '@mui/material';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
+import { deleteSportEventApi } from '#modules/event/api/deleteSportEvent.api';
 import {
   UpdateSportEventApiVariables,
   updateSportEventApi,
@@ -13,6 +14,7 @@ import { SportEventFormDTO } from '#modules/event/infra/sportevent.dto';
 import { SportEvent, SportEventForm } from '#modules/event/sportevent.type';
 import { LanguageSelector } from '#shared/components/LanguageSelector/LanguageSelector';
 import { LoadingButton } from '#shared/components/LoadingButton/LoadingButton';
+import { ConfirmationModal } from '#shared/components/Modal/ConfirmationModal';
 import {
   ResponsiveDialogContent,
   ResponsiveDialogFooter,
@@ -38,6 +40,7 @@ export function EditSportEventModalContent({
   const { palette } = useTheme();
 
   const [selectedLang, setSelectedLang] = useState(currentBaseLanguage);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [formValues, updateFormValues] = useSportEventFormValues({
     event: sportEvent,
   });
@@ -47,6 +50,16 @@ export function EditSportEventModalContent({
     ApiFormError<SportEventFormDTO>,
     UpdateSportEventApiVariables
   >(updateSportEventApi);
+
+  const { mutate: deleteSportEvent, isLoading: isDeleteLoading } = useMutation({
+    mutationFn: deleteSportEventApi,
+    onSuccess: () => {
+      queryClient.invalidateQueries(['getSportEvents']);
+      queryClient.invalidateQueries(['notifications']);
+      setIsDeleteModalOpen(false);
+      onClose();
+    },
+  });
 
   const onSubmit = (e: FormEvent, values: SportEventForm) => {
     e.preventDefault();
@@ -97,6 +110,14 @@ export function EditSportEventModalContent({
         </form>
       </ResponsiveDialogContent>
       <ResponsiveDialogFooter>
+        <Button
+          variant="text"
+          color="error"
+          onClick={() => setIsDeleteModalOpen(true)}
+        >
+          {t('button.delete')}
+        </Button>
+        <Spacer flex={1} />
         <Button variant="text" onClick={() => onClose()}>
           {t('button.cancel')}
         </Button>
@@ -109,6 +130,15 @@ export function EditSportEventModalContent({
           {t('button.confirm')}
         </LoadingButton>
       </ResponsiveDialogFooter>
+      {isDeleteModalOpen && (
+        <ConfirmationModal
+          title={t('sport.deleteModal.title')}
+          body={t('sport.deleteModal.body')}
+          onCancel={() => setIsDeleteModalOpen(false)}
+          onConfirm={() => deleteSportEvent(sportEvent.id)}
+          loading={isDeleteLoading}
+        />
+      )}
     </>
   );
 }

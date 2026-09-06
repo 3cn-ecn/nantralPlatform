@@ -736,6 +736,7 @@
     "home": "Home",
     "map": "Map",
     "signature": "Signature",
+    "sport": "Sport Calendar",
     "student": "Student List"
   },
   "notification": {
@@ -1059,6 +1060,11 @@
     "filters": {
       "allClubs": "All clubs",
       "myClubsOnly": "My clubs only"
+    },
+    "membership_reminder": "Warning: only members of clubs can register for sports events. If you are not a member of a club, you will not be able to register.",
+    "deleteModal": {
+      "title": "Delete the sport event",
+      "body": "Do you really want to delete this sport event? This action is permanent."
     },
     "noEvents": "No sport events planned",
     "noDescription": "No description",

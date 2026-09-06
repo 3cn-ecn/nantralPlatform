@@ -63,6 +63,10 @@ export default function SportPage() {
           </ToggleButtonGroup>
         </FlexCol>
       </FlexRow>
+      <Typography variant="body2" color="text.secondary">
+        {t('sport.membership_reminder')}
+      </Typography>
+      <Spacer vertical={2} />
       <Spacer vertical={2} />
       {count === 0 && <Typography>{t('sport.noEvents')}</Typography>}
       <InfiniteList query={query}>
