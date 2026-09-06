@@ -50,10 +50,20 @@ class SportEventAPITestCase(APITestCase):
         )
         self.group_type = GroupType.objects.create(name="T1", slug="t1")
         self.group = Group.objects.create(
-            name="SportClub", group_type=self.group_type
+            name="SportClub",
+            group_type=self.group_type,
+            can_create_sport_event=True,
         )
         self.group.members.add(self.admin, through_defaults={"admin": True})
         self.group.members.add(self.member)
+        self.unauthorized_group = Group.objects.create(
+            name="UnauthorizedClub",
+            group_type=self.group_type,
+            can_create_sport_event=False,
+        )
+        self.unauthorized_group.members.add(
+            self.admin, through_defaults={"admin": True}
+        )
         self.event = SportEvent.objects.create(
             owner=self.group,
             date=timezone.now() + timezone.timedelta(days=1),
@@ -109,6 +119,20 @@ class SportEventAPITestCase(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertIn("owner", response.data)
 
+    def test_create_rejects_admin_of_unauthorized_group(self):
+        self.client.force_login(self.admin)
+        response = self.client.post(
+            "/api/event/sport/",
+            {
+                "owner": self.unauthorized_group.id,
+                "date": timezone.now() + timezone.timedelta(days=1),
+                "location": "Gym",
+                "description": "Training",
+            },
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertIn("owner", response.data)
+
     def test_create_rejects_overlap_between_participant_lists(self):
         self.client.force_login(self.admin)
         response = self.client.post(
@@ -138,8 +162,7 @@ class SportEventAPITestCase(APITestCase):
                 "type": self.event.type,
             },
         )
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertIn("owner", response.data)
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_update_rejects_overlap_between_participant_lists(self):
         self.client.force_login(self.admin)
@@ -170,8 +193,20 @@ class SportEventAPITestCase(APITestCase):
                 "type": self.event.type,
             },
         )
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertIn("owner", response.data)
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+    def test_partial_update_rejects_non_admin_without_owner_in_payload(self):
+        # a PATCH omitting "owner" must still be blocked for a non-admin:
+        # the admin check must not depend on "owner" being present in the
+        # payload (only object-level permissions guarantee that).
+        self.client.force_login(self.outsider)
+        response = self.client.patch(
+            f"/api/event/sport/{self.event.id}/",
+            {"location": "Hacked"},
+        )
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.event.refresh_from_db()
+        self.assertNotEqual(self.event.location, "Hacked")
 
     def test_delete_requires_admin(self):
         self.client.force_login(self.member)

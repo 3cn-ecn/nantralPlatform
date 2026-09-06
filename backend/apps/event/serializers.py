@@ -81,6 +81,10 @@ class SportEventWriteSerializer(TranslationModelSerializer):
             raise serializers.ValidationError(
                 _("You have to be an admin of the organizer group."),
             )
+        if not value.check_can_create_sport_event:
+            raise serializers.ValidationError(
+                _("This group is not allowed to create sport events."),
+            )
         return value
 
     def validate(self, data: dict) -> dict:

@@ -34,6 +34,16 @@ class EventPermission(permissions.BasePermission):
         return obj.can_view(request.user)
 
 
+class SportEventPermission(permissions.BasePermission):
+    def has_object_permission(self, request, view, obj: SportEvent):
+        if request.method in permissions.SAFE_METHODS:
+            return True
+        if view.action in ("participate", "not_participate"):
+            # membership is enforced inside the action itself
+            return True
+        return obj.owner.is_admin(request.user)
+
+
 class SportEventViewSet(viewsets.ModelViewSet):
     """An API endpoint for sport event.
 
@@ -70,7 +80,7 @@ class SportEventViewSet(viewsets.ModelViewSet):
     - DELETE .../sport/<id>/ : delete a sport event
     """
 
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated, SportEventPermission]
     filter_backends = [filters.SearchFilter, filters.OrderingFilter]
     search_fields = ["description", "owner__name", "owner__short_name"]
     ordering_fields = [
@@ -199,13 +209,6 @@ class SportEventViewSet(viewsets.ModelViewSet):
         event.non_participants.add(request.user)
         return Response(status=status.HTTP_201_CREATED)
 
-    def perform_destroy(self, instance: SportEvent) -> None:
-        if not instance.owner.is_admin(self.request.user):
-            raise exceptions.PermissionDenied(
-                _("You have to be an admin of the group %(group)s.")
-                % {"group": instance.owner.name},
-            )
-        super().perform_destroy(instance)
 
 
 class EventViewSet(viewsets.ModelViewSet):
