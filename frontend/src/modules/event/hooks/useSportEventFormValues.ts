@@ -7,13 +7,17 @@ import { Group } from '#modules/group/types/group.types';
 import { useObjectState } from '#shared/hooks/useObjectState';
 import { defaultTranslatedFieldValue } from '#shared/infra/translatedFields/defaultTranslatedFieldValue';
 
-const defaultSportEventFormValues: SportEventForm = {
-  descriptionTranslated: defaultTranslatedFieldValue,
-  group: 0,
-  location: '',
-  date: new Date(),
-  type: SportEventType.TRAINING,
-};
+function getDefaultSportEventFormValues(): SportEventForm {
+  return {
+    descriptionTranslated: defaultTranslatedFieldValue,
+    group: null,
+    location: '',
+    // default to 1h from now: filling the form takes time, and the date
+    // must not be in the past by the time it is submitted
+    date: new Date(Date.now() + 60 * 60 * 1000),
+    type: SportEventType.TRAINING,
+  };
+}
 
 function convertToForm(event: SportEvent): SportEventForm {
   return {
@@ -34,7 +38,7 @@ export function useSportEventFormValues({
 } = {}) {
   const defaultValues = event
     ? convertToForm(event)
-    : defaultSportEventFormValues;
+    : getDefaultSportEventFormValues();
   if (group) {
     defaultValues.group = group.id;
   }

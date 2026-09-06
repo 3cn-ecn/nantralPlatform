@@ -56,10 +56,7 @@ export function EditSportEventModal({
 
   return (
     <ResponsiveDialog onClose={onClose} disableEnforceFocus>
-      <EditSportEventModalContent
-        sportEvent={sportEvent}
-        onClose={onClose}
-      />
+      <EditSportEventModalContent sportEvent={sportEvent} onClose={onClose} />
     </ResponsiveDialog>
   );
 }

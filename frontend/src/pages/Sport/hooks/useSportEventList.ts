@@ -6,6 +6,8 @@ import {
 } from '#modules/event/api/getSportEvents.api';
 import { SportEvent } from '#modules/event/sportevent.type';
 
+import { getSportEventGroupKey, LATER_GROUP_KEY } from './useDayDisplay';
+
 export function useSportEventList(
   params?: Omit<SportEventsQueryParameters, 'page'>,
 ) {
@@ -25,13 +27,19 @@ export function useSportEventList(
   const groupByDay = new Map<string, SportEvent[]>();
 
   flatResult.forEach((sportEvent: SportEvent) => {
-    const dateKey = sportEvent.date.toDateString();
-    if (groupByDay.has(dateKey)) {
-      groupByDay.get(dateKey)?.push(sportEvent);
+    const groupKey = getSportEventGroupKey(sportEvent.date);
+    if (groupByDay.has(groupKey)) {
+      groupByDay.get(groupKey)?.push(sportEvent);
     } else {
-      groupByDay.set(dateKey, [sportEvent]);
+      groupByDay.set(groupKey, [sportEvent]);
     }
   });
+
+  // the "later" row always shows, even with no events, so it can host
+  // the permanent create-event card
+  if (!groupByDay.has(LATER_GROUP_KEY)) {
+    groupByDay.set(LATER_GROUP_KEY, []);
+  }
 
   return {
     query: query,

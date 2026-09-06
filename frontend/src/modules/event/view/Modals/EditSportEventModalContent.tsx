@@ -50,12 +50,11 @@ export function EditSportEventModalContent({
 
   const onSubmit = (e: FormEvent, values: SportEventForm) => {
     e.preventDefault();
-    console.log(values);
     mutate(
       { id: sportEvent.id, data: values },
       {
         onSuccess: () => {
-          queryClient.invalidateQueries(['sport-events']);
+          queryClient.invalidateQueries(['getSportEvents']);
           queryClient.invalidateQueries(['sport-event', { id: sportEvent.id }]);
           queryClient.invalidateQueries(['notifications']);
           onClose();

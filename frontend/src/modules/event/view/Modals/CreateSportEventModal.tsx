@@ -59,7 +59,7 @@ export function CreateSportEventModal({
     mutate(values, {
       onSuccess: (data) => {
         // if success, reset the sport event data in all queries
-        queryClient.invalidateQueries(['sport-events']);
+        queryClient.invalidateQueries(['getSportEvents']);
         queryClient.invalidateQueries(['notifications']);
         // close the modal
         onCreated(data.id);

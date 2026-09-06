@@ -66,6 +66,9 @@ class GroupPreviewSerializer(serializers.ModelSerializer):
     url = serializers.SerializerMethodField()
     category = serializers.SerializerMethodField()
     sub_category = serializers.SerializerMethodField()
+    can_create_sport_event = serializers.BooleanField(
+        read_only=True, source="check_can_create_sport_event"
+    )
 
     class Meta:
         model = Group
@@ -78,6 +81,7 @@ class GroupPreviewSerializer(serializers.ModelSerializer):
             "id",
             "category",
             "sub_category",
+            "can_create_sport_event",
         ]
         read_only_fields = [
             "name",

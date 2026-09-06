@@ -1,13 +1,21 @@
 import { Dispatch, useCallback } from 'react';
 
+import { MenuItem } from '@mui/material';
+
 import { SportEventFormDTO } from '#modules/event/infra/sportevent.dto';
-import { SportEvent, SportEventForm } from '#modules/event/sportevent.type';
+import {
+  SportEvent,
+  SportEventForm,
+  SportEventType,
+  sportEventTypeToString,
+} from '#modules/event/sportevent.type';
 import { getGroupListApi } from '#modules/group/api/getGroupList.api';
 import { FlexAuto } from '#shared/components/FlexBox/FlexBox';
 import { FormErrorAlert } from '#shared/components/FormErrorAlert/FormErrorAlert';
 import {
   AutocompleteSearchField,
   DateTimeField,
+  SelectField,
   TextField,
 } from '#shared/components/FormFields';
 import { RichTextField } from '#shared/components/FormFields/RichTextField';
@@ -40,8 +48,8 @@ export function SportEventFormFields({
   // (when a field is modified, we only rerender this field and not all of them).
   const fetchInitialGroupOptions = useCallback(
     () =>
-      getGroupListApi({ pageSize: 7, isAdmin: true }).then(
-        (data) => data.results.filter((e) => e.canCreateSportEvent),
+      getGroupListApi({ pageSize: 7, isAdmin: true }).then((data) =>
+        data.results.filter((e) => e.canCreateSportEvent),
       ),
     [],
   );
@@ -66,13 +74,30 @@ export function SportEventFormFields({
           [updateFormValues],
         )}
         defaultObjectValue={prevData?.group}
-        errors={error?.fields?.group}
+        errors={error?.fields?.owner}
         required
         fetchInitialOptions={fetchInitialGroupOptions}
         fetchOptions={fetchGroupOptions}
         labelPropName="name"
         imagePropName="icon"
       />
+      <SelectField
+        name="type"
+        label={t('event.form.type.label')}
+        value={String(formValues.type)}
+        handleChange={useCallback(
+          (val: string) => updateFormValues({ type: Number(val) }),
+          [updateFormValues],
+        )}
+        errors={error?.fields?.type}
+      >
+        <MenuItem value={String(SportEventType.TRAINING)}>
+          {sportEventTypeToString(SportEventType.TRAINING)}
+        </MenuItem>
+        <MenuItem value={String(SportEventType.COMPETITION)}>
+          {sportEventTypeToString(SportEventType.COMPETITION)}
+        </MenuItem>
+      </SelectField>
       <RichTextField
         name="description"
         key={`description-${selectedLang}`}
@@ -80,7 +105,7 @@ export function SportEventFormFields({
         value={formValues.descriptionTranslated[selectedLang]}
         handleChange={useCallback(
           (val) => {
-            updateFormValues((prevState: { descriptionTranslated: any }) => ({
+            updateFormValues((prevState) => ({
               descriptionTranslated: {
                 ...prevState.descriptionTranslated,
                 [selectedLang]: val,

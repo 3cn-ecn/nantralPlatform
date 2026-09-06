@@ -1,43 +1,26 @@
-import {
-  differenceInCalendarDays,
-  format,
-  isValid,
-  parseISO,
-  startOfDay,
-} from 'date-fns';
+import { differenceInCalendarDays, format, startOfDay } from 'date-fns';
+
 import { useTranslation } from '#shared/i18n/useTranslation';
 
-function toDate(value: string): Date {
-  const isoDate = parseISO(value);
-  if (isValid(isoDate)) {
-    return isoDate;
-  }
+export const LATER_GROUP_KEY = 'later';
 
-  const fallbackDate = new Date(value);
-  return isValid(fallbackDate) ? fallbackDate : new Date(NaN);
+/** Groups events more than 7 days away under a single `LATER_GROUP_KEY` bucket, and each of the next 7 days under its own key. */
+export function getSportEventGroupKey(date: Date): string {
+  const today = startOfDay(new Date());
+  const dayDifference = differenceInCalendarDays(date, today);
+  return dayDifference > 7 ? LATER_GROUP_KEY : date.toDateString();
 }
 
 export function useDayDisplay() {
   const { t, dateFnsLocale } = useTranslation();
 
-  return (date: string): string => {
-    const targetDate = toDate(date);
-    if (!isValid(targetDate)) {
-      return date;
-    }
-
-    const today = startOfDay(new Date());
-    const dayDifference = differenceInCalendarDays(targetDate, today);
-
-    if (dayDifference < 0) {
-      return t('sport.dayDisplay.completed');
-    }
-
-    if (dayDifference > 7) {
+  return (groupKey: string, sampleDate?: Date): string => {
+    if (groupKey === LATER_GROUP_KEY) {
       return t('sport.dayDisplay.later');
     }
 
-    const dayLabel = format(targetDate, 'EEEE', { locale: dateFnsLocale });
+    const date = sampleDate ?? new Date(groupKey);
+    const dayLabel = format(date, 'EEEE', { locale: dateFnsLocale });
     return dayLabel.charAt(0).toUpperCase() + dayLabel.slice(1).toLowerCase();
   };
 }

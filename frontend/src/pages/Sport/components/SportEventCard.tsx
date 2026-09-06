@@ -21,7 +21,11 @@ import {
   useTheme,
 } from '@mui/material';
 
-import { SportEvent, SportEventType } from '#modules/event/sportevent.type';
+import {
+  SportEvent,
+  SportEventType,
+  sportEventTypeToString,
+} from '#modules/event/sportevent.type';
 import { EditSportEventModal } from '#modules/event/view/Modals/EditSportEventModal';
 import { SportEventPeopleModal } from '#modules/event/view/SportEventPeopleModal';
 import { useGroupDetailsQuery } from '#modules/group/hooks/useGroupDetails.query';
@@ -58,13 +62,6 @@ export function SportEventCard({ sportEvent }: Readonly<SportEventCardProps>) {
     year: 'numeric',
   });
 
-  let participationLabel = null;
-  if (sportEvent.isParticipating === true) {
-    participationLabel = t('sport.participation.participating');
-  } else if (sportEvent.isParticipating === false) {
-    participationLabel = t('sport.participation.notParticipating');
-  }
-
   const hasDescription = Boolean(sportEvent.description?.trim());
 
   return (
@@ -73,9 +70,8 @@ export function SportEventCard({ sportEvent }: Readonly<SportEventCardProps>) {
         variant="outlined"
         sx={{
           width: '100%',
-          height: '100%',
           maxWidth: '250px',
-          maxHeight: '250px',
+          height: '250px',
           display: 'flex',
           flexDirection: 'column',
           position: 'relative',
@@ -109,9 +105,13 @@ export function SportEventCard({ sportEvent }: Readonly<SportEventCardProps>) {
                   {sportEvent.group.name}
                 </Typography>
                 <Chip
-                  label={SportEventType.toString(sportEvent.type)}
+                  label={sportEventTypeToString(sportEvent.type)}
                   variant="outlined"
-                  color="info"
+                  color={
+                    sportEvent.type === SportEventType.TRAINING
+                      ? 'info'
+                      : 'warning'
+                  }
                   size="small"
                 />
               </FlexCol>
@@ -150,20 +150,17 @@ export function SportEventCard({ sportEvent }: Readonly<SportEventCardProps>) {
             <LocationOn sx={{ fontSize: 16 }} />
             <Typography>{sportEvent.location}</Typography>
           </FlexRow>
-          <Typography
-            variant="body2"
+          <RichTextRenderer
+            content={sportEvent.description || t('sport.noDescription')}
             sx={{
               mt: 0,
               pt: 0,
               color: hasDescription ? 'text.secondary' : 'text.disabled',
               fontStyle: hasDescription ? 'normal' : 'italic',
               lineHeight: 1.5,
+              fontSize: (theme) => theme.typography.body2.fontSize,
             }}
-          >
-            <RichTextRenderer
-              content={sportEvent.description || t('sport.noDescription')}
-            />
-          </Typography>
+          />
         </CardContent>
 
         <Divider />

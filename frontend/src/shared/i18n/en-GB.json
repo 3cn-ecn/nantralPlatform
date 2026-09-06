@@ -223,6 +223,9 @@
       },
       "title": {
         "label": "Event title"
+      },
+      "type": {
+        "label": "Event type"
       }
     },
     "grid": {
@@ -1059,6 +1062,9 @@
     },
     "noEvents": "No sport events planned",
     "noDescription": "No description",
+    "createCard": {
+      "label": "Add an event"
+    },
     "participants_one": "{{count}} participant",
     "participants_other": "{{count}} participants",
     "participants_zero": "{{count}} participant",
@@ -1078,7 +1084,6 @@
       "competition": "Competition"
     },
     "dayDisplay": {
-      "completed": "Finished",
       "later": "Later"
     }
   }

@@ -69,7 +69,7 @@ class SportEventWriteSerializer(TranslationModelSerializer):
         translations_only = False
 
     def validate_date(self, value):
-        if value < timezone.now():
+        if self.instance is None and value < timezone.now():
             raise serializers.ValidationError(
                 _("The date cannot be in the past."),
             )
@@ -85,16 +85,12 @@ class SportEventWriteSerializer(TranslationModelSerializer):
 
     def validate(self, data: dict) -> dict:
         data = super().validate(data)
-        participants = data.get(
-            "participants",
-            list(self.instance.participants.all()) if self.instance else [],
+        # "participants"/"non_participants" are read-only, so DRF already
+        # strips them from `data`; read the raw submitted ids instead.
+        participant_ids = set(self.initial_data.get("participants") or [])
+        non_participant_ids = set(
+            self.initial_data.get("non_participants") or [],
         )
-        non_participants = data.get(
-            "non_participants",
-            list(self.instance.non_participants.all()) if self.instance else [],
-        )
-        participant_ids = {participant.id for participant in participants}
-        non_participant_ids = {user.id for user in non_participants}
         overlap = participant_ids & non_participant_ids
         if overlap:
             raise serializers.ValidationError(

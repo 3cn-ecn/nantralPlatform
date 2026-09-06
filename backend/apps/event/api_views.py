@@ -179,7 +179,7 @@ class SportEventViewSet(viewsets.ModelViewSet):
         event: SportEvent = self.get_object()
         # user asks to remove himself from participants
         if request.method == "DELETE":
-            event.not_participants.remove(request.user)
+            event.non_participants.remove(request.user)
             return Response(status=status.HTTP_204_NO_CONTENT)
         # user asks to add himself to participants
         now = timezone.now()
