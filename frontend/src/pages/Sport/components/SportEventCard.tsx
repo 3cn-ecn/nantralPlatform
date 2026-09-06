@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 
 import {
   CalendarMonth,
@@ -94,14 +95,26 @@ export function SportEventCard({ sportEvent }: Readonly<SportEventCardProps>) {
             justifyContent="space-between"
             gap={1}
           >
-            <FlexRow alignItems="center" justifyContent="space-between" gap={1}>
+            <FlexRow
+              component={Link}
+              to={sportEvent.group.url}
+              alignItems="center"
+              justifyContent="space-between"
+              gap={1}
+              sx={{ color: 'inherit', textDecoration: 'none' }}
+            >
               <GroupAvatar
                 alt={sportEvent.group.name}
                 src={sportEvent.group.icon}
                 size="m"
               />
               <FlexCol>
-                <Typography variant="subtitle1" fontWeight={800} noWrap>
+                <Typography
+                  variant="subtitle1"
+                  fontWeight={800}
+                  noWrap
+                  sx={{ '&:hover': { textDecoration: 'underline' } }}
+                >
                   {sportEvent.group.name}
                 </Typography>
                 <Chip
