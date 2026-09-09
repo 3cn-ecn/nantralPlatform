@@ -23,14 +23,46 @@ class FormSchema(models.Model):
     users = models.ManyToManyField(
         User, through="UserRole", related_name="form_schemas"
     )
-    editable = models.BooleanField(default=True)
-    public = models.BooleanField(default=False)
+    # TODO: Add controls for these parameters
+    editable = models.BooleanField(
+        default=True, verbose_name=_("Can editors edit the form")
+    )
+    public = models.BooleanField(
+        default=False,
+        verbose_name=_("Are people able to get the form with only the URL"),
+    )
+    # active = models.BooleanField(
+    #     default=False, verbose_name=_("Are people allowed to answer the form")
+    # )
 
     def __str__(self):
         return self.name
 
     def get_absolute_url(self):
         return f"/form/{self.uuid}/"
+
+    def is_admin(self, user: User) -> bool:
+        return (
+            user.is_superuser
+            or self.userrole_set.filter(
+                user=user, role__in=["owner", "editor"]
+            ).exists()
+        )
+
+    def can_view_answers(self, user: User) -> bool:
+        return (
+            user.is_superuser
+            or self.userrole_set.filter(
+                user=user, role__in=["owner", "editor", "answer_viewer"]
+            ).exists()
+        )
+
+    def can_view_form(self, user: User) -> bool:
+        return (
+            self.public
+            or user.is_superuser
+            or self.userrole_set.filter(user=user).exists()
+        )
 
 
 class UserRole(models.Model):
@@ -62,8 +94,13 @@ class FormAnswer(models.Model):
     modified_at = models.DateTimeField(auto_now=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
 
+    class Meta:
+        unique_together = ("form_schema", "user")
+
     def __str__(self):
-        return f"Answer to {self.form_schema.name} at {self.submitted_at} by {self.user.name}"
+        return _("Answer to {} at {} by {}").format(
+            self.form_schema.name, self.submitted_at, self.user.name
+        )
 
     def get_absolute_url(self):
         return f"/form/{self.form_schema.uuid}/answer/{self.uuid}/"

@@ -39,6 +39,11 @@ export default function Shortcuts() {
         iconPath="/static/img/icons/cropped/roommates.svg"
       />
       <ShortcutItem
+        label={t('navbar.form')}
+        path="/form/"
+        iconPath="/static/img/icons/cropped/form.svg"
+      />
+      <ShortcutItem
         label={t('navbar.family')}
         path="/parrainage/"
         iconPath="/static/img/icons/cropped/family.svg"

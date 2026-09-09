@@ -1,3 +1,5 @@
+import { useMemo } from 'react';
+
 import {
   and,
   ControlProps,
@@ -7,15 +9,14 @@ import {
   rankWith,
 } from '@jsonforms/core';
 import { WithInput } from '@jsonforms/material-renderers';
-import { withJsonFormsControlProps } from '@jsonforms/react';
-import merge from 'lodash/merge';
+import { useJsonForms, withJsonFormsControlProps } from '@jsonforms/react';
+import { union, merge } from 'lodash';
 
 import { WeightedRow } from '#shared/components/FormFields/WeighedRow';
 
 export const RowControl = ({
   id,
   description,
-  errors,
   label,
   uischema,
   visible,
@@ -28,6 +29,29 @@ export const RowControl = ({
   enabled,
 }: ControlProps & WithInput) => {
   const appliedUiSchemaOptions = merge({}, config, uischema.options);
+
+  const form = useJsonForms();
+  const formErrors = useMemo(
+    () =>
+      union(
+        form.core?.additionalErrors,
+        form.core?.validationMode === 'ValidateAndShow'
+          ? form.core?.errors
+          : [],
+      )
+        .filter((err) =>
+          err.instancePath.startsWith('/' + path.replaceAll('.', '/')),
+        )
+        .map((err) => err.message)
+        .filter((err) => err !== undefined),
+    [
+      form.core?.additionalErrors,
+      form.core?.errors,
+      form.core?.validationMode,
+      path,
+    ],
+  );
+
   if (!visible) {
     return null;
   }
@@ -39,7 +63,7 @@ export const RowControl = ({
       handleChange={(val) => handleChange(path, val ?? '')}
       name={id}
       disabled={!enabled}
-      errors={errors.length > 0 ? errors.split('\n') : undefined}
+      errors={formErrors.length > 0 ? formErrors : undefined}
       required={required}
       helperText={description}
       cols={schema.properties?.value?.oneOf?.map((val) => val.title) || []}

@@ -17,6 +17,11 @@
       "home": "Commentaires",
       "suggestion": "Suggestion"
     },
+    "form": {
+      "edit": "Édition",
+      "index": "Formulaires",
+      "new": "Nouveau"
+    },
     "group": {
       "index": "Groupes"
     },
@@ -47,6 +52,7 @@
     "edit": "Modifier",
     "next": "Suivant",
     "previous": "Précédent",
+    "reset": "Réinitialiser",
     "save": "Enregistrer",
     "saved": "Enregistré",
     "send": "Envoyer",
@@ -634,6 +640,27 @@
     },
     "welcomeTo": "Bienvenue sur"
   },
+  "jsonForm": {
+    "answer": {
+      "hasErrors": {
+        "body": "Veuillez vérifier vos réponses ainsi que les messages d'erreurs affichés. Vous ne pourrez pas soumettre ce formulaire tant que des erreurs seront présentes.",
+        "title": "Le formulaire contient des erreurs"
+      },
+      "loadingTitle": "Chargement du formulaire...",
+      "resetBody": "Voulez-vous supprimer définitivement vos réponses au formulaire ?",
+      "resetTitle": "Réinitialiser le formulaire",
+      "saved": "Votre réponse a été enregistrée, vous pouvez quitter cette page",
+      "submitBody": "Voulez-vous envoyer votre réponse. Vous pourrez la modifier tant que le formulaire reste actif",
+      "submitTitle": "Envoyer la réponse ?"
+    },
+    "edit": {
+      "title": "Édition du formulaire"
+    },
+    "list": {
+      "new": "Nouveau Formulaire",
+      "title": "Formulaires"
+    }
+  },
   "legalNotice": {
     "paragraphs": {
       "cookies": {
@@ -748,11 +775,18 @@
     },
     "helpButton": {
       "label": "Aide"
+    },
+    "numberEdit": {
+      "title": "Modifier la valeur numérique"
+    },
+    "textEdit": {
+      "title": "Modifier la valeur textuelle"
     }
   },
   "navbar": {
     "events": "Évènements",
     "family": "Parrainage",
+    "form": "Formulaires",
     "group": "Groupes",
     "home": "Accueil",
     "map": "Carte",
@@ -823,6 +857,9 @@
       }
     },
     "modal": {
+      "deleteButton": {
+        "label": "Supprimer la publication"
+      },
       "editButton": {
         "label": "Modifier le post"
       },

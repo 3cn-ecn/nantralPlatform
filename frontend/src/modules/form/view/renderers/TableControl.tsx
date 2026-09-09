@@ -78,10 +78,10 @@ export const TableControl = ({
             </TableCell>
             {valueColumns?.map((val: JsonSchema) => (
               <TableCell key={val.const} sx={{ textAlign: 'center' }}>
-                {jsonFormTranslator(i18nKeyPrefix + '.' + val.const + '.label')}
+                {jsonFormTranslator(i18nKeyPrefix + '.' + val.title + '.label')}
                 <FormHelperText>
                   {jsonFormTranslator(
-                    i18nKeyPrefix + '.' + val.const + '.description',
+                    i18nKeyPrefix + '.' + val.title + '.description',
                   )}
                 </FormHelperText>
               </TableCell>

@@ -17,6 +17,9 @@ export interface JsonFormSchema {
   schema: JsonSchema;
   uiSchema: UISchemaElement;
   i18nKeys: Record<BaseLanguage, Record<string, object>>;
+  isAdmin: boolean;
+  canViewAnswers: boolean;
+  canViewForm: boolean;
 }
 
 export interface JsonFormAnswer {
@@ -30,5 +33,10 @@ export interface JsonFormAnswer {
 
 export type JsonFormPreview = Pick<
   JsonFormSchema,
-  'uuid' | 'name' | 'description'
-> & { roles: UserRole[] };
+  'uuid' | 'name' | 'description' | 'isAdmin' | 'canViewAnswers' | 'canViewForm'
+> & { roles?: UserRole[] };
+
+export type JsonFormSchemaForm = Omit<
+  JsonFormSchema,
+  'isAdmin' | 'canViewAnswers' | 'canViewForm'
+>;

@@ -1,51 +1,38 @@
-import { useState } from 'react';
-import { useParams } from 'react-router';
+import { useLoaderData } from 'react-router';
 
-import { Button, Container } from '@mui/material';
+import { Container, Stack, Typography } from '@mui/material';
 
 import { FormProvider } from '#modules/form/state/form.context';
+import { jsonFormToNode } from '#modules/form/state/utils';
+import { JsonFormSchema } from '#modules/form/types/jsonForm.type';
 import { FormEditRoot } from '#modules/form/view/shared/FormEditRoot';
 import { FormHeaderFields } from '#modules/form/view/shared/FormHeaderFields';
-import { FormPreview } from '#modules/form/view/shared/FormPreview';
-import { ImportForm } from '#modules/form/view/shared/ImportForm';
+import { FormItemActions } from '#modules/form/view/shared/FormItemActions';
 import { SaveForm } from '#modules/form/view/shared/SaveForm';
 import { SelectBaseComponent } from '#modules/form/view/shared/SelectBaseComponent';
 import { FlexCol } from '#shared/components/FlexBox/FlexBox';
+import { useTranslation } from '#shared/i18n/useTranslation';
 
 export default function EditFormPage() {
-  const params = useParams();
-  const rootId = crypto.randomUUID();
-  const [showForm, setShowForm] = useState(false);
+  const form: JsonFormSchema = useLoaderData();
+  const { t } = useTranslation();
 
   return (
     <Container sx={{ my: 2 }}>
-      <FormProvider
-        initialForm={{
-          uuid: crypto.randomUUID(),
-          name: '',
-          description: '',
-          root: rootId,
-          nodes: {
-            [rootId]: {
-              payload: {
-                translation: { en: {}, fr: {} },
-                type: 'VerticalLayout',
-                options: {},
-                schema: {},
-              },
-              children: [],
-            },
-          },
-        }}
-      >
+      <FormProvider initialForm={jsonFormToNode(form)}>
         <FlexCol gap={3}>
-          {params['uuid'] && <ImportForm uuid={params['uuid']} />}
+          <Stack
+            direction={'row'}
+            justifyContent={'space-between'}
+            alignItems={'center'}
+            gap={2}
+          >
+            <Typography variant={'h1'}>{t('jsonForm.edit.title')}</Typography>
+            <FormItemActions formPreview={form} />
+          </Stack>
           <FormHeaderFields />
           <SelectBaseComponent />
           <FormEditRoot />
-
-          <Button onClick={() => setShowForm(!showForm)}>Show form</Button>
-          {showForm && <FormPreview />}
           <SaveForm />
         </FlexCol>
       </FormProvider>

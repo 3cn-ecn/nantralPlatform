@@ -1,9 +1,9 @@
-import { JsonFormSchemaDTO } from '#modules/form/infra/jsonForm.dto';
-import { JsonFormSchema } from '#modules/form/types/jsonForm.type';
+import { JsonFormSchemaFormDTO } from '#modules/form/infra/jsonForm.dto';
+import { JsonFormSchemaForm } from '#modules/form/types/jsonForm.type';
 
 export const convertJsonFormSchema = (
-  schema: Omit<JsonFormSchema, 'uuid'>,
-): Omit<JsonFormSchemaDTO, 'uuid'> => {
+  schema: Omit<JsonFormSchemaForm, 'uuid'>,
+): Omit<JsonFormSchemaFormDTO, 'uuid'> => {
   return {
     name: schema.name,
     description: schema.description,

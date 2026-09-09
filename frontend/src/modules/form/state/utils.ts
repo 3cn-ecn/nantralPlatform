@@ -9,7 +9,10 @@ import { UUID } from 'crypto';
 import { cloneDeep, get, mapValues, merge, omit, set } from 'lodash';
 
 import { FormState, Node, Payload } from '#modules/form/types/form.type';
-import { JsonFormSchema } from '#modules/form/types/jsonForm.type';
+import {
+  JsonFormSchema,
+  JsonFormSchemaForm,
+} from '#modules/form/types/jsonForm.type';
 
 /**
  * Add a node to the form as child of the given parent
@@ -176,13 +179,13 @@ export function isDescendent(
 export function nodeToJsonForm(
   state: FormState,
   path?: string[],
-): JsonFormSchema {
+): JsonFormSchemaForm {
   const nodeId = path?.at(-1);
   if (!path) {
     path = [];
   }
   const node = state.nodes[nodeId ?? state.root];
-  const result: JsonFormSchema = {
+  const result: JsonFormSchemaForm = {
     uuid: state.uuid,
     name: state.name,
     description: state.description,

@@ -1,6 +1,8 @@
-import { useState } from 'react';
+import { Link } from 'react-router';
 
+import AddIcon from '@mui/icons-material/Add';
 import {
+  Button,
   Container,
   Paper,
   Table,
@@ -11,26 +13,18 @@ import {
   TableRow,
   Typography,
 } from '@mui/material';
-import {
-  useInfiniteQuery,
-  useMutation,
-  useQueryClient,
-} from '@tanstack/react-query';
+import { useInfiniteQuery } from '@tanstack/react-query';
 
-import { deleteFormApi } from '#modules/form/api/deleteForm.api';
 import { getFormListApi } from '#modules/form/api/getFormList.api';
-import { JsonFormPreview } from '#modules/form/types/jsonForm.type';
-import { FormListItem } from '#modules/form/view/RoleModal/FormListItem';
-import { RoleModal } from '#modules/form/view/RoleModal/RoleModal';
+import {
+  FormListItem,
+  FormListItemSkeleton,
+} from '#modules/form/view/shared/FormListItem';
 import { InfiniteList } from '#shared/components/InfiniteList/InfiniteList';
-import { ConfirmationModal } from '#shared/components/Modal/ConfirmationModal';
-import { useToast } from '#shared/context/Toast.context';
-import { ApiError } from '#shared/infra/errors';
+import { useTranslation } from '#shared/i18n/useTranslation';
 
 export default function FormListPage() {
-  const showToast = useToast();
-  const queryClient = useQueryClient();
-
+  const { t } = useTranslation();
   const formsQuery = useInfiniteQuery({
     queryKey: ['forms'],
     queryFn: ({ pageParam }) => getFormListApi({ page: pageParam }),
@@ -39,36 +33,17 @@ export default function FormListPage() {
       lastPage.next ? allPages.length + 1 : undefined,
   });
 
-  const [jsonFormModal, setJsonFormModal] = useState<JsonFormPreview | null>(
-    null,
-  );
-
-  const [deleteFormModal, setDeleteFormModal] =
-    useState<JsonFormPreview | null>(null);
-
-  const { mutate: deleteForm, isPending: deleteLoading } = useMutation({
-    mutationFn: deleteFormApi,
-    onError: (error: ApiError) =>
-      showToast({
-        message: error.message,
-        variant: 'error',
-      }),
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['forms'] }),
-    onSettled: () => setDeleteFormModal(null),
-  });
-
   return (
     <Container sx={{ py: 3 }}>
       <Typography variant={'h1'} sx={{ mb: 3 }}>
-        Formulaires
+        {t('jsonForm.list.title')}
       </Typography>
       <InfiniteList query={formsQuery}>
         <TableContainer component={Paper}>
           <Table>
             <TableHead>
               <TableRow>
-                <TableCell colSpan={2}>Form</TableCell>
-                <TableCell>Description</TableCell>
+                <TableCell>Form</TableCell>
                 <TableCell>Role</TableCell>
                 <TableCell>Actions</TableCell>
               </TableRow>
@@ -80,31 +55,29 @@ export default function FormListPage() {
                   <FormListItem
                     key={formPreview.uuid}
                     formPreview={formPreview}
-                    handleShare={() => setJsonFormModal(formPreview)}
-                    handleRemove={() => setDeleteFormModal(formPreview)}
                   />
                 ))}
+              {formsQuery.isPending && (
+                <>
+                  <FormListItemSkeleton />
+                  <FormListItemSkeleton />
+                  <FormListItemSkeleton />
+                </>
+              )}
             </TableBody>
           </Table>
         </TableContainer>
       </InfiniteList>
-      {jsonFormModal && (
-        <RoleModal
-          jsonForm={jsonFormModal}
-          onClose={() => setJsonFormModal(null)}
-        />
-      )}
-      {deleteFormModal && (
-        <ConfirmationModal
-          title={`Delete form ${deleteFormModal.name} ?`}
-          body={
-            'Do you really want to delete this form. This action cannot be undone'
-          }
-          onCancel={() => setDeleteFormModal(null)}
-          onConfirm={() => deleteForm(deleteFormModal.uuid)}
-          loading={deleteLoading}
-        />
-      )}
+      <Button
+        size={'large'}
+        variant={'contained'}
+        component={Link}
+        to={'new/'}
+        startIcon={<AddIcon />}
+        sx={{ mt: 3 }}
+      >
+        {t('jsonForm.list.new')}
+      </Button>
     </Container>
   );
 }

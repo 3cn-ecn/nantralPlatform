@@ -1,6 +1,7 @@
 import { Divider } from '@mui/material';
 
 import { InputType, LayoutType } from '#modules/form/types/form.type';
+import { JsonFormSchema } from '#modules/form/types/jsonForm.type';
 import { MultipleChoiceAdditionalInput } from '#modules/form/view/MultipleChoiceAdditionalInput/MultipleChoiceAdditionalInput';
 import { WeightedAdditionalInput } from '#modules/form/view/WeightedAdditionalInput/WeightedAdditionalInput';
 import { CategorizationLayout } from '#modules/form/view/layouts/CategorizationLayout';
@@ -220,4 +221,25 @@ export const LAYOUT_TYPES: Record<string, LayoutType> = {
       type: 'Label',
     },
   },
+};
+
+export const getDefaultForm = (): JsonFormSchema => {
+  return {
+    uuid: crypto.randomUUID(),
+    name: '',
+    description: '',
+    schema: {
+      type: 'object',
+      properties: {},
+    },
+    uiSchema: {
+      type: 'VerticalLayout',
+      elements: [],
+      options: {},
+    },
+    i18nKeys: { fr: {}, en: {} },
+    isAdmin: false,
+    canViewAnswers: false,
+    canViewForm: false,
+  };
 };

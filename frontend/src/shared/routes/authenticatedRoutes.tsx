@@ -3,9 +3,10 @@ import { RouteObject } from 'react-router';
 
 import { QueryClient } from '@tanstack/react-query';
 
+import { getDefaultForm } from '#modules/form/constants';
 import { PageTemplate } from '#shared/components/PageTemplate/PageTemplate';
 
-import { userDetailsLoader } from './loader';
+import { formEditLoader, userDetailsLoader } from './loader';
 
 const EventPage = lazy(() => import('#pages/Event/Event.page'));
 const EventCalendarViewPage = lazy(
@@ -88,6 +89,7 @@ export const authenticatedRoutes: (queryClient: QueryClient) => RouteObject = (
           path: 'new',
           element: <EditFormPage />,
           handle: { crumb: t('breadcrumbs.form.new') },
+          loader: () => getDefaultForm(),
         },
         {
           path: ':uuid',
@@ -101,6 +103,7 @@ export const authenticatedRoutes: (queryClient: QueryClient) => RouteObject = (
               path: 'edit',
               element: <EditFormPage />,
               handle: { crumb: t('breadcrumbs.form.edit') },
+              loader: (args) => formEditLoader(args, queryClient),
             },
           ],
         },

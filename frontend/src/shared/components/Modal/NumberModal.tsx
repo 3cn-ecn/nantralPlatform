@@ -50,7 +50,7 @@ export function NumberModal({
         }}
       >
         <DialogTitle id="responsive-dialog-title">
-          {title || t('modal.textEdit.title', { label })}
+          {title || t('modal.numberEdit.title', { label })}
         </DialogTitle>
         <DialogContent>
           <NumberField

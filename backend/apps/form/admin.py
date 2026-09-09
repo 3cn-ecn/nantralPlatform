@@ -26,7 +26,13 @@ class FormSchemaAdmin(admin.ModelAdmin):
 
 @admin.register(FormAnswer)
 class FormAnswerAdmin(admin.ModelAdmin):
-    list_display = ["uuid", "form_schema", "user", "submitted_at", "modified_at"]
+    list_display = [
+        "uuid",
+        "form_schema",
+        "user",
+        "submitted_at",
+        "modified_at",
+    ]
     list_filter = ["form_schema"]
     search_fields = ["form_schema__name", "user__first_name", "user__last_name"]
     autocomplete_fields = ["form_schema", "user"]

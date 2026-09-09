@@ -61,6 +61,12 @@ export function AppMenuPanel({ menuOpen, onClose }: AppMenuPanelProps) {
           closeMenu={onClose}
         />
         <AppMenuItem
+          label={t('navbar.form')}
+          path="/form/"
+          iconPath="/static/img/icons/cropped/form.svg"
+          closeMenu={onClose}
+        />
+        <AppMenuItem
           label={t('navbar.family')}
           path="/parrainage/"
           iconPath="/static/img/icons/cropped/family.svg"

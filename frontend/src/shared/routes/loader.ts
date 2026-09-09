@@ -6,6 +6,8 @@ import { getCurrentUserApi } from '#modules/account/api/getCurrentUser.api';
 import { getUserDetailsApi } from '#modules/account/api/getUserDetails.api';
 import { emptyUser } from '#modules/account/hooks/useCurrentUser.data';
 import { User } from '#modules/account/user.types';
+import { getJsonSchemaApi } from '#modules/form/api/getJsonSchema.api';
+import { getDefaultForm } from '#modules/form/constants';
 import { getGroupDetailsApi } from '#modules/group/api/getGroupDetails.api';
 import { getGroupTypeDetailsApi } from '#modules/group/api/getGroupTypeDetails.api';
 import { Group } from '#modules/group/types/group.types';
@@ -138,4 +140,18 @@ export async function groupDetailsLoader(
   } catch {
     return {};
   }
+}
+
+export async function formEditLoader(
+  args: LoaderFunctionArgs<unknown>,
+  queryClient: QueryClient,
+) {
+  const { uuid } = args.params;
+  if (!uuid) {
+    return getDefaultForm();
+  }
+  return queryClient.ensureQueryData({
+    queryKey: ['form', uuid],
+    queryFn: () => getJsonSchemaApi(uuid),
+  });
 }

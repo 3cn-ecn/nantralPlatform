@@ -13,6 +13,7 @@ import { updateRoleApi } from '#modules/form/api/updateRole.api';
 import { JsonFormPreview, UserRole } from '#modules/form/types/jsonForm.type';
 import { AddUserFields } from '#modules/form/view/RoleModal/AddUserFields';
 import { UserRoleItem } from '#modules/form/view/RoleModal/UserRoleItem';
+import { InfiniteList } from '#shared/components/InfiniteList/InfiniteList';
 import { ConfirmationModal } from '#shared/components/Modal/ConfirmationModal';
 import {
   ResponsiveDialog,
@@ -34,7 +35,7 @@ export function RoleModal({
 
   const showToast = useToast();
 
-  const { data: roles } = useInfiniteQuery({
+  const rolesQuery = useInfiniteQuery({
     queryKey: ['formRoles', jsonForm.uuid],
     queryFn: ({ pageParam }) =>
       getRolesApi(jsonForm.uuid, { page: pageParam, pageSize: 20 }),
@@ -77,20 +78,22 @@ export function RoleModal({
       <ResponsiveDialogHeader onClose={onClose}>
         Edit roles for form {jsonForm.name}
       </ResponsiveDialogHeader>
-      <ResponsiveDialogContent sx={{ gap: 1 }}>
+      <ResponsiveDialogContent sx={{ gap: 4 }}>
         <AddUserFields jsonForm={jsonForm} />
         <Paper>
           <List>
-            {roles?.pages
-              .flatMap((page) => page.results)
-              .map((role) => (
-                <UserRoleItem
-                  role={role}
-                  key={role.id}
-                  handleDelete={(id) => setRemoveId(id)}
-                  handleUpdate={(id, role) => updateRole({ id, role })}
-                />
-              ))}
+            <InfiniteList query={rolesQuery}>
+              {rolesQuery.data?.pages
+                .flatMap((page) => page.results)
+                .map((role) => (
+                  <UserRoleItem
+                    role={role}
+                    key={role.id}
+                    handleDelete={(id) => setRemoveId(id)}
+                    handleUpdate={(id, role) => updateRole({ id, role })}
+                  />
+                ))}
+            </InfiniteList>
           </List>
         </Paper>
       </ResponsiveDialogContent>

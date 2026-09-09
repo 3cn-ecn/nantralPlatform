@@ -17,6 +17,11 @@
       "home": "Feedback",
       "suggestion": "Suggestion"
     },
+    "form": {
+      "edit": "Edit",
+      "index": "Forms",
+      "new": "New"
+    },
     "group": {
       "index": "Groups"
     },
@@ -47,6 +52,7 @@
     "edit": "Edit",
     "next": "Next",
     "previous": "Previous",
+    "reset": "Reset",
     "save": "Save",
     "saved": "Saved",
     "send": "Send",
@@ -634,6 +640,27 @@
     },
     "welcomeTo": "Welcome to"
   },
+  "jsonForm": {
+    "answer": {
+      "hasErrors": {
+        "body": "Please check your answers and the error messages displayed next to them. You will not be able to post this form until the errors disappear.",
+        "title": "Form has one or more errors"
+      },
+      "loadingTitle": "Form Loading...",
+      "resetBody": "Do you with to permanently remove your answer to this form?",
+      "resetTitle": "Reset Form",
+      "saved": "Your answer have been saved, you may leave this page",
+      "submitBody": "Do you wish to send your answer? You will be able to edit it as long as the form is active",
+      "submitTitle": "Submit Answer?"
+    },
+    "edit": {
+      "title": "Edit Form"
+    },
+    "list": {
+      "new": "New Form",
+      "title": "Form List"
+    }
+  },
   "legalNotice": {
     "paragraphs": {
       "cookies": {
@@ -748,11 +775,18 @@
     },
     "helpButton": {
       "label": "Help"
+    },
+    "numberEdit": {
+      "title": "Enter a numeric value"
+    },
+    "textEdit": {
+      "title": "Enter a text value"
     }
   },
   "navbar": {
     "events": "Events",
     "family": "Family",
+    "form": "Forms",
     "group": "Groups",
     "home": "Home",
     "map": "Map",
@@ -823,6 +857,9 @@
       }
     },
     "modal": {
+      "deleteButton": {
+        "label": "Delete this post"
+      },
       "editButton": {
         "label": "Edit the post"
       },

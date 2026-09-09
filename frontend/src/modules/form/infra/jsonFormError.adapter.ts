@@ -11,3 +11,13 @@ export function adaptJsonFormError(error: JsonFormErrorDTO): ErrorObject {
     params: {},
   };
 }
+
+export function adaptCustomJsonFormError(error: string): ErrorObject {
+  return {
+    keyword: 'custom',
+    message: error,
+    instancePath: '/',
+    schemaPath: '#/',
+    params: {},
+  };
+}

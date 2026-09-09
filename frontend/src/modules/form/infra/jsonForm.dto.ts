@@ -16,6 +16,9 @@ export interface JsonFormSchemaDTO {
   // translation
   i18n_keys_en: Record<string, object>;
   i18n_keys_fr: Record<string, object>;
+  is_admin: boolean;
+  can_view_answers: boolean;
+  can_view_form: boolean;
 }
 
 export interface JsonFormAnswerDTO {
@@ -29,7 +32,17 @@ export interface JsonFormAnswerDTO {
 
 export type JsonFormPreviewDTO = Pick<
   JsonFormSchemaDTO,
-  'uuid' | 'name' | 'description'
+  | 'uuid'
+  | 'name'
+  | 'description'
+  | 'is_admin'
+  | 'can_view_answers'
+  | 'can_view_form'
 > & {
   userrole_set: UserRoleDTO[];
 };
+
+export type JsonFormSchemaFormDTO = Omit<
+  JsonFormSchemaDTO,
+  'is_admin' | 'can_view_answers' | 'can_view_form'
+>;

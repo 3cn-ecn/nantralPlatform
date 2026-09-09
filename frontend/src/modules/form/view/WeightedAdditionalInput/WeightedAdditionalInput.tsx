@@ -52,7 +52,7 @@ export function WeightedAdditionalInput({ nodeId }: { nodeId: UUID }) {
     const rowId = crypto.randomUUID();
     // add row to the schema
     set(node.payload, ['schema', 'allOf', '0', 'properties', rowId], {
-      const: rowId,
+      i18n: rowId,
     });
     // initialize translations
     // set(node.payload, `translation.fr.${rowId}`, 'Ligne');
@@ -74,7 +74,7 @@ export function WeightedAdditionalInput({ nodeId }: { nodeId: UUID }) {
         'value',
         'oneOf',
       ],
-      [...options, { const: optId }],
+      [...options, { title: optId, const: options.length }],
     );
     // initialize translations
     // set(node.payload, `translation.fr.${optId}`, 'Option');
@@ -94,7 +94,7 @@ export function WeightedAdditionalInput({ nodeId }: { nodeId: UUID }) {
     [node.payload, nodeId, setPayload],
   );
   const handleRemoveOption = useCallback(
-    (optId: string) => {
+    (optId: string, optConst: number) => {
       // Reset translations
       unset(node.payload, `translation.fr.${optId}`);
       unset(node.payload, `translation.en.${optId}`);
@@ -111,7 +111,9 @@ export function WeightedAdditionalInput({ nodeId }: { nodeId: UUID }) {
           'value',
           'oneOf',
         ],
-        options.filter((entry) => entry.const !== optId),
+        options
+          .filter((entry) => entry.const !== optConst)
+          .map((opt, i) => ({ ...opt, const: i })),
       );
       setPayload(nodeId, node.payload);
     },
@@ -120,7 +122,7 @@ export function WeightedAdditionalInput({ nodeId }: { nodeId: UUID }) {
 
   return (
     <FlexAuto gap={1}>
-      <FlexCol gap={1} width={'50%'}>
+      <FlexCol gap={1} minWidth={'50%'}>
         <Typography variant={'h4'}>Rows</Typography>
         {rows?.map((rowId: UUID) => (
           <FlexRow key={rowId} gap={1} alignItems={'center'}>
@@ -138,9 +140,9 @@ export function WeightedAdditionalInput({ nodeId }: { nodeId: UUID }) {
         ))}
         <Button onClick={handleAddRow}>Add row</Button>
       </FlexCol>
-      <FlexCol gap={1} width={'50%'}>
+      <FlexCol gap={1} minWidth={'50%'}>
         <Typography variant={'h4'}>Columns</Typography>
-        {options?.map(({ const: optId }) => (
+        {options?.map(({ const: optConst, title: optId }) => (
           <FlexRow key={optId} gap={1} alignItems={'center'}>
             <RadioButtonUnchecked />
             <TextField
@@ -149,7 +151,7 @@ export function WeightedAdditionalInput({ nodeId }: { nodeId: UUID }) {
               size={'small'}
               margin={'none'}
             />
-            <IconButton onClick={() => handleRemoveOption(optId)}>
+            <IconButton onClick={() => handleRemoveOption(optId, optConst)}>
               <DeleteIcon />
             </IconButton>
           </FlexRow>

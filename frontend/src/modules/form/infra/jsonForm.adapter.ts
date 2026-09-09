@@ -32,6 +32,9 @@ export const adaptJsonFormSchema = (
     schema: schemaDTO.schema,
     uiSchema: schemaDTO.ui_schema,
     i18nKeys: { en: schemaDTO.i18n_keys_en, fr: schemaDTO.i18n_keys_fr },
+    isAdmin: schemaDTO.is_admin,
+    canViewAnswers: schemaDTO.can_view_answers,
+    canViewForm: schemaDTO.can_view_form,
   };
 };
 
@@ -56,5 +59,8 @@ export const adaptJsonFormPreview = (
     name: jsonFormPreviewDto.name,
     description: jsonFormPreviewDto.description,
     roles: jsonFormPreviewDto.userrole_set.map(adaptUserRole),
+    isAdmin: jsonFormPreviewDto.is_admin,
+    canViewAnswers: jsonFormPreviewDto.can_view_answers,
+    canViewForm: jsonFormPreviewDto.can_view_form,
   };
 };

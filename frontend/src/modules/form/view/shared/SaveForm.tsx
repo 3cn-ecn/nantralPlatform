@@ -8,7 +8,7 @@ import { createJsonSchemaApi } from '#modules/form/api/createJsonSchema.api';
 import { updateJsonSchemaApi } from '#modules/form/api/updateJsonSchema.api';
 import { useFormContext } from '#modules/form/hooks/useFormContext';
 import { nodeToJsonForm } from '#modules/form/state/utils';
-import { JsonFormSchema } from '#modules/form/types/jsonForm.type';
+import { JsonFormSchemaForm } from '#modules/form/types/jsonForm.type';
 import { LoadingButton } from '#shared/components/LoadingButton/LoadingButton';
 
 export function SaveForm() {
@@ -20,7 +20,7 @@ export function SaveForm() {
     mutationFn:
       // Check path to determine if we need to update or create
       'uuid' in params
-        ? (schema: Omit<JsonFormSchema, 'uuid'>) =>
+        ? (schema: Omit<JsonFormSchemaForm, 'uuid'>) =>
             updateJsonSchemaApi(form.uuid, schema)
         : createJsonSchemaApi,
     // continue editing after creating form

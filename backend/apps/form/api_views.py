@@ -1,5 +1,7 @@
 from typing import TYPE_CHECKING
 
+from django.http import QueryDict
+
 from rest_framework import (
     permissions,
     response,
@@ -16,21 +18,76 @@ from apps.form.serializers import (
     FormSchemaSerializer,
     RoleSerializer,
 )
+from apps.utils.parse import parse_int
 
 if TYPE_CHECKING:
     from apps.account.models import User
 
 
+class FormSchemaPermission(permissions.BasePermission):
+    def has_object_permission(self, request, view, obj: FormSchema):
+        user = request.user
+        if request.method in permissions.SAFE_METHODS:
+            return obj.can_view_form(user)
+        return obj.is_admin(user)
+
+
 class FormSchemaViewSet(viewsets.ModelViewSet):
-    queryset = FormSchema.objects.all()
     serializer_class = FormSchemaSerializer
+    permission_classes = [IsAuthenticated, FormSchemaPermission]
+
+    def get_queryset(self):
+        user = self.request.user
+        return FormSchema.objects.filter(users=user)
+
+    def get_object(self):
+        form_id = self.kwargs.get("pk")
+        form_schema = get_object_or_404(FormSchema, uuid=form_id)
+        self.check_object_permissions(self.request, form_schema)
+        return form_schema
+
+
+class FormAnswerPermission(permissions.BasePermission):
+    def has_permission(self, request, view):
+        form_id = view.kwargs.get("schema", None)
+        form_schema = FormSchema.objects.get(uuid=form_id)
+        user = request.user
+        if form_schema:
+            if request.method in permissions.SAFE_METHODS:  # list
+                return form_schema.can_view_answers(user)
+            else:  # create
+                return form_schema.can_view_form(user)
+        return user.is_superuser
+
+    def has_object_permission(self, request, view, obj: FormAnswer):
+        user = request.user
+        if obj.user == user:
+            return True
+
+        form_schema = obj.form_schema
+        if request.method in permissions.SAFE_METHODS:  # retrieve
+            return form_schema.can_view_answers(user)
+        else:  # destroy or update
+            return form_schema.is_admin(user)
 
 
 class FormAnswerViewSet(viewsets.ModelViewSet):
-    queryset = FormAnswer.objects.all()
+    permission_classes = [IsAuthenticated, FormAnswerPermission]
+
+    @property
+    def query_params(self) -> QueryDict:
+        return self.request.query_params
+
+    def get_queryset(self):
+        user = parse_int(self.query_params.get("user"))
+        schema_uuid = self.kwargs.get("schema")
+        schema = get_object_or_404(FormSchema, uuid=schema_uuid)
+        if user is not None:
+            return schema.formanswer_set.filter(user=user)
+        return schema.formanswer_set.all()
 
     def get_serializer_class(self):
-        if self.action == "list":
+        if self.action == "list" and "user" not in self.query_params:
             return FormAnswerPreviewSerializer
         return FormAnswerSerializer
 
@@ -45,35 +102,22 @@ class FormAnswerViewSet(viewsets.ModelViewSet):
 class RolesPermission(permissions.BasePermission):
     def has_permission(self, request, view):
         form_id = view.kwargs.get("schema", None)
+        form_schema = FormSchema.objects.get(uuid=form_id)
         user = request.user
-        if form_id is not None:
-            return (
-                UserRole.objects.filter(form_schema=form_id, user=user).exists()
-                or user.is_superuser
-            )
-        else:
-            return True
+        if form_schema:
+            return form_schema.can_view_answers(user)
+        return user.is_superuser
 
     def has_object_permission(self, request, view, obj: UserRole):
         user = request.user
-        user_role = UserRole.objects.filter(
-            form_schema=obj.form_schema, user=user
-        ).first()
-        if user_role is None:
-            return user.is_superuser
-        # user may access their own role
-        # editors may change other people roles, except owner
-        # owners and superusers have full permissions
-        return (
-            obj.user == user
-            or (user_role.role == "editor" and obj.role != "owner")
-            or user_role.role == "owner"
-            or user.is_superuser
-        )
+        form_schema = obj.form_schema
+        if request.method in permissions.SAFE_METHODS:
+            return obj.user == user or form_schema.can_view_answers(user)
+        return form_schema.is_admin(user)
 
 
 class SchemaRolesViewSet(viewsets.ModelViewSet):
-    permission_classes = [RolesPermission, IsAuthenticated]
+    permission_classes = [IsAuthenticated, RolesPermission]
 
     def get_queryset(self):
         schema_uuid = self.kwargs.get("schema")
@@ -102,6 +146,6 @@ class SchemaRolesViewSet(viewsets.ModelViewSet):
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        roles: list[UserRole] = self.perform_create(serializer)
+        roles = self.perform_create(serializer)
         instance_serializers = map(RoleSerializer, roles)
         return response.Response([s.data for s in instance_serializers])
