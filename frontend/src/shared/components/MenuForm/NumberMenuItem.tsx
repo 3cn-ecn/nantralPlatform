@@ -6,10 +6,12 @@ import {
   ListItemText,
   MenuItem,
   MenuItemProps,
+  Typography,
 } from '@mui/material';
 
 import { NumberFieldProps } from '#shared/components/FormFields/NumberField';
 import { NumberModal } from '#shared/components/Modal/NumberModal';
+import { useTranslation } from '#shared/i18n/useTranslation';
 
 export interface NumberMenuItemProps extends MenuItemProps {
   handleChange: NumberFieldProps['handleChange'];
@@ -29,6 +31,7 @@ export function NumberMenuItem({
   ...props
 }: NumberMenuItemProps & { value?: number }) {
   const [open, setOpen] = useState(false);
+  const { t } = useTranslation();
 
   return (
     <>
@@ -37,7 +40,11 @@ export function NumberMenuItem({
         <ListItemText>
           {label}
           {': '}
-          {value ?? '>NULL<'}
+          {value ?? (
+            <Typography color={'textDisabled'}>
+              {t('form.menu.empty')}
+            </Typography>
+          )}
         </ListItemText>
       </MenuItem>
       {open && (

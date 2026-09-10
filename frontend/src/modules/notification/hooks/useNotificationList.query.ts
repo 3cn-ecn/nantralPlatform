@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 
 import {
-  InfiniteData,
+  QueryFunctionContext,
   QueryKey,
   useInfiniteQuery,
   UseInfiniteQueryOptions,
@@ -19,29 +19,13 @@ import { SentNotification } from '../notification.types';
 
 export function useNotificationListQuery(
   filters: Omit<NotificationListQueryParams, 'page'>,
-  {
-    ...options
-  }: Partial<
-    UseInfiniteQueryOptions<
-      Page<SentNotification>,
-      ApiError,
-      InfiniteData<Page<SentNotification>>,
-      QueryKey,
-      number
-    >
-  > = {},
+  options?: Partial<UseInfiniteQueryOptions<Page<SentNotification>>>,
 ) {
   const queryClient = useQueryClient();
 
-  const query = useInfiniteQuery<
-    Page<SentNotification>,
-    ApiError,
-    InfiniteData<Page<SentNotification>>,
-    QueryKey,
-    number
-  >({
+  const query = useInfiniteQuery<Page<SentNotification>, ApiError>({
     queryKey: ['notifications', 'list', filters],
-    queryFn: ({ pageParam, signal }) =>
+    queryFn: ({ pageParam, signal }: QueryFunctionContext<QueryKey, number>) =>
       getNotificationListApi(
         {
           ...filters,

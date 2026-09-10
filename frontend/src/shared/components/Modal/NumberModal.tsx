@@ -41,7 +41,7 @@ export function NumberModal({
     <Dialog
       open
       onClose={() => onCancel()}
-      aria-labelledby="responsive-dialog-title"
+      aria-labelledby="number-dialog-title"
     >
       <form
         onSubmit={(e) => {
@@ -49,7 +49,7 @@ export function NumberModal({
           onConfirm(value);
         }}
       >
-        <DialogTitle id="responsive-dialog-title">
+        <DialogTitle id="number-dialog-title">
           {title || t('modal.numberEdit.title', { label })}
         </DialogTitle>
         <DialogContent>

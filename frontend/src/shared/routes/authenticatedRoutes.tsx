@@ -6,7 +6,7 @@ import { QueryClient } from '@tanstack/react-query';
 import { getDefaultForm } from '#modules/form/constants';
 import { PageTemplate } from '#shared/components/PageTemplate/PageTemplate';
 
-import { formEditLoader, userDetailsLoader } from './loader';
+import { formDetailsLoader, userDetailsLoader } from './loader';
 
 const EventPage = lazy(() => import('#pages/Event/Event.page'));
 const EventCalendarViewPage = lazy(
@@ -19,7 +19,7 @@ const EventDetailsPage = lazy(
   () => import('#pages/EventDetails/EventDetails.page'),
 );
 const EditFormPage = lazy(() => import('#pages/Form/EditForm.page'));
-const FormDetailPage = lazy(() => import('#pages/Form/FormDetail.page'));
+const AnswerFormPage = lazy(() => import('#pages/Form/AnswerForm.page'));
 const FormListPage = lazy(() => import('#pages/Form/FormList.page'));
 const MapPage = lazy(() => import('#pages/Map/Map.page'));
 const HomePage = lazy(() => import('#pages/Home/Home.page'));
@@ -79,31 +79,32 @@ export const authenticatedRoutes: (queryClient: QueryClient) => RouteObject = (
     },
     {
       path: '/form',
+      handle: { crumb: t('breadcrumbs.form.index') },
       children: [
         {
           index: true,
           element: <FormListPage />,
-          handle: { crumb: t('breadcrumbs.form.index') },
         },
         {
           path: 'new',
           element: <EditFormPage />,
           handle: { crumb: t('breadcrumbs.form.new') },
-          loader: () => getDefaultForm(),
+          loader: () => ({ formSchema: getDefaultForm() }),
         },
         {
           path: ':uuid',
           children: [
             {
               index: true,
-              element: <FormDetailPage />,
-              handle: { crumb: t('breadcrumbs.form.index') },
+              element: <AnswerFormPage />,
+              loader: (args) => formDetailsLoader(args, queryClient),
+              handle: { crumb: t('breadcrumbs.form.answer') },
             },
             {
               path: 'edit',
               element: <EditFormPage />,
+              loader: (args) => formDetailsLoader(args, queryClient),
               handle: { crumb: t('breadcrumbs.form.edit') },
-              loader: (args) => formEditLoader(args, queryClient),
             },
           ],
         },

@@ -269,9 +269,9 @@ function AutocompleteSearchFieldComponent<
         />
       )}
       getOptionLabel={(option) => option[labelPropName]?.toString() || ''}
-      renderOption={(props, option) => {
+      renderOption={({ key, ...props }, option) => {
         return (
-          <FlexRow component="li" gap={1} {...props}>
+          <FlexRow key={key} component="li" gap={1} {...props}>
             {!!imagePropName && (
               <Avatar
                 alt={option[labelPropName] as string}

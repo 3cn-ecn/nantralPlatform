@@ -18,6 +18,7 @@
       "suggestion": "Suggestion"
     },
     "form": {
+      "answer": "Answer",
       "edit": "Edit",
       "index": "Forms",
       "new": "New"
@@ -348,6 +349,9 @@
       "undoButton": {
         "label": "Undo"
       }
+    },
+    "menu": {
+      "empty": "empty"
     },
     "number": {
       "wrongFormat": "Invalid format"

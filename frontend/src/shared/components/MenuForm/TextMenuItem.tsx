@@ -6,10 +6,12 @@ import {
   ListItemText,
   MenuItem,
   MenuItemProps,
+  Typography,
 } from '@mui/material';
 
 import { TextFieldProps } from '#shared/components/FormFields';
 import { TextModal } from '#shared/components/Modal/TextModal';
+import { useTranslation } from '#shared/i18n/useTranslation';
 
 export interface TextMenuItemProps extends MenuItemProps {
   handleChange: (val: string) => void;
@@ -29,6 +31,7 @@ export function TextMenuItem({
   ...props
 }: TextMenuItemProps & { value?: string }) {
   const [open, setOpen] = useState(false);
+  const { t } = useTranslation();
 
   return (
     <>
@@ -37,7 +40,11 @@ export function TextMenuItem({
         <ListItemText>
           {label}
           {': '}
-          {value ?? '>NULL<'}
+          {value ?? (
+            <Typography color={'textDisabled'}>
+              {t('form.menu.empty')}
+            </Typography>
+          )}
         </ListItemText>
       </MenuItem>
       {open && (

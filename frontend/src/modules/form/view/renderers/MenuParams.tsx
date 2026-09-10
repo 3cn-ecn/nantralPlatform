@@ -16,6 +16,8 @@ type ParamProps<T = object> = Partial<T> & {
   title: string;
 };
 
+// TODO: provide translations for these components
+
 export function BooleanUiParm({ id, title }: ParamProps) {
   const { form, setPayload } = useFormContext();
   const node = useMemo(() => form.nodes[id], [form.nodes, id]);

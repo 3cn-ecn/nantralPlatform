@@ -35,18 +35,14 @@ export function TextModal({
   const [value, setValue] = useState(oldValue || '');
 
   return (
-    <Dialog
-      open
-      onClose={() => onCancel()}
-      aria-labelledby="responsive-dialog-title"
-    >
+    <Dialog open onClose={() => onCancel()} aria-labelledby="text-dialog-title">
       <form
         onSubmit={(e) => {
           e.preventDefault();
           onConfirm(value);
         }}
       >
-        <DialogTitle id="responsive-dialog-title">
+        <DialogTitle id="text-dialog-title">
           {title || t('modal.textEdit.title', { label })}
         </DialogTitle>
         <DialogContent>

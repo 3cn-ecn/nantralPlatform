@@ -17,10 +17,11 @@ import {
   DialogContent,
   DialogContentText,
   DialogTitle,
+  Fab,
   Stack,
   Typography,
 } from '@mui/material';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { ErrorObject } from 'ajv';
 
 import { postJsonFormAnswerApi } from '#modules/form/api/postJsonFormAnswer.api';
@@ -71,6 +72,7 @@ export function ShowForm({
 
   const namespace = 'form-' + jsonFormSchema.uuid;
   const { t } = useTranslation();
+  const queryClient = useQueryClient();
 
   const {
     t: formT,
@@ -126,6 +128,9 @@ export function ShowForm({
       showToast({
         variant: 'success',
         message: t('jsonForm.answer.saved'),
+      });
+      queryClient.invalidateQueries({
+        queryKey: ['answers', jsonFormSchema.uuid],
       });
     },
     onError(err) {
@@ -189,15 +194,23 @@ export function ShowForm({
           }}
         />
       </Box>
-      <Stack direction={'row'} gap={2} alignSelf={'center'}>
-        <Button
-          variant={'outlined'}
+      <Stack
+        direction={'row'}
+        gap={2}
+        alignSelf={'center'}
+        alignItems={'center'}
+        position={'fixed'}
+        bottom={24}
+      >
+        <Fab
+          variant={'extended'}
           color={'secondary'}
+          size={'small'}
           onClick={() => setResetOpen(true)}
-          endIcon={<ResetIcon />}
         >
+          <ResetIcon sx={{ mr: 1 }} />
           {t('button.reset')}
-        </Button>
+        </Fab>
         {resetOpen && (
           <ConfirmationModal
             title={t('jsonForm.answer.resetTitle')}
@@ -209,14 +222,14 @@ export function ShowForm({
             }}
           />
         )}
-        <Button
-          size={'large'}
-          variant={'contained'}
+        <Fab
+          variant={'extended'}
+          color={'primary'}
           onClick={() => setSubmitOpen(true)}
-          endIcon={<SendIcon />}
         >
+          <SendIcon sx={{ mr: 1 }} />
           {t('button.send')}
-        </Button>
+        </Fab>
         {submitOpen && !hasErrors && (
           <ConfirmationModal
             title={t('jsonForm.answer.submitTitle')}

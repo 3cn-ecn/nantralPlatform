@@ -1,5 +1,4 @@
 import {
-  InfiniteData,
   QueryFunctionContext,
   QueryKey,
   useInfiniteQuery,
@@ -16,15 +15,9 @@ import { Page } from '#shared/infra/pagination';
 
 export function useInfiniteEventListQuery(
   filters: Omit<EventListQueryParams, 'page'>,
-  options?: Partial<
-    UseInfiniteQueryOptions<
-      Page<EventPreview>,
-      ApiError,
-      InfiniteData<Page<EventPreview>>
-    >
-  >,
+  options?: Partial<UseInfiniteQueryOptions<Page<EventPreview>, ApiError>>,
 ) {
-  const query = useInfiniteQuery({
+  return useInfiniteQuery({
     queryKey: ['events', 'infiniteList', filters],
     queryFn: ({ pageParam, signal }: QueryFunctionContext<QueryKey, number>) =>
       getEventListApi(
@@ -43,6 +36,4 @@ export function useInfiniteEventListQuery(
       lastPage.next ? pages.length + 1 : undefined,
     ...options,
   });
-
-  return query;
 }

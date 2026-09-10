@@ -11,26 +11,22 @@ import { ApiError } from '#shared/infra/errors';
 
 export function useEventDetailsQuery(
   eventId: number,
-  { ...options }: Partial<UseQueryOptions<Event>> = {},
+  options?: Partial<UseQueryOptions<Event>>,
 ) {
-  const query = useQuery<Event, ApiError>({
+  return useQuery<Event, ApiError>({
     queryKey: ['event', { id: eventId }],
     queryFn: () => getEventDetailsApi(eventId),
     ...options,
   });
-
-  return query;
 }
 
 export function useSuspenseEventDetailQuery(
-  eventId,
-  { ...options }: Partial<UseSuspenseQueryOptions<Event>> = {},
+  eventId: number,
+  options?: Partial<UseSuspenseQueryOptions<Event>>,
 ) {
-  const query = useSuspenseQuery<Event, ApiError>({
+  return useSuspenseQuery<Event, ApiError>({
     queryKey: ['event', { id: eventId }],
     queryFn: () => getEventDetailsApi(eventId),
     ...options,
   });
-
-  return query;
 }

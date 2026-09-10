@@ -2,8 +2,8 @@ import { Link } from 'react-router';
 
 import AddIcon from '@mui/icons-material/Add';
 import {
-  Button,
   Container,
+  Fab,
   Paper,
   Table,
   TableBody,
@@ -34,7 +34,7 @@ export default function FormListPage() {
   });
 
   return (
-    <Container sx={{ py: 3 }}>
+    <Container sx={{ pt: 3, pb: 7 }}>
       <Typography variant={'h1'} sx={{ mb: 3 }}>
         {t('jsonForm.list.title')}
       </Typography>
@@ -68,16 +68,21 @@ export default function FormListPage() {
           </Table>
         </TableContainer>
       </InfiniteList>
-      <Button
+      <Fab
+        variant={'extended'}
+        color={'primary'}
         size={'large'}
-        variant={'contained'}
+        sx={{
+          position: 'fixed',
+          bottom: 24,
+          right: 24,
+        }}
         component={Link}
         to={'new/'}
-        startIcon={<AddIcon />}
-        sx={{ mt: 3 }}
       >
+        <AddIcon sx={{ mr: 1 }} />
         {t('jsonForm.list.new')}
-      </Button>
+      </Fab>
     </Container>
   );
 }

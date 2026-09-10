@@ -14,9 +14,9 @@ import { useSuspenseEventDetailQuery } from '#modules/event/hooks/useEventDetail
 import { FlexRow } from '#shared/components/FlexBox/FlexBox';
 import { RichTextRenderer } from '#shared/components/RichTextRenderer/RichTextRenderer';
 import { Spacer } from '#shared/components/Spacer/Spacer';
+import { TopImage } from '#shared/components/TopImage/TopImage';
 import { useTranslation } from '#shared/i18n/useTranslation';
 
-import { TopImage } from '../../shared/components/TopImage/TopImage';
 import { ActionButtonsBar } from './components/ActionButtonsBar';
 import { BackgroundImageOverlay } from './components/BackgroundImageOverlay';
 import { EventInfo } from './components/EventInfo';
@@ -30,8 +30,11 @@ export default function EventDetailsPage() {
   // Using suspense query allows to skip isPending, isError states: they
   // are catch by the nearest <Suspense> boundary, in this case the one
   // from <PageTemplate />.
-  // We add useErrorBoundary: false to remove the isError state from suspense
   const eventQuery = useSuspenseEventDetailQuery(Number(eventId));
+
+  if (eventQuery.error && !eventQuery.isFetching) {
+    throw eventQuery.error;
+  }
 
   const event = eventQuery.data;
 

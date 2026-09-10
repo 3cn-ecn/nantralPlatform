@@ -4,7 +4,6 @@ import { Container, Stack, Typography } from '@mui/material';
 
 import { FormProvider } from '#modules/form/state/form.context';
 import { jsonFormToNode } from '#modules/form/state/utils';
-import { JsonFormSchema } from '#modules/form/types/jsonForm.type';
 import { FormEditRoot } from '#modules/form/view/shared/FormEditRoot';
 import { FormHeaderFields } from '#modules/form/view/shared/FormHeaderFields';
 import { FormItemActions } from '#modules/form/view/shared/FormItemActions';
@@ -14,12 +13,12 @@ import { FlexCol } from '#shared/components/FlexBox/FlexBox';
 import { useTranslation } from '#shared/i18n/useTranslation';
 
 export default function EditFormPage() {
-  const form: JsonFormSchema = useLoaderData();
+  const { formSchema } = useLoaderData();
   const { t } = useTranslation();
 
   return (
     <Container sx={{ my: 2 }}>
-      <FormProvider initialForm={jsonFormToNode(form)}>
+      <FormProvider initialForm={jsonFormToNode(formSchema)}>
         <FlexCol gap={3}>
           <Stack
             direction={'row'}
@@ -28,7 +27,7 @@ export default function EditFormPage() {
             gap={2}
           >
             <Typography variant={'h1'}>{t('jsonForm.edit.title')}</Typography>
-            <FormItemActions formPreview={form} />
+            <FormItemActions formPreview={formSchema} />
           </Stack>
           <FormHeaderFields />
           <SelectBaseComponent />

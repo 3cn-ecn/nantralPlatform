@@ -142,7 +142,7 @@ export async function groupDetailsLoader(
   }
 }
 
-export async function formEditLoader(
+export async function formDetailsLoader(
   args: LoaderFunctionArgs<unknown>,
   queryClient: QueryClient,
 ) {
@@ -150,8 +150,19 @@ export async function formEditLoader(
   if (!uuid) {
     return getDefaultForm();
   }
-  return queryClient.ensureQueryData({
+  const formSchema = await queryClient.query({
     queryKey: ['form', uuid],
     queryFn: () => getJsonSchemaApi(uuid),
+    staleTime: 'static',
   });
+  return {
+    extraCrumb: [
+      {
+        id: formSchema.uuid,
+        label: formSchema.name,
+        path: `/form/${formSchema.uuid}/`,
+      },
+    ],
+    formSchema,
+  };
 }
