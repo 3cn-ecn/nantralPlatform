@@ -20,6 +20,9 @@ export interface JsonFormSchema {
   isAdmin: boolean;
   canViewAnswers: boolean;
   canViewForm: boolean;
+  active: boolean;
+  editable: boolean;
+  public: boolean;
 }
 
 export interface JsonFormAnswer {
@@ -33,10 +36,23 @@ export interface JsonFormAnswer {
 
 export type JsonFormPreview = Pick<
   JsonFormSchema,
-  'uuid' | 'name' | 'description' | 'isAdmin' | 'canViewAnswers' | 'canViewForm'
+  | 'uuid'
+  | 'name'
+  | 'description'
+  | 'isAdmin'
+  | 'canViewAnswers'
+  | 'canViewForm'
+  | 'active'
+  | 'editable'
+  | 'public'
 > & { roles?: UserRole[] };
 
 export type JsonFormSchemaForm = Omit<
   JsonFormSchema,
-  'isAdmin' | 'canViewAnswers' | 'canViewForm'
+  | 'isAdmin'
+  | 'canViewAnswers'
+  | 'canViewForm'
+  | 'active'
+  | 'editable'
+  | 'public'
 >;

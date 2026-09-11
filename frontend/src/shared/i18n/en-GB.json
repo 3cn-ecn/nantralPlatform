@@ -657,12 +657,53 @@
       "submitBody": "Do you wish to send your answer? You will be able to edit it as long as the form is active",
       "submitTitle": "Submit Answer?"
     },
+    "details": {
+      "active": "The form is active. Close...",
+      "closed": "The form is closed. Publish...",
+      "copy": {
+        "error": "We were not able to copy this text",
+        "success": "The url was successfully copied"
+      },
+      "delete": {
+        "body": "Do you really want to delete this form? This action cannot be undone",
+        "title": "Delete form {{name}}?"
+      },
+      "link": "Copy form link",
+      "preview": "Preview Form",
+      "setActive": {
+        "body": "If you publish this form, you will not be able to edit it anymore. Do you wish to proceed?",
+        "title": "Publish Form"
+      },
+      "share": "Open share options",
+      "viewResults": "View the results"
+    },
     "edit": {
       "title": "Edit Form"
     },
     "list": {
+      "action": "Actions",
+      "name": "Form Title",
       "new": "New Form",
+      "role": "User Role",
       "title": "Form List"
+    },
+    "roles": {
+      "addUsers": "Add other users",
+      "answerViewer": "Analyst",
+      "answerViewerHelp": "User can view the form answers",
+      "editor": "Editor",
+      "editorHelp": "User can edit, share, publish and delete the form, and also have access to answers",
+      "formViewer": "Participant",
+      "formViewerHelp": "User can answer the form even if it is private",
+      "modalTitle": "Edit roles for form {{name}}",
+      "owner": "Owner",
+      "public": "Public Form",
+      "publicHelp": "If enabled, any user with the link can access and answer the form",
+      "removeUser": {
+        "body": "This action will remove access to the form {{name}} for this user. However, if the form is public, the user may still answer it",
+        "title": "Remove User"
+      },
+      "roleChoice": "Role choice"
     }
   },
   "legalNotice": {

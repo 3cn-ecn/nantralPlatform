@@ -35,6 +35,9 @@ export const adaptJsonFormSchema = (
     isAdmin: schemaDTO.is_admin,
     canViewAnswers: schemaDTO.can_view_answers,
     canViewForm: schemaDTO.can_view_form,
+    active: schemaDTO.active,
+    editable: schemaDTO.editable,
+    public: schemaDTO.public,
   };
 };
 
@@ -62,5 +65,8 @@ export const adaptJsonFormPreview = (
     isAdmin: jsonFormPreviewDto.is_admin,
     canViewAnswers: jsonFormPreviewDto.can_view_answers,
     canViewForm: jsonFormPreviewDto.can_view_form,
+    active: jsonFormPreviewDto.active,
+    editable: jsonFormPreviewDto.editable,
+    public: jsonFormPreviewDto.public,
   };
 };

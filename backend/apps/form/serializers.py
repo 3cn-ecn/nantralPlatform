@@ -109,7 +109,13 @@ class FormSchemaSerializer(serializers.ModelSerializer):
     class Meta:
         model = FormSchema
         exclude = ["users"]
-        read_only_fields = ["userrole_set", "uuid"]
+        read_only_fields = [
+            "userrole_set",
+            "uuid",
+            "active",
+            "editable",
+            "public",
+        ]
 
     def create(self, validated_data):
         form: FormSchema = super().create(validated_data)

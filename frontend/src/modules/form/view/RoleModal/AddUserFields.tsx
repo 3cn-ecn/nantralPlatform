@@ -1,6 +1,12 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 
-import { FormControl, FormHelperText, MenuItem, Select } from '@mui/material';
+import {
+  FormControl,
+  FormHelperText,
+  ListItemText,
+  MenuItem,
+  Select,
+} from '@mui/material';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import { getUserListApi } from '#modules/account/api/getUserList.api';
@@ -10,15 +16,35 @@ import { FlexAuto } from '#shared/components/FlexBox/FlexBox';
 import { AutocompleteSearchField } from '#shared/components/FormFields';
 import { LoadingButton } from '#shared/components/LoadingButton/LoadingButton';
 import { useToast } from '#shared/context/Toast.context';
+import { useTranslation } from '#shared/i18n/useTranslation';
 import { ApiFormError } from '#shared/infra/errors';
 
 export function AddUserFields({ jsonForm }: { jsonForm: JsonFormPreview }) {
   const queryClient = useQueryClient();
   const showToast = useToast();
+  const { t } = useTranslation();
+
+  const items = useMemo(
+    () => ({
+      editor: {
+        label: t('jsonForm.roles.editor'),
+        helperText: t('jsonForm.roles.editorHelp'),
+      },
+      answer_viewer: {
+        label: t('jsonForm.roles.answerViewer'),
+        helperText: t('jsonForm.roles.answerViewerHelp'),
+      },
+      form_viewer: {
+        label: t('jsonForm.roles.formViewer'),
+        helperText: t('jsonForm.roles.formViewerHelp'),
+      },
+    }),
+    [t],
+  );
 
   const [userRoles, setUserRoles] = useState<{
     users: number[];
-    role: UserRole['role'];
+    role: Exclude<UserRole['role'], 'owner'>;
   }>({ users: [], role: 'editor' });
   const [errors, setErrors] = useState<
     ApiFormError<{ users: number; role: string }> | undefined
@@ -61,7 +87,7 @@ export function AddUserFields({ jsonForm }: { jsonForm: JsonFormPreview }) {
       <AutocompleteSearchField
         multiple
         name="user"
-        label={'Ajoutez des utilisateurs'}
+        label={t('jsonForm.roles.addUsers')}
         value={userRoles.users}
         handleChange={(val) => setUserRoles({ ...userRoles, users: val })}
         defaultObjectValue={[]}
@@ -76,20 +102,27 @@ export function AddUserFields({ jsonForm }: { jsonForm: JsonFormPreview }) {
         sx={{ flexShrink: 0, my: 'auto' }}
       >
         <Select
-          aria-label={'Choose role'}
+          aria-label={t('jsonForm.roles.roleChoice')}
           value={userRoles.role}
           size="small"
           margin={'none'}
           onChange={(e) =>
             setUserRoles({
               ...userRoles,
-              role: e.target.value as UserRole['role'],
+              role: e.target.value as Exclude<UserRole['role'], 'owner'>,
             })
           }
+          renderValue={(val) => items[val].label}
         >
-          <MenuItem value={'editor'}>Editor</MenuItem>
-          <MenuItem value={'answer_viewer'}>Result Viewer</MenuItem>
-          <MenuItem value={'form_viewer'}>Form Viewer</MenuItem>
+          {Object.entries(items).map(([id, item]) => (
+            <MenuItem key={id} value={id}>
+              <ListItemText
+                sx={{ textWrap: 'wrap', maxWidth: 400 }}
+                primary={item.label}
+                secondary={item.helperText}
+              />
+            </MenuItem>
+          ))}
         </Select>
         {errors?.fields.role?.length && (
           <FormHelperText>{errors.fields.role.join(', ')}</FormHelperText>
@@ -101,7 +134,7 @@ export function AddUserFields({ jsonForm }: { jsonForm: JsonFormPreview }) {
         loading={addLoading}
         sx={{ my: 'auto', flexShrink: 0 }}
       >
-        Add Users
+        {t('button.add')}
       </LoadingButton>
     </FlexAuto>
   );

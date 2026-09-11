@@ -1,4 +1,6 @@
-import { Close as CloseIcon } from '@mui/icons-material';
+import { useMemo } from 'react';
+
+import DeleteIcon from '@mui/icons-material/Delete';
 import InboxIcon from '@mui/icons-material/Inbox';
 import {
   ListItem,
@@ -9,11 +11,13 @@ import {
   Select,
   MenuItem,
   IconButton,
+  Tooltip,
 } from '@mui/material';
 
 import { UserRole } from '#modules/form/types/jsonForm.type';
 import { useUserDetails } from '#pages/StudentDetails/hooks/useUserDetails';
 import { Avatar } from '#shared/components/Avatar/Avatar';
+import { useTranslation } from '#shared/i18n/useTranslation';
 
 export function UserRoleItem({
   role,
@@ -25,7 +29,27 @@ export function UserRoleItem({
   handleUpdate: (id: number, role: UserRole['role']) => void;
   isPending?: boolean;
 }) {
+  const { t } = useTranslation();
+
   const { data: user, isSuccess } = useUserDetails(role.user);
+
+  const items = useMemo(
+    () => ({
+      editor: {
+        label: t('jsonForm.roles.editor'),
+        helperText: t('jsonForm.roles.editorHelp'),
+      },
+      answer_viewer: {
+        label: t('jsonForm.roles.answerViewer'),
+        helperText: t('jsonForm.roles.answerViewerHelp'),
+      },
+      form_viewer: {
+        label: t('jsonForm.roles.formViewer'),
+        helperText: t('jsonForm.roles.formViewerHelp'),
+      },
+    }),
+    [t],
+  );
 
   if (!isSuccess) {
     return (
@@ -51,29 +75,32 @@ export function UserRoleItem({
               handleUpdate(role.id, e.target.value as UserRole['role'])
             }
             disabled={role.role === 'owner'}
+            renderValue={(val) =>
+              items[val]?.label ?? t('jsonForm.roles.owner')
+            }
           >
             {role.role === 'owner' ? (
-              <MenuItem value={'owner'}>Owner</MenuItem>
+              <MenuItem value={'owner'}>{t('jsonForm.roles.owner')}</MenuItem>
             ) : (
-              [
-                <MenuItem key={'editor'} value={'editor'}>
-                  Editor
-                </MenuItem>,
-                <MenuItem key={'answer_viewer'} value={'answer_viewer'}>
-                  Result Viewer
-                </MenuItem>,
-                <MenuItem key={'form_viewer'} value={'form_viewer'}>
-                  Form Viewer
-                </MenuItem>,
-              ]
+              Object.entries(items).map(([id, item]) => (
+                <MenuItem key={id} value={id}>
+                  <ListItemText
+                    sx={{ textWrap: 'wrap', maxWidth: 400 }}
+                    primary={item.label}
+                    secondary={item.helperText}
+                  />
+                </MenuItem>
+              ))
             )}
           </Select>
-          <IconButton
-            onClick={() => handleDelete(role.id)}
-            disabled={role.role === 'owner'}
-          >
-            <CloseIcon />
-          </IconButton>
+          <Tooltip title={t('button.delete')}>
+            <IconButton
+              onClick={() => handleDelete(role.id)}
+              disabled={role.role === 'owner'}
+            >
+              <DeleteIcon />
+            </IconButton>
+          </Tooltip>
         </>
       }
     >

@@ -19,6 +19,9 @@ export interface JsonFormSchemaDTO {
   is_admin: boolean;
   can_view_answers: boolean;
   can_view_form: boolean;
+  active: boolean;
+  editable: boolean;
+  public: boolean;
 }
 
 export interface JsonFormAnswerDTO {
@@ -38,11 +41,19 @@ export type JsonFormPreviewDTO = Pick<
   | 'is_admin'
   | 'can_view_answers'
   | 'can_view_form'
+  | 'active'
+  | 'editable'
+  | 'public'
 > & {
   userrole_set: UserRoleDTO[];
 };
 
 export type JsonFormSchemaFormDTO = Omit<
   JsonFormSchemaDTO,
-  'is_admin' | 'can_view_answers' | 'can_view_form'
+  | 'is_admin'
+  | 'can_view_answers'
+  | 'can_view_form'
+  | 'active'
+  | 'editable'
+  | 'public'
 >;

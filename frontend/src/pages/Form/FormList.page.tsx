@@ -43,9 +43,9 @@ export default function FormListPage() {
           <Table>
             <TableHead>
               <TableRow>
-                <TableCell>Form</TableCell>
-                <TableCell>Role</TableCell>
-                <TableCell>Actions</TableCell>
+                <TableCell>{t('jsonForm.list.name')}</TableCell>
+                <TableCell>{t('jsonForm.list.role')}</TableCell>
+                <TableCell>{t('jsonForm.list.action')}</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>

@@ -23,7 +23,6 @@ class FormSchema(models.Model):
     users = models.ManyToManyField(
         User, through="UserRole", related_name="form_schemas"
     )
-    # TODO: Add controls for these parameters
     editable = models.BooleanField(
         default=True, verbose_name=_("Can editors edit the form")
     )
@@ -31,12 +30,17 @@ class FormSchema(models.Model):
         default=False,
         verbose_name=_("Are people able to get the form with only the URL"),
     )
-    # active = models.BooleanField(
-    #     default=False, verbose_name=_("Are people allowed to answer the form")
-    # )
+    active = models.BooleanField(
+        default=False, verbose_name=_("Are people allowed to answer the form")
+    )
 
     def __str__(self):
         return self.name
+
+    def save(self, *args, **kwargs):
+        if self.active:
+            self.editable = False
+        return super().save(*args, **kwargs)
 
     def get_absolute_url(self):
         return f"/form/{self.uuid}/"

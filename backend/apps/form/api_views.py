@@ -2,13 +2,11 @@ from typing import TYPE_CHECKING
 
 from django.http import QueryDict
 
-from rest_framework import (
-    permissions,
-    response,
-    viewsets,
-)
+from rest_framework import exceptions, permissions, response, status, viewsets
+from rest_framework.decorators import action
 from rest_framework.generics import get_object_or_404
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.request import Request
 
 from apps.form.models import FormAnswer, FormSchema, UserRole
 from apps.form.serializers import (
@@ -40,11 +38,35 @@ class FormSchemaViewSet(viewsets.ModelViewSet):
         user = self.request.user
         return FormSchema.objects.filter(users=user)
 
-    def get_object(self):
+    def get_object(self) -> FormSchema:
         form_id = self.kwargs.get("pk")
         form_schema = get_object_or_404(FormSchema, uuid=form_id)
         self.check_object_permissions(self.request, form_schema)
         return form_schema
+
+    @action(methods=["POST", "DELETE"], detail=True)
+    def active(self, request: Request, pk=None):
+        obj = self.get_object()
+        if request.method == "POST":
+            obj.active = True
+        elif request.method == "DELETE":
+            obj.active = False
+        else:
+            raise exceptions.MethodNotAllowed
+        obj.save()
+        return response.Response(status=status.HTTP_204_NO_CONTENT)
+
+    @action(methods=["POST", "DELETE"], detail=True)
+    def public(self, request: Request, pk=None):
+        obj = self.get_object()
+        if request.method == "POST":
+            obj.public = True
+        elif request.method == "DELETE":
+            obj.public = False
+        else:
+            raise exceptions.MethodNotAllowed
+        obj.save()
+        return response.Response(status=status.HTTP_204_NO_CONTENT)
 
 
 class FormAnswerPermission(permissions.BasePermission):

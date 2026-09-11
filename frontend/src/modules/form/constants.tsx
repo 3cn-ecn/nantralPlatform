@@ -241,5 +241,8 @@ export const getDefaultForm = (): JsonFormSchema => {
     isAdmin: false,
     canViewAnswers: false,
     canViewForm: false,
+    active: false,
+    editable: true,
+    public: false,
   };
 };

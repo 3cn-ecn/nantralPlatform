@@ -657,12 +657,53 @@
       "submitBody": "Voulez-vous envoyer votre réponse. Vous pourrez la modifier tant que le formulaire reste actif",
       "submitTitle": "Envoyer la réponse ?"
     },
+    "details": {
+      "active": "Le formulaire est actif. Fermer...",
+      "closed": "Le formulaire est fermé. Publier...",
+      "copy": {
+        "error": "Une erreur est survenue lors de la copie du text",
+        "success": "Le lien a bien été copié"
+      },
+      "delete": {
+        "body": "Voulez-vous supprimer ce formulaire ? Ce action est définitive",
+        "title": "Supprimer le formulaire {{name}} ?"
+      },
+      "link": "Copier le lien du formulaire",
+      "preview": "Voir le formulaire",
+      "setActive": {
+        "body": "Si vous publiez ce formulaire, vous ne pourrez plus le modifer. Voulez-vous continuer ?",
+        "title": "Publier le formulaire"
+      },
+      "share": "Ouvrir les options de partage",
+      "viewResults": "Voir les résultats"
+    },
     "edit": {
       "title": "Édition du formulaire"
     },
     "list": {
+      "action": "Actions",
+      "name": "Titre du formulaire",
       "new": "Nouveau Formulaire",
+      "role": "Role utilisateur",
       "title": "Formulaires"
+    },
+    "roles": {
+      "addUsers": "Ajouter des utilisateurs",
+      "answerViewer": "Analyste",
+      "answerViewerHelp": "L'utilisateur a accès aux réponses du formulaire",
+      "editor": "Éditeur",
+      "editorHelp": "L'utilisateur peut modifier, partager, publier et supprimer le formulaire, mais aussi voir les réponses",
+      "formViewer": "Participant",
+      "formViewerHelp": "L'utilisateur peut répondre au formulaire même s'il est privé",
+      "modalTitle": "Modifier les roles du formlaire {{name}}",
+      "owner": "Propriétaire",
+      "public": "Formulaire Public",
+      "publicHelp": "Si cette option est activée, tout utilisateur disposant du lien peut accéder et répondre au formulaire",
+      "removeUser": {
+        "body": "Cette action retire l'accès au formulaire {{name}} pour cet utilisateur. Cependant, si le formulaire est public, l'utilisateur pourra toujours fournir une réponse",
+        "title": "Retirer un utilisateur"
+      },
+      "roleChoice": "Choix du role"
     }
   },
   "legalNotice": {
