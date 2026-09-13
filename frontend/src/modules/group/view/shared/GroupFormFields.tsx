@@ -13,6 +13,7 @@ import {
   Box,
   InputAdornment,
   MenuItem,
+  Paper,
   Typography,
 } from '@mui/material';
 import { useQuery } from '@tanstack/react-query';
@@ -194,8 +195,8 @@ export function GroupFormFields({
               ))}
             </SelectField>
           </FlexAuto>
-          <Box>
-            <Accordion>
+          <Box sx={{ my: 1 }}>
+            <Accordion defaultExpanded>
               <AccordionSummary expandIcon={<ExpandMoreIcon />}>
                 {t('group.form.initialMember.title')}
               </AccordionSummary>
@@ -258,25 +259,28 @@ export function GroupFormFields({
         </>
       )}
 
-      {edit && (
-        <CheckboxField
-          label={t('group.form.saveHistroryRecord.label')}
-          value={formValues.saveHistoryRecord}
-          handleChange={(val) => updateFormValues({ saveHistoryRecord: val })}
-          helperText={t('group.form.saveHistroryRecord.helperText')}
-          errors={error?.fields?._save_history_record}
+      <Paper sx={{ p: 1, my: 1 }}>
+        {edit && (
+          <CheckboxField
+            label={t('group.form.saveHistroryRecord.label')}
+            value={formValues.saveHistoryRecord}
+            handleChange={(val) => updateFormValues({ saveHistoryRecord: val })}
+            helperText={t('group.form.saveHistroryRecord.helperText')}
+            errors={error?.fields?._save_history_record}
+          />
+        )}
+        <TextField
+          label={t('group.form.changeReason.label')}
+          value={formValues.changeReason}
+          handleChange={(val) => {
+            updateFormValues({ changeReason: val });
+          }}
+          helperText={t('group.form.changeReason.helperText')}
+          errors={error?.fields?._change_reason}
+          disabled={edit && !formValues.saveHistoryRecord}
+          required={edit}
         />
-      )}
-      <TextField
-        label={t('group.form.changeReason.label')}
-        value={formValues.changeReason}
-        handleChange={(val) => {
-          updateFormValues({ changeReason: val });
-        }}
-        helperText={t('group.form.changeReason.helperText')}
-        errors={error?.fields?._change_reason}
-        disabled={edit && !formValues.saveHistoryRecord}
-      />
+      </Paper>
 
       <FlexAuto columnGap={2}>
         <FileField
