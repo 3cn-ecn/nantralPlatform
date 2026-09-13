@@ -6,13 +6,13 @@ import {
   Delete as DeleteIcon,
   RadioButtonUnchecked,
 } from '@mui/icons-material';
-import { Button, IconButton } from '@mui/material';
+import { Button, IconButton, Stack } from '@mui/material';
 import { UUID } from 'crypto';
 import { without, set, unset } from 'lodash';
 
 import { useFormContext } from '#modules/form/hooks/useFormContext';
-import { FlexCol, FlexRow } from '#shared/components/FlexBox/FlexBox';
 import { TextField } from '#shared/components/FormFields';
+import { useTranslation } from '#shared/i18n/useTranslation';
 
 export function MultipleChoiceAdditionalInput({
   nodeId,
@@ -21,6 +21,8 @@ export function MultipleChoiceAdditionalInput({
   nodeId: UUID;
   multiple?: boolean;
 }) {
+  const { t } = useTranslation();
+
   const { form, lang, setPayload } = useFormContext();
   const node = form.nodes[nodeId];
 
@@ -36,7 +38,7 @@ export function MultipleChoiceAdditionalInput({
     (optId: UUID) => node.payload.translation[lang][optId] ?? '',
     [lang, node.payload.translation],
   );
-  const setlabel = useCallback(
+  const setLabel = useCallback(
     (optId: UUID, val?: string) =>
       setPayload(
         nodeId,
@@ -76,12 +78,12 @@ export function MultipleChoiceAdditionalInput({
   );
 
   return (
-    <FlexCol gap={1}>
+    <Stack gap={1}>
       {options?.map((optId) => (
-        <FlexRow key={optId} gap={1} alignItems={'center'}>
+        <Stack key={optId} direction={'row'} gap={1} alignItems={'center'}>
           {multiple ? <CheckBoxOutlineBlankIcon /> : <RadioButtonUnchecked />}
           <TextField
-            handleChange={(val) => setlabel(optId, val)}
+            handleChange={(val) => setLabel(optId, val)}
             value={getLabel(optId)}
             size={'small'}
             margin={'none'}
@@ -89,9 +91,11 @@ export function MultipleChoiceAdditionalInput({
           <IconButton onClick={() => handleRemoveOption(optId)}>
             <DeleteIcon />
           </IconButton>
-        </FlexRow>
+        </Stack>
       ))}
-      <Button onClick={handleAddOption}>Add option</Button>
-    </FlexCol>
+      <Button onClick={handleAddOption}>
+        {t('jsonForm.edit.additionalInput.addOption')}
+      </Button>
+    </Stack>
   );
 }

@@ -13,6 +13,7 @@ import {
   JsonFormSchema,
 } from '#modules/form/types/jsonForm.type';
 import { SwitchField } from '#shared/components/FormFields';
+import { useToast } from '#shared/context/Toast.context';
 import { useTranslation } from '#shared/i18n/useTranslation';
 import { Page } from '#shared/infra/pagination';
 import { buildAbsoluteUrl } from '#shared/utils/urls';
@@ -23,6 +24,7 @@ export function PublicControl({
   formPreview: JsonFormPreview;
 }) {
   const { t } = useTranslation();
+  const showToast = useToast();
   const queryClient = useQueryClient();
 
   const { mutate } = useMutation({
@@ -31,8 +33,8 @@ export function PublicControl({
         ? setFormPublicApi(formPreview.uuid)
         : setFormPrivateApi(formPreview.uuid),
     onSuccess() {
-      queryClient.setQueryData(
-        ['forms'],
+      queryClient.setQueriesData(
+        { queryKey: ['forms'] },
         (data: InfiniteData<Page<JsonFormPreview>>) => ({
           ...data,
           pages: data.pages.map((page) => ({
@@ -45,8 +47,8 @@ export function PublicControl({
           })),
         }),
       );
-      queryClient.setQueryData(
-        ['form', formPreview.uuid],
+      queryClient.setQueriesData(
+        { queryKey: ['form', formPreview.uuid] },
         (form: JsonFormSchema) => ({ ...form, public: !form.public }),
       );
     },
@@ -63,10 +65,22 @@ export function PublicControl({
       <Tooltip title={t('jsonForm.details.link')}>
         <IconButton
           onClick={() =>
-            navigator.clipboard.writeText(
-              buildAbsoluteUrl(`/form/${formPreview.uuid}/`),
-            )
+            navigator.clipboard
+              .writeText(buildAbsoluteUrl(`/form/${formPreview.uuid}/`))
+              .then(() =>
+                showToast({
+                  variant: 'success',
+                  message: t('jsonForm.details.copy.success'),
+                }),
+              )
+              .catch(() =>
+                showToast({
+                  variant: 'error',
+                  message: t('jsonForm.details.copy.error'),
+                }),
+              )
           }
+          sx={{ my: 'auto' }}
         >
           <LinkIcon />
         </IconButton>

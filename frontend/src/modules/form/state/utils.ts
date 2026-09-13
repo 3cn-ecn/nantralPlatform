@@ -213,6 +213,13 @@ export function nodeToJsonForm(
       set(result, ['schema', 'properties', childId], childResult.schema);
       (result.uiSchema as Layout).elements.push(childResult.uiSchema);
       merge(result.i18nKeys, childResult.i18nKeys);
+      if (state.nodes[childId].payload.required) {
+        set(
+          result,
+          ['schema', 'required'],
+          [...(result.schema.required ?? []), childId],
+        );
+      }
     });
   }
 

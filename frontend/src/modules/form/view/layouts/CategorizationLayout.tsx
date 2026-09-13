@@ -1,10 +1,9 @@
 import { PropsWithChildren } from 'react';
 
-import { Stepper, useTheme } from '@mui/material';
+import { Stack, Stepper, useTheme } from '@mui/material';
 import { UUID } from 'crypto';
 
 import { AddChildButton } from '#modules/form/view/Layout/AddChildButton';
-import { FlexCol } from '#shared/components/FlexBox/FlexBox';
 
 export function CategorizationLayout({
   children,
@@ -17,7 +16,7 @@ export function CategorizationLayout({
   const theme = useTheme();
 
   return (
-    <FlexCol gap={1}>
+    <Stack gap={1}>
       <Stepper
         nonLinear
         orientation="vertical"
@@ -30,6 +29,6 @@ export function CategorizationLayout({
         {children}
       </Stepper>
       <AddChildButton nodeId={nodeId} />
-    </FlexCol>
+    </Stack>
   );
 }

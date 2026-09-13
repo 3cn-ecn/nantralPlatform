@@ -41,7 +41,7 @@ export function NumberMenuItem({
           {label}
           {': '}
           {value ?? (
-            <Typography color={'textDisabled'}>
+            <Typography component={'span'} color={'textDisabled'}>
               {t('form.menu.empty')}
             </Typography>
           )}

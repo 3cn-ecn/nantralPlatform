@@ -1,13 +1,16 @@
 import { useCallback, useMemo } from 'react';
 
 import { JsonSchema } from '@jsonforms/core';
-import { MoreHoriz } from '@mui/icons-material';
+import { CheckBox, MoreHoriz } from '@mui/icons-material';
 import {
   FormControl,
   FormControlLabel,
   InputLabel,
+  ListItemIcon,
+  ListItemText,
   MenuItem,
   Select,
+  Stack,
   Switch,
 } from '@mui/material';
 import { UUID } from 'crypto';
@@ -15,8 +18,7 @@ import { set } from 'lodash';
 
 import { INPUT_TYPES } from '#modules/form/constants';
 import { useFormContext } from '#modules/form/hooks/useFormContext';
-import { FlexAuto, FlexCol } from '#shared/components/FlexBox/FlexBox';
-import { TextField } from '#shared/components/FormFields';
+import { SwitchField, TextField } from '#shared/components/FormFields';
 import { IconMenu } from '#shared/components/IconMenu/IconMenu';
 import { useTranslation } from '#shared/i18n/useTranslation';
 
@@ -100,54 +102,56 @@ export function QuestionFields({ nodeId }: { nodeId: UUID }) {
   const selectTypeId = `select_type-${nodeId}`;
 
   return (
-    <FlexCol gap={1}>
-      <FlexAuto gap={1}>
+    <Stack gap={1}>
+      <Stack direction={{ md: 'row' }} gap={1}>
         <TextField
           handleChange={setLabel}
-          label={'Question'}
+          label={t('jsonForm.edit.question.label')}
           size={'medium'}
           value={label}
           margin={'none'}
         />
         <FormControl fullWidth margin={'none'}>
-          <InputLabel id={selectTypeId}>{'Select Input Type'}</InputLabel>
+          <InputLabel id={selectTypeId}>
+            {t('jsonForm.edit.question.typeSelect')}
+          </InputLabel>
           <Select
             variant={'outlined'}
             onChange={(e) => setType(e.target.value)}
-            label={'Select Input Type'}
+            label={t('jsonForm.edit.question.typeSelect')}
             labelId={selectTypeId}
             value={type}
+            renderValue={(val) => t(INPUT_TYPES[val].i18nKey)}
           >
-            {Object.keys(INPUT_TYPES).map((key) => (
+            {Object.entries(INPUT_TYPES).map(([key, input]) => (
               <MenuItem key={key} value={key}>
-                {t(`jsonForm.control.type.${key}.name`)}
+                <ListItemIcon>{input.icon}</ListItemIcon>
+                <ListItemText primary={t(input.i18nKey)} />
               </MenuItem>
             ))}
           </Select>
         </FormControl>
-      </FlexAuto>
-      <FlexAuto columnGap={2} alignItems={'center'}>
+      </Stack>
+      <Stack direction={{ md: 'row' }} columnGap={2} alignItems={'center'}>
         <TextField
           handleChange={(val) => setDescription(val)}
-          label={'Description'}
+          label={t('jsonForm.edit.question.description')}
           size={'small'}
           value={description?.[lang]}
           margin={'none'}
         />
-        <FormControl margin={'none'}>
-          <FormControlLabel
-            label={'Requis'}
-            value={required}
-            control={<Switch onChange={(e) => setRequired(e.target.checked)} />}
-          />
-        </FormControl>
+        <SwitchField
+          label={t('jsonForm.edit.question.required')}
+          handleChange={setRequired}
+          value={required}
+        />
         {input.getOptions && (
           <IconMenu Icon={MoreHoriz} size={'medium'}>
             {input.getOptions(nodeId)}
           </IconMenu>
         )}
-      </FlexAuto>
+      </Stack>
       {input?.additionalInputs && <input.additionalInputs nodeId={nodeId} />}
-    </FlexCol>
+    </Stack>
   );
 }

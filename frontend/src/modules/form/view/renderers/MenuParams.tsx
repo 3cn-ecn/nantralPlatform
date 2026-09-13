@@ -14,18 +14,19 @@ import { useTranslation } from '#shared/i18n/useTranslation';
 type ParamProps<T = object> = Partial<T> & {
   id: UUID;
   title: string;
+  i18nKey: string;
+  i18nKeyHelp?: string;
 };
 
-// TODO: provide translations for these components
-
-export function BooleanUiParm({ id, title }: ParamProps) {
+export function BooleanUiParm({ id, title, i18nKey, i18nKeyHelp }: ParamProps) {
   const { form, setPayload } = useFormContext();
   const node = useMemo(() => form.nodes[id], [form.nodes, id]);
   const { t } = useTranslation();
 
   return (
     <SelectableMenuItem
-      label={t(`jsonForm.options.${title}.label`)}
+      label={t(i18nKey)}
+      helperText={i18nKeyHelp && t(i18nKeyHelp)}
       handleChange={(val) =>
         setPayload(id, set(node.payload, ['options', title], val))
       }
@@ -34,14 +35,15 @@ export function BooleanUiParm({ id, title }: ParamProps) {
   );
 }
 
-export function BooleanParm({ id, title }: ParamProps) {
+export function BooleanParm({ id, title, i18nKey, i18nKeyHelp }: ParamProps) {
   const { form, setPayload } = useFormContext();
   const node = useMemo(() => form.nodes[id], [form.nodes, id]);
   const { t } = useTranslation();
 
   return (
     <SelectableMenuItem
-      label={t(`jsonForm.options.${title}.label`)}
+      label={t(i18nKey)}
+      helperText={i18nKeyHelp && t(i18nKeyHelp)}
       handleChange={(val) =>
         setPayload(id, set(node.payload, ['schema', title], val))
       }
@@ -53,6 +55,8 @@ export function BooleanParm({ id, title }: ParamProps) {
 export function NumberUiParam({
   id,
   title,
+  i18nKey,
+  i18nKeyHelp,
   ...options
 }: ParamProps<NumberFieldProps>) {
   const { form, setPayload } = useFormContext();
@@ -61,8 +65,8 @@ export function NumberUiParam({
 
   return (
     <NumberMenuItem
-      label={t(`jsonForm.options.${title}.label`)}
-      helperText={t(`jsonForm.options.${title}.helperText`)}
+      label={t(i18nKey)}
+      helperText={i18nKeyHelp && t(i18nKeyHelp)}
       handleChange={(val) =>
         setPayload(id, set(node.payload, ['options', title], val))
       }
@@ -75,6 +79,8 @@ export function NumberUiParam({
 export function NumberParam({
   id,
   title,
+  i18nKey,
+  i18nKeyHelp,
   ...options
 }: ParamProps<NumberFieldProps>) {
   const { form, setPayload } = useFormContext();
@@ -83,8 +89,8 @@ export function NumberParam({
 
   return (
     <NumberMenuItem
-      label={t(`jsonForm.options.${title}.label`)}
-      helperText={t(`jsonForm.options.${title}.helperText`)}
+      label={t(i18nKey)}
+      helperText={i18nKeyHelp && t(i18nKeyHelp)}
       handleChange={(val) =>
         setPayload(id, set(node.payload, ['schema', title], val))
       }
@@ -97,6 +103,8 @@ export function NumberParam({
 export function StringUiParam({
   id,
   title,
+  i18nKey,
+  i18nKeyHelp,
   ...options
 }: ParamProps<TextFieldProps>) {
   const { form, setPayload } = useFormContext();
@@ -105,8 +113,8 @@ export function StringUiParam({
 
   return (
     <TextMenuItem
-      label={t(`jsonForm.options.${title}.label`)}
-      helperText={t(`jsonForm.options.${title}.helperText`)}
+      label={t(i18nKey)}
+      helperText={i18nKeyHelp && t(i18nKeyHelp)}
       handleChange={(val) =>
         setPayload(id, set(node.payload, ['options', title], val))
       }
@@ -119,6 +127,8 @@ export function StringUiParam({
 export function StringParam({
   id,
   title,
+  i18nKey,
+  i18nKeyHelp,
   ...options
 }: ParamProps<TextFieldProps>) {
   const { form, setPayload } = useFormContext();
@@ -127,8 +137,8 @@ export function StringParam({
 
   return (
     <TextMenuItem
-      label={t(`jsonForm.options.${title}.label`)}
-      helperText={t(`jsonForm.options.${title}.helperText`)}
+      label={t(i18nKey)}
+      helperText={i18nKeyHelp && t(i18nKeyHelp)}
       handleChange={(val) =>
         setPayload(id, set(node.payload, ['schema', title], val))
       }

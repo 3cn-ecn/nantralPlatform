@@ -1,13 +1,21 @@
 import { useCallback, useMemo, useState } from 'react';
 
-import { Add as AddIcon } from '@mui/icons-material';
-import { Button, Menu, MenuItem } from '@mui/material';
+import AddIcon from '@mui/icons-material/Add';
+import {
+  Button,
+  ListItemIcon,
+  ListItemText,
+  Menu,
+  MenuItem,
+} from '@mui/material';
 import { UUID } from 'crypto';
 
 import { LAYOUT_TYPES } from '#modules/form/constants';
 import { useFormContext } from '#modules/form/hooks/useFormContext';
+import { useTranslation } from '#shared/i18n/useTranslation';
 
 export function AddChildButton({ nodeId }: { nodeId: UUID }) {
+  const { t } = useTranslation();
   const { form, addNode } = useFormContext();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
@@ -47,7 +55,7 @@ export function AddChildButton({ nodeId }: { nodeId: UUID }) {
         startIcon={<AddIcon />}
         sx={{ justifySelf: 'center', alignSelf: 'center' }}
       >
-        Ajouter un élement
+        {t('jsonForm.edit.addElement')}
       </Button>
       <Menu
         id={`add-menu-${nodeId}`}
@@ -68,7 +76,8 @@ export function AddChildButton({ nodeId }: { nodeId: UUID }) {
               setAnchorEl(null);
             }}
           >
-            {type}
+            <ListItemIcon>{LAYOUT_TYPES[type].icon}</ListItemIcon>
+            <ListItemText primary={t(LAYOUT_TYPES[type].i18nKey)} />
           </MenuItem>
         ))}
       </Menu>

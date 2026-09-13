@@ -4,16 +4,21 @@ import {
   FormControl,
   FormHelperText,
   InputLabel,
+  ListItemIcon,
+  ListItemText,
   MenuItem,
   Select,
+  Stack,
 } from '@mui/material';
 
 import { LAYOUT_TYPES } from '#modules/form/constants';
 import { useFormContext } from '#modules/form/hooks/useFormContext';
-import { FlexRow } from '#shared/components/FlexBox/FlexBox';
 import { LanguageSelector } from '#shared/components/LanguageSelector/LanguageSelector';
+import { useTranslation } from '#shared/i18n/useTranslation';
 
 export function SelectBaseComponent() {
+  const { t } = useTranslation();
+
   const { form, setForm, lang, setLang } = useFormContext();
   const layoutType = useMemo(
     () => form.nodes[form.root].payload.type,
@@ -44,10 +49,10 @@ export function SelectBaseComponent() {
   );
 
   const id = form.root + '/select_type';
-  const selectLabel = 'Select the type';
+  const selectLabel = t('jsonForm.edit.layoutSelect');
 
   return (
-    <FlexRow gap={2}>
+    <Stack direction={'row'} gap={2}>
       <FormControl fullWidth margin={'normal'}>
         <InputLabel id={id}>{selectLabel}</InputLabel>
         <Select
@@ -56,6 +61,7 @@ export function SelectBaseComponent() {
           label={selectLabel}
           labelId={id}
           value={layoutType}
+          renderValue={(val) => t(LAYOUT_TYPES[val].i18nKey)}
         >
           {Object.keys(LAYOUT_TYPES)
             .filter((type) =>
@@ -68,19 +74,18 @@ export function SelectBaseComponent() {
             )
             .map((child) => (
               <MenuItem key={child} value={child}>
-                {LAYOUT_TYPES[child].type}
+                <ListItemIcon>{LAYOUT_TYPES[child].icon}</ListItemIcon>
+                <ListItemText primary={t(LAYOUT_TYPES[child].i18nKey)} />
               </MenuItem>
             ))}
         </Select>
-        <FormHelperText>
-          Choisissez le type d&#39;élément que vous souhaitez ajouter
-        </FormHelperText>
+        <FormHelperText>{t('jsonForm.edit.layoutSelectHelp')}</FormHelperText>
       </FormControl>
       <LanguageSelector
         selectedLang={lang}
         setSelectedLang={setLang}
         sx={{ justifySelf: 'center', alignSelf: 'center' }}
       />
-    </FlexRow>
+    </Stack>
   );
 }

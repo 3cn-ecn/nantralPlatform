@@ -1,3 +1,5 @@
+import { ReactElement } from 'react';
+
 import { Grid } from '@mui/material';
 
 import { GroupPreview } from '#modules/group/types/group.types';
@@ -14,7 +16,7 @@ export function GroupGrid({
   groups?: GroupPreview[];
   isPending?: boolean;
   estimatedSize?: number;
-  extraComponent?: JSX.Element;
+  extraComponent?: ReactElement;
 }) {
   return (
     <Grid spacing={1} container>

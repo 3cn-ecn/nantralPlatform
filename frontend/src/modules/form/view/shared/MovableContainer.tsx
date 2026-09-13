@@ -7,12 +7,11 @@ import {
   Delete as DeleteIcon,
   DragIndicator as DragIndicatorIcon,
 } from '@mui/icons-material';
-import { IconButton, useTheme } from '@mui/material';
+import { IconButton, Stack, useTheme } from '@mui/material';
 import { UUID } from 'crypto';
 
 import { useFormContext } from '#modules/form/hooks/useFormContext';
 import { MoveRemoveControls } from '#modules/form/view/Layout/MoveRemoveControls';
-import { FlexCol, FlexRow } from '#shared/components/FlexBox/FlexBox';
 
 export function MovableContainer({
   parentId,
@@ -40,12 +39,11 @@ export function MovableContainer({
   });
 
   return (
-    <FlexRow
+    <Stack
       ref={parentId && ref}
-      alignItems={'center'}
       data-dragging={isDragging}
       gap={1}
-      py={1}
+      p={1}
       width={'100%'}
       sx={{
         border: `1px solid ${theme.palette.divider}`,
@@ -61,19 +59,21 @@ export function MovableContainer({
       }}
       className={'layout'}
     >
-      <IconButton ref={handleRef} size={'small'}>
-        <DragIndicatorIcon />
-      </IconButton>
+      <Stack direction="row" alignItems="center" justifyContent="space-between">
+        <IconButton ref={handleRef} size={'small'}>
+          <DragIndicatorIcon />
+        </IconButton>
+
+        <MoveRemoveControls
+          nodeId={nodeId}
+          parentId={parentId}
+          index={index}
+          lastIdx={lastIdx}
+        />
+      </Stack>
 
       {children}
-
-      <MoveRemoveControls
-        nodeId={nodeId}
-        parentId={parentId}
-        index={index}
-        lastIdx={lastIdx}
-      />
-    </FlexRow>
+    </Stack>
   );
 }
 
@@ -81,10 +81,9 @@ export function MovableContainerOverlay({ children }: PropsWithChildren) {
   const theme = useTheme();
 
   return (
-    <FlexRow
-      alignItems={'center'}
+    <Stack
       gap={1}
-      py={1}
+      p={1}
       width={'100%'}
       sx={{
         border: `1px solid ${theme.palette.divider}`,
@@ -92,23 +91,25 @@ export function MovableContainerOverlay({ children }: PropsWithChildren) {
         borderRadius: `${theme.shape.borderRadius}px`,
       }}
     >
-      <IconButton size={'small'}>
-        <DragIndicatorIcon />
-      </IconButton>
+      <Stack direction="row" alignItems="center" justifyContent="space-between">
+        <IconButton size="small">
+          <DragIndicatorIcon />
+        </IconButton>
+
+        <Stack direction={'row'} gap={1}>
+          <IconButton size="small">
+            <ArrowUpwardIcon />
+          </IconButton>
+          <IconButton size="small">
+            <DeleteIcon />
+          </IconButton>
+          <IconButton size="small">
+            <ArrowDownwardIcon />
+          </IconButton>
+        </Stack>
+      </Stack>
 
       {children}
-
-      <FlexCol gap={1}>
-        <IconButton size="small">
-          <ArrowUpwardIcon />
-        </IconButton>
-        <IconButton size={'small'}>
-          <DeleteIcon />
-        </IconButton>
-        <IconButton size="small">
-          <ArrowDownwardIcon />
-        </IconButton>
-      </FlexCol>
-    </FlexRow>
+    </Stack>
   );
 }

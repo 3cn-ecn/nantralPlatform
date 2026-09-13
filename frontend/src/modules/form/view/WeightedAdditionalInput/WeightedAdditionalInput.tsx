@@ -1,18 +1,19 @@
 import { useCallback, useMemo } from 'react';
 
-import {
-  Delete as DeleteIcon,
-  RadioButtonUnchecked,
-} from '@mui/icons-material';
-import { Button, IconButton, Typography } from '@mui/material';
+import DeleteIcon from '@mui/icons-material/Delete';
+import ListIcon from '@mui/icons-material/List';
+import RadioButtonUncheckedIcon from '@mui/icons-material/RadioButtonUnchecked';
+import { Button, IconButton, Stack, Typography } from '@mui/material';
 import { UUID } from 'crypto';
 import { set, unset } from 'lodash';
 
 import { useFormContext } from '#modules/form/hooks/useFormContext';
-import { FlexAuto, FlexCol, FlexRow } from '#shared/components/FlexBox/FlexBox';
 import { TextField } from '#shared/components/FormFields';
+import { useTranslation } from '#shared/i18n/useTranslation';
 
 export function WeightedAdditionalInput({ nodeId }: { nodeId: UUID }) {
+  const { t } = useTranslation();
+
   const { form, lang, setPayload } = useFormContext();
   const node = form.nodes[nodeId];
 
@@ -121,43 +122,57 @@ export function WeightedAdditionalInput({ nodeId }: { nodeId: UUID }) {
   );
 
   return (
-    <FlexAuto gap={1}>
-      <FlexCol gap={1} minWidth={'50%'}>
-        <Typography variant={'h4'}>Rows</Typography>
+    <Stack direction={{ md: 'row' }} gap={1}>
+      <Stack gap={1} minWidth={'50%'}>
+        <Typography variant={'h4'}>
+          {t('jsonForm.edit.additionalInput.rows')}
+        </Typography>
         {rows?.map((rowId: UUID) => (
-          <FlexRow key={rowId} gap={1} alignItems={'center'}>
-            <RadioButtonUnchecked />
+          <Stack direction={'row'} key={rowId} gap={1} alignItems={'center'}>
+            <ListIcon />
             <TextField
               handleChange={(val) => setLabel(rowId, val)}
               value={getLabel(rowId)}
               size={'small'}
               margin={'none'}
             />
-            <IconButton onClick={() => handleRemoveRow(rowId)}>
+            <IconButton
+              aria-label={'delete option'}
+              onClick={() => handleRemoveRow(rowId)}
+            >
               <DeleteIcon />
             </IconButton>
-          </FlexRow>
+          </Stack>
         ))}
-        <Button onClick={handleAddRow}>Add row</Button>
-      </FlexCol>
-      <FlexCol gap={1} minWidth={'50%'}>
-        <Typography variant={'h4'}>Columns</Typography>
+        <Button onClick={handleAddRow}>
+          {t('jsonForm.edit.additionalInput.addRow')}
+        </Button>
+      </Stack>
+      <Stack gap={1} minWidth={'50%'}>
+        <Typography variant={'h4'}>
+          {t('jsonForm.edit.additionalInput.columns')}
+        </Typography>
         {options?.map(({ const: optConst, title: optId }) => (
-          <FlexRow key={optId} gap={1} alignItems={'center'}>
-            <RadioButtonUnchecked />
+          <Stack direction={'row'} key={optId} gap={1} alignItems={'center'}>
+            <RadioButtonUncheckedIcon />
             <TextField
               handleChange={(val) => setLabel(optId, val)}
               value={getLabel(optId)}
               size={'small'}
               margin={'none'}
             />
-            <IconButton onClick={() => handleRemoveOption(optId, optConst)}>
+            <IconButton
+              aria-label={'delete option'}
+              onClick={() => handleRemoveOption(optId, optConst)}
+            >
               <DeleteIcon />
             </IconButton>
-          </FlexRow>
+          </Stack>
         ))}
-        <Button onClick={handleAddOption}>Add column</Button>
-      </FlexCol>
-    </FlexAuto>
+        <Button onClick={handleAddOption}>
+          {t('jsonForm.edit.additionalInput.addColumn')}
+        </Button>
+      </Stack>
+    </Stack>
   );
 }

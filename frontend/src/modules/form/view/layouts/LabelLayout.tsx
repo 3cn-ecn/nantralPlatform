@@ -5,8 +5,11 @@ import { set } from 'lodash';
 
 import { useFormContext } from '#modules/form/hooks/useFormContext';
 import { RichTextField } from '#shared/components/FormFields';
+import { useTranslation } from '#shared/i18n/useTranslation';
 
 export function LabelLayout({ nodeId }: { nodeId: UUID }) {
+  const { t } = useTranslation();
+
   const { form, setForm, lang } = useFormContext();
 
   const text = useMemo(
@@ -26,8 +29,8 @@ export function LabelLayout({ nodeId }: { nodeId: UUID }) {
     <RichTextField
       handleChange={(val) => setText(val)}
       value={text as string}
-      label={'Texte'}
-      helperText={'Paragraphe intégré au questionnaire'}
+      label={t('jsonForm.edit.layout.label')}
+      helperText={t('jsonForm.edit.label.help')}
     />
   );
 }

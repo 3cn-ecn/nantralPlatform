@@ -1,13 +1,13 @@
 import { PropsWithChildren, useCallback, useMemo } from 'react';
 
-import { Card, CardActions, CardContent, useTheme } from '@mui/material';
+import { Card, CardActions, CardContent, Stack, useTheme } from '@mui/material';
 import { UUID } from 'crypto';
 import { set } from 'lodash';
 
 import { useFormContext } from '#modules/form/hooks/useFormContext';
 import { AddChildButton } from '#modules/form/view/Layout/AddChildButton';
-import { FlexCol } from '#shared/components/FlexBox/FlexBox';
 import { TextField } from '#shared/components/FormFields';
+import { useTranslation } from '#shared/i18n/useTranslation';
 
 export function GroupLayout({
   children,
@@ -18,6 +18,7 @@ export function GroupLayout({
   canAccept?: boolean;
 } & PropsWithChildren) {
   const theme = useTheme();
+  const { t } = useTranslation();
 
   const { form, setForm, lang } = useFormContext();
   const node = useMemo(() => form.nodes[nodeId], [form.nodes, nodeId]);
@@ -41,17 +42,17 @@ export function GroupLayout({
         <TextField
           handleChange={(val) => setLabel(val)}
           value={label}
-          label={'Label'}
-          helperText={'Nom du groupe de questions'}
+          label={t('jsonForm.edit.group.label')}
+          helperText={t('jsonForm.edit.group.labelHelp')}
         />
-        <FlexCol
+        <Stack
           gap={2}
           border={'1px solid'}
           borderColor={canAccept ? undefined : 'transparent'}
           borderRadius={`${theme.shape.borderRadius}px`}
         >
           {children}
-        </FlexCol>
+        </Stack>
       </CardContent>
       <CardActions sx={{ justifyContent: 'center' }}>
         <AddChildButton nodeId={nodeId} />

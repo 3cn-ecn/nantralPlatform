@@ -1,10 +1,9 @@
 import { PropsWithChildren } from 'react';
 
-import { useTheme } from '@mui/material';
+import { Stack, useTheme } from '@mui/material';
 import { UUID } from 'crypto';
 
 import { AddChildButton } from '#modules/form/view/Layout/AddChildButton';
-import { FlexCol } from '#shared/components/FlexBox/FlexBox';
 
 export function VerticalLayout({
   children,
@@ -13,16 +12,16 @@ export function VerticalLayout({
 }: PropsWithChildren & { nodeId: UUID; canAccept?: boolean }) {
   const theme = useTheme();
   return (
-    <FlexCol gap={2}>
-      <FlexCol
+    <Stack gap={2}>
+      <Stack
         gap={2}
         border={'1px solid'}
         borderColor={canAccept ? undefined : 'transparent'}
         borderRadius={`${theme.shape.borderRadius}px`}
       >
         {children}
-      </FlexCol>
+      </Stack>
       <AddChildButton nodeId={nodeId} />
-    </FlexCol>
+    </Stack>
   );
 }

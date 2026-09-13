@@ -8,12 +8,14 @@ import {
 
 interface SelectableMenuItemProps extends MenuItemProps {
   label: string;
+  helperText?: string;
   handleChange: (val: boolean) => void;
 }
 
 export function SelectableMenuItem({
   selected,
   label,
+  helperText,
   handleChange,
   ...props
 }: SelectableMenuItemProps) {
@@ -28,7 +30,7 @@ export function SelectableMenuItem({
           <Check />
         </ListItemIcon>
       )}
-      <ListItemText inset={!selected}>{label}</ListItemText>
+      <ListItemText inset={!selected} primary={label} secondary={helperText} />
       {props.children}
     </MenuItem>
   );

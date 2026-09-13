@@ -6,13 +6,13 @@ import {
   ListItemText,
   MenuItem,
   Select,
+  Stack,
 } from '@mui/material';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import { getUserListApi } from '#modules/account/api/getUserList.api';
 import { addRolesApi } from '#modules/form/api/addRoles.api';
 import { JsonFormPreview, UserRole } from '#modules/form/types/jsonForm.type';
-import { FlexAuto } from '#shared/components/FlexBox/FlexBox';
 import { AutocompleteSearchField } from '#shared/components/FormFields';
 import { LoadingButton } from '#shared/components/LoadingButton/LoadingButton';
 import { useToast } from '#shared/context/Toast.context';
@@ -83,7 +83,7 @@ export function AddUserFields({ jsonForm }: { jsonForm: JsonFormPreview }) {
   });
 
   return (
-    <FlexAuto gap={1}>
+    <Stack direction={{ md: 'row' }} gap={1}>
       <AutocompleteSearchField
         multiple
         name="user"
@@ -136,6 +136,6 @@ export function AddUserFields({ jsonForm }: { jsonForm: JsonFormPreview }) {
       >
         {t('button.add')}
       </LoadingButton>
-    </FlexAuto>
+    </Stack>
   );
 }

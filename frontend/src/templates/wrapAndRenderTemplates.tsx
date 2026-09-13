@@ -1,6 +1,6 @@
 import React, { ReactNode } from 'react';
 import ReactDOM from 'react-dom/client';
-import { BrowserRouter, Link, NavLink } from 'react-router';
+import { BrowserRouter } from 'react-router';
 
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import axios from 'axios';
@@ -34,16 +34,6 @@ export const wrapAndRenderTemplates = (
   const rootElement = document.getElementById(elementId);
   if (rootElement === null) return;
   const root = ReactDOM.createRoot(rootElement);
-
-  // always reload document because we're outside of React Router
-  Link.defaultProps = {
-    ...Link.defaultProps,
-    reloadDocument: true,
-  };
-  NavLink.defaultProps = {
-    ...NavLink.defaultProps,
-    reloadDocument: true,
-  };
 
   // fill in the React root with our wrapped element
   root.render(

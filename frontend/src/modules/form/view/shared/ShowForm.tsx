@@ -53,7 +53,6 @@ import TextControl, {
 } from '#modules/form/view/renderers/TextControl';
 import { FormItemActions } from '#modules/form/view/shared/FormItemActions';
 import { ConfirmationModal } from '#shared/components/Modal/ConfirmationModal';
-import { RichTextRenderer } from '#shared/components/RichTextRenderer/RichTextRenderer';
 import { useToast } from '#shared/context/Toast.context';
 import { useTranslation } from '#shared/i18n/useTranslation';
 
@@ -158,7 +157,6 @@ export function ShowForm({
         </Typography>
         <FormItemActions formPreview={jsonFormSchema} />
       </Stack>
-      <RichTextRenderer content={jsonFormSchema.description} />
       {error
         ?.filter((e) => e.instancePath === '/')
         .map((e) => (

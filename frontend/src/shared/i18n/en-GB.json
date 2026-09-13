@@ -678,7 +678,118 @@
       "viewResults": "View the results"
     },
     "edit": {
-      "title": "Edit Form"
+      "addElement": "Add Element",
+      "additionalInput": {
+        "addColumn": "Add column",
+        "addOption": "Add option",
+        "addRow": "Add row",
+        "columns": "Columns (Answers)",
+        "rows": "Rows (Questions)"
+      },
+      "category": {
+        "label": "Label",
+        "labelHelp": "Name of the step/part",
+        "noLabel": "Please provide a label..."
+      },
+      "control": {
+        "boolean": "Option",
+        "date": "Date",
+        "dateTime": "Date and Time",
+        "enum": "Unique Choice",
+        "integer": "Integer Value",
+        "multipleChoice": "Multiple Choice",
+        "number": "Numeric Value",
+        "text": "Text",
+        "time": "Time",
+        "weightedList": "Weighted Grid"
+      },
+      "description": "Description",
+      "descriptionHelp": "This text is a quick description of the form. Use the \"Formated Text\" element to include text for the respondants",
+      "dropLayout": "Drop an element here or click on the button bellow to add a new one",
+      "group": {
+        "label": "Label",
+        "labelHelp": "Name of the group of questions"
+      },
+      "label": {
+        "help": "This text will be added to the form"
+      },
+      "layout": {
+        "categorization": "Steps (root)",
+        "category": "Step",
+        "control": "Form Control",
+        "group": "Question Group",
+        "horizontal": "Row",
+        "label": "Formated Text",
+        "vertical": "Column"
+      },
+      "layoutSelect": "Select the root component",
+      "layoutSelectHelp": "Choose the base element that will contain your form",
+      "option": {
+        "autocomplete": {
+          "label": "Search options"
+        },
+        "default": {
+          "helperText": "Fill in the field default value",
+          "label": "Default value"
+        },
+        "enumFormat": {
+          "helperText": "Fill in the enum type. Default: select; radio: radio button",
+          "label": "Enum type"
+        },
+        "format": {
+          "helperText": "Name of a format (eg email, url,...). See ajv-format documentation",
+          "label": "Format (name)"
+        },
+        "maxLength": {
+          "helperText": "Fill in the maximum allowed number of characters",
+          "label": "Maximum length"
+        },
+        "maximum": {
+          "helperText": "The value should be lower than the one in this field",
+          "label": "Maximum"
+        },
+        "minLength": {
+          "helperText": "Fill in the minimum required number of characters",
+          "label": "Minimum length"
+        },
+        "minimum": {
+          "helperText": "The value should be higher than the one in this field",
+          "label": "Minimum"
+        },
+        "multi": {
+          "label": "Multiline"
+        },
+        "multipleOf": {
+          "helperText": "The value should be a multiple of the number in this field",
+          "label": "Multiple"
+        },
+        "pattern": {
+          "helperText": "Use a regular expression (RegEx) to validate the value",
+          "label": "Format (Regular expression)"
+        },
+        "restrict": {
+          "helperText": "Only while typing, does not affect validation",
+          "label": "Prevent too many characters"
+        },
+        "spinner": {
+          "helperText": "Numeric control with + and - buttons",
+          "label": "Alternative control"
+        },
+        "toggle": {
+          "label": "Use a switch"
+        },
+        "trim": {
+          "label": "Ajust size to the content"
+        }
+      },
+      "question": {
+        "description": "Description",
+        "label": "Question name",
+        "required": "Required",
+        "typeSelect": "Question type choice"
+      },
+      "title": "Edit Form",
+      "titleField": "Form Title"
     },
     "list": {
       "action": "Actions",

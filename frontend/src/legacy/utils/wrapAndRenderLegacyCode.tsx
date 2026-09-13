@@ -5,7 +5,7 @@
  */
 import React, { ReactNode } from 'react';
 import ReactDOM from 'react-dom/client';
-import { BrowserRouter, Link, NavLink } from 'react-router';
+import { BrowserRouter } from 'react-router';
 
 import { ThemeProvider } from '@mui/material';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
@@ -28,7 +28,7 @@ const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
       staleTime: 1000 * 60, // time before refetching the server: 1min
-      cacheTime: 1000 * 60 * 60 * 24 * 7, // time before erasing the cached data: 1 week
+      gcTime: 1000 * 60 * 60 * 24 * 7, // time before erasing the cached data: 1 week
       retry: 1,
       retryDelay: 1000,
     },
@@ -45,15 +45,6 @@ export const wrapAndRenderLegacyCode = (
 
   // legacy pages only support light theme and french language
   const theme = getTheme('light', 'fr-FR');
-  // always reload document because we're outside of React Router
-  Link.defaultProps = {
-    ...Link.defaultProps,
-    reloadDocument: true,
-  };
-  NavLink.defaultProps = {
-    ...NavLink.defaultProps,
-    reloadDocument: true,
-  };
 
   // fill in the React root with our wrapped element
   root.render(

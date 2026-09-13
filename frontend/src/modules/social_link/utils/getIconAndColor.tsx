@@ -1,4 +1,6 @@
 // cspell:ignore facebook, instagram, linkedin, youtube, spotify, discord, fortawesome, fontawesome, youtu
+import { ReactElement } from 'react';
+
 import {
   faDiscord,
   faFacebook,
@@ -26,7 +28,7 @@ import { getDomain } from './getDomain';
 export function getIconAndColor(
   socialLink: Pick<SocialLink, 'uri' | 'label'>,
   theme: Theme,
-): { icon: JSX.Element; color: string } {
+): { icon: ReactElement; color: string } {
   const parsedUrl = new URL(socialLink.uri);
 
   if (parsedUrl.protocol == 'mailto:') {

@@ -147,22 +147,24 @@ export async function formDetailsLoader(
   queryClient: QueryClient,
 ) {
   const { uuid } = args.params;
-  if (!uuid) {
-    return getDefaultForm();
-  }
+
   const formSchema = await queryClient.query({
     queryKey: ['form', uuid],
-    queryFn: () => getJsonSchemaApi(uuid),
+    queryFn: () =>
+      !uuid || uuid === 'new' ? getDefaultForm() : getJsonSchemaApi(uuid),
     staleTime: 'static',
   });
   return {
-    extraCrumb: [
-      {
-        id: formSchema.uuid,
-        label: formSchema.name,
-        path: `/form/${formSchema.uuid}/`,
-      },
-    ],
+    extraCrumb:
+      uuid && uuid !== 'new'
+        ? [
+            {
+              id: formSchema.uuid,
+              label: formSchema.name,
+              path: `/form/${formSchema.uuid}/`,
+            },
+          ]
+        : undefined,
     formSchema,
   };
 }

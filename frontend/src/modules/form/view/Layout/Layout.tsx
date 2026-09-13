@@ -24,9 +24,6 @@ export function Layout({ nodeId }: { nodeId: UUID }) {
     () => LAYOUT_TYPES[node.payload.type],
     [node.payload.type],
   );
-  // if (!('elements' in node.payload)) {
-  //   return <QuestionFields nodeId={actualNodeId} />;
-  // }
 
   return (
     <Box flexGrow={2}>
@@ -92,14 +89,12 @@ export function LayoutOverlay({ nodeId }: { nodeId: UUID }) {
   return (
     <Box flexGrow={2}>
       <layout.element nodeId={nodeId}>
-        <Box border={'1px solid transparent'}>
-          {node.children.map((childId) => (
-            <MovableContainerOverlay key={childId}>
-              <LayoutOverlay key={childId} nodeId={childId} />
-            </MovableContainerOverlay>
-          ))}
-          {isEmpty && <DropLayoutPlaceHolder parentId={nodeId} accept={[]} />}
-        </Box>
+        {node.children.map((childId) => (
+          <MovableContainerOverlay key={childId}>
+            <LayoutOverlay key={childId} nodeId={childId} />
+          </MovableContainerOverlay>
+        ))}
+        {isEmpty && <DropLayoutPlaceHolder parentId={nodeId} accept={[]} />}
       </layout.element>
     </Box>
   );

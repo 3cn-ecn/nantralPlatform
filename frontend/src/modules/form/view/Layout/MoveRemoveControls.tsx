@@ -1,15 +1,12 @@
 import { useCallback } from 'react';
 
-import {
-  ArrowDownward as ArrowDownwardIcon,
-  ArrowUpward as ArrowUpwardIcon,
-  Delete as DeleteIcon,
-} from '@mui/icons-material';
-import { IconButton } from '@mui/material';
+import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
+import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
+import DeleteIcon from '@mui/icons-material/Delete';
+import { IconButton, Stack } from '@mui/material';
 import { UUID } from 'crypto';
 
 import { useFormContext } from '#modules/form/hooks/useFormContext';
-import { FlexCol } from '#shared/components/FlexBox/FlexBox';
 
 export function MoveRemoveControls({
   nodeId,
@@ -35,7 +32,7 @@ export function MoveRemoveControls({
   );
 
   return (
-    <FlexCol gap={1}>
+    <Stack direction={'row'} gap={1}>
       <IconButton
         aria-label="move up"
         size="small"
@@ -59,6 +56,6 @@ export function MoveRemoveControls({
       >
         <ArrowDownwardIcon />
       </IconButton>
-    </FlexCol>
+    </Stack>
   );
 }

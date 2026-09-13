@@ -1,7 +1,10 @@
-import { useLoaderData } from 'react-router';
+import { useLoaderData, useParams } from 'react-router';
 
 import { Container, Stack, Typography } from '@mui/material';
+import { useSuspenseQuery } from '@tanstack/react-query';
 
+import { getJsonSchemaApi } from '#modules/form/api/getJsonSchema.api';
+import { getDefaultForm } from '#modules/form/constants';
 import { FormProvider } from '#modules/form/state/form.context';
 import { jsonFormToNode } from '#modules/form/state/utils';
 import { FormEditRoot } from '#modules/form/view/shared/FormEditRoot';
@@ -13,7 +16,14 @@ import { FlexCol } from '#shared/components/FlexBox/FlexBox';
 import { useTranslation } from '#shared/i18n/useTranslation';
 
 export default function EditFormPage() {
-  const { formSchema } = useLoaderData();
+  const { uuid } = useParams();
+  const { data: formSchema } = useSuspenseQuery({
+    queryKey: ['form', uuid],
+    queryFn: () =>
+      !uuid || uuid === 'new' ? getDefaultForm() : getJsonSchemaApi(uuid),
+    initialData: useLoaderData().formSchema,
+  });
+
   const { t } = useTranslation();
 
   return (

@@ -82,8 +82,9 @@ export function FormItemActions({
         ? setFormInactiveApi(formPreview.uuid)
         : setFormActiveApi(formPreview.uuid),
     onSuccess() {
-      queryClient.setQueryData(
-        ['forms'],
+      setActiveModalOpen(false);
+      queryClient.setQueriesData(
+        { queryKey: ['forms'] },
         (data: InfiniteData<Page<JsonFormPreview>>) => ({
           ...data,
           pages: data.pages.map((page) => ({
@@ -96,8 +97,8 @@ export function FormItemActions({
           })),
         }),
       );
-      queryClient.setQueryData(
-        ['form', formPreview.uuid],
+      queryClient.setQueriesData(
+        { queryKey: ['form', formPreview.uuid] },
         (form: JsonFormSchema) => ({ ...form, active: !form.active }),
       );
     },
@@ -174,7 +175,10 @@ export function FormItemActions({
           : formPreview.active
             ? CheckOutlinedIcon
             : CloseOutlinedIcon,
-        clickableProps: { onClick: () => setActiveModalOpen(true) },
+        clickableProps: {
+          onClick: () =>
+            formPreview.active ? activeMutation() : setActiveModalOpen(true),
+        },
       },
       {
         label: t('jsonForm.details.share'),
@@ -188,6 +192,7 @@ export function FormItemActions({
       },
     ],
     [
+      activeMutation,
       activePending,
       formPreview.active,
       formPreview.editable,

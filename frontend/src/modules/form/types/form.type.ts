@@ -1,4 +1,4 @@
-import { FC, ReactNode } from 'react';
+import { FC, ReactElement, ReactNode } from 'react';
 
 import { JsonSchema, JsonSchema7, UISchemaElement } from '@jsonforms/core';
 import { UUID } from 'crypto';
@@ -45,6 +45,8 @@ export interface InputType {
   defaultOptions?: UISchemaElement['options'];
   defaultSchema?: JsonSchema7;
   additionalInputs?: FC<{ nodeId: UUID; [key: string]: unknown }>; /// other inputs to be rendered with the component
+  i18nKey: string;
+  icon: ReactElement;
 }
 
 export interface LayoutType {
@@ -52,4 +54,6 @@ export interface LayoutType {
   element: FC<{ children: ReactNode; nodeId: UUID; canAccept?: boolean }>;
   allowedChildren: string[];
   defaultPayload: Partial<Payload>;
+  i18nKey: string;
+  icon: ReactElement;
 }

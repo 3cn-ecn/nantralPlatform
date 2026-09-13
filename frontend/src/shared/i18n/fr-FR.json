@@ -678,7 +678,118 @@
       "viewResults": "Voir les résultats"
     },
     "edit": {
-      "title": "Édition du formulaire"
+      "addElement": "Ajouter un élément",
+      "additionalInput": {
+        "addColumn": "Ajouter une colone",
+        "addOption": "Ajouter une option",
+        "addRow": "Ajouter une ligne",
+        "columns": "Colones (réponses)",
+        "rows": "Lignes (Questions)"
+      },
+      "category": {
+        "label": "Titre",
+        "labelHelp": "Nom de l'étape / de la partie",
+        "noLabel": "Merci de renseigner le titre..."
+      },
+      "control": {
+        "boolean": "Option",
+        "date": "Date",
+        "dateTime": "Date et heure",
+        "enum": "Choix unique",
+        "integer": "Valeur entière",
+        "multipleChoice": "Choix multiple",
+        "number": "Valeur numérique",
+        "text": "Texte",
+        "time": "Heure",
+        "weightedList": "Grille pondérée"
+      },
+      "description": "Description",
+      "descriptionHelp": "Description rapide du formulaire. Utiliser l'élément \"Texte formaté\" pour inclure du texte à destination des participants",
+      "dropLayout": "Déplacez un élément ici ou cliquez ci-dessous pour en ajouter un",
+      "group": {
+        "label": "Titre",
+        "labelHelp": "Nom du groupe de questions"
+      },
+      "label": {
+        "help": "Ce texte sera intégré au formulaire"
+      },
+      "layout": {
+        "categorization": "Étapes (racine)",
+        "category": "Étape",
+        "control": "Champ de formulaire",
+        "group": "Groupe de questions",
+        "horizontal": "Ligne",
+        "label": "Texte formaté",
+        "vertical": "Colone"
+      },
+      "layoutSelect": "Choix de l'élément racine",
+      "layoutSelectHelp": "CHoisissez l'élément de base qui contiendra votre formulaire",
+      "option": {
+        "autocomplete": {
+          "label": "Rechercher les options"
+        },
+        "default": {
+          "helperText": "Entrez la valeur par défaut du champ",
+          "label": "Valeur par défaut"
+        },
+        "enumFormat": {
+          "helperText": "Entrer le type d'énumération. Par défaut: sélection ; radio : boutons radio",
+          "label": "Type d'énumération"
+        },
+        "format": {
+          "helperText": "Nom d'un format de donnée (ex: email, url,...). Voir la documentation de ajv-format",
+          "label": "Format (nom)"
+        },
+        "maxLength": {
+          "helperText": "Entrez le nombre maximum autorisé de caractères",
+          "label": "Longueur maximale"
+        },
+        "maximum": {
+          "helperText": "La valeur saisie doit être inférieure à la valeur de ce champ",
+          "label": "Maximum"
+        },
+        "minLength": {
+          "helperText": "Entrez le nombre minimum requis de caractères",
+          "label": "Longueur minimale"
+        },
+        "minimum": {
+          "helperText": "La valeur saisie doit être supérieure à la valeur de ce champ",
+          "label": "Minimum"
+        },
+        "multi": {
+          "label": "Multiligne"
+        },
+        "multipleOf": {
+          "helperText": "La valeur saisie doit être un multiple de la valeur de ce champ",
+          "label": "Multiple"
+        },
+        "pattern": {
+          "helperText": "Utiliser une expression régulière (RegEx) pour valider la valeur",
+          "label": "Format (expression régulière)"
+        },
+        "restrict": {
+          "helperText": "Lors de la frappe seulement, n'influence pas la validation",
+          "label": "Interdire le dépassement"
+        },
+        "spinner": {
+          "helperText": "Contrôle numérique avec des boutons + et -",
+          "label": "Variante de contrôle"
+        },
+        "toggle": {
+          "label": "Utiliser un interrupteur"
+        },
+        "trim": {
+          "label": "Ajuster la taille au contenu"
+        }
+      },
+      "question": {
+        "description": "Description",
+        "label": "Nom de la question",
+        "required": "Requis",
+        "typeSelect": "Choix du type de question"
+      },
+      "title": "Édition du formulaire",
+      "titleField": "Titre du formulaire"
     },
     "list": {
       "action": "Actions",
