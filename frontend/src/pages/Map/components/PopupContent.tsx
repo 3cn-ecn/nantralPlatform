@@ -1,11 +1,12 @@
 import { FC, ReactNode } from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 
 import { Close as CloseIcon, OpenInNew } from '@mui/icons-material';
 import {
   Box,
   Button,
   Card,
+  CardActions,
   CardContent,
   CardHeader,
   CardMedia,
@@ -18,7 +19,6 @@ import {
   styled,
   Typography,
 } from '@mui/material';
-import { CardActions } from '@mui/material/';
 
 import { MapGroupPreview } from '#modules/group/types/group.types';
 import { Avatar } from '#shared/components/Avatar/Avatar';

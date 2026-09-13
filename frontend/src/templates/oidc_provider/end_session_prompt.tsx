@@ -69,13 +69,14 @@ function EndSessionPrompt() {
         <Spacer vertical={2} />
         <Typography variant={'h4'} textAlign={'center'}>
           <Trans
+            t={t}
             i18nKey={'templates.oidc.endSessionPrompt.title'}
             values={{ user_name: user_name }}
-            /* eslint-disable-next-line react/jsx-key */
-            components={[<strong />]}
+            components={[<strong key={1} />]}
           />
           {client && (
             <Trans
+              t={t}
               i18nKey={'templates.oidc.endSessionPrompt.titleAppName'}
               values={{ client_name: client.name }}
               components={[

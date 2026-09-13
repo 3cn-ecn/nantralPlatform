@@ -1,4 +1,5 @@
-import { Draggable } from '@hello-pangea/dnd';
+import { RestrictToVerticalAxis } from '@dnd-kit/abstract/modifiers';
+import { useSortable } from '@dnd-kit/react/sortable';
 import { DragIndicator, Edit, Verified } from '@mui/icons-material';
 import InboxIcon from '@mui/icons-material/Inbox';
 import {
@@ -21,46 +22,43 @@ export interface Props {
 
 export function MemberDraggableListItem({ item, index, onClickEdit }: Props) {
   const theme = useTheme();
-  return (
-    <Draggable
-      draggableId={item.id.toString() + item.description}
-      index={index}
-    >
-      {(provided, snapshot) => (
-        <ListItem
-          ref={provided.innerRef}
-          {...provided.draggableProps}
-          {...provided.dragHandleProps}
-          sx={
-            snapshot.isDragging
-              ? { background: theme.palette.background.paper }
-              : undefined
-          }
-        >
-          <DragIndicator
-            sx={{ mr: 1 }}
-            color={snapshot.isDragging ? 'action' : 'disabled'}
-          />
-          <ListItemAvatar>
-            <Avatar src={item.user.picture} alt={item.user.name}>
-              <InboxIcon />
-            </Avatar>
-          </ListItemAvatar>
-          <ListItemText primary={item.user.name} secondary={item.summary} />
-          <ListItemIcon>
-            {item.admin && <Verified color="secondary" />}
-          </ListItemIcon>
+  const { ref, isDragging } = useSortable({
+    id: item.id.toString(),
+    index: index,
+    type: 'member',
+    accept: 'member',
+    modifiers: [RestrictToVerticalAxis],
+  });
 
-          <IconButton
-            title="Modifier"
-            aria-label="edit"
-            size="small"
-            onClick={onClickEdit}
-          >
-            <Edit fontSize="small" />
-          </IconButton>
-        </ListItem>
-      )}
-    </Draggable>
+  return (
+    <ListItem
+      ref={ref}
+      sx={
+        isDragging ? { background: theme.palette.background.paper } : undefined
+      }
+    >
+      <DragIndicator
+        sx={{ mr: 1 }}
+        color={isDragging ? 'action' : 'disabled'}
+      />
+      <ListItemAvatar>
+        <Avatar src={item.user.picture} alt={item.user.name}>
+          <InboxIcon />
+        </Avatar>
+      </ListItemAvatar>
+      <ListItemText primary={item.user.name} secondary={item.summary} />
+      <ListItemIcon>
+        {item.admin && <Verified color="secondary" />}
+      </ListItemIcon>
+
+      <IconButton
+        title="Modifier"
+        aria-label="edit"
+        size="small"
+        onClick={onClickEdit}
+      >
+        <Edit fontSize="small" />
+      </IconButton>
+    </ListItem>
   );
 }

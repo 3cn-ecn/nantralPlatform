@@ -138,6 +138,7 @@ export function HomeHeader() {
             >
               <Typography variant="h2">
                 <Trans
+                  t={t}
                   i18nKey={'home.element.title'}
                   components={{
                     name: (

@@ -17,6 +17,12 @@
       "home": "Commentaires",
       "suggestion": "Suggestion"
     },
+    "form": {
+      "answer": "Réponse",
+      "edit": "Édition",
+      "index": "Formulaires",
+      "new": "Nouveau"
+    },
     "group": {
       "index": "Groupes"
     },
@@ -47,6 +53,7 @@
     "edit": "Modifier",
     "next": "Suivant",
     "previous": "Précédent",
+    "reset": "Réinitialiser",
     "save": "Enregistrer",
     "saved": "Enregistré",
     "send": "Envoyer",
@@ -346,8 +353,20 @@
         "label": "Annuler"
       }
     },
+    "menu": {
+      "empty": "vide"
+    },
     "number": {
       "wrongFormat": "Format invalide"
+    },
+    "weighted": {
+      "weight": {
+        "high": "Haut",
+        "label": "Importance",
+        "low": "Faible",
+        "medium": "Moyen",
+        "unsignificant": "Indifférent"
+      }
     }
   },
   "group": {
@@ -628,6 +647,179 @@
     },
     "welcomeTo": "Bienvenue sur"
   },
+  "jsonForm": {
+    "answer": {
+      "hasErrors": {
+        "body": "Veuillez vérifier vos réponses ainsi que les messages d'erreurs affichés. Vous ne pourrez pas soumettre ce formulaire tant que des erreurs seront présentes.",
+        "title": "Le formulaire contient des erreurs"
+      },
+      "loadingTitle": "Chargement du formulaire...",
+      "resetBody": "Voulez-vous supprimer définitivement vos réponses au formulaire ?",
+      "resetTitle": "Réinitialiser le formulaire",
+      "saved": "Votre réponse a été enregistrée, vous pouvez quitter cette page",
+      "submitBody": "Voulez-vous envoyer votre réponse. Vous pourrez la modifier tant que le formulaire reste actif",
+      "submitTitle": "Envoyer la réponse ?"
+    },
+    "details": {
+      "active": "Le formulaire est actif. Fermer...",
+      "closed": "Le formulaire est fermé. Publier...",
+      "copy": {
+        "error": "Une erreur est survenue lors de la copie du text",
+        "success": "Le lien a bien été copié"
+      },
+      "delete": {
+        "body": "Voulez-vous supprimer ce formulaire ? Ce action est définitive",
+        "title": "Supprimer le formulaire {{name}} ?"
+      },
+      "link": "Copier le lien du formulaire",
+      "preview": "Voir le formulaire",
+      "setActive": {
+        "body": "Si vous publiez ce formulaire, vous ne pourrez plus le modifer. Voulez-vous continuer ?",
+        "title": "Publier le formulaire"
+      },
+      "share": "Ouvrir les options de partage",
+      "viewResults": "Voir les résultats"
+    },
+    "edit": {
+      "addElement": "Ajouter un élément",
+      "additionalInput": {
+        "addColumn": "Ajouter une colone",
+        "addOption": "Ajouter une option",
+        "addRow": "Ajouter une ligne",
+        "columns": "Colones (réponses)",
+        "rows": "Lignes (Questions)"
+      },
+      "category": {
+        "label": "Titre",
+        "labelHelp": "Nom de l'étape / de la partie",
+        "noLabel": "Merci de renseigner le titre..."
+      },
+      "control": {
+        "boolean": "Option",
+        "date": "Date",
+        "dateTime": "Date et heure",
+        "enum": "Choix unique",
+        "integer": "Valeur entière",
+        "multipleChoice": "Choix multiple",
+        "number": "Valeur numérique",
+        "text": "Texte",
+        "time": "Heure",
+        "weightedList": "Grille pondérée"
+      },
+      "description": "Description",
+      "descriptionHelp": "Description rapide du formulaire. Utiliser l'élément \"Texte formaté\" pour inclure du texte à destination des participants",
+      "dropLayout": "Déplacez un élément ici ou cliquez ci-dessous pour en ajouter un",
+      "group": {
+        "label": "Titre",
+        "labelHelp": "Nom du groupe de questions"
+      },
+      "label": {
+        "help": "Ce texte sera intégré au formulaire"
+      },
+      "layout": {
+        "categorization": "Étapes (racine)",
+        "category": "Étape",
+        "control": "Champ de formulaire",
+        "group": "Groupe de questions",
+        "horizontal": "Ligne",
+        "label": "Texte formaté",
+        "vertical": "Colone"
+      },
+      "layoutSelect": "Choix de l'élément racine",
+      "layoutSelectHelp": "CHoisissez l'élément de base qui contiendra votre formulaire",
+      "option": {
+        "autocomplete": {
+          "label": "Rechercher les options"
+        },
+        "default": {
+          "helperText": "Entrez la valeur par défaut du champ",
+          "label": "Valeur par défaut"
+        },
+        "enumFormat": {
+          "helperText": "Entrer le type d'énumération. Par défaut: sélection ; radio : boutons radio",
+          "label": "Type d'énumération"
+        },
+        "format": {
+          "helperText": "Nom d'un format de donnée (ex: email, url,...). Voir la documentation de ajv-format",
+          "label": "Format (nom)"
+        },
+        "maxLength": {
+          "helperText": "Entrez le nombre maximum autorisé de caractères",
+          "label": "Longueur maximale"
+        },
+        "maximum": {
+          "helperText": "La valeur saisie doit être inférieure à la valeur de ce champ",
+          "label": "Maximum"
+        },
+        "minLength": {
+          "helperText": "Entrez le nombre minimum requis de caractères",
+          "label": "Longueur minimale"
+        },
+        "minimum": {
+          "helperText": "La valeur saisie doit être supérieure à la valeur de ce champ",
+          "label": "Minimum"
+        },
+        "multi": {
+          "label": "Multiligne"
+        },
+        "multipleOf": {
+          "helperText": "La valeur saisie doit être un multiple de la valeur de ce champ",
+          "label": "Multiple"
+        },
+        "pattern": {
+          "helperText": "Utiliser une expression régulière (RegEx) pour valider la valeur",
+          "label": "Format (expression régulière)"
+        },
+        "restrict": {
+          "helperText": "Lors de la frappe seulement, n'influence pas la validation",
+          "label": "Interdire le dépassement"
+        },
+        "spinner": {
+          "helperText": "Contrôle numérique avec des boutons + et -",
+          "label": "Variante de contrôle"
+        },
+        "toggle": {
+          "label": "Utiliser un interrupteur"
+        },
+        "trim": {
+          "label": "Ajuster la taille au contenu"
+        }
+      },
+      "question": {
+        "description": "Description",
+        "label": "Nom de la question",
+        "required": "Requis",
+        "typeSelect": "Choix du type de question"
+      },
+      "title": "Édition du formulaire",
+      "titleField": "Titre du formulaire"
+    },
+    "list": {
+      "action": "Actions",
+      "name": "Titre du formulaire",
+      "new": "Nouveau Formulaire",
+      "role": "Role utilisateur",
+      "title": "Formulaires"
+    },
+    "roles": {
+      "addUsers": "Ajouter des utilisateurs",
+      "answerViewer": "Analyste",
+      "answerViewerHelp": "L'utilisateur a accès aux réponses du formulaire",
+      "editor": "Éditeur",
+      "editorHelp": "L'utilisateur peut modifier, partager, publier et supprimer le formulaire, mais aussi voir les réponses",
+      "formViewer": "Participant",
+      "formViewerHelp": "L'utilisateur peut répondre au formulaire même s'il est privé",
+      "modalTitle": "Modifier les roles du formlaire {{name}}",
+      "owner": "Propriétaire",
+      "public": "Formulaire Public",
+      "publicHelp": "Si cette option est activée, tout utilisateur disposant du lien peut accéder et répondre au formulaire",
+      "removeUser": {
+        "body": "Cette action retire l'accès au formulaire {{name}} pour cet utilisateur. Cependant, si le formulaire est public, l'utilisateur pourra toujours fournir une réponse",
+        "title": "Retirer un utilisateur"
+      },
+      "roleChoice": "Choix du role"
+    }
+  },
   "legalNotice": {
     "paragraphs": {
       "cookies": {
@@ -742,11 +934,18 @@
     },
     "helpButton": {
       "label": "Aide"
+    },
+    "numberEdit": {
+      "title": "Modifier la valeur numérique"
+    },
+    "textEdit": {
+      "title": "Modifier la valeur textuelle"
     }
   },
   "navbar": {
     "events": "Évènements",
     "family": "Parrainage",
+    "form": "Formulaires",
     "group": "Groupes",
     "home": "Accueil",
     "map": "Carte",
@@ -818,6 +1017,9 @@
       }
     },
     "modal": {
+      "deleteButton": {
+        "label": "Supprimer la publication"
+      },
       "editButton": {
         "label": "Modifier le post"
       },

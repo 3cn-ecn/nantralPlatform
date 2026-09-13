@@ -1,5 +1,5 @@
 import { MouseEvent, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 
 import {
   AdminPanelSettings as AdminPanelSettingsIcon,
@@ -71,7 +71,7 @@ export function UserMenuAuthenticated() {
           label={t('userMenu.menu.profile')}
           icon={<PersonIcon />}
           component={Link}
-          to={`/student/${currentUser.id}`}
+          to={`/student/${currentUser.id}/`}
           onClick={() => setMenuOpen(null)}
         />
         <UserMenuItem
@@ -117,7 +117,7 @@ export function UserMenuAuthenticated() {
           label={t('userMenu.menu.feedback')}
           icon={<FeedbackIcon />}
           component={Link}
-          to="/feedback"
+          to="/feedback/"
           onClick={() => setMenuOpen(null)}
         />
         <UserMenuItem

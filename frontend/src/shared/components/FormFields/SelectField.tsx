@@ -35,7 +35,7 @@ function SelectFieldComponent<ValueType extends string>({
       error={isError}
       disabled={disabled}
       fullWidth={fullWidth}
-      margin="normal"
+      margin={props.margin ?? 'normal'}
     >
       <InputLabel id={labelId}>{label}</InputLabel>
       <Select
@@ -46,7 +46,10 @@ function SelectFieldComponent<ValueType extends string>({
       >
         {children}
       </Select>
-      <FormHelperText>
+      <FormHelperText
+        sx={isError || helperText ? undefined : { m: 0 }}
+        error={isError}
+      >
         {isError ? errors.join(', ') : helperText}
       </FormHelperText>
     </FormControl>

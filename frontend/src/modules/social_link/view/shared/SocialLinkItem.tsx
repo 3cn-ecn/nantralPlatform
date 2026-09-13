@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 
 import { AlternateEmail as AtIcon, Tag as TagIcon } from '@mui/icons-material';
 import { Chip, colors, useTheme } from '@mui/material';

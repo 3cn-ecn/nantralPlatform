@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 
 import {
   Alert,
@@ -8,7 +8,12 @@ import {
   Paper,
   Typography,
 } from '@mui/material';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import {
+  keepPreviousData,
+  useMutation,
+  useQuery,
+  useQueryClient,
+} from '@tanstack/react-query';
 
 import { deleteGroupHistoryApi } from '#modules/group/api/deleteGroupHistory.api';
 import { getGroupHistoryListApi } from '#modules/group/api/getGroupHistoryList.api';
@@ -41,8 +46,12 @@ export function EditHistoryView({ group, onClose }: EditMembersViewProps) {
   const deleteMutation = useMutation<number, ApiError, number>({
     mutationFn: (pk: number) => deleteGroupHistoryApi(group.slug, pk),
     onSuccess: () => {
-      queryClient.invalidateQueries(queryKey);
-      queryClient.invalidateQueries(['group', { slug: group.slug }]);
+      queryClient.invalidateQueries({
+        queryKey: queryKey,
+      });
+      queryClient.invalidateQueries({
+        queryKey: ['group', { slug: group.slug }],
+      });
       showToast({
         message: t('group.details.modal.editGroup.deleteHistorySuccess'),
         variant: 'success',
@@ -59,8 +68,12 @@ export function EditHistoryView({ group, onClose }: EditMembersViewProps) {
   const restoreMutation = useMutation<number, ApiError, number>({
     mutationFn: (pk: number) => restoreGroupHistoryApi(group.slug, pk),
     onSuccess: () => {
-      queryClient.invalidateQueries(queryKey);
-      queryClient.invalidateQueries(['group', { slug: group.slug }]);
+      queryClient.invalidateQueries({
+        queryKey: queryKey,
+      });
+      queryClient.invalidateQueries({
+        queryKey: ['group', { slug: group.slug }],
+      });
       showToast({
         message: t('group.details.modal.editGroup.restoreHistorySuccess'),
         variant: 'success',
@@ -78,12 +91,12 @@ export function EditHistoryView({ group, onClose }: EditMembersViewProps) {
   const {
     data: records,
     isSuccess,
-    isLoading,
+    isPending,
     isError,
   } = useQuery({
     queryKey: queryKey,
     queryFn: () => getGroupHistoryListApi(group.slug),
-    keepPreviousData: true,
+    placeholderData: keepPreviousData,
   });
 
   if (!records) {
@@ -95,7 +108,7 @@ export function EditHistoryView({ group, onClose }: EditMembersViewProps) {
       <Typography variant="h3" mb={1}>
         {t('group.details.modal.editGroup.history')}
       </Typography>
-      {isLoading && <CircularProgress />}
+      {isPending && <CircularProgress />}
       {isError && (
         <Alert severity="error">
           {t('group.details.modal.editGroup.error')}

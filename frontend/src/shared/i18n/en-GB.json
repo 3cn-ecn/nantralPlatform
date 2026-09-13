@@ -17,6 +17,12 @@
       "home": "Feedback",
       "suggestion": "Suggestion"
     },
+    "form": {
+      "answer": "Answer",
+      "edit": "Edit",
+      "index": "Forms",
+      "new": "New"
+    },
     "group": {
       "index": "Groups"
     },
@@ -47,6 +53,7 @@
     "edit": "Edit",
     "next": "Next",
     "previous": "Previous",
+    "reset": "Reset",
     "save": "Save",
     "saved": "Saved",
     "send": "Send",
@@ -346,8 +353,20 @@
         "label": "Undo"
       }
     },
+    "menu": {
+      "empty": "empty"
+    },
     "number": {
       "wrongFormat": "Invalid format"
+    },
+    "weighted": {
+      "weight": {
+        "high": "High",
+        "label": "Weight",
+        "low": "Low",
+        "medium": "Medium",
+        "unsignificant": "Unsignificant"
+      }
     }
   },
   "group": {
@@ -628,6 +647,179 @@
     },
     "welcomeTo": "Welcome to"
   },
+  "jsonForm": {
+    "answer": {
+      "hasErrors": {
+        "body": "Please check your answers and the error messages displayed next to them. You will not be able to post this form until the errors disappear.",
+        "title": "Form has one or more errors"
+      },
+      "loadingTitle": "Form Loading...",
+      "resetBody": "Do you with to permanently remove your answer to this form?",
+      "resetTitle": "Reset Form",
+      "saved": "Your answer have been saved, you may leave this page",
+      "submitBody": "Do you wish to send your answer? You will be able to edit it as long as the form is active",
+      "submitTitle": "Submit Answer?"
+    },
+    "details": {
+      "active": "The form is active. Close...",
+      "closed": "The form is closed. Publish...",
+      "copy": {
+        "error": "We were not able to copy this text",
+        "success": "The url was successfully copied"
+      },
+      "delete": {
+        "body": "Do you really want to delete this form? This action cannot be undone",
+        "title": "Delete form {{name}}?"
+      },
+      "link": "Copy form link",
+      "preview": "Preview Form",
+      "setActive": {
+        "body": "If you publish this form, you will not be able to edit it anymore. Do you wish to proceed?",
+        "title": "Publish Form"
+      },
+      "share": "Open share options",
+      "viewResults": "View the results"
+    },
+    "edit": {
+      "addElement": "Add Element",
+      "additionalInput": {
+        "addColumn": "Add column",
+        "addOption": "Add option",
+        "addRow": "Add row",
+        "columns": "Columns (Answers)",
+        "rows": "Rows (Questions)"
+      },
+      "category": {
+        "label": "Label",
+        "labelHelp": "Name of the step/part",
+        "noLabel": "Please provide a label..."
+      },
+      "control": {
+        "boolean": "Option",
+        "date": "Date",
+        "dateTime": "Date and Time",
+        "enum": "Unique Choice",
+        "integer": "Integer Value",
+        "multipleChoice": "Multiple Choice",
+        "number": "Numeric Value",
+        "text": "Text",
+        "time": "Time",
+        "weightedList": "Weighted Grid"
+      },
+      "description": "Description",
+      "descriptionHelp": "This text is a quick description of the form. Use the \"Formated Text\" element to include text for the respondants",
+      "dropLayout": "Drop an element here or click on the button bellow to add a new one",
+      "group": {
+        "label": "Label",
+        "labelHelp": "Name of the group of questions"
+      },
+      "label": {
+        "help": "This text will be added to the form"
+      },
+      "layout": {
+        "categorization": "Steps (root)",
+        "category": "Step",
+        "control": "Form Control",
+        "group": "Question Group",
+        "horizontal": "Row",
+        "label": "Formated Text",
+        "vertical": "Column"
+      },
+      "layoutSelect": "Select the root component",
+      "layoutSelectHelp": "Choose the base element that will contain your form",
+      "option": {
+        "autocomplete": {
+          "label": "Search options"
+        },
+        "default": {
+          "helperText": "Fill in the field default value",
+          "label": "Default value"
+        },
+        "enumFormat": {
+          "helperText": "Fill in the enum type. Default: select; radio: radio button",
+          "label": "Enum type"
+        },
+        "format": {
+          "helperText": "Name of a format (eg email, url,...). See ajv-format documentation",
+          "label": "Format (name)"
+        },
+        "maxLength": {
+          "helperText": "Fill in the maximum allowed number of characters",
+          "label": "Maximum length"
+        },
+        "maximum": {
+          "helperText": "The value should be lower than the one in this field",
+          "label": "Maximum"
+        },
+        "minLength": {
+          "helperText": "Fill in the minimum required number of characters",
+          "label": "Minimum length"
+        },
+        "minimum": {
+          "helperText": "The value should be higher than the one in this field",
+          "label": "Minimum"
+        },
+        "multi": {
+          "label": "Multiline"
+        },
+        "multipleOf": {
+          "helperText": "The value should be a multiple of the number in this field",
+          "label": "Multiple"
+        },
+        "pattern": {
+          "helperText": "Use a regular expression (RegEx) to validate the value",
+          "label": "Format (Regular expression)"
+        },
+        "restrict": {
+          "helperText": "Only while typing, does not affect validation",
+          "label": "Prevent too many characters"
+        },
+        "spinner": {
+          "helperText": "Numeric control with + and - buttons",
+          "label": "Alternative control"
+        },
+        "toggle": {
+          "label": "Use a switch"
+        },
+        "trim": {
+          "label": "Ajust size to the content"
+        }
+      },
+      "question": {
+        "description": "Description",
+        "label": "Question name",
+        "required": "Required",
+        "typeSelect": "Question type choice"
+      },
+      "title": "Edit Form",
+      "titleField": "Form Title"
+    },
+    "list": {
+      "action": "Actions",
+      "name": "Form Title",
+      "new": "New Form",
+      "role": "User Role",
+      "title": "Form List"
+    },
+    "roles": {
+      "addUsers": "Add other users",
+      "answerViewer": "Analyst",
+      "answerViewerHelp": "User can view the form answers",
+      "editor": "Editor",
+      "editorHelp": "User can edit, share, publish and delete the form, and also have access to answers",
+      "formViewer": "Participant",
+      "formViewerHelp": "User can answer the form even if it is private",
+      "modalTitle": "Edit roles for form {{name}}",
+      "owner": "Owner",
+      "public": "Public Form",
+      "publicHelp": "If enabled, any user with the link can access and answer the form",
+      "removeUser": {
+        "body": "This action will remove access to the form {{name}} for this user. However, if the form is public, the user may still answer it",
+        "title": "Remove User"
+      },
+      "roleChoice": "Role choice"
+    }
+  },
   "legalNotice": {
     "paragraphs": {
       "cookies": {
@@ -742,11 +934,18 @@
     },
     "helpButton": {
       "label": "Help"
+    },
+    "numberEdit": {
+      "title": "Enter a numeric value"
+    },
+    "textEdit": {
+      "title": "Enter a text value"
     }
   },
   "navbar": {
     "events": "Events",
     "family": "Family",
+    "form": "Forms",
     "group": "Groups",
     "home": "Home",
     "map": "Map",
@@ -818,6 +1017,9 @@
       }
     },
     "modal": {
+      "deleteButton": {
+        "label": "Delete this post"
+      },
       "editButton": {
         "label": "Edit the post"
       },

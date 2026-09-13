@@ -1,11 +1,12 @@
 import { lazy } from 'react';
-import { RouteObject } from 'react-router-dom';
+import { RouteObject } from 'react-router';
 
 import { QueryClient } from '@tanstack/react-query';
 
+import { getDefaultForm } from '#modules/form/constants';
 import { PageTemplate } from '#shared/components/PageTemplate/PageTemplate';
 
-import { userDetailsLoader } from './loader';
+import { formDetailsLoader, userDetailsLoader } from './loader';
 
 const EventPage = lazy(() => import('#pages/Event/Event.page'));
 const EventCalendarViewPage = lazy(
@@ -17,6 +18,9 @@ const EventGridViewPage = lazy(
 const EventDetailsPage = lazy(
   () => import('#pages/EventDetails/EventDetails.page'),
 );
+const EditFormPage = lazy(() => import('#pages/Form/EditForm.page'));
+const AnswerFormPage = lazy(() => import('#pages/Form/AnswerForm.page'));
+const FormListPage = lazy(() => import('#pages/Form/FormList.page'));
 const MapPage = lazy(() => import('#pages/Map/Map.page'));
 const HomePage = lazy(() => import('#pages/Home/Home.page'));
 const NotFoundPage = lazy(() => import('#pages/NotFound/NotFound.page'));
@@ -76,6 +80,39 @@ export const authenticatedRoutes: (queryClient: QueryClient) => RouteObject = (
           path: ':id',
           element: <EventDetailsPage />,
           handle: { crumb: t('breadcrumbs.events.details.index') },
+        },
+      ],
+    },
+    {
+      path: '/form',
+      handle: { crumb: t('breadcrumbs.form.index') },
+      children: [
+        {
+          index: true,
+          element: <FormListPage />,
+        },
+        {
+          path: 'new',
+          element: <EditFormPage />,
+          handle: { crumb: t('breadcrumbs.form.new') },
+          loader: () => ({ formSchema: getDefaultForm() }),
+        },
+        {
+          path: ':uuid',
+          children: [
+            {
+              index: true,
+              element: <AnswerFormPage />,
+              loader: (args) => formDetailsLoader(args, queryClient),
+              handle: { crumb: t('breadcrumbs.form.answer') },
+            },
+            {
+              path: 'edit',
+              element: <EditFormPage />,
+              loader: (args) => formDetailsLoader(args, queryClient),
+              handle: { crumb: t('breadcrumbs.form.edit') },
+            },
+          ],
         },
       ],
     },

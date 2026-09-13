@@ -1,5 +1,7 @@
-import { screen } from '@testing-library/react';
+import { QueryClient } from '@tanstack/react-query';
+import { RenderResult, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { vi, describe, it, expect } from 'vitest';
 
 import { EventDTO } from '#modules/event/infra/event.dto';
 import { GroupPreviewDTO } from '#modules/group/infra/group.dto';
@@ -10,7 +12,7 @@ import { renderWithProviders } from '#shared/testing/renderWithProviders';
 import HomePage from './Home.page';
 
 // mock ckeditor: replaced by #shared/ckeditor/__mocks__/CustomEditor.ts
-jest.mock('#shared/ckeditor/CustomEditor.ts');
+vi.mock('#shared/ckeditor/CustomEditor.ts');
 
 function mockPostApiCall(
   params: { pinned?: boolean; page?: number; page_size?: number },
@@ -57,13 +59,20 @@ describe('Home page', () => {
     mockPostApiCall({ pinned: false }, []);
     mockGroupApiCall([]);
 
-    const component = renderWithProviders(<HomePage />);
+    const [component, queryClient]: [RenderResult, QueryClient] =
+      renderWithProviders(<HomePage />);
 
     // At this point the page is still loading, so we use findBy and await
     // to wait for the element to appear.
     // We use findByRole to check that the element is a heading.
     // We use expect to make the test fails if the element is not found.
     expect(await screen.findByRole('heading', { name: 'Nantral Platform' }));
+
+    // Now that the page is loaded, we wait for all queries to complete,
+    // since the page content depends on the results
+    await waitFor(() => {
+      expect(queryClient.isFetching()).toBe(0);
+    });
 
     // Now that the page is loaded, we check that the "Featured" section
     // (or "A la une" in French) is hidden, since we do not have any posts.
@@ -94,7 +103,7 @@ describe('Home page', () => {
 
     // click the 'See all' button
     const seeAllLink = screen.getAllByText('See all')[0]; // NB: we use get because we are not in an expect
-    userEvent.click(seeAllLink);
+    await userEvent.click(seeAllLink);
 
     // check that we are on the event page
     expect(await screen.findByText('Events')).toBeInTheDocument();

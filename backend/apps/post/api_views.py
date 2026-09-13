@@ -107,3 +107,13 @@ class PostViewSet(viewsets.ModelViewSet):
             query = query.filter(created_at__lte=max_date)
 
         return query.select_related("group").distinct()
+
+    def retrieve(self, request, *args, **kwargs):
+        """Automatically mark notifications as seen when a post is retrieved"""
+        instance: Post = self.get_object()
+        if instance.notification:
+            instance.notification.sentnotification_set.filter(
+                user=request.user,
+                seen=False,  # Don't update if already seen
+            ).update(seen=True)
+        return super().retrieve(request, *args, **kwargs)

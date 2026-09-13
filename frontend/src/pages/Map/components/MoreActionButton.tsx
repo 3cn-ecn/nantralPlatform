@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react';
-import { Link, useSearchParams } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router';
 
 import { MoreHoriz } from '@mui/icons-material';
 import { MenuItem } from '@mui/material';
@@ -35,7 +35,7 @@ export function MoreActionButton({
         disablePortal // show menu when map is fullscreen
       >
         {isSmaller && (
-          <MenuItem component={Link} to={`/group?type=${type}`}>
+          <MenuItem component={Link} to={`/group/?type=${type}`}>
             {t('map.viewList')}
           </MenuItem>
         )}
