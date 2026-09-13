@@ -4,7 +4,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("event", "0021_sportevent"),
     ]
@@ -13,11 +12,15 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name="sportevent",
             name="description_en",
-            field=models.TextField(blank=True, null=True, verbose_name="Description"),
+            field=models.TextField(
+                blank=True, null=True, verbose_name="Description"
+            ),
         ),
         migrations.AddField(
             model_name="sportevent",
             name="description_fr",
-            field=models.TextField(blank=True, null=True, verbose_name="Description"),
+            field=models.TextField(
+                blank=True, null=True, verbose_name="Description"
+            ),
         ),
     ]

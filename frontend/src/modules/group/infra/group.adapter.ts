@@ -116,7 +116,7 @@ export function adaptGroupForm(groupForm: CreateGroupForm): CreateGroupFormDTO {
     address: groupForm.address,
     latitude: groupForm.latitude,
     longitude: groupForm.longitude,
-    _change_reason: groupForm.changeReason,
+    _change_reason: groupForm.changeReason || undefined,
     _save_history_record: groupForm.saveHistoryRecord,
     membership:
       groupForm.membership && convertShortMembershipForm(groupForm.membership),

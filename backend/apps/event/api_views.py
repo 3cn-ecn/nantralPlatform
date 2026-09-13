@@ -210,7 +210,6 @@ class SportEventViewSet(viewsets.ModelViewSet):
         return Response(status=status.HTTP_201_CREATED)
 
 
-
 class EventViewSet(viewsets.ModelViewSet):
     """An API endpoint for event.
 

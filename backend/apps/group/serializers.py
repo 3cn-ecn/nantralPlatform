@@ -238,7 +238,7 @@ class GroupWriteSerializer(serializers.ModelSerializer):
             instance = super().update(instance, validated_data)
             del instance.skip_history_when_saving
             # Now save the changes to the last history record
-            history = instance.history.most_recent()
+            history = instance.history.latest()
             for field, value in validated_data.items():
                 if hasattr(history, field):
                     setattr(history, field, value)
@@ -283,21 +283,23 @@ class GroupWriteSerializer(serializers.ModelSerializer):
         group_type = self.get_group_type()
 
         if group == parent:
-            raise exceptions.ValidationError("Can't assign itself as a parent")
+            raise exceptions.ValidationError(
+                _("Can't assign itself as a parent")
+            )
 
         if not group_type.can_have_parent:
             raise exceptions.ValidationError(
-                "Can't assign a parent to that group"
+                _("Can't assign a parent to that group")
             )
 
         if parent.parent is not None:
             raise exceptions.ValidationError(
-                "Can't choose a subgroup as parent"
+                _("Can't choose a subgroup as parent")
             )
 
         if group and len(group.children.all()) > 0:
             raise exceptions.ValidationError(
-                "A group having children can't have a parent"
+                _("A group having children can't have a parent")
             )
 
         return parent
@@ -310,12 +312,23 @@ class GroupWriteSerializer(serializers.ModelSerializer):
         parent: Group = data.get("parent")
         if parent and not group_type.can_have_parent:
             raise exceptions.ValidationError(
-                "Can't assign parent to that group"
+                {"parent": _("Can't assign parent to that group")}
             )
 
         if parent and parent.group_type != group_type:
             raise exceptions.ValidationError(
-                "Parent group type and this group type do not match"
+                {
+                    "parent": _(
+                        "Parent group type and this group type do not match"
+                    )
+                }
+            )
+
+        if data.get("_save_history_record", False) and not data.get(
+            "_change_reason", False
+        ):
+            raise exceptions.ValidationError(
+                {"_change_reason": _("This field is required.")}
             )
 
         return super().validate(data)
