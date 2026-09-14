@@ -27,7 +27,7 @@ export default function SignaturePage() {
   const [template, setTemplate] = useState<TemplateType>('ecn');
 
   const { t } = useTranslation();
-  const query = useSignatureInfo({ suspense: true, staleTime: Infinity });
+  const query = useSignatureInfo({ staleTime: Infinity });
 
   useEffect(() => {
     if (query.data) {

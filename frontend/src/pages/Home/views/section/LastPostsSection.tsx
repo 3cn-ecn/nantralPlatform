@@ -17,13 +17,13 @@ export function LastPostsSection({ enabled }: LastPostsSectionProps) {
   const { t } = useTranslation();
   const postsQuery = useLastPostsQuery(NUMBER_OF_POSTS, { enabled });
 
-  if (postsQuery.isLoading) {
+  if (postsQuery.isPending) {
     return (
       <Section title={t('home.postSection.title')}>
         <Grid container spacing={1}>
           {repeat(
             NUMBER_OF_POSTS,
-            <Grid xs={12} sm={6} md={4} item>
+            <Grid size={{ xs: 12, sm: 6, md: 4 }}>
               <PostCardSkeleton />
             </Grid>,
           )}
@@ -57,7 +57,7 @@ export function LastPostsSection({ enabled }: LastPostsSectionProps) {
     <Section title={t('home.postSection.title')}>
       <Grid spacing={1} container>
         {lastPosts.map((post) => (
-          <Grid key={post.id} xs={12} sm={6} md={4} item>
+          <Grid key={post.id} size={{ xs: 12, sm: 6, md: 4 }}>
             <PostCard post={post} />
           </Grid>
         ))}

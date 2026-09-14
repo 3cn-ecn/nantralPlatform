@@ -1,4 +1,6 @@
 import {
+  QueryFunctionContext,
+  QueryKey,
   useInfiniteQuery,
   UseInfiniteQueryOptions,
 } from '@tanstack/react-query';
@@ -28,11 +30,12 @@ export function useSportEventPeopleList(
 
   return useInfiniteQuery<Page<UserPreview>, ApiError>({
     queryKey: ['sport-event-people', sportEventId, kind],
-    queryFn: ({ pageParam = 1 }) =>
+    queryFn: ({ pageParam }: QueryFunctionContext<QueryKey, number>) =>
       queryFn(sportEventId, {
         page: pageParam,
         pageSize: 50,
       }),
+    initialPageParam: 1,
     getNextPageParam: (lastPage, allPages) =>
       lastPage.next ? allPages.length + 1 : undefined,
     ...options,

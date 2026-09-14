@@ -1,5 +1,5 @@
-import { FormEvent, useEffect, useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { FormEvent, useEffect, useState, Dispatch } from 'react';
+import { useSearchParams } from 'react-router';
 
 import {
   Check,
@@ -57,9 +57,10 @@ export function ModalEditGroup({
   const [, setSerachParams] = useSearchParams();
   const { error, isError, mutate, isPending } = useMutation<
     Group,
-    ApiFormError<CreateGroupFormDTO>,
-    CreateGroupForm
-  >(() => updateGroupApi(group.slug, formValues), {
+    ApiFormError<CreateGroupFormDTO>
+  >({
+    mutationFn: () => updateGroupApi(group.slug, formValues),
+
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: ['group', { slug: group.slug }],
@@ -72,9 +73,9 @@ export function ModalEditGroup({
     },
   });
 
-  const updateFormValues: React.Dispatch<
-    SetObjectStateAction<CreateGroupForm>
-  > = (value) =>
+  const updateFormValues: Dispatch<SetObjectStateAction<CreateGroupForm>> = (
+    value,
+  ) =>
     setFormValues(
       (prev) =>
         (typeof value === 'function'
@@ -84,7 +85,7 @@ export function ModalEditGroup({
 
   function onSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    mutate(formValues);
+    mutate();
   }
 
   useEffect(() => {

@@ -22,7 +22,9 @@ export function EmailForm({ userId }: { userId: number }) {
   >({
     mutationFn: (value) => addEmailApi(value, userId),
     onSuccess: async () => {
-      await queryClient.invalidateQueries(['emails']);
+      await queryClient.invalidateQueries({
+        queryKey: ['emails'],
+      });
       setEmail('');
     },
   });
@@ -57,7 +59,7 @@ export function EmailForm({ userId }: { userId: number }) {
         />
         <Box sx={{ mt: 2, mb: 1 }}>
           <LoadingButton
-            loading={emailMutation.isLoading}
+            loading={emailMutation.isPending}
             variant={'outlined'}
             type={'submit'}
           >

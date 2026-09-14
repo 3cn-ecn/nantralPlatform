@@ -6,12 +6,11 @@ import { ApiError } from '#shared/infra/errors';
 
 export function useSportEventDetailsQuery(
   sportEventId: number,
-  { onSuccess, ...options }: UseQueryOptions<SportEvent> = {},
+  options: Partial<UseQueryOptions<SportEvent>> = {},
 ) {
   return useQuery<SportEvent, ApiError>({
     queryKey: ['sport-event', { id: sportEventId }],
     queryFn: () => getSportEventDetailsApi(sportEventId),
-    onSuccess: (data) => onSuccess?.(data),
     ...options,
   });
 }

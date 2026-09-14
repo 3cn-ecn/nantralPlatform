@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 
 import {
   Card,
@@ -37,6 +37,11 @@ export default function Shortcuts() {
         label={t('navbar.map')}
         path="/map/?type=colocs"
         iconPath="/static/img/icons/cropped/roommates.svg"
+      />
+      <ShortcutItem
+        label={t('navbar.form')}
+        path="/form/"
+        iconPath="/static/img/icons/cropped/form.svg"
       />
       <ShortcutItem
         label={t('navbar.family')}

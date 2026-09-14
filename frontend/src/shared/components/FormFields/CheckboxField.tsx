@@ -37,7 +37,7 @@ function CheckboxFieldComponent({
       label={
         <>
           <Typography color={isError ? 'error' : undefined}>{label}</Typography>
-          <FormHelperText sx={{ m: 0 }}>
+          <FormHelperText sx={{ m: 0 }} error={isError}>
             {isError ? errors.join(', ') : helperText}
           </FormHelperText>
         </>

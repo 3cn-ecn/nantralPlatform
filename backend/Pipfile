@@ -49,6 +49,7 @@ redis = "~=5.0"
 requests = "~=2.34"
 six = "~=1.16"
 pyjwt = "~=2.13"
+jsonschema = "*"
 
 [dev-packages]
 coverage = "~=7.3"

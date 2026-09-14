@@ -6,7 +6,7 @@ import {
 } from '#modules/account/hooks/useProvideAuth';
 
 const AuthContext = createContext<ProvideAuthValues>({
-  isLoading: true,
+  isPending: true,
   isAuthenticated: false,
   logout: () => new Promise(() => null),
   login: () => new Promise(() => null),

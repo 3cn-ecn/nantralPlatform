@@ -1,10 +1,14 @@
-import { LoaderFunctionArgs, redirect } from 'react-router-dom';
+import { LoaderFunctionArgs, redirect } from 'react-router';
 
 import { QueryClient } from '@tanstack/react-query';
 
 import { getCurrentUserApi } from '#modules/account/api/getCurrentUser.api';
 import { getUserDetailsApi } from '#modules/account/api/getUserDetails.api';
+import { emptyUser } from '#modules/account/hooks/useCurrentUser.data';
 import { User } from '#modules/account/user.types';
+import { getJsonSchemaApi } from '#modules/form/api/getJsonSchema.api';
+import { getDefaultForm } from '#modules/form/constants';
+import { JsonFormSchema } from '#modules/form/types/jsonForm.type';
 import { getGroupDetailsApi } from '#modules/group/api/getGroupDetails.api';
 import { getGroupTypeDetailsApi } from '#modules/group/api/getGroupTypeDetails.api';
 import { Group } from '#modules/group/types/group.types';
@@ -17,13 +21,15 @@ export async function userDetailsLoader(
   const { id } = params;
   const currentUser =
     (queryClient.getQueryData(['user', 'current']) as User) ??
-    (await queryClient.fetchQuery({
-      queryFn: ({ signal }) => getCurrentUserApi({ signal }),
-      queryKey: ['user', 'current'],
-    }));
+    (await queryClient
+      .fetchQuery({
+        queryFn: ({ signal }) => getCurrentUserApi({ signal }),
+        queryKey: ['user', 'current'],
+      })
+      .catch(() => emptyUser));
 
   if (id === 'me') {
-    return redirect(`/student/${currentUser.id}`);
+    return redirect(currentUser.url);
   }
 
   if (id === currentUser.id.toString()) {
@@ -31,7 +37,7 @@ export async function userDetailsLoader(
       extraCrumb: {
         id: 'user me',
         label: currentUser.name,
-        path: `/student/${currentUser.id}`,
+        path: currentUser.url,
       },
     };
   }
@@ -39,19 +45,24 @@ export async function userDetailsLoader(
   const parsedId = id ? Number.parseInt(id) : undefined;
 
   if (!parsedId) {
-    return redirect('/404');
+    return redirect('/404/');
   }
 
   const user =
     (queryClient.getQueryData(['user', parsedId]) as User) ??
     (await queryClient.fetchQuery({
       queryFn: () =>
-        getUserDetailsApi({ id: parsedId }).catch(() => ({ id: -1 }) as User),
+        getUserDetailsApi({ id: parsedId }).catch(
+          () =>
+            ({
+              id: -1,
+            }) as User,
+        ),
       queryKey: ['user', { id }],
     }));
 
   if (user.id === -1) {
-    return redirect('/404');
+    return redirect('/404/');
   }
 
   return {
@@ -92,7 +103,7 @@ export async function groupListLoader(
       ],
     };
   } catch {
-    return redirect('/group');
+    return redirect('/group/');
   }
 }
 
@@ -130,4 +141,37 @@ export async function groupDetailsLoader(
   } catch {
     return {};
   }
+}
+
+export async function formDetailsLoader(
+  args: LoaderFunctionArgs<unknown>,
+  queryClient: QueryClient,
+) {
+  const { uuid } = args.params;
+
+  const formSchema = await queryClient.query<JsonFormSchema | false>({
+    queryKey: ['form', uuid],
+    queryFn: () =>
+      (!uuid || uuid === 'new'
+        ? new Promise<JsonFormSchema>(getDefaultForm)
+        : getJsonSchemaApi(uuid)
+      ).catch(() => false),
+    staleTime: 'static',
+  });
+  if (formSchema === false) {
+    return redirect('/404/');
+  }
+  return {
+    extraCrumb:
+      uuid && uuid !== 'new'
+        ? [
+            {
+              id: formSchema.uuid,
+              label: formSchema.name,
+              path: `/form/${formSchema.uuid}/`,
+            },
+          ]
+        : undefined,
+    formSchema,
+  };
 }

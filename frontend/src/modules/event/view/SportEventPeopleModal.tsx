@@ -44,7 +44,7 @@ function SportEventPeopleListContent({
 
   const people = query.data?.pages.flatMap((page) => page.results) ?? [];
 
-  if (query.isLoading && people.length === 0) {
+  if (query.isPending && people.length === 0) {
     return (
       <ResponsiveDialogContent>
         <CircularProgress />

@@ -94,6 +94,7 @@ COMMON_APPS = [
     "apps.core",
     "apps.event",
     "apps.family",
+    "apps.form",
     "apps.group",
     "apps.notification",
     "apps.post",
