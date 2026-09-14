@@ -63,7 +63,10 @@ class TestGroups(APITestCase):
         self.assertEqual(res.status_code, status.HTTP_403_FORBIDDEN)
         self.assertEqual(Group.objects.count(), init_nb)
         # test on a type that is open
-        res = self.client.post("/api/group/group/?type=t2", {"name": "G1"})
+        res = self.client.post(
+            "/api/group/group/?type=t2",
+            {"name": "G1", "_save_history_record": False},
+        )
         self.assertEqual(res.status_code, status.HTTP_201_CREATED)
         self.assertEqual(Group.objects.count(), init_nb + 1)
 
@@ -95,19 +98,31 @@ class TestGroups(APITestCase):
     def test_update(self):
         g = Group.objects.create(name="G1", slug="g1", group_type=self.t1)
         # test for non-authenticated users
-        res = self.client.put(f"/api/group/group/{g.slug}/", {"name": "G2"})
+        res = self.client.put(
+            f"/api/group/group/{g.slug}/",
+            {"name": "G2", "_save_history_record": False},
+        )
         self.assertEqual(res.status_code, status.HTTP_403_FORBIDDEN)
         # test with authenticated user
         self.client.force_login(self.u1)
-        res = self.client.put(f"/api/group/group/{g.slug}/", {"name": "G2"})
+        res = self.client.put(
+            f"/api/group/group/{g.slug}/",
+            {"name": "G2", "_save_history_record": False},
+        )
         self.assertEqual(res.status_code, status.HTTP_403_FORBIDDEN)
         # test with member
         g.members.add(self.u1)
-        res = self.client.put(f"/api/group/group/{g.slug}/", {"name": "G2"})
+        res = self.client.put(
+            f"/api/group/group/{g.slug}/",
+            {"name": "G2", "_save_history_record": False},
+        )
         self.assertEqual(res.status_code, status.HTTP_403_FORBIDDEN)
         # test with admin
         g.membership_set.filter(user=self.u1).update(admin=True)
-        res = self.client.put(f"/api/group/group/{g.slug}/", {"name": "G2"})
+        res = self.client.put(
+            f"/api/group/group/{g.slug}/",
+            {"name": "G2", "_save_history_record": False},
+        )
         self.assertEqual(res.status_code, status.HTTP_200_OK)
         # check the modification is done
         self.assertEqual(Group.objects.get(slug="g1").name, "G2")

@@ -231,6 +231,9 @@
       },
       "title": {
         "label": "Titre de l'évènement"
+      },
+      "type": {
+        "label": "Type d'évènement"
       }
     },
     "grid": {
@@ -971,6 +974,7 @@
     "home": "Accueil",
     "map": "Carte",
     "signature": "Signature ECN",
+    "sport": "Calendrier des Sport",
     "student": "Annuaire Étudiant"
   },
   "notification": {
@@ -1290,6 +1294,44 @@
     "shareLink": {
       "failure": "Le lien n'a pas pu être copié",
       "success": "Lien copié !"
+    }
+  },
+  "sport": {
+    "pageTitle": "Planning des sports",
+    "filters": {
+      "allClubs": "Tous les clubs",
+      "myClubsOnly": "Mes clubs seulement"
+    },
+    "membership_reminder": "Attention : seul les membres des clubs peuvent s'inscrire aux événements sportifs. Si vous n'êtes pas membre d'un club, vous ne pourrez pas vous inscrire.",
+    "deleteModal": {
+      "title": "Supprimer l'événement sportif",
+      "body": "Voulez-vous vraiment supprimer cet événement sportif ? Cette action est définitive."
+    },
+    "noEvents": "Aucun événement sportif prévu",
+    "noDescription": "Aucune description",
+    "createCard": {
+      "label": "Ajouter un événement"
+    },
+    "participants_one": "{{count}} participant",
+    "participants_other": "{{count}} participants",
+    "participants_zero": "{{count}} participant",
+    "participation": {
+      "participating": "Tu participes",
+      "notParticipating": "Tu ne participes pas"
+    },
+    "actions": {
+      "question": "Je participe ?",
+      "yes": "Oui",
+      "no": "Non",
+      "participate": "Participer",
+      "nonParticipant": "Non-participant"
+    },
+    "eventType": {
+      "training": "Entraînement",
+      "competition": "Compétition"
+    },
+    "dayDisplay": {
+      "later": "Plus tard"
     }
   }
 }

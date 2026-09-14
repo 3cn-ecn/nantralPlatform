@@ -59,6 +59,11 @@ export default function Shortcuts() {
         path="/signature/"
         iconPath="/static/img/icons/cropped/sign.svg"
       />
+      <ShortcutItem
+        label={t('navbar.sport')}
+        path="/sport"
+        iconPath="/static/img/icons/cropped/sport.svg"
+      />
     </FlexRow>
   );
 }

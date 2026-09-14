@@ -26,6 +26,7 @@ export function getMockEventPreview(
       shortName: `Group ${id}`,
       slug: `group-${id}`,
       category: 'test',
+      canCreateSportEvent: false,
     },
   };
 }

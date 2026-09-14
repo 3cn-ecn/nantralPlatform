@@ -76,6 +76,7 @@ class GroupAdmin(SimpleHistoryAdmin):
         "updated_by",
         "updated_at",
         "members_admin_link",
+        "check_can_create_sport_event",
     ]
     autocomplete_fields = ["parent", "tags", "social_links"]
 

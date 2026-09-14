@@ -38,6 +38,7 @@ const StudentListPage = lazy(
 const StudentDetailsPage = lazy(
   () => import('#pages/StudentDetails/StudentDetails.page'),
 );
+const SportPage = lazy(() => import('#pages/Sport/Sport.page'));
 
 const t = (key: string) => key;
 
@@ -50,6 +51,11 @@ export const authenticatedRoutes: (queryClient: QueryClient) => RouteObject = (
       path: '/',
       element: <HomePage />,
       handle: { crumb: t('breadcrumbs.home.index') },
+    },
+    {
+      path: '/sport',
+      element: <SportPage />,
+      handle: { crumb: t('breadcrumbs.events.index') },
     },
     {
       path: '/event',
