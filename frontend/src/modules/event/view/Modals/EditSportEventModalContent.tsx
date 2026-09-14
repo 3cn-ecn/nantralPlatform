@@ -45,17 +45,21 @@ export function EditSportEventModalContent({
     event: sportEvent,
   });
 
-  const { mutate, isLoading, isError, error } = useMutation<
+  const { mutate, isPending, isError, error } = useMutation<
     unknown,
     ApiFormError<SportEventFormDTO>,
     UpdateSportEventApiVariables
-  >(updateSportEventApi);
+  >({ mutationFn: updateSportEventApi });
 
-  const { mutate: deleteSportEvent, isLoading: isDeleteLoading } = useMutation({
+  const { mutate: deleteSportEvent, isPending: isDeleteLoading } = useMutation({
     mutationFn: deleteSportEventApi,
     onSuccess: () => {
-      queryClient.invalidateQueries(['getSportEvents']);
-      queryClient.invalidateQueries(['notifications']);
+      queryClient.invalidateQueries({
+        queryKey: ['getSportEvents'],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ['notifications'],
+      });
       setIsDeleteModalOpen(false);
       onClose();
     },
@@ -67,9 +71,15 @@ export function EditSportEventModalContent({
       { id: sportEvent.id, data: values },
       {
         onSuccess: () => {
-          queryClient.invalidateQueries(['getSportEvents']);
-          queryClient.invalidateQueries(['sport-event', { id: sportEvent.id }]);
-          queryClient.invalidateQueries(['notifications']);
+          queryClient.invalidateQueries({
+            queryKey: ['getSportEvents'],
+          });
+          queryClient.invalidateQueries({
+            queryKey: ['sport-event', { id: sportEvent.id }],
+          });
+          queryClient.invalidateQueries({
+            queryKey: ['notifications'],
+          });
           onClose();
         },
       },
@@ -124,7 +134,7 @@ export function EditSportEventModalContent({
         <LoadingButton
           form="edit-sport-event-form"
           type="submit"
-          loading={isLoading}
+          loading={isPending}
           variant="contained"
         >
           {t('button.confirm')}

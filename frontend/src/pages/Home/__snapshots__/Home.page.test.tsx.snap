@@ -415,34 +415,34 @@ exports[`Home page > should render correctly without data 1`] = `
         class="MuiBox-root css-1o6pa4a"
       >
         <div
-          class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation1 MuiCard-root css-15m64r9-MuiPaper-root-MuiCard-root"
+          class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation1 MuiCard-root css-1t5rwzo-MuiPaper-root-MuiCard-root"
+          style="--Paper-shadow: 0px 2px 1px -1px rgba(0,0,0,0.2),0px 1px 1px 0px rgba(0,0,0,0.14),0px 1px 3px 0px rgba(0,0,0,0.12);"
         >
           <a
             aria-label="Sport Calendar"
-            class="MuiButtonBase-root MuiCardActionArea-root css-1oitmrd-MuiButtonBase-root-MuiCardActionArea-root"
+            class="MuiButtonBase-root MuiCardActionArea-root css-coyn9m-MuiButtonBase-root-MuiCardActionArea-root"
+            data-discover="true"
             href="/sport"
             tabindex="0"
           >
             <div
-              class="MuiCardContent-root css-46bh2p-MuiCardContent-root"
+              class="MuiCardContent-root css-1lt5qva-MuiCardContent-root"
             >
               <img
                 aria-hidden="true"
-                class="material-icons notranslate MuiIcon-root MuiIcon-fontSizeLarge css-1gb9piy-MuiIcon-root"
+                class="material-icons notranslate MuiIcon-root MuiIcon-fontSizeLarge css-x6tooo-MuiIcon-root"
                 src="/static/img/icons/cropped/sport.svg"
               />
             </div>
             <span
-              class="MuiCardActionArea-focusHighlight css-1v2exvi-MuiCardActionArea-focusHighlight"
-            />
-            <span
-              class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
+              class="MuiCardActionArea-focusHighlight css-1h5un5t-MuiCardActionArea-focusHighlight"
             />
           </a>
         </div>
         <p
           aria-hidden="true"
-          class="MuiTypography-root MuiTypography-body2 MuiTypography-alignCenter css-b7etmd-MuiTypography-root"
+          class="MuiTypography-root MuiTypography-body2 MuiTypography-alignCenter css-1u7shb1-MuiTypography-root"
+          style="--Typography-textAlign: center;"
         >
           Sport Calendar
         </p>

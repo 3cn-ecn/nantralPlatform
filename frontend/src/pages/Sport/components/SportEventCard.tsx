@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 
 import {
   CalendarMonth,
@@ -220,7 +220,7 @@ export function SportEventCard({ sportEvent }: Readonly<SportEventCardProps>) {
                   sportEvent.isParticipating === true ? 'contained' : 'outlined'
                 }
                 loading={
-                  participationMutation.isLoading &&
+                  participationMutation.isPending &&
                   participationMutation.variables === 'participant'
                 }
                 onClick={() => participationMutation.mutate('participant')}
@@ -235,7 +235,7 @@ export function SportEventCard({ sportEvent }: Readonly<SportEventCardProps>) {
                     : 'outlined'
                 }
                 loading={
-                  participationMutation.isLoading &&
+                  participationMutation.isPending &&
                   participationMutation.variables === 'nonParticipant'
                 }
                 onClick={() => participationMutation.mutate('nonParticipant')}
