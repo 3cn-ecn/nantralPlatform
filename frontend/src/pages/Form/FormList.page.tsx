@@ -19,7 +19,7 @@ import { getFormListApi } from '#modules/form/api/getFormList.api';
 import {
   FormListItem,
   FormListItemSkeleton,
-} from '#modules/form/view/shared/FormListItem';
+} from '#pages/Form/components/List/FormListItem';
 import { InfiniteList } from '#shared/components/InfiniteList/InfiniteList';
 import { useTranslation } from '#shared/i18n/useTranslation';
 
@@ -34,7 +34,7 @@ export default function FormListPage() {
   });
 
   return (
-    <Container sx={{ pt: 3, pb: 7 }}>
+    <Container sx={{ pt: 4, pb: 7 }}>
       <Typography variant={'h1'} sx={{ mb: 3 }}>
         {t('jsonForm.list.title')}
       </Typography>

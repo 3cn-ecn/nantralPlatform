@@ -19,6 +19,7 @@
     },
     "form": {
       "answer": "Answer",
+      "answers": "Answers",
       "edit": "Edit",
       "index": "Forms",
       "new": "New"
@@ -656,6 +657,16 @@
       "saved": "Your answer have been saved, you may leave this page",
       "submitBody": "Do you wish to send your answer? You will be able to edit it as long as the form is active",
       "submitTitle": "Submit Answer?"
+    },
+    "answers": {
+      "action": "Actions",
+      "date": "Modified at",
+      "detailTitle": "Answer of <0>{{ user }}</0>",
+      "noAnswers": "No aswer to this form yet",
+      "title": "Answers to form {{ name }}",
+      "user": "User",
+      "userError": "Unable to retrieve the user",
+      "viewDetails": "View answer"
     },
     "details": {
       "active": "The form is active. Close...",

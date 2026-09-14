@@ -16,7 +16,7 @@ from apps.form.serializers import (
     FormSchemaSerializer,
     RoleSerializer,
 )
-from apps.utils.parse import parse_int
+from apps.utils.parse import parse_bool, parse_int
 
 if TYPE_CHECKING:
     from apps.account.models import User
@@ -109,7 +109,8 @@ class FormAnswerViewSet(viewsets.ModelViewSet):
         return schema.formanswer_set.all()
 
     def get_serializer_class(self):
-        if self.action == "list" and "user" not in self.query_params:
+        preview = parse_bool(self.query_params.get("preview"), True)
+        if self.action == "list" and preview:
             return FormAnswerPreviewSerializer
         return FormAnswerSerializer
 

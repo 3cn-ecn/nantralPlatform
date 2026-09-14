@@ -2,12 +2,14 @@ import { UUID } from 'crypto';
 
 import {
   JsonFormAnswerDTO,
+  JsonFormAnswerPreviewDTO,
   JsonFormPreviewDTO,
   JsonFormSchemaDTO,
   UserRoleDTO,
 } from '#modules/form/infra/jsonForm.dto';
 import {
   JsonFormAnswer,
+  JsonFormAnswerPreview,
   JsonFormPreview,
   JsonFormSchema,
   UserRole,
@@ -49,6 +51,16 @@ export const adaptJsonFormAnswer = (
     formSchemaUuid: answerDTO.form_schema,
     data: answerDTO.data,
     submittedAt: new Date(answerDTO.submitted_at),
+    modifiedAt: new Date(answerDTO.modified_at),
+    user: answerDTO.user,
+  };
+};
+
+export const adaptJsonFormAnswerPreview = (
+  answerDTO: JsonFormAnswerPreviewDTO,
+): JsonFormAnswerPreview => {
+  return {
+    uuid: answerDTO.uuid as UUID,
     modifiedAt: new Date(answerDTO.modified_at),
     user: answerDTO.user,
   };

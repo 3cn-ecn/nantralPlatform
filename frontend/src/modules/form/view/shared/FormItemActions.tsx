@@ -141,7 +141,7 @@ export function FormItemActions({
         Icon: ResultsIcon,
         clickableProps: {
           component: Link,
-          to: `/form/${formPreview.uuid}/results/`,
+          to: `/form/${formPreview.uuid}/answers/`,
         },
       },
       {

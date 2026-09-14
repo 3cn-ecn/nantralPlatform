@@ -33,6 +33,11 @@ export interface JsonFormAnswerDTO {
   user: number;
 }
 
+export type JsonFormAnswerPreviewDTO = Pick<
+  JsonFormAnswerDTO,
+  'uuid' | 'modified_at' | 'user'
+>;
+
 export type JsonFormPreviewDTO = Pick<
   JsonFormSchemaDTO,
   | 'uuid'

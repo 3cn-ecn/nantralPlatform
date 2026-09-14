@@ -136,14 +136,9 @@ class FormSchemaSerializer(serializers.ModelSerializer):
 
 
 class FormAnswerPreviewSerializer(serializers.ModelSerializer):
-    url = serializers.SerializerMethodField()
-
     class Meta:
         model = FormAnswer
-        fields = ["url", "submitted_at", "user"]
-
-    def get_url(self, obj):
-        return obj.get_absolute_url()
+        fields = ["uuid", "modified_at", "user"]
 
 
 class FormAnswerSerializer(serializers.ModelSerializer):

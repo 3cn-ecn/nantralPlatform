@@ -3,7 +3,6 @@ import { RouteObject } from 'react-router';
 
 import { QueryClient } from '@tanstack/react-query';
 
-import { getDefaultForm } from '#modules/form/constants';
 import { PageTemplate } from '#shared/components/PageTemplate/PageTemplate';
 
 import { formDetailsLoader, userDetailsLoader } from './loader';
@@ -20,6 +19,8 @@ const EventDetailsPage = lazy(
 );
 const EditFormPage = lazy(() => import('#pages/Form/EditForm.page'));
 const AnswerFormPage = lazy(() => import('#pages/Form/AnswerForm.page'));
+const AnswerDetailPage = lazy(() => import('#pages/Form/AnswerDetail.page'));
+const AnswerListPage = lazy(() => import('#pages/Form/AnswerList.page'));
 const FormListPage = lazy(() => import('#pages/Form/FormList.page'));
 const MapPage = lazy(() => import('#pages/Map/Map.page'));
 const HomePage = lazy(() => import('#pages/Home/Home.page'));
@@ -89,22 +90,35 @@ export const authenticatedRoutes: (queryClient: QueryClient) => RouteObject = (
           path: 'new',
           element: <EditFormPage />,
           handle: { crumb: t('breadcrumbs.form.new') },
-          loader: () => ({ formSchema: getDefaultForm() }),
         },
         {
           path: ':uuid',
+          id: 'formDetails',
+          loader: (args) => formDetailsLoader(args, queryClient),
           children: [
             {
               index: true,
               element: <AnswerFormPage />,
-              loader: (args) => formDetailsLoader(args, queryClient),
               handle: { crumb: t('breadcrumbs.form.answer') },
             },
             {
               path: 'edit',
               element: <EditFormPage />,
-              loader: (args) => formDetailsLoader(args, queryClient),
               handle: { crumb: t('breadcrumbs.form.edit') },
+            },
+            {
+              path: 'answers',
+              handle: { crumb: t('breadcrumbs.form.answers') },
+              children: [
+                {
+                  index: true,
+                  element: <AnswerListPage />,
+                },
+                {
+                  path: ':answerId',
+                  element: <AnswerDetailPage />,
+                },
+              ],
             },
           ],
         },

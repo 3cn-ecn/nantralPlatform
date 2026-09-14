@@ -19,6 +19,7 @@
     },
     "form": {
       "answer": "Réponse",
+      "answers": "Réponses",
       "edit": "Édition",
       "index": "Formulaires",
       "new": "Nouveau"
@@ -656,6 +657,16 @@
       "saved": "Votre réponse a été enregistrée, vous pouvez quitter cette page",
       "submitBody": "Voulez-vous envoyer votre réponse. Vous pourrez la modifier tant que le formulaire reste actif",
       "submitTitle": "Envoyer la réponse ?"
+    },
+    "answers": {
+      "action": "Actions",
+      "date": "Date de modification",
+      "detailTitle": "Réponse de <0>{{ user }}</0>",
+      "noAnswers": "Aucune réponse n'a été envoyée",
+      "title": "Réponses au formulaire {{ name }}",
+      "user": "Utilisateur",
+      "userError": "Impossible de récupérer l'utilisateur",
+      "viewDetails": "Voir la réponse"
     },
     "details": {
       "active": "Le formulaire est actif. Fermer...",

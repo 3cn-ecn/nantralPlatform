@@ -59,9 +59,11 @@ import { useTranslation } from '#shared/i18n/useTranslation';
 export function ShowForm({
   jsonFormSchema,
   initialData,
+  disabled = false,
 }: {
   jsonFormSchema: JsonFormSchema;
   initialData?: JsonFormAnswer;
+  disabled?: boolean;
 }) {
   const [data, setData] = useState(initialData?.data ?? {});
   const [hasErrors, setHasErrors] = useState(false);
@@ -190,70 +192,73 @@ export function ShowForm({
             locale: formBaseLanguage,
             translate: translate as Translator,
           }}
+          readonly={disabled}
         />
       </Box>
-      <Stack
-        direction={'row'}
-        gap={2}
-        alignSelf={'center'}
-        alignItems={'center'}
-        position={'fixed'}
-        bottom={24}
-      >
-        <Fab
-          variant={'extended'}
-          color={'secondary'}
-          size={'small'}
-          onClick={() => setResetOpen(true)}
+      {!disabled && (
+        <Stack
+          direction={'row'}
+          gap={2}
+          alignSelf={'center'}
+          alignItems={'center'}
+          position={'fixed'}
+          bottom={24}
         >
-          <ResetIcon sx={{ mr: 1 }} />
-          {t('button.reset')}
-        </Fab>
-        {resetOpen && (
-          <ConfirmationModal
-            title={t('jsonForm.answer.resetTitle')}
-            body={t('jsonForm.answer.resetBody')}
-            onCancel={() => setResetOpen(false)}
-            onConfirm={() => {
-              setData({});
-              setResetOpen(false);
-            }}
-          />
-        )}
-        <Fab
-          variant={'extended'}
-          color={'primary'}
-          onClick={() => setSubmitOpen(true)}
-        >
-          <SendIcon sx={{ mr: 1 }} />
-          {t('button.send')}
-        </Fab>
-        {submitOpen && !hasErrors && (
-          <ConfirmationModal
-            title={t('jsonForm.answer.submitTitle')}
-            body={t('jsonForm.answer.submitBody')}
-            onCancel={() => setSubmitOpen(false)}
-            onConfirm={() => mutate(data)}
-            loading={isPending}
-          />
-        )}
-        <Dialog
-          open={submitOpen && hasErrors}
-          onClose={() => setSubmitOpen(false)}
-        >
-          <DialogTitle>{t('jsonForm.answer.hasErrors.title')}</DialogTitle>
-          <DialogContent>
-            <DialogContentText>
-              {t('jsonForm.answer.hasErrors.body')}
-            </DialogContentText>
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={() => setSubmitOpen(false)}>
-              {t('button.back')}
-            </Button>
-          </DialogActions>
-        </Dialog>
-      </Stack>
+          <Fab
+            variant={'extended'}
+            color={'secondary'}
+            size={'small'}
+            onClick={() => setResetOpen(true)}
+          >
+            <ResetIcon sx={{ mr: 1 }} />
+            {t('button.reset')}
+          </Fab>
+          {resetOpen && (
+            <ConfirmationModal
+              title={t('jsonForm.answer.resetTitle')}
+              body={t('jsonForm.answer.resetBody')}
+              onCancel={() => setResetOpen(false)}
+              onConfirm={() => {
+                setData({});
+                setResetOpen(false);
+              }}
+            />
+          )}
+          <Fab
+            variant={'extended'}
+            color={'primary'}
+            onClick={() => setSubmitOpen(true)}
+          >
+            <SendIcon sx={{ mr: 1 }} />
+            {t('button.send')}
+          </Fab>
+          {submitOpen && !hasErrors && (
+            <ConfirmationModal
+              title={t('jsonForm.answer.submitTitle')}
+              body={t('jsonForm.answer.submitBody')}
+              onCancel={() => setSubmitOpen(false)}
+              onConfirm={() => mutate(data)}
+              loading={isPending}
+            />
+          )}
+          <Dialog
+            open={submitOpen && hasErrors}
+            onClose={() => setSubmitOpen(false)}
+          >
+            <DialogTitle>{t('jsonForm.answer.hasErrors.title')}</DialogTitle>
+            <DialogContent>
+              <DialogContentText>
+                {t('jsonForm.answer.hasErrors.body')}
+              </DialogContentText>
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={() => setSubmitOpen(false)}>
+                {t('button.back')}
+              </Button>
+            </DialogActions>
+          </Dialog>
+        </Stack>
+      )}
     </Stack>
   );
 }

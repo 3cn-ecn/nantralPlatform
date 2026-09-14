@@ -34,6 +34,11 @@ export interface JsonFormAnswer {
   user: number;
 }
 
+export type JsonFormAnswerPreview = Pick<
+  JsonFormAnswer,
+  'uuid' | 'modifiedAt' | 'user'
+>;
+
 export type JsonFormPreview = Pick<
   JsonFormSchema,
   | 'uuid'

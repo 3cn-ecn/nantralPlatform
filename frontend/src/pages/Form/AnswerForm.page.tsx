@@ -1,21 +1,22 @@
-import { useLoaderData, useParams } from 'react-router';
+import { useParams } from 'react-router';
 
 import { Alert, CircularProgress, Container } from '@mui/material';
 import { useQuery, useSuspenseQuery } from '@tanstack/react-query';
 
 import { useCurrentUserData } from '#modules/account/hooks/useCurrentUser.data';
-import { getAnswerApi } from '#modules/form/api/getAnswers.api';
+import { getAnswerListApi } from '#modules/form/api/getAnswerList.api';
 import { getJsonSchemaApi } from '#modules/form/api/getJsonSchema.api';
-import { getDefaultForm } from '#modules/form/constants';
+import { JsonFormAnswer } from '#modules/form/types/jsonForm.type';
 import { ShowForm } from '#modules/form/view/shared/ShowForm';
 
 export default function AnswerFormPage() {
   const { uuid } = useParams();
   const { data: formSchema } = useSuspenseQuery({
     queryKey: ['form', uuid],
-    queryFn: () =>
-      !uuid || uuid === 'new' ? getDefaultForm() : getJsonSchemaApi(uuid),
-    initialData: useLoaderData().formSchema,
+    queryFn: () => {
+      if (uuid) return getJsonSchemaApi(uuid);
+      throw 'Invalid Id';
+    },
   });
 
   const userId = useCurrentUserData().id;
@@ -25,8 +26,9 @@ export default function AnswerFormPage() {
     error: answerError,
     isPending: isAnswerPending,
   } = useQuery({
-    queryKey: ['answers', formSchema.uuid],
-    queryFn: () => getAnswerApi(formSchema.uuid, { user: userId }),
+    queryKey: ['answers', formSchema.uuid, { user: userId, preview: false }],
+    queryFn: () =>
+      getAnswerListApi(formSchema.uuid, { user: userId, preview: false }),
   });
 
   return (
@@ -40,7 +42,10 @@ export default function AnswerFormPage() {
       )}
 
       {formSchema && answer && (
-        <ShowForm jsonFormSchema={formSchema} initialData={answer.results[0]} />
+        <ShowForm
+          jsonFormSchema={formSchema}
+          initialData={answer.results[0] as JsonFormAnswer}
+        />
       )}
     </Container>
   );

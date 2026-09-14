@@ -8,6 +8,7 @@ import { emptyUser } from '#modules/account/hooks/useCurrentUser.data';
 import { User } from '#modules/account/user.types';
 import { getJsonSchemaApi } from '#modules/form/api/getJsonSchema.api';
 import { getDefaultForm } from '#modules/form/constants';
+import { JsonFormSchema } from '#modules/form/types/jsonForm.type';
 import { getGroupDetailsApi } from '#modules/group/api/getGroupDetails.api';
 import { getGroupTypeDetailsApi } from '#modules/group/api/getGroupTypeDetails.api';
 import { Group } from '#modules/group/types/group.types';
@@ -148,12 +149,18 @@ export async function formDetailsLoader(
 ) {
   const { uuid } = args.params;
 
-  const formSchema = await queryClient.query({
+  const formSchema = await queryClient.query<JsonFormSchema | false>({
     queryKey: ['form', uuid],
     queryFn: () =>
-      !uuid || uuid === 'new' ? getDefaultForm() : getJsonSchemaApi(uuid),
+      (!uuid || uuid === 'new'
+        ? new Promise<JsonFormSchema>(getDefaultForm)
+        : getJsonSchemaApi(uuid)
+      ).catch(() => false),
     staleTime: 'static',
   });
+  if (formSchema === false) {
+    return redirect('/404/');
+  }
   return {
     extraCrumb:
       uuid && uuid !== 'new'
