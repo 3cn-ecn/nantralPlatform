@@ -449,7 +449,7 @@ exports[`Home page > should render correctly without data 1`] = `
       </div>
     </div>
     <div
-      class="MuiSpeedDial-root MuiSpeedDial-directionUp css-1q12s3h-MuiSpeedDial-root"
+      class="MuiSpeedDial-root MuiSpeedDial-directionUp css-krf2c1-MuiSpeedDial-root"
       role="presentation"
     >
       <button
