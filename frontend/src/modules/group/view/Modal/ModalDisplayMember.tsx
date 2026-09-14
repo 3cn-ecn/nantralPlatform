@@ -81,7 +81,7 @@ export function ModalShowMember(props: {
         </Typography>
         <Typography gutterBottom>
           {member.description ||
-            t('group.details.modal.displayMember.descripition', {
+            t('group.details.modal.displayMember.description', {
               group: member.group.name,
             })}
         </Typography>

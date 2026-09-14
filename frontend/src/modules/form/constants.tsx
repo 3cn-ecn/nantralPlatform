@@ -226,7 +226,7 @@ export const INPUT_TYPES: Record<string, InputType> = {
       />,
     ],
   },
-  weighedList: {
+  weightedList: {
     i18nKey: 'jsonForm.edit.control.weightedList',
     icon: <TuneIcon />,
     defaultOptions: { table: true },

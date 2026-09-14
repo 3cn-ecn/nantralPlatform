@@ -1,17 +1,15 @@
 import { useCallback, useMemo } from 'react';
 
 import { JsonSchema } from '@jsonforms/core';
-import { CheckBox, MoreHoriz } from '@mui/icons-material';
+import { MoreHoriz } from '@mui/icons-material';
 import {
   FormControl,
-  FormControlLabel,
   InputLabel,
   ListItemIcon,
   ListItemText,
   MenuItem,
   Select,
   Stack,
-  Switch,
 } from '@mui/material';
 import { UUID } from 'crypto';
 import { set } from 'lodash';

@@ -39,6 +39,7 @@ export function FormHeaderFields() {
         {headerEdit ? (
           <TextField
             multiline
+            rows={3}
             value={form.description}
             handleChange={setDescription}
             label={t('jsonForm.edit.description')}

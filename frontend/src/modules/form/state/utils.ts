@@ -13,6 +13,84 @@ import {
   JsonFormSchema,
   JsonFormSchemaForm,
 } from '#modules/form/types/jsonForm.type';
+import { baseLanguages } from '#shared/i18n/config';
+
+type TranslationIssueMap = Record<UUID, Record<string, string[]>>;
+
+const isEmptyTranslationValue = (value: unknown): boolean => {
+  if (value === null || value === undefined) {
+    return true;
+  }
+
+  if (typeof value === 'string') {
+    return value.trim() === '';
+  }
+
+  if (typeof value === 'object') {
+    return Object.values(value as Record<string, unknown>).every(
+      (nestedValue) =>
+        nestedValue === undefined ||
+        nestedValue === null ||
+        (typeof nestedValue === 'string' && nestedValue.trim() === ''),
+    );
+  }
+
+  return false;
+};
+
+const addIssue = (
+  issues: TranslationIssueMap,
+  nodeId: UUID,
+  language: string,
+  key: string,
+) => {
+  const nodeIssues = issues[nodeId] ?? {};
+  const languageIssues = nodeIssues[language] ?? [];
+
+  if (!languageIssues.includes(key)) {
+    languageIssues.push(key);
+  }
+
+  nodeIssues[language] = languageIssues;
+  issues[nodeId] = nodeIssues;
+};
+
+const getWeightedListMetadata = (node: Node) => {
+  const schema = node.payload.schema ?? {};
+  const rows = Object.keys(schema.allOf?.[0]?.properties ?? {});
+  const columns = (
+    schema.allOf?.[1]?.patternProperties?.['^.*$']?.properties?.value?.oneOf ??
+    []
+  )
+    .map((entry) => entry.title)
+    .filter(Boolean) as string[];
+
+  return { rows, columns };
+};
+
+const getEnumOptionIds = (node: Node) => {
+  const schema = node.payload.schema ?? {};
+  const schemaType = schema['x-type'] as string | undefined;
+
+  if (schemaType === 'weightedList') {
+    return { ...getWeightedListMetadata(node), options: [] };
+  }
+
+  if (schemaType === 'Enum') {
+    return { rows: [], columns: [], options: (schema.enum ?? []) as string[] };
+  }
+
+  if (schemaType === 'Multiple choice') {
+    return {
+      rows: [],
+      columns: [],
+      options: ((schema.items as JsonSchema | undefined)?.enum ??
+        []) as string[],
+    };
+  }
+
+  return { rows: [], columns: [], options: [] };
+};
 
 /**
  * Add a node to the form as child of the given parent
@@ -30,6 +108,7 @@ export function addNode(
   if (!state.nodes[parent]) {
     throw new Error('Parent not found');
   }
+
   const id = crypto.randomUUID();
   state.nodes[id] = { parent, children: [], payload };
   state.nodes[parent].children.splice(
@@ -37,6 +116,7 @@ export function addNode(
     0,
     id,
   );
+
   return state;
 }
 
@@ -65,6 +145,7 @@ export function removeNode(state: FormState, id: UUID) {
   if (!parent) {
     throw new Error('Cannot remove the root node');
   }
+
   return {
     ...state,
     nodes: {
@@ -95,10 +176,12 @@ export function moveNode(
   if (isDescendent(state, newParent, id)) {
     throw new Error('Cannot move an element into one of its children');
   }
+
   const oldParent = state.nodes[id].parent;
   if (!oldParent) {
     throw new Error('Cannot move the root node');
   }
+
   if (oldParent === newParent) {
     if (
       position !== undefined &&
@@ -113,7 +196,6 @@ export function moveNode(
         ...state,
         nodes: {
           ...state.nodes,
-
           [oldParent]: {
             ...state.nodes[oldParent],
             children: [
@@ -127,35 +209,32 @@ export function moveNode(
     }
     // No position change
     return state;
-  } else {
-    return {
-      ...state,
-      nodes: {
-        ...state.nodes,
-
-        [oldParent]: {
-          ...state.nodes[oldParent],
-          children: state.nodes[oldParent].children.filter(
-            (childId) => childId !== id,
-          ),
-        },
-
-        [newParent]: {
-          ...state.nodes[newParent],
-          children: [
-            ...state.nodes[newParent].children.slice(0, position),
-            id,
-            ...state.nodes[newParent].children.slice(position),
-          ],
-        },
-
-        [id]: {
-          ...state.nodes[id],
-          parent: newParent,
-        },
-      },
-    };
   }
+
+  return {
+    ...state,
+    nodes: {
+      ...state.nodes,
+      [oldParent]: {
+        ...state.nodes[oldParent],
+        children: state.nodes[oldParent].children.filter(
+          (childId) => childId !== id,
+        ),
+      },
+      [newParent]: {
+        ...state.nodes[newParent],
+        children: [
+          ...state.nodes[newParent].children.slice(0, position),
+          id,
+          ...state.nodes[newParent].children.slice(position),
+        ],
+      },
+      [id]: {
+        ...state.nodes[id],
+        parent: newParent,
+      },
+    },
+  };
 }
 
 /**
@@ -171,9 +250,77 @@ export function isDescendent(
 ) {
   return (
     id === potentialAncestor ||
-    (state.nodes[id].parent &&
+    (state.nodes[id].parent !== undefined &&
       isDescendent(state, state.nodes[id].parent, potentialAncestor))
   );
+}
+
+export function collectTranslationIssues(state: FormState) {
+  const missing: TranslationIssueMap = {};
+  const warnings: TranslationIssueMap = {};
+
+  Object.entries(state.nodes).forEach(([nodeId, node]: [UUID, Node]) => {
+    baseLanguages.forEach((lang) => {
+      const translations = node.payload.translation?.[lang] ?? {};
+      const type = node.payload.type;
+
+      if (type === 'Control') {
+        if (isEmptyTranslationValue(translations.label)) {
+          addIssue(missing, nodeId, lang, 'label');
+        }
+        if (isEmptyTranslationValue(translations.description)) {
+          addIssue(warnings, nodeId, lang, 'description');
+        }
+      } else if (type === 'Label') {
+        if (isEmptyTranslationValue(translations.text)) {
+          addIssue(missing, nodeId, lang, 'text');
+        }
+      } else if (type === 'Group') {
+        if (isEmptyTranslationValue(translations.label)) {
+          addIssue(warnings, nodeId, lang, 'label');
+        }
+      } else if (type === 'Category') {
+        if (isEmptyTranslationValue(translations.label)) {
+          addIssue(missing, nodeId, lang, 'label');
+        }
+      }
+
+      const { rows, columns, options } = getEnumOptionIds(node);
+
+      columns.forEach((columnId) => {
+        const columnTranslation = translations[columnId];
+        const columnLabel =
+          typeof columnTranslation === 'object' && columnTranslation !== null
+            ? columnTranslation.label
+            : columnTranslation;
+
+        if (isEmptyTranslationValue(columnLabel)) {
+          addIssue(missing, nodeId, lang, `column:${columnId}`);
+        }
+      });
+
+      options.forEach((optionId) => {
+        const optionTranslation = translations[optionId];
+        if (isEmptyTranslationValue(optionTranslation)) {
+          addIssue(missing, nodeId, lang, `option:${optionId}`);
+        }
+      });
+
+      rows.forEach((rowId) => {
+        const rowTranslation = translations[rowId];
+        const rowLabel =
+          typeof rowTranslation === 'object' && rowTranslation !== null
+            ? rowTranslation.label
+            : rowTranslation;
+
+        if (isEmptyTranslationValue(rowLabel)) {
+          addIssue(missing, nodeId, lang, `row:${rowId}`);
+        }
+      });
+    });
+  });
+
+  return { missing, warnings };
 }
 
 export function nodeToJsonForm(
@@ -184,6 +331,7 @@ export function nodeToJsonForm(
   if (!path) {
     path = [];
   }
+
   const node = state.nodes[nodeId ?? state.root];
   const result: JsonFormSchemaForm = {
     uuid: state.uuid,
@@ -196,7 +344,7 @@ export function nodeToJsonForm(
       i18n: nodeId,
     },
     i18nKeys: mapValues(node.payload.translation, (value) =>
-      // If it is the root node,put the translation to the root
+      // If it is the root node, put the translation to the root
       nodeId === undefined
         ? cloneDeep(value)
         : {
@@ -208,11 +356,13 @@ export function nodeToJsonForm(
   if (node.children.length > 0) {
     result.schema.type = 'object';
     (result.uiSchema as Layout).elements = [];
+
     node.children.forEach((childId) => {
       const childResult = nodeToJsonForm(state, [...path, childId]);
       set(result, ['schema', 'properties', childId], childResult.schema);
       (result.uiSchema as Layout).elements.push(childResult.uiSchema);
       merge(result.i18nKeys, childResult.i18nKeys);
+
       if (state.nodes[childId].payload.required) {
         set(
           result,

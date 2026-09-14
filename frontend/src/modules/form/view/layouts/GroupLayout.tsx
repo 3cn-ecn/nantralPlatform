@@ -41,7 +41,7 @@ export function GroupLayout({
       <CardContent>
         <TextField
           handleChange={(val) => setLabel(val)}
-          value={label}
+          value={label ?? ''}
           label={t('jsonForm.edit.group.label')}
           helperText={t('jsonForm.edit.group.labelHelp')}
         />

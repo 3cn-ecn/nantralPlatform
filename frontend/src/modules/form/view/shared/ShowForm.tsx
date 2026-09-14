@@ -86,7 +86,7 @@ export function ShowForm({
 
       const namespace = 'form-' + schema.uuid;
 
-      formI18n.addResourceBundle('en-EN', namespace, schema.i18nKeys.en);
+      formI18n.addResourceBundle('en-GB', namespace, schema.i18nKeys.en);
       formI18n.addResourceBundle('fr-FR', namespace, schema.i18nKeys.fr);
 
       return (key: string, defaultMessage?: string) => {

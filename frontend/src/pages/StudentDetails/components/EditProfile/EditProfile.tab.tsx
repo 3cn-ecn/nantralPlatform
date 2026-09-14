@@ -40,18 +40,18 @@ export function EditProfileTab({ user }: EditProfileTabProps) {
 
   const { error, mutate, isPending } = useMutation<
     EditAccountOptionsDTO,
-    ApiFormError<EditAccountOptions>,
+    ApiFormError<EditAccountOptionsDTO>,
     EditAccountOptions
   >({
     mutationFn: (formData: EditAccountOptions) =>
       editAccountApi(formData, user.id),
 
-    onSuccess: async () => {
-      await queryClient.invalidateQueries({ queryKey: ['user', 'current'] });
-      await queryClient.invalidateQueries({
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['user', 'current'] });
+      queryClient.invalidateQueries({
         queryKey: ['user', { id: user.id.toString() }],
       });
-      await queryClient.invalidateQueries({ queryKey: ['username'] });
+      queryClient.invalidateQueries({ queryKey: ['username'] });
       setHasChanges(false);
     },
   });

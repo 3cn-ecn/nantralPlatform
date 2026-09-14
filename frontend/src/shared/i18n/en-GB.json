@@ -416,7 +416,7 @@
         },
         "displayMember": {
           "dates": "Member from {{ from }} to {{ to }}",
-          "descripition": "Member of {{group}}",
+          "description": "Member of {{group}}",
           "openGroup": "Open group",
           "openProfile": "Open profile"
         },
@@ -459,7 +459,7 @@
           "title": "Join {{group}}"
         }
       },
-      "noAdminReqests": "No admin requests",
+      "noAdminRequests": "No admin requests",
       "requestAdmin": "Ask to be an admin",
       "requestSent": "Request sent",
       "requestToBeAdmin": "{{student}} asks to be admin",
@@ -551,7 +551,7 @@
         "helperText": "If checked, the group page will be publicly accessible, including to unconnected users. \nHowever, members, events and posts remain hidden.",
         "label": "Public group"
       },
-      "saveHistroryRecord": {
+      "saveHistoryRecord": {
         "helperText": "If you tick this, we will store this version in order to access it later, even if other changes are made. We recommand to keep this enabled, if you are not making minor updates.",
         "label": "Save an historical record"
       },
@@ -789,7 +789,20 @@
         "typeSelect": "Question type choice"
       },
       "title": "Edit Form",
-      "titleField": "Form Title"
+      "titleField": "Form Title",
+      "translationModal": {
+        "column": "Column {{ i }} ({{ lang }})",
+        "confirm": "Re-check & Continue",
+        "description": "Description ({{ lang }})",
+        "label": "Label ({{ lang }})",
+        "noIssue": "No translation issues detected",
+        "option": "Option {{ i }} ({{ lang }})",
+        "optional": "Missing (Optional)",
+        "required": "Missing (Required)",
+        "row": "Row {{ i }} ({{ lang }})",
+        "text": "Text ({{ lang }})",
+        "title": "Missing Translations"
+      }
     },
     "list": {
       "action": "Actions",

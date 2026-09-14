@@ -49,7 +49,7 @@ export function CategoryLayout({
           <FlexCol gap={2}>
             <TextField
               handleChange={(val) => setLabel(val)}
-              value={label}
+              value={label ?? ''}
               label={t('jsonForm.edit.category.label')}
               helperText={t('jsonForm.edit.category.labelHelp')}
             />
