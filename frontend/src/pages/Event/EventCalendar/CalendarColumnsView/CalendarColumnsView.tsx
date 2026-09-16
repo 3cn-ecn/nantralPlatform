@@ -1,3 +1,5 @@
+import { useEffect } from 'react';
+
 import { Box, Divider, Typography, useTheme } from '@mui/material';
 import {
   areIntervalsOverlapping,
@@ -13,11 +15,11 @@ import {
 import { upperFirst, zipWith } from 'lodash-es';
 
 import { EventListQueryParams } from '#modules/event/api/getEventList.api';
+import { useInfiniteEventListQuery } from '#pages/Event/hooks/useInfiniteEventList.query';
 import { ErrorPageContent } from '#shared/components/ErrorPageContent/ErrorPageContent';
 import { FlexCol, FlexRow } from '#shared/components/FlexBox/FlexBox';
 import { useTranslation } from '#shared/i18n/useTranslation';
 
-import { useEventListQuery } from '../../hooks/useEventList.query';
 import { createBlankEvents } from '../shared/createBlankEvents';
 import { CalendarEventItem } from '../types';
 import { CalendarEventBlock } from './CalendarEventBlock';
@@ -35,7 +37,13 @@ interface CalendarColumnsViewProps {
 export function CalendarColumnsView({ filters }: CalendarColumnsViewProps) {
   const { formatDate, formatTime } = useTranslation();
   const theme = useTheme();
-  const eventsQuery = useEventListQuery(filters);
+  const eventsQuery = useInfiniteEventListQuery(filters);
+
+  useEffect(() => {
+    if (eventsQuery.hasNextPage && !eventsQuery.isFetchingNextPage) {
+      eventsQuery.fetchNextPage();
+    }
+  }, [eventsQuery]);
 
   if (eventsQuery.isError)
     return (
@@ -48,7 +56,7 @@ export function CalendarColumnsView({ filters }: CalendarColumnsViewProps) {
 
   const events = eventsQuery.isLoading
     ? createBlankEvents(filters.fromDate, filters.toDate)
-    : eventsQuery.data.results;
+    : eventsQuery.data.pages.flatMap((page) => page.results);
 
   const hours = eachHourOfInterval(
     { start: startOfToday(), end: endOfToday() },

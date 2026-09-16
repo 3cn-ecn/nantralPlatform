@@ -1,3 +1,5 @@
+import { useEffect } from 'react';
+
 import { Box, Typography, useTheme } from '@mui/material';
 import {
   areIntervalsOverlapping,
@@ -13,10 +15,10 @@ import {
 import { upperFirst } from 'lodash-es';
 
 import { EventListQueryParams } from '#modules/event/api/getEventList.api';
+import { useInfiniteEventListQuery } from '#pages/Event/hooks/useInfiniteEventList.query';
 import { ErrorPageContent } from '#shared/components/ErrorPageContent/ErrorPageContent';
 import { useTranslation } from '#shared/i18n/useTranslation';
 
-import { useEventListQuery } from '../../hooks/useEventList.query';
 import { createBlankEvents } from '../shared/createBlankEvents';
 import { CalendarEventBlock } from './CalendarEventBlock';
 import { CalendarEventBlockSkeleton } from './CalendarEventBlockSkeleton';
@@ -29,7 +31,13 @@ export function CalendarGridView({ filters }: CalendarGridViewProps) {
   const { formatDate, startOfWeek, endOfWeek, dateFnsLocale } =
     useTranslation();
   const theme = useTheme();
-  const eventsQuery = useEventListQuery({ ...filters, pageSize: 200 });
+  const eventsQuery = useInfiniteEventListQuery(filters);
+
+  useEffect(() => {
+    if (eventsQuery.hasNextPage && !eventsQuery.isFetchingNextPage) {
+      eventsQuery.fetchNextPage();
+    }
+  }, [eventsQuery]);
 
   if (eventsQuery.isError)
     return (
@@ -42,7 +50,7 @@ export function CalendarGridView({ filters }: CalendarGridViewProps) {
 
   const events = eventsQuery.isLoading
     ? createBlankEvents(filters.fromDate, filters.toDate)
-    : eventsQuery.data.results;
+    : eventsQuery.data.pages.flatMap((page) => page.results);
 
   const weekDays = eachDayOfInterval({
     start: startOfWeek(filters.fromDate),
