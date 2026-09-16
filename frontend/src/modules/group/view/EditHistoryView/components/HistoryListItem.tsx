@@ -1,3 +1,4 @@
+import { useCallback } from 'react';
 import { Trans } from 'react-i18next';
 import { Link as RouterLink } from 'react-router-dom';
 
@@ -41,6 +42,54 @@ export function HistoryListItem({
 }: Props) {
   const { t, formatRelativeTime } = useTranslation();
   const theme = useTheme();
+
+  const getTypeIcon = useCallback(
+    (mode: GroupHistory['historyType']) => {
+      if (mode === '-')
+        return (
+          <Avatar
+            sx={{ backgroundColor: theme.palette.error.main }}
+            alt={'Group deleted'}
+          >
+            <HighlightOff />
+          </Avatar>
+        );
+      if (mode === '~')
+        return (
+          <Avatar
+            sx={{ backgroundColor: theme.palette.info.main }}
+            alt={'Group updated'}
+          >
+            <Update />
+          </Avatar>
+        );
+      if (mode === '+')
+        return (
+          <Avatar
+            sx={{ backgroundColor: theme.palette.success.main }}
+            alt={'Group created'}
+          >
+            <AddCircleOutline />
+          </Avatar>
+        );
+      return (
+        <Avatar
+          sx={{ backgroundColor: theme.palette.secondary.main }}
+          alt={'Unknown change type'}
+        >
+          <HelpOutline />
+        </Avatar>
+      );
+    },
+
+    [
+      theme.palette.error.main,
+      theme.palette.info.main,
+      theme.palette.secondary.main,
+      theme.palette.success.main,
+    ],
+  );
+
   return (
     <ResponsiveListItem
       actions={[
@@ -66,37 +115,7 @@ export function HistoryListItem({
         },
       ]}
     >
-      <ListItemAvatar>
-        {item.historyType === '+' ? (
-          <Avatar
-            sx={{ backgroundColor: theme.palette.success.main }}
-            alt={'Group created'}
-          >
-            <AddCircleOutline />
-          </Avatar>
-        ) : item.historyType === '~' ? (
-          <Avatar
-            sx={{ backgroundColor: theme.palette.info.main }}
-            alt={'Group updated'}
-          >
-            <Update />
-          </Avatar>
-        ) : item.historyType === '-' ? (
-          <Avatar
-            sx={{ backgroundColor: theme.palette.error.main }}
-            alt={'Group deleted'}
-          >
-            <HighlightOff />
-          </Avatar>
-        ) : (
-          <Avatar
-            sx={{ backgroundColor: theme.palette.secondary.main }}
-            alt={'Unknown change type'}
-          >
-            <HelpOutline />
-          </Avatar>
-        )}
-      </ListItemAvatar>
+      <ListItemAvatar>{getTypeIcon(item.historyType)}</ListItemAvatar>
       <ListItemText
         primary={
           item.historyChangeReason ?? (
