@@ -176,12 +176,16 @@ function AutocompleteSearchFieldComponent<
   }, [loading]);
 
   useEffect(() => {
-    // only apply default once
+    // only apply default once, after defaultObjectValue is loaded
     if (hasAppliedDefaultObjectValue.current) return;
 
     if (
-      (isMultiple(objectValue, multiple) && !objectValue.length) ||
-      (!isMultiple(objectValue, multiple) && isNil(objectValue))
+      (isMultiple(objectValue, multiple) &&
+        !objectValue.length &&
+        defaultObjectValue &&
+        (defaultObjectValue as T[]).length) ||
+      (!isMultiple(objectValue, multiple) &&
+        isNil(objectValue && !isNil(defaultObjectValue)))
     ) {
       setObjectValue(
         defaultObjectValue as AutocompleteValue<T, Multiple, DisableClearable>,
