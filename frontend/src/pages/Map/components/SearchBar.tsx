@@ -2,9 +2,9 @@ import { useCallback, useMemo } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 
 import { Button, Paper } from '@mui/material';
+import { useMutation } from '@tanstack/react-query';
 
 import { getMapGroupListApi } from '#modules/group/api/getMapGroupList.api';
-import { MapGroupSearch } from '#modules/group/types/group.types';
 import { useGroupTypeDetails } from '#pages/GroupList/hooks/useGroupTypeDetails';
 import { MoreActionButton } from '#pages/Map/components/MoreActionButton';
 import { SelectTypeButton } from '#pages/Map/components/SelectTypeButton';
@@ -26,13 +26,16 @@ export function SearchBar({
   const { isSmaller } = useBreakpoint('sm');
 
   const type = useMemo(() => params.get('type'), [params]);
-  const groupId = useMemo(() => {
-    const id = params.get('id');
-    if (id) {
-      return parseInt(id);
-    }
-    return null;
-  }, [params]);
+
+  const searchQuery = useMutation({
+    mutationFn: (searchInput: string) =>
+      getMapGroupListApi({
+        search: searchInput,
+        pageSize: 20,
+        type: type,
+        archived: showArchived,
+      }),
+  });
 
   const handleChange = useCallback(
     (val) => {
@@ -68,24 +71,20 @@ export function SearchBar({
           />
         </FlexRow>
         <FlexRow alignItems="center" gap={2} width={'100%'}>
-          <AutocompleteSearchField<MapGroupSearch, 'name', 'icon'>
+          <AutocompleteSearchField
             name="group"
             label={t('group.search.placeholder')}
-            value={groupId}
+            value={null}
             handleChange={handleChange}
             //size="small"
             margin="none"
-            fetchOptions={async (searchInput): Promise<MapGroupSearch[]> => {
-              const res = await getMapGroupListApi({
-                search: searchInput,
-                pageSize: 6 * 3,
-                type: type,
-                archived: showArchived,
-              });
-              return res.results;
-            }}
-            labelPropName={'name'}
-            imagePropName={'icon'}
+            fetchOptions={(searchInput) =>
+              searchQuery.mutateAsync(searchInput).then((data) => data.results)
+            }
+            loading={searchQuery.isPending}
+            labelPropName="name"
+            imagePropName="icon"
+            valuePropName="id"
             disablePortal // show menu when map is fullscreen
           />
         </FlexRow>

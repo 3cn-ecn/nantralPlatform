@@ -45,12 +45,10 @@ export function StudentTable({ filters, updateFilters }: StudentTableProps) {
         </TableHead>
         <TableBody>
           {(isLoading || isFetching) &&
-            Array(filters.pageSize)
-              .fill(0)
-              .map((_, i) => (
-                // eslint-disable-next-line react/no-array-index-key
-                <StudentRowSkeleton key={i.toString()} />
-              ))}
+            new Array(filters.pageSize).fill(0).map((_, i) => (
+              // eslint-disable-next-line react/no-array-index-key
+              <StudentRowSkeleton key={i.toString()} />
+            ))}
           {isSuccess &&
             !isLoading &&
             !isFetching &&
