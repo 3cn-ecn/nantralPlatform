@@ -1,4 +1,4 @@
-import { Navigate, useLocation, useNavigate } from 'react-router-dom';
+import { Navigate, useLocation, useNavigate } from 'react-router';
 
 import { Check } from '@mui/icons-material';
 import { Button, Divider, Typography } from '@mui/material';

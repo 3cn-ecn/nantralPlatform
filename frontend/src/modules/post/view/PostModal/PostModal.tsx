@@ -24,7 +24,7 @@ export function PostModal({ postId, onClose }: PostModalProps) {
 
   const postQuery = usePostDetailsQuery(postId);
 
-  if (postQuery.isLoading) {
+  if (postQuery.isPending) {
     return (
       <ResponsiveDialog onClose={onClose}>
         <ResponsiveDialogHeader onClose={onClose}></ResponsiveDialogHeader>

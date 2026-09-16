@@ -19,6 +19,7 @@ export function useSportEventList(
         ...params,
       }),
     queryKey: ['getSportEvents', params],
+    initialPageParam: 1,
     getNextPageParam: (lastPage, allPages) =>
       lastPage.next ? allPages.length + 1 : null,
   });

@@ -45,6 +45,8 @@ import { PostDTO } from '#modules/post/infra/post.dto';
 import { mockServer } from '#shared/testing/mockServer';
 import { renderWithProviders } from '#shared/testing/renderWithProviders';
 
+import { vi, describe, it, expect } from 'vitest';
+
 import HomePage from './Home.page';
 
 describe('Home page', () => {
@@ -115,7 +117,7 @@ function mockEventApiCall(results: EventDTO[] = []) {
 }
 
 // mock ckeditor: replaced by #shared/ckeditor/__mocks__/CustomEditor.ts
-jest.mock('#shared/ckeditor/CustomEditor.ts');
+vi.mock('#shared/ckeditor/CustomEditor.ts');
 ```
 
 :::tip Good practices
@@ -137,16 +139,16 @@ and [user-event](https://testing-library.com/docs/ecosystem-user-event/).
 You can run the tests of the whole front end with this command:
 
 ```bash
-npm run jest
+npm run vitest
 ```
 
 You can also run the tests for a specific file:
 
 ```bash
-npm run jest <path>
+npm run vitest <path>
 ```
 
-where `<path>` is a regex, for example you can use `npm run jest Home` to run
+where `<path>` is a regex, for example you can use `npm run vitest Home` to run
 the file `Home.page.test.tsx`.
 
 ## Update snapshots
@@ -158,7 +160,7 @@ When you make changes to the interface, you might need to update the snapshots.
 To do so, run:
 
 ```bash
-npm run jest:u <path>
+npm run vitest:u <path>
 ```
 
 where `<path>` is the path to the file you want to update.

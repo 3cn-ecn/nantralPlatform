@@ -17,6 +17,13 @@
       "home": "Commentaires",
       "suggestion": "Suggestion"
     },
+    "form": {
+      "answer": "Réponse",
+      "answers": "Réponses",
+      "edit": "Édition",
+      "index": "Formulaires",
+      "new": "Nouveau"
+    },
     "group": {
       "index": "Groupes"
     },
@@ -47,6 +54,7 @@
     "edit": "Modifier",
     "next": "Suivant",
     "previous": "Précédent",
+    "reset": "Réinitialiser",
     "save": "Enregistrer",
     "saved": "Enregistré",
     "send": "Envoyer",
@@ -57,7 +65,7 @@
   "email": {
     "changeModal": {
       "askPassword": "Veuillez renseigner votre mot de passe pour procéder au changement.",
-      "body": "Voulez vous définir l'adresse email {{ email }} comme principale ? Vous devrez utiliser cette adresse pour vous connecter, et toutes les notifications seront envoyées dessus.",
+      "body": "Voulez-vous définir l'adresse email {{ email }} comme principale ? Vous devrez utiliser cette adresse pour vous connecter, et toutes les notifications seront envoyées dessus.",
       "title": "Modification de l'email principal"
     },
     "chip": {
@@ -80,7 +88,7 @@
       "success": "L'adresse a bien été supprimée"
     },
     "deleteModal": {
-      "body": "Voulez vous supprimer l'adresse email {{ email }} ? Cette action est irreversible.",
+      "body": "Voulez-vous supprimer l'adresse email {{ email }} ? Cette action est irreversible.",
       "title": "Supprimer l'adresse mail"
     },
     "form": {
@@ -118,7 +126,7 @@
       "addToCalendar": "Ajouter au calendrier",
       "delete": "Supprimer",
       "deleteModal": {
-        "body": "Voulez vous supprimer l'évènement {{ title }} ? Cette action est définitive.",
+        "body": "Voulez-vous supprimer l'évènement {{ title }} ? Cette action est définitive.",
         "title": "Supprimer l'évènement"
       },
       "edit": "Modifier",
@@ -346,8 +354,20 @@
         "label": "Annuler"
       }
     },
+    "menu": {
+      "empty": "vide"
+    },
     "number": {
       "wrongFormat": "Format invalide"
+    },
+    "weighted": {
+      "weight": {
+        "high": "Haut",
+        "label": "Importance",
+        "low": "Faible",
+        "medium": "Moyen",
+        "unsignificant": "Indifférent"
+      }
     }
   },
   "group": {
@@ -400,12 +420,12 @@
         },
         "displayMember": {
           "dates": "Membre du {{ from }} au {{ to }}",
-          "descripition": "Membre de {{ group }}",
+          "description": "Membre de {{ group }}",
           "openGroup": "Ouvrir le groupe",
           "openProfile": "Ouvrir le profil"
         },
         "editGroup": {
-          "deleteHistorySuccess": "Point d'historique supprimé avec succés",
+          "deleteHistorySuccess": "Point d'historique supprimé avec succès",
           "editHistorySuccess": "La modification a été enregistrée",
           "error": "Une erreur s'est produite",
           "history": "Gestion des versions",
@@ -443,7 +463,7 @@
           "title": "Rejoindre {{ group }}"
         }
       },
-      "noAdminReqests": "Aucune demande d'admin",
+      "noAdminRequests": "Aucune demande d'admin",
       "requestAdmin": "Demander a être admin",
       "requestSent": "Demande envoyée",
       "requestToBeAdmin": "{{student}} demande à être admin",
@@ -497,7 +517,7 @@
       },
       "initialMember": {
         "enable": "Activer l'appartenance automatique au groupe",
-        "enableHint": "Si vous cochez cette case, vous serez automatiquement ajouté en tant qu'admin du groupe. Veuillez compléter les informations si dessous",
+        "enableHint": "Si vous cochez cette case, vous serez automatiquement ajouté en tant qu'admin du groupe. Veuillez compléter les informations ci-dessous",
         "title": "Devenir membre"
       },
       "label": {
@@ -510,7 +530,7 @@
       },
       "lockMemberships": {
         "helperText": "Les utilisateurs ne peuvent plus s'ajouter eux-mêmes au groupe.",
-        "label": "Vérouiller les membres"
+        "label": "Verrouiller les membres"
       },
       "longitude": {
         "label": "Longitude"
@@ -535,8 +555,8 @@
         "helperText": "Si coché, la page du groupe sera accessible publiquement, y compris à des utilisateurs non-connectés. Les membres, évènements et posts restent toutefois masqués.",
         "label": "Groupe public"
       },
-      "saveHistroryRecord": {
-        "helperText": "Si vous cochez cette case, nous garderons cette version pour que l'on puisse y accéder dans le futur, même si de nouvelles mises à jour sont effectuées. Nous recommandons de la laissé cocher, sauf pour des mises à jour mineures",
+      "saveHistoryRecord": {
+        "helperText": "Si vous cochez cette case, nous garderons cette version pour que l'on puisse y accéder dans le futur, même si de nouvelles mises à jour sont effectuées. Nous recommandons de la laisser cocher, sauf pour des corrections mineures",
         "label": "Enregistrer un point d'historique"
       },
       "shortName": {
@@ -586,7 +606,7 @@
       "goTo": "Aller sur Element",
       "helperText": "Lors de votre première connexion, choisissez <code>nantral-platform.fr</code> comme fournisseur de compte",
       "independent": {
-        "label": "Indépendent",
+        "label": "Indépendant",
         "tooltip": "Indépendant des entreprises privées de réseaux sociaux"
       },
       "secure": {
@@ -594,8 +614,8 @@
         "tooltip": "Messages chiffrés et authentifiés"
       },
       "selfHosted": {
-        "label": "Hébergé en france",
-        "tooltip": "Hébergés par nos soins sur nos seveurs en France"
+        "label": "Hébergé en France",
+        "tooltip": "Hébergés par nos soins sur nos serveurs en France"
       },
       "subtitle": "La messagerie des étudiants de Centrale Nantes",
       "title": "Téléchargez <name>Element X</name>"
@@ -627,6 +647,202 @@
       "title": "Annonces"
     },
     "welcomeTo": "Bienvenue sur"
+  },
+  "jsonForm": {
+    "answer": {
+      "hasErrors": {
+        "body": "Veuillez vérifier vos réponses ainsi que les messages d'erreurs affichés. Vous ne pourrez pas soumettre ce formulaire tant que des erreurs seront présentes.",
+        "title": "Le formulaire contient des erreurs"
+      },
+      "loadingTitle": "Chargement du formulaire...",
+      "resetBody": "Voulez-vous supprimer définitivement vos réponses au formulaire ?",
+      "resetTitle": "Réinitialiser le formulaire",
+      "saved": "Votre réponse a été enregistrée, vous pouvez quitter cette page",
+      "submitBody": "Voulez-vous envoyer votre réponse. Vous pourrez la modifier tant que le formulaire reste actif",
+      "submitTitle": "Envoyer la réponse ?"
+    },
+    "answers": {
+      "action": "Actions",
+      "date": "Date de modification",
+      "detailTitle": "Réponse de <0>{{ user }}</0>",
+      "noAnswers": "Aucune réponse n'a été envoyée",
+      "title": "Réponses au formulaire {{ name }}",
+      "user": "Utilisateur",
+      "userError": "Impossible de récupérer l'utilisateur",
+      "viewDetails": "Voir la réponse"
+    },
+    "details": {
+      "active": "Le formulaire est actif. Fermer...",
+      "closed": "Le formulaire est fermé. Publier...",
+      "copy": {
+        "error": "Une erreur est survenue lors de la copie du texte",
+        "success": "Le lien a bien été copié"
+      },
+      "delete": {
+        "body": "Voulez-vous supprimer ce formulaire ? Ce action est définitive",
+        "title": "Supprimer le formulaire {{name}} ?"
+      },
+      "link": "Copier le lien du formulaire",
+      "preview": "Voir le formulaire",
+      "setActive": {
+        "body": "Si vous publiez ce formulaire, vous ne pourrez plus le modifier. Voulez-vous continuer ?",
+        "title": "Publier le formulaire"
+      },
+      "share": "Ouvrir les options de partage",
+      "viewResults": "Voir les résultats"
+    },
+    "edit": {
+      "addElement": "Ajouter un élément",
+      "additionalInput": {
+        "addColumn": "Ajouter une colonne",
+        "addOption": "Ajouter une option",
+        "addRow": "Ajouter une ligne",
+        "columns": "Colonnes (réponses)",
+        "rows": "Lignes (Questions)"
+      },
+      "category": {
+        "label": "Titre",
+        "labelHelp": "Nom de l'étape / de la partie",
+        "noLabel": "Merci de renseigner le titre..."
+      },
+      "control": {
+        "boolean": "Option",
+        "date": "Date",
+        "dateTime": "Date et heure",
+        "enum": "Choix unique",
+        "integer": "Valeur entière",
+        "multipleChoice": "Choix multiple",
+        "number": "Valeur numérique",
+        "text": "Texte",
+        "time": "Heure",
+        "weightedList": "Grille pondérée"
+      },
+      "description": "Description",
+      "descriptionHelp": "Description rapide du formulaire. Utiliser l'élément \"Texte formaté\" pour inclure du texte à destination des participants",
+      "dropLayout": "Déplacez un élément ici ou cliquez ci-dessous pour en ajouter un",
+      "group": {
+        "label": "Titre",
+        "labelHelp": "Nom du groupe de questions"
+      },
+      "label": {
+        "help": "Ce texte sera intégré au formulaire"
+      },
+      "layout": {
+        "categorization": "Étapes (racine)",
+        "category": "Étape",
+        "control": "Champ de formulaire",
+        "group": "Groupe de questions",
+        "horizontal": "Ligne",
+        "label": "Texte formaté",
+        "vertical": "Colonne"
+      },
+      "layoutSelect": "Choix de l'élément racine",
+      "layoutSelectHelp": "Choisissez l'élément de base qui contiendra votre formulaire",
+      "option": {
+        "autocomplete": {
+          "label": "Rechercher les options"
+        },
+        "default": {
+          "helperText": "Entrez la valeur par défaut du champ",
+          "label": "Valeur par défaut"
+        },
+        "enumFormat": {
+          "helperText": "Entrer le type d'énumération. Par défaut: sélection ; radio : boutons radio",
+          "label": "Type d'énumération"
+        },
+        "format": {
+          "helperText": "Nom d'un format de donnée (ex: email, url,...). Voir la documentation de ajv-format",
+          "label": "Format (nom)"
+        },
+        "maxLength": {
+          "helperText": "Entrez le nombre maximum autorisé de caractères",
+          "label": "Longueur maximale"
+        },
+        "maximum": {
+          "helperText": "La valeur saisie doit être inférieure à la valeur de ce champ",
+          "label": "Maximum"
+        },
+        "minLength": {
+          "helperText": "Entrez le nombre minimum requis de caractères",
+          "label": "Longueur minimale"
+        },
+        "minimum": {
+          "helperText": "La valeur saisie doit être supérieure à la valeur de ce champ",
+          "label": "Minimum"
+        },
+        "multi": {
+          "label": "Multiligne"
+        },
+        "multipleOf": {
+          "helperText": "La valeur saisie doit être un multiple de la valeur de ce champ",
+          "label": "Multiple"
+        },
+        "pattern": {
+          "helperText": "Utiliser une expression régulière (RegEx) pour valider la valeur",
+          "label": "Format (expression régulière)"
+        },
+        "restrict": {
+          "helperText": "Lors de la frappe seulement, n'influence pas la validation",
+          "label": "Interdire le dépassement"
+        },
+        "spinner": {
+          "helperText": "Contrôle numérique avec des boutons + et -",
+          "label": "Variante de contrôle"
+        },
+        "toggle": {
+          "label": "Utiliser un interrupteur"
+        },
+        "trim": {
+          "label": "Ajuster la taille au contenu"
+        }
+      },
+      "question": {
+        "description": "Description",
+        "label": "Nom de la question",
+        "required": "Requis",
+        "typeSelect": "Choix du type de question"
+      },
+      "title": "Édition du formulaire",
+      "titleField": "Titre du formulaire",
+      "translationModal": {
+        "column": "Colonne {{ i }} ({{ lang }})",
+        "confirm": "Revérifier et continuer",
+        "description": "Description ({{ lang }})",
+        "label": "Libellé ({{ lang }})",
+        "noIssue": "Aucun problème de traduction détecté",
+        "option": "Option {{ i }} ({{ lang }})",
+        "optional": "Manquant (Optionnel)",
+        "required": "Manquant (Requis)",
+        "row": "Ligne {{ i }} ({{ lang }})",
+        "text": "Texte ({{ lang }})",
+        "title": "Traductions manquantes"
+      }
+    },
+    "list": {
+      "action": "Actions",
+      "name": "Titre du formulaire",
+      "new": "Nouveau Formulaire",
+      "role": "Role utilisateur",
+      "title": "Formulaires"
+    },
+    "roles": {
+      "addUsers": "Ajouter des utilisateurs",
+      "answerViewer": "Analyste",
+      "answerViewerHelp": "L'utilisateur a accès aux réponses du formulaire",
+      "editor": "Éditeur",
+      "editorHelp": "L'utilisateur peut modifier, partager, publier et supprimer le formulaire, et aussi voir les réponses",
+      "formViewer": "Participant",
+      "formViewerHelp": "L'utilisateur peut répondre au formulaire même s'il est privé",
+      "modalTitle": "Modifier les roles du formulaire {{name}}",
+      "owner": "Propriétaire",
+      "public": "Formulaire Public",
+      "publicHelp": "Si cette option est activée, tout utilisateur disposant du lien peut accéder et répondre au formulaire",
+      "removeUser": {
+        "body": "Cette action retire l'accès au formulaire {{name}} pour cet utilisateur. Cependant, si le formulaire est public, l'utilisateur pourra toujours fournir une réponse",
+        "title": "Retirer un utilisateur"
+      },
+      "roleChoice": "Choix du role"
+    }
   },
   "legalNotice": {
     "paragraphs": {
@@ -742,11 +958,18 @@
     },
     "helpButton": {
       "label": "Aide"
+    },
+    "numberEdit": {
+      "title": "Modifier la valeur numérique"
+    },
+    "textEdit": {
+      "title": "Modifier la valeur textuelle"
     }
   },
   "navbar": {
     "events": "Évènements",
     "family": "Parrainage",
+    "form": "Formulaires",
     "group": "Groupes",
     "home": "Accueil",
     "map": "Carte",
@@ -778,14 +1001,14 @@
   "passwordReset": {
     "error": "Une erreur s'est produite. Le lien semble invalide.",
     "newPassword": "Nouveau mot de passe",
-    "title": "Réinitilaisation du mot de passe"
+    "title": "Réinitialisation du mot de passe"
   },
   "post": {
     "createModal": {
       "title": "Créer un post"
     },
     "deleteModal": {
-      "body": "Voulez vous supprimer l'annonce {{ title }} ? Cette action est définitive.",
+      "body": "Voulez-vous supprimer l'annonce {{ title }} ? Cette action est définitive.",
       "title": "Supprimer l'annonce"
     },
     "editModal": {
@@ -818,6 +1041,9 @@
       }
     },
     "modal": {
+      "deleteButton": {
+        "label": "Supprimer la publication"
+      },
       "editButton": {
         "label": "Modifier le post"
       },
@@ -830,7 +1056,7 @@
   },
   "register": {
     "ECNEmail": "Votre adresse email ec-nantes.fr",
-    "EmailECN": "J'ai un email Centrale nantes",
+    "EmailECN": "J'ai un email Centrale Nantes",
     "accountCreation": "Création du compte",
     "accountInformations": "Informations de compte",
     "alreadyHaveAccount": "Vous avez déjà un compte ?",
@@ -841,7 +1067,7 @@
     "createAccount": "Créez votre compte Nantral Platform",
     "createAccountNow": "Créer un compte maintenant",
     "createTemporaryAccount": "Créer un compte temporaire",
-    "createdAccountIsTemporary": "Vous pouvez créer un compte Nantral Platform avec votre adresse email personnelle, cependant vous devrez renseigner votre addresse <strong>@ec-nantes.fr</strong> dès que vous y aurez accès. ",
+    "createdAccountIsTemporary": "Vous pouvez créer un compte Nantral Platform avec votre adresse email personnelle, cependant vous devrez renseigner votre adresse <strong>@ec-nantes.fr</strong> dès que vous y aurez accès. ",
     "emailNotReceived": "Email non reçu ?",
     "emailSent": "Email envoyé",
     "firstName": "Prénom",
@@ -1008,7 +1234,7 @@
       },
       "description": "Description",
       "endSessionPrompt": {
-        "title": "Bonjour <0>{{ user_name }}</0>, voulez vous vous deconnecter ",
+        "title": "Bonjour <0>{{ user_name }}</0>, voulez vous vous déconnecter ",
         "titleAppName": "de l'application <0><0>{{ client_name }}</0></0> "
       },
       "scope": "Portée",

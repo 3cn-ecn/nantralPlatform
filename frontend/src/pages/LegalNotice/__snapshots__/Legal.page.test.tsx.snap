@@ -1,34 +1,34 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`Home page should render correctly 1`] = `
+exports[`Home page > should render correctly 1`] = `
 <DocumentFragment>
   <div
-    class="MuiContainer-root MuiContainer-maxWidthLg css-r96aq8-MuiContainer-root"
+    class="MuiContainer-root MuiContainer-maxWidthLg css-ugqbnt-MuiContainer-root"
   >
     <h1
-      class="MuiTypography-root MuiTypography-h1 css-11v5353-MuiTypography-root"
+      class="MuiTypography-root MuiTypography-h1 css-17l2fn9-MuiTypography-root"
     >
       Legal Notice
     </h1>
     <h4
-      class="MuiTypography-root MuiTypography-h4 css-1amwp23-MuiTypography-root"
+      class="MuiTypography-root MuiTypography-h4 css-lvf3yw-MuiTypography-root"
     >
       Website publisher
     </h4>
     <div
-      class="MuiTypography-root MuiTypography-body1 MuiTypography-paragraph css-1eygakl-MuiTypography-root"
+      class="MuiTypography-root MuiTypography-body1 MuiTypography-paragraph css-1gzs4z5-MuiTypography-root"
     >
       The Nantral Platform website is developed by the 3CN club, affiliated with the AECN (ASSOCIATION DES ÉTUDIANTS DE L'ÉCOLE CENTRALE DE NANTES). Responsibility for the content of the website lies with the AECN, which also ensures its funding and management.
     </div>
     <div
-      class="MuiTypography-root MuiTypography-body1 MuiTypography-paragraph css-1eygakl-MuiTypography-root"
+      class="MuiTypography-root MuiTypography-body1 MuiTypography-paragraph css-1gzs4z5-MuiTypography-root"
     >
       The address of the AECN is as follows:
       <div
-        class="MuiTypography-root MuiTypography-body1 MuiTypography-paragraph css-1qg2aev-MuiTypography-root"
+        class="MuiTypography-root MuiTypography-body1 MuiTypography-paragraph css-1wvkcfv-MuiTypography-root"
       >
         <p
-          class="MuiTypography-root MuiTypography-body1 css-5fg32r-MuiTypography-root"
+          class="MuiTypography-root MuiTypography-body1 css-1udjlhh-MuiTypography-root"
         >
           ASSOCIATION DES ÉTUDIANTS DE L'ÉCOLE CENTRALE DE NANTES 
           <br />
@@ -42,39 +42,39 @@ exports[`Home page should render correctly 1`] = `
       </div>
       In particular, the site team is under the direction of: 
       <ul
-        class="MuiList-root MuiList-padding MuiList-dense css-h4y409-MuiList-root"
+        class="MuiList-root MuiList-padding MuiList-dense css-b7dj7n-MuiList-root"
       >
         <li
-          class="MuiListItem-root MuiListItem-dense MuiListItem-gutters MuiListItem-padding css-1g0nj9f-MuiListItem-root"
+          class="MuiListItem-root MuiListItem-dense MuiListItem-gutters MuiListItem-padding css-1o35thd-MuiListItem-root"
         >
           | Zoé GAUDEVIN - AECN President ;
         </li>
         <li
-          class="MuiListItem-root MuiListItem-dense MuiListItem-gutters MuiListItem-padding css-1g0nj9f-MuiListItem-root"
+          class="MuiListItem-root MuiListItem-dense MuiListItem-gutters MuiListItem-padding css-1o35thd-MuiListItem-root"
         >
           | Thomas PONTNEAU-AMISSE - Director of Information Systems at AECN ;
         </li>
         <li
-          class="MuiListItem-root MuiListItem-dense MuiListItem-gutters MuiListItem-padding css-1g0nj9f-MuiListItem-root"
+          class="MuiListItem-root MuiListItem-dense MuiListItem-gutters MuiListItem-padding css-1o35thd-MuiListItem-root"
         >
           | Cyriaque PERIER - 3CN President.
         </li>
       </ul>
     </div>
     <h4
-      class="MuiTypography-root MuiTypography-h4 css-1amwp23-MuiTypography-root"
+      class="MuiTypography-root MuiTypography-h4 css-lvf3yw-MuiTypography-root"
     >
       Hosting provider
     </h4>
     <div
-      class="MuiTypography-root MuiTypography-body1 MuiTypography-paragraph css-1eygakl-MuiTypography-root"
+      class="MuiTypography-root MuiTypography-body1 MuiTypography-paragraph css-1gzs4z5-MuiTypography-root"
     >
       The website is hosted by OVH SAS, whose registered office is located at the following address:
       <div
-        class="MuiTypography-root MuiTypography-body1 MuiTypography-paragraph css-1qg2aev-MuiTypography-root"
+        class="MuiTypography-root MuiTypography-body1 MuiTypography-paragraph css-1wvkcfv-MuiTypography-root"
       >
         <p
-          class="MuiTypography-root MuiTypography-body1 css-5fg32r-MuiTypography-root"
+          class="MuiTypography-root MuiTypography-body1 css-1udjlhh-MuiTypography-root"
         >
           2 rue Kellermann 
           <br />
@@ -86,31 +86,31 @@ exports[`Home page should render correctly 1`] = `
       </div>
     </div>
     <h4
-      class="MuiTypography-root MuiTypography-h4 css-1amwp23-MuiTypography-root"
+      class="MuiTypography-root MuiTypography-h4 css-lvf3yw-MuiTypography-root"
     >
       Intellectual property
     </h4>
     <div
-      class="MuiTypography-root MuiTypography-body1 MuiTypography-paragraph css-1eygakl-MuiTypography-root"
+      class="MuiTypography-root MuiTypography-body1 MuiTypography-paragraph css-1gzs4z5-MuiTypography-root"
     >
       The source code of this website is the property of the 3CN club, affiliated with the AECN. Unless otherwise stated, all elements accessible on the website (texts, images, logos, icons, sounds, software, etc.) remain the exclusive property of their respective authors with regard to intellectual property rights or usage rights. Any reproduction, representation, modification, publication or adaptation of all or part of the elements of the website, by any means or process whatsoever, is prohibited without the prior authorization of the author. Any unauthorized use of the website or any of its elements may constitute an infringement and may result in legal action.
     </div>
     <h4
-      class="MuiTypography-root MuiTypography-h4 css-1amwp23-MuiTypography-root"
+      class="MuiTypography-root MuiTypography-h4 css-lvf3yw-MuiTypography-root"
     >
       Personal data
     </h4>
     <div
-      class="MuiTypography-root MuiTypography-body1 MuiTypography-paragraph css-1eygakl-MuiTypography-root"
+      class="MuiTypography-root MuiTypography-body1 MuiTypography-paragraph css-1gzs4z5-MuiTypography-root"
     >
       Personal data collected are used solely for the proper functioning of Nantral Platform. Access to such data is strictly limited to their owner and to persons expressly authorized by the board of directors of the AECN.
     </div>
     <div
-      class="MuiTypography-root MuiTypography-body1 MuiTypography-paragraph css-1eygakl-MuiTypography-root"
+      class="MuiTypography-root MuiTypography-body1 MuiTypography-paragraph css-1gzs4z5-MuiTypography-root"
     >
       For any questions or requests regarding personal data, you may contact us at the following email address: 
       <a
-        class="MuiTypography-root MuiTypography-inherit MuiLink-root MuiLink-underlineAlways css-18z7zy0-MuiTypography-root-MuiLink-root"
+        class="MuiTypography-root MuiTypography-inherit MuiLink-root MuiLink-underlineAlways css-1ptg00b-MuiTypography-root-MuiLink-root"
         href="mailto:contact@nantral-platform.fr"
       >
         contact@nantral-platform.fr
@@ -118,12 +118,12 @@ exports[`Home page should render correctly 1`] = `
       .
     </div>
     <h4
-      class="MuiTypography-root MuiTypography-h4 css-1amwp23-MuiTypography-root"
+      class="MuiTypography-root MuiTypography-h4 css-lvf3yw-MuiTypography-root"
     >
       Use of Cookies
     </h4>
     <div
-      class="MuiTypography-root MuiTypography-body1 MuiTypography-paragraph css-1eygakl-MuiTypography-root"
+      class="MuiTypography-root MuiTypography-body1 MuiTypography-paragraph css-1gzs4z5-MuiTypography-root"
     >
       Nantral Platform uses only cookies that are strictly necessary for the proper functioning of the website and for user authentication. These cookies allow, in particular, the maintenance of your session after login, access to groups and events, and the personalization of your profile. These cookies are not used for advertising or tracking purposes and do not require prior consent in accordance with applicable regulations. Authentication cookies are retained for the period strictly necessary to manage the session or in compliance with applicable legal obligations. You may configure your browser to block cookies; however, certain features of the website may not function properly.
     </div>

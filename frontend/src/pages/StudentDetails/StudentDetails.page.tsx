@@ -1,4 +1,4 @@
-import { useParams } from 'react-router-dom';
+import { useParams } from 'react-router';
 
 import { Container, Divider, Typography } from '@mui/material';
 
@@ -14,11 +14,13 @@ import { useUserDetails } from './hooks/useUserDetails';
 
 export default function StudentDetailsPage() {
   const { id } = useParams();
-  const { isLoading, data: user } = useUserDetails(id);
+  const { isPending, data: user } = useUserDetails(
+    id === undefined || id === 'me' ? id : Number.parseInt(id),
+  );
 
   const currentUser = useCurrentUserData();
 
-  if (isLoading || !user) {
+  if (isPending || !user) {
     return;
   }
 

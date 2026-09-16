@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 
 import { Add as AddIcon } from '@mui/icons-material';
 import { Fab, Tooltip } from '@mui/material';

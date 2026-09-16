@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 
 import { Check } from '@mui/icons-material';
 import {
@@ -37,10 +37,10 @@ export default function LoginPage() {
   const {
     isSuccess: isResendSuccess,
     mutate,
-    isLoading: isResendLoading,
-  } = useMutation(resendVerificationEmailApi);
+    isPending: isResendLoading,
+  } = useMutation({ mutationFn: resendVerificationEmailApi });
 
-  const { login, error, isLoading } = useAuth();
+  const { login, error, isPending } = useAuth();
 
   useEffect(() => {
     if (error?.response?.data.code == '5') {
@@ -165,7 +165,7 @@ export default function LoginPage() {
               variant="contained"
               size="large"
               fullWidth
-              loading={isLoading}
+              loading={isPending}
             >
               {t('login.login')}
             </LoadingButton>

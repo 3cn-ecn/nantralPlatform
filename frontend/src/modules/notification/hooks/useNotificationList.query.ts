@@ -1,6 +1,10 @@
+import { useEffect } from 'react';
+
 import {
-  UseInfiniteQueryOptions,
+  QueryFunctionContext,
+  QueryKey,
   useInfiniteQuery,
+  UseInfiniteQueryOptions,
   useQueryClient,
 } from '@tanstack/react-query';
 
@@ -8,23 +12,20 @@ import { ApiError } from '#shared/infra/errors';
 import { Page } from '#shared/infra/pagination';
 
 import {
-  NotificationListQueryParams,
   getNotificationListApi,
+  NotificationListQueryParams,
 } from '../api/getNotificationList.api';
 import { SentNotification } from '../notification.types';
 
 export function useNotificationListQuery(
   filters: Omit<NotificationListQueryParams, 'page'>,
-  {
-    onSuccess,
-    ...options
-  }: UseInfiniteQueryOptions<Page<SentNotification>> = {},
+  options?: Partial<UseInfiniteQueryOptions<Page<SentNotification>>>,
 ) {
   const queryClient = useQueryClient();
 
   const query = useInfiniteQuery<Page<SentNotification>, ApiError>({
     queryKey: ['notifications', 'list', filters],
-    queryFn: ({ pageParam = 1, signal }) =>
+    queryFn: ({ pageParam, signal }: QueryFunctionContext<QueryKey, number>) =>
       getNotificationListApi(
         {
           ...filters,
@@ -32,22 +33,25 @@ export function useNotificationListQuery(
         },
         signal,
       ),
+    initialPageParam: 1,
     getNextPageParam: (lastPage, pages) =>
       lastPage.next ? pages.length + 1 : undefined,
-    onSuccess: (data) => {
-      // update the count
-      queryClient.setQueriesData(
-        [
+    ...options,
+  });
+
+  useEffect(() => {
+    // update the count
+    queryClient.setQueriesData(
+      {
+        queryKey: [
           'notifications',
           'count',
           { subscribed: filters.subscribed, seen: filters.seen },
         ],
-        (prevCount: number) => data?.pages.at(-1)?.count || prevCount,
-      );
-      return onSuccess?.(data);
-    },
-    ...options,
-  });
+      },
+      (prevCount: number) => query.data?.pages.at(-1)?.count || prevCount,
+    );
+  }, [filters.seen, filters.subscribed, query.data, queryClient]);
 
   return query;
 }

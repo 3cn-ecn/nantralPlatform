@@ -18,7 +18,7 @@ export function BookmarkedButton({ eventId, selected }: BookmarkedButtonProps) {
   const [fav, setFav] = useState(selected);
   const { t } = useTranslation();
 
-  const { addBookmark, removeBookmark, isLoading } =
+  const { addBookmark, removeBookmark, isPending } =
     useBookmarkMutation(eventId);
 
   const handlePress = async () => {
@@ -39,12 +39,12 @@ export function BookmarkedButton({ eventId, selected }: BookmarkedButtonProps) {
       aria-label={t('event.bookmarkButton.label')}
       aria-checked={fav}
     >
-      <IconButton onClick={handlePress} disabled={isLoading}>
+      <IconButton onClick={handlePress} disabled={isPending}>
         <Zoom in={fav}>
           <FavoriteIcon color="primary" sx={{ position: 'absolute' }} />
         </Zoom>
         <FavoriteBorderIcon color="primary" />
-        {isLoading && (
+        {isPending && (
           <CircularProgress
             color="secondary"
             size="85%"
