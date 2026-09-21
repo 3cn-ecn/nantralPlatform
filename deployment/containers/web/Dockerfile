@@ -1,9 +1,16 @@
-FROM python:3.13-slim-bookworm
+FROM python:3.13-slim-bookworm AS base
+COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
+
+FROM base AS builder
 
 ENV C_FORCE_ROOT 1
 ENV DOCKER True
 ENV DJANGO_SETTINGS_MODULE=config.settings.production
 ENV PYTHONUNBUFFERED 1
+ENV UV_NO_DEV=1
+ENV UV_COMPILE_BYTECODE=1
+ENV UV_SYSTEM_PYTHON=1
+ENV UV_LINK_MODE=copy
 
 # create unprivileged user
 RUN adduser --disabled-password --gecos '' myuser
@@ -20,18 +27,30 @@ RUN mkdir -p /var/app/logs
 RUN mkdir var/app/staticfiles
 WORKDIR  /var/app
 
-COPY ./Pipfile* /tmp/
-RUN pip install -U pip
-RUN pip install pipenv
-RUN cd /tmp && pipenv requirements > requirements.txt
-RUN pip install -r /tmp/requirements.txt
+# Install dependencies
+RUN --mount=type=cache,target=/root/.cache/uv \
+    --mount=type=bind,source=uv.lock,target=uv.lock \
+    --mount=type=bind,source=pyproject.toml,target=pyproject.toml \
+    uv sync --locked --no-install-project
+
+COPY ./pyproject.toml ./uv.lock ./
+
+# Sync the project
+RUN --mount=type=cache,target=/root/.cache/uv uv sync --locked
+
+FROM builder AS development
+
+COPY . .
+CMD ["uv", "run", "manage.py", "runserver", "0.0.0.0:8000"]
+
+FROM builder AS production
 
 # Step 2: Copy Django Code
 # ----------------------------------------
 
 # Copy stuff in rarest-to-most-often order
 # Files that should basically never change
-COPY ./manage.py ./run_server.sh ./
+COPY ./manage.py ./run_server.sh ./run_server_staging.sh ./
 # Files that will change rarely
 COPY ./templates ./templates
 COPY ./config ./config

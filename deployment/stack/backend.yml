@@ -4,6 +4,7 @@ services:
     build:
       context: ../../backend/
       dockerfile: ../deployment/containers/web/Dockerfile
+      target: production
     expose:
       - "8000"
     command: sh run_server.sh
@@ -15,6 +16,8 @@ services:
     depends_on:
       - database
       - redis
+    profiles:
+      - production
     env_file: ../backend.env
     labels:
       - "traefik.enable=true"
@@ -28,7 +31,8 @@ services:
     container_name: backend_staging
     build:
       context: ../../../nantralPlatform-staging/backend/
-      dockerfile: ../deployment/containers/web_staging/Dockerfile
+      dockerfile: ../deployment/containers/web/Dockerfile
+      target: production
     expose:
       - "8001"
     command: sh run_server_staging.sh
@@ -40,6 +44,8 @@ services:
     depends_on:
       - database
       - redis
+    profiles:
+      - staging
     env_file: ../backend-staging.env
     environment:
       - STAGING=True
@@ -51,3 +57,45 @@ services:
       - "traefik.http.routers.backend-staging.tls.certresolver=letsencrypt"
     networks:
       - proxy
+
+  backend-develop:
+    container_name: backend
+    build:
+      context: ../../backend/
+      dockerfile: ../deployment/containers/web/Dockerfile
+      target: development
+    expose:
+      - "8000"
+    command: sh run_server.sh
+    volumes:
+      #- "/etc/timezone:/etc/timezone:ro"
+      #- "/etc/localtime:/etc/localtime:ro"
+      - ../../backend:/var/app
+      - static_volume:/var/app/staticfiles/
+    depends_on:
+      - database
+      - redis
+      - traefik
+    profiles:
+      - development
+    env_file: ../backend.env
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.backend.rule=Host(`localhost`)"
+      - "traefik.http.routers.backend.entrypoints=web"
+    #      - "traefik.http.routers.backend.tls.certresolver=letsencrypt"
+    networks:
+      - proxy
+    develop:
+      watch:
+        # Sync the working directory with the `/app` directory in the container
+        - action: sync
+          path: ../../backend
+          target: /var/app
+          # Exclude the project virtual environment
+          ignore:
+            - ../../backend/.venv/
+
+        # Rebuild the image on changes to the `pyproject.toml`
+        - action: rebuild
+          path: ../../backend/pyproject.toml

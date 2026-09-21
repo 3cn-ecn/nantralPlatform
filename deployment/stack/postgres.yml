@@ -3,13 +3,17 @@ services:
     image: postgres:14.1
     expose:
       - "5432"
-    # environment:
+      # environment:
       # - "TZ=Europe/Paris"
     volumes:
       # - "/etc/timezone:/etc/timezone:ro"
       # - "/etc/localtime:/etc/localtime:ro"
       - postgres_data:/var/lib/postgresql/data/
     env_file: ../backend.env
+    profiles:
+      - production
+      - staging
+      - development
     networks:
       - proxy
 

@@ -5,6 +5,10 @@ services:
     restart: unless-stopped
     depends_on:
       - socket-proxy
+    profiles:
+      - production
+      - staging
+      - development
     ports:
       - "25:25"
       - "80:80"
@@ -73,6 +77,8 @@ services:
     restart: unless-stopped
     depends_on:
       - traefik
+    profiles:
+      - production
     environment:
       - "TZ=Europe/Paris"
     volumes:

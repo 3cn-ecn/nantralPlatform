@@ -31,27 +31,27 @@ jobs:
           npm ci
           npm run build
 
-      - name: Set up Python
-        uses: actions/setup-python@v4
+      - name: "Set up Python"
+        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
         with:
-          python-version-file: backend/.python-version
-          cache: pipenv
-          cache-dependency-path: backend/Pipfile.lock
+          python-version-file: backend/pyproject.toml
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@c771a70e6277c0a99b617c7a806ffedaca235ff9 # v9.0.0
+        with:
+          enable-cache: true
 
       - name: Install dependencies
-        run: |
-          curl https://raw.githubusercontent.com/pypa/pipenv/master/get-pipenv.py | python
-          pipenv verify
-          pipenv sync --dev
+        run: uv sync --locked --all-extras --dev
 
       - name: Linter
         run: |
-          pipenv run lint
+          uv run ruff check
 
       - name: Run tests and collect coverage
         run: |
-          pipenv run test:coverage
-          pipenv run coverage xml
+          uv run coverage run --source='.' manage.py test
+          uv run coverage xml
 
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@master

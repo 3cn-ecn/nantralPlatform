@@ -13,6 +13,8 @@ services:
     depends_on:
       - celery-beat
       - redis
+    profiles:
+      - production
     env_file: ../backend.env
     networks:
       - proxy
@@ -30,6 +32,8 @@ services:
       - ../../backend:/var/app
     depends_on:
       - redis
+    profiles:
+      - production
     env_file: ../backend.env
     networks:
       - proxy
