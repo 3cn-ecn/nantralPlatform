@@ -103,7 +103,7 @@ class GroupType(models.Model):
 
     def get_absolute_url(self) -> str:
         """Get the url of the object."""
-        return f"/group/{self.slug}/"
+        return f"/group/?type={self.slug}"
 
     def delete(self, *args, **kwargs) -> None:
         self.icon.delete(save=False)
