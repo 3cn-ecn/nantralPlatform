@@ -1,4 +1,4 @@
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 
 import { CheckCircle } from '@mui/icons-material';
 import { Button, Divider, Typography } from '@mui/material';

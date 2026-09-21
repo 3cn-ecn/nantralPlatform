@@ -1,4 +1,4 @@
-import { UseQueryOptions, useQuery } from '@tanstack/react-query';
+import { useQuery, UseQueryOptions } from '@tanstack/react-query';
 
 import { getEventListApi } from '#modules/event/api/getEventList.api';
 import { EventPreview } from '#modules/event/event.type';
@@ -7,7 +7,7 @@ import { Page } from '#shared/infra/pagination';
 
 export function useUpcomingEventsQuery(
   numberOfEvents: number,
-  options?: UseQueryOptions<Page<EventPreview>>,
+  options?: Partial<UseQueryOptions<Page<EventPreview>>>,
 ) {
   const now = new Date();
 

@@ -1,4 +1,4 @@
-import { Link as RouterLink } from 'react-router-dom';
+import { Link as RouterLink } from 'react-router';
 
 import { Link } from '@mui/material';
 
@@ -29,7 +29,7 @@ export function HelpUsSection() {
         </li>
         <li>
           {t('home.helpUsSection.level', { level: '3 😍' })}
-          <Link component={RouterLink} to="/feedback">
+          <Link component={RouterLink} to="/feedback/">
             {t('home.helpUsSection.giveFeedback')}
           </Link>
         </li>

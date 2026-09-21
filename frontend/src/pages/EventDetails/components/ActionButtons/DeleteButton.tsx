@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 
 import { Delete as DeleteIcon } from '@mui/icons-material';
 import { ListItemIcon, ListItemText, MenuItem } from '@mui/material';
@@ -19,11 +19,15 @@ export function DeleteButton({ event }: DeleteButtonProps) {
   const navigate = useNavigate();
   const [isOpenDeleteModal, setIsOpenDeleteModal] = useState(false);
   const queryClient = useQueryClient();
-  const { isLoading, mutate: deleteEvent } = useMutation({
+  const { isPending, mutate: deleteEvent } = useMutation({
     mutationFn: deleteEventApi,
     onSuccess: () => {
       setIsOpenDeleteModal(false);
-      queryClient.invalidateQueries(['events']).then(() => navigate('/event'));
+      queryClient
+        .invalidateQueries({
+          queryKey: ['events'],
+        })
+        .then(() => navigate('/event'));
     },
   });
 
@@ -44,7 +48,7 @@ export function DeleteButton({ event }: DeleteButtonProps) {
           })}
           onCancel={() => setIsOpenDeleteModal(false)}
           onConfirm={() => deleteEvent(event.id)}
-          loading={isLoading}
+          loading={isPending}
         />
       )}
     </>

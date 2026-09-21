@@ -1,11 +1,11 @@
 import { lazy } from 'react';
-import { RouteObject } from 'react-router-dom';
+import { RouteObject } from 'react-router';
 
 import { QueryClient } from '@tanstack/react-query';
 
 import { PageTemplate } from '#shared/components/PageTemplate/PageTemplate';
 
-import { userDetailsLoader } from './loader';
+import { formDetailsLoader, userDetailsLoader } from './loader';
 
 const EventPage = lazy(() => import('#pages/Event/Event.page'));
 const EventCalendarViewPage = lazy(
@@ -17,6 +17,11 @@ const EventGridViewPage = lazy(
 const EventDetailsPage = lazy(
   () => import('#pages/EventDetails/EventDetails.page'),
 );
+const EditFormPage = lazy(() => import('#pages/Form/EditForm.page'));
+const AnswerFormPage = lazy(() => import('#pages/Form/AnswerForm.page'));
+const AnswerDetailPage = lazy(() => import('#pages/Form/AnswerDetail.page'));
+const AnswerListPage = lazy(() => import('#pages/Form/AnswerList.page'));
+const FormListPage = lazy(() => import('#pages/Form/FormList.page'));
 const MapPage = lazy(() => import('#pages/Map/Map.page'));
 const HomePage = lazy(() => import('#pages/Home/Home.page'));
 const NotFoundPage = lazy(() => import('#pages/NotFound/NotFound.page'));
@@ -76,6 +81,52 @@ export const authenticatedRoutes: (queryClient: QueryClient) => RouteObject = (
           path: ':id',
           element: <EventDetailsPage />,
           handle: { crumb: t('breadcrumbs.events.details.index') },
+        },
+      ],
+    },
+    {
+      path: '/form',
+      handle: { crumb: t('breadcrumbs.form.index') },
+      children: [
+        {
+          index: true,
+          element: <FormListPage />,
+        },
+        {
+          path: 'new',
+          element: <EditFormPage />,
+          handle: { crumb: t('breadcrumbs.form.new') },
+        },
+        {
+          path: ':uuid',
+          id: 'formDetails',
+          loader: (args) => formDetailsLoader(args, queryClient),
+          children: [
+            {
+              index: true,
+              element: <AnswerFormPage />,
+              handle: { crumb: t('breadcrumbs.form.answer') },
+            },
+            {
+              path: 'edit',
+              element: <EditFormPage />,
+              handle: { crumb: t('breadcrumbs.form.edit') },
+            },
+            {
+              path: 'answers',
+              handle: { crumb: t('breadcrumbs.form.answers') },
+              children: [
+                {
+                  index: true,
+                  element: <AnswerListPage />,
+                },
+                {
+                  path: ':answerId',
+                  element: <AnswerDetailPage />,
+                },
+              ],
+            },
+          ],
         },
       ],
     },

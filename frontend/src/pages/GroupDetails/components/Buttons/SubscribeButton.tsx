@@ -17,7 +17,7 @@ export function SubscribeButton({
 }: SubscribeButtonProps) {
   const { t } = useTranslation();
   const queryClient = useQueryClient();
-  const { mutate, isLoading } = useMutation({
+  const { mutate, isPending } = useMutation({
     mutationFn: async (subscribe: boolean) => {
       const queryKey = ['group', { slug: groupSlug }];
       const data = queryClient.getQueryData<Group>(queryKey);
@@ -48,7 +48,7 @@ export function SubscribeButton({
       startIcon={isSubscribed ? <Check /> : <NotificationsNone />}
       variant={isSubscribed ? 'outlined' : 'contained'}
       onClick={() => mutate(!isSubscribed)}
-      loading={isLoading}
+      loading={isPending}
     >
       {isSubscribed
         ? t('group.details.subscribed')

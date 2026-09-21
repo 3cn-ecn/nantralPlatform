@@ -1,7 +1,7 @@
 import { Dispatch, MouseEvent, useState } from 'react';
 
 import { KeyboardArrowDown as KeyboardArrowDownIcon } from '@mui/icons-material';
-import { Button, Menu, MenuItem } from '@mui/material';
+import { Button, ButtonProps, Menu, MenuItem } from '@mui/material';
 
 import { BaseLanguage, baseLanguages } from '#shared/i18n/config';
 import { useTranslation } from '#shared/i18n/useTranslation';
@@ -15,7 +15,8 @@ interface LanguageSelectorProps {
 export function LanguageSelector({
   selectedLang,
   setSelectedLang,
-}: LanguageSelectorProps) {
+  ...props
+}: LanguageSelectorProps & ButtonProps) {
   const { i18n } = useTranslation();
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -34,6 +35,7 @@ export function LanguageSelector({
         variant="outlined"
         onClick={handleClick}
         endIcon={<KeyboardArrowDownIcon />}
+        {...props}
       >
         {selectedLang}
       </Button>

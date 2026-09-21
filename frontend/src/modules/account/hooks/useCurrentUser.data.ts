@@ -7,7 +7,7 @@ import { ApiError } from '#shared/infra/errors';
 import { getCurrentUserApi } from '../api/getCurrentUser.api';
 import { User } from '../user.types';
 
-const emptyUser: User = {
+export const emptyUser: User = {
   id: -1,
   name: 'Chargement...',
   promo: 1919,

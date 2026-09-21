@@ -19,7 +19,7 @@ import { createGroupSocialLinkApi } from '#modules/social_link/api/createGroupSo
 import { createUserSocialLinkApi } from '#modules/social_link/api/createUserSocialLink.api';
 import { deleteSocialLinkApi } from '#modules/social_link/api/deleteSocialLink.api';
 import { updateSocialLinkApi } from '#modules/social_link/api/updateSocialLink.api';
-import { SocialLinkDTO } from '#modules/social_link/infra/socialLink.dto';
+import { SocialLinkFormDTO } from '#modules/social_link/infra/socialLink.dto';
 import {
   SocialLink,
   SocialLinkForm,
@@ -83,18 +83,18 @@ export function EditSocialLinkForm({
     error: socialLinkError,
     isError: socialLinkIsError,
     mutate: updateSocialLink,
-  } = useMutation<SocialLinkForm, ApiFormError<SocialLinkDTO>, SocialLinkForm>(
-    (val) => updateSocialLinkApi(val, type),
-    {
-      onSuccess: handleSuccess,
-    },
-  );
-
-  const { mutate: deleteSocialLink } = useMutation<
-    unknown,
-    ApiFormError<SocialLinkDTO>,
+  } = useMutation<
+    SocialLinkForm,
+    ApiFormError<SocialLinkFormDTO>,
     SocialLinkForm
-  >((val) => deleteSocialLinkApi(val.id || -1, type), {
+  >({
+    mutationFn: (val) => updateSocialLinkApi(val, type),
+    onSuccess: handleSuccess,
+  });
+
+  const { mutate: deleteSocialLink } = useMutation({
+    mutationFn: (val: SocialLinkForm) =>
+      deleteSocialLinkApi(val.id || -1, type),
     onSuccess: handleSuccess,
   });
 
@@ -102,12 +102,13 @@ export function EditSocialLinkForm({
     error: createError,
     isError: createIsError,
     mutate: createSocialLink,
-  } = useMutation<SocialLinkForm, ApiFormError<SocialLinkDTO>, SocialLinkForm>(
-    (val) =>
-      type == 'group'
-        ? createGroupSocialLinkApi(groupSlug || '', val)
-        : createUserSocialLinkApi(val),
+  } = useMutation<SocialLinkForm, ApiFormError<SocialLinkForm>, SocialLinkForm>(
     {
+      mutationFn: (val: SocialLinkForm) =>
+        type == 'group'
+          ? createGroupSocialLinkApi(groupSlug || '', val)
+          : createUserSocialLinkApi(val),
+
       onSuccess: handleSuccess,
     },
   );

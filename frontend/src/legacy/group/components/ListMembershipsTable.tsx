@@ -1,12 +1,7 @@
 import { useState } from 'react';
 
-import {
-  DragDropContext,
-  Draggable,
-  Droppable,
-  DropResult,
-  OnDragEndResponder,
-} from '@hello-pangea/dnd';
+import { DragDropProvider, DragEndEvent, useDroppable } from '@dnd-kit/react';
+import { isSortable, useSortable } from '@dnd-kit/react/sortable';
 import {
   Archive as ArchiveIcon,
   CheckCircle as CheckCircleIcon,
@@ -62,25 +57,22 @@ function reorder<T>(list: T[], startIndex: number, endIndex: number): T[] {
  */
 function DraggableComponent(id: string, index: number) {
   return function DraggableComponent(props: any): JSX.Element {
+    const { ref, isDragging } = useSortable({
+      id,
+      index,
+    });
     return (
-      <Draggable draggableId={id} index={index}>
-        {(provided, snapshot) => (
-          <TableRow
-            ref={provided.innerRef}
-            {...provided.draggableProps}
-            {...provided.dragHandleProps}
-            style={{
-              ...provided.draggableProps.style,
-              ...(snapshot.isDragging && {
-                background: 'rgb(235,235,235)',
-              }),
-            }}
-            {...props}
-          >
-            {props.children}
-          </TableRow>
-        )}
-      </Draggable>
+      <TableRow
+        ref={ref}
+        style={{
+          ...(isDragging && {
+            background: 'rgb(235,235,235)',
+          }),
+        }}
+        {...props}
+      >
+        {props.children}
+      </TableRow>
     );
   };
 }
@@ -91,23 +83,17 @@ function DraggableComponent(id: string, index: number) {
  * @param onDragEnd - function to use after dragging
  * @returns A component
  */
-function DroppableComponent(onDragEnd: OnDragEndResponder) {
+function DroppableComponent(onDragEnd: (event: DragEndEvent) => void) {
   return function DroppableComponent(props: any): JSX.Element {
+    const { ref } = useDroppable({
+      id: 'droppable',
+    });
     return (
-      <DragDropContext onDragEnd={onDragEnd}>
-        <Droppable droppableId="1" direction="vertical">
-          {(provided) => (
-            <TableBody
-              ref={provided.innerRef}
-              {...provided.droppableProps}
-              {...props}
-            >
-              {props.children}
-              {provided.placeholder}
-            </TableBody>
-          )}
-        </Droppable>
-      </DragDropContext>
+      <DragDropProvider onDragEnd={onDragEnd}>
+        <TableBody ref={ref} onDragEnd={onDragEnd} {...props}>
+          {props.children}
+        </TableBody>
+      </DragDropProvider>
     );
   };
 }
@@ -255,17 +241,22 @@ function ListMembershipsTable(props: {
    * Callback after dropping for the drag-and-drop.
    * Send a request to the server to save the new order.
    */
-  async function onDragEnd(result: DropResult) {
+  async function onDragEnd(event: DragEndEvent) {
+    const { source, target } = event.operation;
     // dropped outside the list
-    if (!result.destination || result.destination.index === result.source.index)
+    if (
+      !isSortable(target) ||
+      !isSortable(source) ||
+      source.index === target.index
+    )
       return;
-    const source = result.source.index;
-    const dest = result.destination.index;
-    const reorderedMembers = reorder(members, source, dest);
+    const reorderedMembers = move(members, event);
     reorderMemberships(
       reorderedMembers,
-      members[source],
-      dest + 1 < members.length ? reorderedMembers[dest + 1] : undefined,
+      members[source.index],
+      source.index + 1 < members.length
+        ? reorderedMembers[source.index + 1]
+        : undefined,
     );
   }
 

@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 
 import {
   Event as EventIcon,
@@ -18,6 +18,7 @@ import { EventPreview } from '#modules/event/event.type';
 import { Avatar } from '#shared/components/Avatar/Avatar';
 import { FlexCol, FlexRow } from '#shared/components/FlexBox/FlexBox';
 import { useTranslation } from '#shared/i18n/useTranslation';
+import { buildAbsoluteUrl } from '#shared/utils/urls';
 
 import { BookmarkedButton } from '../shared/BookmarkedButton';
 import { MoreEventActionsButton } from '../shared/MoreEventActionsButton';
@@ -40,7 +41,7 @@ export function EventCard({ event }: EventCardProps) {
 
   return (
     <Card>
-      <CardActionArea component={Link} to={`/event/${event.id}`}>
+      <CardActionArea component={Link} to={`/event/${event.id}/`}>
         <CardMedia
           component="img"
           src={event.image || DEFAULT_EVENT_IMAGE}
@@ -89,7 +90,7 @@ export function EventCard({ event }: EventCardProps) {
         <BookmarkedButton eventId={event.id} selected={event.isBookmarked} />
         <MoreEventActionsButton
           isAdmin={event.group.isAdmin}
-          sharedUrl={`${window.location.origin}/event/${event.id}`}
+          sharedUrl={buildAbsoluteUrl(`/event/${event.id}/`)}
           eventId={event.id}
           isParticipating={event.isParticipating}
         />

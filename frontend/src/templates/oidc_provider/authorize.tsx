@@ -106,6 +106,7 @@ function Authorize() {
         <Spacer vertical={2} />
         <Typography variant={'h4'} textAlign={'center'}>
           <Trans
+            t={t}
             i18nKey={'templates.oidc.authorize.title'}
             values={{ client_name: client.name }}
             components={[
@@ -154,11 +155,13 @@ function Authorize() {
             <Spacer vertical={2} />
             <Typography variant={'body2'}>
               <Trans
+                t={t}
                 i18nKey={'templates.oidc.authorize.terms'}
                 values={{ client_name: client.name }}
                 components={[
-                  // eslint-disable-next-line react/jsx-key
-                  <Link href={client.terms_url}>Terms and conditions</Link>,
+                  <Link href={client.terms_url} key={1}>
+                    Terms and conditions
+                  </Link>,
                 ]}
               />
             </Typography>
@@ -169,14 +172,14 @@ function Authorize() {
             <Spacer vertical={2} />
             <Typography variant={'body2'}>
               <Trans
+                t={t}
                 i18nKey={'templates.oidc.authorize.contact'}
                 values={{
                   client_name: client.name,
                   contact_email: client.contact_email,
                 }}
                 components={[
-                  // eslint-disable-next-line react/jsx-key
-                  <Link href={`mailto:${client.contact_email}`}>
+                  <Link href={`mailto:${client.contact_email}`} key={1}>
                     {client.contact_email}
                   </Link>,
                 ]}

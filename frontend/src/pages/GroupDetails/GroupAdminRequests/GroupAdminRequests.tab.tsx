@@ -11,9 +11,12 @@ import { AdminRequestRow } from '../components/AdminRequestRow';
 export function GroupAdminRequests({ group }: { group: Group }) {
   const { t } = useTranslation();
   const { data } = useInfiniteQuery({
-    queryFn: ({ pageParam = 1 }) =>
+    queryFn: ({ pageParam }) =>
       getAdminRequestListApi(group.slug, { page: pageParam }),
     queryKey: ['adminRequest', { slug: group.slug }],
+    initialPageParam: 1,
+    getNextPageParam: (lastPage, allPages) =>
+      lastPage.next ? allPages.length + 1 : undefined,
   });
   return (
     <Container maxWidth="sm">
@@ -31,7 +34,7 @@ export function GroupAdminRequests({ group }: { group: Group }) {
       </FlexCol>
       {data?.pages[0].count == 0 && (
         <Typography color="secondary" mt={3} textAlign="center">
-          {t('group.details.noAdminReqests')}
+          {t('group.details.noAdminRequests')}
         </Typography>
       )}
     </Container>

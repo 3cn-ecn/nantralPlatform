@@ -38,11 +38,14 @@ export function EditProfileTab({ user }: EditProfileTabProps) {
 
   const [hasChanges, setHasChanges] = useState(false);
 
-  const { error, mutate, isLoading } = useMutation<
+  const { error, mutate, isPending } = useMutation<
     EditAccountOptionsDTO,
     ApiFormError<EditAccountOptionsDTO>,
     EditAccountOptions
-  >((formData) => editAccountApi(formData, user.id), {
+  >({
+    mutationFn: (formData: EditAccountOptions) =>
+      editAccountApi(formData, user.id),
+
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['user', 'current'] });
       queryClient.invalidateQueries({
@@ -114,7 +117,7 @@ export function EditProfileTab({ user }: EditProfileTabProps) {
       </form>
       <LoadingButton
         variant="contained"
-        loading={isLoading}
+        loading={isPending}
         type="submit"
         form="edit-account-form"
         disabled={!hasChanges}
