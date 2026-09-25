@@ -9,7 +9,7 @@ There are several failure points that we can look into to try and find the cause
 
 ## Deployment logs
 
-If a problem happens during deployment, you can check the status of the GitHub Action responsible for deploying the latest pull request to production [here](https://github.com/3cn-ecn/nantralPlatform/actions). This should provide enough informations for deployment related issues.
+If a problem happens during deployment, you can check the status of the GitHub Action responsible for deploying the latest pull request to production [here](https://github.com/3cn-ecn/nantralPlatform/actions). This should provide enough information for deployment related issues.
 
 The deployment pipeline is split into two parts:
 
@@ -26,15 +26,13 @@ alias `dcf` which stands for `docker compose -f docker compose.yml -f docker-com
 ### Errors while building
 
 The build logs should be available in the GitHub Action logs like described above.
-If you need more information, re-run the build directly on the server:
-
-1. Connect to the server using SSH.
-2. Go to nantralPlatform/deployment by running `cd nantralPlatform/deployment`.
-3. Run `docker build -f deployment/containers/web/Dockerfile .` to re-build the containers.
+If you need more information, re-run the build directly on your machine:
+run `docker build -f deployment/containers/web/Dockerfile .` to re-build the containers.
 
 :::info
-In order to change the running container, you will need to push it to ghcr.io (GitHub repository for docker images).
-Once you've done this, update the version tag in the `.env` file with the new tag, then run `dcf pull && dcf up`.
+In order to change the running container on the server, you will need to push it to ghcr.io
+(GitHub repository for docker images). Once you've done this, update the version tag in
+the `.env` file with the new tag, then run `dcf pull && dcf up`.
 
 You should use the GitHub workflow to update instead of doing this manually.
 :::

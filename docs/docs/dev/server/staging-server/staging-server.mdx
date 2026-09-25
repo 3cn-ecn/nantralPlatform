@@ -15,7 +15,7 @@ deploying them on the production server.
 
 - When you update the database (for example creating new migrations or updating
   the `models.py` files)
-- When you add new dependencies to the project (`Pipfile` or `package.json`)
+- When you add new dependencies to the project (`pyproject.toml` or `package.json`)
 - More generally, when you are not sure about your code and want to test it!
 
 ### 🤔 What can I test on the staging server?
@@ -24,16 +24,23 @@ You can test:
 
 - all modifications of the backend (Python code)
 - all modifications of the frontend (Javascript code)
+- all modifications of the email templates
+- the `Dockerfile` (only the `production` image)
 
 You **_cannot_** test:
 
 - the documentation website
 - the periodic celery tasks (scheduled tasks)
-- the docker configuration (`docker-compose.yml` and `Dockerfile`)
+- the docker configuration (`docker-compose*.yml`, `stack/*.yml`)
 - the deployment scripts (database backup, deployment, etc.)
 - the github actions
 
 ## 2. How to test my code on the staging server
+
+:::info
+First, try to run your code on your machine with docker. If the code does not work there,
+it won't work on the server either.
+:::
 
 _Prerequisite: your code should be pushed on GitHub on a specific branch.
 For our example, let's call this branch `my-feature-branch`._

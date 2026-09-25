@@ -41,7 +41,7 @@ tutorial [here](../get-started/setup-project/setup-project.mdx#create-your-admin
 the command for creating a superuser by:
 
 ```bash
-docker compose exec backend python3 manage.py createsuperuser
+docker compose exec backend uv run manage.py createsuperuser
 ```
 
 You can run this command in another terminal (but always in the `deployment` directory).
@@ -75,7 +75,7 @@ background tasks).
 These services are launch when you run Docker on your local machine:
 
 | Service           | Description                                             | Access                                                                                                              |
-|-------------------|---------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------|
+| ----------------- | ------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------- |
 | database          | The postgresql database for the website                 | You can read it by connecting to the port 5432 on localhost with [PgAdmin4](http://localhost:5050/)                 |
 | backend           | The django server which serve files                     | Open [http://localhost](http://localhost) in your browser                                                           |
 | memcached         | Used for the django cache system                        | -                                                                                                                   |
@@ -95,11 +95,12 @@ These services are launch when you run Docker on your local machine:
    - `.env` for docker injection (used for docker images tags)
 3. Chose the tags (commit sha or `latest`) that you want to use for the backend and the staging images
    Put these values in the `.env` file, then pull the images for GitHub:
+
    ```bash
    docker compose -f docker-compose.yml -f docker-compose.prod.yml pull
    ```
 
-3. Build and run the docker compose files:
+4. Build and run the docker compose files:
    ```bash
    docker compose -f docker-compose.yml -f docker-compose.prod.yml up --build -d
    ```
@@ -110,7 +111,7 @@ time we want to make an update. To do so, we can indicate which service
 we want to restart. For example, to restart only the backend:
 
 ```bash
-docker compose -f docker-compose.yml -f docker-compose.prod.yml build --no-cache nginx backend
+docker compose -f docker-compose.yml -f docker-compose.prod.yml pull backend
 docker compose -f docker-compose.yml -f docker-compose.prod.yml up
 ```
 

@@ -15,7 +15,7 @@ respect the rules defined in the config.
 To check all the backend code, run:
 
 ```bash
-pipenv run lint
+uv run ruff check
 ```
 
 :::tip
@@ -43,7 +43,7 @@ Ruff is a re-implementation of Flake8 in Rust, allowing faster linting and also
 proposing auto-fixing. You can fix the fixable errors by running:
 
 ```bash
-pipenv run lint:fix
+uv run ruff check --fix
 ```
 
 Each error has a unique code, composed of a letter (which indicates which plugin
@@ -60,7 +60,7 @@ format your code to respect the rules defined in the config. It will be executed
 by running:
 
 ```bash
-pipenv run lint:fix
+uv run ruff format
 ```
 
 Or by saving your file in VSCode, if you have the Ruff extension installed.

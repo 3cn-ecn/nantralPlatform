@@ -76,7 +76,7 @@ Here are a few explanations about the purpose of the main folders.
     📁 static
     📁 templates
     📄 manage.py
-    📄 Pipfile    // Dependencies file
+    📄 pyproject.toml    // Dependencies file
 // highlight-end
 📁 deployment // Docker files and back-up scripts
 📁 docs       // Documentation website (Docusaurus)
@@ -112,10 +112,7 @@ The backend is a django application. The most important files and directories ar
   the HTML page which is used as a base for every page
 - **manage.py**: this file contains the main commands of django. For example,
   you can use `python3 manage.py runserver` to run the server.
-- **Pipfile**: this file contains the dependencies of the project,
-  and some shortcuts for everyday commands (for example we have the shortcut
-  `pipenv run start` for `python3 manage.py runserver`). All shortcuts begin
-  with `pipenv run`.
+- **pyproject.toml**: this file contains the dependencies of the project.
 
 ### The Frontend
 

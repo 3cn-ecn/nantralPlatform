@@ -2,24 +2,25 @@
 
 Here is a complete list of websites used for the project Nantral Platform.
 
-| Website                                      | Dev mode                                   | Docker dev mode        | Prod mode                                                              |
-|----------------------------------------------|--------------------------------------------|------------------------|------------------------------------------------------------------------|
-| _Command to start each website_              | _`pipenv run start` or `npm run start`_    | _`docker compose up`_  | _`docker compose -f docker-compose.yml -f docker compose.prod.yml up`_ |
-| Nantral Platform website                     | http://localhost:8000                      | http://localhost       | https://nantral-platform.fr                                            |
-| Nantral Platform admin interface             | http://localhost:8000/admin                | http://localhost/admin | https://nantral-platform.fr/admin                                      |
-| Nantral Platform Staging server              | -                                          | -                      | https://dev.nantral-platform.fr                                        |
-| Documentation                                | http://localhost:3000 (started separately) | -                      | https://docs.nantral-platform.fr                                       |
-| React-Email (for generating email templates) | http://localhost:3000 (started separately) | -                      | -                                                                      |
-| Mailpit (for testing mails)                  | -                                          | http://localhost:8025  | -                                                                      |
-| Flower (celery tasks dashboard)              | -                                          | http://localhost:5555  | -                                                                      |
-| PG Admin (PostgreSQL web interface)          | -                                          | http://localhost:5050  | -                                                                      |
-| Stalwart admin interface                     | -                                          | -                      | https://mail.nantral-platform.fr                                       |
-| Uptime Kuma (for status reporting)           | -                                          | -                      | https://status.nantral-platform.fr                                     |
+| Website                                      | Dev mode                                          | Docker dev mode        | Prod mode                                                              |
+| -------------------------------------------- | ------------------------------------------------- | ---------------------- | ---------------------------------------------------------------------- |
+| _Command to start each website_              | _`uv run manage.py runserver` or `npm run start`_ | _`docker compose up`_  | _`docker compose -f docker-compose.yml -f docker compose.prod.yml up`_ |
+| Nantral Platform website                     | http://localhost:8000                             | http://localhost       | https://nantral-platform.fr                                            |
+| Nantral Platform frontend                    | http://localhost:5173                             | http://localhost:5173  | https://nantral-platform.fr/static/assets (nginx)                      |
+| Nantral Platform admin interface             | http://localhost:8000/admin                       | http://localhost/admin | https://nantral-platform.fr/admin                                      |
+| Nantral Platform Staging server              | -                                                 | -                      | https://dev.nantral-platform.fr                                        |
+| Documentation                                | http://localhost:3000 (started separately)        | -                      | https://docs.nantral-platform.fr (runs on github pages)                |
+| React-Email (for generating email templates) | http://localhost:3000 (started separately)        | -                      | -                                                                      |
+| Mailpit (for testing mails)                  | -                                                 | http://localhost:8025  | -                                                                      |
+| Flower (celery tasks dashboard)              | -                                                 | http://localhost:5555  | -                                                                      |
+| PG Admin (PostgreSQL web interface)          | -                                                 | http://localhost:5050  | -                                                                      |
+| Stalwart admin interface                     | -                                                 | -                      | https://mail.nantral-platform.fr                                       |
+| Uptime Kuma (for status reporting)           | -                                                 | -                      | https://status.nantral-platform.fr                                     |
 
 List of services related to the Matrix server.
 
 | Website                                                                                  | Address                                          |
-|------------------------------------------------------------------------------------------|--------------------------------------------------|
+| ---------------------------------------------------------------------------------------- | ------------------------------------------------ |
 | Synapse (the actual server that send the messages)                                       | https://matrix.nantral-platform.fr               |
 | Element web (webclient for matrix)                                                       | https://element.nantral-platform.fr              |
 | Matrix Authentication Service (for authenticating users, with OpenId and the NP website) | https://matrix.nantral-platform.fr/auth          |
@@ -27,4 +28,3 @@ List of services related to the Matrix server.
 | Grafana (for matrix stats)                                                               | https://stats.nantral-platform.fr                |
 | Element Admin (official interface for MAS)                                               | https://admin.element.nantral-platform.fr        |
 | Ketesa (Complete admin client for Synapse and MAS)                                       | https://admin.nantral-platform.fr                |
-

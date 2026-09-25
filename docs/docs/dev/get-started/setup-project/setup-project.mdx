@@ -38,10 +38,10 @@ to install everything.
 2. In the `backend/config/settings` directory, create a copy of the file
    `.env.example` and rename it `.env` only.
 
-3. Install dependencies and create a virtuel environment for python:
+3. Install dependencies and create a virtual environment for python:
 
    ```bash
-   pipenv install --dev
+   uv sync --dev
    ```
 
    If you get an error with the Python version, install [pyenv](https://github.com/pyenv/pyenv).
@@ -49,13 +49,13 @@ to install everything.
 4. Create your database for django:
 
    ```bash
-   pipenv run django migrate
+   uv run manage.py migrate
    ```
 
 5. Create an administrator account on this database:
 
    ```bash
-   pipenv run django createsuperuser
+   uv run manage.py createsuperuser
    ```
 
    When asked, complete as follow:
@@ -63,7 +63,7 @@ to install everything.
    - email: `admin@ec-nantes.fr`
    - password: `admin`
 
-   _Note: if `admin` already exists, run `pipenv run django changepassword admin`
+   _Note: if `admin` already exists, run `uv run manage.py changepassword admin`
    to change the password of the admin account to `admin`._
 
 6. Now, change your working directory to the `frontend` one:
@@ -117,7 +117,7 @@ Now it's time to launch the website! To do this:
 1. In another terminal, go into the backend directory and launch the backend server (django):
    ```bash
    cd backend/
-   pipenv run start
+   uv run manage.py runserver
    ```
 
 <Tabs>
@@ -176,7 +176,7 @@ on this particular database. So let's create one!
    - Note: if the password does not work, you can reset the password:
       ```bash
       cd backend
-      pipenv run django changepassword admin
+      uv run manage.py changepassword admin
       ```
 
 1. Once connected, open **_"Account > Users"_**
@@ -204,13 +204,14 @@ on this particular database. So let's create one!
 
 ## Use docker for development
 
-For a more detailed version, visit the [docker page](/server/staging.mdx).
+For a more detailed version, visit the [docker page](../../server/docker.mdx).
 
 If you have docker installed, you may want to use it to develop the project.
-To set up the containers, just run `make docker-install` to initialize the project.
-Then, in order to start the project, just run `make docker-start`. Yau may
-proceed with regular setup instruction from now on.
-The server is running at [http://localhost](http://localhost), and the fake
+This allows to have a clean isolated environment at the cost of slightly higher
+ressources usage. To set up the containers, just run `make docker-install` to
+initialize the project. Then, in order to start the project, run `make docker-start`.
+You may proceed with regular setup instruction [(admin account)](#create-your-admin-account)
+from now on. The server is running at [http://localhost](http://localhost), and the fake
 mailserver at [http://localhost:8025](http://localhost:8025)
 
 Some useful commands:
@@ -218,8 +219,3 @@ Some useful commands:
 - Change directory to the docker root: `cd deployment` (needed for the following commands)
 - Open a terminal in the container: `docker compose exec -it backend-develop bash` (first start the container)
 - Manually start / shutdown docker: `docker compose up --watch` and `docker compose down`
-
-If you use an IDE that supports devcontainers, you can open the project with it.
-It allows you to have a clean isolated setup at the cost of a slightly higher
-ressources usage.
-

@@ -67,7 +67,6 @@ update:
 .PHONY: test
 test:
 	cd backend && \
-		$(call EXPORT,PIPENV_IGNORE_VIRTUALENVS,1) && \
 		uv run ruff check && \
 		uv run manage.py test
 	cd frontend && \
@@ -80,9 +79,7 @@ test:
 .PHONY: start
 start:
 	cd frontend && npm run start &
-	cd backend && \
-		$(call EXPORT,PIPENV_IGNORE_VIRTUALENVS,1) && \
-		uv run manage.py runserver
+	cd backend && uv run manage.py runserver
 
 
 # Run docker
