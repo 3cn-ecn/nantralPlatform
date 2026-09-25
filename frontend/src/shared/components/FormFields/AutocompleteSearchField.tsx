@@ -1,11 +1,4 @@
-import {
-  ElementType,
-  memo,
-  SyntheticEvent,
-  useEffect,
-  useRef,
-  useState,
-} from 'react';
+import { ElementType, memo, SyntheticEvent, useEffect, useState } from 'react';
 
 import {
   Autocomplete,
@@ -167,7 +160,6 @@ function AutocompleteSearchFieldComponent<
     initialObjectValue ??
       (defaultObjectValue as AutocompleteValue<T, Multiple, DisableClearable>),
   );
-  const hasAppliedDefaultObjectValue = useRef(false);
 
   const isError = errors !== undefined;
 
@@ -176,23 +168,24 @@ function AutocompleteSearchFieldComponent<
   }, [loading]);
 
   useEffect(() => {
-    // only apply default once, after defaultObjectValue is loaded
-    if (hasAppliedDefaultObjectValue.current) return;
+    setObjectValue((currentObjectValue) => {
+      const shouldApplyDefault = isMultiple(currentObjectValue, multiple)
+        ? !currentObjectValue.length &&
+          !!defaultObjectValue &&
+          (defaultObjectValue as T[]).length > 0
+        : isNil(currentObjectValue) && !isNil(defaultObjectValue);
 
-    if (
-      (isMultiple(objectValue, multiple) &&
-        !objectValue.length &&
-        defaultObjectValue &&
-        (defaultObjectValue as T[]).length) ||
-      (!isMultiple(objectValue, multiple) &&
-        isNil(objectValue && !isNil(defaultObjectValue)))
-    ) {
-      setObjectValue(
-        defaultObjectValue as AutocompleteValue<T, Multiple, DisableClearable>,
-      );
-      hasAppliedDefaultObjectValue.current = true;
-    }
-  }, [defaultObjectValue, objectValue, multiple]);
+      if (!shouldApplyDefault) {
+        return currentObjectValue;
+      }
+
+      return defaultObjectValue as AutocompleteValue<
+        T,
+        Multiple,
+        DisableClearable
+      >;
+    });
+  }, [defaultObjectValue, multiple]);
 
   useEffect(() => {
     if (fetchInitialOptions && isNil(value)) {
@@ -286,6 +279,7 @@ function AutocompleteSearchFieldComponent<
                 {params.InputProps.endAdornment}
               </>
             ),
+            type: 'search',
           }}
         />
       )}

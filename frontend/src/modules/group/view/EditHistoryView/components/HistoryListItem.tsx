@@ -59,7 +59,7 @@ export function HistoryListItem({
       ]}
     >
       <ListItemAvatar>
-        <HistoryIcon type={item.historyType} />
+        <HistoryIcon historyType={item.historyType} />
       </ListItemAvatar>
       <ListItemText
         primary={
