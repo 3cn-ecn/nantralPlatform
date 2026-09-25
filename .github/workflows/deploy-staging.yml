@@ -63,6 +63,7 @@ jobs:
 
   clone-database:
     name: Make a copy of the database
+    needs: build-and-push # prevent clone on failed workflows
     runs-on: ubuntu-latest
     steps:
       - name: Clone the prod database to staging database
