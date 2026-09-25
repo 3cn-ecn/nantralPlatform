@@ -1,18 +1,8 @@
 import { Trans } from 'react-i18next';
 import { Link as RouterLink } from 'react-router-dom';
 
+import { DeleteForever, Edit, Preview, Restore } from '@mui/icons-material';
 import {
-  AddCircleOutline,
-  DeleteForever,
-  Edit,
-  HelpOutline,
-  HighlightOff,
-  Preview,
-  Restore,
-  Update,
-} from '@mui/icons-material';
-import {
-  Avatar,
   Link,
   ListItemAvatar,
   ListItemText,
@@ -21,6 +11,7 @@ import {
 } from '@mui/material';
 
 import { GroupHistory } from '#modules/group/types/groupHistory.type';
+import { HistoryIcon } from '#modules/group/view/EditHistoryView/components/HistoryIcon';
 import { ResponsiveListItem } from '#shared/components/ResponsiveListItem/ResponsiveListItem';
 import { useTranslation } from '#shared/i18n/useTranslation';
 
@@ -41,6 +32,7 @@ export function HistoryListItem({
 }: Props) {
   const { t, formatRelativeTime } = useTranslation();
   const theme = useTheme();
+
   return (
     <ResponsiveListItem
       actions={[
@@ -67,35 +59,7 @@ export function HistoryListItem({
       ]}
     >
       <ListItemAvatar>
-        {item.historyType === '+' ? (
-          <Avatar
-            sx={{ backgroundColor: theme.palette.success.main }}
-            alt={'Group created'}
-          >
-            <AddCircleOutline />
-          </Avatar>
-        ) : item.historyType === '~' ? (
-          <Avatar
-            sx={{ backgroundColor: theme.palette.info.main }}
-            alt={'Group updated'}
-          >
-            <Update />
-          </Avatar>
-        ) : item.historyType === '-' ? (
-          <Avatar
-            sx={{ backgroundColor: theme.palette.error.main }}
-            alt={'Group deleted'}
-          >
-            <HighlightOff />
-          </Avatar>
-        ) : (
-          <Avatar
-            sx={{ backgroundColor: theme.palette.secondary.main }}
-            alt={'Unknown change type'}
-          >
-            <HelpOutline />
-          </Avatar>
-        )}
+        <HistoryIcon type={item.historyType} />
       </ListItemAvatar>
       <ListItemText
         primary={

@@ -39,7 +39,6 @@ import {
   SelectField,
   TextField,
 } from '#shared/components/FormFields';
-import { AutocompleteAddressField } from '#shared/components/FormFields/AutocompleteAddressField';
 import { RichTextField } from '#shared/components/FormFields/RichTextField';
 import { SetObjectStateAction } from '#shared/hooks/useObjectState';
 import { useTranslation } from '#shared/i18n/useTranslation';
@@ -310,7 +309,7 @@ export function GroupFormFields({
       </Typography>
 
       {groupType.isMap && (
-        <AutocompleteAddressField
+        <AutocompleteSearchField
           label={t('group.form.address.label')}
           value={formValues.address}
           handleChange={addressCallback}
@@ -321,7 +320,8 @@ export function GroupFormFields({
             latitude: formValues.latitude,
             longitude: formValues.longitude,
           }}
-          labelPropName={'address'}
+          labelPropName="address"
+          valuePropName="address"
           required
         />
       )}
@@ -457,6 +457,7 @@ export function GroupFormFields({
                   }
                   labelPropName="name"
                   imagePropName="icon"
+                  valuePropName="id"
                 />
               )}
 

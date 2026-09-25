@@ -78,6 +78,7 @@ export function SportEventFormFields({
         required
         fetchInitialOptions={fetchInitialGroupOptions}
         fetchOptions={fetchGroupOptions}
+        valuePropName="id"
         labelPropName="name"
         imagePropName="icon"
       />

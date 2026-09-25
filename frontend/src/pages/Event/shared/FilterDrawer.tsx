@@ -165,6 +165,7 @@ export function FilterDrawer({
             fetchOptions={fetchGroupOptions}
             labelPropName="name"
             imagePropName="icon"
+            valuePropName="id"
           />
           {!noDates && (
             <>
