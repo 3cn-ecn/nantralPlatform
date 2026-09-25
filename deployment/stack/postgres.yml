@@ -10,12 +10,8 @@ services:
       # - "/etc/localtime:/etc/localtime:ro"
       - postgres_data:/var/lib/postgresql/data/
     env_file: ../backend.env
-    profiles:
-      - production
-      - staging
-      - development
     networks:
-      - proxy
+      - database
 
 volumes:
   postgres_data:

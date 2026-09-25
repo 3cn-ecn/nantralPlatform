@@ -2,6 +2,10 @@ name: Deploy Staging
 
 on: workflow_dispatch
 
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}
+
 jobs:
   frontend-quality:
     name: Test front end quality
@@ -18,21 +22,44 @@ jobs:
     uses: ./.github/workflows/quality-email-templates.yml
     secrets: inherit
 
-  frontend-build:
-    name: Build front end
-    needs: frontend-quality
-    uses: ./.github/workflows/build-frontend.yml
-    with:
-      target-directory: "nantralPlatform-staging"
-    secrets: inherit
+  build-and-push:
+    name: Build and push Docker image
+    needs:
+      - frontend-quality
+      - backend-quality
+      - email-templates-quality
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
 
-  email-templates-build:
-    name: Build email templates
-    needs: email-templates-quality
-    uses: ./.github/workflows/build-email-templates.yml
-    with:
-      target-directory: "nantralPlatform-staging"
-    secrets: inherit
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Log in to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build and push web image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: ./deployment/containers/web/Dockerfile
+          target: production
+          push: true
+
+          tags: |
+            ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
+
+          cache-from: type=gha,scope=staging
+          cache-to: type=gha,mode=max,scope=staging
 
   clone-database:
     name: Make a copy of the database
@@ -53,21 +80,19 @@ jobs:
   deploy:
     name: Deploy to staging
     needs:
-      [frontend-build, email-templates-build, backend-quality, clone-database]
+      [ build-and-push, clone-database ]
     runs-on: ubuntu-latest
     steps:
       - name: Deploy to the VPS
-        uses: appleboy/ssh-action@master
+        uses: appleboy/ssh-action@v1
         with:
           host: ${{ secrets.INSTANCE_ADDRESS }}
-          username: "ubuntu"
+          username: ubuntu
           key: ${{ secrets.SSH_KEY_DEPLOY }}
           script: |
             set -e
-            cd nantralPlatform-staging
-            git fetch origin ${{ github.ref_name }}
-            git switch ${{ github.ref_name }}
-            git reset --hard origin/${{ github.ref_name }}
-            cd ../nantralPlatform/deployment
-            docker compose build backend-staging
-            docker compose up -d
+            cd nantralPlatform/deployment
+            sed -i '/^STAGING_TAG=/d' .env
+            echo "STAGING_TAG=${{ github.sha }}" >> .env
+            docker compose -f docker-compose.yml -f docker-compose.prod.yml pull backend-staging
+            docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d

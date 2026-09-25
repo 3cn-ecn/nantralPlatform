@@ -52,14 +52,17 @@ EMAIL_PORT = 1025
 
 
 # Cache config
+CACHE_KEY_PREFIX = "nantral-staging" if STAGING else "nantral-prod"
 CACHES = {
     "default": {
         "BACKEND": "django.core.cache.backends.memcached.PyMemcacheCache",
-        "LOCATION": "127.0.0.1:11211",
+        "LOCATION": "memcached:11211",
+        "KEY_PREFIX": CACHE_KEY_PREFIX,
     },
     "extra_settings": {
         "BACKEND": "django.core.cache.backends.memcached.PyMemcacheCache",
-        "LOCATION": "127.0.0.1:11211",
+        "LOCATION": "memcached:11211",
+        "KEY_PREFIX": CACHE_KEY_PREFIX,
         "TIMEOUT": 60,
     },
 }
@@ -99,4 +102,4 @@ DEBUG_TOOLBAR_CONFIG = {
     "SHOW_TOOLBAR_CALLBACK": (lambda _: DEBUG),
 }
 
-DJANGO_VITE_DEV_MODE = False
+DJANGO_VITE_DEV_MODE = True

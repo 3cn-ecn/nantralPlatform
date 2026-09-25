@@ -1,0 +1,7 @@
+services:
+  memcached:
+    image: memcached:1.6-alpine
+    command: [ "memcached", "-m", "128", "-c", "1024", "-o", "modern" ]
+    networks:
+      - cache
+    restart: unless-stopped

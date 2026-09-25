@@ -9,7 +9,7 @@ services:
     networks:
       proxy:
       mailserver:
-        ipv4_address: 172.19.0.5
+        ipv4_address: 172.24.0.5
     environment:
       - "TZ=Europe/Paris"
     volumes:
@@ -17,8 +17,6 @@ services:
       - "/etc/localtime:/etc/localtime:ro"
       - ../appdata/stalwart/data:/opt/stalwart
       - certs:/data/certs:ro
-    profiles:
-      - production
     labels:
       - traefik.enable=true
 
@@ -54,11 +52,3 @@ services:
       - traefik.tcp.routers.imaps.service=imaps
       - traefik.tcp.services.imaps.loadbalancer.server.port=993
       - traefik.tcp.services.imaps.loadbalancer.proxyProtocol.version=2
-
-  mailpit:
-    image: axllent/mailpit:latest
-    ports:
-      - 1025:1025
-      - 8025:8025
-    profiles:
-      - development

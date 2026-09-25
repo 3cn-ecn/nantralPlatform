@@ -201,3 +201,25 @@ on this particular database. So let's create one!
    your personal account!
 
 1. Congratulations, you now have a personal admin account on your database 🥳
+
+## Use docker for development
+
+For a more detailed version, visit the [docker page](/server/staging.mdx).
+
+If you have docker installed, you may want to use it to develop the project.
+To set up the containers, just run `make docker-install` to initialize the project.
+Then, in order to start the project, just run `make docker-start`. Yau may
+proceed with regular setup instruction from now on.
+The server is running at [http://localhost](http://localhost), and the fake
+mailserver at [http://localhost:8025](http://localhost:8025)
+
+Some useful commands:
+
+- Change directory to the docker root: `cd deployment` (needed for the following commands)
+- Open a terminal in the container: `docker compose exec -it backend-develop bash` (first start the container)
+- Manually start / shutdown docker: `docker compose up --watch` and `docker compose down`
+
+If you use an IDE that supports devcontainers, you can open the project with it.
+It allows you to have a clean isolated setup at the cost of a slightly higher
+ressources usage.
+

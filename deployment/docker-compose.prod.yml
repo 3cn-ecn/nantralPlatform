@@ -1,0 +1,29 @@
+include:
+  - stack/socket-proxy.yml
+  - stack/traefik.yml
+  - stack/nginx.yml
+  - stack/backend.yml
+  - stack/stalwart.yml
+  - stack/uptime-kuma.yml
+
+volumes:
+  static_volume:
+  static_volume_staging:
+  certs:
+
+secrets:
+  ovh_endpoint:
+    file: "secrets/ovh_endpoint.secret"
+  ovh_application_key:
+    file: "secrets/ovh_application_key.secret"
+  ovh_application_secret:
+    file: "secrets/ovh_application_secret.secret"
+  ovh_consumer_key:
+    file: "secrets/ovh_consumer_key.secret"
+
+networks:
+  mailserver:
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.24.0.0/24

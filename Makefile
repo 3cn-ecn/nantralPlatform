@@ -36,6 +36,20 @@ install:
 		npm ci
 
 
+# Install docker
+.PHONY: docker-install
+docker-install:
+	cd deployment && \
+		$(CREATE) backend.env && \
+		docker compose build && \
+		docker compose run --rm backend-develop sh -c '\
+  			mkdir -p static/front &&\
+  			uv run manage.py migrate &&\
+  			DJANGO_SUPERUSER_PASSWORD=admin uv run manage.py createsuperuser --noinput --username np_admin --email admin@ec-nantes.fr &&\
+  			uv run manage.py fakedata\
+		'
+
+
 # Update after pull
 .PHONY: update
 update:
@@ -69,6 +83,13 @@ start:
 	cd backend && \
 		$(call EXPORT,PIPENV_IGNORE_VIRTUALENVS,1) && \
 		uv run manage.py runserver
+
+
+# Run docker
+.PHONY: docker-start
+docker-start:
+	cd deployment && \
+		docker compose up --build --watch
 
 
 # Test the quality of code
