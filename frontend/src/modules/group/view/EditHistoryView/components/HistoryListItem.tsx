@@ -1,19 +1,8 @@
-import { useCallback } from 'react';
 import { Trans } from 'react-i18next';
 import { Link as RouterLink } from 'react-router-dom';
 
+import { DeleteForever, Edit, Preview, Restore } from '@mui/icons-material';
 import {
-  AddCircleOutline,
-  DeleteForever,
-  Edit,
-  HelpOutline,
-  HighlightOff,
-  Preview,
-  Restore,
-  Update,
-} from '@mui/icons-material';
-import {
-  Avatar,
   Link,
   ListItemAvatar,
   ListItemText,
@@ -22,6 +11,7 @@ import {
 } from '@mui/material';
 
 import { GroupHistory } from '#modules/group/types/groupHistory.type';
+import { HistoryIcon } from '#modules/group/view/EditHistoryView/components/HistoryIcon';
 import { ResponsiveListItem } from '#shared/components/ResponsiveListItem/ResponsiveListItem';
 import { useTranslation } from '#shared/i18n/useTranslation';
 
@@ -42,53 +32,6 @@ export function HistoryListItem({
 }: Props) {
   const { t, formatRelativeTime } = useTranslation();
   const theme = useTheme();
-
-  const getTypeIcon = useCallback(
-    (mode: GroupHistory['historyType']) => {
-      if (mode === '-')
-        return (
-          <Avatar
-            sx={{ backgroundColor: theme.palette.error.main }}
-            alt={'Group deleted'}
-          >
-            <HighlightOff />
-          </Avatar>
-        );
-      if (mode === '~')
-        return (
-          <Avatar
-            sx={{ backgroundColor: theme.palette.info.main }}
-            alt={'Group updated'}
-          >
-            <Update />
-          </Avatar>
-        );
-      if (mode === '+')
-        return (
-          <Avatar
-            sx={{ backgroundColor: theme.palette.success.main }}
-            alt={'Group created'}
-          >
-            <AddCircleOutline />
-          </Avatar>
-        );
-      return (
-        <Avatar
-          sx={{ backgroundColor: theme.palette.secondary.main }}
-          alt={'Unknown change type'}
-        >
-          <HelpOutline />
-        </Avatar>
-      );
-    },
-
-    [
-      theme.palette.error.main,
-      theme.palette.info.main,
-      theme.palette.secondary.main,
-      theme.palette.success.main,
-    ],
-  );
 
   return (
     <ResponsiveListItem
@@ -115,7 +58,9 @@ export function HistoryListItem({
         },
       ]}
     >
-      <ListItemAvatar>{getTypeIcon(item.historyType)}</ListItemAvatar>
+      <ListItemAvatar>
+        <HistoryIcon type={item.historyType} />
+      </ListItemAvatar>
       <ListItemText
         primary={
           item.historyChangeReason ?? (
