@@ -1,5 +1,4 @@
 import { CSSProperties, PropsWithChildren } from 'react';
-
 import {
   Body,
   Container,
@@ -9,7 +8,7 @@ import {
   Link,
   Section,
   Text,
-} from '@react-email/components';
+} from 'react-email';
 
 type Props = PropsWithChildren;
 
