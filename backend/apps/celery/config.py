@@ -26,24 +26,12 @@ app.autodiscover_tasks(settings.COMMON_APPS)
 
 @app.on_after_finalize.connect
 def setup_periodic_tasks(sender: Celery, **kwargs):
-    from apps.account.tasks import (
-        delete_unverified_emails,
-        send_email_verification_reminders,
-    )
-
-    # Schedule email verification reminders to run daily at 9 AM
-    sender.add_periodic_task(
-        crontab(hour=9, minute=0),
-        send_email_verification_reminders.s(),
-        name="send-email-verification-reminders",
-    )
-
-    # Schedule deletion of unverified emails to run daily at 10 AM
-    sender.add_periodic_task(
-        crontab(hour=10, minute=0),
-        delete_unverified_emails.s(),
-        name="delete-unverified-emails",
-    )
+    pass
+    # set schedule for non shared tasks here.
+    # sender.add_periodic_task(
+    #     crontab(minute="*/1"),
+    #     debug_task.s()
+    # )
 
 
 @app.task(bind=True)
