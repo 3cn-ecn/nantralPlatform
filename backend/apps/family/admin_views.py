@@ -1,8 +1,11 @@
 # ruff: noqa: N806
+import sys
+import traceback
 
 from django.contrib import messages
 from django.db.models import Q
 from django.shortcuts import redirect
+from django.utils.html import format_html
 from django.views.generic import TemplateView
 
 from extra_settings.models import Setting
@@ -125,8 +128,13 @@ class ResultsView(UserIsInGroup, TemplateView):
                             "family": f["family"],
                         },
                     )
-        except Exception as e:
-            messages.error(self.request, e)
+        except Exception:
+            exc = sys.exc_info()
+            message = format_html(
+                "An error occurred while creating the families:<br/><pre><code>{}</code></pre>",
+                "\n".join(traceback.format_exception(*exc)),
+            )
+            messages.error(self.request, message)
         context["families"] = families
         context["phase"] = Setting.get("PHASE_PARRAINAGE")
         return context

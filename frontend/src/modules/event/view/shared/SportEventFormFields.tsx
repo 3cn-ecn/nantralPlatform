@@ -1,0 +1,180 @@
+import { Dispatch, useCallback } from 'react';
+
+import { MenuItem } from '@mui/material';
+
+import { SportEventFormDTO } from '#modules/event/infra/sportevent.dto';
+import {
+  SportEvent,
+  SportEventForm,
+  SportEventType,
+  sportEventTypeToString,
+} from '#modules/event/sportevent.type';
+import { getGroupListApi } from '#modules/group/api/getGroupList.api';
+import { FlexAuto } from '#shared/components/FlexBox/FlexBox';
+import { FormErrorAlert } from '#shared/components/FormErrorAlert/FormErrorAlert';
+import {
+  AutocompleteSearchField,
+  CheckboxField,
+  DateField,
+  DateTimeField,
+  SelectField,
+  TextField,
+} from '#shared/components/FormFields';
+import { RichTextField } from '#shared/components/FormFields/RichTextField';
+import { SetObjectStateAction } from '#shared/hooks/useObjectState';
+import { BaseLanguage } from '#shared/i18n/config';
+import { useTranslation } from '#shared/i18n/useTranslation';
+import { ApiFormError } from '#shared/infra/errors';
+
+interface SportEventFormFieldsProps {
+  isError: boolean;
+  error: ApiFormError<SportEventFormDTO> | null;
+  formValues: SportEventForm;
+  updateFormValues: Dispatch<SetObjectStateAction<SportEventForm>>;
+  prevData?: Partial<SportEvent>;
+  selectedLang: BaseLanguage;
+}
+
+export function SportEventFormFields({
+  isError,
+  error,
+  formValues,
+  updateFormValues,
+  prevData,
+  selectedLang,
+}: Readonly<SportEventFormFieldsProps>) {
+  const { t } = useTranslation();
+
+  // Use callbacks for every functions passed to a prop of a memoized component,
+  // such as all of our Field components. This allows to optimize performance
+  // (when a field is modified, we only rerender this field and not all of them).
+  // a user can only manage a few groups, so we fetch all of them (the maximum
+  // page size of the API is 100)
+  const fetchInitialGroupOptions = useCallback(
+    () =>
+      getGroupListApi({ pageSize: 100, canManageSportEvents: true }).then(
+        (data) => data.results,
+      ),
+    [],
+  );
+  const fetchGroupOptions = useCallback(
+    (searchText: string) =>
+      getGroupListApi({
+        search: searchText,
+        pageSize: 100,
+        canManageSportEvents: true,
+      }).then((data) => data.results),
+    [],
+  );
+
+  return (
+    <>
+      <FormErrorAlert isError={isError} error={error} />
+      <AutocompleteSearchField
+        name="group"
+        label={t('event.form.group.label')}
+        helperText={t('event.form.group.helpText')}
+        value={formValues.group}
+        handleChange={useCallback(
+          (val: number) => updateFormValues({ group: val }),
+          [updateFormValues],
+        )}
+        defaultObjectValue={prevData?.group}
+        errors={error?.fields?.owner}
+        required
+        fetchInitialOptions={fetchInitialGroupOptions}
+        fetchOptions={fetchGroupOptions}
+        valuePropName="id"
+        labelPropName="name"
+        imagePropName="icon"
+      />
+      <SelectField
+        name="type"
+        label={t('event.form.type.label')}
+        value={String(formValues.type)}
+        handleChange={useCallback(
+          (val: string) => updateFormValues({ type: Number(val) }),
+          [updateFormValues],
+        )}
+        errors={error?.fields?.type}
+      >
+        <MenuItem value={String(SportEventType.TRAINING)}>
+          {sportEventTypeToString(SportEventType.TRAINING)}
+        </MenuItem>
+        <MenuItem value={String(SportEventType.COMPETITION)}>
+          {sportEventTypeToString(SportEventType.COMPETITION)}
+        </MenuItem>
+      </SelectField>
+      <RichTextField
+        name="description"
+        key={`description-${selectedLang}`}
+        label={t('event.form.description.label')}
+        value={formValues.descriptionTranslated[selectedLang]}
+        handleChange={useCallback(
+          (val) => {
+            updateFormValues((prevState) => ({
+              descriptionTranslated: {
+                ...prevState.descriptionTranslated,
+                [selectedLang]: val,
+              },
+            }));
+          },
+          [selectedLang, updateFormValues],
+        )}
+        errors={error?.fields?.description}
+      />
+      <FlexAuto columnGap={2} breakPoint="sm">
+        <DateTimeField
+          name="date"
+          label={t('event.form.startDate.label')}
+          value={formValues.date}
+          onChange={useCallback(
+            (val) => updateFormValues({ date: val }),
+            [updateFormValues],
+          )}
+          errors={error?.fields?.date}
+          required
+          fullWidth
+        />
+      </FlexAuto>
+      <FlexAuto columnGap={2} alignItems="center" breakPoint="sm">
+        <CheckboxField
+          name="isWeekly"
+          label={t('sport.form.weekly.label')}
+          helperText={t('sport.form.weekly.helpText')}
+          value={formValues.isWeekly}
+          handleChange={useCallback(
+            (val: boolean) => updateFormValues({ isWeekly: val }),
+            [updateFormValues],
+          )}
+          sx={{ flexShrink: 0 }}
+        />
+        <DateField
+          name="repeatUntil"
+          label={t('sport.form.repeatUntil.label')}
+          helperText={t('sport.form.repeatUntil.helpText')}
+          value={formValues.repeatUntil}
+          onChange={useCallback(
+            (val: Date | null) => updateFormValues({ repeatUntil: val }),
+            [updateFormValues],
+          )}
+          minDate={formValues.date}
+          errors={error?.fields?.repeat_until}
+          disabled={!formValues.isWeekly}
+          required={formValues.isWeekly}
+          fullWidth
+        />
+      </FlexAuto>
+      <TextField
+        name="location"
+        label={t('event.form.location.label')}
+        value={formValues.location}
+        handleChange={useCallback(
+          (val) => updateFormValues({ location: val }),
+          [updateFormValues],
+        )}
+        errors={error?.fields?.location}
+      />
+    </>
+  );
+}

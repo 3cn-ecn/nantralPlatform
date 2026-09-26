@@ -63,7 +63,10 @@ class TestGroups(APITestCase):
         self.assertEqual(res.status_code, status.HTTP_403_FORBIDDEN)
         self.assertEqual(Group.objects.count(), init_nb)
         # test on a type that is open
-        res = self.client.post("/api/group/group/?type=t2", {"name": "G1"})
+        res = self.client.post(
+            "/api/group/group/?type=t2",
+            {"name": "G1", "_save_history_record": False},
+        )
         self.assertEqual(res.status_code, status.HTTP_201_CREATED)
         self.assertEqual(Group.objects.count(), init_nb + 1)
 
@@ -95,19 +98,31 @@ class TestGroups(APITestCase):
     def test_update(self):
         g = Group.objects.create(name="G1", slug="g1", group_type=self.t1)
         # test for non-authenticated users
-        res = self.client.put(f"/api/group/group/{g.slug}/", {"name": "G2"})
+        res = self.client.put(
+            f"/api/group/group/{g.slug}/",
+            {"name": "G2", "_save_history_record": False},
+        )
         self.assertEqual(res.status_code, status.HTTP_403_FORBIDDEN)
         # test with authenticated user
         self.client.force_login(self.u1)
-        res = self.client.put(f"/api/group/group/{g.slug}/", {"name": "G2"})
+        res = self.client.put(
+            f"/api/group/group/{g.slug}/",
+            {"name": "G2", "_save_history_record": False},
+        )
         self.assertEqual(res.status_code, status.HTTP_403_FORBIDDEN)
         # test with member
         g.members.add(self.u1)
-        res = self.client.put(f"/api/group/group/{g.slug}/", {"name": "G2"})
+        res = self.client.put(
+            f"/api/group/group/{g.slug}/",
+            {"name": "G2", "_save_history_record": False},
+        )
         self.assertEqual(res.status_code, status.HTTP_403_FORBIDDEN)
         # test with admin
         g.membership_set.filter(user=self.u1).update(admin=True)
-        res = self.client.put(f"/api/group/group/{g.slug}/", {"name": "G2"})
+        res = self.client.put(
+            f"/api/group/group/{g.slug}/",
+            {"name": "G2", "_save_history_record": False},
+        )
         self.assertEqual(res.status_code, status.HTTP_200_OK)
         # check the modification is done
         self.assertEqual(Group.objects.get(slug="g1").name, "G2")
@@ -131,6 +146,105 @@ class TestGroups(APITestCase):
         self.assertEqual(res.status_code, status.HTTP_204_NO_CONTENT)
         # check the modification is done
         self.assertFalse(Group.objects.filter(slug="g1").exists())
+
+
+class TestSportEventManageableGroups(APITestCase):
+    def setUp(self):
+        self.superuser = User.objects.create_superuser(
+            username="superuser", email="su@test.ec-nantes.fr", password=""
+        )
+        self.parent_admin = User.objects.create_user(
+            username="parent_admin", email="pa@test.ec-nantes.fr", password=""
+        )
+        self.child_admin = User.objects.create_user(
+            username="child_admin", email="ca@test.ec-nantes.fr", password=""
+        )
+        self.member = User.objects.create_user(
+            username="member", email="m@test.ec-nantes.fr", password=""
+        )
+        self.t1 = GroupType.objects.create(name="T1", slug="t1")
+        self.parent = Group.objects.create(
+            name="BDS", group_type=self.t1, can_create_sport_event=True
+        )
+        self.child = Group.objects.create(
+            name="Club", group_type=self.t1, parent=self.parent, private=True
+        )
+        self.grandchild = Group.objects.create(
+            name="SubClub", group_type=self.t1, parent=self.child
+        )
+        self.forbidden_child = Group.objects.create(
+            name="NoSportClub",
+            group_type=self.t1,
+            parent=self.parent,
+            can_create_sport_event=False,
+        )
+        self.unauthorized = Group.objects.create(name="Other", group_type=self.t1)
+        self.archived = Group.objects.create(
+            name="Archived",
+            group_type=self.t1,
+            parent=self.parent,
+            archived=True,
+        )
+        self.parent.members.add(
+            self.parent_admin, through_defaults={"admin": True}
+        )
+        self.child.members.add(self.child_admin, through_defaults={"admin": True})
+        self.parent.members.add(self.member)
+
+    def tearDown(self):
+        Group.objects.all().delete()
+        GroupType.objects.all().delete()
+        User.objects.all().delete()
+
+    def get_slugs(self, user: User) -> set[str]:
+        self.client.force_login(user)
+        res = self.client.get(
+            "/api/group/group/", {"can_manage_sport_events": True}
+        )
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+        return {g["slug"] for g in res.data["results"]}
+
+    def test_superuser_gets_all_authorized_groups(self):
+        self.assertEqual(
+            self.get_slugs(self.superuser),
+            {self.parent.slug, self.child.slug, self.grandchild.slug},
+        )
+
+    def test_parent_admin_gets_descendants(self):
+        self.assertEqual(
+            self.get_slugs(self.parent_admin),
+            {self.parent.slug, self.child.slug, self.grandchild.slug},
+        )
+
+    def test_child_admin_gets_only_its_subtree(self):
+        self.assertEqual(
+            self.get_slugs(self.child_admin),
+            {self.child.slug, self.grandchild.slug},
+        )
+
+    def test_member_gets_nothing(self):
+        self.assertEqual(self.get_slugs(self.member), set())
+
+    def test_matches_is_admin_and_check_can_create_sport_event(self):
+        for user in (
+            self.superuser,
+            self.parent_admin,
+            self.child_admin,
+            self.member,
+        ):
+            expected = {
+                g.id
+                for g in Group.objects.all()
+                if g.check_can_create_sport_event and g.is_admin(user)
+            }
+            self.assertEqual(
+                set(
+                    Group.sport_event_manageable_by(user).values_list(
+                        "id", flat=True
+                    )
+                ),
+                expected,
+            )
 
 
 class TestMemberships(APITestCase):

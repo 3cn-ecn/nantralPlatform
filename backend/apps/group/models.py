@@ -1,3 +1,4 @@
+from django.contrib import admin
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.utils.translation import gettext_lazy as _
@@ -102,7 +103,7 @@ class GroupType(models.Model):
 
     def get_absolute_url(self) -> str:
         """Get the url of the object."""
-        return f"/group/{self.slug}/"
+        return f"/group/?type={self.slug}"
 
     def delete(self, *args, **kwargs) -> None:
         self.icon.delete(save=False)
@@ -228,6 +229,13 @@ class Group(models.Model, SlugModel):
         default=False,
         help_text=_("Admin members of this group can pin their posts"),
     )
+    can_create_sport_event = models.BooleanField(
+        verbose_name=_("Can create sport events"),
+        blank=True,
+        null=True,
+        default=None,
+        help_text=_("Admin members of this group can create sport events"),
+    )
 
     # Profile
     summary = models.CharField(
@@ -322,6 +330,7 @@ class Group(models.Model, SlugModel):
             "address",
             "latitude",
             "longitude",
+            "can_create_sport_event",
         ),
         related_name="versions",
     )
@@ -366,6 +375,99 @@ class Group(models.Model, SlugModel):
                     "'private' properties to True.",
                 ),
             )
+
+    @property
+    @admin.display(description="Can create sport event (effectively)")
+    def check_can_create_sport_event(self) -> bool:
+        """Check if the group can create sport events.
+
+        Returns
+        -------
+        bool
+            True if the group can create sport events, False otherwise.
+
+        """
+        if self.can_create_sport_event is not None:
+            return self.can_create_sport_event
+        elif self.parent is not None:
+            return self.parent.check_can_create_sport_event
+        else:
+            return False
+
+    @classmethod
+    def sport_event_manageable_by(cls, user: User) -> models.QuerySet["Group"]:
+        """Get the groups for which a user can manage sport events.
+
+        A group is returned if it can create sport events (see
+        `check_can_create_sport_event`) and if the user is an admin of this
+        group (see `is_admin`): the user is a superuser, or an admin member of
+        the group or of one of its ancestors.
+
+        Parameters
+        ----------
+        user : User
+            The user to check for.
+
+        Returns
+        -------
+        QuerySet[Group]
+            The groups for which the user can manage sport events.
+
+        """
+        if not user.is_authenticated:
+            return cls.objects.none()
+        groups = {
+            g["id"]: g
+            for g in cls.objects.values(
+                "id", "parent_id", "can_create_sport_event"
+            )
+        }
+        admin_group_ids = set(
+            user.membership_set.filter(admin=True).values_list(
+                "group_id", flat=True
+            )
+        )
+
+        def inherited(group_id: int, own_value, cache: dict[int, bool]) -> bool:
+            """Get the value of a group, inherited from its closest ancestor
+            with a defined value (`own_value` returns None if undefined)."""
+            chain = []
+            current = group_id
+            value = False
+            while current is not None and current not in chain:
+                if current in cache:
+                    value = cache[current]
+                    break
+                chain.append(current)
+                current_value = own_value(groups[current])
+                if current_value is not None:
+                    value = current_value
+                    break
+                current = groups[current]["parent_id"]
+            for chain_id in chain:
+                cache[chain_id] = value
+            return value
+
+        can_create_cache: dict[int, bool] = {}
+        is_admin_cache: dict[int, bool] = {}
+        manageable_ids = [
+            group_id
+            for group_id in groups
+            if inherited(
+                group_id,
+                lambda g: g["can_create_sport_event"],
+                can_create_cache,
+            )
+            and (
+                user.is_superuser
+                or inherited(
+                    group_id,
+                    lambda g: True if g["id"] in admin_group_ids else None,
+                    is_admin_cache,
+                )
+            )
+        ]
+        return cls.objects.filter(id__in=manageable_ids)
 
     @property
     def created_at(self):

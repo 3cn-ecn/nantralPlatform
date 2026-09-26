@@ -27,7 +27,7 @@ export default function GroupDetailsPage() {
   const [queryParams] = useSearchParams();
   const version = useMemo(() => {
     const paramVersion = queryParams.get('version');
-    return paramVersion ? parseInt(paramVersion) : undefined;
+    return paramVersion ? Number.parseInt(paramVersion) : undefined;
   }, [queryParams]);
 
   const [selectedTab, setSelectedTab] = useQueryParamState<TabType>(

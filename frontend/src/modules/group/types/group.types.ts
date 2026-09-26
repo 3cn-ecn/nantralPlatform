@@ -34,6 +34,7 @@ export interface Group {
   address: string;
   latitude: number;
   longitude: number;
+  canCreateSportEvent: boolean;
 }
 
 export type GroupPreview = Pick<
@@ -46,6 +47,7 @@ export type GroupPreview = Pick<
   | 'icon'
   | 'category'
   | 'subCategory'
+  | 'canCreateSportEvent'
 >;
 
 export type MapGroupPreview = GroupPreview &

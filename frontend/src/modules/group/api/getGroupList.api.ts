@@ -17,6 +17,8 @@ export interface GetGroupListApiParams {
   pageSize?: number | null;
   parent?: string | string[] | null;
   hasNoParent?: boolean | null;
+  /** only groups for which the user can manage sport events */
+  canManageSportEvents?: boolean | null;
 }
 
 export async function getGroupListApi(
@@ -34,6 +36,7 @@ export async function getGroupListApi(
         page_size: options.pageSize,
         parent: options.parent,
         has_no_parent: options.hasNoParent,
+        can_manage_sport_events: options.canManageSportEvents,
       },
     })
     .catch((err: ApiErrorDTO) => {

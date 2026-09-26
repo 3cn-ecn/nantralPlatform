@@ -26,6 +26,11 @@ interface JoinGroupFormFieldsProps {
   showDates?: boolean;
 }
 
+async function fetchOptions(search: string) {
+  const data = await getUserListApi({ search: search });
+  return data.results;
+}
+
 export function MembershipFormFields({
   error,
   formValues,
@@ -34,10 +39,6 @@ export function MembershipFormFields({
   selectUser = false,
   showDates = true,
 }: JoinGroupFormFieldsProps) {
-  async function fetchOptions(search: string) {
-    const data = await getUserListApi({ search: search });
-    return data.results;
-  }
   const { t } = useTranslation();
   return (
     <>
@@ -51,6 +52,7 @@ export function MembershipFormFields({
           errors={error?.fields?.user}
           required
           fetchOptions={fetchOptions}
+          valuePropName="id"
           labelPropName="name"
           imagePropName="picture"
         />
