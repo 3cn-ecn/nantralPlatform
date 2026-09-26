@@ -12,6 +12,7 @@ import {
 } from '@mui/material';
 
 import { SportEvent } from '#modules/event/sportevent.type';
+import { useCanManageSportEventsQuery } from '#modules/group/hooks/useCanManageSportEvents.query';
 import { FlexRow, FlexCol } from '#shared/components/FlexBox/FlexBox';
 import { InfiniteList } from '#shared/components/InfiniteList/InfiniteList';
 import { Spacer } from '#shared/components/Spacer/Spacer';
@@ -20,7 +21,7 @@ import { useTranslation } from '#shared/i18n/useTranslation';
 
 import { SportEventCard } from './components/SportEventCard';
 import { SportEventCardCreate } from './components/SportEventCardCreate';
-import { useDayDisplay } from './hooks/useDayDisplay';
+import { useDayDisplay, useWeekDisplay } from './hooks/useDayDisplay';
 import { useSportEventList } from './hooks/useSportEventList';
 
 export default function SportPage() {
@@ -28,11 +29,13 @@ export default function SportPage() {
   const bk = useBreakpoint(500);
   const now = new Date(Date.now());
   const [onlyMyGroups, setOnlyMyGroups] = useState(false);
+  const weekDisplay = useWeekDisplay();
   const dayDisplay = useDayDisplay();
+  const { canManageSportEvents } = useCanManageSportEventsQuery();
 
   now.setHours(0, 0, 0, 0);
 
-  const { query, groupByDay, count } = useSportEventList({
+  const { query, groupByWeek, count } = useSportEventList({
     is_member: onlyMyGroups ? true : undefined,
     fromDate: now.toISOString(),
   });
@@ -68,20 +71,38 @@ export default function SportPage() {
       </Typography>
       <Spacer vertical={2} />
       <Spacer vertical={2} />
-      {count === 0 && <Typography>{t('sport.noEvents')}</Typography>}
-      <InfiniteList query={query}>
-        {Array.from(groupByDay.entries()).map(([groupKey, sportEvents]) => (
-          <div key={groupKey}>
-            <Typography variant="h2">
-              {dayDisplay(groupKey, sportEvents[0]?.date)}
-            </Typography>
-            <Spacer vertical={1} />
-            <FlexRow gap={2} flexWrap="wrap">
-              {sportEvents.map((sportEvent: SportEvent) => (
-                <SportEventCard key={sportEvent.id} sportEvent={sportEvent} />
-              ))}
+      {count === 0 && (
+        <>
+          <Typography>{t('sport.noEvents')}</Typography>
+          {canManageSportEvents && (
+            <>
+              <Spacer vertical={2} />
               <SportEventCardCreate />
-            </FlexRow>
+            </>
+          )}
+        </>
+      )}
+      <InfiniteList query={query}>
+        {Array.from(groupByWeek.entries()).map(([weekKey, days]) => (
+          <div key={weekKey}>
+            <Typography variant="h2">{weekDisplay(weekKey)}</Typography>
+            <Spacer vertical={2} />
+            {Array.from(days.entries()).map(([dayKey, sportEvents]) => (
+              <div key={dayKey}>
+                <Typography variant="h4">{dayDisplay(dayKey)}</Typography>
+                <Spacer vertical={1} />
+                <FlexRow gap={2} flexWrap="wrap">
+                  {sportEvents.map((sportEvent: SportEvent) => (
+                    <SportEventCard
+                      key={sportEvent.id}
+                      sportEvent={sportEvent}
+                    />
+                  ))}
+                  {canManageSportEvents && <SportEventCardCreate />}
+                </FlexRow>
+                <Spacer vertical={2} />
+              </div>
+            ))}
             <Spacer vertical={2} />
           </div>
         ))}

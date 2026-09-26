@@ -22,6 +22,19 @@ export interface SportEvent {
   nonParticipantsCount: number;
   group: GroupPreview;
   type: SportEventType;
+  /** whether the current user can edit or delete the event */
+  canEdit: boolean;
+  /** whether the current user is a member of the organizer group */
+  isGroupMember: boolean;
+  /** id of the previous occurrence, if the event is recurrent */
+  parent: number | null;
+  /** id of the next occurrence, if the event is recurrent */
+  child: number | null;
+  /**
+   * date of the last occurrence (null if there is no next occurrence),
+   * only available when fetching the details of an event
+   */
+  repeatUntil?: Date | null;
 }
 
 export type SportEventForm = Pick<
@@ -29,4 +42,6 @@ export type SportEventForm = Pick<
   'descriptionTranslated' | 'location' | 'date' | 'type'
 > & {
   group: number | null;
+  isWeekly: boolean;
+  repeatUntil: Date | null;
 };

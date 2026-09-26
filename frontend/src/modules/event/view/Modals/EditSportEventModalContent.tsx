@@ -1,7 +1,7 @@
 import { FormEvent, useState } from 'react';
 
 import { Edit as EditIcon } from '@mui/icons-material';
-import { Avatar, Button, useTheme } from '@mui/material';
+import { Alert, Avatar, Button, useTheme } from '@mui/material';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import { deleteSportEventApi } from '#modules/event/api/deleteSportEvent.api';
@@ -25,6 +25,7 @@ import { useTranslation } from '#shared/i18n/useTranslation';
 import { ApiFormError } from '#shared/infra/errors';
 
 import { SportEventFormFields } from '../shared/SportEventFormFields';
+import { DeleteRecurrentSportEventModal } from './DeleteRecurrentSportEventModal';
 
 interface EditSportEventModalContentProps {
   sportEvent: SportEvent;
@@ -44,6 +45,7 @@ export function EditSportEventModalContent({
   const [formValues, updateFormValues] = useSportEventFormValues({
     event: sportEvent,
   });
+  const hasFollowingOccurrences = sportEvent.child !== null;
 
   const { mutate, isLoading, isError, error } = useMutation<
     unknown,
@@ -55,6 +57,7 @@ export function EditSportEventModalContent({
     mutationFn: deleteSportEventApi,
     onSuccess: () => {
       queryClient.invalidateQueries(['getSportEvents']);
+      queryClient.invalidateQueries(['sport-event']);
       queryClient.invalidateQueries(['notifications']);
       setIsDeleteModalOpen(false);
       onClose();
@@ -68,7 +71,8 @@ export function EditSportEventModalContent({
       {
         onSuccess: () => {
           queryClient.invalidateQueries(['getSportEvents']);
-          queryClient.invalidateQueries(['sport-event', { id: sportEvent.id }]);
+          // the following occurrences may have changed too
+          queryClient.invalidateQueries(['sport-event']);
           queryClient.invalidateQueries(['notifications']);
           onClose();
         },
@@ -95,6 +99,11 @@ export function EditSportEventModalContent({
         />
       </ResponsiveDialogHeader>
       <ResponsiveDialogContent>
+        {hasFollowingOccurrences && (
+          <Alert severity="info" sx={{ mb: 1 }}>
+            {t('sport.editModal.recurrentInfo')}
+          </Alert>
+        )}
         <form
           id="edit-sport-event-form"
           onSubmit={(e) => onSubmit(e, formValues)}
@@ -130,12 +139,21 @@ export function EditSportEventModalContent({
           {t('button.confirm')}
         </LoadingButton>
       </ResponsiveDialogFooter>
-      {isDeleteModalOpen && (
+      {isDeleteModalOpen && hasFollowingOccurrences && (
+        <DeleteRecurrentSportEventModal
+          onCancel={() => setIsDeleteModalOpen(false)}
+          onConfirm={(single) =>
+            deleteSportEvent({ id: sportEvent.id, single })
+          }
+          loading={isDeleteLoading}
+        />
+      )}
+      {isDeleteModalOpen && !hasFollowingOccurrences && (
         <ConfirmationModal
           title={t('sport.deleteModal.title')}
           body={t('sport.deleteModal.body')}
           onCancel={() => setIsDeleteModalOpen(false)}
-          onConfirm={() => deleteSportEvent(sportEvent.id)}
+          onConfirm={() => deleteSportEvent({ id: sportEvent.id })}
           loading={isDeleteLoading}
         />
       )}

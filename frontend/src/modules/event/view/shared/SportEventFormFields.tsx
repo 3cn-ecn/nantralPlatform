@@ -14,6 +14,8 @@ import { FlexAuto } from '#shared/components/FlexBox/FlexBox';
 import { FormErrorAlert } from '#shared/components/FormErrorAlert/FormErrorAlert';
 import {
   AutocompleteSearchField,
+  CheckboxField,
+  DateField,
   DateTimeField,
   SelectField,
   TextField,
@@ -46,18 +48,22 @@ export function SportEventFormFields({
   // Use callbacks for every functions passed to a prop of a memoized component,
   // such as all of our Field components. This allows to optimize performance
   // (when a field is modified, we only rerender this field and not all of them).
+  // a user can only manage a few groups, so we fetch all of them (the maximum
+  // page size of the API is 100)
   const fetchInitialGroupOptions = useCallback(
     () =>
-      getGroupListApi({ pageSize: 7, isAdmin: true }).then((data) =>
-        data.results.filter((e) => e.canCreateSportEvent),
+      getGroupListApi({ pageSize: 100, canManageSportEvents: true }).then(
+        (data) => data.results,
       ),
     [],
   );
   const fetchGroupOptions = useCallback(
     (searchText: string) =>
-      getGroupListApi({ search: searchText, pageSize: 10, isAdmin: true }).then(
-        (data) => data.results.filter((e) => e.canCreateSportEvent),
-      ),
+      getGroupListApi({
+        search: searchText,
+        pageSize: 100,
+        canManageSportEvents: true,
+      }).then((data) => data.results),
     [],
   );
 
@@ -128,6 +134,34 @@ export function SportEventFormFields({
           )}
           errors={error?.fields?.date}
           required
+          fullWidth
+        />
+      </FlexAuto>
+      <FlexAuto columnGap={2} alignItems="center" breakPoint="sm">
+        <CheckboxField
+          name="isWeekly"
+          label={t('sport.form.weekly.label')}
+          helperText={t('sport.form.weekly.helpText')}
+          value={formValues.isWeekly}
+          handleChange={useCallback(
+            (val: boolean) => updateFormValues({ isWeekly: val }),
+            [updateFormValues],
+          )}
+          sx={{ flexShrink: 0 }}
+        />
+        <DateField
+          name="repeatUntil"
+          label={t('sport.form.repeatUntil.label')}
+          helperText={t('sport.form.repeatUntil.helpText')}
+          value={formValues.repeatUntil}
+          onChange={useCallback(
+            (val: Date | null) => updateFormValues({ repeatUntil: val }),
+            [updateFormValues],
+          )}
+          minDate={formValues.date}
+          errors={error?.fields?.repeat_until}
+          disabled={!formValues.isWeekly}
+          required={formValues.isWeekly}
           fullWidth
         />
       </FlexAuto>

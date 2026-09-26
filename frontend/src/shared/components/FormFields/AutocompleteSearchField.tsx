@@ -1,4 +1,11 @@
-import { ElementType, memo, SyntheticEvent, useEffect, useState } from 'react';
+import {
+  ElementType,
+  memo,
+  SyntheticEvent,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
 
 import {
   Autocomplete,
@@ -163,6 +170,11 @@ function AutocompleteSearchFieldComponent<
 
   const isError = errors !== undefined;
 
+  // keep the current object value accessible in async callbacks
+  const objectValueRef = useRef(objectValue);
+  objectValueRef.current = objectValue;
+  const hasFetchedInitialOptions = useRef(false);
+
   useEffect(() => {
     setIsLoading(loading);
   }, [loading]);
@@ -188,16 +200,32 @@ function AutocompleteSearchFieldComponent<
   }, [defaultObjectValue, multiple]);
 
   useEffect(() => {
-    if (fetchInitialOptions && isNil(value)) {
-      setIsLoading(true);
-      fetchInitialOptions()
-        .then((data) => {
-          setOptions(data);
-          setIsLoading(false);
-        })
-        .catch((err) => console.error(err));
+    // fetch the initial options when the field is empty, and also once when
+    // the field already has a value (e.g. in an edit form), so that the user
+    // can choose another option without having to type a search
+    if (
+      !fetchInitialOptions ||
+      (!isNil(value) && hasFetchedInitialOptions.current)
+    ) {
+      return;
     }
-  }, [fetchInitialOptions, value]);
+    hasFetchedInitialOptions.current = true;
+    setIsLoading(true);
+    fetchInitialOptions()
+      .then((data) => {
+        // keep the selected value(s) in the options, otherwise MUI considers
+        // the value as invalid
+        const currentValue = objectValueRef.current;
+        const selected = isMultiple(currentValue, multiple)
+          ? currentValue
+          : isNil(currentValue)
+            ? []
+            : [currentValue as T];
+        setOptions(uniqBy([...data, ...selected], (obj) => obj[valuePropName]));
+        setIsLoading(false);
+      })
+      .catch((err) => console.error(err));
+  }, [fetchInitialOptions, value, multiple, valuePropName]);
 
   const updateOptions = debounce(
     (

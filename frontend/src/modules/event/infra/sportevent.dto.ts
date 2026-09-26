@@ -11,6 +11,12 @@ export type SportEventDTO = {
   location: string;
   owner: GroupPreviewDTO;
   type: number;
+  parent: number | null;
+  child: number | null;
+  can_edit: boolean;
+  is_group_member: boolean;
+  // only in details
+  repeat_until?: string | null;
 } & TranslatedFieldsDTO<'description'>;
 
 export type SportEventFormDTO = Pick<
@@ -20,4 +26,6 @@ export type SportEventFormDTO = Pick<
   // keep unused fields for typing errors
   description: undefined;
   owner: number | null; // id of group
+  // absent: do not change the repetition, null: no repetition
+  repeat_until?: string | null;
 } & TranslatedFieldsDTO<'description'>;

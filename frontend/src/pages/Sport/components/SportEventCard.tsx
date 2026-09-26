@@ -29,7 +29,6 @@ import {
 } from '#modules/event/sportevent.type';
 import { EditSportEventModal } from '#modules/event/view/Modals/EditSportEventModal';
 import { SportEventPeopleModal } from '#modules/event/view/SportEventPeopleModal';
-import { useGroupDetailsQuery } from '#modules/group/hooks/useGroupDetails.query';
 import { useSportEventParticipationMutation } from '#pages/Sport/hooks/useSportEventParticipationMutation';
 import { Avatar as GroupAvatar } from '#shared/components/Avatar/Avatar';
 import { FlexCol, FlexRow } from '#shared/components/FlexBox/FlexBox';
@@ -47,9 +46,10 @@ export function SportEventCard({ sportEvent }: Readonly<SportEventCardProps>) {
   const [isOpenEditModal, setIsOpenEditModal] = useState(false);
   const [isOpenPeopleModal, setIsOpenPeopleModal] = useState(false);
 
-  const { group } = useGroupDetailsQuery(sportEvent.group.slug);
-  const isAdmin = group?.isAdmin ?? false;
-  const isMember = group?.isMember ?? false;
+  const isAdmin = sportEvent.canEdit;
+  const isMember = sportEvent.isGroupMember;
+  // only members and admins of the group can see who participates
+  const canSeePeople = isAdmin || isMember;
 
   const participationMutation = useSportEventParticipationMutation(
     sportEvent.id,
@@ -72,7 +72,7 @@ export function SportEventCard({ sportEvent }: Readonly<SportEventCardProps>) {
         sx={{
           width: '100%',
           maxWidth: '250px',
-          height: '250px',
+          height: '270px',
           display: 'flex',
           flexDirection: 'column',
           position: 'relative',
@@ -99,20 +99,23 @@ export function SportEventCard({ sportEvent }: Readonly<SportEventCardProps>) {
               component={Link}
               to={sportEvent.group.url}
               alignItems="center"
-              justifyContent="space-between"
               gap={1}
-              sx={{ color: 'inherit', textDecoration: 'none' }}
+              // minWidth: 0 lets the name shrink (with an ellipsis) instead of
+              // pushing the edit button out of the card
+              sx={{ color: 'inherit', textDecoration: 'none', minWidth: 0 }}
             >
               <GroupAvatar
                 alt={sportEvent.group.name}
                 src={sportEvent.group.icon}
                 size="m"
               />
-              <FlexCol>
+              <FlexCol alignItems="flex-start" sx={{ minWidth: 0 }}>
                 <Typography
                   variant="subtitle1"
                   fontWeight={800}
                   noWrap
+                  title={sportEvent.group.shortName}
+                  maxWidth="100%"
                   sx={{ '&:hover': { textDecoration: 'underline' } }}
                 >
                   {sportEvent.group.name}
@@ -166,8 +169,16 @@ export function SportEventCard({ sportEvent }: Readonly<SportEventCardProps>) {
           <RichTextRenderer
             content={sportEvent.description || t('sport.noDescription')}
             sx={{
-              mt: 0,
+              mt: 0.5,
               pt: 0,
+              '& > :first-child': { mt: 0 },
+              '& p': { my: 0 },
+              // show at most 2 lines, with an ellipsis
+              display: '-webkit-box',
+              WebkitLineClamp: 2,
+              WebkitBoxOrient: 'vertical',
+              overflow: 'hidden',
+              flexShrink: 0,
               color: hasDescription ? 'text.secondary' : 'text.disabled',
               fontStyle: hasDescription ? 'normal' : 'italic',
               lineHeight: 1.5,
@@ -176,75 +187,83 @@ export function SportEventCard({ sportEvent }: Readonly<SportEventCardProps>) {
           />
         </CardContent>
 
-        <Divider />
+        {canSeePeople && (
+          <>
+            <Divider />
 
-        <CardActions
-          sx={{
-            px: 2,
-            py: 1.25,
-            gap: 1,
-            display: 'flex',
-            flexShrink: 0,
-            flexDirection: 'column',
-            alignItems: 'stretch',
-            flexWrap: 'nowrap',
-          }}
-        >
-          <FlexRow gap={1} alignItems="center" flexWrap="wrap" width="100%">
-            <Button
-              size="small"
-              variant="text"
-              startIcon={<Groups fontSize="small" />}
-              onClick={() => setIsOpenPeopleModal(true)}
-              sx={{ fontWeight: 700, px: 1 }}
+            <CardActions
+              sx={{
+                px: 2,
+                py: 1.25,
+                gap: 1,
+                display: 'flex',
+                flexShrink: 0,
+                flexDirection: 'column',
+                alignItems: 'stretch',
+                flexWrap: 'nowrap',
+              }}
             >
-              {t('sport.participants', {
-                count: sportEvent.participantsCount,
-              })}
-            </Button>
-          </FlexRow>
+              <FlexRow gap={1} alignItems="center" flexWrap="wrap" width="100%">
+                <Button
+                  size="small"
+                  variant="text"
+                  startIcon={<Groups fontSize="small" />}
+                  onClick={() => setIsOpenPeopleModal(true)}
+                  sx={{ fontWeight: 700, px: 1 }}
+                >
+                  {t('sport.participants', {
+                    count: sportEvent.participantsCount,
+                  })}
+                </Button>
+              </FlexRow>
 
-          {isMember && (
-            <FlexRow
-              gap={0.75}
-              alignItems="center"
-              justifyContent="space-between"
-              width="100%"
-            >
-              <Typography variant="body2" noWrap>
-                {t('sport.actions.question')}
-              </Typography>
-              <LoadingButton
-                size="small"
-                variant={
-                  sportEvent.isParticipating === true ? 'contained' : 'outlined'
-                }
-                loading={
-                  participationMutation.isLoading &&
-                  participationMutation.variables === 'participant'
-                }
-                onClick={() => participationMutation.mutate('participant')}
-              >
-                {t('sport.actions.yes')}
-              </LoadingButton>
-              <LoadingButton
-                size="small"
-                variant={
-                  sportEvent.isParticipating === false
-                    ? 'contained'
-                    : 'outlined'
-                }
-                loading={
-                  participationMutation.isLoading &&
-                  participationMutation.variables === 'nonParticipant'
-                }
-                onClick={() => participationMutation.mutate('nonParticipant')}
-              >
-                {t('sport.actions.no')}
-              </LoadingButton>
-            </FlexRow>
-          )}
-        </CardActions>
+              {isMember && (
+                <FlexRow
+                  gap={0.75}
+                  alignItems="center"
+                  justifyContent="space-between"
+                  width="100%"
+                >
+                  <Typography variant="body2" noWrap>
+                    {t('sport.actions.question')}
+                  </Typography>
+                  <LoadingButton
+                    size="small"
+                    variant={
+                      sportEvent.isParticipating === true
+                        ? 'contained'
+                        : 'outlined'
+                    }
+                    loading={
+                      participationMutation.isLoading &&
+                      participationMutation.variables === 'participant'
+                    }
+                    onClick={() => participationMutation.mutate('participant')}
+                  >
+                    {t('sport.actions.yes')}
+                  </LoadingButton>
+                  <LoadingButton
+                    size="small"
+                    variant={
+                      sportEvent.isParticipating === false
+                        ? 'contained'
+                        : 'outlined'
+                    }
+                    loading={
+                      participationMutation.isLoading &&
+                      participationMutation.variables === 'nonParticipant'
+                    }
+                    onClick={() =>
+                      participationMutation.mutate('nonParticipant')
+                    }
+                  >
+                    {t('sport.actions.no')}
+                  </LoadingButton>
+                </FlexRow>
+              )}
+            </CardActions>
+          </>
+        )}
       </Card>
 
       {isOpenEditModal && (
