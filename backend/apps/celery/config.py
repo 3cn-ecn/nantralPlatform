@@ -4,7 +4,6 @@ import os
 from django.conf import settings
 
 from celery import Celery
-from celery.schedules import crontab
 
 logger = logging.getLogger(__name__)
 
