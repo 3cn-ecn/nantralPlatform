@@ -65,6 +65,8 @@ RUN --mount=type=cache,target=/root/.cache/uv \
 FROM backend-deps AS backend-development
 ENV DJANGO_SETTINGS_MODULE=config.settings.docker
 COPY ./backend/ .
+# Built emails templates
+COPY --chown=myuser:myuser --from=email-templates-builder /var/app/backend/templates/emails ./templates/emails
 CMD ["uv", "run", "manage.py", "runserver", "0.0.0.0:8000"]
 
 # Step 7: Build production image with django and react files
@@ -101,3 +103,5 @@ COPY ./backend/templates ./templates
 COPY ./backend/config ./config
 # Files that will change often
 COPY ./backend/apps ./apps
+# Built emails templates
+COPY --from=email-templates-builder /var/app/backend/templates/emails ./templates/emails

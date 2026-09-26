@@ -9,7 +9,6 @@ services:
 
   # The app backend
   backend-develop:
-    container_name: backend
     environment:
       - DJANGO_SETTINGS_MODULE=config.settings.docker
     build:
@@ -32,6 +31,7 @@ services:
       - redis
       - cache
       - proxy
+      - mailserver
     develop:
       watch:
         # Sync source changes without replacing the container's virtual environment.
@@ -41,6 +41,7 @@ services:
           ignore:
             - ../backend/.venv/
             - ../backend/staticfiles/front/
+            - ../backend/templates/emails/
             - ../backend/media/
 
         # Rebuild the image on changes to the `pyproject.toml`
@@ -78,6 +79,7 @@ services:
       - "8025:8025"
     networks:
       - proxy
+      - mailserver
 
   # Celery built from local files
   celery:
@@ -92,6 +94,7 @@ services:
       - "/etc/timezone:/etc/timezone:ro"
       - "/etc/localtime:/etc/localtime:ro"
       - ../backend:/var/app
+      - /var/app/templates/emails
 
   celery-beat:
     build:

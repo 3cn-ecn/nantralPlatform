@@ -1,6 +1,5 @@
 services:
   celery:
-    image: ghcr.io/3cn-ecn/nantralplatform-celery:${BACKEND_TAG:-latest}
     command: uv run celery -A apps.celery worker -l info
     environment:
       - "TZ=Europe/Paris"
@@ -14,9 +13,10 @@ services:
     networks:
       - celery
       - redis
+      - database
+      - mailserver
 
   celery-beat:
-    image: ghcr.io/3cn-ecn/nantralplatform-celery:${BACKEND_TAG:-latest}
     command: uv run celery -A apps.celery beat -l info --scheduler django_celery_beat.schedulers:DatabaseScheduler
     environment:
       - "TZ=Europe/Paris"

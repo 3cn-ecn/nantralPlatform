@@ -9,6 +9,7 @@ volumes:
 
 networks:
   proxy:
+  mailserver:
   database:
     internal: true
   redis:
