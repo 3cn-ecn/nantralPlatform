@@ -1,24 +1,27 @@
 import uuid
 
 from django.apps import apps
+from django.conf import settings
 from django.contrib import admin
 from django.contrib.auth.models import AbstractUser
 from django.db import models, transaction
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
+from requests import HTTPError
 from rest_framework import exceptions
 
 from apps.sociallink.models import SocialLink
 from apps.utils.fields.image_field import CustomImageField
 
+from ..utils.matrix.admin_api import matrix_admin_api
 from ..utils.send_email import send_email
 from .manager import UserManager
 from .utils import send_email_confirmation
 from .validators import (
+    django_validate_matrix_api_username,
     get_user_organization,
     organisation_email_validator,
-    validate_matrix_username,
 )
 
 FACULTIES = [
@@ -76,7 +79,7 @@ class User(AbstractUser):
         help_text=_(
             "Required. 150 characters or fewer. Lower case letters, digits and ./_/-/+ only."
         ),
-        validators=[validate_matrix_username],
+        validators=[django_validate_matrix_api_username],
         error_messages={
             "unique": _("This username is already taken."),
         },
@@ -164,13 +167,41 @@ class User(AbstractUser):
 
     def delete(self, *args, **kwargs):
         self.picture.delete()
+        if settings.PRODUCTION:
+            matrix_user_id = (
+                matrix_admin_api.get_user_by_username(self.username)
+                .get("data")
+                .get("id")
+            )
+            matrix_admin_api.deactivate_user(user_id=matrix_user_id)
         super().delete(*args, **kwargs)
 
     def save(self, *args, **kwargs):
         self.first_name = self.first_name.lower()
         self.last_name = self.last_name.lower()
+        old_user = User.objects.get(pk=self.pk) if self.pk else None
 
         super().save(*args, **kwargs)
+
+        # Handle active field change to mirror behavior in the matrix server
+        if (
+            settings.PRODUCTION
+            and old_user is not None
+            and self.is_active != old_user.is_active
+        ):
+            try:
+                matrix_user_id = (
+                    matrix_admin_api.get_user_by_username(self.username)
+                    .get("data")
+                    .get("id")
+                )
+                if self.is_active:
+                    matrix_admin_api.reactivate_user(matrix_user_id)
+                    matrix_admin_api.unlock_user(matrix_user_id)
+                else:
+                    matrix_admin_api.lock_user(matrix_user_id)
+            except HTTPError:
+                pass
 
     @admin.display(boolean=True)
     def has_authorized_organisation_email(self):

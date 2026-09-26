@@ -26,6 +26,9 @@ env = environ.Env(
     WP_ADMIN_EMAIL=(str, ""),
     WP_PUBLIC_KEY=(str, ""),
     WP_PRIVATE_KEY=(str, ""),
+    MATRIX_CLIENT_ID=(str, ""),
+    MATRIX_CLIENT_TOKEN=(str, ""),
+    MATRIX_BASE_URL=(str, ""),
     STAGING=(bool, False),
     # docker needed
     DB_HOSTNAME=(str, ""),
@@ -45,6 +48,7 @@ env = environ.Env(
     OVH_ACCESS_KEY_ID=(str, ""),
     OVH_SECRET_ACCESS_KEY=(str, ""),
     S3_BUCKET=(str, ""),
+    PRODUCTION=(bool, False),
     # for codespaces only (automatically retrieved from the codespace)
     CODESPACES=(bool, False),
     CODESPACE_NAME=(str, ""),
@@ -206,6 +210,7 @@ SECURE_REFERRER_POLICY = "no-referrer-when-downgrade"
 
 # CUSTOM SETTINGS
 STAGING = env("STAGING")
+PRODUCTION = env("PRODUCTION") and not STAGING and not DEBUG
 
 # THIRD PARTY LIBRARIES SETTINGS
 
@@ -313,6 +318,11 @@ GITHUB_REPO = "3cn-ecn/nantralPlatform"
 
 # Mapbox
 MAPBOX_API_KEY = env("MAPBOX_API_KEY")
+
+# Matrix
+MATRIX_CLIENT_ID = env("MATRIX_CLIENT_ID")
+MATRIX_CLIENT_TOKEN = env("MATRIX_CLIENT_TOKEN")
+MATRIX_BASE_URL = env("MATRIX_BASE_URL")
 
 # Password validation
 # https://docs.djangoproject.com/en/3.0/ref/settings/#auth-password-validators

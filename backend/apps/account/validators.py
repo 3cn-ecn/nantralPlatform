@@ -1,12 +1,14 @@
 import re
 import string
 
+from django.conf import settings
 from django.contrib.auth.password_validation import validate_password
 from django.core.exceptions import ValidationError as DjangoValidationError
 from django.utils.translation import gettext_lazy as _
 
 from rest_framework.exceptions import ValidationError
 
+from ..utils.matrix.admin_api import matrix_admin_api
 from .utils import AuthorizedOrganization
 
 MXID_LOCALPART_ALLOWED_CHARACTERS = set(
@@ -82,6 +84,25 @@ def validate_matrix_username(value):
         value.lower().startswith(p + ".") for p in RESERVED_USERNAMES
     ):
         raise ValidationError(_("This username is reserved"))
+
+    if not settings.PRODUCTION:
+        return True
+
+    try:
+        return matrix_admin_api.register_available(value)
+    except ValueError as e:
+        raise ValidationError(*e.args)
+
+
+def django_validate_matrix_api_username(value):
+
+    if not settings.PRODUCTION:
+        return True
+
+    try:
+        return matrix_admin_api.register_available(value)
+    except ValueError as e:
+        raise DjangoValidationError(*e.args)
 
 
 def validate_email(mail: str):
