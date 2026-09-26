@@ -397,6 +397,54 @@ class SportEventHierarchyPermissionTestCase(APITestCase):
         response = self.client.delete(f"/api/event/sport/{event.id}/")
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
+    def test_people_lists_are_restricted_to_members_and_admins(self):
+        # an event which has already started is not listed anymore, but it
+        # must still be reachable by its id
+        event = SportEvent.objects.create(
+            owner=self.grandchild,
+            date=timezone.now() - timezone.timedelta(hours=1),
+        )
+        member = User.objects.create_user(
+            username="member",
+            email="member@test.ec-nantes.fr",
+            password="",
+        )
+        self.grandchild.members.add(member)
+        outsider = User.objects.create_user(
+            username="outsider",
+            email="outsider@test.ec-nantes.fr",
+            password="",
+        )
+        for user, expected_status in (
+            (self.superuser, status.HTTP_200_OK),
+            (self.parent_admin, status.HTTP_200_OK),
+            (self.child_admin, status.HTTP_200_OK),
+            (member, status.HTTP_200_OK),
+            (outsider, status.HTTP_403_FORBIDDEN),
+        ):
+            self.client.force_login(user)
+            for action in ("participants", "non_participants"):
+                response = self.client.get(
+                    f"/api/event/sport/{event.id}/{action}/"
+                )
+                self.assertEqual(
+                    response.status_code,
+                    expected_status,
+                    f"{user.username} on {action}",
+                )
+
+    def test_started_event_can_still_be_updated(self):
+        event = SportEvent.objects.create(
+            owner=self.child,
+            date=timezone.now() - timezone.timedelta(hours=1),
+        )
+        self.client.force_login(self.parent_admin)
+        response = self.client.patch(
+            f"/api/event/sport/{event.id}/",
+            {"location": "Gym 2"},
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
     def test_list_exposes_can_edit_and_is_group_member(self):
         SportEvent.objects.create(
             owner=self.parent,

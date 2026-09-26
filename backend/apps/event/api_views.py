@@ -37,6 +37,10 @@ class EventPermission(permissions.BasePermission):
 
 class SportEventPermission(permissions.BasePermission):
     def has_object_permission(self, request, view, obj: SportEvent):
+        if view.action in ("participants", "non_participants"):
+            return obj.owner.is_member(request.user) or obj.owner.is_admin(
+                request.user
+            )
         if request.method in permissions.SAFE_METHODS:
             return True
         if view.action in ("participate", "not_participate"):
@@ -83,6 +87,10 @@ class SportEventViewSet(viewsets.ModelViewSet):
       delete its following occurrences if `repeat_until` is null)
     - DELETE .../sport/<id>/ : delete a sport event and all its following
       occurrences (or only this one with `?single=true`)
+    - GET .../sport/<id>/participants/ : get the participants (only for
+      members and admins of the organizer group)
+    - GET .../sport/<id>/non_participants/ : get the non-participants (only
+      for members and admins of the organizer group)
     """
 
     permission_classes = [permissions.IsAuthenticated, SportEventPermission]
@@ -110,7 +118,17 @@ class SportEventViewSet(viewsets.ModelViewSet):
             return SportEventDetailSerializer
         return SportEventSerializer
 
-    def get_queryset(self) -> QuerySet[Event]:
+    def get_queryset(self) -> QuerySet[SportEvent]:
+        qs = SportEvent.objects.select_related("owner", "child")
+        # the filters only apply to the list: an event which is not listed
+        # anymore (e.g. already started) must still be reachable by its id
+        if self.action == "list":
+            qs = self.filter_list_queryset(qs)
+        return qs
+
+    def filter_list_queryset(
+        self, qs: QuerySet[SportEvent]
+    ) -> QuerySet[SportEvent]:
         now = timezone.now()
         user = self.request.user
 
@@ -126,7 +144,6 @@ class SportEventViewSet(viewsets.ModelViewSet):
         to_date = self.query_params.get("to_date")
 
         # filtering
-        qs = SportEvent.objects.all()
         if len(groups) > 0:
             qs = qs.filter(owner__slug__in=groups)
         if from_date:
@@ -148,7 +165,7 @@ class SportEventViewSet(viewsets.ModelViewSet):
         if is_not_participating is False:
             qs = qs.exclude(non_participants=user)
 
-        return qs.select_related("owner", "child").distinct()
+        return qs.distinct()
 
     def perform_destroy(self, instance: SportEvent) -> None:
         if parse_bool(self.query_params.get("single")):

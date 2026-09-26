@@ -48,9 +48,11 @@ export function SportEventFormFields({
   // Use callbacks for every functions passed to a prop of a memoized component,
   // such as all of our Field components. This allows to optimize performance
   // (when a field is modified, we only rerender this field and not all of them).
+  // a user can only manage a few groups, so we fetch all of them (the maximum
+  // page size of the API is 100)
   const fetchInitialGroupOptions = useCallback(
     () =>
-      getGroupListApi({ pageSize: 7, canManageSportEvents: true }).then(
+      getGroupListApi({ pageSize: 100, canManageSportEvents: true }).then(
         (data) => data.results,
       ),
     [],
@@ -59,7 +61,7 @@ export function SportEventFormFields({
     (searchText: string) =>
       getGroupListApi({
         search: searchText,
-        pageSize: 10,
+        pageSize: 100,
         canManageSportEvents: true,
       }).then((data) => data.results),
     [],

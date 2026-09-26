@@ -18,7 +18,7 @@ export function SportEventCardCreate() {
         sx={{
           width: '100%',
           maxWidth: '250px',
-          height: '250px',
+          height: '320px',
           borderStyle: 'dashed',
           borderWidth: '2px',
         }}
