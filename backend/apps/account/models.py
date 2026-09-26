@@ -3,7 +3,7 @@ import uuid
 from django.apps import apps
 from django.contrib import admin
 from django.contrib.auth.models import AbstractUser
-from django.db import models
+from django.db import models, transaction
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
@@ -12,6 +12,7 @@ from rest_framework import exceptions
 from apps.sociallink.models import SocialLink
 from apps.utils.fields.image_field import CustomImageField
 
+from ..utils.send_email import send_email
 from .manager import UserManager
 from .utils import send_email_confirmation
 from .validators import (
