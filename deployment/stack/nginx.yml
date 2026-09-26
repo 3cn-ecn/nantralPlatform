@@ -16,8 +16,6 @@ services:
       - ../config/nginx/.well-known:/var/www/json/.well-known
       - static_volume:/var/app/staticfiles/
       - static_volume_staging:/var/app/staticfiles_staging/
-    depends_on:
-      - backend
     networks:
       - proxy
     labels:

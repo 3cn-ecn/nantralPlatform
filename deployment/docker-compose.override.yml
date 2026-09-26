@@ -1,0 +1,141 @@
+services:
+  database:
+    env_file: ../backend/config/settings/.env
+    ports:
+      - "5432:5432"
+    networks:
+      - database
+      - proxy
+
+  # The app backend
+  backend-develop:
+    container_name: backend
+    environment:
+      - DJANGO_SETTINGS_MODULE=config.settings.docker
+    build:
+      context: ../
+      dockerfile: deployment/containers/web/Dockerfile
+      target: backend-development
+    ports:
+      - "80:8000"
+    volumes:
+      - "/etc/timezone:/etc/timezone:ro"
+      - "/etc/localtime:/etc/localtime:ro"
+    depends_on:
+      - database
+      - redis
+      - frontend-develop
+    env_file: ../backend/config/settings/.env
+    networks:
+      - database
+      - celery
+      - redis
+      - cache
+      - proxy
+    develop:
+      watch:
+        # Sync source changes without replacing the container's virtual environment.
+        - action: sync
+          path: ../backend
+          target: /var/app
+          ignore:
+            - ../backend/.venv/
+            - ../backend/staticfiles/front/
+            - ../backend/media/
+
+        # Rebuild the image on changes to the `pyproject.toml`
+        - action: rebuild
+          path: ../backend/pyproject.toml
+
+  # The frontend
+  frontend-develop:
+    build:
+      context: ../
+      dockerfile: deployment/containers/web/Dockerfile
+      target: frontend-development
+    ports:
+      - "5173:5173"
+    networks:
+      - proxy
+    develop:
+      watch:
+        - action: sync
+          path: ../frontend
+          target: /var/app/frontend
+          ignore:
+            - ../frontend/node_modules/
+            - ../frontend/dist/
+        - action: rebuild
+          path: ../frontend/package.json
+        - action: rebuild
+          path: ../frontend/package-lock.json
+
+  # Dummy mailserver that displays sent emails
+  mailpit:
+    image: axllent/mailpit:latest
+    ports:
+      - "1025:1025"
+      - "8025:8025"
+    networks:
+      - proxy
+
+  # Celery built from local files
+  celery:
+    build:
+      context: ../
+      dockerfile: deployment/containers/web/Dockerfile
+      target: celery
+    env_file: ../backend/config/settings/.env
+    environment:
+      - DJANGO_SETTINGS_MODULE=config.settings.docker
+    volumes:
+      - "/etc/timezone:/etc/timezone:ro"
+      - "/etc/localtime:/etc/localtime:ro"
+      - ../backend:/var/app
+
+  celery-beat:
+    build:
+      context: ../
+      dockerfile: deployment/containers/web/Dockerfile
+      target: celery
+    env_file: ../backend/config/settings/.env
+    environment:
+      - DJANGO_SETTINGS_MODULE=config.settings.docker
+    volumes:
+      - "/etc/timezone:/etc/timezone:ro"
+      - "/etc/localtime:/etc/localtime:ro"
+      - ../backend:/var/app
+
+  workers-dashboard:
+    build:
+      context: ../
+      dockerfile: deployment/containers/web/Dockerfile
+      target: celery
+    command: uv run celery -A apps.celery --broker=redis://redis:6379/0 flower --port=5555
+    ports:
+      - "5555:5555"
+    depends_on:
+      - backend-develop
+      - redis
+      - celery
+    env_file: ../backend/config/settings/.env
+    environment:
+      - CELERY_BROKER=redis://redis:6379/0
+      - CELERY_BACKEND=redis://redis:6379/0
+      - DJANGO_SETTINGS_MODULE=config.settings.docker
+    networks:
+      - proxy
+      - celery
+      - redis
+
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    ports:
+      - "5050:80"
+    networks:
+      - database
+      - proxy
+    env_file: ../backend/config/settings/.env
+    environment:
+      PGADMIN_CONFIG_SERVER_MODE: 'False'
+      PGADMIN_CONFIG_MASTER_PASSWORD_REQUIRED: 'False'

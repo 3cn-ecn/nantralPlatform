@@ -1,35 +1,33 @@
 services:
   celery:
-    build:
-      context: ../../backend/
-      dockerfile: ../deployment/containers/web/Dockerfile
-    command: celery -A apps.celery worker -l info
+    image: ghcr.io/3cn-ecn/nantralplatform-celery:${BACKEND_TAG:-latest}
+    command: uv run celery -A apps.celery worker -l info
     environment:
       - "TZ=Europe/Paris"
     volumes:
       - "/etc/timezone:/etc/timezone:ro"
       - "/etc/localtime:/etc/localtime:ro"
-      - ../../backend:/var/app
     depends_on:
       - celery-beat
       - redis
     env_file: ../backend.env
     networks:
-      - proxy
+      - celery
+      - redis
 
   celery-beat:
-    build:
-      context: ../../backend/
-      dockerfile: ../deployment/containers/web/Dockerfile
-    command: celery -A apps.celery beat -l info --scheduler django_celery_beat.schedulers:DatabaseScheduler
+    image: ghcr.io/3cn-ecn/nantralplatform-celery:${BACKEND_TAG:-latest}
+    command: uv run celery -A apps.celery beat -l info --scheduler django_celery_beat.schedulers:DatabaseScheduler
     environment:
       - "TZ=Europe/Paris"
     volumes:
       - "/etc/timezone:/etc/timezone:ro"
       - "/etc/localtime:/etc/localtime:ro"
-      - ../../backend:/var/app
     depends_on:
       - redis
+      - database
     env_file: ../backend.env
     networks:
-      - proxy
+      - celery
+      - database
+      - redis

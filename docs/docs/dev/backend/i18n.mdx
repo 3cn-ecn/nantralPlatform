@@ -101,7 +101,7 @@ First, create or update the `.po` file:
    ```
 - Create or update the `.po` files for the French translations:
    ```bash
-   pipenv run django-admin makemessages -l fr
+   uv run django-admin makemessages -l fr
    ```
 - Open the `.po` file created in `locale/fr/LC_MESSAGES`,
   and fill in all the translations. You can also use a graphical editor,
@@ -113,7 +113,7 @@ Once you have finished, it's time to compile the translations! Just run, in
 the `backend` directory:
 
 ```bash
-pipenv run django compilemessages -l fr
+uv run manage.py compilemessages -l fr
 ```
 
 :::tip
@@ -155,11 +155,11 @@ The available formats are:
 2. Then create all the new `.po` files for each app:
    ```bash
    cd apps/<app_name>
-   pipenv run django-admin makemessages -l <your_language_code>
+   uv run django-admin makemessages -l <your_language_code>
    ```
 3. Write all the translations, and finally compile them:
    ```bash
-   pipenv run django compilemessages -l <you_language_code>
+   uv run manage.py compilemessages -l <you_language_code>
    ```
 4. Add the language to the frontend (see [Frontend i18n](/dev/frontend/i18n.mdx))
 

@@ -11,7 +11,7 @@ Let's start by creating a new app with the django command-line tool:
 
    ```bash
    cd apps
-   pipenv run django-admin startapp <app_name>
+   uv run django-admin startapp <app_name>
    ```
 
    For this example, let's assume we created an app called `event`.
@@ -41,5 +41,5 @@ Let's start by creating a new app with the django command-line tool:
 
 4. Finally, we need to update your database:
    ```bash
-   pipenv run migrate
+   uv run manage.py migrate
    ```

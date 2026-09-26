@@ -1,20 +1,15 @@
 services:
   backend:
-    container_name: backend
-    build:
-      context: ../../backend/
-      dockerfile: ../deployment/containers/web/Dockerfile
+    image: ghcr.io/3cn-ecn/nantralplatform:${BACKEND_TAG:-latest}
     expose:
       - "8000"
     command: sh run_server.sh
     volumes:
       - "/etc/timezone:/etc/timezone:ro"
       - "/etc/localtime:/etc/localtime:ro"
-      - ../../backend:/var/app
       - static_volume:/var/app/staticfiles/
     depends_on:
       - database
-      - redis
     env_file: ../backend.env
     labels:
       - "traefik.enable=true"
@@ -23,26 +18,25 @@ services:
       - "traefik.http.routers.backend.tls.certresolver=letsencrypt"
     networks:
       - proxy
+      - database
+      - cache
 
   backend-staging:
-    container_name: backend_staging
-    build:
-      context: ../../../nantralPlatform-staging/backend/
-      dockerfile: ../deployment/containers/web_staging/Dockerfile
+    image: ghcr.io/3cn-ecn/nantralplatform:${STAGING_TAG:-latest}
     expose:
-      - "8001"
-    command: sh run_server_staging.sh
+      - "8000"
+    command: sh run_server.sh
     volumes:
       - "/etc/timezone:/etc/timezone:ro"
       - "/etc/localtime:/etc/localtime:ro"
-      - ../../../nantralPlatform-staging/backend:/var/app
       - static_volume_staging:/var/app/staticfiles/
     depends_on:
       - database
-      - redis
+      - memcached
     env_file: ../backend-staging.env
     environment:
       - STAGING=True
+      - GUNICORN_WORKERS=1
       - "TZ=Europe/Paris"
     labels:
       - "traefik.enable=true"
@@ -51,3 +45,5 @@ services:
       - "traefik.http.routers.backend-staging.tls.certresolver=letsencrypt"
     networks:
       - proxy
+      - database
+      - cache
