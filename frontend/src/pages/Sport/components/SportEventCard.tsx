@@ -72,7 +72,7 @@ export function SportEventCard({ sportEvent }: Readonly<SportEventCardProps>) {
         sx={{
           width: '100%',
           maxWidth: '250px',
-          height: '320px',
+          height: '270px',
           display: 'flex',
           flexDirection: 'column',
           position: 'relative',
@@ -173,9 +173,9 @@ export function SportEventCard({ sportEvent }: Readonly<SportEventCardProps>) {
               pt: 0,
               '& > :first-child': { mt: 0 },
               '& p': { my: 0 },
-              // show at most 3 lines, with an ellipsis
+              // show at most 2 lines, with an ellipsis
               display: '-webkit-box',
-              WebkitLineClamp: 3,
+              WebkitLineClamp: 2,
               WebkitBoxOrient: 'vertical',
               overflow: 'hidden',
               flexShrink: 0,
