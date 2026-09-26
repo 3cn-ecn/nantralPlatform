@@ -16,6 +16,8 @@ function getDefaultSportEventFormValues(): SportEventForm {
     // must not be in the past by the time it is submitted
     date: new Date(Date.now() + 60 * 60 * 1000),
     type: SportEventType.TRAINING,
+    isWeekly: false,
+    repeatUntil: null,
   };
 }
 
@@ -26,6 +28,8 @@ function convertToForm(event: SportEvent): SportEventForm {
     location: event.location,
     date: event.date,
     type: event.type,
+    isWeekly: !!event.repeatUntil,
+    repeatUntil: event.repeatUntil ?? null,
   };
 }
 

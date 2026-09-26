@@ -70,7 +70,11 @@ class SportEventSerializer(TranslationModelSerializer):
 
 class SportEventWriteSerializer(TranslationModelSerializer):
     owner = serializers.PrimaryKeyRelatedField(queryset=Group.objects.all())
-    repeat_until = serializers.DateTimeField(write_only=True, required=False)
+    repeat_until = serializers.DateTimeField(
+        write_only=True,
+        required=False,
+        allow_null=True,
+    )
 
     class Meta:
         model = SportEvent
@@ -131,18 +135,11 @@ class SportEventWriteSerializer(TranslationModelSerializer):
             )
         repeat_until = data.get("repeat_until")
         if repeat_until is not None:
-            self.validate_repeat(data.get("date"), repeat_until)
+            date = data.get("date") or self.instance.date
+            self.validate_repeat(date, repeat_until)
         return data
 
     def validate_repeat(self, date, repeat_until) -> None:
-        if self.instance is not None:
-            raise serializers.ValidationError(
-                {
-                    "repeat_until": _(
-                        "An event can only be repeated when it is created.",
-                    ),
-                },
-            )
         if repeat_until < date:
             raise serializers.ValidationError(
                 {
@@ -173,6 +170,28 @@ class SportEventWriteSerializer(TranslationModelSerializer):
             if repeat_until is not None:
                 event.repeat_weekly(repeat_until)
         return event
+
+    def update(self, instance: SportEvent, validated_data: dict) -> SportEvent:
+        # absent: keep the following occurrences as they are
+        # None: delete the following occurrences
+        update_repetition = "repeat_until" in validated_data
+        repeat_until = validated_data.pop("repeat_until", None)
+        with transaction.atomic():
+            event: SportEvent = super().update(instance, validated_data)
+            if update_repetition:
+                event.set_repeat_until(repeat_until)
+        return event
+
+
+class SportEventDetailSerializer(SportEventSerializer):
+    repeat_until = serializers.SerializerMethodField()
+
+    class Meta(SportEventSerializer.Meta):
+        fields = [*SportEventSerializer.Meta.fields, "repeat_until"]
+
+    def get_repeat_until(self, obj: SportEvent) -> str | None:
+        repeat_until = obj.get_repeat_until()
+        return serializers.DateTimeField().to_representation(repeat_until)
 
 
 class EventSerializer(TranslationModelSerializer):

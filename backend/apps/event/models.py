@@ -226,6 +226,40 @@ class SportEvent(models.Model):
         for field in self.shared_fields():
             setattr(other, field, getattr(self, field))
 
+    def get_descendants(self) -> list["SportEvent"]:
+        """Return the following occurrences, in chronological order."""
+        descendants = []
+        child = self.get_child()
+        while child is not None:
+            descendants.append(child)
+            child = child.get_child()
+        return descendants
+
+    def get_repeat_until(self) -> datetime | None:
+        """Return the date of the last occurrence, if there is a following
+        occurrence.
+        """
+        descendants = self.get_descendants()
+        return descendants[-1].date if descendants else None
+
+    def set_repeat_until(self, until: datetime | None) -> None:
+        """Make this event repeat weekly up to `until`.
+
+        The following occurrences after `until` are deleted, and new weekly
+        occurrences are added after the last one if needed. If `until` is
+        None, all the following occurrences are deleted.
+        """
+        with transaction.atomic():
+            last = self
+            for occurrence in self.get_descendants():
+                if until is None or occurrence.date > until:
+                    # deletes all the following occurrences too
+                    occurrence.delete()
+                    break
+                last = occurrence
+            if until is not None:
+                last.repeat_weekly(until)
+
     def repeat_weekly(self, until: datetime) -> list["SportEvent"]:
         """Create a weekly occurrence of this event up to `until`.
 

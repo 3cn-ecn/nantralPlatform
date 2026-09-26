@@ -1079,7 +1079,10 @@
     "membership_reminder": "Warning: only members of clubs can register for sports events. If you are not a member of a club, you will not be able to register.",
     "deleteModal": {
       "title": "Delete the sport event",
-      "body": "Do you really want to delete this sport event? This action is permanent."
+      "body": "Do you really want to delete this sport event? This action is permanent.",
+      "recurrentBody": "This event is weekly. Do you want to delete only this occurrence, or all the following ones too? This action is permanent.",
+      "single": "This occurrence",
+      "following": "This one and the following"
     },
     "noEvents": "No sport events planned",
     "noDescription": "No description",
@@ -1106,6 +1109,19 @@
     },
     "dayDisplay": {
       "later": "Later"
+    },
+    "form": {
+      "weekly": {
+        "label": "Weekly",
+        "helpText": "Repeat the event every week"
+      },
+      "repeatUntil": {
+        "label": "Until",
+        "helpText": "Date of the last occurrence"
+      }
+    },
+    "editModal": {
+      "recurrentInfo": "This event is weekly: the changes will apply to this occurrence and all the following ones. Unchecking \"Weekly\" or moving the end date earlier will delete the affected following occurrences."
     }
   }
 }

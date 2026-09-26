@@ -15,6 +15,7 @@ from .serializers import (
     EventPreviewSerializer,
     EventSerializer,
     EventWriteSerializer,
+    SportEventDetailSerializer,
     SportEventSerializer,
     SportEventWriteSerializer,
 )
@@ -78,6 +79,8 @@ class SportEventViewSet(viewsets.ModelViewSet):
       up to `repeat_until` if given)
     - GET .../sport/<id>/ : get a sport event
     - PUT .../sport/<id>/ : update a sport event and its following occurrences
+      (and update its weekly repetition up to `repeat_until` if given, or
+      delete its following occurrences if `repeat_until` is null)
     - DELETE .../sport/<id>/ : delete a sport event and all its following
       occurrences (or only this one with `?single=true`)
     """
@@ -103,6 +106,8 @@ class SportEventViewSet(viewsets.ModelViewSet):
     def get_serializer_class(self):
         if self.request.method in ["POST", "PUT", "PATCH"]:
             return SportEventWriteSerializer
+        if self.action == "retrieve":
+            return SportEventDetailSerializer
         return SportEventSerializer
 
     def get_queryset(self) -> QuerySet[Event]:

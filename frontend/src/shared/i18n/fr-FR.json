@@ -1079,7 +1079,10 @@
     "membership_reminder": "Attention : seul les membres des clubs peuvent s'inscrire aux événements sportifs. Si vous n'êtes pas membre d'un club, vous ne pourrez pas vous inscrire.",
     "deleteModal": {
       "title": "Supprimer l'événement sportif",
-      "body": "Voulez-vous vraiment supprimer cet événement sportif ? Cette action est définitive."
+      "body": "Voulez-vous vraiment supprimer cet événement sportif ? Cette action est définitive.",
+      "recurrentBody": "Cet événement est hebdomadaire. Voulez-vous supprimer uniquement cette occurrence, ou aussi toutes les suivantes ? Cette action est définitive.",
+      "single": "Cette occurrence",
+      "following": "Celle-ci et les suivantes"
     },
     "noEvents": "Aucun événement sportif prévu",
     "noDescription": "Aucune description",
@@ -1106,6 +1109,19 @@
     },
     "dayDisplay": {
       "later": "Plus tard"
+    },
+    "form": {
+      "weekly": {
+        "label": "Hebdomadaire",
+        "helpText": "Répéter l'événement chaque semaine"
+      },
+      "repeatUntil": {
+        "label": "Jusqu'au",
+        "helpText": "Date de la dernière occurrence"
+      }
+    },
+    "editModal": {
+      "recurrentInfo": "Cet événement est hebdomadaire : les modifications s'appliqueront à cette occurrence et à toutes les suivantes. Décocher « Hebdomadaire » ou avancer la date de fin supprimera les occurrences suivantes concernées."
     }
   }
 }

@@ -408,15 +408,103 @@ class RecurrentSportEventAPITestCase(APITestCase):
         self.assertIn("repeat_until", response.data)
         self.assertEqual(SportEvent.objects.count(), 0)
 
-    def test_update_rejects_repeat_until(self):
-        events = self.create_recurrent_event(weeks=1)
+    def get_chain(self, first: SportEvent) -> list[SportEvent]:
+        first.refresh_from_db()
+        return [first, *first.get_descendants()]
+
+    def test_update_extends_repetition(self):
+        events = self.create_recurrent_event(weeks=2)
+        events[1].participants.add(self.member)
         response = self.client.patch(
             f"/api/event/sport/{events[0].id}/",
             {"repeat_until": self.start + timedelta(weeks=3)},
         )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        chain = self.get_chain(events[0])
+        self.assertEqual(len(chain), 4)
+        self.assertEqual(chain[1].id, events[1].id)
+        # existing occurrences are kept with their participants
+        self.assertTrue(chain[1].participants.filter(id=self.member.id).exists())
+        for event in chain:
+            self.assertEqual(timezone.localtime(event.date).hour, 18)
+            self.assertEqual(event.location, "Gym")
+
+    def test_update_starts_repetition_of_single_event(self):
+        events = self.create_recurrent_event(weeks=1)
+        response = self.client.patch(
+            f"/api/event/sport/{events[0].id}/",
+            {"repeat_until": self.start + timedelta(weeks=2)},
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(self.get_chain(events[0])), 3)
+
+    def test_update_shortens_repetition(self):
+        events = self.create_recurrent_event(weeks=5)
+        response = self.client.patch(
+            f"/api/event/sport/{events[1].id}/",
+            {"repeat_until": self.start + timedelta(weeks=2, days=1)},
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(
+            [event.id for event in self.get_chain(events[0])],
+            [event.id for event in events[:3]],
+        )
+
+    def test_update_null_repeat_until_stops_repetition(self):
+        events = self.create_recurrent_event(weeks=4)
+        response = self.client.patch(
+            f"/api/event/sport/{events[1].id}/",
+            {"repeat_until": None},
+            format="json",
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(
+            [event.id for event in self.get_chain(events[0])],
+            [events[0].id, events[1].id],
+        )
+
+    def test_update_without_repeat_until_keeps_repetition(self):
+        events = self.create_recurrent_event(weeks=4)
+        response = self.client.patch(
+            f"/api/event/sport/{events[1].id}/",
+            {"location": "Stadium"},
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(SportEvent.objects.count(), 4)
+
+    def test_update_rejects_too_many_occurrences(self):
+        events = self.create_recurrent_event(weeks=2)
+        response = self.client.patch(
+            f"/api/event/sport/{events[0].id}/",
+            {
+                "repeat_until": self.start
+                + timedelta(weeks=MAX_SPORT_EVENT_OCCURRENCES),
+            },
+        )
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertIn("repeat_until", response.data)
-        self.assertEqual(SportEvent.objects.count(), 1)
+        self.assertEqual(SportEvent.objects.count(), 2)
+
+    def test_update_rejects_repeat_until_before_date(self):
+        events = self.create_recurrent_event(weeks=2)
+        response = self.client.patch(
+            f"/api/event/sport/{events[1].id}/",
+            {"repeat_until": self.start},
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertIn("repeat_until", response.data)
+        self.assertEqual(SportEvent.objects.count(), 2)
+
+    def test_retrieve_exposes_repeat_until(self):
+        events = self.create_recurrent_event(weeks=3)
+        response = self.client.get(f"/api/event/sport/{events[0].id}/")
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(
+            datetime.fromisoformat(response.data["repeat_until"]),
+            events[2].date,
+        )
+        response = self.client.get(f"/api/event/sport/{events[2].id}/")
+        self.assertIsNone(response.data["repeat_until"])
 
     def test_update_propagates_to_descendants_only(self):
         events = self.create_recurrent_event(weeks=4)

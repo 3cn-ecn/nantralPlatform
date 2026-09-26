@@ -4,6 +4,13 @@ import { adaptTranslatedField } from '#shared/infra/translatedFields/translatedF
 import { SportEvent } from '../sportevent.type';
 import { SportEventDTO } from './sportevent.dto';
 
+function adaptRepeatUntil(repeatUntil?: string | null) {
+  if (repeatUntil === undefined) {
+    return undefined;
+  }
+  return repeatUntil ? new Date(repeatUntil) : null;
+}
+
 export function adaptSportEventDTO(dto: SportEventDTO): SportEvent {
   return {
     id: dto.id,
@@ -16,5 +23,8 @@ export function adaptSportEventDTO(dto: SportEventDTO): SportEvent {
     location: dto.location,
     group: adaptGroupPreview(dto.owner),
     type: dto.type,
+    parent: dto.parent,
+    child: dto.child,
+    repeatUntil: adaptRepeatUntil(dto.repeat_until),
   };
 }
