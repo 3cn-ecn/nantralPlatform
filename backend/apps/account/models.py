@@ -3,7 +3,7 @@ import uuid
 from django.apps import apps
 from django.contrib import admin
 from django.contrib.auth.models import AbstractUser
-from django.db import models
+from django.db import models, transaction
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
@@ -12,6 +12,7 @@ from rest_framework import exceptions
 from apps.sociallink.models import SocialLink
 from apps.utils.fields.image_field import CustomImageField
 
+from ..utils.send_email import send_email
 from .manager import UserManager
 from .utils import send_email_confirmation
 from .validators import (
@@ -244,6 +245,15 @@ class Email(models.Model):
     )
     # Utilisé pour la vérification
     uuid = models.UUIDField(_("Unique ID"), unique=True, default=uuid.uuid4)
+    created_at = models.DateTimeField(
+        verbose_name=_("Created at"), auto_now_add=True
+    )
+    last_reminder_sent = models.DateTimeField(
+        verbose_name=_("Last reminder sent"),
+        null=True,
+        blank=True,
+        help_text=_("Tracks when the last verification reminder was sent"),
+    )
 
     def __str__(self):
         return self.email
@@ -251,6 +261,44 @@ class Email(models.Model):
     def save(self, *args, **kwargs):
         self.email = self.email.lower()
         super().save(*args, **kwargs)
+
+    def delete(self, *args, **kwargs):
+        """Delete the email
+
+        If this email is the user primary email, try to swap with another
+        active email and send a notice email.
+        If there is no active emails delete the account.
+        """
+        user = self.user
+
+        with transaction.atomic():
+            if user.email != self:
+                return super().delete(*args, **kwargs)
+
+            replacement = (
+                user.emails.filter(is_valid=True)
+                .exclude(pk=self.pk)
+                .order_by("created_at")
+                .first()
+            )
+            if replacement is None:
+                user.email = None
+                user.save(update_fields=["email"])
+                return user.delete(*args, **kwargs)
+
+            user.email = replacement
+            user.save(update_fields=["email"])
+            send_email(
+                subject="Votre adresse email principale a été supprimée",
+                to=replacement.email,
+                template_name="email-deleted",
+                context={
+                    "first_name": user.first_name,
+                    "deleted_email": self.email,
+                    "new_email": replacement.email,
+                },
+            )
+            return super().delete(*args, **kwargs)
 
     @admin.display(boolean=True)
     def is_authorized_organisation_email(self):

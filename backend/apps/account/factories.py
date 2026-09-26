@@ -61,7 +61,11 @@ class UserFactory(DjangoModelFactory):
         """Override the default ``_create`` with our custom call."""
         manager = cls._get_manager(model_class)
         # The default would use ``manager.create(*args, **kwargs)``
-        return manager.create_user(*args, **kwargs)
+        user = manager.create_user(*args, **kwargs)
+        email = user.email
+        email.is_valid = True
+        email.save()
+        return user
 
 
 class UserFakeData(FakeDataGenerator):
