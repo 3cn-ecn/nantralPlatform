@@ -54,7 +54,7 @@ def clean_username(username: str):
     return cleaned
 
 
-def send_email_confirmation(email, request: HttpRequest) -> None:
+def send_email_confirmation(email, request: HttpRequest | None = None) -> None:
     path = reverse(
         "account:confirm",
         kwargs={
@@ -62,9 +62,16 @@ def send_email_confirmation(email, request: HttpRequest) -> None:
             "token": email_confirmation_token.make_token(email),
         },
     )
+
+    # Build validation link with or without request
+    if request:
+        validation_link = request.build_absolute_uri(path)
+    else:
+        validation_link = f"https://nantral-platform.fr/{path}"
+
     context = {
         "first_name": email.user.first_name,
-        "validation_link": request.build_absolute_uri(path),
+        "validation_link": validation_link,
     }
 
     try:
@@ -75,13 +82,14 @@ def send_email_confirmation(email, request: HttpRequest) -> None:
             context=context,
         )
     except Exception:
-        messages.error(
-            request,
-            (
-                "Une erreur est survenue lors de l'envoi du mail. "
-                "Merci de contacter l'administrateur."
-            ),
-        )
+        if request:
+            messages.error(
+                request,
+                (
+                    "Une erreur est survenue lors de l'envoi du mail. "
+                    "Merci de contacter l'administrateur."
+                ),
+            )
         return
 
     if request:
