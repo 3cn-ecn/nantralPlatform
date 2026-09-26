@@ -261,6 +261,44 @@ class Email(models.Model):
         self.email = self.email.lower()
         super().save(*args, **kwargs)
 
+    def delete(self, *args, **kwargs):
+        """Delete the email
+
+        If this email is the user primary email, try to swap with another
+        active email and send a notice email.
+        If there is no active emails delete the account.
+        """
+        user = self.user
+
+        with transaction.atomic():
+            if user.email != self:
+                return super().delete(*args, **kwargs)
+
+            replacement = (
+                user.emails.filter(is_valid=True)
+                .exclude(pk=self.pk)
+                .order_by("created_at")
+                .first()
+            )
+            if replacement is None:
+                user.email = None
+                user.save(update_fields=["email"])
+                return user.delete(*args, **kwargs)
+
+            user.email = replacement
+            user.save(update_fields=["email"])
+            send_email(
+                subject="Votre adresse email principale a été supprimée",
+                to=replacement.email,
+                template_name="email-deleted",
+                context={
+                    "first_name": user.first_name,
+                    "deleted_email": self.email,
+                    "new_email": replacement.email,
+                },
+            )
+            return super().delete(*args, **kwargs)
+
     @admin.display(boolean=True)
     def is_authorized_organisation_email(self):
         return self.authorized_organisation() is not None

@@ -1,4 +1,3 @@
-
 import logging
 import os
 
@@ -27,17 +26,22 @@ app.autodiscover_tasks(settings.COMMON_APPS)
 
 @app.on_after_finalize.connect
 def setup_periodic_tasks(sender: Celery, **kwargs):
+    from apps.account.tasks import (
+        delete_unverified_emails,
+        send_email_verification_reminders,
+    )
+
     # Schedule email verification reminders to run daily at 9 AM
     sender.add_periodic_task(
         crontab(hour=9, minute=0),
-        "apps.account.tasks.send_email_verification_reminders",
+        send_email_verification_reminders.s(),
         name="send-email-verification-reminders",
     )
-    
+
     # Schedule deletion of unverified emails to run daily at 10 AM
     sender.add_periodic_task(
         crontab(hour=10, minute=0),
-        "apps.account.tasks.delete_unverified_emails",
+        delete_unverified_emails.s(),
         name="delete-unverified-emails",
     )
 

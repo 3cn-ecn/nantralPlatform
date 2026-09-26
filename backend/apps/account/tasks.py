@@ -76,25 +76,8 @@ def delete_unverified_emails():
 
     deleted_count = 0
     for email_obj in unverified_old_emails:
-        user = email_obj.user
-
-        # Check if this is the user's primary email
-        is_primary = user.email == email_obj
-
         # Delete the email
         email_obj.delete()
         deleted_count += 1
-
-        # If it was the primary email and the user has no other verified emails,
-        # optionally handle this case (e.g., notify admin or delete user)
-        if is_primary and not user.emails.filter(is_valid=True).exists():
-            # You can add additional logic here, e.g., send admin notification
-            import logging
-
-            logger = logging.getLogger(__name__)
-            logger.warning(
-                f"User {user.id} ({user.username}) has no verified emails left "
-                f"after deletion of primary unverified email {email_obj.email}"
-            )
 
     return f"Deleted {deleted_count} unverified emails"

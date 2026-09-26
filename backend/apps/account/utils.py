@@ -1,4 +1,5 @@
 import re
+import traceback
 import unicodedata
 
 from django.contrib import messages
@@ -82,6 +83,7 @@ def send_email_confirmation(email, request: HttpRequest | None = None) -> None:
             context=context,
         )
     except Exception:
+        traceback.print_exc()
         if request:
             messages.error(
                 request,
