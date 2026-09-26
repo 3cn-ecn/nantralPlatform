@@ -114,7 +114,7 @@ export function SportEventCard({ sportEvent }: Readonly<SportEventCardProps>) {
                   variant="subtitle1"
                   fontWeight={800}
                   noWrap
-                  title={sportEvent.group.name}
+                  title={sportEvent.group.shortName}
                   maxWidth="100%"
                   sx={{ '&:hover': { textDecoration: 'underline' } }}
                 >
