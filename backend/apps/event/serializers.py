@@ -1,3 +1,4 @@
+from django.db import transaction
 from django.utils import timezone
 from django.utils.translation import gettext as _
 
@@ -7,7 +8,12 @@ from apps.group.models import Group
 from apps.group.serializers import GroupPreviewSerializer
 from apps.utils.translation_model_serializer import TranslationModelSerializer
 
-from .models import Event, SportEvent
+from .models import (
+    MAX_SPORT_EVENT_OCCURRENCES,
+    Event,
+    SportEvent,
+    weekly_dates,
+)
 
 
 class SportEventSerializer(TranslationModelSerializer):
@@ -15,10 +21,17 @@ class SportEventSerializer(TranslationModelSerializer):
     participants = serializers.SerializerMethodField()
     non_participants = serializers.SerializerMethodField()
     owner = GroupPreviewSerializer(read_only=True)
+    child = serializers.SerializerMethodField()
 
     class Meta:
         model = SportEvent
-        read_only_fields = ["id", "participants", "non_participants", "owner"]
+        read_only_fields = [
+            "id",
+            "participants",
+            "non_participants",
+            "owner",
+            "parent",
+        ]
         fields = [
             "id",
             "type",
@@ -29,6 +42,8 @@ class SportEventSerializer(TranslationModelSerializer):
             "participants",
             "non_participants",
             "owner",
+            "parent",
+            "child",
         ]
         translations_fields = ["description"]
         translations_only = False
@@ -45,12 +60,17 @@ class SportEventSerializer(TranslationModelSerializer):
     def get_participants(self, obj: SportEvent):
         return obj.participants.count()
 
+    def get_child(self, obj: SportEvent) -> int | None:
+        child = obj.get_child()
+        return child.id if child else None
+
     def get_non_participants(self, obj: SportEvent):
         return obj.non_participants.count()
 
 
 class SportEventWriteSerializer(TranslationModelSerializer):
     owner = serializers.PrimaryKeyRelatedField(queryset=Group.objects.all())
+    repeat_until = serializers.DateTimeField(write_only=True, required=False)
 
     class Meta:
         model = SportEvent
@@ -63,8 +83,10 @@ class SportEventWriteSerializer(TranslationModelSerializer):
             "owner",
             "participants",
             "non_participants",
+            "parent",
+            "repeat_until",
         ]
-        read_only_fields = ["id", "participants", "non_participants"]
+        read_only_fields = ["id", "participants", "non_participants", "parent"]
         translations_fields = ["description"]
         translations_only = False
 
@@ -107,7 +129,50 @@ class SportEventWriteSerializer(TranslationModelSerializer):
                     ),
                 },
             )
+        repeat_until = data.get("repeat_until")
+        if repeat_until is not None:
+            self.validate_repeat(data.get("date"), repeat_until)
         return data
+
+    def validate_repeat(self, date, repeat_until) -> None:
+        if self.instance is not None:
+            raise serializers.ValidationError(
+                {
+                    "repeat_until": _(
+                        "An event can only be repeated when it is created.",
+                    ),
+                },
+            )
+        if repeat_until < date:
+            raise serializers.ValidationError(
+                {
+                    "repeat_until": _(
+                        "The end of the repetition cannot be before the date.",
+                    ),
+                },
+            )
+        occurrences = weekly_dates(
+            date,
+            repeat_until,
+            limit=MAX_SPORT_EVENT_OCCURRENCES,
+        )
+        if len(occurrences) > MAX_SPORT_EVENT_OCCURRENCES:
+            raise serializers.ValidationError(
+                {
+                    "repeat_until": _(
+                        "An event cannot be repeated more than %(max)s times.",
+                    )
+                    % {"max": MAX_SPORT_EVENT_OCCURRENCES},
+                },
+            )
+
+    def create(self, validated_data: dict) -> SportEvent:
+        repeat_until = validated_data.pop("repeat_until", None)
+        with transaction.atomic():
+            event: SportEvent = super().create(validated_data)
+            if repeat_until is not None:
+                event.repeat_weekly(repeat_until)
+        return event
 
 
 class EventSerializer(TranslationModelSerializer):

@@ -74,10 +74,12 @@ class SportEventViewSet(viewsets.ModelViewSet):
     Actions
     -------
     - GET .../sport/ : get the list of sport event
-    - POST .../sport/ : create a new sport event
+    - POST .../sport/ : create a new sport event (and its weekly occurrences
+      up to `repeat_until` if given)
     - GET .../sport/<id>/ : get a sport event
-    - PUT .../sport/<id>/ : update a sport event
-    - DELETE .../sport/<id>/ : delete a sport event
+    - PUT .../sport/<id>/ : update a sport event and its following occurrences
+    - DELETE .../sport/<id>/ : delete a sport event and all its following
+      occurrences (or only this one with `?single=true`)
     """
 
     permission_classes = [permissions.IsAuthenticated, SportEventPermission]
@@ -141,7 +143,13 @@ class SportEventViewSet(viewsets.ModelViewSet):
         if is_not_participating is False:
             qs = qs.exclude(non_participants=user)
 
-        return qs.select_related("owner").distinct()
+        return qs.select_related("owner", "child").distinct()
+
+    def perform_destroy(self, instance: SportEvent) -> None:
+        if parse_bool(self.query_params.get("single")):
+            instance.delete_single()
+        else:
+            instance.delete()
 
     @action(detail=True, filter_backends=[])
     def participants(self, request, pk=None):

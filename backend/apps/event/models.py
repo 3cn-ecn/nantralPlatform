@@ -1,6 +1,8 @@
+from datetime import datetime, timedelta
 from enum import IntEnum
 
-from django.db import models
+from django.conf import settings
+from django.db import models, transaction
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
@@ -86,8 +88,49 @@ class Event(AbstractPublication):
         super().save(*args, notification_body=f"Event : {self.title}", **kwargs)
 
 
+MAX_SPORT_EVENT_OCCURRENCES = 52
+
+
+def _local_naive(value: datetime) -> datetime:
+    """Convert an aware datetime to a naive datetime in local time."""
+    return timezone.localtime(value).replace(tzinfo=None)
+
+
+def shift_in_local_time(value: datetime, delta: timedelta) -> datetime:
+    """Shift a datetime by `delta`, computed in local time.
+
+    This keeps the same wall-clock time across daylight saving time changes
+    (e.g. an event at 18:00 stays at 18:00 after the switch to winter time).
+    """
+    return timezone.make_aware(_local_naive(value) + delta)
+
+
+def weekly_dates(
+    start: datetime,
+    until: datetime,
+    limit: int | None = None,
+) -> list[datetime]:
+    """Return the weekly dates from `start` (included) up to `until`.
+
+    If `limit` is given, stop after `limit + 1` dates (enough to know that
+    the limit is exceeded without iterating over a huge range).
+    """
+    dates = []
+    current = start
+    while current <= until and (limit is None or len(dates) <= limit):
+        dates.append(current)
+        current = shift_in_local_time(start, timedelta(weeks=len(dates)))
+    return dates
+
+
 class SportEvent(models.Model):
-    """A model representing a sport event."""
+    """A model representing a sport event.
+
+    A sport event can be recurrent: occurrences are chained through the
+    `parent` field (each occurrence points to the previous one). Updating an
+    occurrence propagates the shared fields (and the date shift) to all of
+    its descendants, and deleting it deletes all of its descendants.
+    """
 
     description = models.TextField(
         verbose_name=_("Description"),
@@ -123,6 +166,92 @@ class SportEvent(models.Model):
         blank=True,
         related_name="non_participating_sport_events",
     )
+    parent = models.OneToOneField(
+        to="self",
+        on_delete=models.CASCADE,
+        verbose_name=_("Previous occurrence"),
+        null=True,
+        blank=True,
+        related_name="child",
+    )
 
     def __str__(self) -> str:
         return self.description
+
+    def save(self, *args, propagate: bool = True, **kwargs) -> None:
+        """Save the event and propagate the changes to its descendants.
+
+        Parameters
+        ----------
+        propagate : bool
+            If False, only save this occurrence.
+        """
+        if not propagate or self._state.adding:
+            super().save(*args, **kwargs)
+            return
+        with transaction.atomic():
+            previous_date = (
+                SportEvent.objects.filter(pk=self.pk)
+                .values_list("date", flat=True)
+                .first()
+            )
+            super().save(*args, **kwargs)
+            date_shift = (
+                _local_naive(self.date) - _local_naive(previous_date)
+                if previous_date is not None
+                else timedelta(0)
+            )
+            child = self.get_child()
+            while child is not None:
+                self.copy_shared_fields_to(child)
+                if date_shift:
+                    child.date = shift_in_local_time(child.date, date_shift)
+                child.save(propagate=False)
+                child = child.get_child()
+
+    @staticmethod
+    def shared_fields() -> list[str]:
+        """Fields copied from an occurrence to its descendants."""
+        return [
+            "owner_id",
+            "location",
+            "type",
+            *(f"description_{code}" for code, _name in settings.LANGUAGES),
+        ]
+
+    def get_child(self) -> "SportEvent | None":
+        return getattr(self, "child", None)
+
+    def copy_shared_fields_to(self, other: "SportEvent") -> None:
+        for field in self.shared_fields():
+            setattr(other, field, getattr(self, field))
+
+    def repeat_weekly(self, until: datetime) -> list["SportEvent"]:
+        """Create a weekly occurrence of this event up to `until`.
+
+        The occurrences are chained after this event, which must not already
+        have a child. The participants are not copied.
+        """
+        occurrences = []
+        previous = self
+        with transaction.atomic():
+            for date in weekly_dates(self.date, until)[1:]:
+                occurrence = SportEvent(parent=previous, date=date)
+                self.copy_shared_fields_to(occurrence)
+                occurrence.save()
+                occurrences.append(occurrence)
+                previous = occurrence
+        return occurrences
+
+    def delete_single(self) -> None:
+        """Delete only this occurrence, linking its child to its parent."""
+        with transaction.atomic():
+            child = self.get_child()
+            parent_id = self.parent_id
+            SportEvent.objects.filter(pk=self.pk).update(parent=None)
+            if child is not None:
+                SportEvent.objects.filter(pk=child.pk).update(
+                    parent=parent_id,
+                )
+            # prevent Django from cascading to the (now detached) child
+            SportEvent.objects.filter(pk=self.pk).delete()
