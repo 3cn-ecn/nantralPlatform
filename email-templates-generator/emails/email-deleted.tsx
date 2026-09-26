@@ -1,4 +1,4 @@
-import { Heading, Hr, Html, Section, Text } from '@react-email/components';
+import { Heading, Hr, Html, Section, Text } from 'react-email';
 
 import GenericTemplate from './_components/generic-template';
 import HeadWithFont from './_components/head-with-font';
@@ -26,9 +26,8 @@ const EmailDeletedEmail = ({
         </Heading>
         <Text>Bonjour {firstName},</Text>
         <Text>
-          L&apos;adresse {deletedEmail} a été supprimée de votre compte
-          Nantral Platform. Votre nouvelle adresse pour vous cennecter
-          est {newEmail}.
+          L&apos;adresse {deletedEmail} a été supprimée de votre compte Nantral
+          Platform. Votre nouvelle adresse pour vous cennecter est {newEmail}.
         </Text>
         <Text>
           Si vous n&apos;êtes pas à l&apos;origine de cette modification,

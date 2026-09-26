@@ -1,11 +1,4 @@
-import {
-  Heading,
-  Hr,
-  Html,
-  Preview,
-  Section,
-  Text,
-} from '@react-email/components';
+import { Heading, Hr, Html, Preview, Section, Text } from 'react-email';
 
 import BigButton from './_components/big-button';
 import GenericTemplate from './_components/generic-template';

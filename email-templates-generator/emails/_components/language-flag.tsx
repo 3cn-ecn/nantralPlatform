@@ -1,6 +1,5 @@
 import { CSSProperties } from 'react';
-
-import { Img } from '@react-email/components';
+import { Img } from 'react-email';
 
 type Lang = 'fr' | 'en';
 

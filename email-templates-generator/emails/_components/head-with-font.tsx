@@ -1,4 +1,4 @@
-import { Font, Head } from '@react-email/components';
+import { Font, Head } from 'react-email';
 
 const heeboFontFileUrl =
   'https://fonts.gstatic.com/s/heebo/v22/NGS6v5_NC0k9P9H2TbFhsqMA.woff2';

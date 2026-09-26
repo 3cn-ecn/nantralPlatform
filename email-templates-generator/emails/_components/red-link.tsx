@@ -1,6 +1,5 @@
 import { CSSProperties } from 'react';
-
-import { Link, LinkProps } from '@react-email/components';
+import { Link, LinkProps } from 'react-email';
 
 type Props = Omit<LinkProps, 'style' | 'rel'>;
 
