@@ -13,6 +13,8 @@ export type SportEventDTO = {
   type: number;
   parent: number | null;
   child: number | null;
+  can_edit: boolean;
+  is_group_member: boolean;
   // only in details
   repeat_until?: string | null;
 } & TranslatedFieldsDTO<'description'>;

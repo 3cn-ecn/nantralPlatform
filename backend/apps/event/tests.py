@@ -286,6 +286,138 @@ class SportEventAPITestCase(APITestCase):
         )
 
 
+class SportEventHierarchyPermissionTestCase(APITestCase):
+    """Superusers and admins of a parent group can manage sport events."""
+
+    def setUp(self) -> None:
+        self.superuser = User.objects.create_superuser(
+            username="superuser",
+            email="superuser@test.ec-nantes.fr",
+            password="",
+        )
+        self.parent_admin = User.objects.create_user(
+            username="parent_admin",
+            email="parent_admin@test.ec-nantes.fr",
+            password="",
+        )
+        self.child_admin = User.objects.create_user(
+            username="child_admin",
+            email="child_admin@test.ec-nantes.fr",
+            password="",
+        )
+        self.group_type = GroupType.objects.create(name="T1", slug="t1")
+        self.parent = Group.objects.create(
+            name="BDS",
+            group_type=self.group_type,
+            can_create_sport_event=True,
+        )
+        self.parent.members.add(
+            self.parent_admin, through_defaults={"admin": True}
+        )
+        self.child = Group.objects.create(
+            name="Club",
+            group_type=self.group_type,
+            parent=self.parent,
+        )
+        self.child.members.add(
+            self.child_admin, through_defaults={"admin": True}
+        )
+        self.grandchild = Group.objects.create(
+            name="SubClub",
+            group_type=self.group_type,
+            parent=self.child,
+        )
+        self.unauthorized_group = Group.objects.create(
+            name="UnauthorizedClub",
+            group_type=self.group_type,
+        )
+
+    def tearDown(self):
+        SportEvent.objects.all().delete()
+        Group.objects.all().delete()
+        GroupType.objects.all().delete()
+        User.objects.all().delete()
+
+    def create_event(self, group: Group):
+        return self.client.post(
+            "/api/event/sport/",
+            {
+                "owner": group.id,
+                "date": timezone.now() + timezone.timedelta(days=1),
+                "location": "Gym",
+                "description": "Training",
+            },
+        )
+
+    def assert_can_create_update_and_delete(self, group: Group):
+        response = self.create_event(group)
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        event_id = response.data["id"]
+        response = self.client.get(f"/api/event/sport/{event_id}/")
+        self.assertTrue(response.data["can_edit"])
+        response = self.client.patch(
+            f"/api/event/sport/{event_id}/",
+            {"location": "Gym 2"},
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        response = self.client.delete(f"/api/event/sport/{event_id}/")
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+
+    def test_superuser_can_manage_events_of_any_authorized_group(self):
+        self.client.force_login(self.superuser)
+        for group in (self.parent, self.child, self.grandchild):
+            self.assert_can_create_update_and_delete(group)
+
+    def test_superuser_cannot_use_unauthorized_group(self):
+        self.client.force_login(self.superuser)
+        response = self.create_event(self.unauthorized_group)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertIn("owner", response.data)
+
+    def test_parent_admin_can_manage_events_of_descendants(self):
+        self.client.force_login(self.parent_admin)
+        for group in (self.child, self.grandchild):
+            self.assert_can_create_update_and_delete(group)
+
+    def test_child_admin_cannot_manage_events_of_parent(self):
+        event = SportEvent.objects.create(
+            owner=self.parent,
+            date=timezone.now() + timezone.timedelta(days=1),
+        )
+        self.client.force_login(self.child_admin)
+        response = self.create_event(self.parent)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        response = self.client.get(f"/api/event/sport/{event.id}/")
+        self.assertFalse(response.data["can_edit"])
+        response = self.client.patch(
+            f"/api/event/sport/{event.id}/",
+            {"location": "Gym 2"},
+        )
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        response = self.client.delete(f"/api/event/sport/{event.id}/")
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+    def test_list_exposes_can_edit_and_is_group_member(self):
+        SportEvent.objects.create(
+            owner=self.parent,
+            date=timezone.now() + timezone.timedelta(days=1),
+        )
+        SportEvent.objects.create(
+            owner=self.child,
+            date=timezone.now() + timezone.timedelta(days=2),
+        )
+        self.client.force_login(self.child_admin)
+        response = self.client.get("/api/event/sport/")
+        self.assertEqual(
+            [e["can_edit"] for e in response.data["results"]],
+            [False, True],
+        )
+        self.assertEqual(
+            [e["is_group_member"] for e in response.data["results"]],
+            [False, True],
+        )
+
+
 class RecurrentSportEventAPITestCase(APITestCase):
     def setUp(self) -> None:
         self.admin = User.objects.create_user(

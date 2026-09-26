@@ -22,6 +22,10 @@ export interface SportEvent {
   nonParticipantsCount: number;
   group: GroupPreview;
   type: SportEventType;
+  /** whether the current user can edit or delete the event */
+  canEdit: boolean;
+  /** whether the current user is a member of the organizer group */
+  isGroupMember: boolean;
   /** id of the previous occurrence, if the event is recurrent */
   parent: number | null;
   /** id of the next occurrence, if the event is recurrent */

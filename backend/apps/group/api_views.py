@@ -88,6 +88,10 @@ class GroupViewSet(viewsets.ModelViewSet):
         Filter by groups where user is member
     - is_admin: bool
         Filter by groups where user is an admin member
+    - can_manage_sport_events: bool
+        Only get the groups for which the user can manage sport events (see
+        `Group.sport_event_manageable_by`), including sub-groups and private
+        groups. Other filters (except search and archived) are ignored.
     - slug: string (multiple)
         Filter by one or multiple slug
     - page: int
@@ -179,6 +183,11 @@ class GroupViewSet(viewsets.ModelViewSet):
         is_map = parse_bool(self.query_params.get("map"))
         archived = parse_bool(self.query_params.get("archived"), False)
 
+        if parse_bool(
+            self.query_params.get("can_manage_sport_events"), default=False
+        ):
+            return self.get_sport_event_manageable_queryset(archived)
+
         queryset = (
             Group.objects
             # hide groups without active members (ie end_date > today)
@@ -245,6 +254,16 @@ class GroupViewSet(viewsets.ModelViewSet):
                 *group_type.sort_fields.split(",") if group_type else "",
             )
             .distinct()
+        )
+
+    def get_sport_event_manageable_queryset(
+        self, archived: bool | None
+    ) -> QuerySet[Group]:
+        queryset = Group.sport_event_manageable_by(self.request.user)
+        if archived is not True:
+            queryset = queryset.filter(archived=False)
+        return queryset.prefetch_related("group_type", "parent").order_by(
+            "group_type", "name"
         )
 
     def get_object(self):

@@ -50,16 +50,18 @@ export function SportEventFormFields({
   // (when a field is modified, we only rerender this field and not all of them).
   const fetchInitialGroupOptions = useCallback(
     () =>
-      getGroupListApi({ pageSize: 7, isAdmin: true }).then((data) =>
-        data.results.filter((e) => e.canCreateSportEvent),
+      getGroupListApi({ pageSize: 7, canManageSportEvents: true }).then(
+        (data) => data.results,
       ),
     [],
   );
   const fetchGroupOptions = useCallback(
     (searchText: string) =>
-      getGroupListApi({ search: searchText, pageSize: 10, isAdmin: true }).then(
-        (data) => data.results.filter((e) => e.canCreateSportEvent),
-      ),
+      getGroupListApi({
+        search: searchText,
+        pageSize: 10,
+        canManageSportEvents: true,
+      }).then((data) => data.results),
     [],
   );
 

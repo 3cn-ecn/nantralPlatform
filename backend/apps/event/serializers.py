@@ -22,6 +22,8 @@ class SportEventSerializer(TranslationModelSerializer):
     non_participants = serializers.SerializerMethodField()
     owner = GroupPreviewSerializer(read_only=True)
     child = serializers.SerializerMethodField()
+    can_edit = serializers.SerializerMethodField()
+    is_group_member = serializers.SerializerMethodField()
 
     class Meta:
         model = SportEvent
@@ -44,9 +46,26 @@ class SportEventSerializer(TranslationModelSerializer):
             "owner",
             "parent",
             "child",
+            "can_edit",
+            "is_group_member",
         ]
         translations_fields = ["description"]
         translations_only = False
+
+    def _get_owner_permission(self, obj: SportEvent, name: str) -> bool:
+        """Call `obj.owner.<name>(user)`, cached per group since a list often
+        contains several events of the same group."""
+        cache = self.context.setdefault(f"sport_event_{name}_cache", {})
+        if obj.owner_id not in cache:
+            user = self.context["request"].user
+            cache[obj.owner_id] = getattr(obj.owner, name)(user)
+        return cache[obj.owner_id]
+
+    def get_can_edit(self, obj: SportEvent) -> bool:
+        return self._get_owner_permission(obj, "is_admin")
+
+    def get_is_group_member(self, obj: SportEvent) -> bool:
+        return self._get_owner_permission(obj, "is_member")
 
     def get_is_participating(self, obj: SportEvent):
         is_participating = None

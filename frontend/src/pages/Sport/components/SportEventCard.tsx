@@ -29,7 +29,6 @@ import {
 } from '#modules/event/sportevent.type';
 import { EditSportEventModal } from '#modules/event/view/Modals/EditSportEventModal';
 import { SportEventPeopleModal } from '#modules/event/view/SportEventPeopleModal';
-import { useGroupDetailsQuery } from '#modules/group/hooks/useGroupDetails.query';
 import { useSportEventParticipationMutation } from '#pages/Sport/hooks/useSportEventParticipationMutation';
 import { Avatar as GroupAvatar } from '#shared/components/Avatar/Avatar';
 import { FlexCol, FlexRow } from '#shared/components/FlexBox/FlexBox';
@@ -47,9 +46,8 @@ export function SportEventCard({ sportEvent }: Readonly<SportEventCardProps>) {
   const [isOpenEditModal, setIsOpenEditModal] = useState(false);
   const [isOpenPeopleModal, setIsOpenPeopleModal] = useState(false);
 
-  const { group } = useGroupDetailsQuery(sportEvent.group.slug);
-  const isAdmin = group?.isAdmin ?? false;
-  const isMember = group?.isMember ?? false;
+  const isAdmin = sportEvent.canEdit;
+  const isMember = sportEvent.isGroupMember;
 
   const participationMutation = useSportEventParticipationMutation(
     sportEvent.id,

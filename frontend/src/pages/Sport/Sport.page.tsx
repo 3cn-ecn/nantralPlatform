@@ -12,6 +12,7 @@ import {
 } from '@mui/material';
 
 import { SportEvent } from '#modules/event/sportevent.type';
+import { useCanManageSportEventsQuery } from '#modules/group/hooks/useCanManageSportEvents.query';
 import { FlexRow, FlexCol } from '#shared/components/FlexBox/FlexBox';
 import { InfiniteList } from '#shared/components/InfiniteList/InfiniteList';
 import { Spacer } from '#shared/components/Spacer/Spacer';
@@ -29,6 +30,7 @@ export default function SportPage() {
   const now = new Date(Date.now());
   const [onlyMyGroups, setOnlyMyGroups] = useState(false);
   const dayDisplay = useDayDisplay();
+  const { canManageSportEvents } = useCanManageSportEventsQuery();
 
   now.setHours(0, 0, 0, 0);
 
@@ -80,7 +82,7 @@ export default function SportPage() {
               {sportEvents.map((sportEvent: SportEvent) => (
                 <SportEventCard key={sportEvent.id} sportEvent={sportEvent} />
               ))}
-              <SportEventCardCreate />
+              {canManageSportEvents && <SportEventCardCreate />}
             </FlexRow>
             <Spacer vertical={2} />
           </div>

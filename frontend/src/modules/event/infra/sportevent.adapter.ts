@@ -25,6 +25,8 @@ export function adaptSportEventDTO(dto: SportEventDTO): SportEvent {
     type: dto.type,
     parent: dto.parent,
     child: dto.child,
+    canEdit: dto.can_edit,
+    isGroupMember: dto.is_group_member,
     repeatUntil: adaptRepeatUntil(dto.repeat_until),
   };
 }
