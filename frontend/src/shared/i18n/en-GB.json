@@ -1107,8 +1107,10 @@
       "training": "Training",
       "competition": "Competition"
     },
-    "dayDisplay": {
-      "later": "Later"
+    "weekDisplay": {
+      "thisWeek": "This week",
+      "nextWeek": "Next week",
+      "weekOf": "Week of {{date}}"
     },
     "form": {
       "weekly": {
