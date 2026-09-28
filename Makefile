@@ -43,7 +43,6 @@ docker-install:
 		$(CREATE) backend.env && \
 		docker compose build && \
 		docker compose run --rm backend-develop sh -c '\
-  			mkdir -p static/front &&\
   			uv run manage.py migrate &&\
   			DJANGO_SUPERUSER_PASSWORD=admin uv run manage.py createsuperuser --noinput --username np_admin --email admin@ec-nantes.fr &&\
   			uv run manage.py fakedata\
@@ -62,6 +61,11 @@ update:
 		uv sync --dev && \
 		uv run manage.py migrate
 
+.PHONY: docker-update
+docker-update:
+	cd deployment && \
+		docker compose build && \
+		docker compose run --rm backend-develop sh -c 'uv sync --dev && uv run manage.py migrate'
 
 # Run the tests
 .PHONY: test
