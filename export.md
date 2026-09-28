@@ -8,7 +8,7 @@ directement dans le shell Django interactif.
 Depuis `backend/` :
 
 ```bash
-pipenv run python manage.py shell
+uv run manage.py shell
 ```
 
 ## Coller ce code
@@ -59,8 +59,8 @@ chaque inscrit :
   de champ "numéro" dédié)
 - `family_name` : nom de la famille
 
-Seules les personnes ayant effectivement rejoint une famille apparaissent
-(le script parcourt les `MembershipFamily`, pas tous les `User`).
+Seules les personnes ayant effectivement rejoint une famille apparaissent (le script parcourt les `MembershipFamily`,
+pas tous les `User`).
 
 Quitter le shell avec `exit()` ou Ctrl+D une fois le fichier généré.
 

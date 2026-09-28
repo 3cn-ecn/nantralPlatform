@@ -30,7 +30,7 @@ services:
       - "../appdata/traefik/letsencrypt:/letsencrypt"
     networks:
       mailserver:
-        ipv4_address: 172.19.0.2
+        ipv4_address: 172.24.0.2
       proxy:
     command:
       - "--providers.docker.endpoint=tcp://socket-proxy:2375"

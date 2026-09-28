@@ -65,7 +65,7 @@ To run the backend, simply go into the `backend` folder and start the server:
 
 ```bash
 cd backend/
-pipenv run start
+uv run manage.py runserver
 ```
 
 The server will be launched in the background. You can stop the
@@ -95,4 +95,24 @@ You will notice 2 others packages in the Nantral Platform repo: `docs` and
 
 You can read their README.md files to know how to run them. Most of the time,
 they share the same commands as the frontend.
+:::
+
+## Shortcut command
+
+You can also use the following command from the root of the project to run everything
+at once.
+
+```bash
+make start
+```
+
+You can also use the docker version:
+
+```bash
+make docker-start
+```
+
+:::info
+The docker and normal version do not use the same database. You will need to reo the initial
+setup if you change your method.
 :::

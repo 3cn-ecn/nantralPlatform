@@ -43,13 +43,13 @@ If you have problems in running the method described above, you have to run befo
 You can generate fake random data for the database using this command:
 
 ```bash
-pipenv run fakedata
+uv run manage.py fakedata
 ```
 
 You can also generate data for a specific app, for example `event`:
 
 ```bash
-pipenv run fakedata event
+uv run manage.py fakedata event
 ```
 
 The fake data generators are defined in the `factories.py` files of each app,

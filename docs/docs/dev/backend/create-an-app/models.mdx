@@ -28,13 +28,13 @@ After creating or updating a model, you must update the database!
 Now we need to update the database. First, let's create a migration file:
 
 ```bash
-pipenv run makemigrations [app_name]
+uv run manage.py makemigrations [app_name]
 ```
 
 Then, apply the migration on your own database:
 
 ```bash
-pipenv run migrate
+uv run manage.py migrate
 ```
 
 :::info Why migration files are important?
@@ -123,16 +123,16 @@ Now you can do multiple things:
 
 - If you want to apply **all migrations** (3, 4 and 5):
    ```bash
-   pipenv run migrate event
+   uv run manage.py migrate event
    ```
 - If you want to apply **only** migrations 3 and 4, but not 5:
    ```bash
-   pipenv run migrate event 0004
+   uv run manage.py migrate event 0004
    ```
 - If you want to **un-apply** the migration n°2,
   and return to the state after the migration n°1:
    ```bash
-   pipenv run migrate event 0001
+   uv run manage.py migrate event 0001
    ```
 
 ### Writing a custom migration
@@ -143,7 +143,7 @@ one table to another.
 First, create an **_empty_** migration file with:
 
 ```bash
-pipenv run makemigrations <app_name> --empty --name <file_name>
+uv run manage.py makemigrations <app_name> --empty --name <file_name>
 ```
 
 Then, go to the `migrations` directory, and edit the new created file
