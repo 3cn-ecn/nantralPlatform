@@ -6,7 +6,7 @@ import {
 } from '#modules/event/api/getSportEvents.api';
 import { SportEvent } from '#modules/event/sportevent.type';
 
-import { getSportEventGroupKey, LATER_GROUP_KEY } from './useDayDisplay';
+import { getSportEventDayKey, getSportEventWeekKey } from './useDayDisplay';
 
 export function useSportEventList(
   params?: Omit<SportEventsQueryParameters, 'page'>,
@@ -24,26 +24,28 @@ export function useSportEventList(
   });
 
   const flatResult = query.data?.pages?.flatMap((page) => page.results) ?? [];
-  const groupByDay = new Map<string, SportEvent[]>();
+  // events come sorted by date, so weeks and days keep their insertion order
+  const groupByWeek = new Map<string, Map<string, SportEvent[]>>();
 
   flatResult.forEach((sportEvent: SportEvent) => {
-    const groupKey = getSportEventGroupKey(sportEvent.date);
-    if (groupByDay.has(groupKey)) {
-      groupByDay.get(groupKey)?.push(sportEvent);
+    const weekKey = getSportEventWeekKey(sportEvent.date);
+    const dayKey = getSportEventDayKey(sportEvent.date);
+    let week = groupByWeek.get(weekKey);
+    if (!week) {
+      week = new Map();
+      groupByWeek.set(weekKey, week);
+    }
+    const day = week.get(dayKey);
+    if (day) {
+      day.push(sportEvent);
     } else {
-      groupByDay.set(groupKey, [sportEvent]);
+      week.set(dayKey, [sportEvent]);
     }
   });
 
-  // the "later" row always shows, even with no events, so it can host
-  // the permanent create-event card
-  if (!groupByDay.has(LATER_GROUP_KEY)) {
-    groupByDay.set(LATER_GROUP_KEY, []);
-  }
-
   return {
     query: query,
-    groupByDay,
+    groupByWeek,
     count: query.data?.pages[0].count,
   };
 }

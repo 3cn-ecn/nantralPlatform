@@ -30,7 +30,9 @@ class SportEventAdmin(admin.ModelAdmin):
         "participants",
         "non_participants",
         "owner",
+        "parent",
     ]
+    readonly_fields = ["parent"]
 
     def save_model(
         self,

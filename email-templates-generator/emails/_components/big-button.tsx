@@ -1,6 +1,5 @@
 import { CSSProperties, PropsWithChildren } from 'react';
-
-import { Button, Container } from '@react-email/components';
+import { Button, Container } from 'react-email';
 
 type Props = PropsWithChildren & {
   href: string;

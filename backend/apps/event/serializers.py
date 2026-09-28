@@ -1,3 +1,4 @@
+from django.db import transaction
 from django.utils import timezone
 from django.utils.translation import gettext as _
 
@@ -7,7 +8,12 @@ from apps.group.models import Group
 from apps.group.serializers import GroupPreviewSerializer
 from apps.utils.translation_model_serializer import TranslationModelSerializer
 
-from .models import Event, SportEvent
+from .models import (
+    MAX_SPORT_EVENT_OCCURRENCES,
+    Event,
+    SportEvent,
+    weekly_dates,
+)
 
 
 class SportEventSerializer(TranslationModelSerializer):
@@ -15,10 +21,19 @@ class SportEventSerializer(TranslationModelSerializer):
     participants = serializers.SerializerMethodField()
     non_participants = serializers.SerializerMethodField()
     owner = GroupPreviewSerializer(read_only=True)
+    child = serializers.SerializerMethodField()
+    can_edit = serializers.SerializerMethodField()
+    is_group_member = serializers.SerializerMethodField()
 
     class Meta:
         model = SportEvent
-        read_only_fields = ["id", "participants", "non_participants", "owner"]
+        read_only_fields = [
+            "id",
+            "participants",
+            "non_participants",
+            "owner",
+            "parent",
+        ]
         fields = [
             "id",
             "type",
@@ -29,9 +44,28 @@ class SportEventSerializer(TranslationModelSerializer):
             "participants",
             "non_participants",
             "owner",
+            "parent",
+            "child",
+            "can_edit",
+            "is_group_member",
         ]
         translations_fields = ["description"]
         translations_only = False
+
+    def _get_owner_permission(self, obj: SportEvent, name: str) -> bool:
+        """Call `obj.owner.<name>(user)`, cached per group since a list often
+        contains several events of the same group."""
+        cache = self.context.setdefault(f"sport_event_{name}_cache", {})
+        if obj.owner_id not in cache:
+            user = self.context["request"].user
+            cache[obj.owner_id] = getattr(obj.owner, name)(user)
+        return cache[obj.owner_id]
+
+    def get_can_edit(self, obj: SportEvent) -> bool:
+        return self._get_owner_permission(obj, "is_admin")
+
+    def get_is_group_member(self, obj: SportEvent) -> bool:
+        return self._get_owner_permission(obj, "is_member")
 
     def get_is_participating(self, obj: SportEvent):
         is_participating = None
@@ -45,12 +79,21 @@ class SportEventSerializer(TranslationModelSerializer):
     def get_participants(self, obj: SportEvent):
         return obj.participants.count()
 
+    def get_child(self, obj: SportEvent) -> int | None:
+        child = obj.get_child()
+        return child.id if child else None
+
     def get_non_participants(self, obj: SportEvent):
         return obj.non_participants.count()
 
 
 class SportEventWriteSerializer(TranslationModelSerializer):
     owner = serializers.PrimaryKeyRelatedField(queryset=Group.objects.all())
+    repeat_until = serializers.DateTimeField(
+        write_only=True,
+        required=False,
+        allow_null=True,
+    )
 
     class Meta:
         model = SportEvent
@@ -63,8 +106,10 @@ class SportEventWriteSerializer(TranslationModelSerializer):
             "owner",
             "participants",
             "non_participants",
+            "parent",
+            "repeat_until",
         ]
-        read_only_fields = ["id", "participants", "non_participants"]
+        read_only_fields = ["id", "participants", "non_participants", "parent"]
         translations_fields = ["description"]
         translations_only = False
 
@@ -107,7 +152,65 @@ class SportEventWriteSerializer(TranslationModelSerializer):
                     ),
                 },
             )
+        repeat_until = data.get("repeat_until")
+        if repeat_until is not None:
+            date = data.get("date") or self.instance.date
+            self.validate_repeat(date, repeat_until)
         return data
+
+    def validate_repeat(self, date, repeat_until) -> None:
+        if repeat_until < date:
+            raise serializers.ValidationError(
+                {
+                    "repeat_until": _(
+                        "The end of the repetition cannot be before the date.",
+                    ),
+                },
+            )
+        occurrences = weekly_dates(
+            date,
+            repeat_until,
+            limit=MAX_SPORT_EVENT_OCCURRENCES,
+        )
+        if len(occurrences) > MAX_SPORT_EVENT_OCCURRENCES:
+            raise serializers.ValidationError(
+                {
+                    "repeat_until": _(
+                        "An event cannot be repeated more than %(max)s times.",
+                    )
+                    % {"max": MAX_SPORT_EVENT_OCCURRENCES},
+                },
+            )
+
+    def create(self, validated_data: dict) -> SportEvent:
+        repeat_until = validated_data.pop("repeat_until", None)
+        with transaction.atomic():
+            event: SportEvent = super().create(validated_data)
+            if repeat_until is not None:
+                event.repeat_weekly(repeat_until)
+        return event
+
+    def update(self, instance: SportEvent, validated_data: dict) -> SportEvent:
+        # absent: keep the following occurrences as they are
+        # None: delete the following occurrences
+        update_repetition = "repeat_until" in validated_data
+        repeat_until = validated_data.pop("repeat_until", None)
+        with transaction.atomic():
+            event: SportEvent = super().update(instance, validated_data)
+            if update_repetition:
+                event.set_repeat_until(repeat_until)
+        return event
+
+
+class SportEventDetailSerializer(SportEventSerializer):
+    repeat_until = serializers.SerializerMethodField()
+
+    class Meta(SportEventSerializer.Meta):
+        fields = [*SportEventSerializer.Meta.fields, "repeat_until"]
+
+    def get_repeat_until(self, obj: SportEvent) -> str | None:
+        repeat_until = obj.get_repeat_until()
+        return serializers.DateTimeField().to_representation(repeat_until)
 
 
 class EventSerializer(TranslationModelSerializer):

@@ -1,26 +1,59 @@
-import { differenceInCalendarDays, format, startOfDay } from 'date-fns';
+import {
+  differenceInCalendarWeeks,
+  format,
+  startOfDay,
+  startOfWeek,
+} from 'date-fns';
 
 import { useTranslation } from '#shared/i18n/useTranslation';
 
-export const LATER_GROUP_KEY = 'later';
+// weeks always start on Monday, whatever the locale
+const WEEK_OPTIONS = { weekStartsOn: 1 } as const;
 
-/** Groups events more than 7 days away under a single `LATER_GROUP_KEY` bucket, and each of the next 7 days under its own key. */
-export function getSportEventGroupKey(date: Date): string {
-  const today = startOfDay(new Date());
-  const dayDifference = differenceInCalendarDays(date, today);
-  return dayDifference > 7 ? LATER_GROUP_KEY : date.toDateString();
+/** Key of the week (Monday to Sunday) an event belongs to. */
+export function getSportEventWeekKey(date: Date): string {
+  return startOfWeek(date, WEEK_OPTIONS).toDateString();
+}
+
+/** Key of the day an event belongs to, inside its week. */
+export function getSportEventDayKey(date: Date): string {
+  return startOfDay(date).toDateString();
+}
+
+export function useWeekDisplay() {
+  const { t, formatDate } = useTranslation();
+
+  return (weekKey: string): string => {
+    const monday = new Date(weekKey);
+    const weekDifference = differenceInCalendarWeeks(
+      monday,
+      new Date(),
+      WEEK_OPTIONS,
+    );
+
+    if (weekDifference === 0) {
+      return t('sport.weekDisplay.thisWeek');
+    }
+    if (weekDifference === 1) {
+      return t('sport.weekDisplay.nextWeek');
+    }
+    return t('sport.weekDisplay.weekOf', {
+      date: formatDate(monday, {
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric',
+      }),
+    });
+  };
 }
 
 export function useDayDisplay() {
-  const { t, dateFnsLocale } = useTranslation();
+  const { dateFnsLocale } = useTranslation();
 
-  return (groupKey: string, sampleDate?: Date): string => {
-    if (groupKey === LATER_GROUP_KEY) {
-      return t('sport.dayDisplay.later');
-    }
-
-    const date = sampleDate ?? new Date(groupKey);
-    const dayLabel = format(date, 'EEEE', { locale: dateFnsLocale });
+  return (dayKey: string): string => {
+    const dayLabel = format(new Date(dayKey), 'EEEE', {
+      locale: dateFnsLocale,
+    });
     return dayLabel.charAt(0).toUpperCase() + dayLabel.slice(1).toLowerCase();
   };
 }

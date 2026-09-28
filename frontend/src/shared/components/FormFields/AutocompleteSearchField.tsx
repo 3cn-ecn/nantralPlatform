@@ -1,4 +1,11 @@
-import { memo, SyntheticEvent, useEffect, useState } from 'react';
+import {
+  ElementType,
+  memo,
+  SyntheticEvent,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
 
 import {
   Autocomplete,
@@ -34,16 +41,25 @@ type AutocompleteValue<T, Multiple, DisableClearable> = MuiAutocompleteValue<
   false
 >;
 
+type SearchFieldItem<
+  ValuePropName extends PropertyKey,
+  LabelPropName extends PropertyKey,
+  ImagePropName extends PropertyKey = never,
+> = Record<ValuePropName, unknown> &
+  Record<LabelPropName, string> &
+  Partial<Record<ImagePropName, string>>;
+
 // the type of the props for our Autocomplete component
 // Omit<.., ...> duplicate the type from MUI and remove some properties
 // and then we add our custom properties
 type AutocompleteSearchFieldProps<
   T,
-  Multiple extends boolean,
-  DisableClearable extends boolean,
-  ChipComponent extends React.ElementType,
-  LabelPropName extends string,
-  ImagePropName extends string,
+  ValuePropName extends keyof T,
+  LabelPropName extends keyof T,
+  ImagePropName extends keyof T = never,
+  Multiple extends boolean = false,
+  DisableClearable extends boolean = false,
+  ChipComponent extends ElementType = ChipTypeMap['defaultComponent'],
 > = Omit<
   AutocompleteProps<T, Multiple, DisableClearable, false, ChipComponent>,
   | 'error'
@@ -56,9 +72,9 @@ type AutocompleteSearchFieldProps<
   | 'onInputChange'
   | 'renderInput'
 > & {
-  value: AutocompleteValue<number, Multiple, DisableClearable>;
+  value: AutocompleteValue<T[ValuePropName], Multiple, DisableClearable>;
   handleChange: (
-    value: AutocompleteValue<number, Multiple, DisableClearable>,
+    value: AutocompleteValue<T[ValuePropName], Multiple, DisableClearable>,
     objectValue: AutocompleteValue<T, Multiple, DisableClearable>,
   ) => void;
   defaultObjectValue?: DisableClearable extends true
@@ -72,6 +88,7 @@ type AutocompleteSearchFieldProps<
   helperText?: string;
   required?: boolean;
   errors?: string[];
+  valuePropName: ValuePropName;
   labelPropName: LabelPropName;
   imagePropName?: ImagePropName;
   loading?: boolean;
@@ -94,23 +111,16 @@ type AutocompleteSearchFieldProps<
  * @param errors - A list of error messages, if any
  * @param fullWidth - If the field takes the full width of the container or not
  * @param multiple - If user can select multiple elements or just one
- * @param getOptionLabel - A function to render the label of an element
- * @param getOptionImage - A function to get the image url of an element
+ * @param labelPropName - The name of the label prop in the element
+ * @param imagePropName - The name of the image prop in the element
+ * @param valuePropName - The name of the label prop in the element
  */
 function AutocompleteSearchFieldComponent<
-  T extends { id: number },
-  LabelPropName extends string &
-    {
-      [LabelPropName in keyof T]: T[LabelPropName] extends string
-        ? LabelPropName
-        : never;
-    }[keyof T],
-  ImagePropName extends string &
-    {
-      [ImagePropName in keyof T]: T[ImagePropName] extends string | undefined
-        ? ImagePropName
-        : never;
-    }[keyof T],
+  ValuePropName extends string,
+  LabelPropName extends string,
+  ImagePropName extends string = never,
+  T extends SearchFieldItem<ValuePropName, LabelPropName, ImagePropName> =
+    SearchFieldItem<ValuePropName, LabelPropName, ImagePropName>,
   Multiple extends boolean = false,
   DisableClearable extends boolean = false,
   ChipComponent extends React.ElementType = ChipTypeMap['defaultComponent'],
@@ -132,6 +142,7 @@ function AutocompleteSearchFieldComponent<
   required = false,
   errors,
   fullWidth = true,
+  valuePropName,
   labelPropName,
   imagePropName,
   loading = false,
@@ -139,11 +150,12 @@ function AutocompleteSearchFieldComponent<
   ...props
 }: AutocompleteSearchFieldProps<
   T,
+  ValuePropName,
+  LabelPropName,
+  ImagePropName,
   Multiple,
   DisableClearable,
-  ChipComponent,
-  LabelPropName,
-  ImagePropName
+  ChipComponent
 >) {
   const { t } = useTranslation();
 
@@ -158,32 +170,62 @@ function AutocompleteSearchFieldComponent<
 
   const isError = errors !== undefined;
 
+  // keep the current object value accessible in async callbacks
+  const objectValueRef = useRef(objectValue);
+  objectValueRef.current = objectValue;
+  const hasFetchedInitialOptions = useRef(false);
+
   useEffect(() => {
     setIsLoading(loading);
   }, [loading]);
 
   useEffect(() => {
-    if (
-      (isMultiple(objectValue, multiple) && !objectValue.length) ||
-      (!isMultiple(objectValue, multiple) && isNil(objectValue))
-    ) {
-      setObjectValue(
-        defaultObjectValue as AutocompleteValue<T, Multiple, DisableClearable>,
-      );
-    }
-  }, [defaultObjectValue, objectValue, multiple]);
+    setObjectValue((currentObjectValue) => {
+      const shouldApplyDefault = isMultiple(currentObjectValue, multiple)
+        ? !currentObjectValue.length &&
+          !!defaultObjectValue &&
+          (defaultObjectValue as T[]).length > 0
+        : isNil(currentObjectValue) && !isNil(defaultObjectValue);
+
+      if (!shouldApplyDefault) {
+        return currentObjectValue;
+      }
+
+      return defaultObjectValue as AutocompleteValue<
+        T,
+        Multiple,
+        DisableClearable
+      >;
+    });
+  }, [defaultObjectValue, multiple]);
 
   useEffect(() => {
-    if (fetchInitialOptions && isNil(value)) {
-      setIsLoading(true);
-      fetchInitialOptions()
-        .then((data) => {
-          setOptions(data);
-          setIsLoading(false);
-        })
-        .catch((err) => console.error(err));
+    // fetch the initial options when the field is empty, and also once when
+    // the field already has a value (e.g. in an edit form), so that the user
+    // can choose another option without having to type a search
+    if (
+      !fetchInitialOptions ||
+      (!isNil(value) && hasFetchedInitialOptions.current)
+    ) {
+      return;
     }
-  }, [fetchInitialOptions, value]);
+    hasFetchedInitialOptions.current = true;
+    setIsLoading(true);
+    fetchInitialOptions()
+      .then((data) => {
+        // keep the selected value(s) in the options, otherwise MUI considers
+        // the value as invalid
+        const currentValue = objectValueRef.current;
+        const selected = isMultiple(currentValue, multiple)
+          ? currentValue
+          : isNil(currentValue)
+            ? []
+            : [currentValue as T];
+        setOptions(uniqBy([...data, ...selected], (obj) => obj[valuePropName]));
+        setIsLoading(false);
+      })
+      .catch((err) => console.error(err));
+  }, [fetchInitialOptions, value, multiple, valuePropName]);
 
   const updateOptions = debounce(
     (
@@ -197,7 +239,7 @@ function AutocompleteSearchFieldComponent<
         .then((data) => {
           setOptions(
             isMultiple(objectValue, multiple)
-              ? uniqBy(data.concat(...objectValue), (obj) => obj.id)
+              ? uniqBy(data.concat(...objectValue), (obj) => obj[valuePropName])
               : data,
           );
           setIsLoading(false);
@@ -214,13 +256,11 @@ function AutocompleteSearchFieldComponent<
     setObjectValue(newObjectValue);
     handleChange(
       isMultiple(newObjectValue, multiple)
-        ? (newObjectValue.map((objVal) => objVal.id) as AutocompleteValue<
-            number,
-            Multiple,
-            DisableClearable
-          >)
-        : (newObjectValue?.id as AutocompleteValue<
-            number,
+        ? (newObjectValue.map(
+            (objVal) => objVal[valuePropName],
+          ) as AutocompleteValue<T[ValuePropName], Multiple, DisableClearable>)
+        : (newObjectValue?.[valuePropName] as AutocompleteValue<
+            T[ValuePropName],
             Multiple,
             DisableClearable
           >),
@@ -234,7 +274,9 @@ function AutocompleteSearchFieldComponent<
       onChange={updateValue}
       options={options}
       filterOptions={(x) => x}
-      isOptionEqualToValue={(option, value) => option.id === value.id}
+      isOptionEqualToValue={(option, value) =>
+        option[valuePropName] === value[valuePropName]
+      }
       fullWidth={fullWidth}
       onInputChange={updateOptions}
       multiple={multiple}
@@ -254,8 +296,8 @@ function AutocompleteSearchFieldComponent<
               : !!imagePropName &&
                 !!objectValue && (
                   <Avatar
-                    alt={objectValue[labelPropName as string]}
-                    src={objectValue[imagePropName as string]}
+                    alt={objectValue[labelPropName]}
+                    src={objectValue[imagePropName]}
                     size="s"
                   />
                 ),
@@ -265,6 +307,7 @@ function AutocompleteSearchFieldComponent<
                 {params.InputProps.endAdornment}
               </>
             ),
+            type: 'search',
           }}
         />
       )}
