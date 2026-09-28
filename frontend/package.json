@@ -108,7 +108,7 @@
     "react-intersection-observer": "^9.8.0",
     "react-map-gl": "^8.0.4",
     "react-player": "^2.14.1",
-    "react-router-dom": "^6.3.0",
+    "react-router-dom": "^7.18.2",
     "sass": "^1.55.0",
     "supercluster": "^7.1.3"
   },
