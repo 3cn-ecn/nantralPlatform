@@ -26,6 +26,7 @@ jobs:
       backend: ${{ steps.filter.outputs.backend }}
       frontend: ${{ steps.filter.outputs.frontend }}
       email-templates: ${{ steps.filter.outputs.email-templates }}
+      deployment: ${{ steps.filter.ouptuts.deployment }}
     steps:
       - uses: actions/checkout@v4
       - uses: dorny/paths-filter@v3
@@ -39,6 +40,8 @@ jobs:
               - 'frontend/**'
             email-templates:
               - 'email-templates-generator/**'
+            deployment:
+              - 'deployment/**'
 
   frontend-quality:
     name: Test front end quality
@@ -134,11 +137,31 @@ jobs:
             chmod +x db_backup.sh
             ./db_backup.sh --skip-success-notif
 
+  update-deployment:
+    name: Update compose files
+    needs: changes
+    if: ${{ needs.changes.outputs.deployment == 'true' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Update on VPS
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.INSTANCE_ADDRESS }}
+          username: ubuntu
+          key: ${{ secrets.SSH_KEY_DEPLOY }}
+          script: |
+            set -e
+            cd nantralPlatform/deployment
+            git pull
+
   deploy:
     name: Deploy on VPS
     needs:
-      [ build-and-push, backup-database ]
-    if: ${{ needs.build-and-push.result == 'success' && needs.backup-database.result == 'success' }}
+      [ build-and-push, backup-database, update-deployment ]
+    if: |
+      (needs.update-deployment.result == 'success' || needs.update-deployment.result == 'skipped') &&
+      needs.build-and-push.result == 'success' &&
+      needs.backup-database.result == 'success'
     runs-on: ubuntu-latest
     steps:
       - name: Deploy to the VPS
@@ -149,9 +172,9 @@ jobs:
           key: ${{ secrets.SSH_KEY_DEPLOY }}
           script: |
             set -e
-            cd nantralPlatform/deployment
-            git pull
+            # Remove the current tag and append the new one
             sed -i '/^BACKEND_TAG=/d' .env
             echo "BACKEND_TAG=${{ github.sha }}" >> .env
+            # Pulls and restart updated services
             docker compose -f docker-compose.yml -f docker-compose.prod.yml pull backend celery celery-beat
             docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d
