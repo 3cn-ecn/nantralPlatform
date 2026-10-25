@@ -54,3 +54,6 @@ tags
 
 # Statistics
 frontend/webpack-stats.json
+
+# Specs files
+specs/
