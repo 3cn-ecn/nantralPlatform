@@ -103,5 +103,5 @@ jobs:
             set -e
             cd nantralPlatform/deployment
             git pull
-            sudo docker compose build --no-cache backend celery celery-beat
+            sudo BUILDX_BAKE_ENTITLEMENTS_FS=0 docker compose build --no-cache backend celery celery-beat
             docker compose up -d
