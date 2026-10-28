@@ -93,7 +93,7 @@
     "array-move": "^4.0.0",
     "axios": "^1.7.4",
     "calendar-link": "^2.7.0",
-    "ckeditor5": "^48.3.0",
+    "ckeditor5": "^48.5.3",
     "date-fns": "^2.30.0",
     "i18next": "^23.5.1",
     "i18next-browser-languagedetector": "^8.0.0",
