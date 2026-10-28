@@ -69,5 +69,5 @@ jobs:
             git switch ${{ github.ref_name }}
             git reset --hard origin/${{ github.ref_name }}
             cd ../nantralPlatform/deployment
-            docker compose build backend-staging
+            BUILDX_BAKE_ENTITLEMENTS_FS=0 docker compose build backend-staging
             docker compose up -d
