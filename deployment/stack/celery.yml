@@ -1,6 +1,6 @@
 services:
   celery:
-    command: uv run celery -A apps.celery worker -l info
+    command: celery -A apps.celery worker -l info
     environment:
       - "TZ=Europe/Paris"
     volumes:
@@ -17,7 +17,7 @@ services:
       - mailserver
 
   celery-beat:
-    command: uv run celery -A apps.celery beat -l info --scheduler django_celery_beat.schedulers:DatabaseScheduler
+    command: celery -A apps.celery beat -l info --scheduler django_celery_beat.schedulers:DatabaseScheduler
     environment:
       - "TZ=Europe/Paris"
     volumes:

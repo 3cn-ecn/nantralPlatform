@@ -39,6 +39,8 @@ ENV DOCKER=True
 ENV DJANGO_SETTINGS_MODULE=config.settings.production
 ENV PYTHONUNBUFFERED=1
 ENV UV_NO_DEV=1
+# Install deps system-wide
+ENV UV_PROJECT_ENVIRONMENT="/usr/local/"
 ENV UV_COMPILE_BYTECODE=1
 ENV UV_LINK_MODE=copy
 # create unprivileged user
@@ -57,9 +59,11 @@ RUN mkdir -p logs staticfiles && \
     chown -R myuser:myuser /var/app
 USER myuser
 COPY ./backend/pyproject.toml ./backend/uv.lock ./
-# Sync the project (no-install-project because we do not create a package)
+# Sync the project (no-install-project because we do not create a package; use root to install system-wide)
+USER root
 RUN --mount=type=cache,target=/root/.cache/uv \
     uv sync --locked --no-install-project
+USER myuser
 
 # DEV: Run backend
 FROM backend-deps AS backend-development
