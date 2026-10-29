@@ -1,0 +1,21 @@
+# Production server specific variables
+
+nantral_platform_enabled: true
+nantral_platform_base_path: "/nantral-platform/backend"
+
+nantral_platform_identifier: "nantral-platform-backend"
+nantral_platform_staging: false
+nantral_platform_hostname: "nantral-platform.fr"
+nantral_platform_database_name: "nantral"
+nantral_platform_django_allowed_hosts:
+  - "{{ nantral_platform_hostname }}"
+  - "www.{{ nantral_platform_hostname }}"
+  - "dev.{{ nantral_platform_hostname }}"
+  - "localhost"
+  - "127.0.0.1"
+  - "[::1]"
+
+nantral_platform_celery_systemd_required_services_list_auto:
+  - mash-redis.service
+  - matrix-postgres.service
+#  - mailserver.service # TODO

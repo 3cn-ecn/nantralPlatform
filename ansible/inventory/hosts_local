@@ -1,0 +1,6 @@
+[nantral_platform]
+nantral-platform.fr ansible_connection=local
+dev.nantral-platform.fr ansible_connection=local
+
+[matrix]
+matrix.nantral-platform.fr ansible_connection=local

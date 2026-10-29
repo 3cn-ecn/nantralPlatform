@@ -1,0 +1,14 @@
+---
+- name: Deploy Nantral Platform
+  hosts: nantral_platform
+  become: true
+
+  roles:
+    - role: galaxy/playbook_help
+    - role: galaxy/systemd_docker_base
+    - role: galaxy/docker
+      vars:
+        docker_install_compose: false
+        docker_install_compose_plugin: false
+    - role: nantral_platform
+    - role: galaxy/systemd_service_manager

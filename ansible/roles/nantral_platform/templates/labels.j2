@@ -1,0 +1,25 @@
+{% if nantral_platform_container_labels_traefik_enabled %}
+traefik.enable=true
+
+{% if nantral_platform_container_labels_traefik_docker_network %}
+traefik.docker.network={{ nantral_platform_container_labels_traefik_docker_network }}
+{% endif %}
+
+traefik.http.routers.{{ nantral_platform_identifier }}.rule={{ nantral_platform_container_labels_traefik_rule }}
+
+traefik.http.routers.{{ nantral_platform_identifier }}.service={{ nantral_platform_identifier }}
+traefik.http.routers.{{ nantral_platform_identifier }}.priority={{ nantral_platform_container_labels_traefik_priority }}
+traefik.http.routers.{{ nantral_platform_identifier }}.entrypoints={{ nantral_platform_container_labels_traefik_entrypoints }}
+
+traefik.http.routers.{{ nantral_platform_identifier }}.tls={{ nantral_platform_container_labels_traefik_tls | to_json }}
+{% if nantral_platform_container_labels_traefik_tls %}
+traefik.http.routers.{{ nantral_platform_identifier }}.tls.certResolver={{ nantral_platform_container_labels_traefik_tls_certResolver }}
+{% endif %}
+
+traefik.http.services.{{ nantral_platform_identifier }}.loadbalancer.server.port={{ nantral_platform_server_http_listen_port }}
+
+{% endif %}
+
+{% for arg in nantral_platform_container_labels_additional_labels %}
+{{ arg }}
+{% endfor %}

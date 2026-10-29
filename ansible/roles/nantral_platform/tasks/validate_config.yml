@@ -1,0 +1,46 @@
+---
+
+- name: Fail if required nantral Platform settings not defined
+  ansible.builtin.fail:
+    msg: >
+      You need to define a required configuration setting (`{{ item.name }}`).
+  when: "item.when | bool and lookup('vars', item.name, defaults='') | string | length == 0"
+  with_items:
+    - { 'name': 'nantral_platform_hostname', when: true }
+    - { 'name': 'nantral_platform_path_prefix', when: true }
+    - { 'name': 'nantral_platform_container_network', when: true }
+    - { 'name': 'nantral_platform_database_hostname', when: true }
+    - { 'name': 'nantral_platform_database_port', when: true }
+    - { 'name': 'nantral_platform_database_username', when: true }
+    - { 'name': 'nantral_platform_database_password', when: true }
+    - { 'name': 'nantral_platform_database_name', when: true }
+    - { 'name': 'nantral_platform_database_network', when: true }
+    - { 'name': 'nantral_platform_memcached_hostname', when: true }
+    - { 'name': 'nantral_platform_memcached_port', when: true }
+    - { 'name': 'nantral_platform_memcached_network', when: true }
+    - { 'name': 'nantral_platform_memcached_key_prefix', when: true }
+    - { 'name': 'nantral_platform_redis_hostname', when: "{{ not nantral_platform_staging }}" }
+    - { 'name': 'nantral_platform_redis_port', when: "{{ not nantral_platform_staging }}" }
+    - { 'name': 'nantral_platform_redis_network', when: "{{ not nantral_platform_staging }}" }
+    - { 'name': 'nantral_platform_staging', when: true }
+    - { 'name': 'nantral_platform_s3_access_key_id', when: true }
+    - { 'name': 'nantral_platform_s3_secret_access_key', when: true }
+    - { 'name': 'nantral_platform_s3_bucket', when: true }
+    - { 'name': 'nantral_platform_django_secret_key', when: true }
+    - { 'name': 'nantral_platform_django_allowed_hosts', when: true }
+    - { 'name': 'nantral_platform_email_host', when: true }
+    - { 'name': 'nantral_platform_email_port', when: true }
+    - { 'name': 'nantral_platform_email_user', when: true }
+    - { 'name': 'nantral_platform_email_password', when: true }
+    - { 'name': 'nantral_platform_base_path', when: true }
+    - { 'name': 'nantral_platform_uid', when: true }
+    - { 'name': 'nantral_platform_gid', when: true }
+    - { 'name': 'nantral_platform_user_name', when: true }
+    - { 'name': 'nantral_platform_group_name', when: true }
+
+- name: Fail if Nantral Platform path prefix is different than /
+  ansible.builtin.fail:
+    msg: >-
+      Nantral Platform with a path prefix other than '/' is not supported yet.
+      You have configured nantral_platform_path_prefix to '{{ nantral_platform_path_prefix }}'.
+  when: "nantral_platform_path_prefix != '/'"

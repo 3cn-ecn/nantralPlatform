@@ -1,0 +1,20 @@
+---
+
+- tags:
+    - setup-all
+    - setup-nantral-platform
+    - install-all
+    - install-nantral-platform
+  block:
+    - when: nantral_platform_enabled | bool
+      ansible.builtin.include_tasks: "{{ role_path }}/tasks/validate_config.yml"
+
+    - when: nantral_platform_enabled | bool
+      ansible.builtin.include_tasks: "{{ role_path }}/tasks/install.yml"
+
+- tags:
+    - setup-all
+    - setup-nantral-platform
+  block:
+    - when: not nantral_platform_enabled | bool
+      ansible.builtin.include_tasks: "{{ role_path }}/tasks/uninstall.yml"

@@ -1,0 +1,20 @@
+---
+
+- name: "Check existence of {{ item.service_name }} service"
+  ansible.builtin.stat:
+    path: "{{ devture_systemd_docker_base_systemd_path }}/{{ item.service_name }}.service"
+  register: nantral_platform_service_stat
+
+- when: nantral_platform_service_stat.stat.exists | bool
+  block:
+    - name: "Ensure {{ item.service_name }} is stopped"
+      ansible.builtin.service:
+        name: "{{ item.service_name }}"
+        state: stopped
+        enabled: false
+        daemon_reload: true
+
+    - name: "Ensure {{ item.service_name }} systemd service doesn't exist"
+      ansible.builtin.file:
+        path: "{{ devture_systemd_docker_base_systemd_path }}/{{ item.service_name }}.service"
+        state: absent

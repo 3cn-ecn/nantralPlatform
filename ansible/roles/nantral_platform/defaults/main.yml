@@ -1,0 +1,206 @@
+---
+
+nantral_platform_enabled: true
+
+nantral_platform_identifier: nantral-platform
+
+nantral_platform_version: "latest"
+
+nantral_platform_container_image_self_build: false
+nantral_platform_container_image: "ghcr.io/3cn-ecn/nantralplatform:{{ nantral_platform_version }}"
+nantral_platform_celery_container_image: "ghcr.io/3cn-ecn/nantralplatform-celery:{{ nantral_platform_version }}"
+
+nantral_platform_uid: ""
+nantral_platform_gid: ""
+nantral_platform_user_name: ""
+nantral_platform_group_name: ""
+
+# ---------------------------------------------------------------------------
+# Paths
+# ---------------------------------------------------------------------------
+
+nantral_platform_base_path: "/{{nantral_platform_identifier}}"
+
+# ---------------------------------------------------------------------------
+# Containers
+# ---------------------------------------------------------------------------
+
+nantral_platform_container_src_path: "{{nantral_platform_base_path}}/container-src"
+nantral_platform_container_image_self_build_repo: "https://github.com/3cn-ecn/nantralPlatform.git"
+nantral_platform_container_image_self_build_repo_version: "{{ 'master' if nantral_platform_version == 'latest' else nantral_platform_version }}"
+
+# ---------------------------------------------------------------------------
+# Networking
+# ---------------------------------------------------------------------------
+
+# The primary network used for Traefik.
+nantral_platform_container_network: "{{ nantral_platform_identifier }}"
+
+# Networks provided by mdad/MASH.
+nantral_platform_container_additional_networks:
+  - "traefik"
+  #  - "{{ nantral_platform_email_network }}"
+  - "{{ nantral_platform_database_network }}"
+  - "{{ nantral_platform_redis_network }}"
+  - "{{ nantral_platform_memcached_network }}"
+
+# ---------------------------------------------------------------------------
+# Celery
+# ---------------------------------------------------------------------------
+nantral_platform_celery_container_network: "celery"
+nantral_platform_celery_container_additional_networks:
+  #  - "{{ nantral_platform_email_network }}"
+  - "{{ nantral_platform_database_network }}"
+  - "{{ nantral_platform_redis_network }}"
+
+# ---------------------------------------------------------------------------
+# PostgreSQL
+# ---------------------------------------------------------------------------
+nantral_platform_database_hostname: ""
+nantral_platform_database_port: 5432
+nantral_platform_database_name: ""
+nantral_platform_database_username: ""
+nantral_platform_database_password: ""
+nantral_platform_database_network: ""
+
+# ---------------------------------------------------------------------------
+# Redis
+# ---------------------------------------------------------------------------
+nantral_platform_redis_hostname: ""
+nantral_platform_redis_port: 6379
+nantral_platform_redis_network: ""
+
+# ---------------------------------------------------------------------------
+# Memcached
+# ---------------------------------------------------------------------------
+nantral_platform_memcached_hostname: ""
+nantral_platform_memcached_port: 11211
+nantral_platform_memcached_network: ""
+nantral_platform_memcached_key_prefix: "{{ nantral_platform_identifier }}"
+
+# ---------------------------------------------------------------------------
+# Django
+# ---------------------------------------------------------------------------
+
+nantral_platform_hostname: ""
+nantral_platform_path_prefix: / # does not work (traefik labels and frontend need updating)
+
+## OPTIONAL
+
+# Github features (eg create issues from website)
+nantral_platform_github_user: ""
+nantral_platform_github_token: ""
+
+# Mapbox key (eg roommates map)
+nantral_platform_mapbox_api_key: ""
+
+# Discord features (eg admin requests)
+nantral_platform_discord_token: ""
+nantral_platform_discord_channel_id: ""
+nantral_platform_discord_admin_moderation_webhook: ""
+nantral_platform_discord_backup_status_webhook: ""
+
+# Webpush notifications
+nantral_platform_webpush_admin_email: ""
+nantral_platform_webpush_public_key: ""
+nantral_platform_webpush_private_key: ""
+
+## NEEDED
+
+# OVH credentials for media files server
+nantral_platform_s3_access_key_id: ""
+nantral_platform_s3_secret_access_key: ""
+nantral_platform_s3_bucket: ""
+# OVH infos for private S3 (db backups) TODO: find a way to make backups
+nantral_platform_s3_bucket_private: ""
+
+# Django settings
+nantral_platform_staging: false  # controls if this is the staging server or not (disable celery, emails...)
+nantral_platform_django_secret_key: ""
+nantral_platform_django_allowed_hosts: [ ]
+
+# Emails
+nantral_platform_email_host: ""
+nantral_platform_email_port: ""
+nantral_platform_email_network: ""
+nantral_platform_email_user: ""
+nantral_platform_email_password: ""
+
+# Matrix homeserver integration
+nantral_platform_matrix_client_id: ""
+nantral_platform_matrix_client_token: ""
+nantral_platform_matrix_base_url: ""
+
+# ---------------------------------------------------------------------------
+# Traefik
+# ---------------------------------------------------------------------------
+
+nantral_platform_container_labels_traefik_enabled: true
+nantral_platform_container_labels_traefik_docker_network: "traefik"
+nantral_platform_container_labels_traefik_hostname: "{{ nantral_platform_hostname }}"
+nantral_platform_container_labels_traefik_rule: "Host(`{{ nantral_platform_container_labels_traefik_hostname }}`)"
+nantral_platform_container_labels_traefik_entrypoints: web-secure
+nantral_platform_container_labels_traefik_tls: "{{ nantral_platform_container_labels_traefik_entrypoints != 'web' }}"
+nantral_platform_container_labels_traefik_tls_certResolver: default  # noqa var-naming
+nantral_platform_container_labels_traefik_priority: 100
+
+nantral_platform_container_labels_additional_labels: ""
+
+
+# ---------------------------------------------------------------------------
+# Runtime
+# ---------------------------------------------------------------------------
+
+nantral_platform_server_http_listen_port: 8000
+
+nantral_platform_container_extra_arguments: [ ]
+nantral_platform_process_extra_arguments: [ ]
+
+nantral_platform_restart_necessary: false
+nantral_platform_celery_restart_necessary: false
+
+# ---------------------------------------------------------------------------
+# Systemd
+# ---------------------------------------------------------------------------
+
+nantral_platform_systemd_required_services_list: >-
+  {{
+    nantral_platform_systemd_required_services_list_default
+    +
+    nantral_platform_systemd_required_services_list_auto
+    +
+    nantral_platform_systemd_required_services_list_custom
+  }}
+
+nantral_platform_systemd_required_services_list_default: >-
+  {{
+    [devture_systemd_docker_base_docker_service_name]
+    if devture_systemd_docker_base_docker_service_name
+    else []
+  }}
+
+nantral_platform_systemd_required_services_list_auto: [ ]
+nantral_platform_systemd_required_services_list_custom: [ ]
+
+nantral_platform_systemd_wanted_services_list: [ ]
+
+nantral_platform_celery_systemd_required_services_list: >-
+  {{
+    nantral_platform_celery_systemd_required_services_list_default
+    +
+    nantral_platform_celery_systemd_required_services_list_auto
+    +
+    nantral_platform_celery_systemd_required_services_list_custom
+  }}
+
+nantral_platform_celery_systemd_required_services_list_default: >-
+  {{
+    [devture_systemd_docker_base_docker_service_name]
+    if devture_systemd_docker_base_docker_service_name
+    else []
+  }}
+
+nantral_platform_celery_systemd_required_services_list_auto: [ ]
+nantral_platform_celery_systemd_required_services_list_custom: [ ]
+
+nantral_platform_celery_systemd_wanted_services_list: [ ]

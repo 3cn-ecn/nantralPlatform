@@ -1,0 +1,108 @@
+---
+# Container images
+nantral_platform_enabled: false
+nantral_platform_container_image_self_build: true
+nantral_platform_container_image_self_build_repo_version: feat/docker-rework
+
+nantral_platform_uid: 1000
+nantral_platform_gid: 1000
+nantral_platform_user_name: ubuntu
+nantral_platform_group_name: ubuntu
+
+devture_systemd_service_manager_services_list_auto: |
+  {{
+    ([{
+      'name': "nantral-platform-staging.service",
+      'priority': 1000,
+      'restart_necessary': (nantral_platform_restart_necessary | bool),
+      'groups': ["nantral"],
+    }] if nantral_platform_enabled and nantral_platform_staging else [])
+    +
+    ([{
+      'name': "nantral-platform.service",
+      'priority': 1000,
+      'restart_necessary': (nantral_platform_restart_necessary | bool),
+      'groups': ["nantral"],
+    },
+    {
+      'name': "nantral-platform-celery.service",
+      'priority': 1000,
+      'restart_necessary': (nantral_platform_restart_necessary | bool),
+      'groups': ["nantral"],
+    },
+    {
+      'name': "nantral-platform-celery-beat.service",
+      'priority': 1000,
+      'restart_necessary': (nantral_platform_restart_necessary | bool),
+      'groups': ["nantral"],
+    }] if nantral_platform_enabled and not nantral_platform_staging else [])
+  }}
+
+# Docker networking
+nantral_platform_container_labels_traefik_tls_certResolver: "default"
+
+# PostgreSQL Database
+nantral_platform_database_hostname: "matrix-postgres"
+nantral_platform_database_port: 5432
+nantral_platform_database_network: "matrix-postgres"
+nantral_platform_database_username: "poufsouffle"
+nantral_platform_database_password: "{{ vault_postgres_password }}"
+
+# Postgres ansible settings. Should match matrix docker ansible deploy configuration
+postgres_identifier: matrix-postgres
+postgres_base_path: "/matrix/postgres"
+postgres_connection_password: "{{ vault_postgres_admin_password }}"
+postgres_db_name: matrix
+# Define the nantral database
+postgres_managed_databases_additional:
+  - name: "{{ nantral_platform_database_name }}"
+    username: "{{ nantral_platform_database_username }}"
+    password: "{{ nantral_platform_database_password }}"
+
+# Redis
+nantral_platform_redis_hostname: "mash-redis"
+nantral_platform_redis_port: 6379
+nantral_platform_redis_network: "mash-redis"
+
+# Memcached
+nantral_platform_memcached_hostname: "mash-memcached"
+nantral_platform_memcached_port: 11211
+nantral_platform_memcached_network: "mash-memcached"
+
+# Django
+nantral_platform_django_secret_key: "{{ vault_django_secret_key }}"
+nantral_platform_mapbox_api_key: "{{ vault_mapbox_api_key }}"
+
+# OVH credentials for media files server
+# TODO: separate bucket config for staging and prod
+nantral_platform_s3_access_key_id: "{{ vault_ovh_access_key_id }}"
+nantral_platform_s3_secret_access_key: "{{ vault_ovh_secret_access_key }}"
+nantral_platform_s3_bucket: "nantral-platform-prod"
+
+# Emails
+# TODO: Create/configure the mailserver
+nantral_platform_email_host: "mail.nantral-platform.fr"
+nantral_platform_email_port: "465"
+nantral_platform_email_network: "TODO"
+nantral_platform_email_user: "admin@nantral-platform.fr"
+nantral_platform_email_password: "{{ vault_mailserver_password }}"
+
+# Systemd
+nantral_platform_systemd_required_services_list_auto:
+  - mash-memcached.service
+  - matrix-postgres.service
+#  - mailserver.service # TODO
+
+# GitHub features (eg create issues from website)
+nantral_platform_github_user: "nantralplatform-bot"
+nantral_platform_github_token: "{{ vault_github_token }}"
+
+# Discord features (eg admin requests)
+nantral_platform_discord_token: "{{ vault_discord_token }}"
+nantral_platform_discord_channel_id: "{{ vault_discord_channel_id }}"
+nantral_platform_discord_admin_moderation_webhook: "{{ vault_discord_admin_moderation_webhook }}"
+
+# Webpush notifications (keys should be defined per host)
+nantral_platform_webpush_admin_email: "nantralplatform@gmail.com"
+nantral_platform_webpush_public_key: "{{ vault_vapid_public_key }}"
+nantral_platform_webpush_private_key: "{{ vault_vapid_private_key }}"

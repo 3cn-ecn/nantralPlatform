@@ -1,0 +1,50 @@
+[Unit]
+Description=Nantral Platform {{ 'staging' if nantral_platform_staging else 'main' }} website
+{% for service in nantral_platform_systemd_required_services_list %}
+Requires={{ service }}
+After={{ service }}
+{% endfor %}
+{% for service in nantral_platform_systemd_wanted_services_list %}
+Wants={{ service }}
+{% endfor %}
+DefaultDependencies=no
+
+[Service]
+Type=simple
+ExecStartPre=-{{ devture_systemd_docker_base_host_command_sh }} -c '{{ devture_systemd_docker_base_host_command_docker }} stop -t {{ devture_systemd_docker_base_container_stop_grace_time_seconds }} {{ nantral_platform_identifier }} 2>/dev/null || true'
+ExecStartPre=-{{ devture_systemd_docker_base_host_command_sh }} -c '{{ devture_systemd_docker_base_host_command_docker }} rm {{ nantral_platform_identifier }} 2>/dev/null || true'
+
+ExecStartPre={{ devture_systemd_docker_base_host_command_docker }} create \
+                --rm \
+                --name={{ nantral_platform_identifier }} \
+                --log-driver=none \
+                --user={{ nantral_platform_uid }}:{{ nantral_platform_gid }} \
+                --cap-drop=ALL \
+                --read-only \
+                --network={{ nantral_platform_container_network }} \
+                --env-file={{ nantral_platform_base_path }}/env \
+                --label-file={{ nantral_platform_base_path }}/labels \
+                --tmpfs=/tmp:rw,noexec,nosuid,size=512m \
+{% for arg in nantral_platform_container_extra_arguments %}
+                {{ arg }} \
+{% endfor %}
+                {{ nantral_platform_container_image }} \
+{% for arg in nantral_platform_process_extra_arguments %}
+                {{ arg }} \
+{% endfor %}
+
+{% for network in nantral_platform_container_additional_networks %}
+ExecStartPre={{ devture_systemd_docker_base_host_command_docker }} network connect {{ network }} {{ nantral_platform_identifier }}
+{% endfor %}
+
+ExecStart={{ devture_systemd_docker_base_host_command_docker }} start --attach {{ nantral_platform_identifier }}
+
+ExecStop=-{{ devture_systemd_docker_base_host_command_sh }} -c '{{ devture_systemd_docker_base_host_command_docker }} stop -t {{ devture_systemd_docker_base_container_stop_grace_time_seconds }} {{ nantral_platform_identifier }} 2>/dev/null || true'
+ExecStop=-{{ devture_systemd_docker_base_host_command_sh }} -c '{{ devture_systemd_docker_base_host_command_docker }} rm {{ nantral_platform_identifier }} 2>/dev/null || true'
+
+Restart=always
+RestartSec=30
+SyslogIdentifier={{ nantral_platform_identifier }}
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,53 @@
+---
+
+- name: Ensure Nantral Platform Celery container image is pulled
+  community.docker.docker_image_pull:
+    name: "{{ nantral_platform_celery_container_image }}"
+    pull: always
+  when: "not nantral_platform_container_image_self_build | bool"
+  register: nantral_platform_celery_container_image_pull_result
+  retries: "{{ devture_playbook_help_container_retries_count }}"
+  delay: "{{ devture_playbook_help_container_retries_delay }}"
+  until: nantral_platform_celery_container_image_pull_result is not failed
+
+- when: nantral_platform_container_image_self_build | bool
+  name: Ensure Nantral Platform Celery container image is built
+  ansible.builtin.command:
+    cmd: |-
+      {{ devture_systemd_docker_base_host_command_docker }} buildx build
+      --tag={{ nantral_platform_celery_container_image }}
+      --file={{ nantral_platform_container_src_path }}/deployment/containers/web/Dockerfile
+      --target celery
+      {{ nantral_platform_container_src_path }}
+  changed_when: true
+
+- name: Ensure Nantral Platform Celery container network is created
+  community.general.docker_network:
+    enable_ipv6: "{{ devture_systemd_docker_base_ipv6_enabled }}"
+    name: "{{ nantral_platform_celery_container_network }}"
+    driver: bridge
+    driver_options: "{{ devture_systemd_docker_base_container_networks_driver_options }}"
+
+- name: Ensure Nantral Platform Celery systemd service installed
+  ansible.builtin.template:
+    src: "{{ role_path }}/templates/systemd/nantral-platform-celery.service.j2"
+    dest: "{{ devture_systemd_docker_base_systemd_path }}/nantral-platform-{{ item.name }}.service"
+    mode: '0644'
+  register: nantral_platform_celery_systemd_service_result
+  vars:
+    nantral_platform_celery_identifier: "nantral-platform-{{ item.name }}"
+    nantral_platform_celery_command: "{{ item.command }}"
+  with_items:
+    - name: celery
+      command: celery -A apps.celery worker -l info
+    - name: celery-beat
+      command: celery -A apps.celery beat -l info --scheduler django_celery_beat.schedulers:DatabaseScheduler
+
+- name: Determine whether Nantral Platform Celery needs a restart
+  ansible.builtin.set_fact:
+    nantral_platform_celery_restart_necessary: >-
+      {{
+        nantral_platform_support_files_result.changed | default(false)
+        or nantral_platform_celery_systemd_service_result.changed | default(false)
+        or nantral_platform_celery_container_image_pull_result.changed | default(false)
+      }}

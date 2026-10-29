@@ -1,0 +1,17 @@
+---
+
+- src: git+https://github.com/geerlingguy/ansible-role-docker
+  version: 8.0.0
+  name: docker
+- src: git+https://github.com/devture/com.devture.ansible.role.playbook_help.git
+  version: 717de2c7fb03f8124abc2beeb34980305f723f33
+  name: playbook_help
+- src: git+https://github.com/mother-of-all-self-hosting/ansible-role-postgres.git
+  version: v18.6-9
+  name: postgres
+- src: git+https://github.com/devture/com.devture.ansible.role.systemd_docker_base.git
+  version: v1.5.0-0
+  name: systemd_docker_base
+- src: git+https://github.com/devture/com.devture.ansible.role.systemd_service_manager.git
+  version: v3.2.1-0
+  name: systemd_service_manager

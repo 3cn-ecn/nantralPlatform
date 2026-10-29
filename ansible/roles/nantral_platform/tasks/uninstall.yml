@@ -1,0 +1,19 @@
+---
+
+- name: Ensures that Nantral Platform services are stopped and doesn't exist
+  ansible.builtin.include_tasks: "{{ role_path }}/tasks/uninstall_service.yml"
+  with_items:
+    - service_name: nantral-platform
+      when: "{{ not nantral_platform_staging }}"
+    - service_name: nantral-platform-celery
+      when: "{{ not nantral_platform_staging }}"
+    - service_name: nantral-platform-celery-beat
+      when: "{{ not nantral_platform_staging }}"
+    - service_name: nantral-platform-staging
+      when: "{{ nantral_platform_staging }}"
+  when: item.when
+
+- name: Ensure Nantral Platform paths don't exist
+  ansible.builtin.file:
+    path: "{{ nantral_platform_base_path }}"
+    state: absent
