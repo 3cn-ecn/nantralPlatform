@@ -18,7 +18,6 @@ services:
       - "traefik.http.routers.backend.tls.certresolver=letsencrypt"
     networks:
       - proxy
-      - mailserver
       - database
       - cache
 
@@ -46,6 +45,5 @@ services:
       - "traefik.http.routers.backend-staging.tls.certresolver=letsencrypt"
     networks:
       - proxy
-      - mailserver
       - database
       - cache

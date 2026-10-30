@@ -95,6 +95,11 @@ services:
       - "/etc/localtime:/etc/localtime:ro"
       - ../backend:/var/app
       - /var/app/templates/emails
+    networks:
+      - celery
+      - redis
+      - database
+      - mailserver
 
   celery-beat:
     build:
