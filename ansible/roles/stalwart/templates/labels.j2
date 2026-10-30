@@ -1,0 +1,45 @@
+{% if stalwart_container_labels_traefik_enabled %}
+traefik.enable=true
+
+{% if stalwart_container_labels_traefik_docker_network %}
+traefik.docker.network={{ stalwart_container_labels_traefik_docker_network }}
+{% endif %}
+
+traefik.http.routers.{{ stalwart_identifier }}.rule={{ stalwart_container_labels_traefik_rule }}
+
+traefik.http.routers.{{ stalwart_identifier }}.service={{ stalwart_identifier }}
+traefik.http.routers.{{ stalwart_identifier }}.priority={{ stalwart_container_labels_traefik_priority }}
+traefik.http.routers.{{ stalwart_identifier }}.entrypoints={{ stalwart_container_labels_traefik_entrypoints }}
+
+traefik.http.routers.{{ stalwart_identifier }}.tls={{ stalwart_container_labels_traefik_tls | to_json }}
+{% if stalwart_container_labels_traefik_tls %}
+traefik.http.routers.{{ stalwart_identifier }}.tls.certResolver={{ stalwart_container_labels_traefik_tls_certResolver }}
+{% endif %}
+
+traefik.http.services.{{ stalwart_identifier }}.loadbalancer.server.port={{ stalwart_server_http_listen_port }}
+
+traefik.tcp.routers.smtp.rule=HostSNI(`*`)
+traefik.tcp.routers.smtp.entrypoints=smtp
+traefik.tcp.routers.smtp.service=smtp
+traefik.tcp.services.smtp.loadbalancer.server.port=10025
+traefik.tcp.services.smtp.loadbalancer.proxyProtocol.version=2
+
+traefik.tcp.routers.smtps.rule=HostSNI(`*`)
+traefik.tcp.routers.smtps.tls.passthrough=true
+traefik.tcp.routers.smtps.entrypoints=smtps
+traefik.tcp.routers.smtps.service=smtps
+traefik.tcp.services.smtps.loadbalancer.server.port=10465
+traefik.tcp.services.smtps.loadbalancer.proxyProtocol.version=2
+
+traefik.tcp.routers.imaps.rule=HostSNI(`*`)
+traefik.tcp.routers.imaps.tls.passthrough=true
+traefik.tcp.routers.imaps.entrypoints=imaps
+traefik.tcp.routers.imaps.service=imaps
+traefik.tcp.services.imaps.loadbalancer.server.port=10993
+traefik.tcp.services.imaps.loadbalancer.proxyProtocol.version=2
+
+{% endif %}
+
+{% for arg in stalwart_container_labels_additional_labels %}
+{{ arg }}
+{% endfor %}

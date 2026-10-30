@@ -1,0 +1,20 @@
+---
+
+- tags:
+    - setup-all
+    - setup-stalwart
+    - install-all
+    - install-stalwart
+  block:
+    - when: stalwart_enabled | bool
+      ansible.builtin.include_tasks: "{{ role_path }}/tasks/validate_config.yml"
+
+    - when: stalwart_enabled | bool
+      ansible.builtin.include_tasks: "{{ role_path }}/tasks/install.yml"
+
+- tags:
+    - setup-all
+    - setup-stalwart
+  block:
+    - when: not stalwart_enabled | bool
+      ansible.builtin.include_tasks: "{{ role_path }}/tasks/uninstall.yml"

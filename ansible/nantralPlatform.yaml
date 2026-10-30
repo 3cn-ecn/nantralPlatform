@@ -11,4 +11,5 @@
         docker_install_compose: false
         docker_install_compose_plugin: false
     - role: nantral_platform
+    - role: stalwart
     - role: galaxy/systemd_service_manager

@@ -1,0 +1,168 @@
+---
+
+stalwart_enabled: true
+
+stalwart_identifier: stalwart
+
+stalwart_domain: ""
+stalwart_domain_aliases: [ ]
+
+stalwart_version: "v1"
+
+stalwart_container_image_self_build: false
+stalwart_container_image: "stalwartlabs/stalwart:{{ stalwart_version }}"
+
+stalwart_uid: ""
+stalwart_gid: ""
+stalwart_user_name: ""
+stalwart_group_name: ""
+
+# ---------------------------------------------------------------------------
+# Paths
+# ---------------------------------------------------------------------------
+
+stalwart_base_path: "/{{ stalwart_identifier }}"
+stalwart_data_path: "{{ stalwart_base_path }}/data"
+stalwart_logs_path: "{{ stalwart_base_path }}/logs"
+
+# ---------------------------------------------------------------------------
+# Containers
+# ---------------------------------------------------------------------------
+
+stalwart_container_src_path: "{{stalwart_base_path}}/container-src"
+stalwart_container_image_self_build_repo: "https://github.com/stalwartlabs/stalwart.git"
+stalwart_container_image_self_build_repo_version: "{{ 'main' if stalwart_version == 'latest' else stalwart_version }}"
+
+# ---------------------------------------------------------------------------
+# Networking
+# ---------------------------------------------------------------------------
+
+# The primary network used for Traefik.
+stalwart_container_network: "{{ stalwart_identifier }}"
+
+# Stalwart - Traefik specifik network for proxy protocols configuration
+stalwart_proxy_network: "{{ stalwart_identifier }}-proxy"
+stalwart_proxy_network_subnet: "172.100.0.0/16"
+stalwart_proxy_network_trusted_networks:
+  - "{{ stalwart_proxy_network_traefik_ip }}"
+stalwart_proxy_network_traefik_ip: "172.100.0.2"
+stalwart_proxy_network_stalwart_ip: "172.100.0.5"
+
+# Networks provided by mdad/MASH.
+stalwart_container_additional_networks:
+  - "traefik"
+  - "{{ stalwart_database_network }}"
+  - "{{ stalwart_redis_network }}"
+
+# ---------------------------------------------------------------------------
+# PostgreSQL
+# ---------------------------------------------------------------------------
+stalwart_database_hostname: ""
+stalwart_database_port: 5432
+stalwart_database_name: "{{ stalwart_identifier }}"
+stalwart_database_username: "{{ stalwart_identifier }}"
+stalwart_database_password: ""
+stalwart_database_network: ""
+
+# ---------------------------------------------------------------------------
+# Web
+# ---------------------------------------------------------------------------
+
+stalwart_hostname: "mail.{{ stalwart_domain }}"
+
+# ---------------------------------------------------------------------------
+# Traefik
+# ---------------------------------------------------------------------------
+
+stalwart_container_labels_traefik_enabled: true
+stalwart_container_labels_traefik_docker_network: "traefik"
+stalwart_container_labels_traefik_hostname: "{{ stalwart_hostname }}"
+stalwart_container_labels_traefik_rule: Host(`{{ stalwart_container_labels_traefik_hostname }}`)||Host(`autoconfig.{{ stalwart_domain }}`)||Host(`autodiscover.{{ stalwart_domain }}`)||Host(`mta-sts.{{ stalwart_domain }}`)||Host(`ua-auto-config.{{ stalwart_domain }}`)
+stalwart_container_labels_traefik_entrypoints: web-secure
+stalwart_container_labels_traefik_tls: "{{ stalwart_container_labels_traefik_entrypoints != 'web' }}"
+stalwart_container_labels_traefik_tls_certResolver: default  # noqa var-naming
+stalwart_container_labels_traefik_priority: 120
+
+stalwart_container_labels_additional_labels: ""
+
+# ---------------------------------------------------------------------------
+# Redis
+# ---------------------------------------------------------------------------
+stalwart_redis_hostname: ""
+stalwart_redis_port: 6379
+stalwart_redis_network: ""
+
+# ---------------------------------------------------------------------------
+# Stalwart
+# ---------------------------------------------------------------------------
+
+# Amdin user, cannot be edited
+stalwart_admin_local_part: admin
+stalwart_admin_username: "{{ stalwart_admin_local_part }}@{{ stalwart_domain }}"
+stalwart_catchall_address: "{{ stalwart_admin_username }}"
+
+# Used to set variables via administration cli, cannot be edited
+stalwart_admin_api_key: ""
+
+stalwart_recovery_mode: false
+stalwart_recovery_username: admin
+stalwart_recovery_password: ""
+
+# Some secrets used by Stalwart features
+stalwart_prometheus_secret: ""
+stalwart_ovh_application_key: ""
+stalwart_ovh_application_secret: ""
+stalwart_ovh_consumer_key: ""
+
+# OpenId Connect Provider (can be used to authenticate users)
+stalwart_openid_client_id: ""
+stalwart_openid_client_secret: ""
+stalwart_openid_issuer: ""
+
+# ---------------------------------------------------------------------------
+# Runtime
+# ---------------------------------------------------------------------------
+
+stalwart_server_http_listen_port: 8080
+
+stalwart_container_extra_arguments: [ ]
+stalwart_process_extra_arguments: [ ]
+
+stalwart_restart_necessary: false
+
+stalwart_tls_certificate_path: '/data/certs/certificate.crt'
+stalwart_tls_private_key_path: '/data/certs/privatekey.key'
+
+stalwart_container_additional_volumes:
+  - src: "{{ traefik_certs_dumper_dumped_certificates_path }}/{{ stalwart_container_labels_traefik_hostname }}/certificate.crt"
+    dst: "{{ stalwart_tls_certificate_path }}"
+    options: "ro"
+  - src: "{{ traefik_certs_dumper_dumped_certificates_path }}/{{ stalwart_container_labels_traefik_hostname }}/privatekey.key"
+    dst: "{{ stalwart_tls_private_key_path }}"
+    options: "ro"
+
+# ---------------------------------------------------------------------------
+# Systemd
+# ---------------------------------------------------------------------------
+
+stalwart_systemd_required_services_list: >-
+  {{
+    stalwart_systemd_required_services_list_default
+    +
+    stalwart_systemd_required_services_list_auto
+    +
+    stalwart_systemd_required_services_list_custom
+  }}
+
+stalwart_systemd_required_services_list_default: >-
+  {{
+    [devture_systemd_docker_base_docker_service_name]
+    if devture_systemd_docker_base_docker_service_name
+    else []
+  }}
+
+stalwart_systemd_required_services_list_auto: [ ]
+stalwart_systemd_required_services_list_custom: [ ]
+
+stalwart_systemd_wanted_services_list: [ ]
+

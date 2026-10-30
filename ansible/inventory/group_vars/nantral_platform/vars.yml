@@ -36,17 +36,31 @@ devture_systemd_service_manager_services_list_auto: |
       'restart_necessary': (nantral_platform_restart_necessary | bool),
       'groups': ["nantral"],
     }] if nantral_platform_enabled and not nantral_platform_staging else [])
+    +
+    ([{
+      'name': "stalwart.service",
+      'priority': 1000,
+      'restart_necessary': (stalwart_restart_necessary | bool),
+      'groups': ["nantral"],
+    }] if stalwart_enabled else [])
   }}
 
 # Docker networking
 nantral_platform_container_labels_traefik_tls_certResolver: "default"
+traefik_certs_dumper_dumped_certificates_path: "/matrix/traefik-certs-dumper/dumped-certificates"
+traefik_identifier: "matrix-traefik"
 
 # PostgreSQL Database
-nantral_platform_database_hostname: "matrix-postgres"
+nantral_platform_database_hostname: "{{ postgres_identifier }}"
 nantral_platform_database_port: 5432
-nantral_platform_database_network: "matrix-postgres"
+nantral_platform_database_network: "{{ postgres_identifier }}"
 nantral_platform_database_username: "poufsouffle"
-nantral_platform_database_password: "{{ vault_postgres_password }}"
+nantral_platform_database_password: "{{ vault_nantral_platform_postgres_password }}"
+
+stalwart_database_hostname: "{{ postgres_identifier }}"
+stalwart_database_port: 5432
+stalwart_database_network: "{{ postgres_identifier }}"
+stalwart_database_password: "{{ vault_stalwart_postgres_password }}"
 
 # Postgres ansible settings. Should match matrix docker ansible deploy configuration
 postgres_identifier: matrix-postgres
@@ -54,15 +68,30 @@ postgres_base_path: "/matrix/postgres"
 postgres_connection_password: "{{ vault_postgres_admin_password }}"
 postgres_db_name: matrix
 # Define the nantral database
-postgres_managed_databases_additional:
-  - name: "{{ nantral_platform_database_name }}"
-    username: "{{ nantral_platform_database_username }}"
-    password: "{{ nantral_platform_database_password }}"
+postgres_managed_databases_additional: >-
+  {{
+    ([{
+      'name': nantral_platform_database_name,
+      'username': nantral_platform_database_username,
+      'password': nantral_platform_database_password
+    }] if nantral_platform_enabled else [])
+    +
+    ([{
+      'name': stalwart_database_name,
+      'username': stalwart_database_username,
+      'password': stalwart_database_password
+    }] if stalwart_enabled else [])
+  }}
+
 
 # Redis
-nantral_platform_redis_hostname: "mash-redis"
+redis_identifier: "mash-redis"
+nantral_platform_redis_hostname: "{{ redis_identifier }}"
 nantral_platform_redis_port: 6379
-nantral_platform_redis_network: "mash-redis"
+nantral_platform_redis_network: "{{ redis_identifier }}"
+stalwart_redis_hostname: "{{ redis_identifier }}"
+stalwart_redis_port: 6379
+stalwart_redis_network: "{{ redis_identifier }}"
 
 # Memcached
 nantral_platform_memcached_hostname: "mash-memcached"
@@ -81,17 +110,17 @@ nantral_platform_s3_bucket: "nantral-platform-prod"
 
 # Emails
 # TODO: Create/configure the mailserver
-nantral_platform_email_host: "mail.nantral-platform.fr"
+nantral_platform_email_host: "{{ stalwart_hostname }}"
 nantral_platform_email_port: "465"
-nantral_platform_email_network: "TODO"
-nantral_platform_email_user: "admin@nantral-platform.fr"
+nantral_platform_email_network: "{{ stalwart_identifier }}"
+nantral_platform_email_user: "{{ stalwart_admin_username }}"
 nantral_platform_email_password: "{{ vault_mailserver_password }}"
 
 # Systemd
 nantral_platform_systemd_required_services_list_auto:
   - mash-memcached.service
   - matrix-postgres.service
-#  - mailserver.service # TODO
+  - stalwart.service
 
 # GitHub features (eg create issues from website)
 nantral_platform_github_user: "nantralplatform-bot"
@@ -106,3 +135,31 @@ nantral_platform_discord_admin_moderation_webhook: "{{ vault_discord_admin_moder
 nantral_platform_webpush_admin_email: "nantralplatform@gmail.com"
 nantral_platform_webpush_public_key: "{{ vault_vapid_public_key }}"
 nantral_platform_webpush_private_key: "{{ vault_vapid_private_key }}"
+
+
+# Stalwart
+stalwart_enabled: true
+
+stalwart_domain: "nantral-platform.fr"
+stalwart_domain_aliases:
+  - "matrix.{{ stalwart_domain }}"
+stalwart_hostname: "test.{{ stalwart_domain }}"
+
+stalwart_uid: 1000
+stalwart_gid: 1000
+stalwart_user_name: ubuntu
+stalwart_group_name: ubuntu
+stalwart_ovh_application_key: "{{ vault_ovh_application_key }}"
+stalwart_ovh_application_secret: "{{ vault_ovh_application_shared_secret }}"
+stalwart_ovh_consumer_key: "{{ vault_ovh_consumer_key }}"
+stalwart_recovery_password: "{{ vault_stalwart_password }}"
+stalwart_admin_api_key: "{{ vault_stalwart_api_key }}"
+stalwart_prometheus_secret: "{{ vault_stalwart_prometheus_secret }}"
+stalwart_openid_client_id: "{{ vault_stalwart_openid_provider_id }}"
+stalwart_openid_client_secret: "{{ vault_stalwart_openid_provider_secret }}"
+stalwart_openid_issuer: "https://{{ nantral_platform_hostname }}/openid"
+
+stalwart_systemd_required_services_list_auto:
+  - matrix-traefik.service
+  - matrix-postgres.service
+  - mash-redis.service

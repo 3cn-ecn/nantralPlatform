@@ -1,0 +1,17 @@
+{
+  "@type": "PostgreSql",
+  "connectTimeout": 15000,
+  "useTls": false,
+  "allowInvalidCerts": false,
+  "poolMaxConnections": null,
+  "poolRecyclingMethod": "fast",
+  "readReplicas": {},
+  "host": "{{ stalwart_database_hostname }}",
+  "port": {{ stalwart_database_port }},
+  "database": "{{ stalwart_database_name }}",
+  "authUsername": "{{ stalwart_database_username }}",
+  "authSecret": {
+    "@type": "EnvironmentVariable",
+    "variableName": "POSTGRES_PASSWORD"
+  }
+}

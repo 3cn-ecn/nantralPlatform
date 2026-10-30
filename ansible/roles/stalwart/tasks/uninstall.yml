@@ -1,0 +1,25 @@
+---
+
+- name: Check existence of Stalwart service
+  ansible.builtin.stat:
+    path: "{{ devture_systemd_docker_base_systemd_path }}/stalwart.service"
+  register: stalwart_service_stat
+
+- when: stalwart_stat.stat.exists | bool
+  block:
+    - name: Ensure Stalwart is stopped
+      ansible.builtin.service:
+        name: stalwart
+        state: stopped
+        enabled: false
+        daemon_reload: true
+
+    - name: Ensure stalwart.service doesn't exist
+      ansible.builtin.file:
+        path: "{{ devture_systemd_docker_base_systemd_path }}/stalwart.service"
+        state: absent
+
+    - name: Ensure Stalwart paths don't exist
+      ansible.builtin.file:
+        path: "{{ stalwart_base_path }}"
+        state: absent

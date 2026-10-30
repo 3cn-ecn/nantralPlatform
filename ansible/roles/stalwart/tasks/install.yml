@@ -1,0 +1,139 @@
+---
+
+- name: Get Traefik container information
+  community.docker.docker_container_info:
+    name: matrix-traefik
+  register: traefik_info
+
+- name: Get Traefik container IP in the proxy network
+  ansible.builtin.set_fact:
+    traefik_internal_ip: >-
+      {{ traefik_info.container.NetworkSettings.Networks[stalwart_container_labels_traefik_docker_network].IPAddress }}
+
+- name: Ensure Stalwart paths exist
+  ansible.builtin.file:
+    path: "{{ item.path }}"
+    state: directory
+    mode: '0750'
+    owner: "{{ stalwart_user_name }}"
+    group: "{{ stalwart_group_name }}"
+  with_items:
+    - path: "{{ stalwart_base_path }}"
+      when: true
+    - path: "{{ stalwart_data_path }}"
+      when: true
+    - path: "{{ stalwart_container_src_path }}"
+      when: "{{ stalwart_container_image_self_build }}"
+  when: item.when | bool
+
+- name: Ensure Stalwart support files installed
+  ansible.builtin.template:
+    src: "{{ role_path }}/templates/{{ item }}.j2"
+    dest: "{{ stalwart_base_path }}/{{ item }}"
+    mode: '0640'
+    owner: "{{ stalwart_user_name }}"
+    group: "{{ stalwart_group_name }}"
+  with_items:
+    - labels
+    - env
+    - config.json
+    - plan.ndjson
+  register: stalwart_support_files_result
+
+- name: Ensure Stalwart container image is pulled
+  community.docker.docker_image_pull:
+    name: "{{ stalwart_container_image }}"
+    pull: always
+  when: "not stalwart_container_image_self_build | bool"
+  register: stalwart_container_image_pull_result
+  retries: "{{ devture_playbook_help_container_retries_count }}"
+  delay: "{{ devture_playbook_help_container_retries_delay }}"
+  until: stalwart_container_image_pull_result is not failed
+
+- when: stalwart_container_image_self_build | bool
+  block:
+    # A checkout owned by a different user (a uid change, an earlier clone by another user, etc.) would make the git task below fail on ownership or permissions.
+    - name: Ensure Stalwart repository ownership is correct on self-build
+      ansible.builtin.file:
+        path: "{{ stalwart_container_src_path }}"
+        state: directory
+        owner: "{{ stalwart_user_name }}"
+        group: "{{ stalwart_group_name }}"
+        recurse: true
+
+    - name: Ensure Stalwart repository is present on self-build
+      ansible.builtin.git:
+        repo: "{{ stalwart_container_image_self_build_repo }}"
+        version: "{{ stalwart_container_image_self_build_repo_version }}"
+        dest: "{{ stalwart_container_src_path }}"
+        force: "yes"
+      become: true
+      become_user: "{{ stalwart_user_name }}"
+      # Keep this even though the task above normalizes ownership. Git may still see an ownership mismatch when Ansible becomes an unprivileged user.
+      environment:
+        GIT_CONFIG_COUNT: "1"
+        GIT_CONFIG_KEY_0: safe.directory
+        GIT_CONFIG_VALUE_0: "{{ stalwart_container_src_path }}"
+      register: stalwart_git_pull_results
+
+    - name: Ensure Stalwart container image is built
+      ansible.builtin.command:
+        cmd: |-
+          {{ devture_systemd_docker_base_host_command_docker }} buildx build
+          --tag={{ stalwart_container_image }}
+          --file={{ stalwart_container_src_path }}/Dockerfile
+          {{ stalwart_container_src_path }}
+      changed_when: true
+
+- name: Ensure Stalwart database is created
+  ansible.builtin.include_role:
+    name: galaxy/postgres
+    tasks_from: util/prepare_managed_databases.yml
+
+- name: Ensure Stalwart container network is created
+  when: stalwart_container_network != 'host'
+  community.general.docker_network:
+    enable_ipv6: "{{ devture_systemd_docker_base_ipv6_enabled }}"
+    name: "{{ stalwart_container_network }}"
+    driver: bridge
+    driver_options: "{{ devture_systemd_docker_base_container_networks_driver_options }}"
+
+- name: Ensure Stalwart systemd service installed
+  ansible.builtin.template:
+    src: "{{ role_path }}/templates/systemd/stalwart.service.j2"
+    dest: "{{ devture_systemd_docker_base_systemd_path }}/stalwart.service"
+    mode: '0644'
+  register: stalwart_systemd_service_result
+
+- name: Determine whether Stalwart needs a restart
+  ansible.builtin.set_fact:
+    stalwart_restart_necessary: >-
+      {{
+        stalwart_support_files_result.changed | default(false)
+        or stalwart_systemd_service_result.changed | default(false)
+        or stalwart_container_image_pull_result.changed | default(false)
+      }}
+
+- name: Ensure Stalwart configuration is applied
+  when: stalwart_support_files_result.changed | default(false) or true
+  block:
+    - name: Ensure Stalwart service is started
+      ansible.builtin.service:
+        name: "{{ stalwart_identifier }}"
+        state: "{{ 'restarted' if stalwart_restart_necessary else 'started' }}"
+        daemon_reload: true
+      register: stalwart_ensure_started_result
+
+    - name: Wait a bit, so that Stalwart can start
+      when: "stalwart_ensure_started_result.changed | bool"
+      ansible.builtin.wait_for:
+        timeout: "10"
+      delegate_to: 127.0.0.1
+      become: false
+
+    - name: Apply stalwart configuration plan
+      ansible.builtin.command:
+        cmd: "/home/ubuntu/.cargo/bin/stalwart-cli apply --file {{ stalwart_base_path }}/plan.ndjson"
+      environment:
+        STALWART_URL: "https://{{ stalwart_hostname }}"
+        STALWART_TOKEN: "{{ stalwart_admin_api_key }}"
