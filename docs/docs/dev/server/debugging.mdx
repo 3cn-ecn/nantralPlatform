@@ -9,7 +9,7 @@ There are several failure points that we can look into to try and find the cause
 
 ## Deployment logs
 
-If a problem happens during deployment, you can check the status of the GitHub Action responsible for deploying the latest pull request to production [here](https://github.com/3cn-ecn/nantralPlatform/actions). This should provide enough informations for deployment related issues.
+If a problem happens during deployment, you can check the status of the GitHub Action responsible for deploying the latest pull request to production [here](https://github.com/3cn-ecn/nantralPlatform/actions). This should provide enough information for deployment related issues.
 
 The deployment pipeline is split into two parts:
 
@@ -19,22 +19,27 @@ The deployment pipeline is split into two parts:
 We will see how to debug both processes.
 
 :::info
-In the following section, all `docker-compose` commands **in production** are replaced with the
-alias `dcf` which stands for `docker-compose -f docker-compose.yml -f docker-compose.prod.yml`
+In the following section, all `docker compose` commands **in production** are replaced with the
+alias `dcf` which stands for `docker compose -f docker compose.yml -f docker-compose.prod.yml`
 :::
 
 ### Errors while building
 
 The build logs should be available in the GitHub Action logs like described above.
-If you need more informations, re-run the build directly on the server:
+If you need more information, re-run the build directly on your machine:
+run `docker build -f deployment/containers/web/Dockerfile .` to re-build the containers.
 
-1. Connect to the server using SSH.
-2. Go to nantralPlatform/deployment by running `cd nantralPlatform/deployment`.
-3. Run `sudo dcf build` to re-build the containers.
+:::info
+In order to change the running container on the server, you will need to push it to ghcr.io
+(GitHub repository for docker images). Once you've done this, update the version tag in
+the `.env` file with the new tag, then run `dcf pull && dcf up`.
+
+You should use the GitHub workflow to update instead of doing this manually.
+:::
 
 ### Errors while running the containers
 
-Even if the docker-compose build ran successfuly, containers can still be prone to errors. If an error happens, you can debug the swarm by following the steps below:
+Even if the docker compose build ran successfully, containers can still be prone to errors. If an error happens, you can debug the swarm by following the steps below:
 
 1. Connect to the server using SSH.
 2. Go to nantralPlatform/deployment by running `cd nantralPlatform/deployment`.
@@ -43,7 +48,8 @@ Even if the docker-compose build ran successfuly, containers can still be prone 
 
 If the containers are not running, use: `dcf up` to bring them online.
 
-Once you are done debugging, press ctrl+C to exit and then run `dcf down && dcf up -d` to bring the containers back online in detached mode.
+Once you are done debugging, press `d` to quit, or press `ctrl+C` to stop and exit and
+then run `dcf down && dcf up -d` to bring the containers back online in detached mode.
 
 ## Django production logs
 
@@ -52,3 +58,7 @@ If a bug happens in the backend code (i.e a 500 error), you can most likely find
 1. Connect to the server using SSH.
 2. Run `dcf logs backend --follow`.
 3. Once you are done, press CTRL+C to exit.
+
+## Mail Server
+
+Please refer to the [mail server page](./emails.mdx).

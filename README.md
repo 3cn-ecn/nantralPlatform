@@ -10,7 +10,7 @@
 
 ## Get started
 
-- Requirements: `python3`, `pipenv` (be sure its in your PATH!), and `node`
+- Requirements: `uv`, `python` (be sure its in your PATH!), and `node`
 - Setup everything the first time:
   ```
   make install
@@ -22,7 +22,7 @@
   ```
 - Start the back end server:
   ```
-  cd backend && pipenv run start
+  cd backend && uv run manage.py runserver
   ```
 - Start the front end server (in another terminal):
   ```
@@ -43,29 +43,31 @@
 > administration panel), you have to create a local account to use the website.
 
 > Debugging: if you can't connect to the admin account, change its password
-> with `pipenv run django changepassword admin`
+> with `uv run manage.py changepassword admin`
 
 ## Contribute
 
-- [Create a [TICKET] issue](https://github.com/3cn-ecn/nantralPlatform/issues) to describe what you want to do. Assign yourself to the issue if you want to work on it.
-- Create a new branch linked to the issue and then create a Pull Request. Don't clone the repository on your personnal account !
+- [Create a [TICKET] issue](https://github.com/3cn-ecn/nantralPlatform/issues) to describe what you want to do. Assign
+  yourself to the issue if you want to work on it.
+- Create a new branch linked to the issue and then create a Pull Request. Don't clone the repository on your personnal
+  account !
 - Test your code:
-  - All-in-one command:
-    ```bash
-    make test
-    ```
-  - in the backend:
-    ```bash
-    pipenv run lint  # use lint:fix to fix errors
-    pipenv run test
-    ```
-  - in the frontend:
-    ```bash
-    npm run types
-    npm run lint  # use lint:fix to fix errors
-    npm run jest  # use jest:u to update snapshots
-    ```
-    _Run these 3 commands at once: `npm run test`_
+    - All-in-one command:
+      ```bash
+      make test
+      ```
+    - in the backend:
+      ```bash
+      uv run ruff check  # use --fix to fix errors
+      uv run manage.py test
+      ```
+    - in the frontend:
+      ```bash
+      npm run types
+      npm run lint  # use lint:fix to fix errors
+      npm run jest  # use jest:u to update snapshots
+      ```
+      _Run these 3 commands at once: `npm run test`_
 
 ## Contributors
 

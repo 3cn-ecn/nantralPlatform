@@ -1,8 +1,11 @@
 {
   "image": "mcr.microsoft.com/devcontainers/universal:2",
   "features": {
-    "ghcr.io/devcontainers-extra/features/pipenv:2": {}
+    "ghcr.io/devcontainers/features/node:1": {
+      "version": "lts"
+    }
   },
+  "postCreateCommand": "curl -LsSf https://astral.sh/uv/install.sh | sh",
   "forwardPorts": [8000, 5173],
   "portsAttributes": {
     "5173": { "onAutoForward": "silent" },

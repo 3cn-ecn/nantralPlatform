@@ -1,10 +1,8 @@
 services:
   uptime-kuma:
     container_name: uptime-kuma
-    image: louislam/uptime-kuma
+    image: louislam/uptime-kuma:latest
     restart: unless-stopped
-    ports:
-      - "3001:3001"
     logging:
       driver: json-file
     environment:

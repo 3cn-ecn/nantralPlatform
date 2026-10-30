@@ -13,10 +13,7 @@ DEBUG = False
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = env("SECRET_KEY")
 
-if STAGING:
-    ALLOWED_HOSTS = env("DJANGO_ALLOWED_HOSTS_STAGING").split(" ")
-else:
-    ALLOWED_HOSTS = env("DJANGO_ALLOWED_HOSTS").split(" ")
+ALLOWED_HOSTS = env("DJANGO_ALLOWED_HOSTS").split(" ")
 
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 EMAIL_HOST = env("EMAIL_HOST")
@@ -103,3 +100,5 @@ AWS_S3_CLIENT_CONFIG = BotoConfig(
 DEBUG_TOOLBAR_CONFIG = {
     "SHOW_TOOLBAR_CALLBACK": (lambda _: DEBUG),
 }
+
+DJANGO_VITE_DEV_MODE = False

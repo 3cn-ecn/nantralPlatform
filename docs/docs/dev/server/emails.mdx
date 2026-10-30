@@ -21,12 +21,13 @@ One particular thing about this service is that it stores its logs in the
 `deployment/appdata/stalwart/data/logs/` instead of using docker logging system, so using
 `docker compose logs mailserver` will not show anything.
 
-The emails and accounts are stored on our Postgresql database.
+The emails and accounts are stored on our PostgreSQL database.
 
-There is no authentification between Django and the SMTP server as they both operate on the same host. This means that any email adress ending in `@nantral-platform.fr` is valid (`foo@nantral-platform.fr`, `bar@nantral-platform.fr`, etc). You do not need to create it in order to use it.
+There is no authentification between Django and the SMTP server as they both operate on the same host. This means that any email address ending in `@nantral-platform.fr` is valid (`foo@nantral-platform.fr`, `bar@nantral-platform.fr`, etc). You do not need to create it in order to use it.
 
 ## Troubleshooting
 
-Errors may occur if docker network configuration change. Restarting the server is not enough,
-you may need to remove any existing networks (e.g. using `docker compose down`) and
-recreate them properly with `docker compose up`
+Errors may occur if docker network configuration change, due to hardcoded ip addresses used
+for filtering invalid hosts. Restarting the server is not enough, you may need to remove any
+existing networks (e.g. using `docker compose down`) and recreate them properly with `docker compose up`.
+Adding a network that is created before the `mailserver` network will break the config.

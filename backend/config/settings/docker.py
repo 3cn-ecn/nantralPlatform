@@ -20,11 +20,11 @@ print("Using docker config")  # noqa: T201
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
-        "NAME": env("POSTGRES_DB_STAGING") if STAGING else env("POSTGRES_DB"),
+        "NAME": env("POSTGRES_DB"),
         "USER": env("POSTGRES_USER"),
         "PASSWORD": env("POSTGRES_PASSWORD"),
-        "HOST": env("DB_HOSTNAME"),
-        "PORT": env("DB_PORT"),
+        "HOST": env("POSTGRES_HOSTNAME"),
+        "PORT": env("POSTGRES_PORT"),
         "CONN_MAX_AGE": 600,
     },
 }
@@ -55,11 +55,13 @@ EMAIL_PORT = 1025
 CACHES = {
     "default": {
         "BACKEND": "django.core.cache.backends.memcached.PyMemcacheCache",
-        "LOCATION": "127.0.0.1:11211",
+        "LOCATION": env("CACHE_LOCATION"),
+        "KEY_PREFIX": env("CACHE_KEY_PREFIX"),
     },
     "extra_settings": {
         "BACKEND": "django.core.cache.backends.memcached.PyMemcacheCache",
-        "LOCATION": "127.0.0.1:11211",
+        "LOCATION": env("CACHE_LOCATION"),
+        "KEY_PREFIX": env("CACHE_KEY_PREFIX"),
         "TIMEOUT": 60,
     },
 }
@@ -69,8 +71,8 @@ INTERNAL_IPS = [
 
 # CELERY SETTINGS
 
-CELERY_BROKER_URL = "redis://redis:6379"
-CELERY_RESULT_BACKEND = "redis://redis:6379"
+CELERY_BROKER_URL = env("CELERY_BROKER_URL")
+CELERY_RESULT_BACKEND = env("CELERY_BROKER_URL")
 CELERY_ACCEPT_CONTENT = ["application/json"]
 CELERY_TASK_SERIALIZER = "json"
 CELERY_RESULT_SERIALIZER = "json"
@@ -99,4 +101,4 @@ DEBUG_TOOLBAR_CONFIG = {
     "SHOW_TOOLBAR_CALLBACK": (lambda _: DEBUG),
 }
 
-DJANGO_VITE_DEV_MODE = False
+DJANGO_VITE_DEV_MODE = True

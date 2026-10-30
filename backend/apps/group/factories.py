@@ -53,7 +53,7 @@ class MembershipFactory(DjangoModelFactory):
     group = factory.Iterator(Group.objects.all())
     user = factory.Iterator(User.objects.all())
     admin = factory.Faker("boolean", chance_of_getting_true=0.1)
-    summary = factory.Faker("sentence", nb_words=10)
+    summary = factory.Faker("text", max_nb_chars=50)
     description = factory.Faker("paragraph", nb_sentences=5)
     begin_date = factory.Faker(
         "date_between",

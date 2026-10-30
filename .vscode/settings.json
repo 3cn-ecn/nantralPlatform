@@ -96,5 +96,5 @@
     "statusBar.background": "#c02837",
     "statusBar.foreground": "#fcfcfc"
   },
-  "python-envs.defaultEnvManager": "ms-python.python:pipenv"
+  "python-envs.defaultEnvManager": "ms-python.python:uv"
 }

@@ -1,6 +1,6 @@
 services:
   redis:
-    image: redis:alpine
+    image: redis:8.10-alpine
     restart: unless-stopped
     environment:
       - "TZ=Europe/Paris"
@@ -9,4 +9,4 @@ services:
       - "/etc/localtime:/etc/localtime:ro"
       - redis:/data
     networks:
-      - proxy
+      - redis
