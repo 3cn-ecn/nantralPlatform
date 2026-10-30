@@ -1,6 +1,6 @@
 services:
   backend:
-    image: ghcr.io/3cn-ecn/nantralplatform:${BACKEND_TAG:-latest}
+    image: ghcr.io/3cn-ecn/nantral-platform:${BACKEND_TAG:-latest}
     expose:
       - "8000"
     command: sh run_server.sh
@@ -23,7 +23,7 @@ services:
       - cache
 
   backend-staging:
-    image: ghcr.io/3cn-ecn/nantralplatform:${STAGING_TAG:-latest}
+    image: ghcr.io/3cn-ecn/nantral-platform:${STAGING_TAG:-latest}
     expose:
       - "8000"
     command: sh run_server.sh
