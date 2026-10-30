@@ -172,6 +172,8 @@ jobs:
           key: ${{ secrets.SSH_KEY_DEPLOY }}
           script: |
             set -e
+            cd nantralPlatform/deployment
+            git pull
             # Remove the current tag and append the new one
             sed -i '/^BACKEND_TAG=/d' .env
             echo "BACKEND_TAG=${{ github.sha }}" >> .env
