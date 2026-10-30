@@ -16,7 +16,7 @@ on:
 
 env:
   REGISTRY: ghcr.io
-  IMAGE_NAME: nantral-platform
+  IMAGE_NAME: 3cn-ecn/nantral-platform
 
 jobs:
   changes:
@@ -173,7 +173,6 @@ jobs:
           script: |
             set -e
             cd nantralPlatform/deployment
-            git pull
             # Remove the current tag and append the new one
             sed -i '/^BACKEND_TAG=/d' .env
             echo "BACKEND_TAG=${{ github.sha }}" >> .env

@@ -4,7 +4,7 @@ on: workflow_dispatch
 
 env:
   REGISTRY: ghcr.io
-  IMAGE_NAME: nantral-platform
+  IMAGE_NAME: 3cn-ecn/nantral-platform
 
 jobs:
   frontend-quality:
