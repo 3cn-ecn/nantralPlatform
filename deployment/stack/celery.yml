@@ -10,11 +10,6 @@ services:
       - celery-beat
       - redis
     env_file: ../backend.env
-    networks:
-      - celery
-      - redis
-      - database
-      - mailserver
 
   celery-beat:
     command: celery -A apps.celery beat -l info --scheduler django_celery_beat.schedulers:DatabaseScheduler
