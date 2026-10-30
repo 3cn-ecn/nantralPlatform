@@ -10,6 +10,7 @@ services:
       proxy:
       mailserver:
         ipv4_address: 172.24.0.5
+      database:
     environment:
       - "TZ=Europe/Paris"
     volumes:
