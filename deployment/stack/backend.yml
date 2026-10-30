@@ -10,9 +10,11 @@ services:
       - static_volume:/var/app/staticfiles/
     depends_on:
       - database
+      - memcached
     env_file: ../backend.env
     labels:
       - "traefik.enable=true"
+      - "traefik.docker.network=deployment_proxy"
       - "traefik.http.routers.backend.rule=Host(`nantral-platform.fr`)"
       - "traefik.http.routers.backend.entrypoints=websecure"
       - "traefik.http.routers.backend.tls.certresolver=letsencrypt"
@@ -40,6 +42,7 @@ services:
       - "TZ=Europe/Paris"
     labels:
       - "traefik.enable=true"
+      - "traefik.docker.network=deployment_proxy"
       - "traefik.http.routers.backend-staging.rule=Host(`dev.nantral-platform.fr`)"
       - "traefik.http.routers.backend-staging.entrypoints=websecure"
       - "traefik.http.routers.backend-staging.tls.certresolver=letsencrypt"

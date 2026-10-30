@@ -13,6 +13,8 @@ services:
       - "../appdata/uptime-kuma:/app/data"
     networks:
       - proxy
+      - database
+      - redis
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.uptime-kuma.entrypoints=websecure"
