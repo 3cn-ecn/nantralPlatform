@@ -20,6 +20,7 @@ services:
       - certs:/data/certs:ro
     labels:
       - traefik.enable=true
+      - traefik.docker.network=deployment_mailserver
 
       - traefik.http.routers.mailserver.rule=Host(`mail.nantral-platform.fr`) || Host(`autodiscover.nantral-platform.fr`) || Host(`autoconfig.nantral-platform.fr`) || Host(`mta-sts.nantral-platform.fr`)
       - traefik.http.routers.mailserver.entrypoints=websecure
