@@ -26,7 +26,7 @@ jobs:
       backend: ${{ steps.filter.outputs.backend }}
       frontend: ${{ steps.filter.outputs.frontend }}
       email-templates: ${{ steps.filter.outputs.email-templates }}
-      deployment: ${{ steps.filter.ouptuts.deployment }}
+      deployment: ${{ steps.filter.outputs.deployment }}
     steps:
       - uses: actions/checkout@v4
       - uses: dorny/paths-filter@v3
@@ -104,8 +104,10 @@ jobs:
           tags: |
             ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
             ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
-          cache-from: type=gha,scope=production
-          cache-to: type=gha,mode=max,scope=production
+          cache-from: |
+            type=gha,scope=production-web
+            type=gha,scope=production-celery
+          cache-to: type=gha,mode=max,scope=production-web
 
       - name: Build and push Celery image
         uses: docker/build-push-action@v6
@@ -117,8 +119,10 @@ jobs:
           tags: |
             ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}-celery:${{ github.sha }}
             ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}-celery:latest
-          cache-from: type=gha,scope=production
-          cache-to: type=gha,mode=max,scope=production
+          cache-from: |
+            type=gha,scope=production-web
+            type=gha,scope=production-celery
+          cache-to: type=gha,mode=max,scope=production-celery
 
   backup-database:
     name: Create a backup of the database
@@ -159,6 +163,7 @@ jobs:
     needs:
       [ build-and-push, backup-database, update-deployment ]
     if: |
+      always() &&
       (needs.update-deployment.result == 'success' || needs.update-deployment.result == 'skipped') &&
       needs.build-and-push.result == 'success' &&
       needs.backup-database.result == 'success'

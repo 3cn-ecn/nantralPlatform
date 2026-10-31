@@ -22,12 +22,9 @@ dependencies = [
     "django-vite~=3.2",
     "djangorestframework~=3.18",
     "docutils",
-    "factory-boy~=3.3",
     "flower~=2.2",
-    "freezegun~=1.2",
     "gunicorn~=23.0",
     "matching~=1.4",
-    "names~=0.3",
     "numpy>=1.21",
     "pillow~=13.0",
     "psycopg2-binary~=2.9",
@@ -43,6 +40,9 @@ dependencies = [
 [dependency-groups]
 dev = [
     "coverage~=7.3",
+    "factory-boy~=3.3",
+    "freezegun~=1.2",
+    "names~=0.3",
     "ruff~=0.15.4",
 ]
 

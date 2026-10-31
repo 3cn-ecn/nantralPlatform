@@ -119,7 +119,7 @@ services:
       context: ../
       dockerfile: deployment/containers/web/Dockerfile
       target: celery
-    command: uv run celery -A apps.celery --broker=redis://redis:6379/0 flower --port=5555
+    command: celery -A apps.celery --broker=redis://redis:6379/0 flower --port=5555
     ports:
       - "5555:5555"
     depends_on:

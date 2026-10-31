@@ -32,80 +32,78 @@ COPY ./frontend/ ./
 CMD ["npm", "run", "start", "--", "--host", "0.0.0.0"]
 
 # Step 5: Create backend build image
-FROM python:3.13-slim-bookworm AS backend-base
-COPY --from=ghcr.io/astral-sh/uv:0.12.18 /uv /uvx /bin/
+FROM python:3.13-slim-bookworm AS backend-builder
+COPY --from=ghcr.io/astral-sh/uv:0.12.18 /uv /bin/
 
 ENV DOCKER=True
 ENV DJANGO_SETTINGS_MODULE=config.settings.production
 ENV PYTHONUNBUFFERED=1
 ENV UV_NO_DEV=1
-# Install deps system-wide
-ENV UV_PROJECT_ENVIRONMENT="/usr/local/"
+ENV UV_PROJECT_ENVIRONMENT="/opt/venv"
 ENV UV_COMPILE_BYTECODE=1
 ENV UV_LINK_MODE=copy
-# create unprivileged user
-RUN adduser --disabled-password --gecos '' myuser
-# Install Runtime dependencies
-RUN apt-get update && \
-  apt-get install -y --no-install-recommends postgresql-client netcat-openbsd memcached gettext
 
-# Step 6: Get backend dependencies
-FROM backend-base AS backend-deps
-# We have to install GCC as the slim and alpine base images do not come with gcc built in
-RUN apt-get update && \
-  apt-get install -y --no-install-recommends libpq-dev gcc
 WORKDIR /var/app
-RUN mkdir -p logs staticfiles && \
-    chown -R myuser:myuser /var/app
-USER myuser
 COPY ./backend/pyproject.toml ./backend/uv.lock ./
-# Sync the project (no-install-project because we do not create a package; use root to install system-wide)
-USER root
 RUN --mount=type=cache,target=/root/.cache/uv \
     uv sync --locked --no-install-project
-USER myuser
 
 # DEV: Run backend
-FROM backend-deps AS backend-development
+FROM backend-builder AS backend-development
 ENV DJANGO_SETTINGS_MODULE=config.settings.docker
+ENV UV_NO_DEV=0
+RUN --mount=type=cache,target=/root/.cache/uv \
+    uv sync --locked --all-groups
 COPY ./backend/ .
 # Built emails templates
-COPY --chown=myuser:myuser --from=email-templates-builder /var/app/backend/templates/emails ./templates/emails
+COPY --from=email-templates-builder /var/app/backend/templates/emails ./templates/emails
+RUN adduser --disabled-password --gecos '' myuser && \
+    chown -R myuser:myuser /var/app /opt/venv
+USER myuser
 CMD ["uv", "run", "manage.py", "runserver", "0.0.0.0:8000"]
 
-# Step 7: Build production image with django and react files
-FROM backend-deps AS production
+# Step 6: Build production image with django and react files
+# Only runtime packages and generated/application files are copied below.
+FROM python:3.13-slim-bookworm AS runtime-base
+ENV DOCKER=True
+ENV DJANGO_SETTINGS_MODULE=config.settings.production
+ENV PYTHONUNBUFFERED=1
+ENV PATH="/opt/venv/bin:${PATH}"
+# Install Runtime dependencies
+RUN apt-get update && \
+  apt-get install -y --no-install-recommends gettext netcat-openbsd && \
+  rm -rf /var/lib/apt/lists/*
+WORKDIR /var/app
+RUN mkdir -p logs staticfiles
 # Copy stuff in rarest-to-most-often order
 # Files that should basically never change
-COPY --chown=myuser:myuser ./backend/manage.py ./backend/run_server.sh ./
+COPY --from=backend-builder /opt/venv /opt/venv
+COPY ./backend/manage.py ./backend/run_server.sh ./
 RUN chmod +x run_server.sh
-# Files that will change rarely
-COPY --chown=myuser:myuser ./backend/templates ./templates
-COPY --chown=myuser:myuser ./backend/config ./config
-# Files that will change often
-COPY --chown=myuser:myuser ./backend/apps ./apps
-
-# Built files from frontend
-COPY --chown=myuser:myuser --from=frontend-builder /var/app/backend/static/front ./static/front
-# Built emails templates
-COPY --chown=myuser:myuser --from=email-templates-builder /var/app/backend/templates/emails ./templates/emails
-
-# Prepare Django
-RUN uv run manage.py collectstatic --noinput
-# Build translations
-RUN uv run manage.py compilemessages -l fr -l en
-
-CMD ["./run_server.sh"]
-
-# Celery: special image with only backend files for celery
-# Used in Prod AND Dev
-FROM backend-deps AS celery
-# Files that should basically never change
-COPY ./backend/manage.py ./
 # Files that will change rarely
 COPY ./backend/templates ./templates
 COPY ./backend/config ./config
 # Files that will change often
 COPY ./backend/apps ./apps
+
 # Built emails templates
 COPY --from=email-templates-builder /var/app/backend/templates/emails ./templates/emails
+
+# Build translations
+RUN python manage.py compilemessages -l fr -l en
+
+# create unprivileged user
+RUN adduser --disabled-password --gecos '' myuser
+RUN chown -R myuser:myuser /var/app
+USER myuser
+
+# Celery: special image with only runtime dependencies and backend files
+FROM runtime-base AS celery
+
+# Step 7: Add frontend files to create the final image
+FROM runtime-base AS production
+# Built files from frontend
+COPY --chown=myuser:myuser --from=frontend-builder /var/app/backend/static/front /var/app/static/front
+# Prepare Django
+RUN python manage.py collectstatic --noinput
+CMD ["./run_server.sh"]
