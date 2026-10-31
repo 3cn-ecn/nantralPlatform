@@ -127,6 +127,7 @@ jobs:
   backup-database:
     name: Create a backup of the database
     needs: build-and-push # prevent backup on failed workflows
+    if: always()
     runs-on: ubuntu-latest
     steps:
       - name: Backup before deploy
