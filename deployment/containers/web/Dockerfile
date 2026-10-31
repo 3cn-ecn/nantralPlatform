@@ -6,7 +6,7 @@ RUN mkdir -p /var/app/frontend
 WORKDIR /var/app/frontend
 COPY ./frontend/package.json ./frontend/package-lock.json ./
 RUN --mount=type=cache,target=/root/.npm \
-    npm ci
+    npm ci --prefer-offline
 
 # Step 2: Build frontend
 FROM frontend-deps AS frontend-builder
@@ -19,7 +19,7 @@ RUN mkdir -p /var/app/email-templates-generator
 WORKDIR /var/app/email-templates-generator
 COPY ./email-templates-generator/package.json ./email-templates-generator/package-lock.json ./
 RUN --mount=type=cache,target=/root/.npm \
-    npm ci --omit=dev
+    npm ci --omit=dev --prefer-offline
 
 # Step 4: Build email templates
 FROM email-templates-deps AS email-templates-builder
