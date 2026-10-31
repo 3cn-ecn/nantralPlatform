@@ -58,8 +58,10 @@ jobs:
           tags: |
             ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
 
-          cache-from: type=gha,scope=staging
-          cache-to: type=gha,mode=max,scope=staging
+          cache-from: |
+            type=gha,scope=staging-web
+            type=gha,scope=production-web
+          cache-to: type=gha,mode=max,scope=staging-web
 
   clone-database:
     name: Make a copy of the database
