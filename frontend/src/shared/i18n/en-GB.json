@@ -111,6 +111,7 @@
     "notFoundMessage": "Sorry, it seems that this page does not exist...",
     "oups": "Whoops",
     "retry": "Retry",
+    "routerResponse": "Error {{ status }}: {{ statusText }}",
     "unexpected": "An unknown error has occurred"
   },
   "event": {
@@ -934,6 +935,62 @@
     },
     "new": "New link"
   },
+  "sport": {
+    "actions": {
+      "no": "No",
+      "nonParticipant": "Non-participant",
+      "participate": "Participate",
+      "question": "Participating?",
+      "yes": "Yes"
+    },
+    "createCard": {
+      "label": "Add an event"
+    },
+    "deleteModal": {
+      "body": "Do you really want to delete this sport event? This action is permanent.",
+      "following": "This one and the following",
+      "recurrentBody": "This event is weekly. Do you want to delete only this occurrence, or all the following ones too? This action is permanent.",
+      "single": "This occurrence",
+      "title": "Delete the sport event"
+    },
+    "editModal": {
+      "recurrentInfo": "This event is weekly: the changes will apply to this occurrence and all the following ones. Unchecking \"Weekly\" or moving the end date earlier will delete the affected following occurrences."
+    },
+    "eventType": {
+      "competition": "Competition",
+      "training": "Training"
+    },
+    "filters": {
+      "allClubs": "All clubs",
+      "myClubsOnly": "My clubs only"
+    },
+    "form": {
+      "repeatUntil": {
+        "helpText": "Date of the last occurrence",
+        "label": "Until"
+      },
+      "weekly": {
+        "helpText": "Repeat the event every week",
+        "label": "Weekly"
+      }
+    },
+    "membership_reminder": "Warning: only members of clubs can register for sports events. If you are not a member of a club, you will not be able to register.",
+    "noDescription": "No description",
+    "noEvents": "No sport events planned",
+    "pageTitle": "Sports schedule",
+    "participants_one": "{{count}} participant",
+    "participants_other": "{{count}} participants",
+    "participants_zero": "{{count}} participant",
+    "participation": {
+      "notParticipating": "You are not participating",
+      "participating": "You are participating"
+    },
+    "weekDisplay": {
+      "nextWeek": "Next week",
+      "thisWeek": "This week",
+      "weekOf": "Week of {{date}}"
+    }
+  },
   "student": {
     "arrivalYear": "Arrival year",
     "confirmNewPassword": "Confirm new password",
@@ -1068,62 +1125,6 @@
     "shareLink": {
       "failure": "The link could not be copied",
       "success": "Link copied!"
-    }
-  },
-  "sport": {
-    "pageTitle": "Sports schedule",
-    "filters": {
-      "allClubs": "All clubs",
-      "myClubsOnly": "My clubs only"
-    },
-    "membership_reminder": "Warning: only members of clubs can register for sports events. If you are not a member of a club, you will not be able to register.",
-    "deleteModal": {
-      "title": "Delete the sport event",
-      "body": "Do you really want to delete this sport event? This action is permanent.",
-      "recurrentBody": "This event is weekly. Do you want to delete only this occurrence, or all the following ones too? This action is permanent.",
-      "single": "This occurrence",
-      "following": "This one and the following"
-    },
-    "noEvents": "No sport events planned",
-    "noDescription": "No description",
-    "createCard": {
-      "label": "Add an event"
-    },
-    "participants_one": "{{count}} participant",
-    "participants_other": "{{count}} participants",
-    "participants_zero": "{{count}} participant",
-    "participation": {
-      "participating": "You are participating",
-      "notParticipating": "You are not participating"
-    },
-    "actions": {
-      "question": "Participating?",
-      "yes": "Yes",
-      "no": "No",
-      "participate": "Participate",
-      "nonParticipant": "Non-participant"
-    },
-    "eventType": {
-      "training": "Training",
-      "competition": "Competition"
-    },
-    "weekDisplay": {
-      "thisWeek": "This week",
-      "nextWeek": "Next week",
-      "weekOf": "Week of {{date}}"
-    },
-    "form": {
-      "weekly": {
-        "label": "Weekly",
-        "helpText": "Repeat the event every week"
-      },
-      "repeatUntil": {
-        "label": "Until",
-        "helpText": "Date of the last occurrence"
-      }
-    },
-    "editModal": {
-      "recurrentInfo": "This event is weekly: the changes will apply to this occurrence and all the following ones. Unchecking \"Weekly\" or moving the end date earlier will delete the affected following occurrences."
     }
   }
 }

@@ -43,7 +43,7 @@ export function NotificationMenu() {
   const newNotificationCountQuery = useNotificationCountQuery({
     seen: false,
   });
-  const { markAllAsSeen, isLoading } = useMarkAllAsSeenMutation();
+  const { markAllAsSeen, isPending } = useMarkAllAsSeenMutation();
 
   const nbNewNotifications = newNotificationCountQuery.data || 0;
 
@@ -90,9 +90,9 @@ export function NotificationMenu() {
               <IconButton
                 color="secondary"
                 onClick={() => markAllAsSeen()}
-                disabled={isLoading}
+                disabled={isPending}
               >
-                {isLoading ? (
+                {isPending ? (
                   <CircularProgress
                     color="secondary"
                     size="0.9em"

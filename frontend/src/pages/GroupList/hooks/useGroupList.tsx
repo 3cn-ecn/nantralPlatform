@@ -8,6 +8,7 @@ export function useGroupList(type?: string) {
     queryFn: ({ pageParam }) =>
       getGroupListApi({ type: type, page: pageParam, pageSize: 6 * 7 }),
     queryKey: ['getGroupListByType', type],
+    initialPageParam: 1,
     getNextPageParam: (lastPage, allPages) =>
       lastPage.next ? allPages.length + 1 : null,
   });

@@ -9,7 +9,7 @@ import { Page } from '#shared/infra/pagination';
 
 export function useParticipantList(
   eventId: number,
-  options?: UseQueryOptions<Page<UserPreview>>,
+  options?: Partial<UseQueryOptions<Page<UserPreview>, ApiError>>,
 ) {
   const [page, setPage] = useState(1);
 

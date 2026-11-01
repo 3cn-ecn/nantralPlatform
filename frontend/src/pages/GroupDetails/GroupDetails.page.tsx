@@ -40,7 +40,7 @@ export default function GroupDetailsPage() {
     groupDetails,
     events,
     members,
-    isLoading,
+    isPending,
     isError,
     error,
     refetch,
@@ -70,7 +70,7 @@ export default function GroupDetailsPage() {
           eventCount={events?.count}
           memberCount={members?.count}
           group={groupDetails}
-          isLoading={isLoading}
+          isPending={isPending}
         />
         {isSuccess && groupDetails && (
           <GroupTabBar

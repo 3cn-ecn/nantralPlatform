@@ -111,6 +111,7 @@
     "notFoundMessage": "Désolé, il semblerait que cette page n'existe pas...",
     "oups": "Oups",
     "retry": "Réessayer",
+    "routerResponse": "Erreur {{ status }} : {{ statusText }}",
     "unexpected": "Une erreur inconnue s'est produite"
   },
   "event": {
@@ -934,6 +935,62 @@
     },
     "new": "Nouveau lien"
   },
+  "sport": {
+    "actions": {
+      "no": "Non",
+      "nonParticipant": "Non-participant",
+      "participate": "Participer",
+      "question": "Je participe ?",
+      "yes": "Oui"
+    },
+    "createCard": {
+      "label": "Ajouter un événement"
+    },
+    "deleteModal": {
+      "body": "Voulez-vous vraiment supprimer cet événement sportif ? Cette action est définitive.",
+      "following": "Celle-ci et les suivantes",
+      "recurrentBody": "Cet événement est hebdomadaire. Voulez-vous supprimer uniquement cette occurrence, ou aussi toutes les suivantes ? Cette action est définitive.",
+      "single": "Cette occurrence",
+      "title": "Supprimer l'événement sportif"
+    },
+    "editModal": {
+      "recurrentInfo": "Cet événement est hebdomadaire : les modifications s'appliqueront à cette occurrence et à toutes les suivantes. Décocher « Hebdomadaire » ou avancer la date de fin supprimera les occurrences suivantes concernées."
+    },
+    "eventType": {
+      "competition": "Compétition",
+      "training": "Entraînement"
+    },
+    "filters": {
+      "allClubs": "Tous les clubs",
+      "myClubsOnly": "Mes clubs seulement"
+    },
+    "form": {
+      "repeatUntil": {
+        "helpText": "Date de la dernière occurrence",
+        "label": "Jusqu'au"
+      },
+      "weekly": {
+        "helpText": "Répéter l'événement chaque semaine",
+        "label": "Hebdomadaire"
+      }
+    },
+    "membership_reminder": "Attention : seul les membres des clubs peuvent s'inscrire aux événements sportifs. Si vous n'êtes pas membre d'un club, vous ne pourrez pas vous inscrire.",
+    "noDescription": "Aucune description",
+    "noEvents": "Aucun événement sportif prévu",
+    "pageTitle": "Planning des sports",
+    "participants_one": "{{count}} participant",
+    "participants_other": "{{count}} participants",
+    "participants_zero": "{{count}} participant",
+    "participation": {
+      "notParticipating": "Tu ne participes pas",
+      "participating": "Tu participes"
+    },
+    "weekDisplay": {
+      "nextWeek": "La semaine prochaine",
+      "thisWeek": "Cette semaine",
+      "weekOf": "Semaine du {{date}}"
+    }
+  },
   "student": {
     "arrivalYear": "Promo",
     "confirmNewPassword": "Confirmer le nouveau mot de passe",
@@ -1068,62 +1125,6 @@
     "shareLink": {
       "failure": "Le lien n'a pas pu être copié",
       "success": "Lien copié !"
-    }
-  },
-  "sport": {
-    "pageTitle": "Planning des sports",
-    "filters": {
-      "allClubs": "Tous les clubs",
-      "myClubsOnly": "Mes clubs seulement"
-    },
-    "membership_reminder": "Attention : seul les membres des clubs peuvent s'inscrire aux événements sportifs. Si vous n'êtes pas membre d'un club, vous ne pourrez pas vous inscrire.",
-    "deleteModal": {
-      "title": "Supprimer l'événement sportif",
-      "body": "Voulez-vous vraiment supprimer cet événement sportif ? Cette action est définitive.",
-      "recurrentBody": "Cet événement est hebdomadaire. Voulez-vous supprimer uniquement cette occurrence, ou aussi toutes les suivantes ? Cette action est définitive.",
-      "single": "Cette occurrence",
-      "following": "Celle-ci et les suivantes"
-    },
-    "noEvents": "Aucun événement sportif prévu",
-    "noDescription": "Aucune description",
-    "createCard": {
-      "label": "Ajouter un événement"
-    },
-    "participants_one": "{{count}} participant",
-    "participants_other": "{{count}} participants",
-    "participants_zero": "{{count}} participant",
-    "participation": {
-      "participating": "Tu participes",
-      "notParticipating": "Tu ne participes pas"
-    },
-    "actions": {
-      "question": "Je participe ?",
-      "yes": "Oui",
-      "no": "Non",
-      "participate": "Participer",
-      "nonParticipant": "Non-participant"
-    },
-    "eventType": {
-      "training": "Entraînement",
-      "competition": "Compétition"
-    },
-    "weekDisplay": {
-      "thisWeek": "Cette semaine",
-      "nextWeek": "La semaine prochaine",
-      "weekOf": "Semaine du {{date}}"
-    },
-    "form": {
-      "weekly": {
-        "label": "Hebdomadaire",
-        "helpText": "Répéter l'événement chaque semaine"
-      },
-      "repeatUntil": {
-        "label": "Jusqu'au",
-        "helpText": "Date de la dernière occurrence"
-      }
-    },
-    "editModal": {
-      "recurrentInfo": "Cet événement est hebdomadaire : les modifications s'appliqueront à cette occurrence et à toutes les suivantes. Décocher « Hebdomadaire » ou avancer la date de fin supprimera les occurrences suivantes concernées."
     }
   }
 }

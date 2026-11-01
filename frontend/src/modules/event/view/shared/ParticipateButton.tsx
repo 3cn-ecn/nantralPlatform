@@ -3,8 +3,8 @@ import { useEffect, useState } from 'react';
 import {
   AddCircle as AddCircleIcon,
   CheckCircle as CheckCircleIcon,
-  OpenInNew as OpenInNewIcon,
   LocalFireDepartment as ShotgunIcon,
+  OpenInNew as OpenInNewIcon,
 } from '@mui/icons-material';
 import { SxProps, Theme } from '@mui/material';
 import { differenceInHours } from 'date-fns';
@@ -26,7 +26,7 @@ interface ParticipateButtonProps {
 export function ParticipateButton({ event, sx }: ParticipateButtonProps) {
   const [isOpenConfirmationModal, setIsOpenConfirmationModal] = useState(false);
 
-  const { register, unregister, isLoading } = useRegistrationMutation(event.id);
+  const { register, unregister, isPending } = useRegistrationMutation(event.id);
   const { t, formatDate, formatTime } = useTranslation();
 
   const now = new Date();
@@ -145,14 +145,14 @@ export function ParticipateButton({ event, sx }: ParticipateButtonProps) {
     <>
       <FlexRow
         className={
-          isShotgun && !isDisabled && !isLoading && !event.formUrl
+          isShotgun && !isDisabled && !isPending && !event.formUrl
             ? 'button-shotgun-style'
             : undefined
         }
         sx={sx}
       >
         <LoadingButton
-          loading={isLoading}
+          loading={isPending}
           disabled={isDisabled}
           onClick={!event.formUrl ? handleClick : undefined}
           startIcon={getStartIcon()}
@@ -177,7 +177,7 @@ export function ParticipateButton({ event, sx }: ParticipateButtonProps) {
           body={t('event.participateButton.unregisterModal.message')}
           onCancel={onUnregisterModalCancel}
           onConfirm={onUnregisterModalConfirm}
-          loading={isLoading}
+          loading={isPending}
         />
       )}
     </>

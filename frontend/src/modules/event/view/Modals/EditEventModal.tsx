@@ -19,7 +19,7 @@ interface EditEventModalProps {
 export function EditEventModal({ eventId, onClose }: EditEventModalProps) {
   const eventQuery = useEventDetailsQuery(eventId);
 
-  if (eventQuery.isLoading) {
+  if (eventQuery.isPending) {
     return (
       <ResponsiveDialog onClose={onClose}>
         <ResponsiveDialogHeader onClose={onClose}></ResponsiveDialogHeader>

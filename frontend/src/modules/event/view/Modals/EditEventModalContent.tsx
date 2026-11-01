@@ -5,8 +5,8 @@ import { Avatar, Button, useTheme } from '@mui/material';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import {
-  UpdateEventApiVariables,
   updateEventApi,
+  UpdateEventApiVariables,
 } from '#modules/event/api/updateEvent.api';
 import { Event, EventForm } from '#modules/event/event.type';
 import { useEventFormValues } from '#modules/event/hooks/useEventFormValues';
@@ -41,11 +41,11 @@ export function EditEventModalContent({
   const [formValues, updateFormValues] = useEventFormValues({ event: event });
 
   // create all states for error, loading, etc. while fetching the API
-  const { mutate, isLoading, isError, error } = useMutation<
+  const { mutate, isPending, isError, error } = useMutation<
     unknown,
     ApiFormError<EventFormDTO>,
     UpdateEventApiVariables
-  >(updateEventApi);
+  >({ mutationFn: updateEventApi });
 
   // send the form to the server
   const onSubmit = (e: FormEvent, values: EventForm) => {
@@ -57,9 +57,15 @@ export function EditEventModalContent({
       {
         onSuccess: () => {
           // if success, reset the event data in all queries
-          queryClient.invalidateQueries(['events']);
-          queryClient.invalidateQueries(['event', { id: event.id }]);
-          queryClient.invalidateQueries(['notifications']);
+          queryClient.invalidateQueries({
+            queryKey: ['events'],
+          });
+          queryClient.invalidateQueries({
+            queryKey: ['event', { id: event.id }],
+          });
+          queryClient.invalidateQueries({
+            queryKey: ['notifications'],
+          });
           // close the modal
           onClose();
         },
@@ -104,7 +110,7 @@ export function EditEventModalContent({
         <LoadingButton
           form="edit-event-form"
           type="submit"
-          loading={isLoading}
+          loading={isPending}
           variant="contained"
         >
           {t('button.confirm')}

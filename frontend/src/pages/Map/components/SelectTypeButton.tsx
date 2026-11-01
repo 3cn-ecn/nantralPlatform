@@ -41,11 +41,11 @@ export function SelectTypeButton({
         aria-haspopup="true"
         aria-expanded={open ? 'true' : undefined}
         onClick={handleClick}
-        loading={groupTypeQuery.isLoading}
+        loading={groupTypeQuery.isPending}
         endIcon={open ? <ArrowDropUp /> : <ArrowDropDown />}
       >
         {type ? (
-          groupTypeQuery.isLoading ? (
+          groupTypeQuery.isPending ? (
             <Skeleton variant="text" width={100} />
           ) : (
             groupTypeQuery.data?.name

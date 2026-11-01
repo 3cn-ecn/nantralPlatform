@@ -34,7 +34,7 @@ export default function RegisterFormPanel() {
   });
   const navigate = useNavigate();
   const {
-    isLoading: loading,
+    isPending: loading,
     error,
     mutate,
   } = useMutation<
@@ -43,7 +43,8 @@ export default function RegisterFormPanel() {
       fields: Partial<Record<keyof RegisterForm, string[]>>;
     },
     RegisterForm
-  >(register, {
+  >({
+    mutationFn: register,
     onSuccess: (data) =>
       navigate('/register/validation', {
         state: { email: data?.email, firstName: data?.firstName },

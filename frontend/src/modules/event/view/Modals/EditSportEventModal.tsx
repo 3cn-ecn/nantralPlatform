@@ -22,7 +22,7 @@ export function EditSportEventModal({
 }: Readonly<EditSportEventModalProps>) {
   const sportEventQuery = useSportEventDetailsQuery(sportEventId);
 
-  if (sportEventQuery.isLoading) {
+  if (sportEventQuery.isPending) {
     return (
       <ResponsiveDialog onClose={onClose}>
         <ResponsiveDialogHeader onClose={onClose}></ResponsiveDialogHeader>

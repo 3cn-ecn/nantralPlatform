@@ -23,11 +23,12 @@ export default function ForgotPasswordForm() {
   function requestPasswordReset() {
     mutate(formValues?.email);
   }
-  const { isLoading, mutate, error } = useMutation<
+  const { isPending, mutate, error } = useMutation<
     number,
     { fields: { email: string[] } },
     string
-  >(passwordResetRequestApi, {
+  >({
+    mutationFn: passwordResetRequestApi,
     onSuccess: () =>
       navigate('email_sent', { state: { email: formValues.email } }),
   });
@@ -65,7 +66,7 @@ export default function ForgotPasswordForm() {
           }}
         >
           <LoadingButton
-            loading={isLoading}
+            loading={isPending}
             variant="contained"
             type="submit"
             size="large"

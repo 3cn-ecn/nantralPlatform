@@ -59,7 +59,9 @@ export function ModalEditGroup({
     Group,
     ApiFormError<CreateGroupFormDTO>,
     CreateGroupForm
-  >(() => updateGroupApi(group.slug, formValues), {
+  >({
+    mutationFn: () => updateGroupApi(group.slug, formValues),
+
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: ['group', { slug: group.slug }],

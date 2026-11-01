@@ -44,11 +44,11 @@ export function CreatePostModal({
   });
 
   // create all states for error, loading, etc. while fetching the API
-  const { mutate, isLoading, isError, error } = useMutation<
+  const { mutate, isPending, isError, error } = useMutation<
     Post,
     ApiFormError<PostFormDTO>,
     PostForm
-  >(createPostApi);
+  >({ mutationFn: createPostApi });
 
   // send the form to the server
   const onSubmit = (event: FormEvent, values: PostForm) => {
@@ -58,8 +58,12 @@ export function CreatePostModal({
     mutate(values, {
       onSuccess: (data) => {
         // if success, reset the post data in all queries
-        queryClient.invalidateQueries(['posts']);
-        queryClient.invalidateQueries(['notifications']);
+        queryClient.invalidateQueries({
+          queryKey: ['posts'],
+        });
+        queryClient.invalidateQueries({
+          queryKey: ['notifications'],
+        });
         // close the modal
         onCreated(data.id);
       },
@@ -102,7 +106,7 @@ export function CreatePostModal({
         <LoadingButton
           form="create-post-form"
           type="submit"
-          loading={isLoading}
+          loading={isPending}
           variant="contained"
         >
           Valider

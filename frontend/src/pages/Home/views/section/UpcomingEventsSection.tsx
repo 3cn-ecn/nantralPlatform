@@ -38,7 +38,7 @@ export function UpcomingEventsSection({ enabled }: UpcomingEventsSectionProps) {
 
   const eventsQuery = useUpcomingEventsQuery(numberOfEvents, { enabled });
 
-  if (eventsQuery.isLoading) {
+  if (eventsQuery.isPending) {
     return (
       <Section
         title={t('home.eventSection.title')}

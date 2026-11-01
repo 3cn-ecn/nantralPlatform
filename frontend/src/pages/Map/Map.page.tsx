@@ -41,13 +41,14 @@ export default function MapPage() {
 
   // Get points from API
   const groupListQuery = useInfiniteQuery({
-    queryFn: ({ pageParam = 1 }) =>
+    queryFn: ({ pageParam }) =>
       getMapGroupListPreviewApi({
         type: groupType,
         archived: showArchived,
         pageSize: 30,
         page: pageParam,
       }),
+    initialPageParam: 1,
     getNextPageParam: (lastPage, allPages) =>
       lastPage.next ? allPages.length + 1 : undefined,
     queryKey: ['map', { groupType, showArchived }],

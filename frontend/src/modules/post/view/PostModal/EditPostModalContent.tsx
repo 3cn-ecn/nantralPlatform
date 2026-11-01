@@ -5,8 +5,8 @@ import { Avatar, Button, useTheme } from '@mui/material';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import {
-  UpdatePostApiVariables,
   updatePostApi,
+  UpdatePostApiVariables,
 } from '#modules/post/api/updatePost.api';
 import { usePostFormValues } from '#modules/post/hooks/usePostFormValues';
 import { PostFormDTO } from '#modules/post/infra/post.dto';
@@ -43,11 +43,11 @@ export function EditPostModalContent({
   const [formValues, updateFormValues] = usePostFormValues({ post: post });
 
   // create all states for error, loading, etc. while fetching the API
-  const { mutate, isLoading, isError, error } = useMutation<
+  const { mutate, isPending, isError, error } = useMutation<
     unknown,
     ApiFormError<PostFormDTO>,
     UpdatePostApiVariables
-  >(updatePostApi);
+  >({ mutationFn: updatePostApi });
 
   // send the form to the server
   const onSubmit = (event: FormEvent, values: PostForm) => {
@@ -59,9 +59,15 @@ export function EditPostModalContent({
       {
         onSuccess: () => {
           // if success, reset the post data in all queries
-          queryClient.invalidateQueries(['posts']);
-          queryClient.invalidateQueries(['post', { id: post.id }]);
-          queryClient.invalidateQueries(['notifications']);
+          queryClient.invalidateQueries({
+            queryKey: ['posts'],
+          });
+          queryClient.invalidateQueries({
+            queryKey: ['post', { id: post.id }],
+          });
+          queryClient.invalidateQueries({
+            queryKey: ['notifications'],
+          });
           // close the modal
           onFinish();
         },
@@ -105,7 +111,7 @@ export function EditPostModalContent({
         <LoadingButton
           form="edit-post-form"
           type="submit"
-          loading={isLoading}
+          loading={isPending}
           variant="contained"
         >
           {t('button.confirm')}

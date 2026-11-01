@@ -28,11 +28,12 @@ export function useSportEventPeopleList(
 
   return useInfiniteQuery<Page<UserPreview>, ApiError>({
     queryKey: ['sport-event-people', sportEventId, kind],
-    queryFn: ({ pageParam = 1 }) =>
+    queryFn: ({ pageParam }) =>
       queryFn(sportEventId, {
-        page: pageParam,
+        page: pageParam as number | undefined,
         pageSize: 50,
       }),
+    initialPageParam: 1,
     getNextPageParam: (lastPage, allPages) =>
       lastPage.next ? allPages.length + 1 : undefined,
     ...options,

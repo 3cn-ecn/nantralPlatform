@@ -1,7 +1,7 @@
 import {
   InfiniteData,
-  UseMutationOptions,
   useMutation,
+  UseMutationOptions,
   useQueryClient,
 } from '@tanstack/react-query';
 
@@ -17,15 +17,17 @@ type OptionsType = UseMutationOptions<number, ApiError, number>;
 export function useBookmarkMutation(eventId: number) {
   const queryClient = useQueryClient();
 
-  const removeMutation = useMutation<number, ApiError, number>(
-    removeBookmarkApi,
-  );
-  const addMutation = useMutation<number, ApiError, number>(addBookmarkApi);
+  const removeMutation = useMutation<number, ApiError, number>({
+    mutationFn: removeBookmarkApi,
+  });
+  const addMutation = useMutation<number, ApiError, number>({
+    mutationFn: addBookmarkApi,
+  });
 
   const updateCachedQueries = (newData: Partial<Event>) => {
     // update data NOW so that it is displayed to the user
     queryClient.setQueriesData(
-      ['events', 'infiniteList'],
+      { queryKey: ['events', 'infiniteList'] },
       (data?: InfiniteData<Page<Event>>) =>
         data && {
           ...data,
@@ -51,7 +53,7 @@ export function useBookmarkMutation(eventId: number) {
         },
     );
     queryClient.setQueriesData(
-      ['event', { id: eventId }],
+      { queryKey: ['event', { id: eventId }] },
       (data?: Event) =>
         data && {
           ...data,
@@ -59,8 +61,12 @@ export function useBookmarkMutation(eventId: number) {
         },
     );
     // invalidate queries to force reload the queries we have modified
-    queryClient.invalidateQueries(['events']);
-    queryClient.invalidateQueries(['event', { id: eventId }]);
+    queryClient.invalidateQueries({
+      queryKey: ['events'],
+    });
+    queryClient.invalidateQueries({
+      queryKey: ['event', { id: eventId }],
+    });
   };
 
   const addBookmark = ({ onSuccess, ...options }: OptionsType) => {
@@ -86,7 +92,7 @@ export function useBookmarkMutation(eventId: number) {
   return {
     addBookmark,
     removeBookmark,
-    isLoading: removeMutation.isLoading || addMutation.isLoading,
+    isPending: removeMutation.isPending || addMutation.isPending,
     isError: removeMutation.isError || addMutation.isError,
     error: removeMutation.error || addMutation.error,
   };

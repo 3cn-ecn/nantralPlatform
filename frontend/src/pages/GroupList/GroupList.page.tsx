@@ -34,7 +34,7 @@ export default function GroupListPage() {
     <Container sx={{ my: 3 }}>
       <FlexRow alignItems="center" gap={1}>
         <Typography variant="h1">
-          {groupTypeQuery.isLoading || groupListQuery.isLoading ? (
+          {groupTypeQuery.isPending || groupListQuery.isPending ? (
             <Skeleton width={250} variant="text" />
           ) : (
             `${groupTypeQuery.data?.name} (${count})`
@@ -86,12 +86,12 @@ export default function GroupListPage() {
                   {cat}
                 </Typography>
                 <GroupGrid estimatedSize={100} groups={groupsByCategory[cat]} />
-                {(groupListQuery.isLoading ||
+                {(groupListQuery.isPending ||
                   groupListQuery.isFetchingNextPage) && (
                   <GroupGrid
                     estimatedSize={100}
                     groups={groupsByCategory[cat]}
-                    isLoading
+                    isPending
                   />
                 )}
               </FlexCol>

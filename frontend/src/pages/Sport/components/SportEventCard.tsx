@@ -3,10 +3,10 @@ import { Link } from 'react-router-dom';
 
 import {
   CalendarMonth,
-  QueryBuilder,
   Edit,
   Groups,
   LocationOn,
+  QueryBuilder,
 } from '@mui/icons-material';
 import {
   alpha,
@@ -235,7 +235,7 @@ export function SportEventCard({ sportEvent }: Readonly<SportEventCardProps>) {
                         : 'outlined'
                     }
                     loading={
-                      participationMutation.isLoading &&
+                      participationMutation.isPending &&
                       participationMutation.variables === 'participant'
                     }
                     onClick={() => participationMutation.mutate('participant')}
@@ -250,7 +250,7 @@ export function SportEventCard({ sportEvent }: Readonly<SportEventCardProps>) {
                         : 'outlined'
                     }
                     loading={
-                      participationMutation.isLoading &&
+                      participationMutation.isPending &&
                       participationMutation.variables === 'nonParticipant'
                     }
                     onClick={() =>

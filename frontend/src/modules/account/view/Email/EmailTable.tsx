@@ -7,13 +7,13 @@ import { EmailRow } from './EmailRow';
 
 export function EmailTable({
   emails,
-  isLoading,
+  isPending,
   setSelectedEmail,
   changeVisibility,
   setAnchorEl,
 }: {
   emails?: Email[];
-  isLoading: boolean;
+  isPending: boolean;
   setSelectedEmail: (email: Email) => void;
   changeVisibility: (emailUuid: string, isVisible: boolean) => void;
   setAnchorEl: (anchorEl: null | HTMLElement) => void;
@@ -22,7 +22,7 @@ export function EmailTable({
     <TableContainer component={Paper}>
       <Table>
         <TableBody>
-          {isLoading ? (
+          {isPending ? (
             <EmailRowSkeleton />
           ) : (
             emails?.map((email) => (

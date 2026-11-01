@@ -48,7 +48,7 @@ export function CalendarGridView({ filters }: CalendarGridViewProps) {
       />
     );
 
-  const events = eventsQuery.isLoading
+  const events = eventsQuery.isPending
     ? createBlankEvents(filters.fromDate, filters.toDate)
     : eventsQuery.data.pages.flatMap((page) => page.results);
 
@@ -119,7 +119,7 @@ export function CalendarGridView({ filters }: CalendarGridViewProps) {
               ),
             )
             .map((event) =>
-              eventsQuery.isLoading ? (
+              eventsQuery.isPending ? (
                 <CalendarEventBlockSkeleton key={event.id} />
               ) : (
                 <CalendarEventBlock key={event.id} eventItem={event} />

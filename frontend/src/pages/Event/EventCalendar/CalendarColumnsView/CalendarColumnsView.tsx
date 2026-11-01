@@ -54,7 +54,7 @@ export function CalendarColumnsView({ filters }: CalendarColumnsViewProps) {
       />
     );
 
-  const events = eventsQuery.isLoading
+  const events = eventsQuery.isPending
     ? createBlankEvents(filters.fromDate, filters.toDate)
     : eventsQuery.data.pages.flatMap((page) => page.results);
 
@@ -132,7 +132,7 @@ export function CalendarColumnsView({ filters }: CalendarColumnsViewProps) {
               <Divider key={formatISO(h, { representation: 'time' })} />
             ))}
             {col.events.map((item) =>
-              eventsQuery.isLoading ? (
+              eventsQuery.isPending ? (
                 <CalendarEventBlockSkeleton
                   eventItem={item}
                   key={item.data.id}

@@ -1,15 +1,15 @@
 import { useCallback } from 'react';
 
+import { LoginApiBody } from '#modules/account/api/login.api';
+import { ProvideAuthValues } from '#modules/account/hooks/useProvideAuth';
 import { TextField } from '#shared/components/FormFields';
 import { PasswordField } from '#shared/components/FormFields/PasswordField';
 import { useTranslation } from '#shared/i18n/useTranslation';
 
 interface LoginFormFieldsProps {
-  isError;
-  error;
-  formValues;
-  updateFormValues;
-  prevData;
+  error: ProvideAuthValues['error'];
+  formValues: LoginApiBody;
+  updateFormValues: (val: Partial<LoginApiBody>) => void;
   askEcnEmail: boolean;
 }
 
