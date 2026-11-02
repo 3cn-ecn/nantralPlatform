@@ -45,7 +45,7 @@ export function FullscreenControl({
           : t('map.controls.fullscreen')
       }
       placement={'left'}
-      PopperProps={{ container: portalContainer }}
+      slotProps={{ popper: { container: portalContainer } }}
     >
       <IconButton size="small" color="primary" onClick={handleFullscreen}>
         {isFullscreen ? <FullscreenExitIcon /> : <FullscreenIcon />}

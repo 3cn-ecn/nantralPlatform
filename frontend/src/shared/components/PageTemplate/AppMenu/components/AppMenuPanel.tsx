@@ -93,6 +93,7 @@ export function AppMenuPanel({ menuOpen, onClose }: AppMenuPanelProps) {
               color: 'success.main',
               '& span': { fontWeight: 500 },
             }}
+            nativeButton={false}
           >
             <ListItemIcon>
               <Icon

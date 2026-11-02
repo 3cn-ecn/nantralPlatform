@@ -32,7 +32,7 @@ export function ZoomControls({
       <Tooltip
         title={t('map.controls.zoomIn')}
         placement={'left'}
-        PopperProps={{ container: portalContainer }}
+        slotProps={{ popper: { container: portalContainer } }}
       >
         <IconButton
           size="small"
@@ -48,7 +48,7 @@ export function ZoomControls({
       <Tooltip
         title={t('map.controls.zoomOut')}
         placement={'left'}
-        PopperProps={{ container: portalContainer }}
+        slotProps={{ popper: { container: portalContainer } }}
       >
         <IconButton
           size="small"

@@ -133,10 +133,12 @@ export function HomeHeader() {
           >
             <CardContent
               component={Stack}
-              gap={2}
-              height={'100%'}
-              justifyContent={'center'}
-              alignItems={'flex-start'}
+              spacing={2}
+              sx={{
+                height: '100%',
+                justifyContent: 'center',
+                alignItems: 'flex-start',
+              }}
             >
               <Typography variant="h2">
                 <Trans
@@ -182,6 +184,7 @@ export function HomeHeader() {
                 size={'large'}
                 endIcon={<LinkIcon />}
                 sx={{ mt: 2 }}
+                nativeButton={false}
               >
                 {t('home.element.goTo')}
               </Button>
