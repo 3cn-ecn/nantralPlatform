@@ -1,6 +1,7 @@
 import { useState } from 'react';
 
-import { FlexRow } from '#shared/components/FlexBox/FlexBox';
+import { Stack } from '@mui/material';
+
 import { Spacer } from '#shared/components/Spacer/Spacer';
 import { useBreakpoint } from '#shared/hooks/useBreakpoint';
 
@@ -31,12 +32,14 @@ export default function EventCalendarViewPage() {
           <Spacer vertical={2} />
         </>
       )}
-      <FlexRow
-        flexDirection={bk.isLarger ? 'row' : 'column-reverse'}
-        justifyContent="space-between"
-        alignItems={bk.isLarger ? 'center' : 'flex-start'}
-        gap={1}
-        maxWidth="100%"
+      <Stack
+        direction={bk.isLarger ? 'row' : 'column-reverse'}
+        sx={{
+          justifyContent: 'space-between',
+          alignItems: bk.isLarger ? 'center' : 'flex-start',
+          maxWidth: '100%',
+        }}
+        spacing={1}
       >
         <CalendarDateSelector
           filters={filters}
@@ -50,7 +53,7 @@ export default function EventCalendarViewPage() {
           resetFilters={resetFilters}
           isSmallScreen={bk.isSmaller}
         />
-      </FlexRow>
+      </Stack>
       <Spacer vertical={2} />
       {viewMode === 'days' ? (
         <CalendarColumnsView filters={filters} />

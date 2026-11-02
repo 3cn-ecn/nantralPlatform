@@ -1,14 +1,13 @@
 import { useCallback, useMemo } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 
-import { Button, Paper } from '@mui/material';
+import { Button, Paper, Stack } from '@mui/material';
 import { useMutation } from '@tanstack/react-query';
 
 import { getMapGroupListApi } from '#modules/group/api/getMapGroupList.api';
 import { useGroupTypeDetails } from '#pages/GroupList/hooks/useGroupTypeDetails';
 import { MoreActionButton } from '#pages/Map/components/MoreActionButton';
 import { SelectTypeButton } from '#pages/Map/components/SelectTypeButton';
-import { FlexCol, FlexRow } from '#shared/components/FlexBox/FlexBox';
 import { AutocompleteSearchField } from '#shared/components/FormFields';
 import { Spacer } from '#shared/components/Spacer/Spacer';
 import { useBreakpoint } from '#shared/hooks/useBreakpoint';
@@ -50,8 +49,12 @@ export function SearchBar({
   const groupTypeQuery = useGroupTypeDetails(type || undefined);
   return (
     <Paper sx={{ padding: 2 }}>
-      <FlexCol gap={2}>
-        <FlexRow alignItems="center" gap={2} width={'100%'}>
+      <Stack spacing={2}>
+        <Stack
+          direction="row"
+          spacing={2}
+          sx={{ alignItems: 'center', width: '100%' }}
+        >
           <SelectTypeButton groupTypeQuery={groupTypeQuery} />
           {!isSmaller && (
             <Button
@@ -69,8 +72,12 @@ export function SearchBar({
             setShowArchived={setShowArchived}
             groupTypeQuery={groupTypeQuery}
           />
-        </FlexRow>
-        <FlexRow alignItems="center" gap={2} width={'100%'}>
+        </Stack>
+        <Stack
+          direction="row"
+          spacing={2}
+          sx={{ alignItems: 'center', width: '100%' }}
+        >
           <AutocompleteSearchField
             name="group"
             label={t('group.search.placeholder')}
@@ -87,8 +94,8 @@ export function SearchBar({
             valuePropName="id"
             disablePortal // show menu when map is fullscreen
           />
-        </FlexRow>
-      </FlexCol>
+        </Stack>
+      </Stack>
     </Paper>
   );
 }

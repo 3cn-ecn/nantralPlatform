@@ -10,6 +10,7 @@ import {
   Button,
   Link,
   Paper,
+  Stack,
   Table,
   TableBody,
   TableCell,
@@ -21,7 +22,6 @@ import {
 } from '@mui/material';
 
 import { Avatar } from '#shared/components/Avatar/Avatar';
-import { FlexRow } from '#shared/components/FlexBox/FlexBox';
 import { Spacer } from '#shared/components/Spacer/Spacer';
 import { useTranslation } from '#shared/i18n/useTranslation';
 
@@ -54,7 +54,11 @@ function Authorize() {
           Nantral Platform
         </Typography>
         <Spacer vertical={2} />
-        <FlexRow gap={2} alignItems={'center'} justifyContent={'center'}>
+        <Stack
+          direction="row"
+          spacing={2}
+          sx={{ alignItems: 'center', justifyContent: 'center' }}
+        >
           <Avatar
             src="/static/img/logo/scalable/logo.svg"
             alt="Nantral platform"
@@ -102,7 +106,7 @@ function Authorize() {
               }}
             />
           </Badge>
-        </FlexRow>
+        </Stack>
         <Spacer vertical={2} />
         <Typography variant={'h4'} sx={{ textAlign: 'center' }}>
           <Trans
@@ -185,7 +189,7 @@ function Authorize() {
           </>
         )}
         <Spacer vertical={2} />
-        <FlexRow gap={2} justifyContent={'center'}>
+        <Stack direction="row" spacing={2} sx={{ justifyContent: 'center' }}>
           <Button type={'submit'} variant={'outlined'}>
             {t('button.cancel')}
           </Button>
@@ -197,7 +201,7 @@ function Authorize() {
           >
             {t('button.allowAccess')}
           </Button>
-        </FlexRow>
+        </Stack>
       </form>
     </CardTemplate>
   );

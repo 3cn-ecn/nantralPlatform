@@ -6,6 +6,7 @@ import {
   Button,
   Card,
   Container,
+  Stack,
   TextField,
   Typography,
 } from '@mui/material';
@@ -18,7 +19,6 @@ import {
   TemplateType,
 } from '#modules/signature/view/templates/SelectTemplate';
 import { formatSignatureInfoToMarkdown } from '#modules/signature/view/templates/formatSignatureInfoToMarkdown';
-import { FlexAuto, FlexCol, FlexRow } from '#shared/components/FlexBox/FlexBox';
 import { useTranslation } from '#shared/i18n/useTranslation';
 
 export default function SignaturePage() {
@@ -55,8 +55,8 @@ export default function SignaturePage() {
         setTemplate={setTemplate}
         clubMemberships={query.data?.clubMemberships}
       />
-      <FlexAuto gap={6} mt={2}>
-        <FlexCol width="100%" gap={2}>
+      <Stack direction={{ xs: 'column', md: 'row' }} spacing={6} sx={{ mt: 2 }}>
+        <Stack sx={{ width: '100%' }} spacing={2}>
           <TextField
             multiline
             value={markdownContent}
@@ -66,7 +66,7 @@ export default function SignaturePage() {
             slotProps={{ htmlInput: { sx: { fontFamily: 'monospace' } } }}
             disabled={query.isFetching}
           />
-          <FlexRow gap={1} justifyContent="end">
+          <Stack direction="row" spacing={1} sx={{ justifyContent: 'end' }}>
             <Button
               variant="outlined"
               color="secondary"
@@ -83,8 +83,8 @@ export default function SignaturePage() {
             >
               {t('signature.actions.export.label')}
             </Button>
-          </FlexRow>
-        </FlexCol>
+          </Stack>
+        </Stack>
         <Box sx={{ width: '100%', overflow: 'auto' }}>
           <Card
             sx={{
@@ -100,7 +100,7 @@ export default function SignaturePage() {
             />
           </Card>
         </Box>
-      </FlexAuto>
+      </Stack>
       <ExportMethodModal
         isOpen={isExportModalOpen}
         onClose={() => setExportModalOpen(false)}

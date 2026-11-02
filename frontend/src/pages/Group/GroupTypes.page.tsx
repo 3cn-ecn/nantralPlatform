@@ -2,13 +2,18 @@ import { useMemo } from 'react';
 import { useSearchParams } from 'react-router-dom';
 
 import { AdminPanelSettings as AdminPanelSettingsIcon } from '@mui/icons-material';
-import { Container, IconButton, Tooltip, Typography } from '@mui/material';
+import {
+  Container,
+  IconButton,
+  Stack,
+  Tooltip,
+  Typography,
+} from '@mui/material';
 import { useInfiniteQuery } from '@tanstack/react-query';
 
 import { useCurrentUserData } from '#modules/account/hooks/useCurrentUser.data';
 import { getGroupListApi } from '#modules/group/api/getGroupList.api';
 import { GroupGrid } from '#modules/group/view/GroupGrid/GroupGrid';
-import { FlexCol, FlexRow } from '#shared/components/FlexBox/FlexBox';
 import { SearchField } from '#shared/components/FormFields';
 import { InfiniteList } from '#shared/components/InfiniteList/InfiniteList';
 import { Spacer } from '#shared/components/Spacer/Spacer';
@@ -38,7 +43,7 @@ export default function GroupTypesPage() {
 
   return (
     <Container sx={{ my: 3 }}>
-      <FlexRow alignItems="center" gap={1}>
+      <Stack direction="row" sx={{ alignItems: 'center' }} spacing={1}>
         <Typography variant="h1">{t('group.type.title')}</Typography>
         {staff && (
           <Tooltip title={t('group.type.seeList')}>
@@ -51,7 +56,7 @@ export default function GroupTypesPage() {
             </IconButton>
           </Tooltip>
         )}
-      </FlexRow>
+      </Stack>
       <SearchField
         value={search}
         handleChange={(val) => {
@@ -67,7 +72,7 @@ export default function GroupTypesPage() {
       />
       <Spacer vertical={2} />
       {!search && (
-        <FlexCol gap={4}>
+        <Stack spacing={4}>
           {groupTypesQuery.isSuccess &&
             groupTypesQuery.data.results?.map((type, index) => (
               <GroupTypeSection
@@ -78,7 +83,7 @@ export default function GroupTypesPage() {
                 isPending={!listQueries[index] || listQueries[index].isPending}
               />
             ))}
-        </FlexCol>
+        </Stack>
       )}
       {search && (
         <InfiniteList query={groupSearchQuery}>

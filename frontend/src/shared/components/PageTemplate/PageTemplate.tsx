@@ -5,11 +5,11 @@ import {
   Box,
   CircularProgress,
   CssBaseline,
+  Stack,
   Toolbar,
   useTheme,
 } from '@mui/material';
 
-import { FlexCol, FlexRow } from '../FlexBox/FlexBox';
 import { NavBar } from './NavBar/NavBar';
 
 export function PageTemplate() {
@@ -26,18 +26,18 @@ export function PageTemplate() {
       <CssBaseline />
       <ScrollRestoration />
       <NavBar />
-      <FlexCol component="main" sx={{ height: '100vh' }}>
+      <Stack component="main" sx={{ height: '100vh' }}>
         <Toolbar />
         <Suspense
           fallback={
-            <FlexRow justifyContent="center" mt={8}>
+            <Stack direction="row" sx={{ justifyContent: 'center', mt: 8 }}>
               <CircularProgress />
-            </FlexRow>
+            </Stack>
           }
         >
           <Outlet />
         </Suspense>
-      </FlexCol>
+      </Stack>
     </Box>
   );
 }

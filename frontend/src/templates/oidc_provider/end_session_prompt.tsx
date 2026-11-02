@@ -1,9 +1,15 @@
 import { Trans } from 'react-i18next';
 
-import { Button, Link, Tooltip, Typography, useTheme } from '@mui/material';
+import {
+  Button,
+  Link,
+  Stack,
+  Tooltip,
+  Typography,
+  useTheme,
+} from '@mui/material';
 
 import { Avatar } from '#shared/components/Avatar/Avatar';
-import { FlexRow } from '#shared/components/FlexBox/FlexBox';
 import { Spacer } from '#shared/components/Spacer/Spacer';
 import { useTranslation } from '#shared/i18n/useTranslation';
 
@@ -42,7 +48,11 @@ function EndSessionPrompt() {
           Nantral Platform
         </Typography>
         <Spacer vertical={2} />
-        <FlexRow gap={2} alignItems={'center'} justifyContent={'center'}>
+        <Stack
+          direction="row"
+          spacing={2}
+          sx={{ alignItems: 'center', justifyContent: 'center' }}
+        >
           <Avatar
             src="/static/img/logo/scalable/logo.svg"
             alt="Nantral platform"
@@ -65,9 +75,9 @@ function EndSessionPrompt() {
               }}
             />
           )}
-        </FlexRow>
+        </Stack>
         <Spacer vertical={2} />
-        <Typography variant={'h4'} textAlign={'center'}>
+        <Typography variant={'h4'} sx={{ textAlign: 'center' }}>
           <Trans
             i18nKey={'templates.oidc.endSessionPrompt.title'}
             values={{ user_name: user_name }}
@@ -93,7 +103,7 @@ function EndSessionPrompt() {
           ?
         </Typography>
         <Spacer vertical={2} />
-        <FlexRow gap={2}>
+        <Stack direction="row" spacing={2}>
           <Button type={'submit'} variant={'outlined'}>
             {t('button.cancel')}
           </Button>
@@ -105,7 +115,7 @@ function EndSessionPrompt() {
           >
             {t('button.yes')}
           </Button>
-        </FlexRow>
+        </Stack>
       </form>
     </CardTemplate>
   );

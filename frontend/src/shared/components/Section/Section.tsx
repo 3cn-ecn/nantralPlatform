@@ -1,8 +1,6 @@
 import { PropsWithChildren, ReactNode } from 'react';
 
-import { Box, Typography, styled } from '@mui/material';
-
-import { FlexRow } from '../FlexBox/FlexBox';
+import { Box, Typography, styled, Stack } from '@mui/material';
 
 type SectionProps = PropsWithChildren & {
   title: string;
@@ -21,8 +19,9 @@ export function Section({ title, button, children }: SectionProps) {
   );
 }
 
-const Header = styled(FlexRow)({
+const Header = styled(Stack)({
   flexWrap: 'wrap',
+  flexDirection: 'row',
   rowGap: 4,
   columnGap: 16,
   alignItems: 'center',

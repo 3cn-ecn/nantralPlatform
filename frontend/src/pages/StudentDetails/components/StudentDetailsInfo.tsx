@@ -1,31 +1,30 @@
 import { AdminPanelSettings } from '@mui/icons-material';
-import { Chip, Typography } from '@mui/material';
+import { Chip, Stack, Typography } from '@mui/material';
 
 import { Curriculum, Faculties, User } from '#modules/account/user.types';
 import { SocialLinkItem } from '#modules/social_link/view/shared/SocialLinkItem';
-import { FlexCol, FlexRow } from '#shared/components/FlexBox/FlexBox';
 import { useTranslation } from '#shared/i18n/useTranslation';
 
 export function StudentDetailsInfo({ user }: { user: Partial<User> }) {
   const { t } = useTranslation();
   return (
-    <FlexCol>
-      <FlexRow alignItems="center" gap={2}>
+    <Stack>
+      <Stack direction="row" sx={{ alignItems: 'center' }} spacing={2}>
         <Typography variant="h1" sx={{ pb: 0 }}>
           {user.name}
         </Typography>
         {user?.staff && (
           <AdminPanelSettings fontSize="large" color="secondary" />
         )}
-      </FlexRow>
-      <FlexRow flexWrap={'wrap'} gap={1}>
+      </Stack>
+      <Stack direction="row" sx={{ flexWrap: 'wrap' }} spacing={1}>
         <Chip label={`Année d'entrée: ${user.promo}`}></Chip>
         {user.faculty && <Chip label={t(Faculties[user.faculty])}></Chip>}
         {user.path && user.path !== 'Cla' && (
           <Chip label={t(Curriculum[user.path])}></Chip>
         )}
-      </FlexRow>
-      <FlexRow my={1} flexWrap={'wrap'}>
+      </Stack>
+      <Stack direction="row" sx={{ my: 1, flexWrap: 'wrap' }}>
         <SocialLinkItem
           socialLink={{
             uri: `@${user.username}:nantral-platform.fr`,
@@ -41,7 +40,7 @@ export function StudentDetailsInfo({ user }: { user: Partial<User> }) {
         {user.socialLinks?.map((link) => (
           <SocialLinkItem key={link.id} socialLink={link} />
         ))}
-      </FlexRow>
-    </FlexCol>
+      </Stack>
+    </Stack>
   );
 }

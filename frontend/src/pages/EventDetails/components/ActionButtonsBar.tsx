@@ -1,10 +1,11 @@
 import { useState } from 'react';
 
+import { Stack } from '@mui/material';
+
 import { Event } from '#modules/event/event.type';
 import { BookmarkedButton } from '#modules/event/view/shared/BookmarkedButton';
 import { ParticipateButton } from '#modules/event/view/shared/ParticipateButton';
 import { DeleteButton } from '#pages/EventDetails/components/ActionButtons/DeleteButton';
-import { FlexRow } from '#shared/components/FlexBox/FlexBox';
 import { MoreActionsButton } from '#shared/components/MoreActionsButton/MoreActionsButton';
 import { Spacer } from '#shared/components/Spacer/Spacer';
 
@@ -21,11 +22,11 @@ export function ActionButtonsBar({ event }: ActionButtonsBarProps) {
   const [menuIsOpen, setMenuIsOpen] = useState(false);
 
   return (
-    <FlexRow gap={1} flexWrap="wrap">
+    <Stack direction="row" spacing={1} sx={{ flexWrap: 'wrap' }}>
       <ParticipateButton event={event} />
       <BookmarkedButton eventId={event.id} selected={event.isBookmarked} />
       <Spacer flex={1} />
-      <FlexRow gap={1} flexWrap="wrap">
+      <Stack direction="row" spacing={1} sx={{ flexWrap: 'wrap' }}>
         <ShareButton eventId={event.id} />
         {!event.formUrl && <ParticipantsButton event={event} />}
         <MoreActionsButton
@@ -41,7 +42,7 @@ export function ActionButtonsBar({ event }: ActionButtonsBarProps) {
           )}
           <AddToCalendarButton event={event} />
         </MoreActionsButton>
-      </FlexRow>
-    </FlexRow>
+      </Stack>
+    </Stack>
   );
 }

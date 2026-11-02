@@ -10,13 +10,13 @@ import {
   CardActions,
   CardContent,
   CardMedia,
+  Stack,
   Typography,
 } from '@mui/material';
 import { differenceInHours, differenceInMonths } from 'date-fns';
 
 import { EventPreview } from '#modules/event/event.type';
 import { Avatar } from '#shared/components/Avatar/Avatar';
-import { FlexCol, FlexRow } from '#shared/components/FlexBox/FlexBox';
 import { useTranslation } from '#shared/i18n/useTranslation';
 
 import { BookmarkedButton } from '../shared/BookmarkedButton';
@@ -49,19 +49,19 @@ export function EventCard({ event }: EventCardProps) {
           height={140}
         />
         <CardContent sx={{ pb: 1 }}>
-          <FlexRow gap={1} alignItems="center">
+          <Stack direction="row" spacing={1} sx={{ alignItems: 'center' }}>
             <Avatar alt={event.group.shortName} src={event.group.icon} />
-            <FlexCol>
+            <Stack sx={{ minWidth: 0 }}>
               <Typography variant="h6" sx={{ lineHeight: 1, mb: '4px' }} noWrap>
                 {event.title}
               </Typography>
               <Typography variant="caption" sx={{ lineHeight: 1 }} noWrap>
                 {event.group.name}
               </Typography>
-            </FlexCol>
-          </FlexRow>
-          <FlexRow mt={2} gap={2} flexWrap="wrap">
-            <FlexRow gap={1} alignItems="center">
+            </Stack>
+          </Stack>
+          <Stack direction="row" spacing={2} sx={{ mt: 2, flexWrap: 'wrap' }}>
+            <Stack direction="row" spacing={1} sx={{ alignItems: 'center' }}>
               <EventIcon />
               <Typography variant="body2">
                 {isLongerThanADay
@@ -72,16 +72,16 @@ export function EventCard({ event }: EventCardProps) {
                     )
                   : formatDate(event.startDate, formatDateOptions)}
               </Typography>
-            </FlexRow>
+            </Stack>
             {!isLongerThanADay && (
-              <FlexRow gap={1} alignItems="center">
+              <Stack direction="row" spacing={1} sx={{ alignItems: 'center' }}>
                 <ScheduleIcon />
                 <Typography variant="body2">
                   {formatTime(event.startDate)}
                 </Typography>
-              </FlexRow>
+              </Stack>
             )}
-          </FlexRow>
+          </Stack>
         </CardContent>
       </CardActionArea>
       <CardActions disableSpacing>

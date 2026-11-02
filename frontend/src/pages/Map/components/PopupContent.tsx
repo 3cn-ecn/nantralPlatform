@@ -15,6 +15,7 @@ import {
   ListItemAvatar,
   ListItemButton,
   ListItemText,
+  Stack,
   styled,
   Typography,
 } from '@mui/material';
@@ -22,7 +23,6 @@ import { CardActions } from '@mui/material/';
 
 import { MapGroupPreview } from '#modules/group/types/group.types';
 import { Avatar } from '#shared/components/Avatar/Avatar';
-import { FlexRow } from '#shared/components/FlexBox/FlexBox';
 import { useTranslation } from '#shared/i18n/useTranslation';
 
 // Styled arrow component
@@ -99,7 +99,7 @@ export function PopupContent({
         ))}
       </List>
       <CardActions>
-        <FlexRow gap={2}>
+        <Stack direction="row" spacing={2}>
           <Button
             component={Link}
             to={group.url}
@@ -117,7 +117,7 @@ export function PopupContent({
           >
             {t('map.popup.go')}
           </Button>
-        </FlexRow>
+        </Stack>
       </CardActions>
       <CardMedia component={'img'} src={group.banner} sx={{ maxHeight: 150 }} />
     </CardWithArrow>

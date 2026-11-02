@@ -7,6 +7,7 @@ import {
   Card,
   CardActions,
   CardContent,
+  Stack,
   Typography,
 } from '@mui/material';
 import { useQueryClient } from '@tanstack/react-query';
@@ -15,7 +16,6 @@ import { acceptAdminRequestApi } from '#modules/group/api/acceptAdminRequest.api
 import { denyAdminRequestApi } from '#modules/group/api/denyAdminRequest.api';
 import { AdminRequest } from '#modules/group/types/adminRequest.type';
 import { Avatar } from '#shared/components/Avatar/Avatar';
-import { FlexRow } from '#shared/components/FlexBox/FlexBox';
 import { useTranslation } from '#shared/i18n/useTranslation';
 
 export function AdminRequestRow({
@@ -60,7 +60,7 @@ export function AdminRequestRow({
   return (
     <Card>
       <CardContent>
-        <FlexRow alignItems={'center'} gap={1}>
+        <Stack direction="row" sx={{ alignItems: 'center' }} spacing={1}>
           <Avatar
             alt={adminRequest.user.name}
             src={adminRequest.user.picture}
@@ -72,7 +72,7 @@ export function AdminRequestRow({
               user: adminRequest.user.name,
             })}
           </Typography>
-        </FlexRow>
+        </Stack>
         <Typography sx={{ mt: 2 }}>
           {adminRequest.adminRequestMessage}
         </Typography>

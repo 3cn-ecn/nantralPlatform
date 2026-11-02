@@ -1,6 +1,12 @@
 import { useState } from 'react';
 
-import { Alert, CircularProgress, Paper, Typography } from '@mui/material';
+import {
+  Alert,
+  CircularProgress,
+  Paper,
+  Stack,
+  Typography,
+} from '@mui/material';
 import {
   keepPreviousData,
   useMutation,
@@ -14,7 +20,6 @@ import { reorderMembershipApi } from '#modules/group/api/reorderMember.api';
 import { Group } from '#modules/group/types/group.types';
 import { Membership } from '#modules/group/types/membership.types';
 import { AddMemberButton } from '#pages/GroupDetails/components/Buttons/AddMemberButton';
-import { FlexAuto } from '#shared/components/FlexBox/FlexBox';
 import { useToast } from '#shared/context/Toast.context';
 import { useTranslation } from '#shared/i18n/useTranslation';
 
@@ -107,12 +112,15 @@ export function EditMembersView({ group }: EditMembersViewProps) {
 
   return (
     <>
-      <FlexAuto justifyContent={'space-between'} alignItems={'center'} mb={1}>
+      <Stack
+        direction={{ xs: 'column', md: 'row' }}
+        sx={{ justifyContent: 'space-between', alignItems: 'center', mb: 1 }}
+      >
         <Typography variant="h3" sx={{ mb: 1 }}>
           {t('group.details.modal.editGroup.members')} ({memberships.count})
         </Typography>
         <AddMemberButton group={group} />
-      </FlexAuto>
+      </Stack>
       {isPending && <CircularProgress />}
       {isError && (
         <Alert severity="error">

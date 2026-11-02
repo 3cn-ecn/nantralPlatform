@@ -11,7 +11,15 @@ import {
   Settings,
   Share,
 } from '@mui/icons-material';
-import { Alert, Avatar, Button, Tab, Tabs, useTheme } from '@mui/material';
+import {
+  Alert,
+  Avatar,
+  Button,
+  Stack,
+  Tab,
+  Tabs,
+  useTheme,
+} from '@mui/material';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import { updateGroupApi } from '#modules/group/api/updateGroup.api';
@@ -21,7 +29,6 @@ import { CreateGroupForm, Group } from '#modules/group/types/group.types';
 import { EditHistoryView } from '#modules/group/view/EditHistoryView/EditHistoryView';
 import { GroupFormFields } from '#modules/group/view/shared/GroupFormFields';
 import { EditSocialLinkForm } from '#modules/social_link/view/shared/EditSocialLinkForm';
-import { FlexRow } from '#shared/components/FlexBox/FlexBox';
 import { LoadingButton } from '#shared/components/LoadingButton/LoadingButton';
 import {
   ResponsiveDialog,
@@ -182,7 +189,7 @@ export function ModalEditGroup({
                 edit
               />
             </form>
-            <FlexRow my={2} justifyContent={'end'}>
+            <Stack direction="row" sx={{ my: 2, justifyContent: 'end' }}>
               <LoadingButton
                 form="edit-group-form"
                 type="submit"
@@ -194,7 +201,7 @@ export function ModalEditGroup({
               >
                 {!hasModifications ? t('button.saved') : t('button.save')}
               </LoadingButton>
-            </FlexRow>
+            </Stack>
           </>
         )}
         {tab == 'members' && <EditMembersView group={group} />}

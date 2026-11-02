@@ -1,6 +1,6 @@
 import { Dispatch, useCallback } from 'react';
 
-import { MenuItem } from '@mui/material';
+import { MenuItem, Stack } from '@mui/material';
 
 import { SportEventFormDTO } from '#modules/event/infra/sportevent.dto';
 import {
@@ -10,7 +10,6 @@ import {
   sportEventTypeToString,
 } from '#modules/event/sportevent.type';
 import { getGroupListApi } from '#modules/group/api/getGroupList.api';
-import { FlexAuto } from '#shared/components/FlexBox/FlexBox';
 import { FormErrorAlert } from '#shared/components/FormErrorAlert/FormErrorAlert';
 import {
   AutocompleteSearchField,
@@ -123,7 +122,7 @@ export function SportEventFormFields({
         )}
         errors={error?.fields?.description}
       />
-      <FlexAuto columnGap={2} breakPoint="sm">
+      <Stack direction={{ xs: 'column', sm: 'row' }} spacing={{ xs: 0, sm: 2 }}>
         <DateTimeField
           name="date"
           label={t('event.form.startDate.label')}
@@ -136,8 +135,12 @@ export function SportEventFormFields({
           required
           fullWidth
         />
-      </FlexAuto>
-      <FlexAuto columnGap={2} alignItems="center" breakPoint="sm">
+      </Stack>
+      <Stack
+        direction={{ xs: 'column', sm: 'row' }}
+        spacing={{ xs: 0, sm: 2 }}
+        sx={{ alignItems: 'center' }}
+      >
         <CheckboxField
           name="isWeekly"
           label={t('sport.form.weekly.label')}
@@ -164,7 +167,7 @@ export function SportEventFormFields({
           required={formValues.isWeekly}
           fullWidth
         />
-      </FlexAuto>
+      </Stack>
       <TextField
         name="location"
         label={t('event.form.location.label')}

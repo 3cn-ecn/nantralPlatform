@@ -5,12 +5,10 @@ import {
   Home as HomeIcon,
   Replay as ReplayIcon,
 } from '@mui/icons-material';
-import { Button, Container, Typography } from '@mui/material';
+import { Button, Container, Stack, Typography } from '@mui/material';
 
 import { useBreakpoint } from '#shared/hooks/useBreakpoint';
 import { useTranslation } from '#shared/i18n/useTranslation';
-
-import { FlexCol, FlexRow } from '../FlexBox/FlexBox';
 
 type ErrorPageContentProps = {
   status?: number;
@@ -34,7 +32,7 @@ export function ErrorPageContent({
 
   return (
     <Container>
-      <FlexCol alignItems="center" gap={4} my={8}>
+      <Stack spacing={4} sx={{ alignItems: 'center', my: 8 }}>
         <Typography
           component="h1"
           sx={{
@@ -51,7 +49,10 @@ export function ErrorPageContent({
         <Button onClick={retryFn} endIcon={<ReplayIcon />} variant="contained">
           {t('error.retry')}
         </Button>
-        <FlexRow justifyContent="center" gap={1} flexWrap="wrap">
+        <Stack
+          direction="row"
+          sx={{ justifyContent: 'center', flexWrap: 'wrap' }}
+        >
           <Button
             component={Link}
             to="/"
@@ -70,8 +71,8 @@ export function ErrorPageContent({
           >
             {t('error.feedback')}
           </Button>
-        </FlexRow>
-      </FlexCol>
+        </Stack>
+      </Stack>
     </Container>
   );
 }

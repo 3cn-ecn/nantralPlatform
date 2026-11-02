@@ -1,10 +1,9 @@
 import { useState } from 'react';
 
 import { FilterAlt } from '@mui/icons-material';
-import { Button, Chip } from '@mui/material';
+import { Button, Chip, Stack } from '@mui/material';
 
 import { Curriculum, Faculties } from '#modules/account/user.types';
-import { FlexRow } from '#shared/components/FlexBox/FlexBox';
 import { SearchField } from '#shared/components/FormFields';
 import { useTranslation } from '#shared/i18n/useTranslation';
 
@@ -34,7 +33,11 @@ export function FilterBar({
         }}
         value={filters.search}
       />
-      <FlexRow overflow={'scroll'} gap={2} py={1} alignItems={'center'}>
+      <Stack
+        direction="row"
+        spacing={2}
+        sx={{ overflow: 'scroll', py: 1, alignItems: 'center' }}
+      >
         <Button
           variant="outlined"
           color="secondary"
@@ -62,7 +65,7 @@ export function FilterBar({
             onDelete={() => updateFilters({ promo: undefined })}
           />
         )}
-      </FlexRow>
+      </Stack>
       <FilterDrawer
         open={open}
         onClose={() => setOpen(false)}

@@ -4,11 +4,9 @@ import {
   Close as CloseIcon,
   HelpOutlined as HelpOutlinedIcon,
 } from '@mui/icons-material';
-import { DialogTitle, IconButton, Tooltip } from '@mui/material';
+import { DialogTitle, IconButton, Stack, Tooltip } from '@mui/material';
 
 import { useTranslation } from '#shared/i18n/useTranslation';
-
-import { FlexRow } from '../FlexBox/FlexBox';
 
 interface ResponsiveDialogHeaderProps {
   onClose: () => void;
@@ -33,10 +31,14 @@ export function ResponsiveDialogHeader({
         alignItems: 'center',
       }}
     >
-      <FlexRow alignItems="center" gap={1} flex={1} pr={1}>
+      <Stack
+        direction="row"
+        spacing={1}
+        sx={{ alignItems: 'center', flex: 1, pr: 1 }}
+      >
         {leftIcon}
         {children}
-      </FlexRow>
+      </Stack>
       {!!helpUrl && (
         <Tooltip title={t('modal.helpButton.label')}>
           <IconButton href={helpUrl} target="_blank" rel="noopener">

@@ -1,14 +1,13 @@
 import { useState } from 'react';
 
 import { History } from '@mui/icons-material';
-import { Chip } from '@mui/material';
+import { Chip, Stack } from '@mui/material';
 import { roundToNearestMinutes, isSameDay } from 'date-fns/fp';
 
 import { EventListQueryParams } from '#modules/event/api/getEventList.api';
 import { CreateEventModal } from '#modules/event/view/Modals/CreateEventModal';
 import { Group } from '#modules/group/types/group.types';
 import { EventInfiniteGrid } from '#pages/Event/EventGrid/EventInfiniteGrid';
-import { FlexRow } from '#shared/components/FlexBox/FlexBox';
 import { useTranslation } from '#shared/i18n/useTranslation';
 
 import { CreateButton } from '../components/Buttons/CreateButton';
@@ -34,7 +33,10 @@ export function GroupEvents({ group }: { group: Group }) {
 
   return (
     <>
-      <FlexRow pb={2} justifyContent={'space-between'} alignItems={'center'}>
+      <Stack
+        direction="row"
+        sx={{ pb: 2, justifyContent: 'space-between', alignItems: 'center' }}
+      >
         <Chip
           icon={<History />}
           label={t('event.filters.pastEvents')}
@@ -55,7 +57,7 @@ export function GroupEvents({ group }: { group: Group }) {
           }
         />
         {group.isAdmin && <CreateButton onClick={() => setOpen(true)} />}
-      </FlexRow>
+      </Stack>
       <EventInfiniteGrid filters={filters} />
       {open && (
         <CreateEventModal

@@ -1,9 +1,8 @@
-import { Container, Typography } from '@mui/material';
+import { Container, Stack, Typography } from '@mui/material';
 import { useInfiniteQuery } from '@tanstack/react-query';
 
 import { getAdminRequestListApi } from '#modules/group/api/getAdminRequestList.api';
 import { Group } from '#modules/group/types/group.types';
-import { FlexCol } from '#shared/components/FlexBox/FlexBox';
 import { useTranslation } from '#shared/i18n/useTranslation';
 
 import { AdminRequestRow } from '../components/AdminRequestRow';
@@ -20,7 +19,7 @@ export function GroupAdminRequests({ group }: { group: Group }) {
   });
   return (
     <Container maxWidth="sm">
-      <FlexCol gap={2}>
+      <Stack spacing={2}>
         {data?.pages
           .map((page) => page.results)
           .flat()
@@ -31,7 +30,7 @@ export function GroupAdminRequests({ group }: { group: Group }) {
               groupSlug={group.slug}
             />
           ))}
-      </FlexCol>
+      </Stack>
       {data?.pages[0].count == 0 && (
         <Typography color="secondary" sx={{ mt: 3, textAlign: 'center' }}>
           {t('group.details.noAdminReqests')}

@@ -1,10 +1,9 @@
 import { Link } from 'react-router-dom';
 
-import { Typography, useTheme } from '@mui/material';
+import { Stack, Typography, useTheme } from '@mui/material';
 
 import { GroupPreview } from '#modules/group/types/group.types';
 import { Avatar, AvatarSize } from '#shared/components/Avatar/Avatar';
-import { FlexCol } from '#shared/components/FlexBox/FlexBox';
 
 interface GroupItemProps {
   size?: AvatarSize;
@@ -16,7 +15,7 @@ function GroupItem({ group, size }: GroupItemProps) {
   const theme = useTheme();
 
   return (
-    <FlexCol alignItems={'center'} gap={1}>
+    <Stack spacing={1} sx={{ alignItems: 'center' }}>
       <Link to={group.url}>
         <Avatar
           sx={{
@@ -37,7 +36,7 @@ function GroupItem({ group, size }: GroupItemProps) {
           {group.subCategory}
         </Typography>
       )}
-    </FlexCol>
+    </Stack>
   );
 }
 

@@ -1,8 +1,7 @@
 import { Outlet } from 'react-router-dom';
 
-import { Container, Typography } from '@mui/material';
+import { Container, Stack, Typography } from '@mui/material';
 
-import { FlexRow } from '#shared/components/FlexBox/FlexBox';
 import { Spacer } from '#shared/components/Spacer/Spacer';
 import { useTranslation } from '#shared/i18n/useTranslation';
 
@@ -18,12 +17,12 @@ export default function EventPage() {
 
   return (
     <Container sx={{ my: 4 }}>
-      <FlexRow gap={1}>
+      <Stack direction="row" spacing={1} sx={{ minWidth: 0 }}>
         <Typography variant="h1" sx={{ flex: 1 }} noWrap>
           {t('event.grid.title')}
         </Typography>
         <ToggleEventViewButton />
-      </FlexRow>
+      </Stack>
       <Spacer vertical={2} />
       <Outlet />
       <CreateNewEventButton />

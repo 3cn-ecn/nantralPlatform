@@ -11,6 +11,7 @@ import {
   IconButton,
   Link,
   Skeleton,
+  Stack,
   Tooltip,
   Typography,
 } from '@mui/material';
@@ -21,7 +22,6 @@ import { sortLinks } from '#modules/social_link/utils/sortLinks';
 import { SocialLinkItem } from '#modules/social_link/view/shared/SocialLinkItem';
 import { HistoryButton } from '#pages/GroupDetails/GroupHistory/HistoryButton';
 import { Avatar } from '#shared/components/Avatar/Avatar';
-import { FlexCol, FlexRow } from '#shared/components/FlexBox/FlexBox';
 import { useAuth } from '#shared/context/Auth.context';
 import { useBreakpoint } from '#shared/hooks/useBreakpoint';
 import { useTranslation } from '#shared/i18n/useTranslation';
@@ -50,12 +50,16 @@ export function GroupInfo({
   const sortedSocialLinks = group ? sortLinks(group.socialLinks) : [];
 
   return (
-    <FlexRow
-      columnGap={4}
-      rowGap={2}
-      mt={3}
-      mb={2}
-      flexWrap={isSmaller ? 'wrap' : 'nowrap'}
+    <Box
+      sx={{
+        display: 'flex',
+        flexDirection: 'row',
+        columnGap: 4,
+        rowGap: 2,
+        mt: 3,
+        mb: 2,
+        flexWrap: isSmaller ? 'wrap' : 'nowrap',
+      }}
     >
       <Box
         sx={{
@@ -78,8 +82,8 @@ export function GroupInfo({
           />
         )}
       </Box>
-      <FlexCol>
-        <FlexRow gap={1} alignItems="center">
+      <Stack>
+        <Stack direction="row" spacing={1} sx={{ alignItems: 'center' }}>
           <Typography variant="h1">
             {isPending ? (
               <Skeleton animation="wave" width={200} />
@@ -98,7 +102,7 @@ export function GroupInfo({
               </IconButton>
             </Tooltip>
           )}
-        </FlexRow>
+        </Stack>
 
         <GroupInfoLine
           isPending={isPending}
@@ -117,7 +121,11 @@ export function GroupInfo({
                 ml: '-3px',
               }}
             >
-              <FlexRow flexWrap="nowrap" alignItems="center" gap="3.5px">
+              <Stack
+                direction="row"
+                sx={{ flexWrap: 'nowrap', alignItems: 'center' }}
+                spacing="3.5px"
+              >
                 <PlaceIcon
                   color="secondary"
                   titleAccess={t('group.form.address.label')}
@@ -132,7 +140,7 @@ export function GroupInfo({
                 >
                   {group.address}
                 </Typography>
-              </FlexRow>
+              </Stack>
             </Link>
           ) : (
             (group.meetingHour || group.meetingPlace) && (
@@ -148,13 +156,13 @@ export function GroupInfo({
         )}
 
         {sortedSocialLinks.length > 0 && (
-          <FlexRow flexWrap="wrap" mt={2} ml="-4px">
+          <Stack direction="row" sx={{ flexWrap: 'wrap', mt: 2, ml: '-4px' }}>
             {sortedSocialLinks?.map((socialLink) => (
               <SocialLinkItem key={socialLink.id} socialLink={socialLink} />
             ))}
-          </FlexRow>
+          </Stack>
         )}
-        <FlexRow py={2} gap={1} flexWrap="wrap">
+        <Stack direction="row" spacing={1} sx={{ py: 2, flexWrap: 'wrap' }}>
           {isAuthenticated && group && (
             <SubscribeButton
               groupSlug={group.slug}
@@ -174,8 +182,8 @@ export function GroupInfo({
           )}
           {group && <HistoryButton group={group} />}
           {group?.isAdmin && <EditButton group={group} />}
-        </FlexRow>
-      </FlexCol>
-    </FlexRow>
+        </Stack>
+      </Stack>
+    </Box>
   );
 }

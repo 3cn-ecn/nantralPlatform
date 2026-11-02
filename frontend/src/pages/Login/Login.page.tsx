@@ -7,6 +7,7 @@ import {
   Button,
   Card,
   Divider,
+  Stack,
   Typography,
   useTheme,
 } from '@mui/material';
@@ -15,7 +16,6 @@ import { useMutation } from '@tanstack/react-query';
 import { LoginApiBody } from '#modules/account/api/login.api';
 import { resendVerificationEmailApi } from '#modules/account/api/resendVerificationEmail.api';
 import { LoginFormFields } from '#modules/account/view/shared/LoginFormFields';
-import { FlexCol, FlexRow } from '#shared/components/FlexBox/FlexBox';
 import { FloatingContainer } from '#shared/components/FloatingContainer/FloatingContainer';
 import { LoadingButton } from '#shared/components/LoadingButton/LoadingButton';
 import { Spacer } from '#shared/components/Spacer/Spacer';
@@ -50,7 +50,7 @@ export default function LoginPage() {
 
   return (
     <FloatingContainer maxWidth={'sm'}>
-      <FlexCol gap={3}>
+      <Stack spacing={3}>
         <Card
           sx={{
             padding: 5,
@@ -59,7 +59,8 @@ export default function LoginPage() {
             flexDirection: 'column',
           }}
         >
-          <FlexRow
+          <Stack
+            direction="row"
             sx={{
               alignItems: 'center',
               justifyContent: 'center',
@@ -88,7 +89,7 @@ export default function LoginPage() {
             >
               Nantral Platform.
             </Typography>
-          </FlexRow>
+          </Stack>
           <Typography sx={{ mt: 1, textAlign: 'center' }} variant="subtitle1">
             {t('login.website.ecn')}
           </Typography>
@@ -142,7 +143,8 @@ export default function LoginPage() {
                 error?.response?.data?.code == '2' || !!error?.fields?.email_ecn
               }
             />
-            <FlexRow
+            <Stack
+              direction="row"
               sx={{
                 justifyContent: 'space-between',
                 mt: 2,
@@ -155,7 +157,7 @@ export default function LoginPage() {
               <Button onClick={() => navigate('/forgot_password')}>
                 {t('resetPassword.forgotten')}
               </Button>
-            </FlexRow>
+            </Stack>
             <Divider flexItem />
             <Spacer vertical={3} />
             <LoadingButton
@@ -170,7 +172,7 @@ export default function LoginPage() {
           </form>
         </Card>
         <SeeGroupsButton />
-      </FlexCol>
+      </Stack>
     </FloatingContainer>
   );
 }

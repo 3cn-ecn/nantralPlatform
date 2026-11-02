@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 
-import { Box, Divider, Typography, useTheme } from '@mui/material';
+import { Box, Divider, Stack, Typography, useTheme } from '@mui/material';
 import {
   areIntervalsOverlapping,
   differenceInMinutes,
@@ -17,7 +17,6 @@ import { upperFirst, zipWith } from 'lodash-es';
 import { EventListQueryParams } from '#modules/event/api/getEventList.api';
 import { useInfiniteEventListQuery } from '#pages/Event/hooks/useInfiniteEventList.query';
 import { ErrorPageContent } from '#shared/components/ErrorPageContent/ErrorPageContent';
-import { FlexCol, FlexRow } from '#shared/components/FlexBox/FlexBox';
 import { useTranslation } from '#shared/i18n/useTranslation';
 
 import { createBlankEvents } from '../shared/createBlankEvents';
@@ -86,25 +85,27 @@ export function CalendarColumnsView({ filters }: CalendarColumnsViewProps) {
   }));
 
   return (
-    <FlexRow overflow="auto" minWidth="100%">
-      <FlexCol
-        justifyContent="space-between"
-        paddingTop="1.5rem"
-        paddingRight={1}
+    <Stack direction="row" sx={{ overflow: 'auto', minWidth: '100%' }}>
+      <Stack
+        sx={{
+          justifyContent: 'space-between',
+          paddingTop: '1.5rem',
+          paddingRight: 1,
+        }}
       >
         {hours.map((hour) => (
           <Typography
             variant="caption"
             key={formatISO(hour, { representation: 'time' })}
+            color="textSecondary"
             sx={{
               textAlign: 'right',
-              color: 'text.secondary',
             }}
           >
             {formatTime(hour)}
           </Typography>
         ))}
-      </FlexCol>
+      </Stack>
       {columns.map((col, i) => (
         <Box
           key={col.date.toISOString()}
@@ -118,9 +119,9 @@ export function CalendarColumnsView({ filters }: CalendarColumnsViewProps) {
               formatDate(col.date, { weekday: 'short', day: 'numeric' }),
             )}
           </Typography>
-          <FlexCol
-            justifyContent="space-between"
+          <Stack
             sx={{
+              justifyContent: 'space-between',
               position: 'relative',
               height: '80vh',
               minHeight: '30rem',
@@ -143,9 +144,9 @@ export function CalendarColumnsView({ filters }: CalendarColumnsViewProps) {
                 <CalendarEventBlock eventItem={item} key={item.data.id} />
               ),
             )}
-          </FlexCol>
+          </Stack>
         </Box>
       ))}
-    </FlexRow>
+    </Stack>
   );
 }

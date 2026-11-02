@@ -1,6 +1,6 @@
 import { FormEvent, useState } from 'react';
 
-import { Divider } from '@mui/material';
+import { Divider, Stack } from '@mui/material';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import {
@@ -10,7 +10,6 @@ import {
 } from '#modules/account/api/editAccount.api';
 import { User } from '#modules/account/user.types';
 import { Avatar } from '#shared/components/Avatar/Avatar';
-import { FlexRow } from '#shared/components/FlexBox/FlexBox';
 import { LoadingButton } from '#shared/components/LoadingButton/LoadingButton';
 import { useTranslation } from '#shared/i18n/useTranslation';
 import { ApiFormError } from '#shared/infra/errors';
@@ -96,7 +95,7 @@ export function EditProfileTab({ user }: EditProfileTabProps) {
 
   return (
     <>
-      <FlexRow>
+      <Stack direction="row">
         <Avatar
           alt={formValues.firstName + ' ' + formValues.lastName.toUpperCase()}
           src={convertPictureToURL()}
@@ -104,7 +103,7 @@ export function EditProfileTab({ user }: EditProfileTabProps) {
           sx={{ m: 1 }}
         />
         <StudentDetailsInfo user={convertToPreview(formValues)} />
-      </FlexRow>
+      </Stack>
       <Divider sx={{ my: 2 }} />
       <form id="edit-account-form" onSubmit={(e) => onSubmit(e)}>
         <EditProfileFormFields

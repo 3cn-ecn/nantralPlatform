@@ -5,12 +5,11 @@ import {
   Place as PlaceIcon,
   Schedule as ScheduleIcon,
 } from '@mui/icons-material';
-import { IconButton, Typography } from '@mui/material';
+import { IconButton, Stack, Typography } from '@mui/material';
 import { isSameDay as dateFnsIsSameDay, differenceInMonths } from 'date-fns';
 
 import { Event } from '#modules/event/event.type';
 import { Avatar } from '#shared/components/Avatar/Avatar';
-import { FlexAuto, FlexRow } from '#shared/components/FlexBox/FlexBox';
 import { useBreakpoint } from '#shared/hooks/useBreakpoint';
 import { useTranslation } from '#shared/i18n/useTranslation';
 
@@ -50,14 +49,12 @@ export function EventInfo({
       : { dateStyle: 'long', timeStyle: 'short' };
 
   return (
-    <FlexAuto
-      breakPoint="sm"
-      columnGap={5}
-      rowGap={2}
-      alignItems="center"
-      flexWrap="wrap"
+    <Stack
+      direction={{ xs: 'column', sm: 'row' }}
+      spacing={{ xs: 2, sm: 5 }}
+      sx={{ alignItems: 'center', flexWrap: 'wrap' }}
     >
-      <FlexRow gap={1} alignItems="center">
+      <Stack direction="row" spacing={1} sx={{ alignItems: 'center' }}>
         <IconButton component={Link} to={group.url} sx={{ p: 0.5 }}>
           <Avatar
             src={group.icon}
@@ -66,29 +63,29 @@ export function EventInfo({
           />
         </IconButton>
         <Typography>{group.name}</Typography>
-      </FlexRow>
+      </Stack>
       {!!location && (
-        <FlexRow gap={1} alignItems="center">
+        <Stack direction="row" spacing={1} sx={{ alignItems: 'center' }}>
           <PlaceIcon titleAccess={t('event.details.place.label')} id="place" />
           <Typography aria-labelledby="place">{location}</Typography>
-        </FlexRow>
+        </Stack>
       )}
-      <FlexRow gap={1} alignItems="center">
+      <Stack direction="row" spacing={1} sx={{ alignItems: 'center' }}>
         <EventIcon titleAccess={t('event.details.day.label')} id="date" />
         <Typography aria-labelledby="date">
           {isSameDay
             ? formatDate(startDate, formatDateOptions)
             : formatDateTimeRange(startDate, endDate, formatDateTimeOptions)}
         </Typography>
-      </FlexRow>
+      </Stack>
       {isSameDay && (
-        <FlexRow gap={1} alignItems="center">
+        <Stack direction="row" spacing={1} sx={{ alignItems: 'center' }}>
           <ScheduleIcon titleAccess={t('event.details.time.label')} id="time" />
           <Typography aria-labelledby="time">
             {formatDateTimeRange(startDate, endDate, { timeStyle: 'short' })}
           </Typography>
-        </FlexRow>
+        </Stack>
       )}
-    </FlexAuto>
+    </Stack>
   );
 }

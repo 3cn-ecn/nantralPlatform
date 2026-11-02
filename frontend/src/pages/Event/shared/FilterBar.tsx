@@ -6,11 +6,10 @@ import {
   FilterList as FilterListIcon,
   History as HistoryIcon,
 } from '@mui/icons-material';
-import { Badge, Chip } from '@mui/material';
+import { Badge, Chip, Stack } from '@mui/material';
 import { isSameDay, roundToNearestMinutes } from 'date-fns';
 
 import { EventListQueryParams } from '#modules/event/api/getEventList.api';
-import { FlexRow } from '#shared/components/FlexBox/FlexBox';
 import { useBreakpoint } from '#shared/hooks/useBreakpoint';
 import { useTranslation } from '#shared/i18n/useTranslation';
 
@@ -49,7 +48,7 @@ export function FilterBar({
     filters.group?.length;
 
   return (
-    <FlexRow gap={1} flexWrap="wrap">
+    <Stack direction="row" spacing={1} sx={{ flexWrap: 'wrap' }}>
       <Chip
         icon={<CheckCircleIcon />}
         label={t('event.filters.isParticipating')}
@@ -108,6 +107,6 @@ export function FilterBar({
         onClose={() => setIsDrawerOpen(false)}
         noDates={noDates}
       />
-    </FlexRow>
+    </Stack>
   );
 }

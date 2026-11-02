@@ -19,6 +19,7 @@ import {
   ListItemIcon,
   ListItemText,
   Paper,
+  Stack,
   Typography,
 } from '@mui/material';
 import { useQueryClient } from '@tanstack/react-query';
@@ -28,7 +29,6 @@ import { EventListQueryParams } from '#modules/event/api/getEventList.api';
 import { getGroupListApi } from '#modules/group/api/getGroupList.api';
 import { useGroupListQuery } from '#modules/group/hooks/useGroupList.query';
 import { GroupPreview } from '#modules/group/types/group.types';
-import { FlexRow } from '#shared/components/FlexBox/FlexBox';
 import {
   AutocompleteSearchField,
   DateField,
@@ -107,12 +107,15 @@ export function FilterDrawer({
       slotProps={{ paper: { sx: { width: 400, maxWidth: '90%' } } }}
     >
       <Container sx={{ my: 2 }}>
-        <FlexRow justifyContent="space-between" alignItems="center">
+        <Stack
+          direction="row"
+          sx={{ justifyContent: 'space-between', alignItems: 'center' }}
+        >
           <Typography variant="h3">{t('event.filters.title')}</Typography>
           <IconButton onClick={onClose}>
             <CloseIcon />
           </IconButton>
-        </FlexRow>
+        </Stack>
         <List>
           <CheckboxListItem
             label={t('event.filters.isParticipating')}

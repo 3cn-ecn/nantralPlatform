@@ -3,13 +3,12 @@ import { Trans } from 'react-i18next';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 
 import { ChevronLeft, Info } from '@mui/icons-material';
-import { Button, Divider, Paper, Typography } from '@mui/material';
+import { Button, Divider, Paper, Stack, Typography } from '@mui/material';
 import { useMutation } from '@tanstack/react-query';
 
 import { RegisterCreated, RegisterForm } from '#modules/account/account.type';
 import { registerApi } from '#modules/account/api/register.api';
 import { RegisterFormFields } from '#modules/account/view/shared/RegisterFormFields';
-import { FlexRow } from '#shared/components/FlexBox/FlexBox';
 import { LoadingButton } from '#shared/components/LoadingButton/LoadingButton';
 import { Spacer } from '#shared/components/Spacer/Spacer';
 import { useTranslation } from '#shared/i18n/useTranslation';
@@ -90,7 +89,7 @@ export default function RegisterFormPanel() {
         />
         <Divider flexItem />
         <Spacer vertical={3} />
-        <FlexRow justifyContent={'space-between'}>
+        <Stack direction="row" sx={{ justifyContent: 'space-between' }}>
           <Button
             sx={{ background: 'none' }}
             color="secondary"
@@ -109,7 +108,7 @@ export default function RegisterFormPanel() {
           >
             {t('register.register')}
           </LoadingButton>
-        </FlexRow>
+        </Stack>
       </form>
     </>
   );

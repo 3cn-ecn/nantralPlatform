@@ -1,9 +1,8 @@
 import { useState } from 'react';
 
-import { CircularProgress } from '@mui/material';
+import { CircularProgress, Stack } from '@mui/material';
 
 import { ErrorPageContent } from '#shared/components/ErrorPageContent/ErrorPageContent';
-import { FlexRow } from '#shared/components/FlexBox/FlexBox';
 import {
   ResponsiveDialog,
   ResponsiveDialogContent,
@@ -28,13 +27,18 @@ export function PostModal({ postId, onClose }: PostModalProps) {
     return (
       <ResponsiveDialog onClose={onClose}>
         <ResponsiveDialogHeader onClose={onClose}></ResponsiveDialogHeader>
-        <FlexRow
-          justifyContent="center"
-          alignItems="center"
-          sx={{ p: 9, pt: 0, height: '100%' }}
+        <Stack
+          direction="row"
+          sx={{
+            justifyContent: 'center',
+            alignItems: 'center',
+            p: 9,
+            pt: 0,
+            height: '100%',
+          }}
         >
           <CircularProgress />
-        </FlexRow>
+        </Stack>
       </ResponsiveDialog>
     );
   }

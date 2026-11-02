@@ -6,12 +6,11 @@ import {
   KeyboardArrowDown,
   KeyboardArrowUp,
 } from '@mui/icons-material';
-import { Menu, MenuItem, Typography, useTheme } from '@mui/material';
+import { Menu, MenuItem, Stack, Typography, useTheme } from '@mui/material';
 import { useQuery } from '@tanstack/react-query';
 
 import { getGroupHistoryListApi } from '#modules/group/api/getGroupHistoryList.api';
 import { Group } from '#modules/group/types/group.types';
-import { FlexCol } from '#shared/components/FlexBox/FlexBox';
 import { LoadingButton } from '#shared/components/LoadingButton/LoadingButton';
 import { useTranslation } from '#shared/i18n/useTranslation';
 
@@ -89,7 +88,7 @@ export function HistoryButton(props: HistoryButtonProps) {
             selected={searchParams.get('version') === item.pk.toString()}
             key={item.pk}
           >
-            <FlexCol>
+            <Stack>
               {item.historyUser
                 ? t('group.details.historyTimeAndUser', {
                     user: item.historyUser.name,
@@ -104,7 +103,7 @@ export function HistoryButton(props: HistoryButtonProps) {
                   {item.historyChangeReason}
                 </Typography>
               )}
-            </FlexCol>
+            </Stack>
           </MenuItem>
         ))}
       </Menu>

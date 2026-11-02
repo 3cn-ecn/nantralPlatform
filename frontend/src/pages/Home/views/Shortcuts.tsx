@@ -5,23 +5,26 @@ import {
   CardActionArea,
   CardContent,
   Icon,
+  Stack,
   Typography,
 } from '@mui/material';
 
-import { FlexCol, FlexRow } from '#shared/components/FlexBox/FlexBox';
 import { useTranslation } from '#shared/i18n/useTranslation';
 
 export default function Shortcuts() {
   const { t } = useTranslation();
 
   return (
-    <FlexRow
-      mt={1}
-      mb={5}
-      columnGap={3}
-      rowGap={1}
-      flexWrap="wrap"
-      justifyContent="center"
+    <Stack
+      direction="row"
+      sx={{
+        mt: 1,
+        mb: 5,
+        columnGap: 3,
+        rowGap: 1,
+        flexWrap: 'wrap',
+        justifyContent: 'center',
+      }}
     >
       <ShortcutItem
         label={t('navbar.events')}
@@ -59,7 +62,7 @@ export default function Shortcuts() {
         path="/sport"
         iconPath="/static/img/icons/cropped/sport.svg"
       />
-    </FlexRow>
+    </Stack>
   );
 }
 
@@ -77,7 +80,7 @@ function ShortcutItem({
   isOnBackend = false,
 }: ShortcutItemProps) {
   return (
-    <FlexCol gap={1} alignItems="center" width="min-content">
+    <Stack spacing={1} sx={{ alignItems: 'center', width: 'min-content' }}>
       <Card variant="elevation" sx={{ aspectRatio: 1 }}>
         <CardActionArea
           component={Link}
@@ -93,6 +96,6 @@ function ShortcutItem({
       <Typography variant="body2" align="center" aria-hidden>
         {label}
       </Typography>
-    </FlexCol>
+    </Stack>
   );
 }

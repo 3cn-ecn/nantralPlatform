@@ -1,12 +1,11 @@
 import { Dispatch, useCallback } from 'react';
 
 import { LocalFireDepartment } from '@mui/icons-material';
-import { MenuItem, Paper, Typography } from '@mui/material';
+import { MenuItem, Paper, Stack, Typography } from '@mui/material';
 
 import { Event, EventForm } from '#modules/event/event.type';
 import { EventFormDTO } from '#modules/event/infra/event.dto';
 import { getGroupListApi } from '#modules/group/api/getGroupList.api';
-import { FlexAuto, FlexRow } from '#shared/components/FlexBox/FlexBox';
 import { FormErrorAlert } from '#shared/components/FormErrorAlert/FormErrorAlert';
 import {
   AutocompleteSearchField,
@@ -117,7 +116,7 @@ export function EventFormFields({
         )}
         errors={error?.fields?.description}
       />
-      <FlexAuto columnGap={2} breakPoint="sm">
+      <Stack direction={{ xs: 'column', sm: 'row' }} spacing={{ xs: 0, sm: 2 }}>
         <DateTimeField
           name="start_date"
           label={t('event.form.startDate.label')}
@@ -143,7 +142,7 @@ export function EventFormFields({
           required
           fullWidth
         />
-      </FlexAuto>
+      </Stack>
       <TextField
         name="location"
         label={t('event.form.location.label')}
@@ -181,16 +180,19 @@ export function EventFormFields({
         placeholder="https://example.com"
       />
       <Paper sx={{ p: 2, my: 1 }} variant="outlined">
-        <FlexRow alignItems="center" gap={1} mb={1}>
+        <Stack direction="row" spacing={1} sx={{ alignItems: 'center', mb: 1 }}>
           <LocalFireDepartment />
           <Typography variant="h5">
             {t('event.form.shotgunSection.title')}
           </Typography>
-        </FlexRow>
+        </Stack>
         <Typography sx={{ mb: 1 }}>
           {t('event.form.shotgunSection.helper')}
         </Typography>
-        <FlexAuto columnGap={2} breakPoint="sm">
+        <Stack
+          direction={{ xs: 'column', sm: 'row' }}
+          spacing={{ xs: 0, sm: 2 }}
+        >
           <DateTimeField
             name="start_registration"
             label={t('event.form.startRegistration.label')}
@@ -213,7 +215,7 @@ export function EventFormFields({
             errors={error?.fields?.end_registration}
             fullWidth
           />
-        </FlexAuto>
+        </Stack>
         <NumberField
           name="max_participant"
           label={t('event.form.maxParticipant.label')}

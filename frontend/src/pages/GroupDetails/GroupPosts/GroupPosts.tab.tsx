@@ -1,11 +1,10 @@
 import { useState } from 'react';
 
-import { Grid, Typography } from '@mui/material';
+import { Grid, Stack, Typography } from '@mui/material';
 
 import { Group } from '#modules/group/types/group.types';
 import { CreatePostModal } from '#modules/post/view/CreatePostModal/CreatePostModal';
 import { PostCard } from '#modules/post/view/PostCard/PostCard';
-import { FlexRow } from '#shared/components/FlexBox/FlexBox';
 import { InfiniteList } from '#shared/components/InfiniteList/InfiniteList';
 import { useTranslation } from '#shared/i18n/useTranslation';
 
@@ -18,9 +17,9 @@ export function GroupPosts({ group }: { group: Group }) {
   const { t } = useTranslation();
   return (
     <>
-      <FlexRow justifyContent={'end'}>
+      <Stack direction="row" sx={{ justifyContent: 'end' }}>
         {group.isAdmin && <CreateButton onClick={() => setOpenModal(true)} />}
-      </FlexRow>
+      </Stack>
       <InfiniteList query={postsQuery}>
         <Grid spacing={1} container sx={{ mt: 2 }}>
           {postsQuery.data?.pages

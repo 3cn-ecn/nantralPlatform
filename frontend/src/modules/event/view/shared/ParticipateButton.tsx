@@ -6,12 +6,11 @@ import {
   LocalFireDepartment as ShotgunIcon,
   OpenInNew as OpenInNewIcon,
 } from '@mui/icons-material';
-import { SxProps, Theme } from '@mui/material';
+import { Stack, SxProps, Theme } from '@mui/material';
 import { differenceInHours } from 'date-fns';
 
 import { EventPreview } from '#modules/event/event.type';
 import { useRegistrationMutation } from '#modules/event/hooks/useRegistration.mutation';
-import { FlexRow } from '#shared/components/FlexBox/FlexBox';
 import { LoadingButton } from '#shared/components/LoadingButton/LoadingButton';
 import { ConfirmationModal } from '#shared/components/Modal/ConfirmationModal';
 import { useTranslation } from '#shared/i18n/useTranslation';
@@ -143,7 +142,8 @@ export function ParticipateButton({ event, sx }: ParticipateButtonProps) {
 
   return (
     <>
-      <FlexRow
+      <Stack
+        direction="row"
         className={
           isShotgun && !isDisabled && !isPending && !event.formUrl
             ? 'button-shotgun-style'
@@ -170,7 +170,7 @@ export function ParticipateButton({ event, sx }: ParticipateButtonProps) {
         >
           {getLabel()}
         </LoadingButton>
-      </FlexRow>
+      </Stack>
       {isOpenConfirmationModal && (
         <ConfirmationModal
           title={t('event.participateButton.unregisterModal.title')}

@@ -95,6 +95,11 @@ function getTheme(mode: PaletteMode, language: string) {
             variant: 'outlined',
           },
         },
+        MuiStack: {
+          defaultProps: {
+            useFlexGap: true,
+          },
+        },
         MuiTypography: {
           defaultProps: {
             variantMapping: {

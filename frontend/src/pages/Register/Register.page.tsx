@@ -4,6 +4,7 @@ import {
   Button,
   Card,
   Paper,
+  Stack,
   Step,
   StepLabel,
   Stepper,
@@ -11,7 +12,6 @@ import {
   useTheme,
 } from '@mui/material';
 
-import { FlexCol, FlexRow } from '#shared/components/FlexBox/FlexBox';
 import { FloatingContainer } from '#shared/components/FloatingContainer/FloatingContainer';
 import { useBreakpoint } from '#shared/hooks/useBreakpoint';
 import { useTranslation } from '#shared/i18n/useTranslation';
@@ -35,7 +35,7 @@ export default function RegisterPage() {
           padding: 5,
         }}
       >
-        <FlexCol alignItems="center">
+        <Stack sx={{ alignItems: 'center' }}>
           <img
             style={{
               width: 50,
@@ -69,7 +69,7 @@ export default function RegisterPage() {
               mb: 1,
             }}
           >
-            <FlexRow alignItems="center" gap={1}>
+            <Stack direction="row" sx={{ alignItems: 'center' }} spacing={1}>
               <Typography>{t('register.alreadyHaveAccount')}</Typography>
               <Button
                 sx={{ textTransform: 'none' }}
@@ -77,7 +77,7 @@ export default function RegisterPage() {
               >
                 {t('register.goLoginPage')}
               </Button>
-            </FlexRow>
+            </Stack>
           </Paper>
           <Stepper
             activeStep={pathNameToStep[pathname.replaceAll('/', '')]}
@@ -97,7 +97,7 @@ export default function RegisterPage() {
             </Step>
           </Stepper>
           <Outlet />
-        </FlexCol>
+        </Stack>
       </Card>
     </FloatingContainer>
   );

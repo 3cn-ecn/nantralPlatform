@@ -1,11 +1,10 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import { Button, Divider, Typography } from '@mui/material';
+import { Button, Divider, Stack, Typography } from '@mui/material';
 import { useMutation } from '@tanstack/react-query';
 
 import { passwordResetRequestApi } from '#modules/account/api/passwordReset.api';
-import { FlexCol } from '#shared/components/FlexBox/FlexBox';
 import { TextField } from '#shared/components/FormFields';
 import { LoadingButton } from '#shared/components/LoadingButton/LoadingButton';
 import { Spacer } from '#shared/components/Spacer/Spacer';
@@ -58,11 +57,11 @@ export default function ForgotPasswordForm() {
         <Spacer vertical={3} />
         <Divider flexItem />
         <Spacer vertical={3} />
-        <FlexCol
+        <Stack
+          spacing={2}
           sx={{
             justifyContent: 'center',
             alignItems: 'center',
-            gap: 2,
           }}
         >
           <LoadingButton
@@ -81,7 +80,7 @@ export default function ForgotPasswordForm() {
           >
             {t('resetPassword.backToLogin')}
           </Button>
-        </FlexCol>
+        </Stack>
       </form>
     </>
   );

@@ -1,4 +1,5 @@
 import {
+  Stack,
   Table,
   TableBody,
   TableCell,
@@ -11,7 +12,6 @@ import TablePaginationActions from '@mui/material/TablePaginationActions';
 import { keepPreviousData, useQuery } from '@tanstack/react-query';
 
 import { getUserListApi } from '#modules/account/api/getUserList.api';
-import { FlexRow } from '#shared/components/FlexBox/FlexBox';
 import { useTranslation } from '#shared/i18n/useTranslation';
 
 import { StudentListQueryParams } from '../hooks/useFilters';
@@ -57,7 +57,7 @@ export function StudentTable({ filters, updateFilters }: StudentTableProps) {
             ))}
         </TableBody>
       </Table>
-      <FlexRow>
+      <Stack direction="row">
         <TablePagination
           rowsPerPageOptions={[10, 25, 50, 75, 100]}
           labelRowsPerPage={'Résultats par page'}
@@ -83,7 +83,7 @@ export function StudentTable({ filters, updateFilters }: StudentTableProps) {
           showFirstButton
           showLastButton
         />
-      </FlexRow>
+      </Stack>
     </TableContainer>
   );
 }

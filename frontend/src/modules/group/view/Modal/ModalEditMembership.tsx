@@ -7,6 +7,7 @@ import {
   IconButton,
   Menu,
   MenuItem,
+  Stack,
   Typography,
   useTheme,
 } from '@mui/material';
@@ -21,7 +22,6 @@ import {
   Membership,
   MembershipForm,
 } from '#modules/group/types/membership.types';
-import { FlexRow } from '#shared/components/FlexBox/FlexBox';
 import { LoadingButton } from '#shared/components/LoadingButton/LoadingButton';
 import {
   ResponsiveDialog,
@@ -122,7 +122,7 @@ export function ModalEditMembership({
               showDates={!group.groupType.noMembershipDates}
             />
           </form>
-          <FlexRow justifyContent={'left'}>
+          <Stack direction="row" sx={{ justifyContent: 'left' }}>
             <IconButton onClick={handleClick}>
               <MoreHoriz />
             </IconButton>
@@ -139,7 +139,7 @@ export function ModalEditMembership({
                 <Typography color="primary">Supprimer</Typography>
               </MenuItem>
             </Menu>
-          </FlexRow>
+          </Stack>
         </ResponsiveDialogContent>
         <ResponsiveDialogFooter>
           <Button variant="text" onClick={() => onClose()}>

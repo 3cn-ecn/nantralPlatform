@@ -1,11 +1,10 @@
 import { useNavigate } from 'react-router-dom';
 
-import { Card, CardActionArea, Paper, Typography } from '@mui/material';
+import { Card, CardActionArea, Paper, Stack, Typography } from '@mui/material';
 
 import { Group } from '#modules/group/types/group.types';
 import { GroupGrid } from '#modules/group/view/GroupGrid/GroupGrid';
 import { Avatar } from '#shared/components/Avatar/Avatar';
-import { FlexRow } from '#shared/components/FlexBox/FlexBox';
 import { InfiniteList } from '#shared/components/InfiniteList/InfiniteList';
 import { RichTextRenderer } from '#shared/components/RichTextRenderer/RichTextRenderer';
 import { Spacer } from '#shared/components/Spacer/Spacer';
@@ -35,10 +34,14 @@ export function GroupHome({ group }: Readonly<GroupHomeProps>) {
           onClick={() => navigate(group.parent?.url || '')}
         >
           <CardActionArea sx={{ p: 2 }}>
-            <FlexRow alignItems={'center'} justifyContent={'center'} gap={2}>
+            <Stack
+              direction="row"
+              sx={{ alignItems: 'center', justifyContent: 'center' }}
+              spacing={2}
+            >
               <Typography>{t('group.details.subGroupOf')}</Typography>
               <Avatar alt={group.parent.shortName} src={group.parent?.icon} />
-            </FlexRow>
+            </Stack>
           </CardActionArea>
         </Card>
       )}

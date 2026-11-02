@@ -7,12 +7,12 @@ import {
   Divider,
   MenuItem,
   Skeleton,
+  Stack,
   Typography,
 } from '@mui/material';
 
 import { useCurrentUserData } from '#modules/account/hooks/useCurrentUser.data';
 import { GroupGrid } from '#modules/group/view/GroupGrid/GroupGrid';
-import { FlexCol, FlexRow } from '#shared/components/FlexBox/FlexBox';
 import { IconMenu } from '#shared/components/IconMenu/IconMenu';
 import { InfiniteList } from '#shared/components/InfiniteList/InfiniteList';
 import { Spacer } from '#shared/components/Spacer/Spacer';
@@ -32,7 +32,7 @@ export default function GroupListPage() {
 
   return (
     <Container sx={{ my: 3 }}>
-      <FlexRow alignItems="center" gap={1}>
+      <Stack direction="row" sx={{ alignItems: 'center' }} spacing={1}>
         <Typography variant="h1">
           {groupTypeQuery.isPending || groupListQuery.isPending ? (
             <Skeleton width={250} variant="text" />
@@ -74,14 +74,14 @@ export default function GroupListPage() {
             </Button>
           </>
         )}
-      </FlexRow>
+      </Stack>
       <Divider sx={{ my: 3 }} />
       <InfiniteList query={groupListQuery}>
-        <FlexCol gap={4}>
+        <Stack spacing={4}>
           {groupListQuery.isSuccess &&
             groupsByCategory &&
             Object.keys(groupsByCategory).map((cat) => (
-              <FlexCol key={cat}>
+              <Stack key={cat}>
                 <Typography variant="h2" sx={{ mb: 4 }}>
                   {cat}
                 </Typography>
@@ -94,9 +94,9 @@ export default function GroupListPage() {
                     isPending
                   />
                 )}
-              </FlexCol>
+              </Stack>
             ))}
-        </FlexCol>
+        </Stack>
       </InfiniteList>
       {groupListQuery.data?.pages[0].count === 0 && (
         <Typography>{t('group.list.noGroup')}</Typography>

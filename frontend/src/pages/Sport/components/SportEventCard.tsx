@@ -17,6 +17,7 @@ import {
   Chip,
   Divider,
   IconButton,
+  Stack,
   Tooltip,
   Typography,
   useTheme,
@@ -31,7 +32,6 @@ import { EditSportEventModal } from '#modules/event/view/Modals/EditSportEventMo
 import { SportEventPeopleModal } from '#modules/event/view/SportEventPeopleModal';
 import { useSportEventParticipationMutation } from '#pages/Sport/hooks/useSportEventParticipationMutation';
 import { Avatar as GroupAvatar } from '#shared/components/Avatar/Avatar';
-import { FlexCol, FlexRow } from '#shared/components/FlexBox/FlexBox';
 import { LoadingButton } from '#shared/components/LoadingButton/LoadingButton';
 import { RichTextRenderer } from '#shared/components/RichTextRenderer/RichTextRenderer';
 import { useTranslation } from '#shared/i18n/useTranslation';
@@ -90,26 +90,29 @@ export function SportEventCard({ sportEvent }: Readonly<SportEventCardProps>) {
             overflowX: 'hidden',
           }}
         >
-          <FlexRow
-            alignItems="flex-start"
-            justifyContent="space-between"
-            gap={1}
+          <Stack
+            direction="row"
+            sx={{ alignItems: 'flex-start', justifyContent: 'space-between' }}
+            spacing={1}
           >
-            <FlexRow
+            <Stack
+              direction="row"
               component={Link}
               to={sportEvent.group.url}
-              alignItems="center"
-              gap={1}
-              // minWidth: 0 lets the name shrink (with an ellipsis) instead of
-              // pushing the edit button out of the card
-              sx={{ color: 'inherit', textDecoration: 'none', minWidth: 0 }}
+              spacing={1}
+              sx={{
+                color: 'inherit',
+                textDecoration: 'none',
+                minWidth: 0,
+                alignItems: 'center',
+              }}
             >
               <GroupAvatar
                 alt={sportEvent.group.name}
                 src={sportEvent.group.icon}
                 size="m"
               />
-              <FlexCol alignItems="flex-start" sx={{ minWidth: 0 }}>
+              <Stack sx={{ alignItems: 'flex-start', minWidth: 0 }}>
                 <Typography
                   variant="subtitle1"
                   noWrap
@@ -132,8 +135,8 @@ export function SportEventCard({ sportEvent }: Readonly<SportEventCardProps>) {
                   }
                   size="small"
                 />
-              </FlexCol>
-            </FlexRow>
+              </Stack>
+            </Stack>
 
             {isAdmin && (
               <Tooltip title={t('button.edit')}>
@@ -155,19 +158,31 @@ export function SportEventCard({ sportEvent }: Readonly<SportEventCardProps>) {
                 </IconButton>
               </Tooltip>
             )}
-          </FlexRow>
-          <FlexRow gap={0.5} alignItems="center" marginTop={1}>
+          </Stack>
+          <Stack
+            direction="row"
+            spacing={0.5}
+            sx={{ alignItems: 'center', marginTop: 1 }}
+          >
             <CalendarMonth sx={{ fontSize: 16 }} />
             <Typography>{eventDate}</Typography>
-          </FlexRow>
-          <FlexRow gap={0.5} alignItems="center">
+          </Stack>
+          <Stack
+            direction="row"
+            spacing={0.5}
+            sx={{ alignItems: 'center', marginTop: 1 }}
+          >
             <QueryBuilder sx={{ fontSize: 16 }} />
             <Typography>{formatTime(sportEvent.date)}</Typography>
-          </FlexRow>
-          <FlexRow gap={0.5} alignItems="center">
+          </Stack>
+          <Stack
+            direction="row"
+            spacing={0.5}
+            sx={{ alignItems: 'center', marginTop: 1 }}
+          >
             <LocationOn sx={{ fontSize: 16 }} />
             <Typography>{sportEvent.location}</Typography>
-          </FlexRow>
+          </Stack>
           <RichTextRenderer
             content={sportEvent.description || t('sport.noDescription')}
             sx={{
@@ -205,7 +220,11 @@ export function SportEventCard({ sportEvent }: Readonly<SportEventCardProps>) {
                 flexWrap: 'nowrap',
               }}
             >
-              <FlexRow gap={1} alignItems="center" flexWrap="wrap" width="100%">
+              <Stack
+                direction="row"
+                spacing={1}
+                sx={{ alignItems: 'center', flexWrap: 'wrap', width: '100%' }}
+              >
                 <Button
                   size="small"
                   variant="text"
@@ -217,14 +236,17 @@ export function SportEventCard({ sportEvent }: Readonly<SportEventCardProps>) {
                     count: sportEvent.participantsCount,
                   })}
                 </Button>
-              </FlexRow>
+              </Stack>
 
               {isMember && (
-                <FlexRow
-                  gap={0.75}
-                  alignItems="center"
-                  justifyContent="space-between"
-                  width="100%"
+                <Stack
+                  direction="row"
+                  spacing={0.75}
+                  sx={{
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    width: '100%',
+                  }}
                 >
                   <Typography variant="body2" noWrap>
                     {t('sport.actions.question')}
@@ -261,7 +283,7 @@ export function SportEventCard({ sportEvent }: Readonly<SportEventCardProps>) {
                   >
                     {t('sport.actions.no')}
                   </LoadingButton>
-                </FlexRow>
+                </Stack>
               )}
             </CardActions>
           </>

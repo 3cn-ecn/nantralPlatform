@@ -1,10 +1,9 @@
-import { Button, Grid, Typography } from '@mui/material';
+import { Button, Grid, Stack, Typography } from '@mui/material';
 
 import { EventListQueryParams } from '#modules/event/api/getEventList.api';
 import { EventCard } from '#modules/event/view/EventCard/EventCard';
 import { EventCardSkeleton } from '#modules/event/view/EventCard/EventCardSkeleton';
 import { ErrorPageContent } from '#shared/components/ErrorPageContent/ErrorPageContent';
-import { FlexRow } from '#shared/components/FlexBox/FlexBox';
 import { InfiniteList } from '#shared/components/InfiniteList/InfiniteList';
 import { useBreakpoint } from '#shared/hooks/useBreakpoint';
 import { useTranslation } from '#shared/i18n/useTranslation';
@@ -80,7 +79,7 @@ export function EventInfiniteGrid({
             )}
         </Grid>
       </InfiniteList>
-      <FlexRow justifyContent="center" mt={3}>
+      <Stack direction="row" sx={{ justifyContent: 'center', mt: 3 }}>
         {eventsQuery.hasNextPage && !eventsQuery.isFetchingNextPage && (
           <Button
             onClick={() => eventsQuery.fetchNextPage()}
@@ -96,7 +95,7 @@ export function EventInfiniteGrid({
             {t('event.list.allIsLoaded')}
           </Typography>
         )}
-      </FlexRow>
+      </Stack>
     </>
   );
 }

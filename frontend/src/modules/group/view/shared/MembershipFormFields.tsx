@@ -1,11 +1,11 @@
 import { Dispatch, useCallback } from 'react';
 
 import { Verified } from '@mui/icons-material';
+import { Stack } from '@mui/material';
 
 import { getUserListApi } from '#modules/account/api/getUserList.api';
 import { MembershipFormDTO } from '#modules/group/infra/membership.dto';
 import { MembershipForm } from '#modules/group/types/membership.types';
-import { FlexAuto, FlexRow } from '#shared/components/FlexBox/FlexBox';
 import {
   AutocompleteSearchField,
   CheckboxField,
@@ -81,7 +81,7 @@ export function MembershipFormFields({
         multiline
       />
       {showDates && (
-        <FlexAuto gap={2}>
+        <Stack direction={{ xs: 'column', md: 'row' }} spacing={2}>
           <DateField
             label={t('group.form.beginDate.label')}
             value={formValues.beginDate}
@@ -103,11 +103,11 @@ export function MembershipFormFields({
             fullWidth
             required
           />
-        </FlexAuto>
+        </Stack>
       )}
 
       {isAdmin && (
-        <FlexRow alignItems="center">
+        <Stack direction="row" sx={{ alignItems: 'center' }}>
           <CheckboxField
             label={t('group.form.admin.label')}
             value={formValues.admin}
@@ -117,7 +117,7 @@ export function MembershipFormFields({
             sx={{ mr: 1 }}
           />
           <Verified color="secondary" />
-        </FlexRow>
+        </Stack>
       )}
     </>
   );

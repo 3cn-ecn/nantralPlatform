@@ -13,13 +13,13 @@ import {
   Icon,
   IconButton,
   Popover,
+  Stack,
   Tooltip,
   Typography,
 } from '@mui/material';
 
 import { useMarkAllAsSeenMutation } from '#modules/notification/hooks/useMarkAllAsSeen.mutation';
 import { useNotificationCountQuery } from '#modules/notification/hooks/useNotificationCount.query';
-import { FlexCol, FlexRow } from '#shared/components/FlexBox/FlexBox';
 import { useTranslation } from '#shared/i18n/useTranslation';
 
 import { NotificationAskConsentBanner } from './NotificationAskConsentBanner';
@@ -81,8 +81,8 @@ export function NotificationMenu() {
           },
         }}
       >
-        <FlexCol height="100%">
-          <FlexRow alignItems="center" px={2} pt={1}>
+        <Stack sx={{ height: '100%' }}>
+          <Stack direction="row" sx={{ alignItems: 'center', px: 2, pt: 1 }}>
             <Typography variant="h6" sx={{ flex: 1 }}>
               {t('notification.title')}
             </Typography>
@@ -115,9 +115,9 @@ export function NotificationMenu() {
                 <SettingsOutlinedIcon />
               </IconButton>
             </Tooltip>
-          </FlexRow>
+          </Stack>
           <NotificationAskConsentBanner />
-          <FlexRow gap={1} px={2} py={1}>
+          <Stack spacing={1} sx={{ px: 2, py: 1 }}>
             <Chip
               variant={subscribedFilter ? 'filled' : 'outlined'}
               label={t('notification.subscribed')}
@@ -130,14 +130,14 @@ export function NotificationMenu() {
               color="primary"
               onClick={() => setUnseenFilter(!unseenFilter)}
             />
-          </FlexRow>
+          </Stack>
           <NotificationMenuContent
             isOpen={isMenuOpen}
             onClose={handleClose}
             subscribedFilter={subscribedFilter}
             unseenFilter={unseenFilter}
           />
-        </FlexCol>
+        </Stack>
       </Popover>
     </>
   );

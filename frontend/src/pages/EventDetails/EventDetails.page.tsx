@@ -5,13 +5,13 @@ import {
   Container,
   Divider,
   IconButton,
+  Stack,
   Tooltip,
   Typography,
 } from '@mui/material';
 
 import { useCurrentUserData } from '#modules/account/hooks/useCurrentUser.data';
 import { useSuspenseEventDetailsQuery } from '#modules/event/hooks/useEventDetails.query';
-import { FlexRow } from '#shared/components/FlexBox/FlexBox';
 import { RichTextRenderer } from '#shared/components/RichTextRenderer/RichTextRenderer';
 import { Spacer } from '#shared/components/Spacer/Spacer';
 import { TopImage } from '#shared/components/TopImage/TopImage';
@@ -44,7 +44,7 @@ export default function EventDetailsPage() {
         maxWidth="md"
         sx={{ display: 'flex', flexDirection: 'column', gap: 3, pt: 3 }}
       >
-        <FlexRow alignItems="center" gap={1}>
+        <Stack direction="row" sx={{ alignItems: 'center' }} spacing={1}>
           <Typography variant="h1">{event.title}</Typography>
           {staff && (
             <Tooltip title={t('site.adminSettings')}>
@@ -57,7 +57,7 @@ export default function EventDetailsPage() {
               </IconButton>
             </Tooltip>
           )}
-        </FlexRow>
+        </Stack>
         <ActionButtonsBar event={event} />
         <EventInfo
           startDate={event.startDate}

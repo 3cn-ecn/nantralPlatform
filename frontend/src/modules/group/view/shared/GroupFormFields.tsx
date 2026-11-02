@@ -14,6 +14,7 @@ import {
   InputAdornment,
   MenuItem,
   Paper,
+  Stack,
   Typography,
 } from '@mui/material';
 import { useQuery } from '@tanstack/react-query';
@@ -29,7 +30,6 @@ import { GroupTypePreview } from '#modules/group/types/groupType.types';
 import { ShortMembershipForm } from '#modules/group/types/membership.types';
 import { getGeocodeListApi } from '#modules/map/api/getGeocodeList.api';
 import { Geocode } from '#modules/map/geocode.type';
-import { FlexAuto, FlexCol } from '#shared/components/FlexBox/FlexBox';
 import { FormErrorAlert } from '#shared/components/FormErrorAlert/FormErrorAlert';
 import {
   AutocompleteSearchField,
@@ -139,7 +139,7 @@ export function GroupFormFields({
 
       <Typography variant="h3">{t('group.form.title.general')}</Typography>
 
-      <FlexAuto columnGap={2}>
+      <Stack direction={{ xs: 'column', md: 'row' }} spacing={{ xs: 0, md: 2 }}>
         <TextField
           name={'name'}
           key={'title'}
@@ -160,11 +160,14 @@ export function GroupFormFields({
           helperText={t('group.form.shortName.helperText')}
           errors={error?.fields?.short_name}
         />
-      </FlexAuto>
+      </Stack>
 
       {!edit && (
         <>
-          <FlexAuto columnGap={2}>
+          <Stack
+            direction={{ xs: 'column', md: 'row' }}
+            spacing={{ xs: 0, md: 2 }}
+          >
             <DateField
               label={t('group.form.creationDate.label')}
               defaultValue={new Date()}
@@ -193,7 +196,7 @@ export function GroupFormFields({
                 </MenuItem>
               ))}
             </SelectField>
-          </FlexAuto>
+          </Stack>
           <Box sx={{ my: 1 }}>
             <Accordion defaultExpanded>
               <AccordionSummary expandIcon={<ExpandMoreIcon />}>
@@ -207,7 +210,10 @@ export function GroupFormFields({
                   helperText={t('group.form.initialMember.enableHint')}
                 />
                 {!groupType.noMembershipDates && (
-                  <FlexAuto gap={2}>
+                  <Stack
+                    direction={{ xs: 'column', md: 'row' }}
+                    spacing={{ xs: 0, md: 2 }}
+                  >
                     <DateField
                       label={t('group.form.beginDate.label')}
                       value={formValues.membership?.beginDate ?? null}
@@ -231,7 +237,7 @@ export function GroupFormFields({
                       required
                       disabled={!formValues.membership}
                     />
-                  </FlexAuto>
+                  </Stack>
                 )}
                 <TextField
                   label={t('group.details.form.summary.label')}
@@ -281,7 +287,7 @@ export function GroupFormFields({
         />
       </Paper>
 
-      <FlexAuto columnGap={2}>
+      <Stack direction={{ xs: 'column', md: 'row' }} spacing={{ xs: 0, md: 2 }}>
         <FileField
           name="icon"
           label={t('group.form.icon.label')}
@@ -302,7 +308,7 @@ export function GroupFormFields({
           errors={error?.fields?.banner}
           accept="image/*"
         />
-      </FlexAuto>
+      </Stack>
 
       <Typography variant="h3" sx={{ mt: 2 }}>
         {t('group.form.title.presentation')}
@@ -341,7 +347,10 @@ export function GroupFormFields({
         }
       />
       {groupType.isMap ? (
-        <FlexAuto columnGap={2}>
+        <Stack
+          direction={{ xs: 'column', md: 'row' }}
+          spacing={{ xs: 0, md: 2 }}
+        >
           <TextField
             label={t('group.form.latitude.label')}
             helperText={t('group.form.latitude.helperText')}
@@ -356,9 +365,12 @@ export function GroupFormFields({
             handleChange={longitudeCallback}
             errors={error?.fields?.longitude}
           />
-        </FlexAuto>
+        </Stack>
       ) : (
-        <FlexAuto columnGap={2}>
+        <Stack
+          direction={{ xs: 'column', md: 'row' }}
+          spacing={{ xs: 0, md: 2 }}
+        >
           <TextField
             slotProps={{
               input: {
@@ -389,10 +401,10 @@ export function GroupFormFields({
             handleChange={meetingHourCallback}
             errors={error?.fields?.meeting_hour}
           />
-        </FlexAuto>
+        </Stack>
       )}
 
-      <FlexAuto columnGap={2}>
+      <Stack direction={{ xs: 'column', md: 'row' }} spacing={{ xs: 0, md: 2 }}>
         <TextField
           label={t('group.form.video1.label')}
           type="url"
@@ -429,7 +441,7 @@ export function GroupFormFields({
           }}
           errors={error?.fields?.video2}
         />
-      </FlexAuto>
+      </Stack>
 
       <RichTextField
         label={t('group.form.description.label')}
@@ -446,7 +458,7 @@ export function GroupFormFields({
             {t('group.form.title.advancedOptions')}
           </AccordionSummary>
           <AccordionDetails>
-            <FlexCol gap={2}>
+            <Stack spacing={2}>
               {groupType.canHaveParent && (
                 <AutocompleteSearchField
                   name="parent"
@@ -505,7 +517,7 @@ export function GroupFormFields({
                   updateFormValues({ archived: val })
                 }
               />
-            </FlexCol>
+            </Stack>
           </AccordionDetails>
         </Accordion>
       </Box>

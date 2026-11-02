@@ -1,10 +1,9 @@
 import { Dispatch, SetStateAction, useCallback } from 'react';
 
 import { HelpOutlined } from '@mui/icons-material';
-import { MenuItem, Tooltip } from '@mui/material';
+import { MenuItem, Stack, Tooltip } from '@mui/material';
 
 import { SignatureInfo } from '#modules/signature/signature.type';
-import { FlexRow } from '#shared/components/FlexBox/FlexBox';
 import { SelectField } from '#shared/components/FormFields';
 import { useTranslation } from '#shared/i18n/useTranslation';
 
@@ -24,7 +23,7 @@ export function SelectTemplate({
   const { t } = useTranslation();
 
   return (
-    <FlexRow gap={2} alignItems="center">
+    <Stack direction="row" spacing={2} sx={{ alignItems: 'center' }}>
       <SelectField
         label={t('signature.template.label')}
         value={template}
@@ -48,6 +47,6 @@ export function SelectTemplate({
       <Tooltip title={t('signature.template.help')}>
         <HelpOutlined />
       </Tooltip>
-    </FlexRow>
+    </Stack>
   );
 }

@@ -4,9 +4,8 @@ import {
   CalendarMonth as CalendarIcon,
   GridView as GridIcon,
 } from '@mui/icons-material';
-import { ToggleButton, ToggleButtonGroup } from '@mui/material';
+import { Stack, ToggleButton, ToggleButtonGroup } from '@mui/material';
 
-import { FlexCol } from '#shared/components/FlexBox/FlexBox';
 import { useBreakpoint } from '#shared/hooks/useBreakpoint';
 import { useTranslation } from '#shared/i18n/useTranslation';
 
@@ -17,7 +16,7 @@ export function ToggleEventViewButton() {
   const bk = useBreakpoint(500);
 
   return (
-    <FlexCol justifyContent="center">
+    <Stack sx={{ justifyContent: 'center' }}>
       <ToggleButtonGroup
         size={bk.isSmaller ? 'medium' : 'small'}
         exclusive
@@ -34,6 +33,6 @@ export function ToggleEventViewButton() {
           {bk.isLarger && t('event.calendar.label')}
         </ToggleButton>
       </ToggleButtonGroup>
-    </FlexCol>
+    </Stack>
   );
 }

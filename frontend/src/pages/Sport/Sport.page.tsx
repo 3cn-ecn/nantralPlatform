@@ -9,11 +9,11 @@ import {
   Typography,
   ToggleButton,
   ToggleButtonGroup,
+  Stack,
 } from '@mui/material';
 
 import { SportEvent } from '#modules/event/sportevent.type';
 import { useCanManageSportEventsQuery } from '#modules/group/hooks/useCanManageSportEvents.query';
-import { FlexRow, FlexCol } from '#shared/components/FlexBox/FlexBox';
 import { InfiniteList } from '#shared/components/InfiniteList/InfiniteList';
 import { Spacer } from '#shared/components/Spacer/Spacer';
 import { useBreakpoint } from '#shared/hooks/useBreakpoint';
@@ -42,11 +42,11 @@ export default function SportPage() {
 
   return (
     <Container sx={{ my: 4 }}>
-      <FlexRow gap={1}>
+      <Stack direction="row" spacing={1} sx={{ minWidth: 0 }}>
         <Typography variant="h1" sx={{ flex: 1 }} noWrap>
           {t('sport.pageTitle')}
         </Typography>
-        <FlexCol justifyContent="center">
+        <Stack sx={{ justifyContent: 'center' }}>
           <ToggleButtonGroup
             size={bk.isSmaller ? 'medium' : 'small'}
             exclusive
@@ -64,8 +64,8 @@ export default function SportPage() {
               {bk.isLarger && t('sport.filters.myClubsOnly')}
             </ToggleButton>
           </ToggleButtonGroup>
-        </FlexCol>
-      </FlexRow>
+        </Stack>
+      </Stack>
       <Typography variant="body2" color="textSecondary">
         {t('sport.membership_reminder')}
       </Typography>
@@ -91,7 +91,7 @@ export default function SportPage() {
               <div key={dayKey}>
                 <Typography variant="h4">{dayDisplay(dayKey)}</Typography>
                 <Spacer vertical={1} />
-                <FlexRow gap={2} flexWrap="wrap">
+                <Stack direction="row" spacing={2} sx={{ flexWrap: 'wrap' }}>
                   {sportEvents.map((sportEvent: SportEvent) => (
                     <SportEventCard
                       key={sportEvent.id}
@@ -99,7 +99,7 @@ export default function SportPage() {
                     />
                   ))}
                   {canManageSportEvents && <SportEventCardCreate />}
-                </FlexRow>
+                </Stack>
                 <Spacer vertical={2} />
               </div>
             ))}

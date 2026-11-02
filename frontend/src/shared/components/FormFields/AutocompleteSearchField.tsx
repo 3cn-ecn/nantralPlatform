@@ -14,6 +14,7 @@ import {
   AutocompleteValue as MuiAutocompleteValue,
   ChipTypeMap,
   CircularProgress,
+  Stack,
   TextField,
 } from '@mui/material';
 import { debounce, isNil, uniqBy } from 'lodash-es';
@@ -21,7 +22,6 @@ import { debounce, isNil, uniqBy } from 'lodash-es';
 import { useTranslation } from '#shared/i18n/useTranslation';
 
 import { Avatar } from '../Avatar/Avatar';
-import { FlexRow } from '../FlexBox/FlexBox';
 
 // just a function to make typescript work
 function isMultiple<T, Multiple extends boolean>(
@@ -317,7 +317,7 @@ function AutocompleteSearchFieldComponent<
       getOptionLabel={(option) => option[labelPropName]?.toString() || ''}
       renderOption={(props, option) => {
         return (
-          <FlexRow component="li" gap={1} {...props}>
+          <Stack direction="row" component="li" spacing={1} {...props}>
             {!!imagePropName && (
               <Avatar
                 alt={option[labelPropName] as string}
@@ -326,7 +326,7 @@ function AutocompleteSearchFieldComponent<
               />
             )}
             {option[labelPropName]?.toString()}
-          </FlexRow>
+          </Stack>
         );
       }}
       openText={t('form.autocomplete.open')}

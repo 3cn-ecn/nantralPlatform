@@ -8,14 +8,13 @@ import {
   Group as GroupIcon,
   PushPin as PushPinIcon,
 } from '@mui/icons-material';
-import { Box, IconButton, Tooltip, Typography } from '@mui/material';
+import { Box, IconButton, Stack, Tooltip, Typography } from '@mui/material';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import { useCurrentUserData } from '#modules/account/hooks/useCurrentUser.data';
 import { deletePostApi } from '#modules/post/api/deletePost.api';
 import { Post } from '#modules/post/post.types';
 import { Avatar } from '#shared/components/Avatar/Avatar';
-import { FlexRow } from '#shared/components/FlexBox/FlexBox';
 import { ConfirmationModal } from '#shared/components/Modal/ConfirmationModal';
 import {
   ResponsiveDialogContent,
@@ -73,10 +72,10 @@ export function ReadPostModalContent({
           </Typography>
         </Box>
         <Spacer flex={1} />
-        <FlexRow gap={2}>
+        <Stack direction="row" spacing={2}>
           {post.publicity === 'Mem' && <BadgeIcon Icon={GroupIcon} />}
           {post.pinned && <BadgeIcon Icon={PushPinIcon} />}
-        </FlexRow>
+        </Stack>
       </ResponsiveDialogHeader>
       <ResponsiveDialogContent sx={{ p: 0 }}>
         {post.image && (

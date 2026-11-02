@@ -1,10 +1,9 @@
 import { useParams } from 'react-router-dom';
 
-import { Container, Divider, Typography } from '@mui/material';
+import { Container, Divider, Stack, Typography } from '@mui/material';
 
 import { useCurrentUserData } from '#modules/account/hooks/useCurrentUser.data';
 import { Avatar } from '#shared/components/Avatar/Avatar';
-import { FlexRow } from '#shared/components/FlexBox/FlexBox';
 import { Spacer } from '#shared/components/Spacer/Spacer';
 
 import { StudentGroupsSection } from './components/Section/StudentGroupSection';
@@ -26,10 +25,10 @@ export default function StudentDetailsPage() {
 
   return (
     <Container sx={{ my: 3 }}>
-      <FlexRow flexWrap={'wrap'} gap={3}>
+      <Stack direction="row" sx={{ flexWrap: 'wrap' }} spacing={3}>
         <Avatar alt={user.name} src={user.picture} size="xxl"></Avatar>
         <StudentDetailsInfo user={user} />
-      </FlexRow>
+      </Stack>
       <Typography sx={{ lineBreak: 'anywhere', my: 2 }}>
         {user.description}
       </Typography>
