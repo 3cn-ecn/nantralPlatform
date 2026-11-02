@@ -43,7 +43,7 @@ export default function SportPage() {
   return (
     <Container sx={{ my: 4 }}>
       <FlexRow gap={1}>
-        <Typography variant="h1" flex={1} noWrap>
+        <Typography variant="h1" sx={{ flex: 1 }} noWrap>
           {t('sport.pageTitle')}
         </Typography>
         <FlexCol justifyContent="center">
@@ -66,7 +66,7 @@ export default function SportPage() {
           </ToggleButtonGroup>
         </FlexCol>
       </FlexRow>
-      <Typography variant="body2" color="text.secondary">
+      <Typography variant="body2" color="textSecondary">
         {t('sport.membership_reminder')}
       </Typography>
       <Spacer vertical={2} />

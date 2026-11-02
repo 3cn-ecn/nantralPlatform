@@ -44,7 +44,7 @@ export function GroupHome({ group }: Readonly<GroupHomeProps>) {
       )}
       {childrenQuery.data?.pages && childrenQuery.data?.pages[0].count > 0 && (
         <Paper sx={{ p: 2 }}>
-          <Typography variant="h2" mb={2}>
+          <Typography variant="h2" sx={{ mb: 2 }}>
             {t('group.details.subgroups')}
           </Typography>
           <InfiniteList query={childrenQuery}>

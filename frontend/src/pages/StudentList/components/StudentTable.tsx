@@ -7,7 +7,7 @@ import {
   TablePagination,
   TableRow,
 } from '@mui/material';
-import TablePaginationActions from '@mui/material/TablePagination/TablePaginationActions';
+import TablePaginationActions from '@mui/material/TablePaginationActions';
 import { keepPreviousData, useQuery } from '@tanstack/react-query';
 
 import { getUserListApi } from '#modules/account/api/getUserList.api';

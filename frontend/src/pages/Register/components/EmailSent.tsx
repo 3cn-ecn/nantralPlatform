@@ -30,7 +30,11 @@ export default function EmailSent() {
           <FlexRow justifyContent={'center'}>
             <MarkEmailReadRounded sx={{ fontSize: 200 }} color="secondary" />
           </FlexRow>
-          <Typography variant="body1" color="secondary" textAlign="center">
+          <Typography
+            variant="body1"
+            color="secondary"
+            sx={{ textAlign: 'center' }}
+          >
             <Trans
               i18nKey="register.confirmationEmailSent"
               values={{ email: email.replace('-', '-\u2060') }}

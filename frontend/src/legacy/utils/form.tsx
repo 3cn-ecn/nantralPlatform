@@ -207,7 +207,7 @@ function FormGroup(props: {
                 onChange={(e) => handleChange(field.name, e.target.value)}
                 fullWidth={!noFullWidth}
                 required={field.required}
-                inputProps={{ maxLength: field.maxLength }}
+                slotProps={{ htmlInput: { maxLength: field.maxLength } }}
                 helperText={error || field.helpText}
                 error={!!error}
                 margin="normal"

@@ -33,7 +33,7 @@ export function GroupAdminRequests({ group }: { group: Group }) {
           ))}
       </FlexCol>
       {data?.pages[0].count == 0 && (
-        <Typography color="secondary" mt={3} textAlign="center">
+        <Typography color="secondary" sx={{ mt: 3, textAlign: 'center' }}>
           {t('group.details.noAdminReqests')}
         </Typography>
       )}

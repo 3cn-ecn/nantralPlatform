@@ -20,12 +20,12 @@ export function MembersGrid({
   const { t } = useTranslation();
 
   return (
-    <Grid spacing={1} container my={2}>
+    <Grid spacing={1} container sx={{ my: 2 }}>
       {memberships.map((member) => (
         <MembershipCard group={group} key={member.id} item={member} />
       ))}
       {memberships.length === 0 && group && (
-        <Typography px={2}>
+        <Typography sx={{ px: 2 }}>
           {t('group.details.modal.editGroup.noMembers')}
         </Typography>
       )}

@@ -50,11 +50,11 @@ export default function RegisterPage() {
           />
           <Typography
             sx={{
+              m: 2,
               textAlign: 'center',
               width: '100%',
               color: theme.palette.mode == 'dark' ? '#b6b7b7' : '#282828',
             }}
-            m={2}
             variant="h2"
           >
             {t('register.createAccount')}

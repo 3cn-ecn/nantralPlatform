@@ -1,6 +1,6 @@
 import { Dispatch, SetStateAction, useCallback } from 'react';
 
-import { HelpOutline } from '@mui/icons-material';
+import { HelpOutlined } from '@mui/icons-material';
 import { MenuItem, Tooltip } from '@mui/material';
 
 import { SignatureInfo } from '#modules/signature/signature.type';
@@ -46,7 +46,7 @@ export function SelectTemplate({
         ))}
       </SelectField>
       <Tooltip title={t('signature.template.help')}>
-        <HelpOutline />
+        <HelpOutlined />
       </Tooltip>
     </FlexRow>
   );

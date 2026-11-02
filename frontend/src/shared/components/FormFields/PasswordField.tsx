@@ -28,24 +28,28 @@ function PasswordFieldComponent({
   return (
     <TextField
       type={showPassword ? 'text' : 'password'}
-      InputProps={{
-        endAdornment: (
-          <>
-            {!visibilityIconHidden && (
-              <InputAdornment position="end" sx={{ margin: 1 }}>
-                <IconButton
-                  aria-label="toggle password visibility"
-                  onClick={handleClickShowPassword}
-                  onMouseDown={handleMouseDownPassword}
-                  edge="end"
-                >
-                  {showPassword ? <VisibilityOff /> : <Visibility />}
-                </IconButton>
-              </InputAdornment>
-            )}
-            {showValidateIcon && <Check color="success" sx={{ margin: 0.5 }} />}
-          </>
-        ),
+      slotProps={{
+        input: {
+          endAdornment: (
+            <>
+              {!visibilityIconHidden && (
+                <InputAdornment position="end" sx={{ margin: 1 }}>
+                  <IconButton
+                    aria-label="toggle password visibility"
+                    onClick={handleClickShowPassword}
+                    onMouseDown={handleMouseDownPassword}
+                    edge="end"
+                  >
+                    {showPassword ? <VisibilityOff /> : <Visibility />}
+                  </IconButton>
+                </InputAdornment>
+              )}
+              {showValidateIcon && (
+                <Check color="success" sx={{ margin: 0.5 }} />
+              )}
+            </>
+          ),
+        },
       }}
       {...props}
     />

@@ -13,7 +13,7 @@ export function BackgroundImageOverlay({ src }: BackgroundImageOverlayProps) {
   if (!src) return null;
 
   return (
-    <Box position="relative">
+    <Box sx={{ position: 'relative' }}>
       <BackgroundImage
         src={src}
         shift="bottom"

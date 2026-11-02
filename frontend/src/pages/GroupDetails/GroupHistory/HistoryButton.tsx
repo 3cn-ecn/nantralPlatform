@@ -67,8 +67,10 @@ export function HistoryButton(props: HistoryButtonProps) {
         anchorEl={anchorEl}
         open={open}
         onClose={handleClose}
-        MenuListProps={{
-          'aria-labelledby': 'type-button',
+        slotProps={{
+          list: {
+            'aria-labelledby': 'type-button',
+          },
         }}
       >
         <MenuItem

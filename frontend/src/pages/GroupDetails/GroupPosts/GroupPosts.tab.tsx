@@ -22,7 +22,7 @@ export function GroupPosts({ group }: { group: Group }) {
         {group.isAdmin && <CreateButton onClick={() => setOpenModal(true)} />}
       </FlexRow>
       <InfiniteList query={postsQuery}>
-        <Grid spacing={1} container mt={2}>
+        <Grid spacing={1} container sx={{ mt: 2 }}>
           {postsQuery.data?.pages
             ?.flatMap((page) => page.results)
             .map((post) => (
@@ -33,7 +33,7 @@ export function GroupPosts({ group }: { group: Group }) {
         </Grid>
       </InfiniteList>
       {postsQuery.data && postsQuery.data?.pages[0].count === 0 && (
-        <Typography color="secondary" mt={3} textAlign="center">
+        <Typography color="secondary" sx={{ mt: 3, textAlign: 'center' }}>
           {t('post.noPosts')}
         </Typography>
       )}

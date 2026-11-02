@@ -44,8 +44,12 @@ export function CreateNewButton() {
             onClick={action.onClick}
             key={action.name}
             icon={action.icon}
-            tooltipTitle={action.name}
-            tooltipOpen
+            slotProps={{
+              tooltip: {
+                title: action.name,
+                open: true,
+              },
+            }}
           />
         ))}
       </SpeedDial>

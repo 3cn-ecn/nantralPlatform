@@ -10,7 +10,7 @@ export function NotificationItemSkeleton() {
         <Skeleton variant="text" width="60%" sx={{ fontSize: 12 }} />
         <Skeleton variant="text" width="100%" sx={{ fontSize: 14 }} />
       </FlexCol>
-      <Box marginRight={-1.5}>
+      <Box sx={{ marginRight: -1.5 }}>
         <Skeleton
           variant="circular"
           width={12}

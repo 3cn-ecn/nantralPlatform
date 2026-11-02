@@ -108,7 +108,7 @@ export function EditMembersView({ group }: EditMembersViewProps) {
   return (
     <>
       <FlexAuto justifyContent={'space-between'} alignItems={'center'} mb={1}>
-        <Typography variant="h3" mb={1}>
+        <Typography variant="h3" sx={{ mb: 1 }}>
           {t('group.details.modal.editGroup.members')} ({memberships.count})
         </Typography>
         <AddMemberButton group={group} />

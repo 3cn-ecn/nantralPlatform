@@ -31,9 +31,9 @@ function GroupItem({ group, size }: GroupItemProps) {
           alt={group.name}
         />
       </Link>
-      <Typography textAlign={'center'}>{group.shortName}</Typography>
+      <Typography sx={{ textAlign: 'center' }}>{group.shortName}</Typography>
       {group.subCategory && (
-        <Typography color="gray" variant="body1">
+        <Typography color="textSecondary" variant="body1">
           {group.subCategory}
         </Typography>
       )}

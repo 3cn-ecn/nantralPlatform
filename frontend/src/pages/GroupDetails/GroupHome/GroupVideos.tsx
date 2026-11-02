@@ -9,7 +9,7 @@ const ReactPlayerItem = (ReactPlayer as any).default ?? ReactPlayer;
 
 export function GroupVideos({ group }: Readonly<{ group?: Group }>) {
   return (
-    <Grid container spacing={1} mt={1}>
+    <Grid container spacing={1} sx={{ mt: 1 }}>
       {group?.video1 && (
         <Grid size={{ xs: 12, md: 6, lg: 6 }}>
           <ReactPlayerItem

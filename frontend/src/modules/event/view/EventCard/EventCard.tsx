@@ -52,10 +52,10 @@ export function EventCard({ event }: EventCardProps) {
           <FlexRow gap={1} alignItems="center">
             <Avatar alt={event.group.shortName} src={event.group.icon} />
             <FlexCol>
-              <Typography variant="h6" lineHeight={1} mb="4px" noWrap>
+              <Typography variant="h6" sx={{ lineHeight: 1, mb: '4px' }} noWrap>
                 {event.title}
               </Typography>
-              <Typography variant="caption" lineHeight={1} noWrap>
+              <Typography variant="caption" sx={{ lineHeight: 1 }} noWrap>
                 {event.group.name}
               </Typography>
             </FlexCol>

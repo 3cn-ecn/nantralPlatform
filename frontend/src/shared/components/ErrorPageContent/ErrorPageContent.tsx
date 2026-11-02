@@ -37,13 +37,15 @@ export function ErrorPageContent({
       <FlexCol alignItems="center" gap={4} my={8}>
         <Typography
           component="h1"
-          fontSize={smallBk.isSmaller ? 90 : 110}
-          fontWeight={700}
-          lineHeight={1.1}
+          sx={{
+            fontSize: smallBk.isSmaller ? 90 : 110,
+            fontWeight: 700,
+            lineHeight: 1.1,
+          }}
         >
           {status || t('error.oups')}
         </Typography>
-        <Typography textAlign="center">
+        <Typography sx={{ textAlign: 'center' }}>
           {errorMessage ? t('error.errorMessage', { errorMessage }) : message}
         </Typography>
         <Button onClick={retryFn} endIcon={<ReplayIcon />} variant="contained">

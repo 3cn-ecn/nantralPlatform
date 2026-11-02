@@ -204,14 +204,27 @@ export default function MapPage() {
           <Layer {...unclusteredPointLayer} />
         </Source>
       )}
-      <Box position={'absolute'} p={2} width={'100%'} maxWidth={'sm'}>
+      <Box
+        sx={{
+          position: 'absolute',
+          p: 2,
+          width: '100%',
+          maxWidth: 'sm',
+        }}
+      >
         <SearchBar
           showArchived={showArchived}
           setShowArchived={setShowArchived}
         />
       </Box>
       <ScaleControl />
-      <Box position={'absolute'} bottom={35} right={20}>
+      <Box
+        sx={{
+          position: 'absolute',
+          bottom: 35,
+          right: 20,
+        }}
+      >
         <CustomMapControls portalContainer={mapRef.current?.getContainer()} />
       </Box>
 

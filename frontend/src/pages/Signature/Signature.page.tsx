@@ -44,10 +44,10 @@ export default function SignaturePage() {
 
   return (
     <Container sx={{ my: 4 }}>
-      <Typography variant="h1" mb={1}>
+      <Typography variant="h1" sx={{ mb: 1 }}>
         {t('signature.title')}
       </Typography>
-      <Typography variant="body1" mb={2}>
+      <Typography variant="body1" sx={{ mb: 2 }}>
         {t('signature.description')}
       </Typography>
       <SelectTemplate
@@ -63,7 +63,7 @@ export default function SignaturePage() {
             onChange={(e) => setMarkdownCode(e.target.value)}
             label={t('signature.actions.edit.label')}
             fullWidth
-            inputProps={{ sx: { fontFamily: 'monospace' } }}
+            slotProps={{ htmlInput: { sx: { fontFamily: 'monospace' } } }}
             disabled={query.isFetching}
           />
           <FlexRow gap={1} justifyContent="end">
@@ -85,7 +85,7 @@ export default function SignaturePage() {
             </Button>
           </FlexRow>
         </FlexCol>
-        <Box width="100%" overflow="auto">
+        <Box sx={{ width: '100%', overflow: 'auto' }}>
           <Card
             sx={{
               p: 3,

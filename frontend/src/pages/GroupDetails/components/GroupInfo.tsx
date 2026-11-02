@@ -112,8 +112,10 @@ export function GroupInfo({
             <Link
               component={RouterLink}
               to={`/map?type=${group.groupType.slug}&id=${group.id}`}
-              mt={1}
-              ml="-3px"
+              sx={{
+                mt: 1,
+                ml: '-3px',
+              }}
             >
               <FlexRow flexWrap="nowrap" alignItems="center" gap="3.5px">
                 <PlaceIcon
@@ -124,7 +126,9 @@ export function GroupInfo({
                   color="secondary"
                   variant="subtitle2"
                   component="p"
-                  lineHeight={1.3}
+                  sx={{
+                    lineHeight: 1.3,
+                  }}
                 >
                   {group.address}
                 </Typography>
@@ -139,7 +143,9 @@ export function GroupInfo({
             )
           ))}
 
-        {group?.summary && <Typography mt={2}>{group?.summary}</Typography>}
+        {group?.summary && (
+          <Typography sx={{ mt: 2 }}>{group?.summary}</Typography>
+        )}
 
         {sortedSocialLinks.length > 0 && (
           <FlexRow flexWrap="wrap" mt={2} ml="-4px">

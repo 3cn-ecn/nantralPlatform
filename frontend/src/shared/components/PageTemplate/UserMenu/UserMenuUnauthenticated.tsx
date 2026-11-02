@@ -49,7 +49,7 @@ export function UserMenuUnauthenticated() {
         anchorEl={anchorEl}
         open={menuOpen === 'main'}
         onClose={() => setMenuOpen(null)}
-        TransitionComponent={Collapse}
+        slots={{ transition: Collapse }}
         anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
         transformOrigin={{ vertical: 'top', horizontal: 'right' }}
         slotProps={{ paper: { sx: { minWidth: 200 } } }}

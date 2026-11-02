@@ -26,7 +26,7 @@ export function TimeAndPlace({ time, place }: TimeAndPlaceProps) {
             color="secondary"
             variant="subtitle2"
             component="p"
-            lineHeight={1.3}
+            sx={{ lineHeight: 1.3 }}
           >
             {place}
           </Typography>
@@ -42,7 +42,7 @@ export function TimeAndPlace({ time, place }: TimeAndPlaceProps) {
             color="secondary"
             variant="subtitle2"
             component="p"
-            lineHeight={1.3}
+            sx={{ lineHeight: 1.3 }}
           >
             {time}
           </Typography>

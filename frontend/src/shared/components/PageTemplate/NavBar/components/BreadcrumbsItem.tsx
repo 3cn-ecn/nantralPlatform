@@ -53,8 +53,10 @@ export function BreadcrumbsItem({
         <Typography
           variant="h6"
           component="span"
-          fontWeight={fontWeight}
           noWrap
+          sx={{
+            fontWeight: fontWeight,
+          }}
         >
           {label}
         </Typography>

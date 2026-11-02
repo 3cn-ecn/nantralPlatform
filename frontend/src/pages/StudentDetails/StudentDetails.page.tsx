@@ -30,7 +30,7 @@ export default function StudentDetailsPage() {
         <Avatar alt={user.name} src={user.picture} size="xxl"></Avatar>
         <StudentDetailsInfo user={user} />
       </FlexRow>
-      <Typography sx={{ lineBreak: 'anywhere' }} my={2}>
+      <Typography sx={{ lineBreak: 'anywhere', my: 2 }}>
         {user.description}
       </Typography>
       <Divider sx={{ my: 2 }} />

@@ -104,7 +104,7 @@ export function FilterDrawer({
       anchor="right"
       open={open}
       onClose={onClose}
-      PaperProps={{ sx: { width: 400, maxWidth: '90%' } }}
+      slotProps={{ paper: { sx: { width: 400, maxWidth: '90%' } } }}
     >
       <Container sx={{ my: 2 }}>
         <FlexRow justifyContent="space-between" alignItems="center">

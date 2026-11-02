@@ -41,7 +41,9 @@ export function GroupTypeSection({
         </Button>
       </FlexRow>
 
-      {count === 0 && <Typography mb={3}>{t('group.list.noGroup')}</Typography>}
+      {count === 0 && (
+        <Typography sx={{ mb: 3 }}>{t('group.list.noGroup')}</Typography>
+      )}
       <GroupGrid
         estimatedSize={6}
         isPending={isPending}

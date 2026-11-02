@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-import { StarOutline } from '@mui/icons-material';
+import { StarOutlined } from '@mui/icons-material';
 import { ListItemIcon, ListItemText, MenuItem } from '@mui/material';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
@@ -73,7 +73,7 @@ export function SetMainMenuItem({
         }}
       >
         <ListItemIcon>
-          <StarOutline />
+          <StarOutlined />
         </ListItemIcon>
         <ListItemText>{t('email.setMain.label')}</ListItemText>
       </MenuItem>

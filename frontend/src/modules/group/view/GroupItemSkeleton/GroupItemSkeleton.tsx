@@ -12,7 +12,7 @@ export function GroupItemSkeleton({ size = 'm' }: { size?: AvatarSize }) {
         height={AVATAR_SIZES[size]}
       />
 
-      <Typography sx={{ width: '50%' }} textAlign={'center'}>
+      <Typography sx={{ width: '50%', textAlign: 'center' }}>
         <Skeleton variant="text" />
         <Skeleton variant="text" />
       </Typography>

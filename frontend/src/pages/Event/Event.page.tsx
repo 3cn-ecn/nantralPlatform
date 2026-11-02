@@ -19,7 +19,7 @@ export default function EventPage() {
   return (
     <Container sx={{ my: 4 }}>
       <FlexRow gap={1}>
-        <Typography variant="h1" flex={1} noWrap>
+        <Typography variant="h1" sx={{ flex: 1 }} noWrap>
           {t('event.grid.title')}
         </Typography>
         <ToggleEventViewButton />

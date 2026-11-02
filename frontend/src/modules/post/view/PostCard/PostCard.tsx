@@ -40,14 +40,14 @@ export function PostCard({ post }: PostCardProps) {
             {post.pinned && <BadgeIcon Icon={PushPinIcon} />}
           </BadgeIconsContainer>
           <CardContent>
-            <Box mt={1}>
-              <Typography variant="h6" lineHeight={1.2} mb={1}>
+            <Box sx={{ mt: 1 }}>
+              <Typography variant="h6" sx={{ lineHeight: 1.2, mb: 1 }}>
                 {post.title}
               </Typography>
               <Typography
                 variant="caption"
-                color="text.secondary"
-                fontStyle="italic"
+                color="textSecondary"
+                sx={{ fontStyle: 'italic' }}
               >
                 {upperFirst(formatRelativeTime(post.createdAt))}
               </Typography>

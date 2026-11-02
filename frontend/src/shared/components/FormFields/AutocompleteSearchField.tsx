@@ -289,25 +289,28 @@ function AutocompleteSearchFieldComponent<
           helperText={isError ? errors.join(', ') : helperText}
           error={isError}
           margin={margin}
-          InputProps={{
-            ...params.InputProps,
-            startAdornment: isMultiple(objectValue, multiple)
-              ? params.InputProps.startAdornment
-              : !!imagePropName &&
-                !!objectValue && (
-                  <Avatar
-                    alt={objectValue[labelPropName]}
-                    src={objectValue[imagePropName]}
-                    size="s"
-                  />
-                ),
-            endAdornment: (
-              <>
-                {isLoading && <CircularProgress color="inherit" size={20} />}
-                {params.InputProps.endAdornment}
-              </>
-            ),
-            type: 'search',
+          slotProps={{
+            ...params.slotProps,
+            input: {
+              ...params.slotProps?.input,
+              startAdornment: isMultiple(objectValue, multiple)
+                ? params.slotProps?.input?.startAdornment
+                : !!imagePropName &&
+                  !!objectValue && (
+                    <Avatar
+                      alt={objectValue[labelPropName]}
+                      src={objectValue[imagePropName]}
+                      size="s"
+                    />
+                  ),
+              endAdornment: (
+                <>
+                  {isLoading && <CircularProgress color="inherit" size={20} />}
+                  {params.slotProps?.input?.endAdornment}
+                </>
+              ),
+              type: 'search',
+            },
           }}
         />
       )}

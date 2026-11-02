@@ -59,8 +59,10 @@ export function SelectTypeButton({
         anchorEl={anchorEl}
         open={open}
         onClose={handleClose}
-        MenuListProps={{
-          'aria-labelledby': 'type-button',
+        slotProps={{
+          list: {
+            'aria-labelledby': 'type-button',
+          },
         }}
         disablePortal // show menu when map is fullscreen
       >

@@ -94,10 +94,12 @@ export function CalendarColumnsView({ filters }: CalendarColumnsViewProps) {
       >
         {hours.map((hour) => (
           <Typography
-            textAlign="right"
             variant="caption"
-            color="text.secondary"
             key={formatISO(hour, { representation: 'time' })}
+            sx={{
+              textAlign: 'right',
+              color: 'text.secondary',
+            }}
           >
             {formatTime(hour)}
           </Typography>
@@ -111,7 +113,7 @@ export function CalendarColumnsView({ filters }: CalendarColumnsViewProps) {
             minWidth: `${6 + (getNumberOfCols(col.events) - 1) * 2}rem`,
           }}
         >
-          <Typography variant="body2" textAlign="center" noWrap>
+          <Typography variant="body2" sx={{ textAlign: 'center' }} noWrap>
             {upperFirst(
               formatDate(col.date, { weekday: 'short', day: 'numeric' }),
             )}

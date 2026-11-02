@@ -64,7 +64,7 @@ export default function RegisterFormPanel() {
     <>
       <Paper sx={{ p: 2, justifyContent: 'center', display: 'flex' }}>
         <Info sx={{ m: 0 }} />
-        <Typography component={'span'} textAlign={'center'}>
+        <Typography component={'span'} sx={{ textAlign: 'center' }}>
           {uuid ? (
             <Trans i18nKey="register.createdAccountIsTemporary" />
           ) : (

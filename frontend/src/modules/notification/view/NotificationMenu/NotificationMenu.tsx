@@ -67,7 +67,7 @@ export function NotificationMenu() {
         anchorEl={anchorEl}
         open={isMenuOpen}
         onClose={handleClose}
-        TransitionComponent={Collapse}
+        slots={{ transition: Collapse }}
         anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
         transformOrigin={{ vertical: 'top', horizontal: 'right' }}
         slotProps={{

@@ -11,7 +11,7 @@ type SectionProps = PropsWithChildren & {
 
 export function Section({ title, button, children }: SectionProps) {
   return (
-    <Box marginBottom={3}>
+    <Box sx={{ marginBottom: 3 }}>
       <Header>
         <Typography variant="h2">{title}</Typography>
         {button}

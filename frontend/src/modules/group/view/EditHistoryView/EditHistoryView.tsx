@@ -105,7 +105,7 @@ export function EditHistoryView({ group, onClose }: EditMembersViewProps) {
 
   return (
     <>
-      <Typography variant="h3" mb={1}>
+      <Typography variant="h3" sx={{ mb: 1 }}>
         {t('group.details.modal.editGroup.history')}
       </Typography>
       {isPending && <CircularProgress />}

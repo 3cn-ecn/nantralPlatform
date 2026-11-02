@@ -34,7 +34,7 @@ export function SportEventCardCreate() {
             sx={{ width: '100%', height: '100%', p: 2 }}
           >
             <Add color="action" fontSize="large" />
-            <Typography color="text.secondary" align="center">
+            <Typography color="textSecondary" align="center">
               {t('sport.createCard.label')}
             </Typography>
           </FlexCol>

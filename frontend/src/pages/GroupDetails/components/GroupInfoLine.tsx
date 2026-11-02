@@ -29,7 +29,7 @@ export function GroupInfoLine({
   }
 
   return (
-    <Typography color="textSecondary" variant="body2" mt="1px">
+    <Typography color="textSecondary" variant="body2" sx={{ mt: '1px' }}>
       {isPending ? (
         <Skeleton animation="wave" width={200} />
       ) : (

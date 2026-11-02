@@ -86,12 +86,22 @@ export function ReadPostModalContent({
             style={{ maxWidth: '100%', flexShrink: 0 }}
           />
         )}
-        <Box paddingX={3} paddingTop={1} paddingBottom={6}>
+        <Box
+          sx={{
+            paddingX: 3,
+            paddingTop: 1,
+            paddingBottom: 6,
+          }}
+        >
           <RichTextRenderer content={post.description} />
         </Box>
       </ResponsiveDialogContent>
       <ResponsiveDialogFooter sx={{ pl: 3 }}>
-        <Typography variant="caption" color="text.secondary" fontStyle="italic">
+        <Typography
+          variant="caption"
+          color="textSecondary"
+          sx={{ fontStyle: 'italic' }}
+        >
           {`${t('post.modal.metadata.dates', {
             createdDuration: formatRelativeTime(post.createdAt),
             updatedDuration: formatRelativeTime(post.updatedAt),

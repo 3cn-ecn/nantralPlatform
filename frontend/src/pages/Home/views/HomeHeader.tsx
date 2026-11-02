@@ -110,9 +110,11 @@ export function HomeHeader() {
       >
         <Stack
           direction={mdBreakpoint.isSmaller ? 'column' : 'row'}
-          justifyContent={'center'}
-          alignItems={'center'}
-          gap={10}
+          sx={{
+            justifyContent: 'center',
+            alignItems: 'center',
+            gap: 10,
+          }}
         >
           <Stack>
             <TitleTypography variant="h4">
@@ -143,15 +145,17 @@ export function HomeHeader() {
                     name: (
                       <Box
                         component={'span'}
-                        color={theme.palette.success.main}
-                        sx={{ textWrap: 'nowrap' }}
+                        sx={{
+                          color: theme.palette.success.main,
+                          textWrap: 'nowrap',
+                        }}
                       />
                     ),
                   }}
                 />
               </Typography>
               <Typography>{t('home.element.subtitle')}</Typography>
-              <Stack direction={'row'} gap={1} flexWrap={'wrap'}>
+              <Stack direction={'row'} spacing={1} sx={{ flexWrap: 'wrap' }}>
                 <Tooltip title={t('home.element.selfHosted.tooltip')}>
                   <Chip
                     label={t('home.element.selfHosted.label')}

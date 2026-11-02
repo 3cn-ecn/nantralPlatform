@@ -138,8 +138,10 @@ export function CalendarDateSelector({
         >
           <Typography
             variant="h5"
-            whiteSpace="nowrap"
-            sx={{ transform: 'translateY(1px)' }}
+            sx={{
+              whiteSpace: 'nowrap',
+              transform: 'translateY(1px)',
+            }}
           >
             {title}
           </Typography>
@@ -148,7 +150,7 @@ export function CalendarDateSelector({
       <Dialog
         open={isModalOpen}
         onClose={() => setIsModalOpen(false)}
-        PaperProps={{ sx: { minWidth: '320px' } }}
+        slotProps={{ paper: { sx: { minWidth: '320px' } } }}
       >
         <LocalizationProvider
           dateAdapter={AdapterDateFns}

@@ -11,7 +11,7 @@ export function StudentDetailsInfo({ user }: { user: Partial<User> }) {
   return (
     <FlexCol>
       <FlexRow alignItems="center" gap={2}>
-        <Typography variant="h1" pb={0}>
+        <Typography variant="h1" sx={{ pb: 0 }}>
           {user.name}
         </Typography>
         {user?.staff && (

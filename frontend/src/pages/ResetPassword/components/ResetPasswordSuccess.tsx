@@ -13,7 +13,7 @@ export default function ResetPasswordSuccess() {
     <>
       <CheckCircle sx={{ fontSize: 200 }} color="success" />
       <Typography variant="h4">{t('resetPassword.passwordChanged')}</Typography>
-      <Typography textAlign="center">
+      <Typography sx={{ textAlign: 'center' }}>
         {t('resetPassword.youCanNowLogin')}
       </Typography>
       <Spacer vertical={3} />

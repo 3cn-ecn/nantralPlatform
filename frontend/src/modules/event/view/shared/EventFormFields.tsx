@@ -187,7 +187,9 @@ export function EventFormFields({
             {t('event.form.shotgunSection.title')}
           </Typography>
         </FlexRow>
-        <Typography mb={1}>{t('event.form.shotgunSection.helper')}</Typography>
+        <Typography sx={{ mb: 1 }}>
+          {t('event.form.shotgunSection.helper')}
+        </Typography>
         <FlexAuto columnGap={2} breakPoint="sm">
           <DateTimeField
             name="start_registration"

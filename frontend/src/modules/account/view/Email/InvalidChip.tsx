@@ -1,4 +1,4 @@
-import { Check, Close, ErrorOutline } from '@mui/icons-material';
+import { Check, Close, ErrorOutlined } from '@mui/icons-material';
 import { Chip, CircularProgress, Tooltip } from '@mui/material';
 import { useMutation } from '@tanstack/react-query';
 
@@ -16,7 +16,7 @@ export function InvalidChip({ email }: { email: Email }) {
     return (
       <Tooltip title={t('email.chip.sendMessage')}>
         <Chip
-          icon={<ErrorOutline />}
+          icon={<ErrorOutlined />}
           label={t('email.chip.unverified')}
           color={'primary'}
           size={'small'}

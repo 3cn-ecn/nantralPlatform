@@ -2,7 +2,7 @@ import { ReactNode } from 'react';
 
 import {
   Close as CloseIcon,
-  HelpOutline as HelpOutlineIcon,
+  HelpOutlined as HelpOutlinedIcon,
 } from '@mui/icons-material';
 import { DialogTitle, IconButton, Tooltip } from '@mui/material';
 
@@ -40,7 +40,7 @@ export function ResponsiveDialogHeader({
       {!!helpUrl && (
         <Tooltip title={t('modal.helpButton.label')}>
           <IconButton href={helpUrl} target="_blank" rel="noopener">
-            <HelpOutlineIcon />
+            <HelpOutlinedIcon />
           </IconButton>
         </Tooltip>
       )}

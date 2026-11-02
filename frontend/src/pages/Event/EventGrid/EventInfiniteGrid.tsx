@@ -54,7 +54,7 @@ export function EventInfiniteGrid({
 
   if (eventsQuery.data.pages[0].count === 0) {
     return (
-      <Typography color="secondary" textAlign="center" mt={3}>
+      <Typography color="secondary" sx={{ textAlign: 'center', mt: 3 }}>
         {t('event.list.noEventFound')}
       </Typography>
     );

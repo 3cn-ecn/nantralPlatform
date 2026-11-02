@@ -50,7 +50,13 @@ interface CardWithArrowProps {
 
 const CardWithArrow: FC<CardWithArrowProps> = ({ children }) => {
   return (
-    <Box position="relative" top={14} display="inline-block">
+    <Box
+      sx={{
+        position: 'relative',
+        top: 14,
+        display: 'inline-block',
+      }}
+    >
       <Arrow />
       <Card variant={'outlined'}>{children}</Card>
     </Box>

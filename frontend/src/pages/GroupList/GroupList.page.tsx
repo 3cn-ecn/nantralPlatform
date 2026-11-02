@@ -82,7 +82,7 @@ export default function GroupListPage() {
             groupsByCategory &&
             Object.keys(groupsByCategory).map((cat) => (
               <FlexCol key={cat}>
-                <Typography variant="h2" mb={4}>
+                <Typography variant="h2" sx={{ mb: 4 }}>
                   {cat}
                 </Typography>
                 <GroupGrid estimatedSize={100} groups={groupsByCategory[cat]} />

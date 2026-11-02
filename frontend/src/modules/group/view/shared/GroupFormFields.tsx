@@ -304,7 +304,7 @@ export function GroupFormFields({
         />
       </FlexAuto>
 
-      <Typography mt={2} variant="h3">
+      <Typography variant="h3" sx={{ mt: 2 }}>
         {t('group.form.title.presentation')}
       </Typography>
 
@@ -360,12 +360,14 @@ export function GroupFormFields({
       ) : (
         <FlexAuto columnGap={2}>
           <TextField
-            InputProps={{
-              endAdornment: (
-                <InputAdornment position="end">
-                  <PlaceIcon />
-                </InputAdornment>
-              ),
+            slotProps={{
+              input: {
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <PlaceIcon />
+                  </InputAdornment>
+                ),
+              },
             }}
             label={t('group.form.meetingPlace.label')}
             value={formValues.meetingPlace}
@@ -373,12 +375,14 @@ export function GroupFormFields({
             errors={error?.fields?.meeting_place}
           />
           <TextField
-            InputProps={{
-              endAdornment: (
-                <InputAdornment position="end">
-                  <ClockIcon />
-                </InputAdornment>
-              ),
+            slotsProps={{
+              input: {
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <ClockIcon />
+                  </InputAdornment>
+                ),
+              },
             }}
             label={t('group.form.meetingHour.label')}
             value={formValues.meetingHour}
@@ -392,12 +396,14 @@ export function GroupFormFields({
         <TextField
           label={t('group.form.video1.label')}
           type="url"
-          InputProps={{
-            endAdornment: (
-              <InputAdornment position="end">
-                <LinkIcon />
-              </InputAdornment>
-            ),
+          slotProps={{
+            input: {
+              endAdornment: (
+                <InputAdornment position="end">
+                  <LinkIcon />
+                </InputAdornment>
+              ),
+            },
           }}
           value={formValues.video1}
           handleChange={(val) => {
@@ -407,12 +413,14 @@ export function GroupFormFields({
         />
         <TextField
           label={t('group.form.video2.label')}
-          InputProps={{
-            endAdornment: (
-              <InputAdornment position="end">
-                <LinkIcon />
-              </InputAdornment>
-            ),
+          slotProps={{
+            input: {
+              endAdornment: (
+                <InputAdornment position="end">
+                  <LinkIcon />
+                </InputAdornment>
+              ),
+            },
           }}
           type="url"
           value={formValues.video2}
@@ -432,7 +440,7 @@ export function GroupFormFields({
         errors={error?.fields?.description}
       />
 
-      <Box mt={2}>
+      <Box sx={{ mt: 2 }}>
         <Accordion>
           <AccordionSummary expandIcon={<ExpandMoreIcon />}>
             {t('group.form.title.advancedOptions')}

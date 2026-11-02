@@ -50,7 +50,7 @@ function Authorize() {
       <form action={post_url} method="POST">
         <div dangerouslySetInnerHTML={{ __html: hidden_inputs }}></div>
         <div dangerouslySetInnerHTML={{ __html: csrf_token }}></div>
-        <Typography variant="h2" textAlign="center">
+        <Typography variant="h2" sx={{ textAlign: 'center' }}>
           Nantral Platform
         </Typography>
         <Spacer vertical={2} />
@@ -104,7 +104,7 @@ function Authorize() {
           </Badge>
         </FlexRow>
         <Spacer vertical={2} />
-        <Typography variant={'h4'} textAlign={'center'}>
+        <Typography variant={'h4'} sx={{ textAlign: 'center' }}>
           <Trans
             i18nKey={'templates.oidc.authorize.title'}
             values={{ client_name: client.name }}

@@ -35,7 +35,7 @@ export default function ForgotPasswordForm() {
 
   return (
     <>
-      <Typography variant="body1" margin={2} textAlign="center">
+      <Typography variant="body1" sx={{ margin: 2, textAlign: 'center' }}>
         {t('resetPassword.provideEmail')}
       </Typography>
       <form

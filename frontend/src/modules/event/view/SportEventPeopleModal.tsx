@@ -92,11 +92,7 @@ function SportEventPeopleListContent({
         </List>
       </InfiniteList>
       {query.isFetchingNextPage && (
-        <Typography
-          sx={{ px: 2, py: 1 }}
-          variant="body2"
-          color="text.secondary"
-        >
+        <Typography sx={{ px: 2, py: 1 }} variant="body2" color="textSecondary">
           Chargement...
         </Typography>
       )}

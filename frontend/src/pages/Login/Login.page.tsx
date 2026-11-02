@@ -82,14 +82,14 @@ export default function LoginPage() {
             <Typography
               variant="h2"
               sx={{
+                textAlign: 'center',
                 color: theme.palette.mode == 'dark' ? '#b6b7b7' : '#282828',
               }}
-              textAlign="center"
             >
               Nantral Platform.
             </Typography>
           </FlexRow>
-          <Typography mt={1} textAlign="center" variant="subtitle1">
+          <Typography sx={{ mt: 1, textAlign: 'center' }} variant="subtitle1">
             {t('login.website.ecn')}
           </Typography>
           <Spacer vertical={2} />
