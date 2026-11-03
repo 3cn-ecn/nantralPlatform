@@ -11,7 +11,7 @@
     "types": "tsc",
     "lint": "eslint src --ignore-pattern \"src/legacy/**\" --fix",
     "lint:fix": "eslint src --ignore-pattern \"src/legacy/**\" --fix",
-    "jest": "TZ=Europe/Paris jest",
+    "jest": "TZ=Europe/Paris node --experimental-vm-modules node_modules/jest/bin/jest.js",
     "jest:u": "npm run jest -- -u",
     "test": "npm run types && npm run lint && npm run jest"
   },

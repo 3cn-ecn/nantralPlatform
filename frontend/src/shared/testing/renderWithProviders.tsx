@@ -22,13 +22,14 @@ const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
       retry: false,
-      gcTime: 0,
+      gcTime: Infinity,
+      throwOnError: false,
     },
   },
 });
 
 /**
- * Customise the `render` function from '@testing-library/react' but with some
+ * Customize the `render` function from '@testing-library/react' but with some
  * default providers so that elements can be rendered correctly:
  * -> language: 'en' by default
  * -> theme: 'light' by default

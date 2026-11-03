@@ -4,6 +4,7 @@
  * Greenwich meridian (referred as GMT, or UTC) used in the ISO format
  * (the ISO format is 'yyyy-MM-ddThh:mm:ssZ').
  */
+import { jest } from '@jest/globals';
 import { act, renderHook } from '@testing-library/react';
 
 import './config';
