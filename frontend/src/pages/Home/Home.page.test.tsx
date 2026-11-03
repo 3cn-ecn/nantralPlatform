@@ -99,7 +99,7 @@ describe('Home page', () => {
 
     // click the 'See all' button
     const seeAllLink = screen.getAllByText('See all')[0]; // NB: we use get because we are not in an expect
-    userEvent.click(seeAllLink);
+    await userEvent.click(seeAllLink);
 
     // check that we are on the event page
     expect(await screen.findByText('Events')).toBeInTheDocument();

@@ -23,7 +23,7 @@ import { useTranslation } from '#shared/i18n/useTranslation';
 
 import { Avatar } from '../Avatar/Avatar';
 
-// just a function to make typescript work
+// just a function to make TypeScript work
 function isMultiple<T, Multiple extends boolean>(
   objectValue: T | T[] | null,
   multiple?: Multiple,
@@ -113,7 +113,7 @@ type AutocompleteSearchFieldProps<
  * @param multiple - If user can select multiple elements or just one
  * @param labelPropName - The name of the label prop in the element
  * @param imagePropName - The name of the image prop in the element
- * @param valuePropName - The name of the label prop in the element
+ * @param valuePropName - The name of the value prop in the element
  */
 function AutocompleteSearchFieldComponent<
   ValuePropName extends string,
@@ -123,7 +123,7 @@ function AutocompleteSearchFieldComponent<
     SearchFieldItem<ValuePropName, LabelPropName, ImagePropName>,
   Multiple extends boolean = false,
   DisableClearable extends boolean = false,
-  ChipComponent extends React.ElementType = ChipTypeMap['defaultComponent'],
+  ChipComponent extends ElementType = ChipTypeMap['defaultComponent'],
 >({
   value,
   handleChange,
@@ -229,7 +229,7 @@ function AutocompleteSearchFieldComponent<
 
   const updateOptions = debounce(
     (
-      event: React.SyntheticEvent,
+      event: SyntheticEvent,
       inputValue: string,
       reason: AutocompleteInputChangeReason,
     ): void => {

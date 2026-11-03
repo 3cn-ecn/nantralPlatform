@@ -27,13 +27,13 @@ export function FullscreenControl({
       document.removeEventListener('fullscreenchange', handleFullScreenChange);
   }, []);
 
-  const handleFullscreen = () => {
+  const handleFullscreen = async () => {
     const container = mapRef?.getContainer();
     if (!container) return;
     if (!document.fullscreenElement) {
-      container.requestFullscreen?.();
+      await container.requestFullscreen?.();
     } else {
-      document.exitFullscreen?.();
+      await document.exitFullscreen?.();
     }
   };
 

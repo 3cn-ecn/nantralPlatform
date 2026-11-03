@@ -12,7 +12,7 @@ import { Page } from '#shared/infra/pagination';
 import { markAllNotificationsAsSeenApi } from '../api/markAllNotificationsAsSeen.api';
 import { SentNotification } from '../notification.types';
 
-type OptionsType = UseMutationOptions<number, ApiError, void>;
+type OptionsType = UseMutationOptions<number, ApiError>;
 
 export function useMarkAllAsSeenMutation() {
   const queryClient = useQueryClient();

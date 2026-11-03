@@ -35,6 +35,8 @@ const queryClient = new QueryClient({
  * -> theme: 'light' by default
  *
  * @param element - the element to render
+ * @param otherRoutes - additional routes add to the router
+ * @param path - base path for this element
  * @returns
  */
 export function renderWithProviders(

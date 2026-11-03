@@ -1,4 +1,4 @@
-import { SubmitEvent, useEffect, useState } from 'react';
+import { SubmitEvent, useEffect, useState, Dispatch } from 'react';
 import { useSearchParams } from 'react-router-dom';
 
 import {
@@ -61,7 +61,6 @@ export function ModalEditGroup({
   const [hasModifications, setHasModifications] = useState(false);
   const queryClient = useQueryClient();
   const { palette } = useTheme();
-  const [, setSerachParams] = useSearchParams();
   const { error, isError, mutate, isPending } = useMutation<
     Group,
     ApiFormError<CreateGroupFormDTO>,
@@ -76,14 +75,14 @@ export function ModalEditGroup({
       queryClient.invalidateQueries({
         queryKey: ['history', { slug: group.slug }],
       });
-      setSerachParams({}, { preventScrollReset: true });
+      setSearchParams({}, { preventScrollReset: true });
       setHasModifications(false);
     },
   });
 
-  const updateFormValues: React.Dispatch<
-    SetObjectStateAction<CreateGroupForm>
-  > = (value) =>
+  const updateFormValues: Dispatch<SetObjectStateAction<CreateGroupForm>> = (
+    value,
+  ) =>
     setFormValues(
       (prev) =>
         (typeof value === 'function'

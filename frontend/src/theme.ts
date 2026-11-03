@@ -1,3 +1,5 @@
+import { CSSProperties } from 'react';
+
 import { PaletteMode, createTheme, responsiveFontSizes } from '@mui/material';
 import { enUS, frFR } from '@mui/x-date-pickers/locales';
 
@@ -142,10 +144,10 @@ declare module '@mui/material/styles' {
     neutral: PaletteOptions['primary'];
   }
   interface TypographyVariants {
-    poster: React.CSSProperties;
+    poster: CSSProperties;
   }
   interface TypographyVariantsOptions {
-    poster?: React.CSSProperties;
+    poster?: CSSProperties;
   }
 }
 

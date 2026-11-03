@@ -10,7 +10,7 @@ import { useSearchParams } from 'react-router-dom';
 
 import { Box } from '@mui/material';
 import { useInfiniteQuery } from '@tanstack/react-query';
-import { Point } from 'geojson';
+import { Feature, Point } from 'geojson';
 import { GeoJSONSource, MapMouseEvent } from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 
@@ -110,7 +110,7 @@ export default function MapPage() {
   }, [groupListQuery.data?.pages, handleOpen, params]);
 
   // convert data from the server to GeoJSON
-  const points: GeoJSON.Feature[] =
+  const points: Feature[] =
     useMemo(
       () =>
         groupListQuery.data?.pages

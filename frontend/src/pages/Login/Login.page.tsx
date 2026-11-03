@@ -95,9 +95,9 @@ export default function LoginPage() {
           </Typography>
           <Spacer vertical={2} />
           <form
-            onSubmit={(event) => {
+            onSubmit={async (event) => {
               event.preventDefault();
-              login(formValues);
+              await login(formValues);
             }}
           >
             {error?.response?.data?.message && (

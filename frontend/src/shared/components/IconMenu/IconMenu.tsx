@@ -1,4 +1,4 @@
-import { ReactNode, useState } from 'react';
+import { ReactNode, useState, MouseEvent } from 'react';
 
 import { SvgIconComponent } from '@mui/icons-material';
 import { IconButton, Menu, Tooltip } from '@mui/material';
@@ -20,7 +20,7 @@ export function IconMenu({
 }: IconMenuProps) {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
-  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+  const handleClick = (event: MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
   };
   const handleClose = () => {

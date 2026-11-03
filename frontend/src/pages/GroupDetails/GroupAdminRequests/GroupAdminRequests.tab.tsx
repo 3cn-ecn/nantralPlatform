@@ -33,7 +33,7 @@ export function GroupAdminRequests({ group }: { group: Group }) {
       </Stack>
       {data?.pages[0].count == 0 && (
         <Typography color="secondary" sx={{ mt: 3, textAlign: 'center' }}>
-          {t('group.details.noAdminReqests')}
+          {t('group.details.noAdminRequests')}
         </Typography>
       )}
     </Container>

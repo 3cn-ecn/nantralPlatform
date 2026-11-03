@@ -1,3 +1,5 @@
+import { MouseEvent } from 'react';
+
 import { MoreHoriz } from '@mui/icons-material';
 import { IconButton } from '@mui/material';
 
@@ -12,7 +14,7 @@ export function MoreActionButton({
   setEmail: (email: null | Email) => void;
   email: Email;
 }) {
-  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+  const handleClick = (event: MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
     setEmail(email);
   };

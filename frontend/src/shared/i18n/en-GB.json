@@ -67,7 +67,7 @@
       "mainTooltip": "Main email used in the login page and to send notifications",
       "organisation": "Institutional email",
       "organisationTooltip": "This email address is provided by an authorized organization. If it is verified, it can be used to verify your account.",
-      "sendError": "An error occured. Click to try again",
+      "sendError": "An error occurred. Click to try again",
       "sendMessage": "Click to resend confirmation email",
       "sendSuccess": "The confirmation email has been sent",
       "success": "Success",
@@ -76,7 +76,7 @@
       "visible": "Public"
     },
     "delete": {
-      "error": "An error has occured while deleting the email address",
+      "error": "An error has occurred while deleting the email address",
       "success": "The email address has been successfully deleted"
     },
     "deleteModal": {
@@ -88,14 +88,14 @@
     },
     "more": {
       "resend": "Resend confirmation email",
-      "resendError": "An error occured while sending the mail.",
+      "resendError": "An error occurred while sending the mail.",
       "resendSuccess": "Confirmation email has been sent"
     },
     "page": {
       "title": "Manage your email addresses"
     },
     "setMain": {
-      "error": "An error occured while changing main email address",
+      "error": "An error occurred while changing main email address",
       "label": "Set as main address",
       "success": "The main email address has been changed. From now on, please use this address to login."
     },
@@ -401,7 +401,7 @@
         },
         "displayMember": {
           "dates": "Member from {{ from }} to {{ to }}",
-          "descripition": "Member of {{group}}",
+          "description": "Member of {{group}}",
           "openGroup": "Open group",
           "openProfile": "Open profile"
         },
@@ -444,7 +444,7 @@
           "title": "Join {{group}}"
         }
       },
-      "noAdminReqests": "No admin requests",
+      "noAdminRequests": "No admin requests",
       "requestAdmin": "Ask to be an admin",
       "requestSent": "Request sent",
       "requestToBeAdmin": "{{student}} asks to be admin",
@@ -498,7 +498,7 @@
       },
       "initialMember": {
         "enable": "Enable group autojoin",
-        "enableHint": "If you enable this, you will automaticcally join the group as admin. Please fill the short form bellow.",
+        "enableHint": "If you enable this, you will automatically join the group as admin. Please fill the short form bellow.",
         "title": "Become member"
       },
       "label": {
@@ -536,8 +536,8 @@
         "helperText": "If checked, the group page will be publicly accessible, including to unconnected users. \nHowever, members, events and posts remain hidden.",
         "label": "Public group"
       },
-      "saveHistroryRecord": {
-        "helperText": "If you tick this, we will store this version in order to access it later, even if other changes are made. We recommand to keep this enabled, if you are not making minor updates.",
+      "saveHistoryRecord": {
+        "helperText": "If you tick this, we will store this version in order to access it later, even if other changes are made. We recommend to keep this enabled, if you are not making minor updates.",
         "label": "Save an historical record"
       },
       "shortName": {
@@ -553,7 +553,7 @@
         "advancedOptions": "Advanced options",
         "general": "General",
         "presentation": "Presentation",
-        "versionWarning": "Your are editing an old version. If you save, all changes that are more recent will be canceled. If that is not what you are looking for, please go back to the latest version (recommanded).",
+        "versionWarning": "Your are editing an old version. If you save, all changes that are more recent will be canceled. If that is not what you are looking for, please go back to the latest version (recommended).",
         "versionWarningAction": "Latest version"
       },
       "video1": {
@@ -819,6 +819,9 @@
       }
     },
     "modal": {
+      "deleteButton": {
+        "label": "Delete Post"
+      },
       "editButton": {
         "label": "Edit the post"
       },
@@ -1063,7 +1066,7 @@
         "terms": "Click to see how {{ client_name }} uses your personal data: <link>terms and conditions</link>",
         "title": "<tooltip><0>{{client_name}}</0></tooltip> wants to get the following personal data"
       },
-      "description": "Sumary",
+      "description": "Summary",
       "endSessionPrompt": {
         "title": "Hi <strong>{{ client_name }}</strong>, do you want to log out",
         "titleAppName": " from <tooltip><0>{{ client_name }}</0></tooltip>"

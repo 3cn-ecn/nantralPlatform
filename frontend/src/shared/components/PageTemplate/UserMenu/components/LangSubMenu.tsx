@@ -43,9 +43,9 @@ export function LangSubMenu({
           key={lng}
           label={getNativeLanguageName(lng)}
           selected={i18n.language === lng}
-          onClick={() => {
-            i18n.changeLanguage(lng);
-            queryClient.invalidateQueries();
+          onClick={async () => {
+            await i18n.changeLanguage(lng);
+            await queryClient.invalidateQueries();
             onClose();
           }}
         />

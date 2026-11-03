@@ -1,4 +1,4 @@
-import { SubmitEvent, useState } from 'react';
+import { SubmitEvent, useState, MouseEvent } from 'react';
 
 import { Edit, MoreHoriz } from '@mui/icons-material';
 import {
@@ -56,7 +56,7 @@ export function ModalEditMembership({
   );
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
-  const handleClick = (event: React.MouseEvent<HTMLElement>) => {
+  const handleClick = (event: MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
   };
   const handleClose = () => {

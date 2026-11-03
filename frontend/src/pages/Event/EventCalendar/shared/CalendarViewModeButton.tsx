@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, MouseEvent } from 'react';
 
 import {
   CalendarViewDayRounded as CalendarViewDayIcon,
@@ -49,7 +49,7 @@ export function CalendarViewModeButton({
   const nbOfDays =
     differenceInCalendarDays(filters.toDate, filters.fromDate) + 1;
 
-  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+  const handleClick = (event: MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
     setIsOpen(true);
   };

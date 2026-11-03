@@ -1,4 +1,4 @@
-import { memo, useState } from 'react';
+import { memo, useState, MouseEvent } from 'react';
 
 import { Check, Visibility, VisibilityOff } from '@mui/icons-material';
 import { IconButton, InputAdornment } from '@mui/material';
@@ -19,9 +19,7 @@ function PasswordFieldComponent({
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
 
-  const handleMouseDownPassword = (
-    event: React.MouseEvent<HTMLButtonElement>,
-  ) => {
+  const handleMouseDownPassword = (event: MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
   };
 

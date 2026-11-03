@@ -77,9 +77,7 @@ export function UserMenuAuthenticated() {
         <UserMenuItem
           label={t('userMenu.menu.signOut')}
           icon={<LogoutIcon />}
-          onClick={() => {
-            logout();
-          }}
+          onClick={() => logout()}
         />
         <Divider />
         <UserMenuItem

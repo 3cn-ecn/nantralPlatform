@@ -1,3 +1,4 @@
+import { MouseEvent } from 'react';
 import { Link } from 'react-router-dom';
 
 import {
@@ -32,7 +33,7 @@ export function NotificationItem({
     onClose();
   };
 
-  const handleSeenMarkClick = (e: React.MouseEvent) => {
+  const handleSeenMarkClick = (e: MouseEvent) => {
     e.stopPropagation();
     e.preventDefault();
     if (notification.seen) {

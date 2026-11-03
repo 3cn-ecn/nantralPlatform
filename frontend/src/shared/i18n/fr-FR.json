@@ -401,12 +401,12 @@
         },
         "displayMember": {
           "dates": "Membre du {{ from }} au {{ to }}",
-          "descripition": "Membre de {{ group }}",
+          "description": "Membre de {{ group }}",
           "openGroup": "Ouvrir le groupe",
           "openProfile": "Ouvrir le profil"
         },
         "editGroup": {
-          "deleteHistorySuccess": "Point d'historique supprimé avec succés",
+          "deleteHistorySuccess": "Point d'historique supprimé avec succès",
           "editHistorySuccess": "La modification a été enregistrée",
           "error": "Une erreur s'est produite",
           "history": "Gestion des versions",
@@ -444,7 +444,7 @@
           "title": "Rejoindre {{ group }}"
         }
       },
-      "noAdminReqests": "Aucune demande d'admin",
+      "noAdminRequests": "Aucune demande d'admin",
       "requestAdmin": "Demander a être admin",
       "requestSent": "Demande envoyée",
       "requestToBeAdmin": "{{student}} demande à être admin",
@@ -511,7 +511,7 @@
       },
       "lockMemberships": {
         "helperText": "Les utilisateurs ne peuvent plus s'ajouter eux-mêmes au groupe.",
-        "label": "Vérouiller les membres"
+        "label": "Verrouiller les membres"
       },
       "longitude": {
         "label": "Longitude"
@@ -536,7 +536,7 @@
         "helperText": "Si coché, la page du groupe sera accessible publiquement, y compris à des utilisateurs non-connectés. Les membres, évènements et posts restent toutefois masqués.",
         "label": "Groupe public"
       },
-      "saveHistroryRecord": {
+      "saveHistoryRecord": {
         "helperText": "Si vous cochez cette case, nous garderons cette version pour que l'on puisse y accéder dans le futur, même si de nouvelles mises à jour sont effectuées. Nous recommandons de la laissé cocher, sauf pour des mises à jour mineures",
         "label": "Enregistrer un point d'historique"
       },
@@ -595,8 +595,8 @@
         "tooltip": "Messages chiffrés et authentifiés"
       },
       "selfHosted": {
-        "label": "Hébergé en france",
-        "tooltip": "Hébergés par nos soins sur nos seveurs en France"
+        "label": "Hébergé en France",
+        "tooltip": "Hébergés par nos soins sur nos serveurs en France"
       },
       "subtitle": "La messagerie des étudiants de Centrale Nantes",
       "title": "Téléchargez <name>Element X</name>"
@@ -779,7 +779,7 @@
   "passwordReset": {
     "error": "Une erreur s'est produite. Le lien semble invalide.",
     "newPassword": "Nouveau mot de passe",
-    "title": "Réinitilaisation du mot de passe"
+    "title": "Réinitialisation du mot de passe"
   },
   "post": {
     "createModal": {
@@ -819,6 +819,9 @@
       }
     },
     "modal": {
+      "deleteButton": {
+        "label": "Supprimer la Publication"
+      },
       "editButton": {
         "label": "Modifier le post"
       },
@@ -831,7 +834,7 @@
   },
   "register": {
     "ECNEmail": "Votre adresse email ec-nantes.fr",
-    "EmailECN": "J'ai un email Centrale nantes",
+    "EmailECN": "J'ai un email Centrale Nantes",
     "accountCreation": "Création du compte",
     "accountInformations": "Informations de compte",
     "alreadyHaveAccount": "Vous avez déjà un compte ?",
@@ -842,7 +845,7 @@
     "createAccount": "Créez votre compte Nantral Platform",
     "createAccountNow": "Créer un compte maintenant",
     "createTemporaryAccount": "Créer un compte temporaire",
-    "createdAccountIsTemporary": "Vous pouvez créer un compte Nantral Platform avec votre adresse email personnelle, cependant vous devrez renseigner votre addresse <strong>@ec-nantes.fr</strong> dès que vous y aurez accès. ",
+    "createdAccountIsTemporary": "Vous pouvez créer un compte Nantral Platform avec votre adresse email personnelle, cependant vous devrez renseigner votre adresse <strong>@ec-nantes.fr</strong> dès que vous y aurez accès. ",
     "emailNotReceived": "Email non reçu ?",
     "emailSent": "Email envoyé",
     "firstName": "Prénom",
@@ -1065,7 +1068,7 @@
       },
       "description": "Description",
       "endSessionPrompt": {
-        "title": "Bonjour <strong>{{ user_name }}</strong>, voulez vous vous deconnecter ",
+        "title": "Bonjour <strong>{{ user_name }}</strong>, voulez vous vous déconnecter ",
         "titleAppName": "de l'application <tooltip><0>{{ client_name }}</0></tooltip> "
       },
       "scope": "Portée",
