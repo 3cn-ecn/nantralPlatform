@@ -1,4 +1,4 @@
-import { FormEvent, useEffect, useState } from 'react';
+import { SubmitEvent, useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 
 import {
@@ -91,7 +91,7 @@ export function ModalEditGroup({
           : { ...prev, ...value }) as CreateGroupForm,
     );
 
-  function onSubmit(e: FormEvent<HTMLFormElement>) {
+  function onSubmit(e: SubmitEvent<HTMLFormElement>) {
     e.preventDefault();
     mutate(formValues);
   }

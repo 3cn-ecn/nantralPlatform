@@ -1,4 +1,4 @@
-import { FormEvent, useState } from 'react';
+import { SubmitEvent, useState } from 'react';
 
 import { Typography } from '@mui/material';
 import { useMutation } from '@tanstack/react-query';
@@ -51,7 +51,7 @@ export function ChangePasswordTab() {
   function updateFormValues(val: Partial<ChangePasswordForm>) {
     setFormValues({ ...formValues, ...val });
   }
-  function onSubmit(e: FormEvent<HTMLFormElement>) {
+  function onSubmit(e: SubmitEvent<HTMLFormElement>) {
     e.preventDefault();
     mutate(formValues);
   }

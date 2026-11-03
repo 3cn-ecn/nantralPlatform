@@ -1,4 +1,4 @@
-import { FormEvent, useState } from 'react';
+import { SubmitEvent, useState } from 'react';
 
 import { Edit, MoreHoriz } from '@mui/icons-material';
 import {
@@ -92,7 +92,7 @@ export function ModalEditMembership({
   function updateFormValues(val: Partial<CreateGroupForm>) {
     setFormValues((prev) => ({ ...prev, ...val }));
   }
-  function onSubmit(e: FormEvent<HTMLFormElement>) {
+  function onSubmit(e: SubmitEvent<HTMLFormElement>) {
     e.preventDefault();
     mutate(formValues);
   }

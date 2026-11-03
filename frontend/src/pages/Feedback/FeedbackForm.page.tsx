@@ -1,4 +1,4 @@
-import { FormEvent } from 'react';
+import { SubmitEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { Send as SendIcon } from '@mui/icons-material';
@@ -41,7 +41,7 @@ export default function FeedbackFormPage({ kind }: FeedbackHomePageProps) {
   });
 
   const onSubmit = async (
-    e: FormEvent<HTMLFormElement>,
+    e: SubmitEvent<HTMLFormElement>,
     data: FeedbackForm,
   ) => {
     e.preventDefault();

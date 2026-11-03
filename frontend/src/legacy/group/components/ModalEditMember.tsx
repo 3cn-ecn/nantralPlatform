@@ -1,4 +1,4 @@
-import { FormEvent, useState } from 'react';
+import { SubmitEvent, useState } from 'react';
 
 import {
   Close as CloseIcon,
@@ -135,7 +135,7 @@ function EditMemberModal(props: {
   const [globalErrors, setGlobalErrors] = useState('');
 
   /** Function called on submit to save data */
-  function onSubmit(e: FormEvent) {
+  function onSubmit(e: SubmitEvent) {
     e.preventDefault(); // prevent default action from browser
     setSaving(true); // show loading
     saveMembership(formValues) // save data

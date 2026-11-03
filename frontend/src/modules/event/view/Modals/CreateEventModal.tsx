@@ -1,4 +1,4 @@
-import { FormEvent, useState } from 'react';
+import { SubmitEvent, useState } from 'react';
 
 import { Edit as EditIcon } from '@mui/icons-material';
 import { Avatar, Button, useTheme } from '@mui/material';
@@ -52,7 +52,7 @@ export function CreateEventModal({
   >({ mutationFn: createEventApi });
 
   // send the form to the server
-  const onSubmit = (e: FormEvent, values: EventForm) => {
+  const onSubmit = (e: SubmitEvent, values: EventForm) => {
     // prevent the default function of <form>
     e.preventDefault();
     // call the updatePost function

@@ -1,4 +1,4 @@
-import { FormEvent, useState } from 'react';
+import { SubmitEvent, useState } from 'react';
 
 import { PersonAdd } from '@mui/icons-material';
 import { Avatar, Button, useTheme } from '@mui/material';
@@ -73,7 +73,7 @@ export function ModalJoinGroup({
   function updateFormValues(val: Partial<MembershipForm>) {
     setFormValues((prev) => ({ ...prev, ...val }));
   }
-  function onSubmit(e: FormEvent<HTMLFormElement>) {
+  function onSubmit(e: SubmitEvent<HTMLFormElement>) {
     e.preventDefault();
     mutate(formValues);
   }

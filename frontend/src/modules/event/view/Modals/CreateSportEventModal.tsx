@@ -1,4 +1,4 @@
-import { FormEvent, useState } from 'react';
+import { SubmitEvent, useState } from 'react';
 
 import { Edit as EditIcon } from '@mui/icons-material';
 import { Avatar, Button, useTheme } from '@mui/material';
@@ -52,7 +52,7 @@ export function CreateSportEventModal({
   >({ mutationFn: createSportEventApi });
 
   // send the form to the server
-  const onSubmit = (e: FormEvent, values: SportEventForm) => {
+  const onSubmit = (e: SubmitEvent, values: SportEventForm) => {
     // prevent the default function of <form>
     e.preventDefault();
     // call the updatePost function

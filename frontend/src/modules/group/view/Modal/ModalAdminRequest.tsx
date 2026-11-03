@@ -1,4 +1,4 @@
-import { FormEvent, useState } from 'react';
+import { SubmitEvent, useState } from 'react';
 
 import { AdminPanelSettings } from '@mui/icons-material';
 import { Button } from '@mui/material';
@@ -43,7 +43,7 @@ export function ModalAdminRequest({
   });
   const [formValues, setFormValues] = useState({ message: '' });
 
-  function onSubmit(e: FormEvent<HTMLFormElement>) {
+  function onSubmit(e: SubmitEvent<HTMLFormElement>) {
     e.preventDefault();
     mutate({ membership: membership.id, message: formValues.message });
   }

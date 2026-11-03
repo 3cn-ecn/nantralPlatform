@@ -5,6 +5,7 @@ import { Button, Paper, Stack } from '@mui/material';
 import { useMutation } from '@tanstack/react-query';
 
 import { getMapGroupListApi } from '#modules/group/api/getMapGroupList.api';
+import { MapGroupSearch } from '#modules/group/types/group.types';
 import { useGroupTypeDetails } from '#pages/GroupList/hooks/useGroupTypeDetails';
 import { MoreActionButton } from '#pages/Map/components/MoreActionButton';
 import { SelectTypeButton } from '#pages/Map/components/SelectTypeButton';
@@ -37,7 +38,7 @@ export function SearchBar({
   });
 
   const handleChange = useCallback(
-    (val: unknown) => {
+    (val: number | null) => {
       if (val) {
         params.set('id', val.toString());
         setParams(params, { preventScrollReset: true });
@@ -78,10 +79,10 @@ export function SearchBar({
           spacing={2}
           sx={{ alignItems: 'center', width: '100%' }}
         >
-          <AutocompleteSearchField
+          <AutocompleteSearchField<'id', 'name', 'icon', MapGroupSearch>
             name="group"
             label={t('group.search.placeholder')}
-            value={null}
+            value={0}
             handleChange={handleChange}
             //size="small"
             margin="none"
