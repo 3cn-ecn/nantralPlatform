@@ -9,7 +9,7 @@ import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 
 import { useTranslation } from '#shared/i18n/useTranslation';
 
-type DateFieldProps = Omit<DatePickerProps<Date>, 'error'> & {
+type DateFieldProps = Omit<DatePickerProps, 'error'> & {
   name?: string;
   label?: string;
   helperText?: string;

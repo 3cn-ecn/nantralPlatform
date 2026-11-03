@@ -1,5 +1,5 @@
 import { PaletteMode, createTheme, responsiveFontSizes } from '@mui/material';
-import { enUS, frFR } from '@mui/x-date-pickers';
+import { enUS, frFR } from '@mui/x-date-pickers/locales';
 
 import { languages } from '#shared/i18n/config';
 
@@ -10,7 +10,8 @@ const mapLocales: Record<(typeof languages)[number], typeof enUS> = {
 };
 
 function getTheme(mode: PaletteMode, language: string) {
-  const muiDatePickerLocale: typeof enUS = mapLocales[language] || enUS;
+  const muiDatePickerLocale: typeof enUS =
+    mapLocales[language as (typeof languages)[number]] || enUS;
 
   const theme = createTheme(
     {
