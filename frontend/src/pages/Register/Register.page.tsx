@@ -1,4 +1,4 @@
-import { Outlet, useLocation, useNavigate } from 'react-router-dom';
+import { Outlet, useLoaderData, useNavigate } from 'react-router-dom';
 
 import {
   Button,
@@ -19,14 +19,9 @@ import { useTranslation } from '#shared/i18n/useTranslation';
 export default function RegisterPage() {
   const navigate = useNavigate();
   const { t } = useTranslation();
-  const { pathname } = useLocation();
+  const { activeStep } = useLoaderData();
   const theme = useTheme();
   const small = useBreakpoint('sm').isSmaller;
-  const pathNameToStep = {
-    register: 0,
-    registerform: 1,
-    registervalidation: 2,
-  };
 
   return (
     <FloatingContainer maxWidth={'md'}>
@@ -80,7 +75,7 @@ export default function RegisterPage() {
             </Stack>
           </Paper>
           <Stepper
-            activeStep={pathNameToStep[pathname.replaceAll('/', '')]}
+            activeStep={activeStep}
             variant="outlined"
             nonLinear
             sx={{ width: '100%', margin: 2, marginBottom: 4 }}

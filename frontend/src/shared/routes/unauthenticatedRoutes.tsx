@@ -42,9 +42,22 @@ export const unauthenticatedRoutes: RouteObject = {
       path: '/register',
       element: <RegisterPage />,
       children: [
-        { path: '', element: <RegisterChoice key="choice" />, id: 'choice' },
-        { path: 'form', element: <RegisterFormPanel /> },
-        { path: 'validation', element: <EmailSent /> },
+        {
+          path: '',
+          element: <RegisterChoice key="choice" />,
+          id: 'choice',
+          loader: () => ({ activeStep: 0 }),
+        },
+        {
+          path: 'form',
+          element: <RegisterFormPanel />,
+          loader: () => ({ activeStep: 1 }),
+        },
+        {
+          path: 'validation',
+          element: <EmailSent />,
+          loader: () => ({ activeStep: 2 }),
+        },
       ],
     },
     {
