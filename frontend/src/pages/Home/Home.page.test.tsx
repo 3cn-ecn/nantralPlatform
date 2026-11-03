@@ -76,10 +76,10 @@ describe('Home page', () => {
     );
     // On the contrary, the Events section must be displayed
     expect(
-      await screen.queryByRole('heading', { name: 'Upcoming events' }),
+      await screen.findByRole('heading', { name: 'Upcoming events' }),
     ).toBeInTheDocument();
     expect(
-      await screen.queryByText(/No upcoming event\.\.\./),
+      await screen.findByText(/No upcoming event\.\.\./),
     ).toBeInTheDocument();
 
     // finally, make a screenshot
