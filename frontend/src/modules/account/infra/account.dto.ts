@@ -1,3 +1,5 @@
+import { FacultyOptions, PathOptions } from '#modules/account/user.types';
+
 export interface RegisterDTO {
   email: string;
   username: string;
@@ -19,8 +21,3 @@ export interface RegisterCreatedDTO {
   faculty: FacultyOptions;
   path: PathOptions;
 }
-
-export type FacultyOptions = 'Gen' | 'Iti' | 'Mas' | 'Doc' | 'Bac' | 'MSp';
-
-export type PathOptions =
-  'Cla' | 'Alt' | 'I-A' | 'A-I' | 'I-M' | 'M-I' | 'I-O' | 'O-I';

@@ -1,5 +1,6 @@
 import axios from 'axios';
 
+import { FacultyOptions, PathOptions } from '#modules/account/user.types';
 import { adaptApiFormErrors, ApiFormErrorDTO } from '#shared/infra/errors';
 
 export interface EditAccountOptions {
@@ -7,8 +8,8 @@ export interface EditAccountOptions {
   lastName: string;
   description: string;
   picture: File | undefined;
-  path: string;
-  faculty: string;
+  path: PathOptions;
+  faculty: FacultyOptions;
   promo: number;
 }
 

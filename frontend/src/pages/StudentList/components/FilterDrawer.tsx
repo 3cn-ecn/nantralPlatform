@@ -13,6 +13,7 @@ import {
   Typography,
 } from '@mui/material';
 
+import { PathOptions } from '#modules/account/user.types';
 import { DateField, SelectField } from '#shared/components/FormFields';
 import { useTranslation } from '#shared/i18n/useTranslation';
 
@@ -90,7 +91,7 @@ export function FilterDrawer({
           </ListItem>
           <ListItem>
             <SelectField
-              handleChange={(val) =>
+              handleChange={(val: PathOptions) =>
                 updateTempFilters({
                   path: val,
                 })

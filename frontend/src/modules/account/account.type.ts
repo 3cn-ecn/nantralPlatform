@@ -1,4 +1,4 @@
-import { FacultyOptions, PathOptions } from './infra/account.dto';
+import { FacultyOptions, PathOptions } from '#modules/account/user.types';
 
 export interface RegisterForm {
   email: string;
