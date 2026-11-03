@@ -129,7 +129,7 @@ export function FilterDrawer({
                   : null
               }
               views={['year']}
-              onChange={(date) => {
+              onChange={(date: Date | null) => {
                 updateTempFilters({ promo: date?.getFullYear() });
               }}
               disableFuture

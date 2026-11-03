@@ -176,7 +176,7 @@ export function FilterDrawer({
                 label={t('event.filters.date.fromDate')}
                 fullWidth
                 value={filters.fromDate || null}
-                onChange={(value) =>
+                onChange={(value: Date | null) =>
                   updateFilters({ fromDate: value || undefined })
                 }
               />
@@ -184,7 +184,7 @@ export function FilterDrawer({
                 label={t('event.filters.date.toDate')}
                 fullWidth
                 value={filters.toDate || null}
-                onChange={(value) =>
+                onChange={(value: Date | null) =>
                   updateFilters({ toDate: value || undefined })
                 }
               />

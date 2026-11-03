@@ -18,7 +18,7 @@ export function SearchBar({
   setShowArchived,
 }: {
   showArchived: boolean;
-  setShowArchived: (boolean) => void;
+  setShowArchived: (value: boolean) => void;
 }) {
   const [params, setParams] = useSearchParams();
   const { t } = useTranslation();
@@ -37,7 +37,7 @@ export function SearchBar({
   });
 
   const handleChange = useCallback(
-    (val) => {
+    (val: unknown) => {
       if (val) {
         params.set('id', val.toString());
         setParams(params, { preventScrollReset: true });

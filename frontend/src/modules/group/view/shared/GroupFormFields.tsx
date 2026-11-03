@@ -1,4 +1,4 @@
-import { Dispatch, useCallback } from 'react';
+import { useCallback } from 'react';
 
 import {
   AccessTime as ClockIcon,
@@ -40,7 +40,6 @@ import {
   TextField,
 } from '#shared/components/FormFields';
 import { RichTextField } from '#shared/components/FormFields/RichTextField';
-import { SetObjectStateAction } from '#shared/hooks/useObjectState';
 import { useTranslation } from '#shared/i18n/useTranslation';
 import { ApiFormError } from '#shared/infra/errors';
 
@@ -48,7 +47,7 @@ interface GroupFormFieldsProps {
   isError: boolean;
   error: ApiFormError<CreateGroupFormDTO> | null;
   formValues: GroupForm;
-  updateFormValues: Dispatch<SetObjectStateAction<GroupForm>>;
+  updateFormValues: (value: Partial<GroupForm>) => void;
   prevData?: Partial<Group>;
   groupType: GroupTypePreview;
   edit?: boolean;
@@ -172,7 +171,7 @@ export function GroupFormFields({
               label={t('group.form.creationDate.label')}
               defaultValue={new Date()}
               views={['year']}
-              onChange={(date) =>
+              onChange={(date: Date | null) =>
                 updateFormValues({ creationYear: date?.getFullYear() })
               }
               disableFuture
@@ -217,7 +216,7 @@ export function GroupFormFields({
                     <DateField
                       label={t('group.form.beginDate.label')}
                       value={formValues.membership?.beginDate ?? null}
-                      onChange={(val) => {
+                      onChange={(val: Date | null) => {
                         updateMembership({ beginDate: val ?? undefined });
                       }}
                       errors={error?.fields?.membership?.begin_date}
@@ -229,7 +228,7 @@ export function GroupFormFields({
                       label={t('group.form.endDate.label')}
                       minDate={formValues.membership?.beginDate}
                       value={formValues.membership?.endDate ?? null}
-                      onChange={(val) => {
+                      onChange={(val: Date | null) => {
                         updateMembership({ endDate: val ?? undefined });
                       }}
                       errors={error?.fields?.membership?.end_date}
@@ -387,7 +386,7 @@ export function GroupFormFields({
             errors={error?.fields?.meeting_place}
           />
           <TextField
-            slotsProps={{
+            slotProps={{
               input: {
                 endAdornment: (
                   <InputAdornment position="end">

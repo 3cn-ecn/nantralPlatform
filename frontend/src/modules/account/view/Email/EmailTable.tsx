@@ -14,7 +14,7 @@ export function EmailTable({
 }: {
   emails?: Email[];
   isPending: boolean;
-  setSelectedEmail: (email: Email) => void;
+  setSelectedEmail: (email: Email | null) => void;
   changeVisibility: (emailUuid: string, isVisible: boolean) => void;
   setAnchorEl: (anchorEl: null | HTMLElement) => void;
 }) {

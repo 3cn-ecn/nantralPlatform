@@ -11,7 +11,7 @@ export type TemplateType = 'ecn' | 'international' | `@${string}`;
 
 interface SelectTemplateProps {
   template: TemplateType;
-  setTemplate: Dispatch<SetStateAction<string>>;
+  setTemplate: Dispatch<SetStateAction<TemplateType>>;
   clubMemberships?: SignatureInfo['clubMemberships'];
 }
 
@@ -27,7 +27,10 @@ export function SelectTemplate({
       <SelectField
         label={t('signature.template.label')}
         value={template}
-        handleChange={useCallback((value) => setTemplate(value), [setTemplate])}
+        handleChange={useCallback(
+          (value: TemplateType) => setTemplate(value),
+          [setTemplate],
+        )}
         fullWidth={false}
         sx={{ minWidth: 200 }}
       >

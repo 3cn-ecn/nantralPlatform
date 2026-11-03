@@ -12,9 +12,7 @@ import { CalendarViewModeButton } from './CalendarViewModeButton';
 
 interface CalendarToolBarProps {
   filters: EventListQueryParams & { fromDate: Date; toDate: Date };
-  updateFilters: (
-    newFilter: Partial<EventListQueryParams & { fromDate: Date; toDate: Date }>,
-  ) => void;
+  updateFilters: (newFilter: Partial<EventListQueryParams>) => void;
   resetFilters: () => void;
   viewMode: CalendarViewMode;
   isSmallScreen?: boolean;

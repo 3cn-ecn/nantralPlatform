@@ -86,7 +86,7 @@ export function EventFormFields({
         helperText={t('event.form.group.helpText')}
         value={formValues.group}
         handleChange={useCallback(
-          (val: number) => updateFormValues({ group: val }),
+          (val: number | null) => updateFormValues({ group: val }),
           [updateFormValues],
         )}
         defaultObjectValue={prevData?.group || null}
@@ -122,7 +122,7 @@ export function EventFormFields({
           label={t('event.form.startDate.label')}
           value={formValues.startDate}
           onChange={useCallback(
-            (val) => updateFormValues({ startDate: val }),
+            (val: Date | null) => updateFormValues({ startDate: val }),
             [updateFormValues],
           )}
           errors={error?.fields?.start_date}
@@ -135,7 +135,7 @@ export function EventFormFields({
           value={formValues.endDate}
           minDateTime={formValues.startDate || undefined}
           onChange={useCallback(
-            (val) => updateFormValues({ endDate: val }),
+            (val: Date | null) => updateFormValues({ endDate: val }),
             [updateFormValues],
           )}
           errors={error?.fields?.end_date}
@@ -198,7 +198,8 @@ export function EventFormFields({
             label={t('event.form.startRegistration.label')}
             value={formValues.startRegistration}
             onChange={useCallback(
-              (val) => updateFormValues({ startRegistration: val }),
+              (val: Date | null) =>
+                updateFormValues({ startRegistration: val }),
               [updateFormValues],
             )}
             errors={error?.fields?.start_registration}
@@ -209,7 +210,7 @@ export function EventFormFields({
             label={t('event.form.endRegistration.label')}
             value={formValues.endRegistration}
             onChange={useCallback(
-              (val) => updateFormValues({ endRegistration: val }),
+              (val: Date | null) => updateFormValues({ endRegistration: val }),
               [updateFormValues],
             )}
             errors={error?.fields?.end_registration}

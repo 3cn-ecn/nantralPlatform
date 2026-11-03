@@ -75,7 +75,7 @@ export function SportEventFormFields({
         helperText={t('event.form.group.helpText')}
         value={formValues.group}
         handleChange={useCallback(
-          (val: number) => updateFormValues({ group: val }),
+          (val: number | null) => updateFormValues({ group: val }),
           [updateFormValues],
         )}
         defaultObjectValue={prevData?.group}
@@ -128,7 +128,7 @@ export function SportEventFormFields({
           label={t('event.form.startDate.label')}
           value={formValues.date}
           onChange={useCallback(
-            (val) => updateFormValues({ date: val }),
+            (val: Date | null) => updateFormValues({ date: val || undefined }),
             [updateFormValues],
           )}
           errors={error?.fields?.date}

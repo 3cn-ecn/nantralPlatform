@@ -10,7 +10,8 @@ import { useSearchParams } from 'react-router-dom';
 
 import { Box } from '@mui/material';
 import { useInfiniteQuery } from '@tanstack/react-query';
-import { GeoJSONSource } from 'mapbox-gl';
+import { Point } from 'geojson';
+import { GeoJSONSource, MapMouseEvent } from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 
 import { getMapGroupDetailApi } from '#modules/group/api/getMapGroupDetail.api';
@@ -131,7 +132,7 @@ export default function MapPage() {
     ) ?? [];
 
   // Action to perform when clicking an item from a layer
-  const onClick = (event) => {
+  const onClick = (event: MapMouseEvent) => {
     const feature = event?.features?.[0];
     if (feature?.properties?.point_count) {
       const clusterId = feature?.properties?.cluster_id;
@@ -144,7 +145,7 @@ export default function MapPage() {
         }
 
         mapRef.current?.flyTo({
-          center: feature.geometry.coordinates,
+          center: (feature.geometry as Point).coordinates as [number, number],
           zoom: zoom ? zoom + 0.01 : undefined,
           duration: 500,
         });

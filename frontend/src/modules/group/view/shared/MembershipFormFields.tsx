@@ -1,4 +1,4 @@
-import { Dispatch, useCallback } from 'react';
+import { useCallback } from 'react';
 
 import { Verified } from '@mui/icons-material';
 import { Stack } from '@mui/material';
@@ -12,7 +12,6 @@ import {
   DateField,
   TextField,
 } from '#shared/components/FormFields';
-import { SetObjectStateAction } from '#shared/hooks/useObjectState';
 import { useTranslation } from '#shared/i18n/useTranslation';
 import { ApiFormError } from '#shared/infra/errors';
 
@@ -20,7 +19,7 @@ interface JoinGroupFormFieldsProps {
   isError: boolean;
   error: ApiFormError<MembershipFormDTO> | null;
   formValues: MembershipForm;
-  updateFormValues: Dispatch<SetObjectStateAction<MembershipForm>>;
+  updateFormValues: (value: Partial<MembershipForm>) => void;
   isAdmin?: boolean;
   selectUser?: boolean;
   showDates?: boolean;
@@ -85,7 +84,7 @@ export function MembershipFormFields({
           <DateField
             label={t('group.form.beginDate.label')}
             value={formValues.beginDate}
-            onChange={(val) => {
+            onChange={(val: Date | null) => {
               updateFormValues({ beginDate: val ?? undefined });
             }}
             errors={error?.fields?.begin_date}
@@ -96,7 +95,7 @@ export function MembershipFormFields({
             label={t('group.form.endDate.label')}
             minDate={formValues.beginDate}
             value={formValues.endDate}
-            onChange={(val) => {
+            onChange={(val: Date | null) => {
               updateFormValues({ endDate: val ?? undefined });
             }}
             errors={error?.fields?.end_date}

@@ -130,7 +130,9 @@ export function RegisterFormFields({
         defaultValue={new Date()}
         sx={{ marginTop: 3 }}
         views={['year']}
-        onChange={(date) => updateFormValues({ promo: date?.getFullYear() })}
+        onChange={(date: Date | null) =>
+          updateFormValues({ promo: date?.getFullYear() })
+        }
         disableFuture
         required
         fullWidth

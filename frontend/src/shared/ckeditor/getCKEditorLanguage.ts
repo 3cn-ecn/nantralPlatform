@@ -18,11 +18,11 @@ export const CKEditorTranslations = [
  * @returns - The CKEditor language (same tag as import)
  */
 export const getCKEditorLanguage = (i18n: i18n): string => {
-  const stdLang = i18n.language;
   const stdLangToCKEditorLang = {
     'en-US': 'en',
     'en-GB': 'en-gb',
     'fr-FR': 'fr',
   };
+  const stdLang = i18n.language as keyof typeof stdLangToCKEditorLang;
   return stdLangToCKEditorLang[stdLang] || 'en';
 };
