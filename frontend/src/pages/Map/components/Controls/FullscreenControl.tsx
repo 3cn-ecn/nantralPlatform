@@ -27,13 +27,13 @@ export function FullscreenControl({
       document.removeEventListener('fullscreenchange', handleFullScreenChange);
   }, []);
 
-  const handleFullscreen = () => {
+  const handleFullscreen = async () => {
     const container = mapRef?.getContainer();
     if (!container) return;
     if (!document.fullscreenElement) {
-      container.requestFullscreen?.();
+      await container.requestFullscreen?.();
     } else {
-      document.exitFullscreen?.();
+      await document.exitFullscreen?.();
     }
   };
 
@@ -45,7 +45,7 @@ export function FullscreenControl({
           : t('map.controls.fullscreen')
       }
       placement={'left'}
-      PopperProps={{ container: portalContainer }}
+      slotProps={{ popper: { container: portalContainer } }}
     >
       <IconButton size="small" color="primary" onClick={handleFullscreen}>
         {isFullscreen ? <FullscreenExitIcon /> : <FullscreenIcon />}

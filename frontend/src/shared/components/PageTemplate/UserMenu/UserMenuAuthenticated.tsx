@@ -62,7 +62,7 @@ export function UserMenuAuthenticated() {
         anchorEl={anchorEl}
         open={menuOpen === 'main'}
         onClose={() => setMenuOpen(null)}
-        TransitionComponent={Collapse}
+        slots={{ transition: Collapse }}
         anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
         transformOrigin={{ vertical: 'top', horizontal: 'right' }}
         slotProps={{ paper: { sx: { minWidth: 200 } } }}
@@ -77,9 +77,7 @@ export function UserMenuAuthenticated() {
         <UserMenuItem
           label={t('userMenu.menu.signOut')}
           icon={<LogoutIcon />}
-          onClick={() => {
-            logout();
-          }}
+          onClick={() => logout()}
         />
         <Divider />
         <UserMenuItem

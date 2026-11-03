@@ -1,3 +1,4 @@
+import { jest } from '@jest/globals';
 import { screen } from '@testing-library/react';
 
 import { renderWithProviders } from '#shared/testing/renderWithProviders';

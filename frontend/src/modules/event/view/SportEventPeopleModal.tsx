@@ -44,7 +44,7 @@ function SportEventPeopleListContent({
 
   const people = query.data?.pages.flatMap((page) => page.results) ?? [];
 
-  if (query.isLoading && people.length === 0) {
+  if (query.isPending && people.length === 0) {
     return (
       <ResponsiveDialogContent>
         <CircularProgress />
@@ -92,11 +92,7 @@ function SportEventPeopleListContent({
         </List>
       </InfiniteList>
       {query.isFetchingNextPage && (
-        <Typography
-          sx={{ px: 2, py: 1 }}
-          variant="body2"
-          color="text.secondary"
-        >
+        <Typography sx={{ px: 2, py: 1 }} variant="body2" color="textSecondary">
           Chargement...
         </Typography>
       )}

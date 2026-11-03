@@ -33,7 +33,7 @@ function ContactForHelpCard() {
         <Typography variant="h4" gutterBottom>
           {t('feedback.home.help.title')}
         </Typography>
-        <Typography variant="body2" color="text.secondary" gutterBottom>
+        <Typography variant="body2" color="textSecondary" gutterBottom>
           {t('feedback.home.help.description')}
         </Typography>
         <ul style={{ margin: 0 }}>
@@ -75,7 +75,7 @@ function SuggestionCard() {
       <Typography gutterBottom variant="h4">
         {t('feedback.home.suggestion.title')}
       </Typography>
-      <Typography variant="body2" color="text.secondary">
+      <Typography variant="body2" color="textSecondary">
         {t('feedback.home.suggestion.description')}
       </Typography>
     </LargeBigButton>
@@ -91,7 +91,7 @@ function BugCard() {
       <Typography gutterBottom variant="h4">
         {t('feedback.home.bug.title')}
       </Typography>
-      <Typography variant="body2" color="text.secondary">
+      <Typography variant="body2" color="textSecondary">
         {t('feedback.home.bug.description')}
       </Typography>
     </LargeBigButton>

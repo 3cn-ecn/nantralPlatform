@@ -1,8 +1,8 @@
 import React from 'react';
 import {
+  createMemoryRouter,
   RouteObject,
   RouterProvider,
-  createMemoryRouter,
 } from 'react-router-dom';
 
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
@@ -22,20 +22,21 @@ const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
       retry: false,
-      cacheTime: 0,
-      suspense: true,
-      useErrorBoundary: false,
+      gcTime: Infinity,
+      throwOnError: false,
     },
   },
 });
 
 /**
- * Customise the `render` function from '@testing-library/react' but with some
+ * Customize the `render` function from '@testing-library/react' but with some
  * default providers so that elements can be rendered correctly:
  * -> language: 'en' by default
  * -> theme: 'light' by default
  *
  * @param element - the element to render
+ * @param otherRoutes - additional routes add to the router
+ * @param path - base path for this element
  * @returns
  */
 export function renderWithProviders(

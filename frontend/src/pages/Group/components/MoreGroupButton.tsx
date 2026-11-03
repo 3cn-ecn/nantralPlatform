@@ -1,7 +1,5 @@
 import { Add } from '@mui/icons-material';
-import { Fab } from '@mui/material';
-
-import { FlexCol } from '#shared/components/FlexBox/FlexBox';
+import { Fab, Stack } from '@mui/material';
 
 export function MoreGroupButton({
   count,
@@ -11,11 +9,13 @@ export function MoreGroupButton({
   onClick: () => void;
 }) {
   return (
-    <FlexCol alignItems={'center'} justifyContent={'center'} height={'100%'}>
+    <Stack
+      sx={{ alignItems: 'center', justifyContent: 'center', height: '100%' }}
+    >
       <Fab onClick={onClick} variant="extended" sx={{ fontSize: 20 }}>
         <Add />
         {count}
       </Fab>
-    </FlexCol>
+    </Stack>
   );
 }

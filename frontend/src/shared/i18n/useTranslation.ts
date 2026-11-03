@@ -22,7 +22,10 @@ export function useTranslation() {
   const { t, i18n } = useI18nextTranslation('translation');
 
   return useMemo(() => {
-    const dateFnsLocale: Locale = mapLocales[i18n.language] || enGB;
+    const dateFnsLocale: Locale =
+      i18n.language in mapLocales
+        ? mapLocales[i18n.language as (typeof languages)[number]]
+        : enGB;
 
     /** Base language without region: use only for translated fields */
     const currentBaseLanguage = i18n.language.split('-')[0] as BaseLanguage;

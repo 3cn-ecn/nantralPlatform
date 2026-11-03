@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-import { StarOutline } from '@mui/icons-material';
+import { StarOutlined } from '@mui/icons-material';
 import { ListItemIcon, ListItemText, MenuItem } from '@mui/material';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
@@ -35,7 +35,9 @@ export function SetMainMenuItem({
         message: t('email.setMain.success'),
         variant: 'success',
       });
-      await queryClient.invalidateQueries(['emails']);
+      await queryClient.invalidateQueries({
+        queryKey: ['emails'],
+      });
     },
     onError: (error) => {
       if (error.globalErrors) {
@@ -71,7 +73,7 @@ export function SetMainMenuItem({
         }}
       >
         <ListItemIcon>
-          <StarOutline />
+          <StarOutlined />
         </ListItemIcon>
         <ListItemText>{t('email.setMain.label')}</ListItemText>
       </MenuItem>
@@ -85,7 +87,7 @@ export function SetMainMenuItem({
             handleClose();
           }}
           reset={changeEmailMutation.reset}
-          isLoading={changeEmailMutation.isLoading}
+          isPending={changeEmailMutation.isPending}
         />
       )}
     </>

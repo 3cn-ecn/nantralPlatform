@@ -18,7 +18,7 @@ export default function ForgotPasswordSuccessView() {
     <>
       <Spacer vertical={2} />
       <Check sx={{ fontSize: 200 }} color="success" />
-      <Typography variant="body1" margin={2}>
+      <Typography variant="body1" sx={{ margin: 2 }}>
         {t('resetPassword.emailSent')}
       </Typography>
       <Spacer vertical={3} />

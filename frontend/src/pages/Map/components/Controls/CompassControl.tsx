@@ -33,7 +33,7 @@ export function CompassControl({
     <Tooltip
       title={t('map.controls.compass')}
       placement={'left'}
-      PopperProps={{ container: portalContainer }}
+      slotProps={{ popper: { container: portalContainer } }}
     >
       <IconButton
         size="small"

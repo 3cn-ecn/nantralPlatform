@@ -1,4 +1,4 @@
-import { FormEvent, useState } from 'react';
+import { SubmitEvent, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { Add } from '@mui/icons-material';
@@ -38,22 +38,23 @@ export function CreateGroupModal({
   const navigate = useNavigate();
   const { palette } = useTheme();
   const [formValues, setFormValues] = useState<CreateGroupForm>(value);
-  const { error, isError, mutate } = useMutation<
+  const { error, isError, mutate, isPending } = useMutation<
     Group,
     ApiFormError<CreateGroupFormDTO>,
     CreateGroupForm
-  >(() => createGroupApi(groupType.slug, formValues), {
+  >({
+    mutationFn: (values) => createGroupApi(groupType.slug, values),
+
     onSuccess: (group) => {
       onClose();
       navigate(group.url);
     },
   });
-  const isLoading = false;
 
   function updateFormValues(val: Partial<CreateGroupForm>) {
     setFormValues((prev) => ({ ...prev, ...val }));
   }
-  function onSubmit(e: FormEvent<HTMLFormElement>) {
+  function onSubmit(e: SubmitEvent<HTMLFormElement>) {
     e.preventDefault();
     mutate(formValues);
   }
@@ -93,7 +94,7 @@ export function CreateGroupModal({
         <LoadingButton
           form="create-group-form"
           type="submit"
-          loading={isLoading}
+          loading={isPending}
           variant="contained"
         >
           {t('button.confirm')}

@@ -48,7 +48,7 @@ export function CalendarGridView({ filters }: CalendarGridViewProps) {
       />
     );
 
-  const events = eventsQuery.isLoading
+  const events = eventsQuery.isPending
     ? createBlankEvents(filters.fromDate, filters.toDate)
     : eventsQuery.data.pages.flatMap((page) => page.results);
 
@@ -71,17 +71,22 @@ export function CalendarGridView({ filters }: CalendarGridViewProps) {
 
   return (
     <Box
-      sx={{ display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)' }}
-      overflow="auto"
-      minWidth="100%"
+      sx={{
+        overflow: 'auto',
+        minWidth: '100%',
+        display: 'grid',
+        gridTemplateColumns: 'repeat(7, 1fr)',
+      }}
     >
       {weekDays.map((weekDay) => (
         <Typography
           key={weekDay}
-          textAlign="center"
           variant="caption"
-          color="text.secondary"
           noWrap
+          sx={{
+            textAlign: 'center',
+            color: 'text.secondary',
+          }}
         >
           {weekDay}
         </Typography>
@@ -108,7 +113,7 @@ export function CalendarGridView({ filters }: CalendarGridViewProps) {
               : {}),
           }}
         >
-          <Typography textAlign="center" py={1}>
+          <Typography sx={{ textAlign: 'center', py: 1 }}>
             {formatDate(date, { day: 'numeric' })}
           </Typography>
           {events
@@ -119,7 +124,7 @@ export function CalendarGridView({ filters }: CalendarGridViewProps) {
               ),
             )
             .map((event) =>
-              eventsQuery.isLoading ? (
+              eventsQuery.isPending ? (
                 <CalendarEventBlockSkeleton key={event.id} />
               ) : (
                 <CalendarEventBlock key={event.id} eventItem={event} />

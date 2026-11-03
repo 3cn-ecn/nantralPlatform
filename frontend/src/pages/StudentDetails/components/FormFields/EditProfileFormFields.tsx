@@ -62,7 +62,7 @@ export function EditProfileFormFields({
         errors={error?.fields?.description}
         multiline
       />
-      <Typography variant="h3" m={1}>
+      <Typography variant="h3" sx={{ m: 1 }}>
         {t('student.details.schooling')}
       </Typography>
       <DateField

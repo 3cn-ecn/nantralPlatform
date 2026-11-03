@@ -1,6 +1,6 @@
 import { adaptSocialLink } from '#modules/social_link/infra/socialLink.adapter';
 
-import { User, UserPreview } from '../user.types';
+import { FacultyOptions, PathOptions, User, UserPreview } from '../user.types';
 import { UserDTO, UserPreviewDTO } from './user.dto';
 
 export function adaptUser(userDTO: UserDTO): User {
@@ -10,8 +10,8 @@ export function adaptUser(userDTO: UserDTO): User {
     url: userDTO.url,
     picture: userDTO.picture,
     promo: userDTO.promo,
-    faculty: userDTO.faculty,
-    path: userDTO.path,
+    faculty: userDTO.faculty as FacultyOptions,
+    path: userDTO.path as PathOptions,
     staff: userDTO.is_staff,
     admin: userDTO.is_superuser,
     description: userDTO.description,

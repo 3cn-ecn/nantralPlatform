@@ -9,10 +9,7 @@ import {
 import { OverridableComponent } from '@mui/material/OverridableComponent';
 
 type UserMenuItemComponent = OverridableComponent<
-  MenuItemTypeMap<
-    { label: string; icon?: ReactNode; rightIcon?: ReactNode },
-    'li'
-  >
+  MenuItemTypeMap<{ label: string; icon?: ReactNode; rightIcon?: ReactNode }>
 >;
 
 export const UserMenuItem: UserMenuItemComponent = ({

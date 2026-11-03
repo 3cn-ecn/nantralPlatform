@@ -1,10 +1,9 @@
-import { Button, Grid, Typography } from '@mui/material';
+import { Button, Grid, Stack, Typography } from '@mui/material';
 
 import { EventListQueryParams } from '#modules/event/api/getEventList.api';
 import { EventCard } from '#modules/event/view/EventCard/EventCard';
 import { EventCardSkeleton } from '#modules/event/view/EventCard/EventCardSkeleton';
 import { ErrorPageContent } from '#shared/components/ErrorPageContent/ErrorPageContent';
-import { FlexRow } from '#shared/components/FlexBox/FlexBox';
 import { InfiniteList } from '#shared/components/InfiniteList/InfiniteList';
 import { useBreakpoint } from '#shared/hooks/useBreakpoint';
 import { useTranslation } from '#shared/i18n/useTranslation';
@@ -29,12 +28,12 @@ export function EventInfiniteGrid({
     { enabled: !disableLoading },
   );
 
-  if (eventsQuery.isLoading) {
+  if (eventsQuery.isPending) {
     return (
       <Grid container spacing={1}>
         {repeat(
           eventsPerPage,
-          <Grid xs={12} sm={6} md={4} lg={3} item>
+          <Grid size={{ xs: 12, sm: 6, md: 4, lg: 3 }}>
             <EventCardSkeleton />
           </Grid>,
         )}
@@ -54,7 +53,7 @@ export function EventInfiniteGrid({
 
   if (eventsQuery.data.pages[0].count === 0) {
     return (
-      <Typography color="secondary" textAlign="center" mt={3}>
+      <Typography color="secondary" sx={{ textAlign: 'center', mt: 3 }}>
         {t('event.list.noEventFound')}
       </Typography>
     );
@@ -66,7 +65,7 @@ export function EventInfiniteGrid({
         <Grid spacing={1} container>
           {eventsQuery.data.pages.map((page) =>
             page.results.map((event) => (
-              <Grid key={event.id} xs={12} sm={6} md={4} lg={3} item>
+              <Grid key={event.id} size={{ xs: 12, sm: 6, md: 4, lg: 3 }}>
                 <EventCard event={event} />
               </Grid>
             )),
@@ -74,13 +73,13 @@ export function EventInfiniteGrid({
           {eventsQuery.isFetchingNextPage &&
             repeat(
               eventsPerPage,
-              <Grid xs={12} sm={6} md={4} lg={3} item>
+              <Grid size={{ xs: 12, sm: 6, md: 4, lg: 3 }}>
                 <EventCardSkeleton />
               </Grid>,
             )}
         </Grid>
       </InfiniteList>
-      <FlexRow justifyContent="center" mt={3}>
+      <Stack direction="row" sx={{ justifyContent: 'center', mt: 3 }}>
         {eventsQuery.hasNextPage && !eventsQuery.isFetchingNextPage && (
           <Button
             onClick={() => eventsQuery.fetchNextPage()}
@@ -96,7 +95,7 @@ export function EventInfiniteGrid({
             {t('event.list.allIsLoaded')}
           </Typography>
         )}
-      </FlexRow>
+      </Stack>
     </>
   );
 }

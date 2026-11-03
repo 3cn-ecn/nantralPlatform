@@ -1,7 +1,7 @@
 import { useState } from 'react';
 
 import { ButtonBase } from '@mui/material';
-import Image from 'mui-image';
+import { Image } from 'mui-image-alter';
 
 import { ImageModal } from '#shared/components/Modal/ImageModal';
 

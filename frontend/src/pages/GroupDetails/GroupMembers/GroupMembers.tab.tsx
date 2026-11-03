@@ -1,10 +1,9 @@
 import { useState } from 'react';
 
 import { History } from '@mui/icons-material';
-import { Chip } from '@mui/material';
+import { Chip, Stack } from '@mui/material';
 
 import { Group } from '#modules/group/types/group.types';
-import { FlexAuto, FlexRow } from '#shared/components/FlexBox/FlexBox';
 import { useTranslation } from '#shared/i18n/useTranslation';
 
 import { JoinButton } from '../components/Buttons/JoinButton';
@@ -18,7 +17,10 @@ export function GroupMembers({ group }: GroupMembersProps) {
   const { t } = useTranslation();
   return (
     <>
-      <FlexRow alignItems={'center'} justifyContent={'space-between'}>
+      <Stack
+        direction="column"
+        sx={{ alignItems: 'center', justifyContent: 'space-between' }}
+      >
         <Chip
           icon={<History />}
           disabled={group.groupType.noMembershipDates}
@@ -29,10 +31,10 @@ export function GroupMembers({ group }: GroupMembersProps) {
             setFilters({ ...filters, previous: !filters.previous })
           }
         />
-        <FlexAuto gap={2}>
+        <Stack direction={{ xs: 'column', md: 'row' }} spacing={2}>
           <JoinButton group={group} />
-        </FlexAuto>
-      </FlexRow>
+        </Stack>
+      </Stack>
       <MembersInfiniteGrid group={group} filters={filters} />
     </>
   );

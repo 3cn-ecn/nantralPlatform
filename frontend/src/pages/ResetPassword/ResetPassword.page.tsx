@@ -35,9 +35,9 @@ export default function ForgotPasswordPage() {
         />
         <Typography
           sx={{
+            textAlign: 'center',
             color: theme.palette.mode == 'dark' ? '#b6b7b7' : '#282828',
           }}
-          textAlign="center"
           variant="h2"
         >
           {t('passwordReset.title')}

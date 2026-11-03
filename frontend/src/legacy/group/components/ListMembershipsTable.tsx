@@ -150,7 +150,7 @@ function MembershipRow(props: {
       <TableCell>
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
           <Avatar url={item.user.picture} title={item.user.name} size="small" />
-          <Typography noWrap fontWeight="lg">
+          <Typography noWrap sx={{ fontWeight: 'lg' }}>
             {item.user.name}
           </Typography>
         </Box>

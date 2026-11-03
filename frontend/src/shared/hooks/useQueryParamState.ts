@@ -6,7 +6,7 @@ export function useQueryParamState<
   key: string,
   defaultValue: T,
   parseValue: (value: string) => T = (value) => value as unknown as T,
-): [T, (newValue: T | null) => void] {
+): [T, (newValue: T) => void] {
   const [searchParams, setSearchParams] = useSearchParams();
 
   // Get the query param value or fallback to the default value

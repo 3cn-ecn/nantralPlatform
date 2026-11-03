@@ -26,8 +26,9 @@ export function adaptTranslatedField<Field extends string>(
   const translatedFieldObject: Partial<TranslatedFieldObject> = {};
 
   for (const lang of baseLanguages) {
-    const key = `${translatedFieldName}_${lang}`;
-    translatedFieldObject[lang] = dataObject[key] || '';
+    const key = `${translatedFieldName}_${lang}` as keyof typeof dataObject;
+    translatedFieldObject[lang] =
+      (dataObject[key] as string | null | undefined) || '';
   }
 
   return translatedFieldObject as TranslatedFieldObject;

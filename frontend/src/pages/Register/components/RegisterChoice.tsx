@@ -12,12 +12,12 @@ import {
   Card,
   CardActions,
   CardContent,
+  Stack,
   Typography,
 } from '@mui/material';
 import { useQuery } from '@tanstack/react-query';
 
 import { validateInvitationApi } from '#modules/account/api/invitation.api';
-import { FlexRow } from '#shared/components/FlexBox/FlexBox';
 import { useTranslation } from '#shared/i18n/useTranslation';
 
 export default function RegisterChoice() {
@@ -60,7 +60,7 @@ export default function RegisterChoice() {
         variant="elevation"
       >
         <CardContent>
-          <FlexRow alignItems="center" gap={1}>
+          <Stack direction="row" sx={{ alignItems: 'center' }} spacing={1}>
             <CheckCircle color="success" fontSize="medium" />
             <Typography
               variant="h3"
@@ -68,7 +68,7 @@ export default function RegisterChoice() {
             >
               {t('register.haveECNEmail.yes')}
             </Typography>
-          </FlexRow>
+          </Stack>
           <Typography
             variant="body1"
             sx={{ textAlign: 'justify', marginLeft: 1, marginTop: 2 }}
@@ -91,12 +91,12 @@ export default function RegisterChoice() {
       </Card>
       <Card sx={{ width: '100%', marginTop: 3 }} variant="outlined">
         <CardContent>
-          <FlexRow alignItems="center" gap={1}>
+          <Stack direction="row" sx={{ alignItems: 'center' }} spacing={1}>
             <CloseRounded color="primary" fontSize="large" />
             <Typography variant="h3">
               {t('register.haveECNEmail.no')}
             </Typography>
-          </FlexRow>
+          </Stack>
           <Typography
             variant="body1"
             sx={{ textAlign: 'justify', marginLeft: 1, marginTop: 2 }}

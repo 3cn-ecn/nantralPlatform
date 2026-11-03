@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, MouseEvent } from 'react';
 import { Link } from 'react-router-dom';
 
 import { Event as EventIcon } from '@mui/icons-material';
@@ -18,7 +18,7 @@ export function AddToCalendarButton({ event }: AddToCalendarButtonProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
 
-  const onButtonClick = (event: React.MouseEvent<HTMLElement>) => {
+  const onButtonClick = (event: MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
     setIsMenuOpen(true);
   };

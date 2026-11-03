@@ -1,5 +1,3 @@
-import { forwardRef } from 'react';
-
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import { EventInfo } from '@ckeditor/ckeditor5-utils';
 import {
@@ -17,14 +15,14 @@ import './custom.styles.scss';
 import { getCKEditorLanguage } from './getCKEditorLanguage';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-const CKEditorWithRef = forwardRef<HTMLInputElement>((props: any, ref) => {
+const CKEditorWithRef = ({ ref, ...props }: any) => {
   return (
     <>
       <CKEditor {...props} />
       <input hidden ref={ref} />
     </>
   );
-});
+};
 CKEditorWithRef.displayName = 'CKEditorWithRef';
 
 interface CKEditorComponentProps {

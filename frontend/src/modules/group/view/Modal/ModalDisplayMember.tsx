@@ -70,7 +70,7 @@ export function ModalShowMember(props: {
       <DialogContent dividers>
         <Typography
           hidden={group && group.groupType.noMembershipDates}
-          color="text.secondary"
+          color="textSecondary"
           gutterBottom
           sx={{ fontSize: 12, fontStyle: 'italic' }}
         >
@@ -81,7 +81,7 @@ export function ModalShowMember(props: {
         </Typography>
         <Typography gutterBottom>
           {member.description ||
-            t('group.details.modal.displayMember.descripition', {
+            t('group.details.modal.displayMember.description', {
               group: member.group.name,
             })}
         </Typography>

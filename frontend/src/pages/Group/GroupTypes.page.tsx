@@ -2,13 +2,18 @@ import { useMemo } from 'react';
 import { useSearchParams } from 'react-router-dom';
 
 import { AdminPanelSettings as AdminPanelSettingsIcon } from '@mui/icons-material';
-import { Container, IconButton, Tooltip, Typography } from '@mui/material';
+import {
+  Container,
+  IconButton,
+  Stack,
+  Tooltip,
+  Typography,
+} from '@mui/material';
 import { useInfiniteQuery } from '@tanstack/react-query';
 
 import { useCurrentUserData } from '#modules/account/hooks/useCurrentUser.data';
 import { getGroupListApi } from '#modules/group/api/getGroupList.api';
 import { GroupGrid } from '#modules/group/view/GroupGrid/GroupGrid';
-import { FlexCol, FlexRow } from '#shared/components/FlexBox/FlexBox';
 import { SearchField } from '#shared/components/FormFields';
 import { InfiniteList } from '#shared/components/InfiniteList/InfiniteList';
 import { Spacer } from '#shared/components/Spacer/Spacer';
@@ -27,8 +32,9 @@ export default function GroupTypesPage() {
   const search = useMemo(() => params.get('search'), [params]);
 
   const groupSearchQuery = useInfiniteQuery({
-    queryFn: ({ pageParam = 1 }) =>
+    queryFn: ({ pageParam }) =>
       getGroupListApi({ search: search, pageSize: 6 * 3, page: pageParam }),
+    initialPageParam: 1,
     getNextPageParam: (lastPage, allPages) =>
       lastPage.next ? allPages.length + 1 : undefined,
     queryKey: ['groups', { search }],
@@ -37,7 +43,7 @@ export default function GroupTypesPage() {
 
   return (
     <Container sx={{ my: 3 }}>
-      <FlexRow alignItems="center" gap={1}>
+      <Stack direction="row" sx={{ alignItems: 'center' }} spacing={1}>
         <Typography variant="h1">{t('group.type.title')}</Typography>
         {staff && (
           <Tooltip title={t('group.type.seeList')}>
@@ -50,7 +56,7 @@ export default function GroupTypesPage() {
             </IconButton>
           </Tooltip>
         )}
-      </FlexRow>
+      </Stack>
       <SearchField
         value={search}
         handleChange={(val) => {
@@ -66,7 +72,7 @@ export default function GroupTypesPage() {
       />
       <Spacer vertical={2} />
       {!search && (
-        <FlexCol gap={4}>
+        <Stack spacing={4}>
           {groupTypesQuery.isSuccess &&
             groupTypesQuery.data.results?.map((type, index) => (
               <GroupTypeSection
@@ -74,22 +80,22 @@ export default function GroupTypesPage() {
                 pageSize={PAGE_SIZE}
                 type={type}
                 groups={listQueries[index].data}
-                isLoading={!listQueries[index] || listQueries[index].isLoading}
+                isPending={!listQueries[index] || listQueries[index].isPending}
               />
             ))}
-        </FlexCol>
+        </Stack>
       )}
       {search && (
         <InfiniteList query={groupSearchQuery}>
           <GroupGrid
             estimatedSize={6}
-            isLoading={groupSearchQuery.isLoading}
+            isPending={groupSearchQuery.isPending}
             groups={groupSearchQuery.data?.pages.flatMap(
               (page) => page.results,
             )}
           />
           {groupSearchQuery.isFetchingNextPage && (
-            <GroupGrid estimatedSize={6} isLoading />
+            <GroupGrid estimatedSize={6} isPending />
           )}
           {groupSearchQuery.data?.pages[0].count === 0 && (
             <Typography>{t('group.list.noGroup')}</Typography>

@@ -14,6 +14,7 @@ import {
   AutocompleteValue as MuiAutocompleteValue,
   ChipTypeMap,
   CircularProgress,
+  Stack,
   TextField,
 } from '@mui/material';
 import { debounce, isNil, uniqBy } from 'lodash-es';
@@ -21,9 +22,8 @@ import { debounce, isNil, uniqBy } from 'lodash-es';
 import { useTranslation } from '#shared/i18n/useTranslation';
 
 import { Avatar } from '../Avatar/Avatar';
-import { FlexRow } from '../FlexBox/FlexBox';
 
-// just a function to make typescript work
+// just a function to make TypeScript work
 function isMultiple<T, Multiple extends boolean>(
   objectValue: T | T[] | null,
   multiple?: Multiple,
@@ -113,7 +113,7 @@ type AutocompleteSearchFieldProps<
  * @param multiple - If user can select multiple elements or just one
  * @param labelPropName - The name of the label prop in the element
  * @param imagePropName - The name of the image prop in the element
- * @param valuePropName - The name of the label prop in the element
+ * @param valuePropName - The name of the value prop in the element
  */
 function AutocompleteSearchFieldComponent<
   ValuePropName extends string,
@@ -123,7 +123,7 @@ function AutocompleteSearchFieldComponent<
     SearchFieldItem<ValuePropName, LabelPropName, ImagePropName>,
   Multiple extends boolean = false,
   DisableClearable extends boolean = false,
-  ChipComponent extends React.ElementType = ChipTypeMap['defaultComponent'],
+  ChipComponent extends ElementType = ChipTypeMap['defaultComponent'],
 >({
   value,
   handleChange,
@@ -173,7 +173,7 @@ function AutocompleteSearchFieldComponent<
   // keep the current object value accessible in async callbacks
   const objectValueRef = useRef(objectValue);
   objectValueRef.current = objectValue;
-  const hasFetchedInitialOptions = useRef(false);
+  const hasFetchedInitialOptionsRef = useRef(false);
 
   useEffect(() => {
     setIsLoading(loading);
@@ -205,11 +205,11 @@ function AutocompleteSearchFieldComponent<
     // can choose another option without having to type a search
     if (
       !fetchInitialOptions ||
-      (!isNil(value) && hasFetchedInitialOptions.current)
+      (!isNil(value) && hasFetchedInitialOptionsRef.current)
     ) {
       return;
     }
-    hasFetchedInitialOptions.current = true;
+    hasFetchedInitialOptionsRef.current = true;
     setIsLoading(true);
     fetchInitialOptions()
       .then((data) => {
@@ -229,7 +229,7 @@ function AutocompleteSearchFieldComponent<
 
   const updateOptions = debounce(
     (
-      event: React.SyntheticEvent,
+      event: SyntheticEvent,
       inputValue: string,
       reason: AutocompleteInputChangeReason,
     ): void => {
@@ -289,32 +289,35 @@ function AutocompleteSearchFieldComponent<
           helperText={isError ? errors.join(', ') : helperText}
           error={isError}
           margin={margin}
-          InputProps={{
-            ...params.InputProps,
-            startAdornment: isMultiple(objectValue, multiple)
-              ? params.InputProps.startAdornment
-              : !!imagePropName &&
-                !!objectValue && (
-                  <Avatar
-                    alt={objectValue[labelPropName]}
-                    src={objectValue[imagePropName]}
-                    size="s"
-                  />
-                ),
-            endAdornment: (
-              <>
-                {isLoading && <CircularProgress color="inherit" size={20} />}
-                {params.InputProps.endAdornment}
-              </>
-            ),
-            type: 'search',
+          slotProps={{
+            ...params.slotProps,
+            input: {
+              ...params.slotProps?.input,
+              startAdornment: isMultiple(objectValue, multiple)
+                ? params.slotProps?.input?.startAdornment
+                : !!imagePropName &&
+                  !!objectValue && (
+                    <Avatar
+                      alt={objectValue[labelPropName]}
+                      src={objectValue[imagePropName]}
+                      size="s"
+                    />
+                  ),
+              endAdornment: (
+                <>
+                  {isLoading && <CircularProgress color="inherit" size={20} />}
+                  {params.slotProps?.input?.endAdornment}
+                </>
+              ),
+              type: 'search',
+            },
           }}
         />
       )}
       getOptionLabel={(option) => option[labelPropName]?.toString() || ''}
       renderOption={(props, option) => {
         return (
-          <FlexRow component="li" gap={1} {...props}>
+          <Stack direction="row" component="li" spacing={1} {...props}>
             {!!imagePropName && (
               <Avatar
                 alt={option[labelPropName] as string}
@@ -323,7 +326,7 @@ function AutocompleteSearchFieldComponent<
               />
             )}
             {option[labelPropName]?.toString()}
-          </FlexRow>
+          </Stack>
         );
       }}
       openText={t('form.autocomplete.open')}

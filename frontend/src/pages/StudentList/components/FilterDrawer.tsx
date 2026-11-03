@@ -9,10 +9,11 @@ import {
   List,
   ListItem,
   MenuItem,
+  Stack,
   Typography,
 } from '@mui/material';
 
-import { FlexRow } from '#shared/components/FlexBox/FlexBox';
+import { PathOptions } from '#modules/account/user.types';
 import { DateField, SelectField } from '#shared/components/FormFields';
 import { useTranslation } from '#shared/i18n/useTranslation';
 
@@ -51,12 +52,15 @@ export function FilterDrawer({
   return (
     <Drawer open={open} onClose={onClose} anchor="right">
       <Container sx={{ my: 2 }}>
-        <FlexRow justifyContent="space-between" alignItems="center">
+        <Stack
+          direction="row"
+          sx={{ justifyContent: 'space-between', alignItems: 'center' }}
+        >
           <Typography variant="h3">{t('student.filters.title')}</Typography>
           <IconButton onClick={onClose}>
             <Close />
           </IconButton>
-        </FlexRow>
+        </Stack>
         <List>
           <ListItem>
             <SelectField
@@ -87,7 +91,7 @@ export function FilterDrawer({
           </ListItem>
           <ListItem>
             <SelectField
-              handleChange={(val) =>
+              handleChange={(val: PathOptions) =>
                 updateTempFilters({
                   path: val,
                 })
@@ -125,14 +129,14 @@ export function FilterDrawer({
                   : null
               }
               views={['year']}
-              onChange={(date) => {
+              onChange={(date: Date | null) => {
                 updateTempFilters({ promo: date?.getFullYear() });
               }}
               disableFuture
             />
           </ListItem>
         </List>
-        <FlexRow mt={1} gap={1}>
+        <Stack direction="row" sx={{ mt: 1 }} spacing={1}>
           <Button
             variant="contained"
             color="secondary"
@@ -146,7 +150,7 @@ export function FilterDrawer({
           <Button variant="outlined" color="secondary" onClick={handleReset}>
             {t('event.filters.reset')}
           </Button>
-        </FlexRow>
+        </Stack>
       </Container>
     </Drawer>
   );

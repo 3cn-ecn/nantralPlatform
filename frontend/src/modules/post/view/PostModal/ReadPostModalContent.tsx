@@ -8,14 +8,13 @@ import {
   Group as GroupIcon,
   PushPin as PushPinIcon,
 } from '@mui/icons-material';
-import { Box, IconButton, Tooltip, Typography } from '@mui/material';
+import { Box, IconButton, Stack, Tooltip, Typography } from '@mui/material';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import { useCurrentUserData } from '#modules/account/hooks/useCurrentUser.data';
 import { deletePostApi } from '#modules/post/api/deletePost.api';
 import { Post } from '#modules/post/post.types';
 import { Avatar } from '#shared/components/Avatar/Avatar';
-import { FlexRow } from '#shared/components/FlexBox/FlexBox';
 import { ConfirmationModal } from '#shared/components/Modal/ConfirmationModal';
 import {
   ResponsiveDialogContent,
@@ -43,11 +42,13 @@ export function ReadPostModalContent({
   const { staff } = useCurrentUserData();
   const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
   const queryClient = useQueryClient();
-  const { isLoading, mutate: deletePost } = useMutation({
+  const { isPending, mutate: deletePost } = useMutation({
     mutationFn: deletePostApi,
     onSuccess: () => {
       setIsConfirmModalOpen(false);
-      queryClient.invalidateQueries(['posts']);
+      queryClient.invalidateQueries({
+        queryKey: ['posts'],
+      });
       onClose();
     },
   });
@@ -71,10 +72,10 @@ export function ReadPostModalContent({
           </Typography>
         </Box>
         <Spacer flex={1} />
-        <FlexRow gap={2}>
+        <Stack direction="row" spacing={2}>
           {post.publicity === 'Mem' && <BadgeIcon Icon={GroupIcon} />}
           {post.pinned && <BadgeIcon Icon={PushPinIcon} />}
-        </FlexRow>
+        </Stack>
       </ResponsiveDialogHeader>
       <ResponsiveDialogContent sx={{ p: 0 }}>
         {post.image && (
@@ -84,12 +85,22 @@ export function ReadPostModalContent({
             style={{ maxWidth: '100%', flexShrink: 0 }}
           />
         )}
-        <Box paddingX={3} paddingTop={1} paddingBottom={6}>
+        <Box
+          sx={{
+            paddingX: 3,
+            paddingTop: 1,
+            paddingBottom: 6,
+          }}
+        >
           <RichTextRenderer content={post.description} />
         </Box>
       </ResponsiveDialogContent>
       <ResponsiveDialogFooter sx={{ pl: 3 }}>
-        <Typography variant="caption" color="text.secondary" fontStyle="italic">
+        <Typography
+          variant="caption"
+          color="textSecondary"
+          sx={{ fontStyle: 'italic' }}
+        >
           {`${t('post.modal.metadata.dates', {
             createdDuration: formatRelativeTime(post.createdAt),
             updatedDuration: formatRelativeTime(post.updatedAt),
@@ -128,7 +139,7 @@ export function ReadPostModalContent({
                 body={t('post.deleteModal.body', { title: post.title })}
                 onCancel={() => setIsConfirmModalOpen(false)}
                 onConfirm={() => deletePost(post.id)}
-                loading={isLoading}
+                loading={isPending}
               />
             )}
           </>

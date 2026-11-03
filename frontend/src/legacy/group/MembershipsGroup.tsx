@@ -1,15 +1,14 @@
-import { useCallback, useEffect, useState } from 'react';
+import { JSX, useCallback, useEffect, useState } from 'react';
 
 import {
   NavigateBefore as NavigateBeforeIcon,
   NavigateNext as NavigateNextIcon,
   OpenInNew as OpenInNewIcon,
 } from '@mui/icons-material';
-import { Button, IconButton, Typography } from '@mui/material';
+import { Button, IconButton, Stack, Typography } from '@mui/material';
 
 import { User } from '#modules/account/user.types';
 import { useGroupDetailsQuery } from '#modules/group/hooks/useGroupDetails.query';
-import { FlexRow } from '#shared/components/FlexBox/FlexBox';
 import { Spacer } from '#shared/components/Spacer/Spacer';
 import { useToast } from '#shared/context/Toast.context';
 
@@ -174,7 +173,7 @@ function MembershipsGroup(): JSX.Element {
 
   return (
     <>
-      <FlexRow gap={2} mb={1} alignItems="center">
+      <Stack direction="row" spacing={2} sx={{ mb: 1, alignItems: 'center' }}>
         <Typography variant="h2">Membres</Typography>
         {group.isAdmin && displayType === 'grid' && (
           <Button
@@ -187,7 +186,7 @@ function MembershipsGroup(): JSX.Element {
             Modifier
           </Button>
         )}
-      </FlexRow>
+      </Stack>
       {displayType === 'grid' ? (
         <ListMembershipsGrid
           members={members}
@@ -206,7 +205,7 @@ function MembershipsGroup(): JSX.Element {
           deleteMembership={(member: Membership) => deleteMembership(member)}
         />
       )}
-      <FlexRow flexWrap="wrap" mt={1} gap={1}>
+      <Stack direction="row" spacing={1} sx={{ flexWrap: 'wrap', mt: 1 }}>
         {((!group.isMember && !group.lockMemberships) || group.isAdmin) && (
           <>
             <Button variant="contained" onClick={() => setOpenAddModal(true)}>
@@ -259,7 +258,7 @@ function MembershipsGroup(): JSX.Element {
         >
           <NavigateNextIcon />
         </IconButton>
-      </FlexRow>
+      </Stack>
     </>
   );
 }

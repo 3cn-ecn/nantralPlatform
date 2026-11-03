@@ -3,13 +3,12 @@ import { Trans } from 'react-i18next';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 
 import { ChevronLeft, Info } from '@mui/icons-material';
-import { Button, Divider, Paper, Typography } from '@mui/material';
+import { Button, Divider, Paper, Stack, Typography } from '@mui/material';
 import { useMutation } from '@tanstack/react-query';
 
 import { RegisterCreated, RegisterForm } from '#modules/account/account.type';
 import { registerApi } from '#modules/account/api/register.api';
 import { RegisterFormFields } from '#modules/account/view/shared/RegisterFormFields';
-import { FlexRow } from '#shared/components/FlexBox/FlexBox';
 import { LoadingButton } from '#shared/components/LoadingButton/LoadingButton';
 import { Spacer } from '#shared/components/Spacer/Spacer';
 import { useTranslation } from '#shared/i18n/useTranslation';
@@ -20,7 +19,7 @@ export default function RegisterFormPanel() {
   const uuid = params.get('uuid') || undefined;
   const [formValues, setFormValues] = useState<
     RegisterForm & { passwordConfirm: string }
-  >({
+  >(() => ({
     email: '',
     username: '',
     password: '',
@@ -31,10 +30,10 @@ export default function RegisterFormPanel() {
     promo: new Date().getFullYear(),
     path: 'Cla',
     invitationUUID: uuid,
-  });
+  }));
   const navigate = useNavigate();
   const {
-    isLoading: loading,
+    isPending: loading,
     error,
     mutate,
   } = useMutation<
@@ -43,7 +42,8 @@ export default function RegisterFormPanel() {
       fields: Partial<Record<keyof RegisterForm, string[]>>;
     },
     RegisterForm
-  >(register, {
+  >({
+    mutationFn: register,
     onSuccess: (data) =>
       navigate('/register/validation', {
         state: { email: data?.email, firstName: data?.firstName },
@@ -63,7 +63,7 @@ export default function RegisterFormPanel() {
     <>
       <Paper sx={{ p: 2, justifyContent: 'center', display: 'flex' }}>
         <Info sx={{ m: 0 }} />
-        <Typography component={'span'} textAlign={'center'}>
+        <Typography component={'span'} sx={{ textAlign: 'center' }}>
           {uuid ? (
             <Trans i18nKey="register.createdAccountIsTemporary" />
           ) : (
@@ -89,7 +89,7 @@ export default function RegisterFormPanel() {
         />
         <Divider flexItem />
         <Spacer vertical={3} />
-        <FlexRow justifyContent={'space-between'}>
+        <Stack direction="row" sx={{ justifyContent: 'space-between' }}>
           <Button
             sx={{ background: 'none' }}
             color="secondary"
@@ -108,7 +108,7 @@ export default function RegisterFormPanel() {
           >
             {t('register.register')}
           </LoadingButton>
-        </FlexRow>
+        </Stack>
       </form>
     </>
   );

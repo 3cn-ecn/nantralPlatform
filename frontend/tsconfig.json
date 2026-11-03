@@ -10,19 +10,20 @@
     "forceConsistentCasingInFileNames": true,
     "noFallthroughCasesInSwitch": true,
     "module": "esnext",
-    "moduleResolution": "node",
+    "moduleResolution": "bundler",
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
     "jsx": "react-jsx",
-    "baseUrl": "./src",
+    "types": ["node", "geojson"],
     "paths": {
-      "#api/*": ["api/*"],
-      "#modules/*": ["modules/*"],
-      "#pages/*": ["pages/*"],
-      "#shared/*": ["shared/*"],
-      "#types/*": ["types/*"]
-    }
+      "#api/*": ["./src/api/*"],
+      "#modules/*": ["./src/modules/*"],
+      "#pages/*": ["./src/pages/*"],
+      "#shared/*": ["./src/shared/*"],
+      "#types/*": ["./src/types/*"]
+    },
+    "rootDir": "."
   },
   "include": ["src", "custom.d.ts"],
   "exclude": ["src/legacy"]

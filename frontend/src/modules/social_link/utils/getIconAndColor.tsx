@@ -1,4 +1,6 @@
 // cspell:ignore facebook, instagram, linkedin, youtube, spotify, discord, fortawesome, fontawesome, youtu
+import { JSX } from 'react';
+
 import {
   faDiscord,
   faFacebook,

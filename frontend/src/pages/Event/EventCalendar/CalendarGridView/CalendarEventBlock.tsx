@@ -31,7 +31,9 @@ export function CalendarEventBlock({ eventItem }: CalendarEventBlockProps) {
     >
       <Typography
         variant="caption"
+        noWrap
         sx={{
+          textAlign: 'center',
           backdropFilter: 'blur(5px)',
           backgroundColor:
             theme.palette.mode === 'light' ? '#FFFFFF90' : '#00000050',
@@ -39,8 +41,6 @@ export function CalendarEventBlock({ eventItem }: CalendarEventBlockProps) {
           width: '100%',
           height: '100%',
         }}
-        textAlign="center"
-        noWrap
       >
         {eventItem.title}
       </Typography>

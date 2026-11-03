@@ -1,4 +1,5 @@
 import {
+  Stack,
   Table,
   TableBody,
   TableCell,
@@ -7,11 +8,10 @@ import {
   TablePagination,
   TableRow,
 } from '@mui/material';
-import TablePaginationActions from '@mui/material/TablePagination/TablePaginationActions';
-import { useQuery } from '@tanstack/react-query';
+import TablePaginationActions from '@mui/material/TablePaginationActions';
+import { keepPreviousData, useQuery } from '@tanstack/react-query';
 
 import { getUserListApi } from '#modules/account/api/getUserList.api';
-import { FlexRow } from '#shared/components/FlexBox/FlexBox';
 import { useTranslation } from '#shared/i18n/useTranslation';
 
 import { StudentListQueryParams } from '../hooks/useFilters';
@@ -25,10 +25,10 @@ interface StudentTableProps {
 
 export function StudentTable({ filters, updateFilters }: StudentTableProps) {
   const { t } = useTranslation();
-  const { data, isSuccess, isFetching, isLoading } = useQuery({
+  const { data, isSuccess, isFetching, isPending } = useQuery({
     queryFn: () => getUserListApi(filters),
     queryKey: ['user', filters],
-    keepPreviousData: true,
+    placeholderData: keepPreviousData,
   });
 
   return (
@@ -44,20 +44,20 @@ export function StudentTable({ filters, updateFilters }: StudentTableProps) {
           </TableRow>
         </TableHead>
         <TableBody>
-          {(isLoading || isFetching) &&
+          {(isPending || isFetching) &&
             new Array(filters.pageSize).fill(0).map((_, i) => (
-              // eslint-disable-next-line react/no-array-index-key
+              // eslint-disable-next-line @eslint-react/no-array-index-key
               <StudentRowSkeleton key={i.toString()} />
             ))}
           {isSuccess &&
-            !isLoading &&
+            !isPending &&
             !isFetching &&
             data.results.map((user) => (
               <StudentRow key={user.id} user={user} />
             ))}
         </TableBody>
       </Table>
-      <FlexRow>
+      <Stack direction="row">
         <TablePagination
           rowsPerPageOptions={[10, 25, 50, 75, 100]}
           labelRowsPerPage={'Résultats par page'}
@@ -83,7 +83,7 @@ export function StudentTable({ filters, updateFilters }: StudentTableProps) {
           showFirstButton
           showLastButton
         />
-      </FlexRow>
+      </Stack>
     </TableContainer>
   );
 }

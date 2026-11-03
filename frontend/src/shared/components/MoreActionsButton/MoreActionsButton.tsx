@@ -1,4 +1,10 @@
-import { Dispatch, ReactNode, SetStateAction, useState } from 'react';
+import {
+  Dispatch,
+  ReactNode,
+  SetStateAction,
+  useState,
+  MouseEvent,
+} from 'react';
 
 import {
   MoreVert as MoreVertIcon,
@@ -23,7 +29,7 @@ export function MoreActionsButton({
 }: MoreActionsButtonProps) {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
-  const handleOpenMenu = (event: React.MouseEvent<HTMLElement>) => {
+  const handleOpenMenu = (event: MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
     setMenuIsOpen(true);
   };

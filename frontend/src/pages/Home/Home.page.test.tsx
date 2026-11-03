@@ -1,4 +1,5 @@
-import { screen } from '@testing-library/react';
+import { jest } from '@jest/globals';
+import { screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
 import { EventDTO } from '#modules/event/infra/event.dto';
@@ -67,15 +68,19 @@ describe('Home page', () => {
 
     // Now that the page is loaded, we check that the "Featured" section
     // (or "A la une" in French) is hidden, since we do not have any posts.
-    expect(
-      screen.queryByRole('heading', { name: 'Featured' }),
-    ).not.toBeInTheDocument();
-
+    // We still need to wait for the tanstack queries to complete
+    await waitFor(() =>
+      expect(
+        screen.queryByRole('heading', { name: 'Featured' }),
+      ).not.toBeInTheDocument(),
+    );
     // On the contrary, the Events section must be displayed
     expect(
-      screen.queryByRole('heading', { name: 'Upcoming events' }),
+      await screen.findByRole('heading', { name: 'Upcoming events' }),
     ).toBeInTheDocument();
-    expect(screen.queryByText(/No upcoming event.../)).toBeInTheDocument();
+    expect(
+      await screen.findByText(/No upcoming event\.\.\./),
+    ).toBeInTheDocument();
 
     // finally, make a screenshot
     expect(component.asFragment()).toMatchSnapshot();
@@ -94,7 +99,7 @@ describe('Home page', () => {
 
     // click the 'See all' button
     const seeAllLink = screen.getAllByText('See all')[0]; // NB: we use get because we are not in an expect
-    userEvent.click(seeAllLink);
+    await userEvent.click(seeAllLink);
 
     // check that we are on the event page
     expect(await screen.findByText('Events')).toBeInTheDocument();

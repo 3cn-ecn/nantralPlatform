@@ -1,6 +1,6 @@
 import {
-  AddCircleOutline,
-  HelpOutline,
+  AddCircleOutlined,
+  HelpOutlined,
   HighlightOff,
   Update,
 } from '@mui/icons-material';
@@ -40,7 +40,7 @@ export function HistoryIcon({
           sx={{ backgroundColor: palette.success.main }}
           alt={'Group created'}
         >
-          <AddCircleOutline />
+          <AddCircleOutlined />
         </Avatar>
       );
     default:
@@ -49,7 +49,7 @@ export function HistoryIcon({
           sx={{ backgroundColor: palette.secondary.main }}
           alt={'Unknown change type'}
         >
-          <HelpOutline />
+          <HelpOutlined />
         </Avatar>
       );
   }

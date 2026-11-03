@@ -4,6 +4,7 @@ import { AccountCircle, School } from '@mui/icons-material';
 import { Divider, MenuItem, Typography } from '@mui/material';
 
 import { RegisterForm } from '#modules/account/account.type';
+import { FacultyOptions, PathOptions } from '#modules/account/user.types';
 import {
   DateField,
   SelectField,
@@ -129,17 +130,17 @@ export function RegisterFormFields({
         defaultValue={new Date()}
         sx={{ marginTop: 3 }}
         views={['year']}
-        onChange={(date) => updateFormValues({ promo: date?.getFullYear() })}
+        onChange={(date: Date | null) =>
+          updateFormValues({ promo: date?.getFullYear() })
+        }
         disableFuture
         required
         fullWidth
         errors={error?.fields?.promo}
       />
       <SelectField
-        handleChange={(value: RegisterForm['faculty']) =>
-          updateFormValues({
-            faculty: value,
-          })
+        handleChange={(value: FacultyOptions) =>
+          updateFormValues({ faculty: value })
         }
         required
         value={formValues?.faculty}
@@ -162,11 +163,7 @@ export function RegisterFormFields({
         </MenuItem>
       </SelectField>
       <SelectField
-        handleChange={(value: RegisterForm['path']) =>
-          updateFormValues({
-            path: value,
-          })
-        }
+        handleChange={(value: PathOptions) => updateFormValues({ path: value })}
         value={formValues?.path}
         label={t('login.specialProgram.label')}
         errors={error?.fields?.path}

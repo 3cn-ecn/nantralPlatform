@@ -1,4 +1,4 @@
-import { ReactNode, createContext, useContext } from 'react';
+import { createContext, ReactNode, useContext } from 'react';
 
 import {
   ProvideAuthValues,
@@ -6,7 +6,7 @@ import {
 } from '#modules/account/hooks/useProvideAuth';
 
 const AuthContext = createContext<ProvideAuthValues>({
-  isLoading: true,
+  isPending: true,
   isAuthenticated: false,
   logout: () => new Promise(() => null),
   login: () => new Promise(() => null),
@@ -19,7 +19,7 @@ const AuthContext = createContext<ProvideAuthValues>({
  */
 export function AuthProvider({ children }: { children: ReactNode }) {
   const auth = useProvideAuth();
-  return <AuthContext.Provider value={auth}>{children}</AuthContext.Provider>;
+  return <AuthContext value={auth}>{children}</AuthContext>;
 }
 /**
  * Get access to auth state

@@ -10,7 +10,8 @@ import { useSearchParams } from 'react-router-dom';
 
 import { Box } from '@mui/material';
 import { useInfiniteQuery } from '@tanstack/react-query';
-import { GeoJSONSource } from 'mapbox-gl';
+import { Feature, Point } from 'geojson';
+import { GeoJSONSource, MapMouseEvent } from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 
 import { getMapGroupDetailApi } from '#modules/group/api/getMapGroupDetail.api';
@@ -41,13 +42,14 @@ export default function MapPage() {
 
   // Get points from API
   const groupListQuery = useInfiniteQuery({
-    queryFn: ({ pageParam = 1 }) =>
+    queryFn: ({ pageParam }) =>
       getMapGroupListPreviewApi({
         type: groupType,
         archived: showArchived,
         pageSize: 30,
         page: pageParam,
       }),
+    initialPageParam: 1,
     getNextPageParam: (lastPage, allPages) =>
       lastPage.next ? allPages.length + 1 : undefined,
     queryKey: ['map', { groupType, showArchived }],
@@ -108,7 +110,7 @@ export default function MapPage() {
   }, [groupListQuery.data?.pages, handleOpen, params]);
 
   // convert data from the server to GeoJSON
-  const points: GeoJSON.Feature[] =
+  const points: Feature[] =
     useMemo(
       () =>
         groupListQuery.data?.pages
@@ -130,7 +132,7 @@ export default function MapPage() {
     ) ?? [];
 
   // Action to perform when clicking an item from a layer
-  const onClick = (event) => {
+  const onClick = (event: MapMouseEvent) => {
     const feature = event?.features?.[0];
     if (feature?.properties?.point_count) {
       const clusterId = feature?.properties?.cluster_id;
@@ -143,7 +145,7 @@ export default function MapPage() {
         }
 
         mapRef.current?.flyTo({
-          center: feature.geometry.coordinates,
+          center: (feature.geometry as Point).coordinates as [number, number],
           zoom: zoom ? zoom + 0.01 : undefined,
           duration: 500,
         });
@@ -203,14 +205,27 @@ export default function MapPage() {
           <Layer {...unclusteredPointLayer} />
         </Source>
       )}
-      <Box position={'absolute'} p={2} width={'100%'} maxWidth={'sm'}>
+      <Box
+        sx={{
+          position: 'absolute',
+          p: 2,
+          width: '100%',
+          maxWidth: 'sm',
+        }}
+      >
         <SearchBar
           showArchived={showArchived}
           setShowArchived={setShowArchived}
         />
       </Box>
       <ScaleControl />
-      <Box position={'absolute'} bottom={35} right={20}>
+      <Box
+        sx={{
+          position: 'absolute',
+          bottom: 35,
+          right: 20,
+        }}
+      >
         <CustomMapControls portalContainer={mapRef.current?.getContainer()} />
       </Box>
 

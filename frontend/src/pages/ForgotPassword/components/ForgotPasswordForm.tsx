@@ -1,11 +1,10 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import { Button, Divider, Typography } from '@mui/material';
+import { Button, Divider, Stack, Typography } from '@mui/material';
 import { useMutation } from '@tanstack/react-query';
 
 import { passwordResetRequestApi } from '#modules/account/api/passwordReset.api';
-import { FlexCol } from '#shared/components/FlexBox/FlexBox';
 import { TextField } from '#shared/components/FormFields';
 import { LoadingButton } from '#shared/components/LoadingButton/LoadingButton';
 import { Spacer } from '#shared/components/Spacer/Spacer';
@@ -23,18 +22,19 @@ export default function ForgotPasswordForm() {
   function requestPasswordReset() {
     mutate(formValues?.email);
   }
-  const { isLoading, mutate, error } = useMutation<
+  const { isPending, mutate, error } = useMutation<
     number,
     { fields: { email: string[] } },
     string
-  >(passwordResetRequestApi, {
+  >({
+    mutationFn: passwordResetRequestApi,
     onSuccess: () =>
       navigate('email_sent', { state: { email: formValues.email } }),
   });
 
   return (
     <>
-      <Typography variant="body1" margin={2} textAlign="center">
+      <Typography variant="body1" sx={{ margin: 2, textAlign: 'center' }}>
         {t('resetPassword.provideEmail')}
       </Typography>
       <form
@@ -57,15 +57,15 @@ export default function ForgotPasswordForm() {
         <Spacer vertical={3} />
         <Divider flexItem />
         <Spacer vertical={3} />
-        <FlexCol
+        <Stack
+          spacing={2}
           sx={{
             justifyContent: 'center',
             alignItems: 'center',
-            gap: 2,
           }}
         >
           <LoadingButton
-            loading={isLoading}
+            loading={isPending}
             variant="contained"
             type="submit"
             size="large"
@@ -80,7 +80,7 @@ export default function ForgotPasswordForm() {
           >
             {t('resetPassword.backToLogin')}
           </Button>
-        </FlexCol>
+        </Stack>
       </form>
     </>
   );

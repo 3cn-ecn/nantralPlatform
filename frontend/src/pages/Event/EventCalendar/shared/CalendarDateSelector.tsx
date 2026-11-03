@@ -5,7 +5,14 @@ import {
   ChevronRight as ChevronRightIcon,
   Today as TodayIcon,
 } from '@mui/icons-material';
-import { Button, Dialog, IconButton, Tooltip, Typography } from '@mui/material';
+import {
+  Button,
+  Dialog,
+  IconButton,
+  Stack,
+  Tooltip,
+  Typography,
+} from '@mui/material';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import {
@@ -23,7 +30,6 @@ import {
 import { upperFirst } from 'lodash-es';
 
 import { EventListQueryParams } from '#modules/event/api/getEventList.api';
-import { FlexRow } from '#shared/components/FlexBox/FlexBox';
 import { useTranslation } from '#shared/i18n/useTranslation';
 
 import { CalendarViewMode } from '../types';
@@ -112,7 +118,7 @@ export function CalendarDateSelector({
 
   return (
     <>
-      <FlexRow alignItems="center" overflow="auto">
+      <Stack direction="row" sx={{ alignItems: 'center', overflow: 'auto' }}>
         <Tooltip title={t('button.previous')}>
           <IconButton onClick={handlePrev}>
             <ChevronLeftIcon />
@@ -138,17 +144,19 @@ export function CalendarDateSelector({
         >
           <Typography
             variant="h5"
-            whiteSpace="nowrap"
-            sx={{ transform: 'translateY(1px)' }}
+            sx={{
+              whiteSpace: 'nowrap',
+              transform: 'translateY(1px)',
+            }}
           >
             {title}
           </Typography>
         </Button>
-      </FlexRow>
+      </Stack>
       <Dialog
         open={isModalOpen}
         onClose={() => setIsModalOpen(false)}
-        PaperProps={{ sx: { minWidth: '320px' } }}
+        slotProps={{ paper: { sx: { minWidth: '320px' } } }}
       >
         <LocalizationProvider
           dateAdapter={AdapterDateFns}

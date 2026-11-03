@@ -4,8 +4,8 @@ import i18n from 'i18next';
 import LanguageDetector from 'i18next-browser-languagedetector';
 import { uniq } from 'lodash-es';
 
-import translationEn from './en-GB.json';
-import translationFr from './fr-FR.json';
+import translationEn from './en-GB.json' with { type: 'json' };
+import translationFr from './fr-FR.json' with { type: 'json' };
 
 export const languages = ['fr-FR', 'en-GB', 'en-US'] as const;
 

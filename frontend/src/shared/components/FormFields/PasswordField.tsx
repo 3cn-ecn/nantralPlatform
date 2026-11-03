@@ -1,4 +1,4 @@
-import { memo, useState } from 'react';
+import { memo, useState, MouseEvent } from 'react';
 
 import { Check, Visibility, VisibilityOff } from '@mui/icons-material';
 import { IconButton, InputAdornment } from '@mui/material';
@@ -19,33 +19,35 @@ function PasswordFieldComponent({
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
 
-  const handleMouseDownPassword = (
-    event: React.MouseEvent<HTMLButtonElement>,
-  ) => {
+  const handleMouseDownPassword = (event: MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
   };
 
   return (
     <TextField
       type={showPassword ? 'text' : 'password'}
-      InputProps={{
-        endAdornment: (
-          <>
-            {!visibilityIconHidden && (
-              <InputAdornment position="end" sx={{ margin: 1 }}>
-                <IconButton
-                  aria-label="toggle password visibility"
-                  onClick={handleClickShowPassword}
-                  onMouseDown={handleMouseDownPassword}
-                  edge="end"
-                >
-                  {showPassword ? <VisibilityOff /> : <Visibility />}
-                </IconButton>
-              </InputAdornment>
-            )}
-            {showValidateIcon && <Check color="success" sx={{ margin: 0.5 }} />}
-          </>
-        ),
+      slotProps={{
+        input: {
+          endAdornment: (
+            <>
+              {!visibilityIconHidden && (
+                <InputAdornment position="end" sx={{ margin: 1 }}>
+                  <IconButton
+                    aria-label="toggle password visibility"
+                    onClick={handleClickShowPassword}
+                    onMouseDown={handleMouseDownPassword}
+                    edge="end"
+                  >
+                    {showPassword ? <VisibilityOff /> : <Visibility />}
+                  </IconButton>
+                </InputAdornment>
+              )}
+              {showValidateIcon && (
+                <Check color="success" sx={{ margin: 0.5 }} />
+              )}
+            </>
+          ),
+        },
       }}
       {...props}
     />

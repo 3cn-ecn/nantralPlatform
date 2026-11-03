@@ -1,4 +1,4 @@
-import { FormEvent, useEffect, useState } from 'react';
+import { SubmitEvent, useEffect, useState, Dispatch } from 'react';
 import { useSearchParams } from 'react-router-dom';
 
 import {
@@ -11,7 +11,15 @@ import {
   Settings,
   Share,
 } from '@mui/icons-material';
-import { Alert, Avatar, Button, Tab, Tabs, useTheme } from '@mui/material';
+import {
+  Alert,
+  Avatar,
+  Button,
+  Stack,
+  Tab,
+  Tabs,
+  useTheme,
+} from '@mui/material';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import { updateGroupApi } from '#modules/group/api/updateGroup.api';
@@ -21,7 +29,6 @@ import { CreateGroupForm, Group } from '#modules/group/types/group.types';
 import { EditHistoryView } from '#modules/group/view/EditHistoryView/EditHistoryView';
 import { GroupFormFields } from '#modules/group/view/shared/GroupFormFields';
 import { EditSocialLinkForm } from '#modules/social_link/view/shared/EditSocialLinkForm';
-import { FlexRow } from '#shared/components/FlexBox/FlexBox';
 import { LoadingButton } from '#shared/components/LoadingButton/LoadingButton';
 import {
   ResponsiveDialog,
@@ -54,12 +61,13 @@ export function ModalEditGroup({
   const [hasModifications, setHasModifications] = useState(false);
   const queryClient = useQueryClient();
   const { palette } = useTheme();
-  const [, setSerachParams] = useSearchParams();
   const { error, isError, mutate, isPending } = useMutation<
     Group,
     ApiFormError<CreateGroupFormDTO>,
     CreateGroupForm
-  >(() => updateGroupApi(group.slug, formValues), {
+  >({
+    mutationFn: () => updateGroupApi(group.slug, formValues),
+
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: ['group', { slug: group.slug }],
@@ -67,14 +75,14 @@ export function ModalEditGroup({
       queryClient.invalidateQueries({
         queryKey: ['history', { slug: group.slug }],
       });
-      setSerachParams({}, { preventScrollReset: true });
+      setSearchParams({}, { preventScrollReset: true });
       setHasModifications(false);
     },
   });
 
-  const updateFormValues: React.Dispatch<
-    SetObjectStateAction<CreateGroupForm>
-  > = (value) =>
+  const updateFormValues: Dispatch<SetObjectStateAction<CreateGroupForm>> = (
+    value,
+  ) =>
     setFormValues(
       (prev) =>
         (typeof value === 'function'
@@ -82,7 +90,7 @@ export function ModalEditGroup({
           : { ...prev, ...value }) as CreateGroupForm,
     );
 
-  function onSubmit(e: FormEvent<HTMLFormElement>) {
+  function onSubmit(e: SubmitEvent<HTMLFormElement>) {
     e.preventDefault();
     mutate(formValues);
   }
@@ -180,7 +188,7 @@ export function ModalEditGroup({
                 edit
               />
             </form>
-            <FlexRow my={2} justifyContent={'end'}>
+            <Stack direction="row" sx={{ my: 2, justifyContent: 'end' }}>
               <LoadingButton
                 form="edit-group-form"
                 type="submit"
@@ -192,7 +200,7 @@ export function ModalEditGroup({
               >
                 {!hasModifications ? t('button.saved') : t('button.save')}
               </LoadingButton>
-            </FlexRow>
+            </Stack>
           </>
         )}
         {tab == 'members' && <EditMembersView group={group} />}

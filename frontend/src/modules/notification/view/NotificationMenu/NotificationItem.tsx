@@ -1,3 +1,4 @@
+import { MouseEvent } from 'react';
 import { Link } from 'react-router-dom';
 
 import {
@@ -6,13 +7,13 @@ import {
   IconButton,
   ListItem,
   ListItemButton,
+  Stack,
   Typography,
 } from '@mui/material';
 
 import { useMarkAsSeenMutation } from '#modules/notification/hooks/useMarkAsSeen.mutation';
 import { SentNotification } from '#modules/notification/notification.types';
 import { Avatar } from '#shared/components/Avatar/Avatar';
-import { FlexCol } from '#shared/components/FlexBox/FlexBox';
 
 interface NotificationItemProps {
   notification: SentNotification;
@@ -23,7 +24,7 @@ export function NotificationItem({
   notification,
   onClose,
 }: NotificationItemProps) {
-  const { markAsSeen, markAsUnseen, isLoading } = useMarkAsSeenMutation(
+  const { markAsSeen, markAsUnseen, isPending } = useMarkAsSeenMutation(
     notification.id,
   );
 
@@ -32,7 +33,7 @@ export function NotificationItem({
     onClose();
   };
 
-  const handleSeenMarkClick = (e: React.MouseEvent) => {
+  const handleSeenMarkClick = (e: MouseEvent) => {
     e.stopPropagation();
     e.preventDefault();
     if (notification.seen) {
@@ -51,7 +52,7 @@ export function NotificationItem({
         sx={{ gap: 1 }}
       >
         <Avatar alt={notification.title} src={notification.iconUrl} size="m" />
-        <FlexCol flex={1} overflow="hidden">
+        <Stack sx={{ flex: 1, overflow: 'hidden', minWidth: 0 }}>
           <Typography variant="caption" noWrap>
             {notification.title}
           </Typography>
@@ -66,7 +67,7 @@ export function NotificationItem({
           >
             {notification.body}
           </Typography>
-        </FlexCol>
+        </Stack>
         <Box>
           <IconButton
             onMouseDown={(e) => e.stopPropagation()}
@@ -74,7 +75,7 @@ export function NotificationItem({
             edge="end"
             sx={{ width: 28, height: 28 }}
           >
-            {isLoading ? (
+            {isPending ? (
               <CircularProgress size={12} thickness={6} />
             ) : (
               <Typography

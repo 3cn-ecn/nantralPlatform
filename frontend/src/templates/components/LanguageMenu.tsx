@@ -20,9 +20,9 @@ export function LanguageMenu({
         <MenuItem
           key={language}
           selected={language === i18n.language}
-          onClick={() => {
-            i18n.changeLanguage(language);
-            queryClient.invalidateQueries();
+          onClick={async () => {
+            await i18n.changeLanguage(language);
+            await queryClient.invalidateQueries();
             onClose();
           }}
         >

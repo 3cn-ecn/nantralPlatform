@@ -12,6 +12,7 @@ import {
   AccordionSummary,
   Box,
   Button,
+  Stack,
 } from '@mui/material';
 import { useMutation } from '@tanstack/react-query';
 
@@ -26,7 +27,6 @@ import {
 } from '#modules/social_link/types/socialLink.type';
 import { sortLinks } from '#modules/social_link/utils/sortLinks';
 import { SocialLinkFormFields } from '#modules/social_link/view/shared/SocialLinkFormFields';
-import { FlexRow } from '#shared/components/FlexBox/FlexBox';
 import { Spacer } from '#shared/components/Spacer/Spacer';
 import { useTranslation } from '#shared/i18n/useTranslation';
 import { ApiFormError } from '#shared/infra/errors';
@@ -83,18 +83,17 @@ export function EditSocialLinkForm({
     error: socialLinkError,
     isError: socialLinkIsError,
     mutate: updateSocialLink,
-  } = useMutation<SocialLinkForm, ApiFormError<SocialLinkDTO>, SocialLinkForm>(
-    (val) => updateSocialLinkApi(val, type),
-    {
-      onSuccess: handleSuccess,
-    },
-  );
+  } = useMutation<SocialLinkForm, ApiFormError<SocialLinkDTO>, SocialLinkForm>({
+    mutationFn: (val) => updateSocialLinkApi(val, type),
+    onSuccess: handleSuccess,
+  });
 
   const { mutate: deleteSocialLink } = useMutation<
     unknown,
     ApiFormError<SocialLinkDTO>,
     SocialLinkForm
-  >((val) => deleteSocialLinkApi(val.id || -1, type), {
+  >({
+    mutationFn: (val) => deleteSocialLinkApi(val.id || -1, type),
     onSuccess: handleSuccess,
   });
 
@@ -102,15 +101,14 @@ export function EditSocialLinkForm({
     error: createError,
     isError: createIsError,
     mutate: createSocialLink,
-  } = useMutation<SocialLinkForm, ApiFormError<SocialLinkDTO>, SocialLinkForm>(
-    (val) =>
+  } = useMutation<SocialLinkForm, ApiFormError<SocialLinkDTO>, SocialLinkForm>({
+    mutationFn: (val) =>
       type == 'group'
         ? createGroupSocialLinkApi(groupSlug || '', val)
         : createUserSocialLinkApi(val),
-    {
-      onSuccess: handleSuccess,
-    },
-  );
+
+    onSuccess: handleSuccess,
+  });
 
   return (
     <>
@@ -215,7 +213,7 @@ export function EditSocialLinkForm({
         )}
       </Box>
       <Spacer vertical={3} />
-      <FlexRow gap={1}>
+      <Stack direction="row" spacing={1}>
         <Button
           startIcon={<AddIcon />}
           ref={addButtonRef}
@@ -259,7 +257,7 @@ export function EditSocialLinkForm({
         >
           {t('socialLink.addPhoneNumber')}
         </Button>
-      </FlexRow>
+      </Stack>
     </>
   );
 }

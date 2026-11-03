@@ -1,4 +1,4 @@
-import { FormEvent, useState } from 'react';
+import { SubmitEvent, useState } from 'react';
 
 import { Edit as EditIcon } from '@mui/icons-material';
 import { Alert, Avatar, Button, useTheme } from '@mui/material';
@@ -6,8 +6,8 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import { deleteSportEventApi } from '#modules/event/api/deleteSportEvent.api';
 import {
-  UpdateSportEventApiVariables,
   updateSportEventApi,
+  UpdateSportEventApiVariables,
 } from '#modules/event/api/updateSportEvent.api';
 import { useSportEventFormValues } from '#modules/event/hooks/useSportEventFormValues';
 import { SportEventFormDTO } from '#modules/event/infra/sportevent.dto';
@@ -47,33 +47,45 @@ export function EditSportEventModalContent({
   });
   const hasFollowingOccurrences = sportEvent.child !== null;
 
-  const { mutate, isLoading, isError, error } = useMutation<
+  const { mutate, isPending, isError, error } = useMutation<
     unknown,
     ApiFormError<SportEventFormDTO>,
     UpdateSportEventApiVariables
-  >(updateSportEventApi);
+  >({ mutationFn: updateSportEventApi });
 
-  const { mutate: deleteSportEvent, isLoading: isDeleteLoading } = useMutation({
+  const { mutate: deleteSportEvent, isPending: isDeletePending } = useMutation({
     mutationFn: deleteSportEventApi,
     onSuccess: () => {
-      queryClient.invalidateQueries(['getSportEvents']);
-      queryClient.invalidateQueries(['sport-event']);
-      queryClient.invalidateQueries(['notifications']);
+      queryClient.invalidateQueries({
+        queryKey: ['getSportEvents'],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ['sport-event'],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ['notifications'],
+      });
       setIsDeleteModalOpen(false);
       onClose();
     },
   });
 
-  const onSubmit = (e: FormEvent, values: SportEventForm) => {
+  const onSubmit = (e: SubmitEvent, values: SportEventForm) => {
     e.preventDefault();
     mutate(
       { id: sportEvent.id, data: values },
       {
         onSuccess: () => {
-          queryClient.invalidateQueries(['getSportEvents']);
+          queryClient.invalidateQueries({
+            queryKey: ['getSportEvents'],
+          });
           // the following occurrences may have changed too
-          queryClient.invalidateQueries(['sport-event']);
-          queryClient.invalidateQueries(['notifications']);
+          queryClient.invalidateQueries({
+            queryKey: ['sport-event'],
+          });
+          queryClient.invalidateQueries({
+            queryKey: ['notifications'],
+          });
           onClose();
         },
       },
@@ -133,7 +145,7 @@ export function EditSportEventModalContent({
         <LoadingButton
           form="edit-sport-event-form"
           type="submit"
-          loading={isLoading}
+          loading={isPending}
           variant="contained"
         >
           {t('button.confirm')}
@@ -145,7 +157,7 @@ export function EditSportEventModalContent({
           onConfirm={(single) =>
             deleteSportEvent({ id: sportEvent.id, single })
           }
-          loading={isDeleteLoading}
+          loading={isDeletePending}
         />
       )}
       {isDeleteModalOpen && !hasFollowingOccurrences && (
@@ -154,7 +166,7 @@ export function EditSportEventModalContent({
           body={t('sport.deleteModal.body')}
           onCancel={() => setIsDeleteModalOpen(false)}
           onConfirm={() => deleteSportEvent({ id: sportEvent.id })}
-          loading={isDeleteLoading}
+          loading={isDeletePending}
         />
       )}
     </>

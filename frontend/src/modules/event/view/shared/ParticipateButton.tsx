@@ -3,15 +3,14 @@ import { useEffect, useState } from 'react';
 import {
   AddCircle as AddCircleIcon,
   CheckCircle as CheckCircleIcon,
-  OpenInNew as OpenInNewIcon,
   LocalFireDepartment as ShotgunIcon,
+  OpenInNew as OpenInNewIcon,
 } from '@mui/icons-material';
-import { SxProps, Theme } from '@mui/material';
+import { Stack, SxProps, Theme } from '@mui/material';
 import { differenceInHours } from 'date-fns';
 
 import { EventPreview } from '#modules/event/event.type';
 import { useRegistrationMutation } from '#modules/event/hooks/useRegistration.mutation';
-import { FlexRow } from '#shared/components/FlexBox/FlexBox';
 import { LoadingButton } from '#shared/components/LoadingButton/LoadingButton';
 import { ConfirmationModal } from '#shared/components/Modal/ConfirmationModal';
 import { useTranslation } from '#shared/i18n/useTranslation';
@@ -26,7 +25,7 @@ interface ParticipateButtonProps {
 export function ParticipateButton({ event, sx }: ParticipateButtonProps) {
   const [isOpenConfirmationModal, setIsOpenConfirmationModal] = useState(false);
 
-  const { register, unregister, isLoading } = useRegistrationMutation(event.id);
+  const { register, unregister, isPending } = useRegistrationMutation(event.id);
   const { t, formatDate, formatTime } = useTranslation();
 
   const now = new Date();
@@ -143,16 +142,17 @@ export function ParticipateButton({ event, sx }: ParticipateButtonProps) {
 
   return (
     <>
-      <FlexRow
+      <Stack
+        direction="row"
         className={
-          isShotgun && !isDisabled && !isLoading && !event.formUrl
+          isShotgun && !isDisabled && !isPending && !event.formUrl
             ? 'button-shotgun-style'
             : undefined
         }
         sx={sx}
       >
         <LoadingButton
-          loading={isLoading}
+          loading={isPending}
           disabled={isDisabled}
           onClick={!event.formUrl ? handleClick : undefined}
           startIcon={getStartIcon()}
@@ -170,14 +170,14 @@ export function ParticipateButton({ event, sx }: ParticipateButtonProps) {
         >
           {getLabel()}
         </LoadingButton>
-      </FlexRow>
+      </Stack>
       {isOpenConfirmationModal && (
         <ConfirmationModal
           title={t('event.participateButton.unregisterModal.title')}
           body={t('event.participateButton.unregisterModal.message')}
           onCancel={onUnregisterModalCancel}
           onConfirm={onUnregisterModalConfirm}
-          loading={isLoading}
+          loading={isPending}
         />
       )}
     </>

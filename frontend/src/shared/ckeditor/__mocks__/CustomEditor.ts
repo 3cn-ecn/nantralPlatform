@@ -4,7 +4,7 @@ export class CustomEditor {
   static defaultConfig = {}; // Mock this if required
   config: unknown;
 
-  constructor(config) {
+  constructor(config: unknown) {
     this.config = config;
   }
 

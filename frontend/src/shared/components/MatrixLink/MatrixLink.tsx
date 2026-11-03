@@ -1,4 +1,4 @@
-import { AnchorHTMLAttributes, forwardRef } from 'react';
+import { AnchorHTMLAttributes } from 'react';
 
 const ELEMENT_WEB_URL = 'https://element.nantral-platform.fr';
 
@@ -73,19 +73,19 @@ function isMobile(): boolean {
   return /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent);
 }
 
-export const MatrixLink = forwardRef<HTMLAnchorElement, MatrixLinkProps>(
-  function MatrixLink({ to, ...props }, ref) {
-    const href = isMobile() ? getElementXUri(to) : getElementWebUrl(to);
+export const MatrixLink = function MatrixLink({
+  to,
+  ...props
+}: MatrixLinkProps) {
+  const href = isMobile() ? getElementXUri(to) : getElementWebUrl(to);
 
-    return <a {...props} ref={ref} href={href} />;
-  },
-);
+  return <a {...props} href={href} />;
+};
 
-export const MatrixHomeLink = forwardRef<
-  HTMLAnchorElement,
-  MatrixHomeLinkProps
->(function MatrixHomeLink({ ...props }, ref) {
+export const MatrixHomeLink = function MatrixHomeLink(
+  props: MatrixHomeLinkProps,
+) {
   const href = isMobile() ? getAppStoreUrl() : ELEMENT_WEB_URL;
 
-  return <a {...props} ref={ref} href={href} />;
-});
+  return <a {...props} href={href} />;
+};

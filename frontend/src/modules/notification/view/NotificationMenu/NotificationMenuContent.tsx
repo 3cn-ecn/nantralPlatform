@@ -43,14 +43,14 @@ export function NotificationMenuContent({
 
   if (!notificationListQuery.isSuccess) {
     return (
-      <Box overflow="auto">
+      <Box sx={{ overflow: 'auto' }}>
         <List>{repeat(10, <NotificationItemSkeleton />)}</List>
       </Box>
     );
   }
 
   return (
-    <Box overflow="auto">
+    <Box sx={{ overflow: 'auto' }}>
       <List>
         {notificationListQuery.data.pages.map((page) =>
           page.results.map((item) => (
@@ -76,9 +76,11 @@ export function NotificationMenuContent({
         ) : (
           <Typography
             color="secondary"
-            textAlign="center"
             variant="body2"
-            mt={1}
+            sx={{
+              textAlign: 'center',
+              mt: 1,
+            }}
           >
             {t('notification.endOfList')}
           </Typography>

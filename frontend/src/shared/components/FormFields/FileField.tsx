@@ -96,72 +96,77 @@ function FileFieldComponent({
           ? { textDecoration: 'line-through' }
           : {},
       }}
-      inputProps={{ disabled: true }}
-      InputProps={{
-        startAdornment: (
-          <InputAdornment position="start">
-            <Button
-              component="label"
-              htmlFor={name}
-              onKeyDownCapture={(e) => {
-                if (e.code === 'Space' || e.code === 'Enter') {
-                  inputElementRef.current?.click();
-                }
-              }}
-              disabled={disabled}
-              variant="contained"
-              color="secondary"
-              size="small"
-              sx={{ mr: 1 }}
-            >
-              {t('form.file.label')}
-            </Button>
-            <input
-              name={name}
-              id={name}
-              ref={inputElementRef}
-              hidden
-              disabled={disabled}
-              accept={accept}
-              type="file"
-              onChange={(event) => {
-                if (event.target.files && event.target.files.length > 0)
-                  handleChange(event.target.files[0]);
-              }}
-            />
-          </InputAdornment>
-        ),
-        endAdornment: (value || prevFileName) && !disabled && (
-          <InputAdornment position="start">
-            {/* If a new file is selected, the button proposes to remove it */}
-            {isRealFile(value) && (
-              <FileActionButton
-                title={t('form.file.clearButton.label')}
-                onClick={() => handleChange(undefined)}
-                Icon={ClearIcon}
-                key="action-button"
+      slotProps={{
+        ...props.slotProps,
+        htmlInput: {
+          disabled: true,
+        },
+        input: {
+          startAdornment: (
+            <InputAdornment position="start">
+              <Button
+                component="label"
+                htmlFor={name}
+                onKeyDownCapture={(e) => {
+                  if (e.code === 'Space' || e.code === 'Enter') {
+                    inputElementRef.current?.click();
+                  }
+                }}
+                disabled={disabled}
+                variant="contained"
+                color="secondary"
+                size="small"
+                sx={{ mr: 1 }}
+              >
+                {t('form.file.label')}
+              </Button>
+              <input
+                name={name}
+                id={name}
+                ref={inputElementRef}
+                hidden
+                disabled={disabled}
+                accept={accept}
+                type="file"
+                onChange={(event) => {
+                  if (event.target.files && event.target.files.length > 0)
+                    handleChange(event.target.files[0]);
+                }}
               />
-            )}
-            {/* If showing the previous file, the button proposes to delete it */}
-            {isNotAFile(value) && prevFileName && (
-              <FileActionButton
-                title={t('form.file.deleteButton.label')}
-                onClick={() => handleChange(new File([], ''))}
-                Icon={DeleteIcon}
-                key="action-button"
-              />
-            )}
-            {/* If the user click to delete the file, the button proposes to undo it */}
-            {isDeletedFile(value) && (
-              <FileActionButton
-                title={t('form.file.undoButton.label')}
-                onClick={() => handleChange(undefined)}
-                Icon={UndoIcon}
-                key="action-button"
-              />
-            )}
-          </InputAdornment>
-        ),
+            </InputAdornment>
+          ),
+          endAdornment: (value || prevFileName) && !disabled && (
+            <InputAdornment position="start">
+              {/* If a new file is selected, the button proposes to remove it */}
+              {isRealFile(value) && (
+                <FileActionButton
+                  title={t('form.file.clearButton.label')}
+                  onClick={() => handleChange(undefined)}
+                  Icon={ClearIcon}
+                  key="action-button"
+                />
+              )}
+              {/* If showing the previous file, the button proposes to delete it */}
+              {isNotAFile(value) && prevFileName && (
+                <FileActionButton
+                  title={t('form.file.deleteButton.label')}
+                  onClick={() => handleChange(new File([], ''))}
+                  Icon={DeleteIcon}
+                  key="action-button"
+                />
+              )}
+              {/* If the user click to delete the file, the button proposes to undo it */}
+              {isDeletedFile(value) && (
+                <FileActionButton
+                  title={t('form.file.undoButton.label')}
+                  onClick={() => handleChange(undefined)}
+                  Icon={UndoIcon}
+                  key="action-button"
+                />
+              )}
+            </InputAdornment>
+          ),
+        },
       }}
       {...props}
     />

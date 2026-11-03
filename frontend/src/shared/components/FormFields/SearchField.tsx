@@ -28,7 +28,7 @@ function SearchFieldComponent({
     <TextField
       defaultValue={value}
       handleChange={handleHandleChange}
-      InputProps={{ endAdornment: <SearchIcon /> }}
+      slotProps={{ input: { endAdornment: <SearchIcon /> } }}
       {...props}
     />
   );

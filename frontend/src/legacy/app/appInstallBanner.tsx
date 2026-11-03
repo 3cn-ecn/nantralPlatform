@@ -1,12 +1,8 @@
 import { useEffect, useState } from 'react';
-import {
-  Button,
-  IconButton,
-  Stack,
-  Typography,
-} from '@mui/material';
-import CloseIcon from '@mui/icons-material/Close';
 import { useCookies } from 'react-cookie';
+
+import CloseIcon from '@mui/icons-material/Close';
+import { Button, IconButton, Stack, Typography } from '@mui/material';
 
 interface BeforeInstallPromptEvent extends Event {
   prompt: () => Promise<void>;
@@ -33,10 +29,7 @@ export function AppInstallBanner(): JSX.Element {
       setDeferredPrompt(promptEvent);
     }
 
-    window.addEventListener(
-      'beforeinstallprompt',
-      handleBeforeInstallPrompt,
-    );
+    window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
 
     return () => {
       window.removeEventListener(
@@ -46,9 +39,7 @@ export function AppInstallBanner(): JSX.Element {
     };
   }, []);
 
-  const visitInApp = window.matchMedia(
-    '(display-mode: standalone)',
-  ).matches;
+  const visitInApp = window.matchMedia('(display-mode: standalone)').matches;
 
   const appUnsupportedOrInstalled = deferredPrompt === null;
   const bannerClosed = cookies['app-install-closed'] ?? false;
@@ -92,12 +83,12 @@ export function AppInstallBanner(): JSX.Element {
     <Stack
       direction="row"
       spacing={2}
-      alignItems="center"
       className="app-install"
+      sx={{
+        alignItems: 'center',
+      }}
     >
-      <Typography>
-        L'appli Nantral Platform est disponible&nbsp;! 🥳
-      </Typography>
+      <Typography>L'appli Nantral Platform est disponible&nbsp;! 🥳</Typography>
 
       {isAndroid ? (
         <Button
@@ -113,20 +104,12 @@ export function AppInstallBanner(): JSX.Element {
           Télécharger
         </Button>
       ) : (
-        <Button
-          variant="contained"
-          color="error"
-          onClick={askToInstallApp}
-        >
+        <Button variant="contained" color="error" onClick={askToInstallApp}>
           Installer
         </Button>
       )}
 
-      <IconButton
-        aria-label="Fermer"
-        onClick={closeBanner}
-        size="small"
-      >
+      <IconButton aria-label="Fermer" onClick={closeBanner} size="small">
         <CloseIcon fontSize="small" />
       </IconButton>
     </Stack>

@@ -1,4 +1,4 @@
-import { FormEvent, useState } from 'react';
+import { SubmitEvent, useState, MouseEvent } from 'react';
 
 import { Edit, MoreHoriz } from '@mui/icons-material';
 import {
@@ -7,6 +7,7 @@ import {
   IconButton,
   Menu,
   MenuItem,
+  Stack,
   Typography,
   useTheme,
 } from '@mui/material';
@@ -21,7 +22,6 @@ import {
   Membership,
   MembershipForm,
 } from '#modules/group/types/membership.types';
-import { FlexRow } from '#shared/components/FlexBox/FlexBox';
 import { LoadingButton } from '#shared/components/LoadingButton/LoadingButton';
 import {
   ResponsiveDialog,
@@ -51,12 +51,12 @@ export function ModalEditMembership({
   oneYear.setFullYear(today.getFullYear() + 1);
 
   const [modalOpen, setModalOpen] = useState(false);
-  const [formValues, setFormValues] = useState<MembershipForm>(
+  const [formValues, setFormValues] = useState<MembershipForm>(() =>
     convertMembershipToForm(membership),
   );
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
-  const handleClick = (event: React.MouseEvent<HTMLElement>) => {
+  const handleClick = (event: MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
   };
   const handleClose = () => {
@@ -65,21 +65,26 @@ export function ModalEditMembership({
   const queryClient = useQueryClient();
   const { palette } = useTheme();
   const { staff } = useCurrentUserData();
-  const { error, isError, mutate, isLoading } = useMutation<
+  const { error, isError, mutate, isPending } = useMutation<
     Membership,
     ApiFormError<MembershipFormDTO>,
     MembershipForm
-  >(() => editMembershipApi(membership.id, formValues), {
+  >({
+    mutationFn: () => editMembershipApi(membership.id, formValues),
+
     onSuccess: () => {
-      queryClient.invalidateQueries(['group', { slug: membership.group.slug }]);
-      queryClient.invalidateQueries([
-        'members',
-        { slug: membership.group.slug },
-      ]);
-      queryClient.invalidateQueries([
-        'membership',
-        { group: membership.group.slug, user: membership.user.id },
-      ]);
+      queryClient.invalidateQueries({
+        queryKey: ['group', { slug: membership.group.slug }],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ['members', { slug: membership.group.slug }],
+      });
+      queryClient.invalidateQueries({
+        queryKey: [
+          'membership',
+          { group: membership.group.slug, user: membership.user.id },
+        ],
+      });
       onClose();
     },
   });
@@ -87,7 +92,7 @@ export function ModalEditMembership({
   function updateFormValues(val: Partial<CreateGroupForm>) {
     setFormValues((prev) => ({ ...prev, ...val }));
   }
-  function onSubmit(e: FormEvent<HTMLFormElement>) {
+  function onSubmit(e: SubmitEvent<HTMLFormElement>) {
     e.preventDefault();
     mutate(formValues);
   }
@@ -117,7 +122,7 @@ export function ModalEditMembership({
               showDates={!group.groupType.noMembershipDates}
             />
           </form>
-          <FlexRow justifyContent={'left'}>
+          <Stack direction="row" sx={{ justifyContent: 'left' }}>
             <IconButton onClick={handleClick}>
               <MoreHoriz />
             </IconButton>
@@ -134,7 +139,7 @@ export function ModalEditMembership({
                 <Typography color="primary">Supprimer</Typography>
               </MenuItem>
             </Menu>
-          </FlexRow>
+          </Stack>
         </ResponsiveDialogContent>
         <ResponsiveDialogFooter>
           <Button variant="text" onClick={() => onClose()}>
@@ -143,7 +148,7 @@ export function ModalEditMembership({
           <LoadingButton
             form="edit-group-form"
             type="submit"
-            loading={isLoading}
+            loading={isPending}
             variant="contained"
           >
             {t('button.confirm')}

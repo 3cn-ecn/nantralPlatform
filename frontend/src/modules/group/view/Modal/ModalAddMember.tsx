@@ -1,4 +1,4 @@
-import { FormEvent, useState } from 'react';
+import { SubmitEvent, useState } from 'react';
 
 import { PersonAdd } from '@mui/icons-material';
 import { Avatar, Button, useTheme } from '@mui/material';
@@ -46,14 +46,20 @@ export function ModalAddMember({
   });
   const queryClient = useQueryClient();
   const { palette } = useTheme();
-  const { error, isError, mutate, isLoading } = useMutation<
+  const { error, isError, mutate, isPending } = useMutation<
     Membership,
     ApiFormError<MembershipFormDTO>,
     MembershipForm
-  >(() => createMembershipApi(formValues), {
+  >({
+    mutationFn: () => createMembershipApi(formValues),
+
     onSuccess: () => {
-      queryClient.invalidateQueries(['group', { slug: group.slug }]);
-      queryClient.invalidateQueries(['members', { slug: group.slug }]);
+      queryClient.invalidateQueries({
+        queryKey: ['group', { slug: group.slug }],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ['members', { slug: group.slug }],
+      });
       onClose();
     },
   });
@@ -61,7 +67,7 @@ export function ModalAddMember({
   function updateFormValues(val: Partial<CreateGroupForm>) {
     setFormValues((prev) => ({ ...prev, ...val }));
   }
-  function onSubmit(e: FormEvent<HTMLFormElement>) {
+  function onSubmit(e: SubmitEvent<HTMLFormElement>) {
     e.preventDefault();
     mutate(formValues);
   }
@@ -99,7 +105,7 @@ export function ModalAddMember({
         <LoadingButton
           form="edit-group-form"
           type="submit"
-          loading={isLoading}
+          loading={isPending}
           variant="contained"
         >
           {t('button.confirm')}

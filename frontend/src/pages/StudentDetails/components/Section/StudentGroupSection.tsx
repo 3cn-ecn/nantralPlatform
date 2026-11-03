@@ -1,12 +1,11 @@
 import { useState } from 'react';
 
 import { Visibility, VisibilityOff } from '@mui/icons-material';
-import { Chip, Typography } from '@mui/material';
+import { Chip, Stack, Typography } from '@mui/material';
 
 import { User } from '#modules/account/user.types';
 import { useGroupTypes } from '#pages/Group/hooks/useGroupTypes';
 import { MembersInfiniteGrid } from '#pages/GroupDetails/GroupMembers/MembersInfiniteGrid';
-import { FlexRow } from '#shared/components/FlexBox/FlexBox';
 import { CheckboxField } from '#shared/components/FormFields';
 import { useTranslation } from '#shared/i18n/useTranslation';
 
@@ -19,13 +18,16 @@ export function StudentGroupsSection({ user }: { user: User }) {
   return (
     <>
       <Typography variant="h2">Groupes</Typography>
-      <FlexRow
-        alignItems="center"
-        gap={1}
-        mt={2}
-        pb={1}
-        overflow={'scroll'}
-        sx={{ scrollbarWidth: 'none' }}
+      <Stack
+        direction="row"
+        spacing={1}
+        sx={{
+          alignItems: 'center',
+          mt: 2,
+          pb: 1,
+          overflow: 'scroll',
+          scrollbarWidth: 'none',
+        }}
       >
         <Chip
           variant={type === undefined ? 'filled' : 'outlined'}
@@ -40,7 +42,7 @@ export function StudentGroupsSection({ user }: { user: User }) {
             onClick={() => setType(groupType.slug)}
           />
         ))}
-      </FlexRow>
+      </Stack>
       {!groupTypesQuery.data?.results.find((item) => type == item.slug)
         ?.noMembershipDates && (
         <CheckboxField

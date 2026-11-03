@@ -1,6 +1,7 @@
 import { useCallback, useMemo } from 'react';
 import { useSearchParams } from 'react-router-dom';
 
+import { FacultyOptions, PathOptions } from '#modules/account/user.types';
 import {
   convertCamelToSnakeCase,
   convertToURLSearchParams,
@@ -13,8 +14,8 @@ export interface StudentListQueryParams {
   search?: string;
   page: number;
   pageSize: number;
-  path?: string;
-  faculty?: string;
+  path?: PathOptions;
+  faculty?: FacultyOptions;
 }
 
 function parseQueryParams(
@@ -26,8 +27,11 @@ function parseQueryParams(
     pageSize: parseNumber(queryParams.get('page_size')) ?? 25,
     search: parseString(queryParams.get('search')) ?? undefined,
     ordering: parseString(queryParams.get('ordering')) ?? undefined,
-    path: parseString(queryParams.get('path')) ?? undefined,
-    faculty: parseString(queryParams.get('faculty')) ?? undefined,
+    path:
+      (parseString(queryParams.get('path')) as PathOptions | null) ?? undefined,
+    faculty:
+      (parseString(queryParams.get('faculty')) as FacultyOptions | null) ??
+      undefined,
   };
 
   return filters;

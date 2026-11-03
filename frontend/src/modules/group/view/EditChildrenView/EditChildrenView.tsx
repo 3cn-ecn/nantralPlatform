@@ -1,12 +1,11 @@
 import { useState } from 'react';
 
 import { Add } from '@mui/icons-material';
-import { Button, Typography } from '@mui/material';
+import { Button, Stack, Typography } from '@mui/material';
 
 import { Group } from '#modules/group/types/group.types';
 import { useGroupChildren } from '#pages/GroupDetails/hooks/useGroupChildren';
 import { CreateGroupModal } from '#pages/GroupList/components/CreateGroupModal';
-import { FlexRow } from '#shared/components/FlexBox/FlexBox';
 import { InfiniteList } from '#shared/components/InfiniteList/InfiniteList';
 import { useTranslation } from '#shared/i18n/useTranslation';
 
@@ -19,7 +18,7 @@ export function EditChildrenView({ group }: { group: Group }) {
 
   return (
     <>
-      <FlexRow justifyContent={'space-between'} mb={3}>
+      <Stack direction="row" sx={{ justifyContent: 'space-between', mb: 3 }}>
         <Typography variant="h2">
           {t('group.details.modal.editGroup.tabs.subgroups')} (
           {query.data?.pages[0].count})
@@ -31,13 +30,13 @@ export function EditChildrenView({ group }: { group: Group }) {
         >
           {t('button.add')}
         </Button>
-      </FlexRow>
+      </Stack>
       {query.data?.pages[0].count === 0 && (
         <Typography>This group has no subgroups 🙁</Typography>
       )}
       <InfiniteList query={query}>
         <GroupGrid
-          isLoading={query.isLoading}
+          isPending={query.isPending}
           estimatedSize={6}
           groups={query.data?.pages.flatMap((page) => page.results)}
         />

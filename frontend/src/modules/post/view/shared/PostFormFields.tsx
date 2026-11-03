@@ -89,7 +89,7 @@ export function PostFormFields({
         helperText={t('post.form.group.helpText')}
         value={formValues.group}
         handleChange={useCallback(
-          (val: number) => updateFormValues({ group: val }),
+          (val: number | null) => updateFormValues({ group: val }),
           [updateFormValues],
         )}
         defaultObjectValue={prevData?.group || null}

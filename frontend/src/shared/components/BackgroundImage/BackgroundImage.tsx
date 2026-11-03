@@ -1,6 +1,6 @@
 import { ComponentProps } from 'react';
 
-import { Image } from 'mui-image';
+import { Image } from 'mui-image-alter';
 
 export function BackgroundImage({
   wrapperStyle,

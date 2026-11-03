@@ -37,7 +37,7 @@ function MembershipCard(props: {
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
 
   return (
-    <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
+    <Grid size={{ xs: 12, sm: 6, md: 4, lg: 3, xl: 2 }}>
       <Card sx={{ height: '100%' }}>
         <CardActionArea
           onClick={() => setOpenShowModal(true)}

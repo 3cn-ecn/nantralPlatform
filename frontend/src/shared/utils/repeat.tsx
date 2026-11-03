@@ -9,7 +9,7 @@ export function repeat(nb: number, children: React.ReactElement) {
   return (
     <>
       {Array.from({ length: nb }).map((_, index) =>
-        // eslint-disable-next-line react/no-array-index-key
+        // eslint-disable-next-line @eslint-react/no-array-index-key
         React.cloneElement(children, { key: index }),
       )}
     </>

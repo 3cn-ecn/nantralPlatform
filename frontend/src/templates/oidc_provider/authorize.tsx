@@ -10,6 +10,7 @@ import {
   Button,
   Link,
   Paper,
+  Stack,
   Table,
   TableBody,
   TableCell,
@@ -21,7 +22,6 @@ import {
 } from '@mui/material';
 
 import { Avatar } from '#shared/components/Avatar/Avatar';
-import { FlexRow } from '#shared/components/FlexBox/FlexBox';
 import { Spacer } from '#shared/components/Spacer/Spacer';
 import { useTranslation } from '#shared/i18n/useTranslation';
 
@@ -50,11 +50,15 @@ function Authorize() {
       <form action={post_url} method="POST">
         <div dangerouslySetInnerHTML={{ __html: hidden_inputs }}></div>
         <div dangerouslySetInnerHTML={{ __html: csrf_token }}></div>
-        <Typography variant="h2" textAlign="center">
+        <Typography variant="h2" sx={{ textAlign: 'center' }}>
           Nantral Platform
         </Typography>
         <Spacer vertical={2} />
-        <FlexRow gap={2} alignItems={'center'} justifyContent={'center'}>
+        <Stack
+          direction="row"
+          spacing={2}
+          sx={{ alignItems: 'center', justifyContent: 'center' }}
+        >
           <Avatar
             src="/static/img/logo/scalable/logo.svg"
             alt="Nantral platform"
@@ -102,14 +106,14 @@ function Authorize() {
               }}
             />
           </Badge>
-        </FlexRow>
+        </Stack>
         <Spacer vertical={2} />
-        <Typography variant={'h4'} textAlign={'center'}>
+        <Typography variant={'h4'} sx={{ textAlign: 'center' }}>
           <Trans
             i18nKey={'templates.oidc.authorize.title'}
             values={{ client_name: client.name }}
-            components={[
-              client.website_url ? (
+            components={{
+              tooltip: client.website_url ? (
                 <Tooltip title={client.website_url}>
                   <Link href={client.website_url}>{client.name}</Link>
                 </Tooltip>
@@ -117,7 +121,7 @@ function Authorize() {
                 // no tooltip nor url if it was not provided
                 <strong>{client.name}</strong>
               ),
-            ]}
+            }}
           />
         </Typography>
         <Spacer vertical={2} />
@@ -156,10 +160,11 @@ function Authorize() {
               <Trans
                 i18nKey={'templates.oidc.authorize.terms'}
                 values={{ client_name: client.name }}
-                components={[
-                  // eslint-disable-next-line react/jsx-key
-                  <Link href={client.terms_url}>Terms and conditions</Link>,
-                ]}
+                components={{
+                  link: (
+                    <Link href={client.terms_url}>Terms and conditions</Link>
+                  ),
+                }}
               />
             </Typography>
           </>
@@ -174,18 +179,19 @@ function Authorize() {
                   client_name: client.name,
                   contact_email: client.contact_email,
                 }}
-                components={[
-                  // eslint-disable-next-line react/jsx-key
-                  <Link href={`mailto:${client.contact_email}`}>
-                    {client.contact_email}
-                  </Link>,
-                ]}
+                components={{
+                  mailto: (
+                    <Link href={`mailto:${client.contact_email}`}>
+                      {client.contact_email}
+                    </Link>
+                  ),
+                }}
               />
             </Typography>
           </>
         )}
         <Spacer vertical={2} />
-        <FlexRow gap={2} justifyContent={'center'}>
+        <Stack direction="row" spacing={2} sx={{ justifyContent: 'center' }}>
           <Button type={'submit'} variant={'outlined'}>
             {t('button.cancel')}
           </Button>
@@ -197,7 +203,7 @@ function Authorize() {
           >
             {t('button.allowAccess')}
           </Button>
-        </FlexRow>
+        </Stack>
       </form>
     </CardTemplate>
   );

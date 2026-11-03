@@ -1,11 +1,10 @@
 import { useCallback, useState } from 'react';
 
-import { Box } from '@mui/material';
+import { Box, Stack } from '@mui/material';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import { addEmailApi } from '#modules/account/api/addEmail.api';
 import { Email } from '#modules/account/email.type';
-import { FlexRow } from '#shared/components/FlexBox/FlexBox';
 import { TextField } from '#shared/components/FormFields';
 import { LoadingButton } from '#shared/components/LoadingButton/LoadingButton';
 import { useTranslation } from '#shared/i18n/useTranslation';
@@ -22,7 +21,9 @@ export function EmailForm({ userId }: { userId: number }) {
   >({
     mutationFn: (value) => addEmailApi(value, userId),
     onSuccess: async () => {
-      await queryClient.invalidateQueries(['emails']);
+      await queryClient.invalidateQueries({
+        queryKey: ['emails'],
+      });
       setEmail('');
     },
   });
@@ -43,7 +44,7 @@ export function EmailForm({ userId }: { userId: number }) {
         emailMutation.mutate(email);
       }}
     >
-      <FlexRow gap={2}>
+      <Stack spacing={2}>
         <TextField
           name="email"
           label={t('email.form.label')}
@@ -57,14 +58,14 @@ export function EmailForm({ userId }: { userId: number }) {
         />
         <Box sx={{ mt: 2, mb: 1 }}>
           <LoadingButton
-            loading={emailMutation.isLoading}
+            loading={emailMutation.isPending}
             variant={'outlined'}
             type={'submit'}
           >
             {t('button.add')}
           </LoadingButton>
         </Box>
-      </FlexRow>
+      </Stack>
     </form>
   );
 }

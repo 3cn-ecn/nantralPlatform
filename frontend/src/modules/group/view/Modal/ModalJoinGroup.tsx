@@ -1,4 +1,4 @@
-import { FormEvent, useState } from 'react';
+import { SubmitEvent, useState } from 'react';
 
 import { PersonAdd } from '@mui/icons-material';
 import { Avatar, Button, useTheme } from '@mui/material';
@@ -7,7 +7,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { User } from '#modules/account/user.types';
 import { createMembershipApi } from '#modules/group/api/createMembership.api';
 import { MembershipFormDTO } from '#modules/group/infra/membership.dto';
-import { CreateGroupForm, Group } from '#modules/group/types/group.types';
+import { Group } from '#modules/group/types/group.types';
 import {
   Membership,
   MembershipForm,
@@ -49,26 +49,31 @@ export function ModalJoinGroup({
   });
   const queryClient = useQueryClient();
   const { palette } = useTheme();
-  const { error, isError, mutate, isLoading } = useMutation<
+  const { error, isError, mutate, isPending } = useMutation<
     Membership,
     ApiFormError<MembershipFormDTO>,
     MembershipForm
-  >(() => createMembershipApi(formValues), {
+  >({
+    mutationFn: () => createMembershipApi(formValues),
+
     onSuccess: () => {
-      queryClient.invalidateQueries(['group', { slug: group.slug }]);
-      queryClient.invalidateQueries(['members', { slug: group.slug }]);
-      queryClient.invalidateQueries([
-        'membership',
-        { group: group.slug, user: user.id },
-      ]);
+      queryClient.invalidateQueries({
+        queryKey: ['group', { slug: group.slug }],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ['members', { slug: group.slug }],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ['membership', { group: group.slug, user: user.id }],
+      });
       onClose();
     },
   });
 
-  function updateFormValues(val: Partial<CreateGroupForm>) {
+  function updateFormValues(val: Partial<MembershipForm>) {
     setFormValues((prev) => ({ ...prev, ...val }));
   }
-  function onSubmit(e: FormEvent<HTMLFormElement>) {
+  function onSubmit(e: SubmitEvent<HTMLFormElement>) {
     e.preventDefault();
     mutate(formValues);
   }
@@ -104,7 +109,7 @@ export function ModalJoinGroup({
         <LoadingButton
           form="edit-group-form"
           type="submit"
-          loading={isLoading}
+          loading={isPending}
           variant="contained"
         >
           {t('button.confirm')}

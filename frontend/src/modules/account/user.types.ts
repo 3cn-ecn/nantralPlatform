@@ -5,8 +5,8 @@ export interface User {
   name: string;
   promo: number;
   picture: string;
-  faculty: string;
-  path: string;
+  faculty: FacultyOptions;
+  path: PathOptions;
   url: string;
   staff: boolean;
   admin: boolean;
@@ -18,7 +18,7 @@ export interface User {
 
 export type UserPreview = Pick<User, 'id' | 'name' | 'url' | 'picture'>;
 
-export type FacultyOptions = 'Gen' | 'Iti' | 'Mas' | 'Doc' | 'Bac' | 'Msp';
+export type FacultyOptions = 'Gen' | 'Iti' | 'Mas' | 'Doc' | 'Bac' | 'MSp';
 export type PathOptions =
   'Cla' | 'Alt' | 'I-A' | 'A-I' | 'I-M' | 'M-I' | 'I-O' | 'O-I';
 

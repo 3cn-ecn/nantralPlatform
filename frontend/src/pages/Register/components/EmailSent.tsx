@@ -2,11 +2,17 @@ import { Trans } from 'react-i18next';
 import { Navigate, useLocation, useNavigate } from 'react-router-dom';
 
 import { Check, MarkEmailReadRounded } from '@mui/icons-material';
-import { Box, Button, CardContent, Paper, Typography } from '@mui/material';
+import {
+  Box,
+  Button,
+  CardContent,
+  Paper,
+  Stack,
+  Typography,
+} from '@mui/material';
 import { useMutation } from '@tanstack/react-query';
 
 import { resendVerificationEmailApi } from '#modules/account/api/resendVerificationEmail.api';
-import { FlexCol, FlexRow } from '#shared/components/FlexBox/FlexBox';
 import { useTranslation } from '#shared/i18n/useTranslation';
 
 export default function EmailSent() {
@@ -14,9 +20,9 @@ export default function EmailSent() {
   const { state } = useLocation();
   const { t } = useTranslation();
   const { email = undefined, firstName = undefined } = state || {};
-  const { isSuccess, mutate, isLoading } = useMutation(
-    resendVerificationEmailApi,
-  );
+  const { isSuccess, mutate, isPending } = useMutation({
+    mutationFn: resendVerificationEmailApi,
+  });
   if (!state) {
     return <Navigate to="/register" replace />;
   }
@@ -27,10 +33,14 @@ export default function EmailSent() {
       </Typography>
       <Paper sx={{ width: '100%', marginTop: 3 }} variant="elevation">
         <CardContent>
-          <FlexRow justifyContent={'center'}>
+          <Stack direction="row" sx={{ justifyContent: 'center' }}>
             <MarkEmailReadRounded sx={{ fontSize: 200 }} color="secondary" />
-          </FlexRow>
-          <Typography variant="body1" color="secondary" textAlign="center">
+          </Stack>
+          <Typography
+            variant="body1"
+            color="secondary"
+            sx={{ textAlign: 'center' }}
+          >
             <Trans
               i18nKey="register.confirmationEmailSent"
               values={{ email: email.replace('-', '-\u2060') }}
@@ -43,7 +53,7 @@ export default function EmailSent() {
           >
             {t('register.clickOnLink')}
           </Typography>
-          <FlexRow mt={3} justifyContent="center">
+          <Stack direction="row" sx={{ mt: 3, justifyContent: 'center' }}>
             <Button
               sx={{ maxWidth: 300 }}
               onClick={() => navigate('/login/')}
@@ -53,15 +63,15 @@ export default function EmailSent() {
             >
               {t('login.login')}
             </Button>
-          </FlexRow>
+          </Stack>
         </CardContent>
       </Paper>
-      <FlexCol sx={{ mt: 2 }}>
+      <Stack sx={{ mt: 2 }}>
         <Typography sx={{ color: 'gray', mb: 1 }}>
           {t('register.emailNotReceived')}
         </Typography>
         <Typography>{t('register.waitAFewMinutes')}</Typography>
-        <FlexRow sx={{ alignItems: 'center', gap: 1, mt: 1 }}>
+        <Stack direction="row" spacing={1} sx={{ alignItems: 'center', mt: 1 }}>
           <Typography>{t('register.stillNothing')}</Typography>
           {isSuccess ? (
             <>
@@ -72,7 +82,7 @@ export default function EmailSent() {
             </>
           ) : (
             <Button
-              disabled={isLoading}
+              disabled={isPending}
               sx={{ textTransform: 'none' }}
               onClick={() => {
                 mutate(email);
@@ -81,8 +91,8 @@ export default function EmailSent() {
               {t('register.sendAgain')}
             </Button>
           )}
-        </FlexRow>
-      </FlexCol>
+        </Stack>
+      </Stack>
     </Box>
   );
 }

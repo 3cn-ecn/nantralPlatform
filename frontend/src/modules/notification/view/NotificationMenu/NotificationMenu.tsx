@@ -13,13 +13,13 @@ import {
   Icon,
   IconButton,
   Popover,
+  Stack,
   Tooltip,
   Typography,
 } from '@mui/material';
 
 import { useMarkAllAsSeenMutation } from '#modules/notification/hooks/useMarkAllAsSeen.mutation';
 import { useNotificationCountQuery } from '#modules/notification/hooks/useNotificationCount.query';
-import { FlexCol, FlexRow } from '#shared/components/FlexBox/FlexBox';
 import { useTranslation } from '#shared/i18n/useTranslation';
 
 import { NotificationAskConsentBanner } from './NotificationAskConsentBanner';
@@ -43,7 +43,7 @@ export function NotificationMenu() {
   const newNotificationCountQuery = useNotificationCountQuery({
     seen: false,
   });
-  const { markAllAsSeen, isLoading } = useMarkAllAsSeenMutation();
+  const { markAllAsSeen, isPending } = useMarkAllAsSeenMutation();
 
   const nbNewNotifications = newNotificationCountQuery.data || 0;
 
@@ -67,7 +67,7 @@ export function NotificationMenu() {
         anchorEl={anchorEl}
         open={isMenuOpen}
         onClose={handleClose}
-        TransitionComponent={Collapse}
+        slots={{ transition: Collapse }}
         anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
         transformOrigin={{ vertical: 'top', horizontal: 'right' }}
         slotProps={{
@@ -81,8 +81,8 @@ export function NotificationMenu() {
           },
         }}
       >
-        <FlexCol height="100%">
-          <FlexRow alignItems="center" px={2} pt={1}>
+        <Stack sx={{ height: '100%' }}>
+          <Stack direction="row" sx={{ alignItems: 'center', px: 2, pt: 1 }}>
             <Typography variant="h6" sx={{ flex: 1 }}>
               {t('notification.title')}
             </Typography>
@@ -90,9 +90,9 @@ export function NotificationMenu() {
               <IconButton
                 color="secondary"
                 onClick={() => markAllAsSeen()}
-                disabled={isLoading}
+                disabled={isPending}
               >
-                {isLoading ? (
+                {isPending ? (
                   <CircularProgress
                     color="secondary"
                     size="0.9em"
@@ -115,9 +115,9 @@ export function NotificationMenu() {
                 <SettingsOutlinedIcon />
               </IconButton>
             </Tooltip>
-          </FlexRow>
+          </Stack>
           <NotificationAskConsentBanner />
-          <FlexRow gap={1} px={2} py={1}>
+          <Stack spacing={1} sx={{ px: 2, py: 1 }}>
             <Chip
               variant={subscribedFilter ? 'filled' : 'outlined'}
               label={t('notification.subscribed')}
@@ -130,14 +130,14 @@ export function NotificationMenu() {
               color="primary"
               onClick={() => setUnseenFilter(!unseenFilter)}
             />
-          </FlexRow>
+          </Stack>
           <NotificationMenuContent
             isOpen={isMenuOpen}
             onClose={handleClose}
             subscribedFilter={subscribedFilter}
             unseenFilter={unseenFilter}
           />
-        </FlexCol>
+        </Stack>
       </Popover>
     </>
   );

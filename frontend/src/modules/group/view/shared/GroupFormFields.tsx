@@ -1,4 +1,4 @@
-import { Dispatch, useCallback } from 'react';
+import { useCallback } from 'react';
 
 import {
   AccessTime as ClockIcon,
@@ -14,6 +14,7 @@ import {
   InputAdornment,
   MenuItem,
   Paper,
+  Stack,
   Typography,
 } from '@mui/material';
 import { useQuery } from '@tanstack/react-query';
@@ -29,7 +30,6 @@ import { GroupTypePreview } from '#modules/group/types/groupType.types';
 import { ShortMembershipForm } from '#modules/group/types/membership.types';
 import { getGeocodeListApi } from '#modules/map/api/getGeocodeList.api';
 import { Geocode } from '#modules/map/geocode.type';
-import { FlexAuto, FlexCol } from '#shared/components/FlexBox/FlexBox';
 import { FormErrorAlert } from '#shared/components/FormErrorAlert/FormErrorAlert';
 import {
   AutocompleteSearchField,
@@ -40,7 +40,6 @@ import {
   TextField,
 } from '#shared/components/FormFields';
 import { RichTextField } from '#shared/components/FormFields/RichTextField';
-import { SetObjectStateAction } from '#shared/hooks/useObjectState';
 import { useTranslation } from '#shared/i18n/useTranslation';
 import { ApiFormError } from '#shared/infra/errors';
 
@@ -48,7 +47,7 @@ interface GroupFormFieldsProps {
   isError: boolean;
   error: ApiFormError<CreateGroupFormDTO> | null;
   formValues: GroupForm;
-  updateFormValues: Dispatch<SetObjectStateAction<GroupForm>>;
+  updateFormValues: (value: Partial<GroupForm>) => void;
   prevData?: Partial<Group>;
   groupType: GroupTypePreview;
   edit?: boolean;
@@ -139,7 +138,7 @@ export function GroupFormFields({
 
       <Typography variant="h3">{t('group.form.title.general')}</Typography>
 
-      <FlexAuto columnGap={2}>
+      <Stack direction={{ xs: 'column', md: 'row' }} spacing={{ xs: 0, md: 2 }}>
         <TextField
           name={'name'}
           key={'title'}
@@ -160,16 +159,19 @@ export function GroupFormFields({
           helperText={t('group.form.shortName.helperText')}
           errors={error?.fields?.short_name}
         />
-      </FlexAuto>
+      </Stack>
 
       {!edit && (
         <>
-          <FlexAuto columnGap={2}>
+          <Stack
+            direction={{ xs: 'column', md: 'row' }}
+            spacing={{ xs: 0, md: 2 }}
+          >
             <DateField
               label={t('group.form.creationDate.label')}
               defaultValue={new Date()}
               views={['year']}
-              onChange={(date) =>
+              onChange={(date: Date | null) =>
                 updateFormValues({ creationYear: date?.getFullYear() })
               }
               disableFuture
@@ -193,7 +195,7 @@ export function GroupFormFields({
                 </MenuItem>
               ))}
             </SelectField>
-          </FlexAuto>
+          </Stack>
           <Box sx={{ my: 1 }}>
             <Accordion defaultExpanded>
               <AccordionSummary expandIcon={<ExpandMoreIcon />}>
@@ -207,11 +209,14 @@ export function GroupFormFields({
                   helperText={t('group.form.initialMember.enableHint')}
                 />
                 {!groupType.noMembershipDates && (
-                  <FlexAuto gap={2}>
+                  <Stack
+                    direction={{ xs: 'column', md: 'row' }}
+                    spacing={{ xs: 0, md: 2 }}
+                  >
                     <DateField
                       label={t('group.form.beginDate.label')}
                       value={formValues.membership?.beginDate ?? null}
-                      onChange={(val) => {
+                      onChange={(val: Date | null) => {
                         updateMembership({ beginDate: val ?? undefined });
                       }}
                       errors={error?.fields?.membership?.begin_date}
@@ -223,7 +228,7 @@ export function GroupFormFields({
                       label={t('group.form.endDate.label')}
                       minDate={formValues.membership?.beginDate}
                       value={formValues.membership?.endDate ?? null}
-                      onChange={(val) => {
+                      onChange={(val: Date | null) => {
                         updateMembership({ endDate: val ?? undefined });
                       }}
                       errors={error?.fields?.membership?.end_date}
@@ -231,7 +236,7 @@ export function GroupFormFields({
                       required
                       disabled={!formValues.membership}
                     />
-                  </FlexAuto>
+                  </Stack>
                 )}
                 <TextField
                   label={t('group.details.form.summary.label')}
@@ -261,10 +266,10 @@ export function GroupFormFields({
       <Paper sx={{ p: 1, my: 1 }}>
         {edit && (
           <CheckboxField
-            label={t('group.form.saveHistroryRecord.label')}
+            label={t('group.form.saveHistoryRecord.label')}
             value={formValues.saveHistoryRecord}
             handleChange={(val) => updateFormValues({ saveHistoryRecord: val })}
-            helperText={t('group.form.saveHistroryRecord.helperText')}
+            helperText={t('group.form.saveHistoryRecord.helperText')}
             errors={error?.fields?._save_history_record}
           />
         )}
@@ -281,7 +286,7 @@ export function GroupFormFields({
         />
       </Paper>
 
-      <FlexAuto columnGap={2}>
+      <Stack direction={{ xs: 'column', md: 'row' }} spacing={{ xs: 0, md: 2 }}>
         <FileField
           name="icon"
           label={t('group.form.icon.label')}
@@ -302,9 +307,9 @@ export function GroupFormFields({
           errors={error?.fields?.banner}
           accept="image/*"
         />
-      </FlexAuto>
+      </Stack>
 
-      <Typography mt={2} variant="h3">
+      <Typography variant="h3" sx={{ mt: 2 }}>
         {t('group.form.title.presentation')}
       </Typography>
 
@@ -341,7 +346,10 @@ export function GroupFormFields({
         }
       />
       {groupType.isMap ? (
-        <FlexAuto columnGap={2}>
+        <Stack
+          direction={{ xs: 'column', md: 'row' }}
+          spacing={{ xs: 0, md: 2 }}
+        >
           <TextField
             label={t('group.form.latitude.label')}
             helperText={t('group.form.latitude.helperText')}
@@ -356,16 +364,21 @@ export function GroupFormFields({
             handleChange={longitudeCallback}
             errors={error?.fields?.longitude}
           />
-        </FlexAuto>
+        </Stack>
       ) : (
-        <FlexAuto columnGap={2}>
+        <Stack
+          direction={{ xs: 'column', md: 'row' }}
+          spacing={{ xs: 0, md: 2 }}
+        >
           <TextField
-            InputProps={{
-              endAdornment: (
-                <InputAdornment position="end">
-                  <PlaceIcon />
-                </InputAdornment>
-              ),
+            slotProps={{
+              input: {
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <PlaceIcon />
+                  </InputAdornment>
+                ),
+              },
             }}
             label={t('group.form.meetingPlace.label')}
             value={formValues.meetingPlace}
@@ -373,31 +386,35 @@ export function GroupFormFields({
             errors={error?.fields?.meeting_place}
           />
           <TextField
-            InputProps={{
-              endAdornment: (
-                <InputAdornment position="end">
-                  <ClockIcon />
-                </InputAdornment>
-              ),
+            slotProps={{
+              input: {
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <ClockIcon />
+                  </InputAdornment>
+                ),
+              },
             }}
             label={t('group.form.meetingHour.label')}
             value={formValues.meetingHour}
             handleChange={meetingHourCallback}
             errors={error?.fields?.meeting_hour}
           />
-        </FlexAuto>
+        </Stack>
       )}
 
-      <FlexAuto columnGap={2}>
+      <Stack direction={{ xs: 'column', md: 'row' }} spacing={{ xs: 0, md: 2 }}>
         <TextField
           label={t('group.form.video1.label')}
           type="url"
-          InputProps={{
-            endAdornment: (
-              <InputAdornment position="end">
-                <LinkIcon />
-              </InputAdornment>
-            ),
+          slotProps={{
+            input: {
+              endAdornment: (
+                <InputAdornment position="end">
+                  <LinkIcon />
+                </InputAdornment>
+              ),
+            },
           }}
           value={formValues.video1}
           handleChange={(val) => {
@@ -407,12 +424,14 @@ export function GroupFormFields({
         />
         <TextField
           label={t('group.form.video2.label')}
-          InputProps={{
-            endAdornment: (
-              <InputAdornment position="end">
-                <LinkIcon />
-              </InputAdornment>
-            ),
+          slotProps={{
+            input: {
+              endAdornment: (
+                <InputAdornment position="end">
+                  <LinkIcon />
+                </InputAdornment>
+              ),
+            },
           }}
           type="url"
           value={formValues.video2}
@@ -421,7 +440,7 @@ export function GroupFormFields({
           }}
           errors={error?.fields?.video2}
         />
-      </FlexAuto>
+      </Stack>
 
       <RichTextField
         label={t('group.form.description.label')}
@@ -432,13 +451,13 @@ export function GroupFormFields({
         errors={error?.fields?.description}
       />
 
-      <Box mt={2}>
+      <Box sx={{ mt: 2 }}>
         <Accordion>
           <AccordionSummary expandIcon={<ExpandMoreIcon />}>
             {t('group.form.title.advancedOptions')}
           </AccordionSummary>
           <AccordionDetails>
-            <FlexCol gap={2}>
+            <Stack spacing={2}>
               {groupType.canHaveParent && (
                 <AutocompleteSearchField
                   name="parent"
@@ -497,7 +516,7 @@ export function GroupFormFields({
                   updateFormValues({ archived: val })
                 }
               />
-            </FlexCol>
+            </Stack>
           </AccordionDetails>
         </Accordion>
       </Box>

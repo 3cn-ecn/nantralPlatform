@@ -7,14 +7,15 @@ import {
   Button,
   Card,
   Divider,
+  Stack,
   Typography,
   useTheme,
 } from '@mui/material';
 import { useMutation } from '@tanstack/react-query';
 
+import { LoginApiBody } from '#modules/account/api/login.api';
 import { resendVerificationEmailApi } from '#modules/account/api/resendVerificationEmail.api';
 import { LoginFormFields } from '#modules/account/view/shared/LoginFormFields';
-import { FlexCol, FlexRow } from '#shared/components/FlexBox/FlexBox';
 import { FloatingContainer } from '#shared/components/FloatingContainer/FloatingContainer';
 import { LoadingButton } from '#shared/components/LoadingButton/LoadingButton';
 import { Spacer } from '#shared/components/Spacer/Spacer';
@@ -28,19 +29,18 @@ export default function LoginPage() {
   const theme = useTheme();
   const navigate = useNavigate();
 
-  const [formValues, setFormValues] = useState<{
-    email: string;
-    password: string;
-    email_ecn?: string;
-  }>({ email: '', password: '' });
+  const [formValues, setFormValues] = useState<LoginApiBody>({
+    email: '',
+    password: '',
+  });
 
   const {
     isSuccess: isResendSuccess,
     mutate,
-    isLoading: isResendLoading,
-  } = useMutation(resendVerificationEmailApi);
+    isPending: isResendPending,
+  } = useMutation({ mutationFn: resendVerificationEmailApi });
 
-  const { login, error, isLoading } = useAuth();
+  const { login, error, isPending } = useAuth();
 
   useEffect(() => {
     if (error?.response?.data.code == '5') {
@@ -50,7 +50,7 @@ export default function LoginPage() {
 
   return (
     <FloatingContainer maxWidth={'sm'}>
-      <FlexCol gap={3}>
+      <Stack spacing={3}>
         <Card
           sx={{
             padding: 5,
@@ -59,7 +59,8 @@ export default function LoginPage() {
             flexDirection: 'column',
           }}
         >
-          <FlexRow
+          <Stack
+            direction="row"
             sx={{
               alignItems: 'center',
               justifyContent: 'center',
@@ -82,21 +83,21 @@ export default function LoginPage() {
             <Typography
               variant="h2"
               sx={{
+                textAlign: 'center',
                 color: theme.palette.mode == 'dark' ? '#b6b7b7' : '#282828',
               }}
-              textAlign="center"
             >
               Nantral Platform.
             </Typography>
-          </FlexRow>
-          <Typography mt={1} textAlign="center" variant="subtitle1">
+          </Stack>
+          <Typography sx={{ mt: 1, textAlign: 'center' }} variant="subtitle1">
             {t('login.website.ecn')}
           </Typography>
           <Spacer vertical={2} />
           <form
-            onSubmit={(event) => {
+            onSubmit={async (event) => {
               event.preventDefault();
-              login(formValues);
+              await login(formValues);
             }}
           >
             {error?.response?.data?.message && (
@@ -109,7 +110,7 @@ export default function LoginPage() {
                     <Check color="success" />
                   ) : (
                     <LoadingButton
-                      loading={isResendLoading}
+                      loading={isResendPending}
                       variant="outlined"
                       color="inherit"
                       size="small"
@@ -138,13 +139,12 @@ export default function LoginPage() {
                 setFormValues({ ...formValues, ...newValues })
               }
               error={error}
-              isError={!!error}
-              prevData={undefined}
               askEcnEmail={
                 error?.response?.data?.code == '2' || !!error?.fields?.email_ecn
               }
             />
-            <FlexRow
+            <Stack
+              direction="row"
               sx={{
                 justifyContent: 'space-between',
                 mt: 2,
@@ -157,7 +157,7 @@ export default function LoginPage() {
               <Button onClick={() => navigate('/forgot_password')}>
                 {t('resetPassword.forgotten')}
               </Button>
-            </FlexRow>
+            </Stack>
             <Divider flexItem />
             <Spacer vertical={3} />
             <LoadingButton
@@ -165,14 +165,14 @@ export default function LoginPage() {
               variant="contained"
               size="large"
               fullWidth
-              loading={isLoading}
+              loading={isPending}
             >
               {t('login.login')}
             </LoadingButton>
           </form>
         </Card>
         <SeeGroupsButton />
-      </FlexCol>
+      </Stack>
     </FloatingContainer>
   );
 }

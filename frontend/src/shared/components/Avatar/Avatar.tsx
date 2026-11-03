@@ -1,4 +1,4 @@
-import { ComponentProps } from 'react';
+import { ComponentProps, ElementType } from 'react';
 
 import { SvgIconComponent } from '@mui/icons-material';
 import { AvatarTypeMap, Avatar as MuiAvatar, useTheme } from '@mui/material';
@@ -10,7 +10,7 @@ import { stringToColor } from '#shared/utils/stringToColor';
 // props of the MuiAvatar
 type AvatarComponentType<
   P = object,
-  D extends React.ElementType = 'div',
+  D extends ElementType = 'div',
 > = OverridableComponent<
   AvatarTypeMap<
     P & {

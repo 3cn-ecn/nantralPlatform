@@ -32,7 +32,7 @@ export function LocationControl({
             : t('map.controls.followPosition')
         }
         placement={'left'}
-        PopperProps={{ container: portalContainer }}
+        slotProps={{ popper: { container: portalContainer } }}
       >
         {/* use `span` because of disabled button and tooltip */}
         <span>

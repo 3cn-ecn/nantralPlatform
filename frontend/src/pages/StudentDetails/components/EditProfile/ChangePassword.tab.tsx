@@ -1,4 +1,4 @@
-import { FormEvent, useState } from 'react';
+import { SubmitEvent, useState } from 'react';
 
 import { Typography } from '@mui/material';
 import { useMutation } from '@tanstack/react-query';
@@ -28,7 +28,7 @@ export function ChangePasswordTab() {
     confirmNewPassword: '',
   });
 
-  const { error, isError, mutate, isLoading } = useMutation<
+  const { error, isError, mutate, isPending } = useMutation<
     number,
     ApiFormError<{
       old_password: string;
@@ -36,7 +36,8 @@ export function ChangePasswordTab() {
       confirm_new_password: string;
     }>,
     ChangePasswordForm
-  >(changePasswordApi, {
+  >({
+    mutationFn: changePasswordApi,
     onSuccess: () => {
       showToast({
         message: 'Password successfully modified',
@@ -50,7 +51,7 @@ export function ChangePasswordTab() {
   function updateFormValues(val: Partial<ChangePasswordForm>) {
     setFormValues({ ...formValues, ...val });
   }
-  function onSubmit(e: FormEvent<HTMLFormElement>) {
+  function onSubmit(e: SubmitEvent<HTMLFormElement>) {
     e.preventDefault();
     mutate(formValues);
   }
@@ -70,7 +71,7 @@ export function ChangePasswordTab() {
       <LoadingButton
         form="edit-password-form"
         type="submit"
-        loading={isLoading}
+        loading={isPending}
         variant="contained"
       >
         {t('button.confirm')}

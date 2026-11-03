@@ -1,10 +1,5 @@
 import { CSSProperties } from 'react';
-
-import { Column } from '@react-email/column';
-import { Img } from '@react-email/img';
-import { Link } from '@react-email/link';
-import { Markdown } from '@react-email/markdown';
-import { Row } from '@react-email/row';
+import { Column, Img, Link, Markdown, Row } from 'react-email';
 
 import { GroupPreview } from '#modules/group/types/group.types';
 import { buildAbsoluteUrl } from '#shared/utils/urls';

@@ -1,11 +1,10 @@
 import { useState } from 'react';
 
 import { FilterList as FilterListIcon } from '@mui/icons-material';
-import { Button } from '@mui/material';
+import { Button, Stack } from '@mui/material';
 
 import { EventListQueryParams } from '#modules/event/api/getEventList.api';
 import { FilterDrawer } from '#pages/Event/shared/FilterDrawer';
-import { FlexRow } from '#shared/components/FlexBox/FlexBox';
 import { useTranslation } from '#shared/i18n/useTranslation';
 
 import { CalendarViewMode } from '../types';
@@ -13,9 +12,7 @@ import { CalendarViewModeButton } from './CalendarViewModeButton';
 
 interface CalendarToolBarProps {
   filters: EventListQueryParams & { fromDate: Date; toDate: Date };
-  updateFilters: (
-    newFilter: Partial<EventListQueryParams & { fromDate: Date; toDate: Date }>,
-  ) => void;
+  updateFilters: (newFilter: Partial<EventListQueryParams>) => void;
   resetFilters: () => void;
   viewMode: CalendarViewMode;
   isSmallScreen?: boolean;
@@ -32,7 +29,7 @@ export function CalendarToolBar({
   const { t } = useTranslation();
 
   return (
-    <FlexRow gap={1}>
+    <Stack direction="row" spacing={1}>
       {isSmallScreen && (
         <Button
           startIcon={<FilterListIcon />}
@@ -58,6 +55,6 @@ export function CalendarToolBar({
         onClose={() => setIsDrawerOpen(false)}
         noDates
       />
-    </FlexRow>
+    </Stack>
   );
 }

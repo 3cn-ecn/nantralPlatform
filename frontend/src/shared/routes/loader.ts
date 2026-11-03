@@ -17,7 +17,7 @@ export async function userDetailsLoader(
   const { id } = params;
   const currentUser =
     (queryClient.getQueryData(['user', 'current']) as User) ??
-    (await queryClient.fetchQuery({
+    (await queryClient.query({
       queryFn: ({ signal }) => getCurrentUserApi({ signal }),
       queryKey: ['user', 'current'],
     }));
@@ -44,7 +44,7 @@ export async function userDetailsLoader(
 
   const user =
     (queryClient.getQueryData(['user', parsedId]) as User) ??
-    (await queryClient.fetchQuery({
+    (await queryClient.query({
       queryFn: () =>
         getUserDetailsApi({ id: parsedId }).catch(() => ({ id: -1 }) as User),
       queryKey: ['user', { id }],
@@ -77,7 +77,7 @@ export async function groupListLoader(
     const queryKey = ['groupType', type];
     const groupType: GroupTypePreview =
       queryClient.getQueryData(queryKey) ??
-      (await queryClient.fetchQuery({
+      (await queryClient.query({
         queryFn: () => getGroupTypeDetailsApi(type),
         queryKey,
       }));
@@ -109,7 +109,7 @@ export async function groupDetailsLoader(
     const queryKey = ['group', { slug: type.slice(1) }];
     const group: Group =
       queryClient.getQueryData(queryKey) ??
-      (await queryClient.fetchQuery({
+      (await queryClient.query({
         queryFn: async () => getGroupDetailsApi(type.slice(1)),
         queryKey,
       }));

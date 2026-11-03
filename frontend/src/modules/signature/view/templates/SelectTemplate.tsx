@@ -1,10 +1,9 @@
 import { Dispatch, SetStateAction, useCallback } from 'react';
 
-import { HelpOutline } from '@mui/icons-material';
-import { MenuItem, Tooltip } from '@mui/material';
+import { HelpOutlined } from '@mui/icons-material';
+import { MenuItem, Stack, Tooltip } from '@mui/material';
 
 import { SignatureInfo } from '#modules/signature/signature.type';
-import { FlexRow } from '#shared/components/FlexBox/FlexBox';
 import { SelectField } from '#shared/components/FormFields';
 import { useTranslation } from '#shared/i18n/useTranslation';
 
@@ -12,7 +11,7 @@ export type TemplateType = 'ecn' | 'international' | `@${string}`;
 
 interface SelectTemplateProps {
   template: TemplateType;
-  setTemplate: Dispatch<SetStateAction<string>>;
+  setTemplate: Dispatch<SetStateAction<TemplateType>>;
   clubMemberships?: SignatureInfo['clubMemberships'];
 }
 
@@ -24,11 +23,14 @@ export function SelectTemplate({
   const { t } = useTranslation();
 
   return (
-    <FlexRow gap={2} alignItems="center">
+    <Stack direction="row" spacing={2} sx={{ alignItems: 'center' }}>
       <SelectField
         label={t('signature.template.label')}
         value={template}
-        handleChange={useCallback((value) => setTemplate(value), [setTemplate])}
+        handleChange={useCallback(
+          (value: TemplateType) => setTemplate(value),
+          [setTemplate],
+        )}
         fullWidth={false}
         sx={{ minWidth: 200 }}
       >
@@ -46,8 +48,8 @@ export function SelectTemplate({
         ))}
       </SelectField>
       <Tooltip title={t('signature.template.help')}>
-        <HelpOutline />
+        <HelpOutlined />
       </Tooltip>
-    </FlexRow>
+    </Stack>
   );
 }

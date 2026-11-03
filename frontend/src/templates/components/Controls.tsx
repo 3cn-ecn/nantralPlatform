@@ -7,9 +7,8 @@ import {
   LightMode as LightModeIcon,
   SettingsBrightness as DeviceModeIcon,
 } from '@mui/icons-material';
-import { Button, IconButton, Tooltip } from '@mui/material';
+import { Button, IconButton, Stack, Tooltip } from '@mui/material';
 
-import { FlexRow } from '#shared/components/FlexBox/FlexBox';
 import { useChangeThemeMode } from '#shared/context/CustomTheme.context';
 import { useTranslation } from '#shared/i18n/useTranslation';
 
@@ -27,7 +26,11 @@ export function Controls() {
   };
 
   return (
-    <FlexRow alignItems={'center'} justifyContent={'end'} gap={1}>
+    <Stack
+      direction="row"
+      sx={{ alignItems: 'center', justifyContent: 'end' }}
+      spacing={1}
+    >
       <Tooltip title={t(`templates.theme.${themeMode}`)}>
         <IconButton onClick={handleThemeToggle}>
           {themeMode === 'dark' ? (
@@ -51,6 +54,6 @@ export function Controls() {
         </Button>
       </Tooltip>
       <LanguageMenu anchorEl={anchorEl} onClose={() => setAnchorEl(null)} />
-    </FlexRow>
+    </Stack>
   );
 }

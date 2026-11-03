@@ -6,11 +6,10 @@ import {
   Card,
   CardActionArea,
   CardContent,
+  Stack,
   SxProps,
   useTheme,
 } from '@mui/material';
-
-import { FlexRow } from '../FlexBox/FlexBox';
 
 interface LargeBigButtonProps {
   onClick: () => void;
@@ -38,15 +37,20 @@ export function LargeBigButton({
     >
       <CardActionArea onClick={onClick}>
         <CardContent>
-          <FlexRow
-            justifyContent="space-between"
-            alignItems="center"
-            gap={2}
-            sx={sx}
+          <Stack
+            direction="row"
+            spacing={2}
+            sx={[
+              {
+                justifyContent: 'space-between',
+                alignItems: 'center',
+              },
+              ...(Array.isArray(sx) ? sx : [sx]),
+            ]}
           >
             <Box>{children}</Box>
             <ArrowForward />
-          </FlexRow>
+          </Stack>
         </CardContent>
       </CardActionArea>
     </Card>

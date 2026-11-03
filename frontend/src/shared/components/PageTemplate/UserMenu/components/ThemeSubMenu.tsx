@@ -32,7 +32,7 @@ export function ThemeSubMenu({
       anchorEl={anchorEl}
       open={isOpen}
       onClose={onGoBack}
-      TransitionComponent={Collapse}
+      slots={{ transition: Collapse }}
       anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
       transformOrigin={{ vertical: 'top', horizontal: 'right' }}
       slotProps={{ paper: { sx: { minWidth: 200 } } }}

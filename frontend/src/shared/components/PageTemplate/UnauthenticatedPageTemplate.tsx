@@ -1,9 +1,8 @@
 import { Suspense } from 'react';
 import { Outlet, ScrollRestoration } from 'react-router-dom';
 
-import { Box, CircularProgress, CssBaseline } from '@mui/material';
+import { Box, CircularProgress, CssBaseline, Stack } from '@mui/material';
 
-import { FlexRow } from '../FlexBox/FlexBox';
 import './UnauthenticatedPage.scss';
 
 export function UnauthenticatedPageTemplate() {
@@ -22,9 +21,9 @@ export function UnauthenticatedPageTemplate() {
       <ScrollRestoration />
       <Suspense
         fallback={
-          <FlexRow justifyContent="center" mt={8}>
+          <Stack direction="row" sx={{ justifyContent: 'center', mt: 8 }}>
             <CircularProgress />
-          </FlexRow>
+          </Stack>
         }
       >
         <Outlet />

@@ -18,6 +18,7 @@ export function useSportEventList(
         pageSize: 6 * 7,
         ...params,
       }),
+    initialPageParam: 1,
     queryKey: ['getSportEvents', params],
     getNextPageParam: (lastPage, allPages) =>
       lastPage.next ? allPages.length + 1 : null,

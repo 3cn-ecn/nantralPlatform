@@ -9,13 +9,13 @@ import {
   CardMedia,
   Typography,
   styled,
+  Stack,
 } from '@mui/material';
 import { upperFirst } from 'lodash-es';
 
 import { usePostQueryParamState } from '#modules/post/hooks/usePostQueryParamState';
 import { PostPreview } from '#modules/post/post.types';
 import { Avatar } from '#shared/components/Avatar/Avatar';
-import { FlexCol, FlexRow } from '#shared/components/FlexBox/FlexBox';
 import { Spacer } from '#shared/components/Spacer/Spacer';
 import { useTranslation } from '#shared/i18n/useTranslation';
 
@@ -40,27 +40,27 @@ export function PostCard({ post }: PostCardProps) {
             {post.pinned && <BadgeIcon Icon={PushPinIcon} />}
           </BadgeIconsContainer>
           <CardContent>
-            <Box mt={1}>
-              <Typography variant="h6" lineHeight={1.2} mb={1}>
+            <Box sx={{ mt: 1 }}>
+              <Typography variant="h6" sx={{ lineHeight: 1.2, mb: 1 }}>
                 {post.title}
               </Typography>
               <Typography
                 variant="caption"
-                color="text.secondary"
-                fontStyle="italic"
+                color="textSecondary"
+                sx={{ fontStyle: 'italic' }}
               >
                 {upperFirst(formatRelativeTime(post.createdAt))}
               </Typography>
             </Box>
             <Spacer vertical={1} flex={1} />
-            <FlexRow alignItems="center" gap={1}>
+            <Stack direction="row" spacing={1} sx={{ alignItems: 'center' }}>
               <Avatar
                 alt={post.group.shortName}
                 src={post.group.icon}
                 size="s"
               />
               <Typography variant="caption">{post.group.name}</Typography>
-            </FlexRow>
+            </Stack>
           </CardContent>
           {post.image && (
             <CardMedia
@@ -93,13 +93,14 @@ const StyledCardActionArea = styled(CardActionArea)({
   height: '100%',
 });
 
-const CardContent = styled(FlexCol)({
+const CardContent = styled(Stack)({
   padding: 16,
   flex: 1,
   height: '100%',
 });
 
-const BadgeIconsContainer = styled(FlexRow)({
+const BadgeIconsContainer = styled(Stack)({
+  flexDirection: 'row',
   position: 'absolute',
   gap: 8,
   top: 12,

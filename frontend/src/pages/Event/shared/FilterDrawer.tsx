@@ -19,6 +19,7 @@ import {
   ListItemIcon,
   ListItemText,
   Paper,
+  Stack,
   Typography,
 } from '@mui/material';
 import { useQueryClient } from '@tanstack/react-query';
@@ -28,7 +29,6 @@ import { EventListQueryParams } from '#modules/event/api/getEventList.api';
 import { getGroupListApi } from '#modules/group/api/getGroupList.api';
 import { useGroupListQuery } from '#modules/group/hooks/useGroupList.query';
 import { GroupPreview } from '#modules/group/types/group.types';
-import { FlexRow } from '#shared/components/FlexBox/FlexBox';
 import {
   AutocompleteSearchField,
   DateField,
@@ -104,15 +104,18 @@ export function FilterDrawer({
       anchor="right"
       open={open}
       onClose={onClose}
-      PaperProps={{ sx: { width: 400, maxWidth: '90%' } }}
+      slotProps={{ paper: { sx: { width: 400, maxWidth: '90%' } } }}
     >
       <Container sx={{ my: 2 }}>
-        <FlexRow justifyContent="space-between" alignItems="center">
+        <Stack
+          direction="row"
+          sx={{ justifyContent: 'space-between', alignItems: 'center' }}
+        >
           <Typography variant="h3">{t('event.filters.title')}</Typography>
           <IconButton onClick={onClose}>
             <CloseIcon />
           </IconButton>
-        </FlexRow>
+        </Stack>
         <List>
           <CheckboxListItem
             label={t('event.filters.isParticipating')}
@@ -155,7 +158,7 @@ export function FilterDrawer({
             label={t('event.filters.organizer')}
             value={selectedGroupsId}
             handleChange={handleGroupChange}
-            loading={selectedGroupsQuery.isLoading}
+            loading={selectedGroupsQuery.isPending}
             defaultObjectValue={
               filters.group?.length && selectedGroupsQuery.isSuccess
                 ? selectedGroupsQuery.data.results
@@ -173,7 +176,7 @@ export function FilterDrawer({
                 label={t('event.filters.date.fromDate')}
                 fullWidth
                 value={filters.fromDate || null}
-                onChange={(value) =>
+                onChange={(value: Date | null) =>
                   updateFilters({ fromDate: value || undefined })
                 }
               />
@@ -181,7 +184,7 @@ export function FilterDrawer({
                 label={t('event.filters.date.toDate')}
                 fullWidth
                 value={filters.toDate || null}
-                onChange={(value) =>
+                onChange={(value: Date | null) =>
                   updateFilters({ toDate: value || undefined })
                 }
               />

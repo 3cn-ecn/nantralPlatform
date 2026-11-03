@@ -6,6 +6,7 @@ import {
   Button,
   Card,
   Container,
+  Stack,
   TextField,
   Typography,
 } from '@mui/material';
@@ -18,7 +19,6 @@ import {
   TemplateType,
 } from '#modules/signature/view/templates/SelectTemplate';
 import { formatSignatureInfoToMarkdown } from '#modules/signature/view/templates/formatSignatureInfoToMarkdown';
-import { FlexAuto, FlexCol, FlexRow } from '#shared/components/FlexBox/FlexBox';
 import { useTranslation } from '#shared/i18n/useTranslation';
 
 export default function SignaturePage() {
@@ -27,7 +27,7 @@ export default function SignaturePage() {
   const [template, setTemplate] = useState<TemplateType>('ecn');
 
   const { t } = useTranslation();
-  const query = useSignatureInfo({ suspense: true, staleTime: Infinity });
+  const query = useSignatureInfo({ staleTime: Infinity });
 
   useEffect(() => {
     if (query.data) {
@@ -44,10 +44,10 @@ export default function SignaturePage() {
 
   return (
     <Container sx={{ my: 4 }}>
-      <Typography variant="h1" mb={1}>
+      <Typography variant="h1" sx={{ mb: 1 }}>
         {t('signature.title')}
       </Typography>
-      <Typography variant="body1" mb={2}>
+      <Typography variant="body1" sx={{ mb: 2 }}>
         {t('signature.description')}
       </Typography>
       <SelectTemplate
@@ -55,18 +55,18 @@ export default function SignaturePage() {
         setTemplate={setTemplate}
         clubMemberships={query.data?.clubMemberships}
       />
-      <FlexAuto gap={6} mt={2}>
-        <FlexCol width="100%" gap={2}>
+      <Stack direction={{ xs: 'column', md: 'row' }} spacing={6} sx={{ mt: 2 }}>
+        <Stack sx={{ width: '100%' }} spacing={2}>
           <TextField
             multiline
             value={markdownContent}
             onChange={(e) => setMarkdownCode(e.target.value)}
             label={t('signature.actions.edit.label')}
             fullWidth
-            inputProps={{ sx: { fontFamily: 'monospace' } }}
+            slotProps={{ htmlInput: { sx: { fontFamily: 'monospace' } } }}
             disabled={query.isFetching}
           />
-          <FlexRow gap={1} justifyContent="end">
+          <Stack direction="row" spacing={1} sx={{ justifyContent: 'end' }}>
             <Button
               variant="outlined"
               color="secondary"
@@ -83,9 +83,9 @@ export default function SignaturePage() {
             >
               {t('signature.actions.export.label')}
             </Button>
-          </FlexRow>
-        </FlexCol>
-        <Box width="100%" overflow="auto">
+          </Stack>
+        </Stack>
+        <Box sx={{ width: '100%', overflow: 'auto' }}>
           <Card
             sx={{
               p: 3,
@@ -100,7 +100,7 @@ export default function SignaturePage() {
             />
           </Card>
         </Box>
-      </FlexAuto>
+      </Stack>
       <ExportMethodModal
         isOpen={isExportModalOpen}
         onClose={() => setExportModalOpen(false)}

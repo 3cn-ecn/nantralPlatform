@@ -19,13 +19,14 @@ export function StaticMonthPicker({
   return (
     <StaticDatePicker
       value={filters.fromDate}
-      onAccept={(val) =>
+      onAccept={(val) => {
         updateFilters({
           fromDate: val ? startOfMonth(val) : undefined,
           toDate: val ? endOfMonth(val) : undefined,
-        })
-      }
-      onClose={onClose}
+        });
+        onClose();
+      }}
+      onCancel={onClose}
       views={['month', 'year']}
     />
   );

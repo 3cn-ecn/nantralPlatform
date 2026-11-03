@@ -2,8 +2,8 @@ import { useState } from 'react';
 
 import { useTheme } from '@mui/material';
 import {
-  PickersDay,
-  PickersDayProps,
+  PickerDay,
+  PickerDayProps,
   StaticDatePicker,
 } from '@mui/x-date-pickers';
 import {
@@ -37,7 +37,7 @@ export function StaticMultipleDaysPicker({
   const nbOfDays =
     differenceInCalendarDays(filters.toDate, filters.fromDate) + 1;
 
-  const [value, setValue] = useState<Date | null>(
+  const [value, setValue] = useState<Date | null>(() =>
     keepInRange ? filters.fromDate : addDays(filters.fromDate, nbOfDays / 2),
   );
 
@@ -56,13 +56,14 @@ export function StaticMultipleDaysPicker({
     <StaticDatePicker
       value={value}
       onChange={(val) => setValue(val)}
-      onAccept={() =>
+      onAccept={() => {
         updateFilters({
           fromDate: startDate ? startOfDay(startDate) : undefined,
           toDate: endDate ? endOfDay(endDate) : undefined,
-        })
-      }
-      onClose={onClose}
+        });
+        onClose();
+      }}
+      onCancel={onClose}
       showDaysOutsideCurrentMonth
       slots={{ day: CustomDay }}
       slotProps={{
@@ -76,9 +77,9 @@ export function StaticMultipleDaysPicker({
 }
 
 // A custom Day component renderer to also renders dates between 2 dates
-type CustomDayProps = PickersDayProps<Date> & {
-  start: Date | null;
-  end: Date | null;
+type CustomDayProps = PickerDayProps & {
+  start?: Date | null;
+  end?: Date | null;
 };
 function CustomDay({ day, start, end, ...props }: CustomDayProps) {
   const theme = useTheme();
@@ -88,7 +89,7 @@ function CustomDay({ day, start, end, ...props }: CustomDayProps) {
     end == null ||
     differenceInCalendarDays(end, start) === 0
   ) {
-    return <PickersDay day={day} {...props} />;
+    return <PickerDay day={day} {...props} />;
   }
 
   const dayIsBetween = isWithinInterval(day, { start, end });
@@ -96,7 +97,7 @@ function CustomDay({ day, start, end, ...props }: CustomDayProps) {
   const isLastDay = isSameDay(day, end);
 
   return (
-    <PickersDay
+    <PickerDay
       {...props}
       day={day}
       sx={{

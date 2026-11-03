@@ -1,8 +1,7 @@
 import { Link } from 'react-router-dom';
 
-import { Card, CardActionArea, Typography } from '@mui/material';
+import { Card, CardActionArea, Stack, Typography } from '@mui/material';
 
-import { FlexRow } from '#shared/components/FlexBox/FlexBox';
 import { useTranslation } from '#shared/i18n/useTranslation';
 
 export function SeeGroupsButton() {
@@ -11,7 +10,11 @@ export function SeeGroupsButton() {
   return (
     <Card variant="elevation">
       <CardActionArea component={Link} to="/group" sx={{ display: 'flex' }}>
-        <FlexRow sx={{ padding: 2, gap: 3, alignItems: 'center' }}>
+        <Stack
+          direction="row"
+          spacing={3}
+          sx={{ padding: 2, alignItems: 'center' }}
+        >
           <img
             style={{
               width: 50,
@@ -25,7 +28,7 @@ export function SeeGroupsButton() {
             alt="Groups"
           />
           <Typography>{t('login.viewPublicGroups')}</Typography>
-        </FlexRow>
+        </Stack>
       </CardActionArea>
     </Card>
   );

@@ -31,7 +31,7 @@ const CustomThemeContext = createContext<ChangeThemeCallback | null>(null);
 
 export function CustomThemeProvider({ children }: PropsWithChildren) {
   const { i18n } = useTranslation();
-  const [themeMode, setThemeMode] = useState<PaletteMode | 'auto'>(
+  const [themeMode, setThemeMode] = useState<PaletteMode | 'auto'>(() =>
     getCachedThemeMode(),
   );
 
@@ -67,9 +67,9 @@ export function CustomThemeProvider({ children }: PropsWithChildren) {
   );
 
   return (
-    <CustomThemeContext.Provider value={customThemeContextValue}>
+    <CustomThemeContext value={customThemeContextValue}>
       <ThemeProvider theme={theme}>{children}</ThemeProvider>
-    </CustomThemeContext.Provider>
+    </CustomThemeContext>
   );
 }
 

@@ -32,8 +32,10 @@ function RichTextFieldComponent(props: RichTextFieldProps) {
           handleChange={noop}
           helperText={props.helperText}
           disabled
-          InputProps={{
-            endAdornment: <CircularProgress color="inherit" size={20} />,
+          slotProps={{
+            input: {
+              endAdornment: <CircularProgress color="inherit" size={20} />,
+            },
           }}
         />
       }

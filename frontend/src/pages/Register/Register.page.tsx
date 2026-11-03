@@ -1,9 +1,10 @@
-import { Outlet, useLocation, useNavigate } from 'react-router-dom';
+import { Outlet, useLoaderData, useNavigate } from 'react-router-dom';
 
 import {
   Button,
   Card,
   Paper,
+  Stack,
   Step,
   StepLabel,
   Stepper,
@@ -11,7 +12,6 @@ import {
   useTheme,
 } from '@mui/material';
 
-import { FlexCol, FlexRow } from '#shared/components/FlexBox/FlexBox';
 import { FloatingContainer } from '#shared/components/FloatingContainer/FloatingContainer';
 import { useBreakpoint } from '#shared/hooks/useBreakpoint';
 import { useTranslation } from '#shared/i18n/useTranslation';
@@ -19,14 +19,9 @@ import { useTranslation } from '#shared/i18n/useTranslation';
 export default function RegisterPage() {
   const navigate = useNavigate();
   const { t } = useTranslation();
-  const { pathname } = useLocation();
+  const { activeStep } = useLoaderData();
   const theme = useTheme();
   const small = useBreakpoint('sm').isSmaller;
-  const pathNameToStep = {
-    register: 0,
-    registerform: 1,
-    registervalidation: 2,
-  };
 
   return (
     <FloatingContainer maxWidth={'md'}>
@@ -35,7 +30,7 @@ export default function RegisterPage() {
           padding: 5,
         }}
       >
-        <FlexCol alignItems="center">
+        <Stack sx={{ alignItems: 'center' }}>
           <img
             style={{
               width: 50,
@@ -50,11 +45,11 @@ export default function RegisterPage() {
           />
           <Typography
             sx={{
+              m: 2,
               textAlign: 'center',
               width: '100%',
               color: theme.palette.mode == 'dark' ? '#b6b7b7' : '#282828',
             }}
-            m={2}
             variant="h2"
           >
             {t('register.createAccount')}
@@ -69,7 +64,7 @@ export default function RegisterPage() {
               mb: 1,
             }}
           >
-            <FlexRow alignItems="center" gap={1}>
+            <Stack direction="row" sx={{ alignItems: 'center' }} spacing={1}>
               <Typography>{t('register.alreadyHaveAccount')}</Typography>
               <Button
                 sx={{ textTransform: 'none' }}
@@ -77,10 +72,10 @@ export default function RegisterPage() {
               >
                 {t('register.goLoginPage')}
               </Button>
-            </FlexRow>
+            </Stack>
           </Paper>
           <Stepper
-            activeStep={pathNameToStep[pathname.replaceAll('/', '')]}
+            activeStep={activeStep}
             variant="outlined"
             nonLinear
             sx={{ width: '100%', margin: 2, marginBottom: 4 }}
@@ -97,7 +92,7 @@ export default function RegisterPage() {
             </Step>
           </Stepper>
           <Outlet />
-        </FlexCol>
+        </Stack>
       </Card>
     </FloatingContainer>
   );

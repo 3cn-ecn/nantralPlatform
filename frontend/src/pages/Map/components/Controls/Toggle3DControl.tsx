@@ -64,7 +64,7 @@ export function Toggle3DControl({
     <Tooltip
       title={is3D ? t('map.controls.disable3D') : t('map.controls.enable3D')}
       placement={'left'}
-      PopperProps={{ container: portalContainer }}
+      slotProps={{ popper: { container: portalContainer } }}
     >
       <IconButton size="small" color="primary" onClick={handleToggle3D}>
         {is3D ? '2D' : '3D'}

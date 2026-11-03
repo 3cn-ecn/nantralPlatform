@@ -1,4 +1,4 @@
-import { FormEvent, useState } from 'react';
+import { SubmitEvent, useState } from 'react';
 
 import { AdminPanelSettings } from '@mui/icons-material';
 import { Button } from '@mui/material';
@@ -31,16 +31,19 @@ export function ModalAdminRequest({
   const { t } = useTranslation();
   const queryClient = useQueryClient();
   const showToast = useToast();
-  const { isLoading, mutate } = useMutation(sendAdminRequestApi, {
+  const { isPending, mutate } = useMutation({
+    mutationFn: sendAdminRequestApi,
     onSuccess: (data) => {
       showToast({ message: data.detail, variant: 'success' });
-      queryClient.invalidateQueries(['membership', { group: group.slug }]);
+      queryClient.invalidateQueries({
+        queryKey: ['membership', { group: group.slug }],
+      });
       onClose();
     },
   });
   const [formValues, setFormValues] = useState({ message: '' });
 
-  function onSubmit(e: FormEvent<HTMLFormElement>) {
+  function onSubmit(e: SubmitEvent<HTMLFormElement>) {
     e.preventDefault();
     mutate({ membership: membership.id, message: formValues.message });
   }
@@ -73,7 +76,7 @@ export function ModalAdminRequest({
         <LoadingButton
           form="send-admin-request-form"
           type="submit"
-          loading={isLoading}
+          loading={isPending}
           variant="contained"
         >
           {t('button.send')}
