@@ -1,3 +1,4 @@
+import { MouseEvent } from 'react';
 import { Link, useLocation, useSearchParams } from 'react-router-dom';
 
 import { Button, Icon, Typography } from '@mui/material';
@@ -22,7 +23,7 @@ export function BreadcrumbsItem({
 
   const [, setParams] = useSearchParams();
 
-  const scrollToTop = (e) => {
+  const scrollToTop = (e: MouseEvent) => {
     e.preventDefault();
     setParams({});
     window.scroll({ behavior: 'smooth', top: 0 });

@@ -32,7 +32,7 @@ export function MembersGrid({
       {showSkeletonsAtEnd &&
         new Array(6)
           .fill(0)
-          // eslint-disable-next-line react/no-array-index-key
+          // eslint-disable-next-line @eslint-react/no-array-index-key
           .map((_, i) => <MembershipCardSkeleton key={i} />)}
     </Grid>
   );

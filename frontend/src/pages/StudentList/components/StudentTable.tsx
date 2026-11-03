@@ -46,7 +46,7 @@ export function StudentTable({ filters, updateFilters }: StudentTableProps) {
         <TableBody>
           {(isPending || isFetching) &&
             new Array(filters.pageSize).fill(0).map((_, i) => (
-              // eslint-disable-next-line react/no-array-index-key
+              // eslint-disable-next-line @eslint-react/no-array-index-key
               <StudentRowSkeleton key={i.toString()} />
             ))}
           {isSuccess &&

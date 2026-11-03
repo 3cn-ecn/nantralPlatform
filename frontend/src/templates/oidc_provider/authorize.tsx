@@ -112,8 +112,8 @@ function Authorize() {
           <Trans
             i18nKey={'templates.oidc.authorize.title'}
             values={{ client_name: client.name }}
-            components={[
-              client.website_url ? (
+            components={{
+              tooltip: client.website_url ? (
                 <Tooltip title={client.website_url}>
                   <Link href={client.website_url}>{client.name}</Link>
                 </Tooltip>
@@ -121,7 +121,7 @@ function Authorize() {
                 // no tooltip nor url if it was not provided
                 <strong>{client.name}</strong>
               ),
-            ]}
+            }}
           />
         </Typography>
         <Spacer vertical={2} />
@@ -160,10 +160,11 @@ function Authorize() {
               <Trans
                 i18nKey={'templates.oidc.authorize.terms'}
                 values={{ client_name: client.name }}
-                components={[
-                  // eslint-disable-next-line react/jsx-key
-                  <Link href={client.terms_url}>Terms and conditions</Link>,
-                ]}
+                components={{
+                  link: (
+                    <Link href={client.terms_url}>Terms and conditions</Link>
+                  ),
+                }}
               />
             </Typography>
           </>
@@ -178,12 +179,13 @@ function Authorize() {
                   client_name: client.name,
                   contact_email: client.contact_email,
                 }}
-                components={[
-                  // eslint-disable-next-line react/jsx-key
-                  <Link href={`mailto:${client.contact_email}`}>
-                    {client.contact_email}
-                  </Link>,
-                ]}
+                components={{
+                  mailto: (
+                    <Link href={`mailto:${client.contact_email}`}>
+                      {client.contact_email}
+                    </Link>
+                  ),
+                }}
               />
             </Typography>
           </>

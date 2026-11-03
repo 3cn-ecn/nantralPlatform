@@ -19,7 +19,7 @@ export default function RegisterFormPanel() {
   const uuid = params.get('uuid') || undefined;
   const [formValues, setFormValues] = useState<
     RegisterForm & { passwordConfirm: string }
-  >({
+  >(() => ({
     email: '',
     username: '',
     password: '',
@@ -30,7 +30,7 @@ export default function RegisterFormPanel() {
     promo: new Date().getFullYear(),
     path: 'Cla',
     invitationUUID: uuid,
-  });
+  }));
   const navigate = useNavigate();
   const {
     isPending: loading,

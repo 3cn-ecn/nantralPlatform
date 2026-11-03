@@ -19,7 +19,7 @@ const AuthContext = createContext<ProvideAuthValues>({
  */
 export function AuthProvider({ children }: { children: ReactNode }) {
   const auth = useProvideAuth();
-  return <AuthContext.Provider value={auth}>{children}</AuthContext.Provider>;
+  return <AuthContext value={auth}>{children}</AuthContext>;
 }
 /**
  * Get access to auth state

@@ -81,15 +81,14 @@ function EndSessionPrompt() {
           <Trans
             i18nKey={'templates.oidc.endSessionPrompt.title'}
             values={{ user_name: user_name }}
-            /* eslint-disable-next-line react/jsx-key */
-            components={[<strong />]}
+            components={{ strong: <strong /> }}
           />
           {client && (
             <Trans
               i18nKey={'templates.oidc.endSessionPrompt.titleAppName'}
               values={{ client_name: client.name }}
-              components={[
-                client.website_url ? (
+              components={{
+                tooltip: client.website_url ? (
                   <Tooltip title={client.website_url}>
                     <Link href={client.website_url}>{client.name}</Link>
                   </Tooltip>
@@ -97,7 +96,7 @@ function EndSessionPrompt() {
                   // no tooltip nor url if it was not provided
                   <strong>{client.name}</strong>
                 ),
-              ]}
+              }}
             />
           )}
           ?

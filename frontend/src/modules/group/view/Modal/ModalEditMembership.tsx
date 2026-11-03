@@ -51,7 +51,7 @@ export function ModalEditMembership({
   oneYear.setFullYear(today.getFullYear() + 1);
 
   const [modalOpen, setModalOpen] = useState(false);
-  const [formValues, setFormValues] = useState<MembershipForm>(
+  const [formValues, setFormValues] = useState<MembershipForm>(() =>
     convertMembershipToForm(membership),
   );
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);

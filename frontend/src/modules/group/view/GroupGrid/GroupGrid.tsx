@@ -1,3 +1,5 @@
+import { JSX } from 'react';
+
 import { Grid } from '@mui/material';
 
 import { GroupPreview } from '#modules/group/types/group.types';
@@ -22,7 +24,7 @@ export function GroupGrid({
         ? Array(estimatedSize)
             .fill(0)
             .map((_, index) => (
-              // eslint-disable-next-line react/no-array-index-key
+              // eslint-disable-next-line @eslint-react/no-array-index-key
               <Grid key={index} size={{ xs: 6, sm: 4, md: 3, lg: 2 }}>
                 <GroupItemSkeleton size="xl" />
               </Grid>

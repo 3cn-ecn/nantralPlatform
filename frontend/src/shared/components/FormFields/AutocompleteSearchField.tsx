@@ -173,7 +173,7 @@ function AutocompleteSearchFieldComponent<
   // keep the current object value accessible in async callbacks
   const objectValueRef = useRef(objectValue);
   objectValueRef.current = objectValue;
-  const hasFetchedInitialOptions = useRef(false);
+  const hasFetchedInitialOptionsRef = useRef(false);
 
   useEffect(() => {
     setIsLoading(loading);
@@ -205,11 +205,11 @@ function AutocompleteSearchFieldComponent<
     // can choose another option without having to type a search
     if (
       !fetchInitialOptions ||
-      (!isNil(value) && hasFetchedInitialOptions.current)
+      (!isNil(value) && hasFetchedInitialOptionsRef.current)
     ) {
       return;
     }
-    hasFetchedInitialOptions.current = true;
+    hasFetchedInitialOptionsRef.current = true;
     setIsLoading(true);
     fetchInitialOptions()
       .then((data) => {

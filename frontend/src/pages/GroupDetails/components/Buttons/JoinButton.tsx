@@ -25,7 +25,7 @@ export function JoinButton({ group }: { group?: Group }) {
   const { isAuthenticated } = useAuth();
   const user = useCurrentUserData();
   const { t } = useTranslation();
-  const [modalOpen, setJoinModalOpen] = useState(false);
+  const [joinModalOpen, setJoinModalOpen] = useState(false);
   const [adminRequestModalOpen, setAdminRequestModalOpen] = useState(false);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
@@ -103,14 +103,14 @@ export function JoinButton({ group }: { group?: Group }) {
             </MenuItem>
           )}
         </Menu>
-        {modalOpen && !group?.isMember && (
+        {joinModalOpen && !group?.isMember && (
           <ModalJoinGroup
             group={group}
             user={user}
             onClose={() => setJoinModalOpen(false)}
           />
         )}
-        {modalOpen && group?.isMember && member && (
+        {joinModalOpen && group?.isMember && member && (
           <ModalEditMembership
             group={group}
             membership={member}

@@ -35,7 +35,7 @@ export function ToastProvider({ children }: PropsWithChildren) {
   };
 
   return (
-    <ToastContext.Provider value={showToast}>
+    <ToastContext value={showToast}>
       <Snackbar
         open={open}
         autoHideDuration={toast?.autoHideDuration ?? 6000}
@@ -54,7 +54,7 @@ export function ToastProvider({ children }: PropsWithChildren) {
         </Alert>
       </Snackbar>
       {children}
-    </ToastContext.Provider>
+    </ToastContext>
   );
 }
 

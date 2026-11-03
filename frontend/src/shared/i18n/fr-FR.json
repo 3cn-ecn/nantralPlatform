@@ -1059,14 +1059,14 @@
           "confidential": "Cette application applique nos règles de protection des données",
           "public": "Nous ne pouvons pas garantir la sécurité des données pour cette application"
         },
-        "contact": "Vous pouvez contacter l'administrateur de {{ client_name }} si vous avez des questions : <0>{{ contact_email }}</0>",
-        "terms": "Cliquez pour voir comment {{ client_name }} utilise vos données : <0>conditions d'utilisation</0>",
-        "title": "<0><0>{{ client_name }}</0></0> demande à accéder aux informations personnelles suivantes"
+        "contact": "Vous pouvez contacter l'administrateur de {{ client_name }} si vous avez des questions : <mailto>{{ contact_email }}</mailto>",
+        "terms": "Cliquez pour voir comment {{ client_name }} utilise vos données : <link>conditions d'utilisation</link>",
+        "title": "<tooltip><0>{{ client_name }}</0></tooltip> demande à accéder aux informations personnelles suivantes"
       },
       "description": "Description",
       "endSessionPrompt": {
-        "title": "Bonjour <0>{{ user_name }}</0>, voulez vous vous deconnecter ",
-        "titleAppName": "de l'application <0><0>{{ client_name }}</0></0> "
+        "title": "Bonjour <strong>{{ user_name }}</strong>, voulez vous vous deconnecter ",
+        "titleAppName": "de l'application <tooltip><0>{{ client_name }}</0></tooltip> "
       },
       "scope": "Portée",
       "scopes": {

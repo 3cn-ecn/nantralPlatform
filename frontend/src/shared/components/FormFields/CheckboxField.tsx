@@ -43,11 +43,15 @@ function CheckboxFieldComponent({
         </>
       }
       checked={value}
-      onChange={(e: ChangeEvent<HTMLInputElement>) =>
-        handleChange(e.target.checked)
-      }
       value={value}
-      control={<Checkbox {...checkboxProps} />}
+      control={
+        <Checkbox
+          onChange={(e: ChangeEvent<HTMLInputElement>) =>
+            handleChange(e.target.checked)
+          }
+          {...checkboxProps}
+        />
+      }
       sx={{ ml: 0, ...props.sx }}
       {...props}
     />

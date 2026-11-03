@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { Fragment, useMemo } from 'react';
 import { useSearchParams } from 'react-router-dom';
 
 import { Divider, Typography } from '@mui/material';
@@ -89,7 +89,7 @@ export function MembersInfiniteGrid({
         <InfiniteList query={oldMembershipsQuery}>
           {oldMembershipsGroupedByYear.map(
             ([scholarYear, memberships], index) => (
-              <>
+              <Fragment key={scholarYear}>
                 <Typography
                   variant="caption"
                   sx={{ mt: 2, ml: 1 }}
@@ -106,7 +106,7 @@ export function MembersInfiniteGrid({
                   }
                   group={group}
                 />
-              </>
+              </Fragment>
             ),
           )}
         </InfiniteList>

@@ -1,4 +1,3 @@
-/* eslint-disable no-irregular-whitespace */
 import { Membership } from '#modules/group/types/membership.types';
 
 import { SignatureInfo } from '../../signature.type';
